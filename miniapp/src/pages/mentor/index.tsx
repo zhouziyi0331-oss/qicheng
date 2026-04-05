@@ -3,6 +3,7 @@ import Taro, { useRouter } from '@tarojs/taro'
 import { useEffect, useState, useRef } from 'react'
 import { mentorAPI } from '../../services/api'
 import { formatTime } from '../../utils'
+import { detectEmotionState, saveEmotionState } from '../../utils/emotion'
 import './index.scss'
 
 interface Message {
@@ -23,16 +24,16 @@ export default function Mentor() {
   useEffect(() => {
     // 根据上下文初始化对话
     if (context === 'task' && taskId) {
-      // 从任务详情页进入
+      // 场景1：任务详情页点击"问AI导师"
       const decodedTitle = decodeURIComponent(taskTitle || '')
       setMessages([{
         id: '1',
         role: 'mentor',
-        content: `你好！我看到你在查看任务「${decodedTitle}」。\n\n我可以帮你：\n• 分析任务要求和难点\n• 制定执行计划\n• 解答技术问题\n• 提供学习资源\n\n有什么我可以帮你的吗？`,
+        content: `你好！我看到你在查看任务「${decodedTitle}」。\n\n我可以帮你：\n• 分析任务要求和难点\n• 评估你的能力匹配度\n• 制定执行计划\n• 推荐学习资源\n\n有什么我可以帮你的吗？`,
         timestamp: new Date().toISOString()
       }])
     } else if (context === 'working' && taskId) {
-      // 任务进行中（30秒后主动推送）
+      // 场景2：任务进行中（30秒后主动推送）
       const decodedTitle = decodeURIComponent(taskTitle || '')
       setMessages([{
         id: '1',
@@ -41,12 +42,30 @@ export default function Mentor() {
         timestamp: new Date().toISOString()
       }])
     } else if (context === 'stuck' && taskId) {
-      // 学生说"我卡住了"
+      // 场景3：学生说"我卡住了"
       const decodedTitle = decodeURIComponent(taskTitle || '')
       setMessages([{
         id: '1',
         role: 'mentor',
         content: `别担心，卡住是很正常的！让我来帮你。\n\n关于「${decodedTitle}」这个任务，你具体卡在哪里了？\n\n• 不知道从哪里开始？\n• 遇到技术难题？\n• 不确定方向是否正确？\n• 缺少某些资源或工具？\n\n告诉我具体情况，我们一起解决！`,
+        timestamp: new Date().toISOString()
+      }])
+    } else if (context === 'rejected' && taskId) {
+      // 场景4：任务被打回
+      const decodedTitle = decodeURIComponent(taskTitle || '')
+      setMessages([{
+        id: '1',
+        role: 'mentor',
+        content: `我看到你的任务「${decodedTitle}」被打回了。\n\n别灰心！这是成长的机会。让我帮你分析一下：\n\n• 需求方的反馈是什么？\n• 哪些地方需要改进？\n• 如何避免类似问题？\n• 需要补充哪些知识？\n\n我们一起把它做得更好！`,
+        timestamp: new Date().toISOString()
+      }])
+    } else if (context === 'milestone' && taskId) {
+      // 场景5：完成里程碑
+      const decodedTitle = decodeURIComponent(taskTitle || '')
+      setMessages([{
+        id: '1',
+        role: 'mentor',
+        content: `太棒了！你完成了「${decodedTitle}」的一个重要里程碑！\n\n让我们回顾一下：\n• 你学到了什么新技能？\n• 哪些地方做得特别好？\n• 还有哪些可以优化的？\n• 下一步计划是什么？\n\n继续保持这个势头！`,
         timestamp: new Date().toISOString()
       }])
     } else if (taskId) {
@@ -58,7 +77,7 @@ export default function Mentor() {
       setMessages([{
         id: '1',
         role: 'mentor',
-        content: '你好，我是启程小猫 🐱，你的 AI 成长伙伴。有什么可以帮你的吗？',
+        content: '你好，我是启程小猫，你的 AI 成长伙伴。\n\n我可以帮你：\n• 分析你的能力和成长方向\n• 推荐适合的任务\n• 解答学习和工作中的问题\n• 制定个人成长计划\n\n有什么可以帮你的吗？',
         timestamp: new Date().toISOString()
       }])
     }
@@ -104,6 +123,13 @@ export default function Mentor() {
     setInputText('')
     setLoading(true)
 
+    // 检测情绪状态
+    const emotion = detectEmotionState(messageToSend)
+    const user = Taro.getStorageSync('user')
+    if (user?.id) {
+      saveEmotionState(user.id, emotion)
+    }
+
     try {
       // 调用真实AI API
       const validContext = ['task', 'working', 'stuck', 'rejected', 'milestone'].includes(context || '')
@@ -114,6 +140,7 @@ export default function Mentor() {
         taskId,
         message: messageToSend,
         context: validContext,
+        emotionState: emotion, // 传递情绪状态给AI
         conversationHistory: messages.map(m => ({
           role: m.role,
           content: m.content

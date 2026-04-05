@@ -1,7 +1,8 @@
 import { View, Text, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
-import { authAPI, abilityAPI, withdrawAPI } from '../../services/api'
+import { authAPI, abilityAPI, withdrawAPI, levelAPI } from '../../services/api'
+import LevelUpModal from '../../components/LevelUpModal'
 import './index.scss'
 
 export default function Profile() {
@@ -9,6 +10,8 @@ export default function Profile() {
   const [balance, setBalance] = useState(0)
   const [radarData, setRadarData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [showLevelUp, setShowLevelUp] = useState(false)
+  const [newLevel, setNewLevel] = useState(1)
 
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
@@ -21,6 +24,7 @@ export default function Profile() {
     }
 
     loadUserData()
+    checkLevelUp()
   }, [])
 
   const loadUserData = async () => {
@@ -76,6 +80,18 @@ export default function Profile() {
       })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const checkLevelUp = async () => {
+    try {
+      const res = await levelAPI.checkLevelUp()
+      if (res.success && res.levelUp) {
+        setNewLevel(res.newLevel)
+        setShowLevelUp(true)
+      }
+    } catch (error) {
+      console.error('检查升级失败:', error)
     }
   }
 
@@ -240,6 +256,13 @@ export default function Profile() {
           退出登录
         </Button>
       </View>
+
+      {/* 升级弹窗 */}
+      <LevelUpModal
+        visible={showLevelUp}
+        level={newLevel}
+        onClose={() => setShowLevelUp(false)}
+      />
     </View>
   )
 }

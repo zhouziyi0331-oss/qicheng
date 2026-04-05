@@ -129,6 +129,7 @@ export const mentorAPI = {
     taskId?: string;
     message: string;
     context?: 'task' | 'working' | 'stuck' | 'rejected' | 'milestone';
+    emotionState?: any;
     conversationHistory?: Array<{ role: string; content: string }>;
   }) =>
     request('/mentor/chat', { method: 'POST', data }),
@@ -210,6 +211,21 @@ export const withdrawAPI = {
   getHistory: () => request('/payments/withdraw/history')
 }
 
+// 成长时间线API
+export const getGrowthTimeline = () => request('/student/timeline')
+
+// 等级系统API
+export const levelAPI = {
+  // 获取当前等级信息
+  getCurrentLevel: () => request('/student/level'),
+
+  // 获取升级所需经验
+  getNextLevelExp: () => request('/student/level/next'),
+
+  // 检查是否可以升级
+  checkLevelUp: () => request('/student/level/check')
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -218,5 +234,6 @@ export default {
   ability: abilityAPI,
   story: storyAPI,
   report: reportAPI,
-  withdraw: withdrawAPI
+  withdraw: withdrawAPI,
+  level: levelAPI
 }
