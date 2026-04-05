@@ -1,0 +1,33 @@
+{
+  "name": "qicheng-opc-miniapp",
+  "version": "1.0.0",
+  "description": "启程OPC孵化微信小程序",
+  "main": "index.js",
+  "scripts": {
+    "dev": "taro build --type weapp --watch",
+    "dev:weapp": "taro build --type weapp --watch",
+    "build": "taro build --type weapp",
+    "build:weapp": "taro build --type weapp"
+  },
+  "dependencies": {
+    "@tarojs/components": "3.6.39",
+    "@tarojs/plugin-framework-react": "^3.6.39",
+    "@tarojs/plugin-platform-weapp": "3.6.39",
+    "@tarojs/react": "3.6.39",
+    "@tarojs/runtime": "3.6.39",
+    "@tarojs/taro": "3.6.39",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-react": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@tarojs/cli": "3.6.39",
+    "@tarojs/webpack5-runner": "3.6.39",
+    "@types/react": "^18.2.0",
+    "babel-preset-taro": "3.6.39",
+    "typescript": "^5.0.0",
+    "webpack": "^5.105.4"
+  }
+}

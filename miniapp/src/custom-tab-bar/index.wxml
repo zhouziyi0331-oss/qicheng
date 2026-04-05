@@ -1,0 +1,23 @@
+<view class="custom-tab-bar">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="tab-item {{selected === index ? 'active' : ''}} {{item.isCenter ? 'tab-center' : ''}}"
+    bindtap="switchTab"
+    data-index="{{index}}"
+    data-path="{{item.pagePath}}"
+  >
+    <!-- 中央荧光绿胶囊形大按钮 -->
+    <view wx:if="{{item.isCenter}}" class="center-btn">
+      <view class="tab-icon-add">+</view>
+    </view>
+
+    <!-- 普通导航项 -->
+    <block wx:else>
+      <view class="tab-icon-wrapper">
+        <view class="tab-icon tab-icon-{{item.iconType}}"></view>
+      </view>
+      <view class="tab-text">{{item.text}}</view>
+    </block>
+  </view>
+</view>

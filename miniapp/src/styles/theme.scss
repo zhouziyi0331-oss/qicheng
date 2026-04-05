@@ -1,0 +1,100 @@
+// 启程OPC - 温暖治愈系配色方案
+// 参考 MindMate 设计风格
+
+// ========== 主色系 ==========
+$bg-primary: #F5E6F0;           // 淡粉紫背景
+$bg-secondary: #EDE4F0;         // 次级背景
+$card-white: #FFFFFF;           // 卡片白色
+
+// ========== 强调色 ==========
+$accent-green: #D4F291;         // 嫩草绿（主按钮、进度条）
+$accent-pink: #F9C6D9;          // 樱花粉（次要元素）
+$accent-blue: #A8D8EA;          // 天空蓝（图标、图表）
+$accent-yellow: #FFE082;        // 奶油黄（点缀）
+$accent-orange: #FFB74D;        // 温暖橙（橙子AI导师）
+
+// ========== 文字色 ==========
+$text-primary: #2D3436;         // 深灰黑（标题、正文）
+$text-secondary: #636E72;       // 中灰（辅助说明）
+$text-light: #95A5A6;           // 浅灰（次要信息）
+
+// ========== 边框/分隔 ==========
+$border-color: #E8E8E8;         // 浅灰边框
+$divider-color: #F0F0F0;        // 分隔线
+
+// ========== 渐变色 ==========
+$gradient-primary: linear-gradient(135deg, #D4F291 0%, #F9C6D9 100%);
+$gradient-secondary: linear-gradient(135deg, #A8D8EA 0%, #F9C6D9 100%);
+$gradient-warm: linear-gradient(135deg, #FFE082 0%, #FFB74D 100%);
+$gradient-bg: linear-gradient(180deg, #F5E6F0 0%, #EDE4F0 100%);
+
+// ========== 圆角系统 ==========
+$radius-xs: 12px;
+$radius-sm: 16px;
+$radius-md: 20px;
+$radius-lg: 24px;
+$radius-xl: 28px;
+$radius-2xl: 32px;
+$radius-full: 50px;
+
+// ========== 阴影系统 ==========
+$shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.04);
+$shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+// ========== 间距系统 ==========
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 20px;
+$spacing-xl: 24px;
+$spacing-2xl: 32px;
+
+// ========== Mixins ==========
+
+// 超级圆角卡片
+@mixin card-super-rounded {
+  background: $card-white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  padding: $spacing-xl;
+}
+
+// 渐变按钮
+@mixin btn-gradient {
+  background: $gradient-primary;
+  border-radius: $radius-full;
+  color: $text-primary;
+  font-weight: 600;
+  border: none;
+  box-shadow: $shadow-sm;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.96);
+    box-shadow: $shadow-xs;
+  }
+}
+
+// 圆形图标容器
+@mixin icon-circle($size: 48px, $bg: $accent-green) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  background: $bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $shadow-sm;
+}
+
+// 柔和浮动动画
+@mixin float-animation {
+  animation: float 3s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+}

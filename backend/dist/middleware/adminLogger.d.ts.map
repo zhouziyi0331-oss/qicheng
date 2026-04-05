@@ -1,0 +1,1 @@
+{"version":3,"file":"adminLogger.d.ts","sourceRoot":"","sources":["../../src/middleware/adminLogger.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAI1D;;;;GAIG;AACH,wBAAgB,oBAAoB,CAClC,MAAM,EAAE,MAAM,EACd,UAAU,EAAE,MAAM,IAEJ,KAAK,OAAO,EAAE,KAAK,QAAQ,EAAE,MAAM,YAAY,KAAG,OAAO,CAAC,IAAI,CAAC,CA+B9E"}

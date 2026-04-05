@@ -1,0 +1,98 @@
+{
+  "name": "启程平台 - AI驱动的个性化成长平台",
+  "short_name": "启程",
+  "description": "帮助你发现潜力、积累经验、实现价值",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9FAFB",
+  "theme_color": "#8B5CF6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["education", "productivity", "business"],
+  "shortcuts": [
+    {
+      "name": "任务大厅",
+      "short_name": "任务",
+      "description": "浏览可接取的任务",
+      "url": "/tasks",
+      "icons": [{ "src": "/icons/tasks.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "我的任务",
+      "short_name": "我的",
+      "description": "查看我的任务进度",
+      "url": "/my-tasks",
+      "icons": [{ "src": "/icons/my-tasks.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "个人主页",
+      "short_name": "主页",
+      "description": "查看个人资料和成长数据",
+      "url": "/profile",
+      "icons": [{ "src": "/icons/profile.png", "sizes": "96x96" }]
+    }
+  ]
+}

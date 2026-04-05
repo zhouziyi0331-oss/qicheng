@@ -1,0 +1,22 @@
+import { Request, Response, NextFunction } from 'express';
+export declare function getDashboard(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getCompanyTasks(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function takedownTask(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function blacklistCompany(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function listStudents(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getStudentDetail(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function exportStudentData(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getTaskMessages(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function interveneTask(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function sendAdminNotification(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getTags(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function updateUserTag(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getPayments(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getWithdrawals(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function approveWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getFirstTaskAdvances(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function broadcastNotification(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getAdminLogs(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getSystemConfig(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function updateSystemConfig(req: Request, res: Response, next: NextFunction): Promise<void>;
+//# sourceMappingURL=controller.d.ts.map

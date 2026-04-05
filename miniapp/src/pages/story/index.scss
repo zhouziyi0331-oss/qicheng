@@ -1,0 +1,344 @@
+@import '../../styles/theme.scss';
+
+.story-page {
+  min-height: 100vh;
+  background: $gradient-bg;
+  padding-bottom: 100px;
+}
+
+/* 头部 */
+.story-header {
+  position: relative;
+  padding: 24px 20px;
+  background: $card-white;
+  border-radius: 0 0 $radius-2xl $radius-2xl;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+}
+
+.decoration-1 {
+  width: 100px;
+  height: 100px;
+  background: $accent-pink;
+  top: -30px;
+  right: -20px;
+}
+
+.decoration-2 {
+  width: 70px;
+  height: 70px;
+  background: $accent-blue;
+  bottom: -20px;
+  left: 20px;
+}
+
+.header-content {
+  position: relative;
+  flex: 1;
+}
+
+.story-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 4px;
+}
+
+.story-subtitle {
+  font-size: 14px;
+  color: $text-secondary;
+}
+
+.post-button {
+  position: relative;
+  @include btn-gradient;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+
+  &::after {
+    border: none;
+  }
+}
+
+.post-icon {
+  font-size: 18px;
+}
+
+.post-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+/* 故事列表 */
+.story-list {
+  padding: 20px;
+}
+
+.story-card {
+  @include card-super-rounded;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* 用户信息 */
+.story-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.user-avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: $accent-green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.story-card:nth-child(2n) .user-avatar-circle {
+  background: $accent-pink;
+}
+
+.story-card:nth-child(3n) .user-avatar-circle {
+  background: $accent-blue;
+}
+
+.story-card:nth-child(4n) .user-avatar-circle {
+  background: $accent-yellow;
+}
+
+.avatar-letter {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 4px;
+}
+
+.user-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-opc {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, rgba(212, 242, 145, 0.3) 0%, rgba(249, 198, 217, 0.3) 100%);
+  border-radius: $radius-full;
+}
+
+.opc-text {
+  font-size: 11px;
+  font-weight: 600;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.story-time {
+  font-size: 12px;
+  color: $text-light;
+}
+
+/* 故事内容 */
+.story-content {
+  font-size: 15px;
+  line-height: 1.7;
+  color: $text-primary;
+  margin-bottom: 16px;
+}
+
+/* 故事图片 */
+.story-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .story-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 16px;
+  }
+}
+
+/* 互动区域 */
+.story-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $divider-color;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: $radius-full;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  &.liked {
+    background: linear-gradient(135deg, rgba(249, 198, 217, 0.3) 0%, rgba(249, 198, 217, 0.5) 100%);
+  }
+}
+
+.action-icon {
+  font-size: 18px;
+}
+
+.action-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-secondary;
+}
+
+.action-item.liked .action-text {
+  color: $text-primary;
+}
+
+/* 评论输入框 */
+.comment-input-wrapper {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $divider-color;
+
+  .comment-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 16px;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .comment-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+
+    .comment-cancel,
+    .comment-submit {
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+
+      &::after {
+        border: none;
+      }
+    }
+
+    .comment-cancel {
+      background: rgba(0, 0, 0, 0.05);
+      color: $text-secondary;
+    }
+
+    .comment-submit {
+      background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+      color: white;
+    }
+  }
+}
+
+/* 加载和空状态 */
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 32px;
+
+  .loading-text,
+  .empty-text {
+    font-size: 28px;
+    color: #999;
+    margin-top: 24px;
+  }
+
+  .empty-icon {
+    font-size: 120px;
+  }
+
+  .empty-btn {
+    margin-top: 48px;
+    width: 320px;
+    height: 88px;
+    background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+    border-radius: 44px;
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+    border: none;
+
+    &::after {
+      border: none;
+    }
+  }
+}
+
+/* 底部提示 */
+.story-footer {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 14px;
+  color: $text-light;
+  margin-bottom: 8px;
+}
+
+.footer-hint {
+  font-size: 13px;
+  color: $text-light;
+  opacity: 0.6;
+}

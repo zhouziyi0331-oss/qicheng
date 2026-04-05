@@ -1,0 +1,176 @@
+@import '../../styles/theme.scss';
+
+.ability-page {
+  min-height: 100vh;
+  background: $bg-primary;
+}
+
+.ability-scroll {
+  height: 100vh;
+  padding: 32px;
+  padding-bottom: 100px;
+}
+
+.ability-header {
+  background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+  border-radius: 32px;
+  padding: 40px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+
+  .header-title {
+    display: block;
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .header-subtitle {
+    display: block;
+    font-size: 26px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 32px;
+  }
+
+  .header-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+
+      .stat-value {
+        font-size: 40px;
+        font-weight: 700;
+        color: white;
+      }
+
+      .stat-label {
+        font-size: 24px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .stat-divider {
+      width: 2px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.radar-card {
+  background: white;
+  border-radius: 32px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+
+  .radar-canvas {
+    width: 100%;
+    height: 600px;
+  }
+}
+
+.ability-details {
+  background: white;
+  border-radius: 32px;
+  padding: 32px;
+  margin-bottom: 24px;
+
+  .details-title {
+    display: block;
+    font-size: 36px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 32px;
+  }
+
+  .ability-item {
+    margin-bottom: 32px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .ability-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .ability-name {
+        font-size: 30px;
+        font-weight: 600;
+        color: #1a1a1a;
+      }
+
+      .ability-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #A855F7;
+      }
+    }
+
+    .ability-bar {
+      height: 16px;
+      background: #F5E6F0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+
+      .ability-fill {
+        height: 100%;
+        border-radius: 8px;
+        transition: width 0.6s ease;
+      }
+    }
+
+    .ability-level {
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+}
+
+.improvement-tips {
+  background: rgba(168, 85, 247, 0.05);
+  border-radius: 24px;
+  padding: 32px;
+
+  .tips-title {
+    display: block;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+  }
+
+  .tips-content {
+    display: block;
+    font-size: 26px;
+    color: #666;
+    line-height: 1.8;
+  }
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px;
+
+  .loading-text,
+  .empty-text {
+    font-size: 28px;
+    color: #999;
+  }
+}
