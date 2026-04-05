@@ -5,19 +5,19 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const features = [
-  { icon: "🧠", title: "25题能力测评", desc: "AI分析你的OPC人格标签，发现你的独特优势", color: "#D4A5F9" },
-  { icon: "🎯", title: "智能任务匹配", desc: "基于你的能力与情绪状态，推荐最合适的企业任务", color: "#A8D8EA" },
-  { icon: "💰", title: "首单24小时到账", desc: "平台垫付首单报酬，让你零风险完成第一步", color: "#D4F291" },
-  { icon: "📈", title: "六维能力雷达", desc: "可视化追踪你的专业成长，积累属于你的OPC档案", color: "#FFE082" },
-  { icon: "🤝", title: "真实企业需求", desc: "与有真实AI应用需求的企业直接对接，打造作品集", color: "#F9C6D9" },
-  { icon: "🚀", title: "OPC独立之路", desc: "最终目标：成为可以独立接单的One-Person Creator", color: "#FFB84D" },
+  { icon: "🧠", title: "看见真实的自己", desc: "25道题，不是测试，是一次对话。AI帮你发现那些你自己都没注意到的闪光点", color: "#D4A5F9" },
+  { icon: "🎯", title: "不是抢单，是遇见", desc: "我们不会让你盲目竞争。每个任务推荐，都基于你此刻的能力和状态", color: "#A8D8EA" },
+  { icon: "💰", title: "第一步，我们陪你", desc: "首单24小时到账，平台先垫付。因为我们知道，开始有多难", color: "#D4F291" },
+  { icon: "📈", title: "成长看得见", desc: "六维能力雷达，记录每一次进步。你的OPC档案，是你自己写的故事", color: "#FFE082" },
+  { icon: "🤝", title: "真实的项目经验", desc: "不是练习，是真实企业的真实需求。每一单，都是你作品集的一部分", color: "#F9C6D9" },
+  { icon: "🚀", title: "终点是独立", desc: "我们的目标，是让你有一天不再需要平台，成为真正独立的创造者", color: "#FFB84D" },
 ];
 
 const steps = [
-  { num: "01", title: "注册 & 测评", desc: "10分钟完成25题测评，获得你的OPC人格标签" },
-  { num: "02", title: "接取首单", desc: "AI为你匹配最适合的入门任务，第一步永远是最小可行步骤" },
-  { num: "03", title: "完成 & 收款", desc: "完成任务，平台24小时内垫付报酬，仪式感拉满" },
-  { num: "04", title: "迭代成长", desc: "每完成一单，能力雷达更新，OPC档案积累" },
+  { num: "01", title: "先聊聊", desc: "10分钟，25道题。不是考试，是让我们了解你的一次对话" },
+  { num: "02", title: "遇见第一个任务", desc: "AI会为你找到最适合现在的你的那一个。不用担心，永远是你能做到的" },
+  { num: "03", title: "完成，然后收获", desc: "提交作品，24小时内到账。这不只是钱，是对你能力的第一次确认" },
+  { num: "04", title: "看见自己在成长", desc: "每完成一单，能力雷达更新。你会看到，自己真的在变强" },
 ];
 
 export default function HomePage() {
@@ -126,12 +126,12 @@ export default function HomePage() {
           lineHeight: '1.2',
           color: '#2D3436'
         }}>
-          从第一单开始，<br />
+          乘着问题，<br />
           <span style={{
             background: 'linear-gradient(135deg, #F9C6D9 0%, #D4A5F9 50%, #A8D8EA 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
-          }}>成为真正的OPC</span>
+          }}>飞跃山峰</span>
         </h1>
 
         <p style={{
@@ -142,8 +142,8 @@ export default function HomePage() {
           color: '#636E72',
           lineHeight: '1.8'
         }}>
-          启程连接有AI能力的高校生与有真实需求的企业。<br />
-          完成第一单，改变你对自己的认知。
+          你的能力，值得被看见。<br />
+          启程陪你从第一个真实项目开始，一步步成为独立的创造者。
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -223,7 +223,7 @@ export default function HomePage() {
           marginBottom: '48px',
           color: '#2D3436'
         }}>
-          为什么选择启程
+          我们懂你
         </h2>
         <div style={{
           display: 'grid',
@@ -276,7 +276,7 @@ export default function HomePage() {
           marginBottom: '48px',
           color: '#2D3436'
         }}>
-          四步开启OPC之路
+          就这样开始
         </h2>
         <div style={{
           display: 'grid',
@@ -342,14 +342,14 @@ export default function HomePage() {
             marginBottom: '16px',
             color: '#2D3436'
           }}>
-            准备好开始了吗？
+            准备好了吗？
           </h2>
           <p style={{
             fontSize: '16px',
             marginBottom: '32px',
             color: '#636E72'
           }}>
-            现在注册，完成测评，今天就可以接到你的第一单。
+            不用想太多。注册，聊聊天，今天就能接到第一个任务。
           </p>
           <Link
             href="/register"

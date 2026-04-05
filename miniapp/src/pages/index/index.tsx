@@ -93,20 +93,20 @@ export default function Index() {
           <View className="float-icon icon-4">⚙️</View>
         </View>
 
-        <Text className="hero-title">发现你的无限可能</Text>
-        <Text className="hero-subtitle">通过OPC标签，开启个性化成长之旅</Text>
+        <Text className="hero-title">乘着问题，飞跃山峰</Text>
+        <Text className="hero-subtitle">你的能力，值得被看见</Text>
       </View>
 
       {/* 登录按钮或推荐卡片 */}
       {!user ? (
         <Button className="primary-btn" onClick={handleWechatLogin}>
-          开始探索
+          开始你的第一步
         </Button>
       ) : (
         <View className="content-section">
           {/* 推荐区域 */}
           <View className="section-header">
-            <Text className="section-title">为你推荐</Text>
+            <Text className="section-title">从这里开始</Text>
             <Text className="section-link">查看全部</Text>
           </View>
 
@@ -115,31 +115,31 @@ export default function Index() {
               <View className="card-icon-small">
                 <Text className="icon-symbol">✓</Text>
               </View>
-              <Text className="card-title-small">任务大厅</Text>
-              <Text className="card-desc-small">发现适合你的成长任务</Text>
+              <Text className="card-title-small">遇见任务</Text>
+              <Text className="card-desc-small">适合现在的你的那一个</Text>
             </View>
 
             <View className="recommend-card card-yellow" onClick={() => handleNavigate('/pages/ability/index')}>
               <View className="card-icon-small">
                 <Text className="icon-symbol">◈</Text>
               </View>
-              <Text className="card-title-small">能力图谱</Text>
-              <Text className="card-desc-small">可视化你的六维能力</Text>
+              <Text className="card-title-small">看见成长</Text>
+              <Text className="card-desc-small">你的进步，一目了然</Text>
             </View>
           </View>
 
           {/* 热门区域 */}
           <View className="section-header">
-            <Text className="section-title">热门</Text>
+            <Text className="section-title">他们的故事</Text>
           </View>
 
           <View className="popular-card card-pink" onClick={() => Taro.switchTab({ url: '/pages/story/index' })}>
             <Text className="popular-title">故事墙</Text>
-            <Text className="popular-desc">分享你的成长故事，与他人产生共鸣</Text>
+            <Text className="popular-desc">每个人都在用自己的方式成长，来看看他们的故事</Text>
             <View className="popular-tags">
-              <View className="tag tag-pink">24个模块</View>
-              <View className="tag tag-pink">40小时</View>
-              <View className="tag tag-dark">免费</View>
+              <View className="tag tag-pink">真实经历</View>
+              <View className="tag tag-pink">共鸣时刻</View>
+              <View className="tag tag-dark">持续更新</View>
             </View>
           </View>
 
@@ -149,7 +149,7 @@ export default function Index() {
             </View>
             <View className="popular-content">
               <Text className="popular-title-inline">启程小猫</Text>
-              <Text className="popular-subtitle">AI成长伙伴陪你前行</Text>
+              <Text className="popular-subtitle">有问题随时找我，我一直在</Text>
             </View>
             <Text className="popular-arrow">→</Text>
           </View>
