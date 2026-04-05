@@ -96,7 +96,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="container" style={{ paddingTop: '80px', paddingBottom: '60px', textAlign: 'center' }}>
+      <section className="container" style={{ paddingTop: '100px', paddingBottom: '80px', textAlign: 'center' }}>
         <div style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -120,11 +120,12 @@ export default function HomePage() {
         </div>
 
         <h1 style={{
-          fontSize: 'clamp(36px, 5vw, 56px)',
-          fontWeight: '800',
-          marginBottom: '24px',
-          lineHeight: '1.2',
-          color: '#2D3436'
+          fontSize: 'clamp(48px, 6vw, 72px)',
+          fontWeight: '900',
+          marginBottom: '32px',
+          lineHeight: '1.15',
+          color: '#2D3436',
+          letterSpacing: '-0.02em'
         }}>
           乘着问题，<br />
           <span style={{
@@ -135,12 +136,13 @@ export default function HomePage() {
         </h1>
 
         <p style={{
-          fontSize: '18px',
-          marginBottom: '40px',
-          maxWidth: '600px',
-          margin: '0 auto 40px',
+          fontSize: '20px',
+          marginBottom: '48px',
+          maxWidth: '700px',
+          margin: '0 auto 48px',
           color: '#636E72',
-          lineHeight: '1.8'
+          lineHeight: '1.8',
+          fontWeight: '400'
         }}>
           你的能力，值得被看见。<br />
           启程陪你从第一个真实项目开始，一步步成为独立的创造者。
