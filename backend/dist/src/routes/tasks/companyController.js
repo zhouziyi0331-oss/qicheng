@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -22,9 +55,19 @@ async function createTask(req, res, next) {
             throw new errorHandler_1.AppError(403, '企业账号待审核，审核通过后可发布任务', 'NOT_VERIFIED');
         if (company.is_blacklisted)
             throw new errorHandler_1.AppError(403, '账号已被封禁', 'BLACKLISTED');
-        const { title, description, taskType, track, levelRequired, budgetGross, acceptanceCriteria, deadline, estimatedMinutes } = req.body;
+        const { title, description, taskType, track, levelRequired, budgetGross, acceptanceCriteria, deadline, estimatedMinutes, publishType // 新增：'normal' 或 'invitation'
+         } = req.body;
         if (!title || !description || !budgetGross || !acceptanceCriteria) {
             throw new errorHandler_1.AppError(400, '标题、描述、预算和验收标准为必填项', 'MISSING_FIELDS');
+        }
+        if (!publishType || !['normal', 'invitation'].includes(publishType)) {
+            throw new errorHandler_1.AppError(400, '请选择任务发布类型（普通任务或邀请任务）', 'INVALID_PUBLISH_TYPE');
+        }
+        // 邀请任务的额外校验
+        if (publishType === 'invitation') {
+            if (!levelRequired || parseInt(levelRequired) < 10) {
+                throw new errorHandler_1.AppError(400, '邀请任务仅限满级学生（Lv.10+）', 'INVITATION_LEVEL_REQUIRED');
+            }
         }
         // 根据等级计算平台抽成
         const level = parseInt(levelRequired || '0');
@@ -38,12 +81,24 @@ async function createTask(req, res, next) {
         const [task] = await (0, db_1.query)(`INSERT INTO tasks
         (company_id, title, description, task_type, track, level_required,
          budget_gross, budget_net, platform_fee_rate, acceptance_criteria,
-         deadline, estimated_minutes, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'pending_review')
+         deadline, estimated_minutes, status, task_type)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'pending_review',$13)
        RETURNING id`, [companyId, title, description, taskType, track || 'A', level,
-            gross, net, feeRate, acceptanceCriteria, deadline, estimatedMinutes]);
+            gross, net, feeRate, acceptanceCriteria, deadline, estimatedMinutes, publishType]);
         await (0, db_1.query)('UPDATE company_profiles SET total_tasks_posted = total_tasks_posted + 1 WHERE user_id = $1', [companyId]);
-        logger_1.default.info('Company task created', { taskId: task.id, companyId });
+        // 如果是邀请任务，自动触发智能匹配
+        if (publishType === 'invitation') {
+            // 异步触发匹配，不阻塞响应
+            const { InvitationMatchService } = await Promise.resolve().then(() => __importStar(require('../../services/invitation/matchService')));
+            const matchService = new InvitationMatchService();
+            matchService.matchStudentsForTask(companyId, {
+                target_level_min: level,
+                max_invitations: 10
+            }).catch((err) => {
+                logger_1.default.error('Failed to match students for invitation task', { taskId: task.id, error: err.message });
+            });
+        }
+        logger_1.default.info('Company task created', { taskId: task.id, companyId, publishType });
         res.status(201).json({
             success: true,
             data: {

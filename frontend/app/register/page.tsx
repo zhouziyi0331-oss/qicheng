@@ -64,6 +64,7 @@ export default function RegisterPage() {
     try {
       const { data } = await authApi.register({
         phone, code, password, role, nickname,
+        userType: role, // 新增：用户类型（student/company），注册后不可更改
         ...(role === "company" ? { companyName, contactName } : {}),
       });
       login(data.data.userId, data.data.role, nickname, {

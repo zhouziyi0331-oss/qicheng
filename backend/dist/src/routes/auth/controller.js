@@ -98,36 +98,47 @@ async function register(req, res, next) {
             res.status(400).json({ success: false, errors: errors.array() });
             return;
         }
-        const { phone, code, role, password, deviceType, sourceChannel } = req.body;
-        // 1. 验证码校验
+        const { phone, code, role, password, deviceType, sourceChannel, userType } = req.body;
+        // 1. 验证userType必填且有效
+        if (!userType || !['student', 'company'].includes(userType)) {
+            throw new errorHandler_1.AppError(400, '请选择用户身份（学生或企业）', 'INVALID_USER_TYPE');
+        }
+        // 2. 验证码校验
         const codeValid = await (0, redis_1.verifySmsCode)(phone, code);
         if (!codeValid) {
             throw new errorHandler_1.AppError(400, '验证码错误或已过期', 'INVALID_CODE');
         }
-        // 2. 检查手机号是否已注册
-        const existing = await (0, db_1.queryOne)('SELECT id, role FROM users WHERE phone = $1 AND deleted_at IS NULL', [phone]);
+        // 3. 检查手机号是否已注册
+        const existing = await (0, db_1.queryOne)('SELECT id, role, user_type FROM users WHERE phone = $1 AND deleted_at IS NULL', [phone]);
         if (existing) {
             throw new errorHandler_1.AppError(409, '该手机号已注册', 'PHONE_EXISTS');
+        }
+        // 4. userType和role必须匹配
+        if ((userType === 'student' && role !== 'student') || (userType === 'company' && role !== 'company')) {
+            throw new errorHandler_1.AppError(400, '用户身份与角色不匹配', 'TYPE_ROLE_MISMATCH');
         }
         const passwordHash = await bcryptjs_1.default.hash(password, 12);
         const userId = (0, uuid_1.v4)();
         await (0, db_1.withTransaction)(async (client) => {
-            // 3. 创建用户
-            await client.query(`INSERT INTO users (id, role, phone, password_hash, device_type, source_channel)
-         VALUES ($1, $2, $3, $4, $5, $6)`, [userId, role, phone, passwordHash, deviceType || null, sourceChannel || 'direct']);
-            if (role === 'student') {
-                // 4a. 创建学生档案
+            // 5. 创建用户（包含user_type字段）
+            await client.query(`INSERT INTO users (id, role, user_type, phone, password_hash, device_type, source_channel)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`, [userId, role, userType, phone, passwordHash, deviceType || null, sourceChannel || 'direct']);
+            if (userType === 'student') {
+                // 6a. 创建学生档案
                 await client.query('INSERT INTO student_profiles (user_id) VALUES ($1)', [userId]);
-                // 4b. 创建余额账户
+                // 6b. 创建余额账户
                 await client.query('INSERT INTO student_balances (user_id) VALUES ($1)', [userId]);
-                // 4c. 初始化 Onboarding 状态
+                // 6c. 初始化 Onboarding 状态
                 await client.query('INSERT INTO onboarding_status (user_id) VALUES ($1)', [userId]);
-                // 4d. 记录成长时间线: journey_start
+                // 6d. 记录成长时间线: journey_start
                 await client.query(`INSERT INTO growth_timeline (user_id, event_type, event_title, event_desc)
            VALUES ($1, 'journey_start', '开始OPC旅程', '你正在开始一段OPC旅程')`, [userId]);
+                // 6e. 初始化活跃度记录（用于邀请任务系统）
+                await client.query(`INSERT INTO student_activity_logs (student_id, activity_type, activity_data)
+           VALUES ($1, 'register', '{}')`, [userId]);
             }
             else {
-                // 4b. 创建企业档案 (需后台审核)
+                // 6b. 创建企业档案 (需后台审核)
                 const { companyName, contactName } = req.body;
                 if (!companyName || !contactName) {
                     throw new errorHandler_1.AppError(400, '企业名称和联系人姓名必填', 'MISSING_FIELDS');
@@ -148,10 +159,11 @@ async function register(req, res, next) {
             data: {
                 userId,
                 role,
+                userType,
                 accessToken: tokens.accessToken,
                 refreshToken: tokens.refreshToken,
-                // 学生注册后进入 Onboarding，不直接返回首页
-                nextStep: role === 'student' ? 'onboarding' : 'pending_review',
+                // 学生注册后进入 Onboarding，企业注册后等待审核
+                nextStep: userType === 'student' ? 'onboarding' : 'pending_review',
             },
         });
     }
@@ -170,7 +182,7 @@ async function login(req, res, next) {
             return;
         }
         const { phone, password, code } = req.body;
-        const user = await (0, db_1.queryOne)(`SELECT u.id, u.role, u.password_hash, u.is_active
+        const user = await (0, db_1.queryOne)(`SELECT u.id, u.role, u.user_type, u.password_hash, u.is_active
        FROM users u
        WHERE u.phone = $1 AND u.deleted_at IS NULL`, [phone]);
         if (!user) {
@@ -195,6 +207,11 @@ async function login(req, res, next) {
         }
         // 更新最后登录时间 + 触发情绪信号检测
         await (0, db_1.query)('UPDATE users SET last_login_at = NOW() WHERE id = $1', [user.id]);
+        // 如果是学生，记录活跃度（用于邀请任务系统）
+        if (user.user_type === 'student') {
+            await (0, db_1.query)(`INSERT INTO student_activity_logs (student_id, activity_type, activity_data)
+         VALUES ($1, 'login', '{}')`, [user.id]).catch(() => { }); // 忽略错误，不影响登录流程
+        }
         // 检查是否3天未登录 (cooling 信号)
         await checkAndUpdateEmotionOnLogin(user.id);
         const payload = { userId: user.id, role: user.role };
@@ -208,6 +225,7 @@ async function login(req, res, next) {
             data: {
                 userId: user.id,
                 role: user.role,
+                userType: user.user_type,
                 accessToken: tokens.accessToken,
                 refreshToken: tokens.refreshToken,
             },

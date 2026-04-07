@@ -17,6 +17,10 @@ const LEVEL_OPTIONS = [
   { value: 2, label: "Lv.2 实践者（AI熟练用户）" },
   { value: 3, label: "Lv.3 熟练（AI专家）" },
 ];
+const PUBLISH_TYPE_OPTIONS = [
+  { value: "normal", label: "普通匹配任务", desc: "发布到任务市场，所有符合条件的学生都可以接单" },
+  { value: "invitation", label: "邀请指定任务", desc: "仅邀请满级（Lv.10+）学生，AI智能匹配推荐" },
+];
 
 export default function PostTaskPage() {
   const [title, setTitle] = useState("");
@@ -28,6 +32,7 @@ export default function PostTaskPage() {
   const [estimatedHours, setEstimatedHours] = useState("");
   const [maxAssignees, setMaxAssignees] = useState("1");
   const [tags, setTags] = useState("");
+  const [publishType, setPublishType] = useState<"normal" | "invitation">("normal");
   const [loading, setLoading] = useState(false);
   const { show } = useToast();
   const router = useRouter();
@@ -53,6 +58,7 @@ export default function PostTaskPage() {
         estimated_hours: parseFloat(estimatedHours) || 2,
         max_assignees: parseInt(maxAssignees) || 1,
         tags: tags.split(/[,，\s]+/).filter(Boolean),
+        publishType, // 新增：任务类型（normal/invitation）
       });
       show("任务发布成功！等待平台审核 🎉", "success");
       router.push("/company/tasks");
@@ -107,6 +113,38 @@ export default function PostTaskPage() {
 
         <div className="p-5 rounded-lg flex flex-col gap-4" style={{ background: "#161b22", border: "1px solid #30363d" }}>
           <h2 className="text-sm font-medium" style={{ color: "#8b949e" }}>任务设置</h2>
+
+          {/* 任务类型选择 */}
+          <div>
+            <label className="text-xs mb-1 block" style={{ color: "#8b949e" }}>任务类型</label>
+            <div className="flex flex-col gap-2">
+              {PUBLISH_TYPE_OPTIONS.map((t) => (
+                <label key={t.value} className="flex items-start gap-3 cursor-pointer p-3 rounded-lg transition-colors"
+                  style={{
+                    background: publishType === t.value ? "#1f3358" : "#21262d",
+                    border: `1px solid ${publishType === t.value ? "#58a6ff" : "#30363d"}`,
+                  }}>
+                  <input
+                    type="radio"
+                    name="publishType"
+                    value={t.value}
+                    checked={publishType === t.value}
+                    onChange={(e) => setPublishType(e.target.value as "normal" | "invitation")}
+                    style={{ width: "auto", marginTop: "2px" }}
+                  />
+                  <div className="flex-1">
+                    <div className="text-sm font-medium mb-1" style={{ color: publishType === t.value ? "#58a6ff" : "#e6edf3" }}>
+                      {t.label}
+                    </div>
+                    <div className="text-xs" style={{ color: "#8b949e" }}>
+                      {t.desc}
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
           <div>
             <label className="text-xs mb-1 block" style={{ color: "#8b949e" }}>赛道选择</label>
             <div className="flex flex-col gap-2">

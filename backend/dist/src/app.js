@@ -27,11 +27,13 @@ const notification_1 = __importDefault(require("./routes/notification"));
 const upload_1 = __importDefault(require("./routes/upload"));
 const mentor_1 = __importDefault(require("./routes/mentor"));
 const trust_1 = __importDefault(require("./routes/trust"));
+const invitation_1 = __importDefault(require("./routes/invitation"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
     require('./jobs/firstTaskSettlement');
     require('./cron/mentorNudge').startMentorNudgeCron();
+    require('./jobs/invitationCron');
 }
 const app = (0, express_1.default)();
 exports.app = app;
@@ -80,6 +82,7 @@ app.use('/api/v1/notification', notification_1.default);
 app.use('/api/v1/upload', upload_1.default);
 app.use('/api/v1/mentor', mentor_1.default);
 app.use('/api/v1/trust', trust_1.default);
+app.use('/api/v1/invitation', invitation_1.default);
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

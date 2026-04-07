@@ -45,6 +45,7 @@ export const authApi = {
   register: (data: {
     phone: string; code: string; password: string;
     role: "student" | "company"; nickname: string;
+    userType: "student" | "company"; // 用户类型（注册后不可更改）
     companyName?: string; contactName?: string;
   }) => api.post("/auth/register", data),
   login: (phone: string, password: string) =>

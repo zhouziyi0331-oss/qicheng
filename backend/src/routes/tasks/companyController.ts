@@ -20,11 +20,23 @@ export async function createTask(req: Request, res: Response, next: NextFunction
 
     const {
       title, description, taskType, track, levelRequired,
-      budgetGross, acceptanceCriteria, deadline, estimatedMinutes
+      budgetGross, acceptanceCriteria, deadline, estimatedMinutes,
+      publishType // 新增：'normal' 或 'invitation'
     } = req.body;
 
     if (!title || !description || !budgetGross || !acceptanceCriteria) {
       throw new AppError(400, '标题、描述、预算和验收标准为必填项', 'MISSING_FIELDS');
+    }
+
+    if (!publishType || !['normal', 'invitation'].includes(publishType)) {
+      throw new AppError(400, '请选择任务发布类型（普通任务或邀请任务）', 'INVALID_PUBLISH_TYPE');
+    }
+
+    // 邀请任务的额外校验
+    if (publishType === 'invitation') {
+      if (!levelRequired || parseInt(levelRequired) < 10) {
+        throw new AppError(400, '邀请任务仅限满级学生（Lv.10+）', 'INVITATION_LEVEL_REQUIRED');
+      }
     }
 
     // 根据等级计算平台抽成
@@ -40,11 +52,11 @@ export async function createTask(req: Request, res: Response, next: NextFunction
       `INSERT INTO tasks
         (company_id, title, description, task_type, track, level_required,
          budget_gross, budget_net, platform_fee_rate, acceptance_criteria,
-         deadline, estimated_minutes, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'pending_review')
+         deadline, estimated_minutes, status, task_type)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'pending_review',$13)
        RETURNING id`,
       [companyId, title, description, taskType, track || 'A', level,
-       gross, net, feeRate, acceptanceCriteria, deadline, estimatedMinutes]
+       gross, net, feeRate, acceptanceCriteria, deadline, estimatedMinutes, publishType]
     );
 
     await query(
@@ -52,7 +64,20 @@ export async function createTask(req: Request, res: Response, next: NextFunction
       [companyId]
     );
 
-    logger.info('Company task created', { taskId: task.id, companyId });
+    // 如果是邀请任务，自动触发智能匹配
+    if (publishType === 'invitation') {
+      // 异步触发匹配，不阻塞响应
+      const { InvitationMatchService } = await import('../../services/invitation/matchService');
+      const matchService = new InvitationMatchService();
+      matchService.matchStudentsForTask(companyId, {
+        target_level_min: level,
+        max_invitations: 10
+      }).catch((err: Error) => {
+        logger.error('Failed to match students for invitation task', { taskId: task.id, error: err.message });
+      });
+    }
+
+    logger.info('Company task created', { taskId: task.id, companyId, publishType });
 
     res.status(201).json({
       success: true,

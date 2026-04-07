@@ -22,12 +22,14 @@ import notificationRoutes from './routes/notification';
 import uploadRoutes from './routes/upload';
 import mentorRoutes from './routes/mentor';
 import trustRoutes from './routes/trust';
+import invitationRoutes from './routes/invitation';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
   require('./jobs/emotionSignalDetector');
   require('./jobs/firstTaskSettlement');
   require('./cron/mentorNudge').startMentorNudgeCron();
+  require('./jobs/invitationCron');
 }
 
 const app = express();
@@ -82,6 +84,7 @@ app.use('/api/v1/notification', notificationRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/mentor', mentorRoutes);
 app.use('/api/v1/trust', trustRoutes);
+app.use('/api/v1/invitation', invitationRoutes);
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
