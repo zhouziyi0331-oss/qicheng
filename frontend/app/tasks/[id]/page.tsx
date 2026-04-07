@@ -2,6 +2,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { taskApi, chatApi } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/components/ui/Toast";
@@ -201,13 +202,13 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
       {alreadyAccepted && (
         <button
           onClick={() => setShowMentor(true)}
-          className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-110 active:scale-95 transition-transform z-40"
+          className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform z-40"
           style={{
             background: "linear-gradient(135deg, #A78BFA 0%, #EC4899 100%)",
           }}
           title="问AI导师"
         >
-          🐱
+          <Image src="/cat-logo.png" alt="AI导师" width={40} height={40} />
         </button>
       )}
 

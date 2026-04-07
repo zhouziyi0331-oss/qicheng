@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -57,7 +58,7 @@ export default function HomePage() {
             alignItems: 'center',
             gap: '8px'
           }}>
-            🐱 启程
+            <Image src="/cat-logo.png" alt="启程" width={32} height={32} /> 启程
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
             <Link
