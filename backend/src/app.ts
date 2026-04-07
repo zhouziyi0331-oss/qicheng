@@ -21,6 +21,7 @@ import chatRoutes from './routes/chat';
 import notificationRoutes from './routes/notification';
 import uploadRoutes from './routes/upload';
 import mentorRoutes from './routes/mentor';
+import trustRoutes from './routes/trust';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -80,6 +81,7 @@ app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/notification', notificationRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/mentor', mentorRoutes);
+app.use('/api/v1/trust', trustRoutes);
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));

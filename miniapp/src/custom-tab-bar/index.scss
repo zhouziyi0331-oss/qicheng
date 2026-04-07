@@ -76,17 +76,16 @@
   height: 60px;
   border-radius: 30px; // 半高 = 完美胶囊形
 
-  // 荧光绿渐变背景
-  background: radial-gradient(
-    120% 120% at 30% 30%,
-    #CCFF00 0%,
-    #B8FF2C 50%,
-    #E8FF8C 100%
+  // 柔和的嫩草绿渐变背景
+  background: linear-gradient(
+    135deg,
+    #D4F291 0%,
+    #E8F9B8 100%
   );
 
-  // 发光效果
+  // 柔和发光效果
   box-shadow:
-    0 4px 20px rgba(204, 255, 0, 0.4),
+    0 4px 16px rgba(212, 242, 145, 0.25),
     inset 0 1px 2px rgba(255, 255, 255, 0.5);
 
   // 居中加号图标
@@ -107,12 +106,10 @@
 
 // 中央加号图标
 .tab-icon-add {
-  width: 34px;
-  height: 34px;
-  stroke: #1A1A1A;
-  stroke-width: 3;
-  stroke-linecap: round;
-  fill: none;
+  font-size: 36px;
+  font-weight: 300;
+  color: #1A1A1A;
+  line-height: 1;
 }
 
 // Home 图标选中时填充

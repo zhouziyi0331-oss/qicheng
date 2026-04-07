@@ -211,20 +211,30 @@ async function rejectTask(req, res, next) {
 // ============================================================
 // 内部: 检查联系方式解锁
 // ============================================================
-async function checkContactUnlock(client, studentId, companyId, _taskId) {
-    const existing = await client.query('SELECT id FROM contact_unlocks WHERE student_id = $1 AND company_id = $2', [studentId, companyId]);
-    if (existing.rows.length > 0)
-        return; // 已解锁
-    const taskCount = await client.query(`SELECT COUNT(*) FROM task_submissions ts
-     JOIN tasks t ON t.id = ts.task_id
-     WHERE ts.student_id = $1 AND t.company_id = $2 AND ts.status = 'approved'`, [studentId, companyId]);
-    if (parseInt(taskCount.rows[0].count) >= 2) {
-        await client.query(`INSERT INTO contact_unlocks (student_id, company_id) VALUES ($1, $2)`, [studentId, companyId]);
-        // 双向通知
+async function checkContactUnlock(client, studentId, companyId, taskId) {
+    // 获取任务收入
+    const taskResult = await client.query('SELECT budget_net FROM tasks WHERE id = $1', [taskId]);
+    const earnings = taskResult.rows[0]?.budget_net || 0;
+    // 调用信任加速器MatchService记录合作
+    const { MatchService } = require('../../services/trustAccelerator/matchService');
+    const matchResult = await MatchService.recordTaskCompletion(studentId, companyId, earnings);
+    // 如果达到解锁资格（完成2次任务）
+    if (matchResult.unlockEligible) {
+        // 发送通知：提示学生可以解锁联系方式
         await client.query(`INSERT INTO notifications (user_id, type, title, content)
-       VALUES ($1, 'contact_unlocked', '联系方式已解锁', '你和这家企业已合作完成2单，可以直接联系了！')`, [studentId]);
-        await client.query(`INSERT INTO notifications (user_id, type, title, content)
-       VALUES ($1, 'contact_unlocked', '学生联系方式已解锁', '你们已完成2单合作，可以直接联系该学生了！')`, [companyId]);
+       VALUES ($1, 'unlock_eligible', '🎉 解锁深度合作机会', $2)`, [
+            studentId,
+            JSON.stringify({
+                message: '你已完成该商家2个任务，现在可以付费解锁联系方式，开启长期合作！',
+                matchId: matchResult.matchId,
+                companyId: companyId
+            })
+        ]);
+        logger_1.default.info('Student eligible for contact unlock', {
+            studentId,
+            companyId,
+            matchId: matchResult.matchId
+        });
     }
 }
 async function scheduleFirstTaskSettlement(studentId, taskId) {

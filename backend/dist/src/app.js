@@ -26,6 +26,7 @@ const chat_1 = __importDefault(require("./routes/chat"));
 const notification_1 = __importDefault(require("./routes/notification"));
 const upload_1 = __importDefault(require("./routes/upload"));
 const mentor_1 = __importDefault(require("./routes/mentor"));
+const trust_1 = __importDefault(require("./routes/trust"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
@@ -78,6 +79,7 @@ app.use('/api/v1/chat', chat_1.default);
 app.use('/api/v1/notification', notification_1.default);
 app.use('/api/v1/upload', upload_1.default);
 app.use('/api/v1/mentor', mentor_1.default);
+app.use('/api/v1/trust', trust_1.default);
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

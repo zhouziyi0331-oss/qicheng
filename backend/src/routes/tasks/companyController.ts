@@ -298,37 +298,40 @@ async function checkContactUnlock(
   client: { query: Function },
   studentId: string,
   companyId: string,
-  _taskId: string
+  taskId: string
 ): Promise<void> {
-  const existing = await client.query(
-    'SELECT id FROM contact_unlocks WHERE student_id = $1 AND company_id = $2',
-    [studentId, companyId]
+  // 获取任务收入
+  const taskResult = await client.query(
+    'SELECT budget_net FROM tasks WHERE id = $1',
+    [taskId]
   );
-  if (existing.rows.length > 0) return; // 已解锁
+  const earnings = taskResult.rows[0]?.budget_net || 0;
 
-  const taskCount = await client.query(
-    `SELECT COUNT(*) FROM task_submissions ts
-     JOIN tasks t ON t.id = ts.task_id
-     WHERE ts.student_id = $1 AND t.company_id = $2 AND ts.status = 'approved'`,
-    [studentId, companyId]
-  );
+  // 调用信任加速器MatchService记录合作
+  const { MatchService } = require('../../services/trustAccelerator/matchService');
+  const matchResult = await MatchService.recordTaskCompletion(studentId, companyId, earnings);
 
-  if (parseInt(taskCount.rows[0].count) >= 2) {
-    await client.query(
-      `INSERT INTO contact_unlocks (student_id, company_id) VALUES ($1, $2)`,
-      [studentId, companyId]
-    );
-    // 双向通知
+  // 如果达到解锁资格（完成2次任务）
+  if (matchResult.unlockEligible) {
+    // 发送通知：提示学生可以解锁联系方式
     await client.query(
       `INSERT INTO notifications (user_id, type, title, content)
-       VALUES ($1, 'contact_unlocked', '联系方式已解锁', '你和这家企业已合作完成2单，可以直接联系了！')`,
-      [studentId]
+       VALUES ($1, 'unlock_eligible', '🎉 解锁深度合作机会', $2)`,
+      [
+        studentId,
+        JSON.stringify({
+          message: '你已完成该商家2个任务，现在可以付费解锁联系方式，开启长期合作！',
+          matchId: matchResult.matchId,
+          companyId: companyId
+        })
+      ]
     );
-    await client.query(
-      `INSERT INTO notifications (user_id, type, title, content)
-       VALUES ($1, 'contact_unlocked', '学生联系方式已解锁', '你们已完成2单合作，可以直接联系该学生了！')`,
-      [companyId]
-    );
+
+    logger.info('Student eligible for contact unlock', {
+      studentId,
+      companyId,
+      matchId: matchResult.matchId
+    });
   }
 }
 

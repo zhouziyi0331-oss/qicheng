@@ -9,7 +9,7 @@
   >
     <!-- 中央荧光绿胶囊形大按钮 -->
     <view wx:if="{{item.isCenter}}" class="center-btn">
-      <view class="tab-icon-add">+</view>
+      <text class="tab-icon-add">+</text>
     </view>
 
     <!-- 普通导航项 -->
