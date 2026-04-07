@@ -1,7 +1,8 @@
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text, Button, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import './index.scss'
+import catLogo from '../../assets/images/cat-logo.png'
 
 export default function Index() {
   const [user, setUser] = useState<any>(null)
@@ -145,7 +146,7 @@ export default function Index() {
 
           <View className="popular-card card-dark" onClick={() => handleNavigate('/pages/mentor/index')}>
             <View className="popular-icon">
-              <Text className="icon-emoji">🐱</Text>
+              <Image src={catLogo} className="cat-logo-img" mode="aspectFit" />
             </View>
             <View className="popular-content">
               <Text className="popular-title-inline">启程小猫</Text>

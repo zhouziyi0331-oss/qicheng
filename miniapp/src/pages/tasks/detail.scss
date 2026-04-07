@@ -188,9 +188,10 @@
   z-index: 100;
 }
 
-.mentor-icon {
-  font-size: 48rpx;
-  line-height: 1;
+.mentor-logo {
+  width: 60rpx;
+  height: 60rpx;
+  object-fit: contain;
 }
 
 .mentor-text {

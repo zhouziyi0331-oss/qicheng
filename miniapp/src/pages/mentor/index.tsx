@@ -1,10 +1,11 @@
-import { View, Text, Input, ScrollView } from '@tarojs/components'
+import { View, Text, Input, ScrollView, Image } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useEffect, useState, useRef } from 'react'
 import { mentorAPI } from '../../services/api'
 import { formatTime } from '../../utils'
 import { detectEmotionState, saveEmotionState } from '../../utils/emotion'
 import './index.scss'
+import catLogo from '../../assets/images/cat-logo.png'
 
 interface Message {
   id: string
@@ -175,12 +176,7 @@ export default function Mentor() {
       {/* 头部 */}
       <View className="mentor-header">
         <View className="mentor-avatar-circle">
-          <svg className="icon-svg" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <circle cx="9" cy="10" r="1.5" />
-            <circle cx="15" cy="10" r="1.5" />
-            <path d="M8 15c0 2 1.79 3 4 3s4-1 4-3" />
-          </svg>
+          <Image src={catLogo} className="mentor-logo-img" mode="aspectFit" />
         </View>
         <View className="mentor-info">
           <Text className="mentor-name">启程小猫</Text>
@@ -197,12 +193,7 @@ export default function Mentor() {
           >
             {msg.role === 'mentor' && (
               <View className="message-avatar mentor-avatar-small">
-                <svg className="icon-svg-small" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" />
-                  <circle cx="9" cy="10" r="1.5" />
-                  <circle cx="15" cy="10" r="1.5" />
-                  <path d="M8 15c0 2 1.79 3 4 3s4-1 4-3" />
-                </svg>
+                <Image src={catLogo} className="mentor-logo-small" mode="aspectFit" />
               </View>
             )}
             <View className="message-content">

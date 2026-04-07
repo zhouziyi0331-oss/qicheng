@@ -427,9 +427,16 @@
     justify-content: center;
     margin-right: 24px;
     flex-shrink: 0;
+    overflow: hidden;
 
     .icon-emoji {
       font-size: 48px;
+    }
+
+    .cat-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 

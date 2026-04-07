@@ -1,9 +1,10 @@
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text, Button, Image } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { getUserInfo, saveUserInfo } from '../../utils'
 import GuideDialog from '../../components/GuideDialog'
 import './detail.scss'
+import catLogo from '../../assets/images/cat-logo.png'
 
 export default function TaskDetail() {
   const router = useRouter()
@@ -159,7 +160,7 @@ export default function TaskDetail() {
 
       {/* AI导师悬浮按钮 */}
       <View className="mentor-float-btn" onClick={handleAskMentor}>
-        <Text className="mentor-icon">🐱</Text>
+        <Image src={catLogo} className="mentor-logo" mode="aspectFit" />
         <Text className="mentor-text">问AI导师</Text>
       </View>
     </View>

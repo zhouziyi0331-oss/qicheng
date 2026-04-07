@@ -42,6 +42,13 @@
   justify-content: center;
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+  overflow: hidden;
+}
+
+.mentor-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .icon-svg {
@@ -111,16 +118,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
-.icon-svg-small {
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: $text-primary;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.mentor-logo-small {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-avatar-small {
