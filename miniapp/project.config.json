@@ -53,7 +53,7 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "3.0.0",
+  "libVersion": "3.15.1",
   "projectname": "启程OPC孵化",
   "condition": {},
   "editorSetting": {

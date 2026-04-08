@@ -362,6 +362,13 @@ export default function OPCTest() {
       opcScores: normalizedScores,
       hasCompletedTest: true
     })
+
+    // 跳转到结果页面
+    setTimeout(() => {
+      Taro.redirectTo({
+        url: '/pages/opc-test/result'
+      })
+    }, 500)
   }
 
   const generateOPCTag = (scores: any) => {

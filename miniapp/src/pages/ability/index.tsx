@@ -27,16 +27,36 @@ export default function Ability() {
   const loadAbilityData = async () => {
     try {
       setLoading(true)
-      const data = await abilityAPI.getRadar()
-      setAbilityData(data)
 
-      // 延迟绘制雷达图，确保Canvas已渲染
-      setTimeout(() => {
-        drawRadarChart(data)
-      }, 300)
+      // 尝试从API加载
+      try {
+        const data = await abilityAPI.getRadar()
+        setAbilityData(data)
+        setTimeout(() => {
+          drawRadarChart(data)
+        }, 300)
+      } catch (apiErr) {
+        // API失败时使用模拟数据
+        console.log('API加载失败，使用模拟数据')
+        const mockData: AbilityData = {
+          d1: 0, // 学习力
+          d2: 0, // 执行力
+          d3: 0, // 沟通力
+          d4: 0, // 创新力
+          d5: 0, // 协作力
+          d6: 0, // 抗压力
+          level: 1,
+          totalScore: 0,
+          rank: '未测评'
+        }
+        setAbilityData(mockData)
+        setTimeout(() => {
+          drawRadarChart(mockData)
+        }, 300)
+      }
     } catch (err: any) {
       Taro.showToast({
-        title: err.message || '加载失败',
+        title: '加载失败',
         icon: 'none'
       })
     } finally {

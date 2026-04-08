@@ -3,6 +3,7 @@ export default defineAppConfig({
     'pages/index/index',           // 首页
     'pages/role-select/index',     // 角色选择
     'pages/opc-test/index',        // OPC测评
+    'pages/opc-test/result',       // OPC测评结果
     'pages/login/index',           // 登录
     'pages/register/index',        // 注册
     'pages/onboarding/index',      // 引导页
