@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const features = [
-  { icon: "🧠", title: "看见真实的自己", desc: "25道题，不是测试，是一次对话。AI帮你发现那些你自己都没注意到的闪光点", color: "#D4A5F9" },
-  { icon: "🎯", title: "不是抢单，是遇见", desc: "我们不会让你盲目竞争。每个任务推荐，都基于你此刻的能力和状态", color: "#A8D8EA" },
-  { icon: "💰", title: "第一步，我们陪你", desc: "首单24小时到账，平台先垫付。因为我们知道，开始有多难", color: "#D4F291" },
-  { icon: "📈", title: "成长看得见", desc: "六维能力雷达，记录每一次进步。你的OPC档案，是你自己写的故事", color: "#FFE082" },
-  { icon: "🤝", title: "真实的项目经验", desc: "不是练习，是真实企业的真实需求。每一单，都是你作品集的一部分", color: "#F9C6D9" },
-  { icon: "🚀", title: "终点是独立", desc: "我们的目标，是让你有一天不再需要平台，成为真正独立的创造者", color: "#FFB84D" },
+  { icon: "🧠", title: "看见真实的自己", desc: "25道题，不是测试，是一次对话。AI帮你发现那些你自己都没注意到的闪光点", color: "#D4A5F9", link: "/onboarding" },
+  { icon: "🎯", title: "不是抢单，是遇见", desc: "我们不会让你盲目竞争。每个任务推荐，都基于你此刻的能力和状态", color: "#A8D8EA", link: "/tasks" },
+  { icon: "💰", title: "第一步，我们陪你", desc: "首单24小时到账，平台先垫付。因为我们知道，开始有多难", color: "#D4F291", link: "/register" },
+  { icon: "📈", title: "成长看得见", desc: "六维能力雷达，记录每一次进步。你的OPC档案，是你自己写的故事", color: "#FFE082", link: "/ability" },
+  { icon: "🤝", title: "真实的项目经验", desc: "不是练习，是真实企业的真实需求。每一单，都是你作品集的一部分", color: "#F9C6D9", link: "/story" },
+  { icon: "🚀", title: "终点是独立", desc: "我们的目标，是让你有一天不再需要平台，成为真正独立的创造者", color: "#FFB84D", link: "/reports" },
 ];
 
 const steps = [
@@ -217,6 +217,92 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 核心功能快速入口 */}
+      <section className="container" style={{ paddingTop: '60px', paddingBottom: '60px', background: 'linear-gradient(180deg, rgba(249, 198, 217, 0.1) 0%, rgba(168, 216, 234, 0.1) 100%)', borderRadius: '32px', margin: '60px auto' }}>
+        <h2 style={{
+          fontSize: '32px',
+          fontWeight: '700',
+          textAlign: 'center',
+          marginBottom: '16px',
+          color: '#2D3436'
+        }}>
+          探索启程平台
+        </h2>
+        <p style={{
+          fontSize: '16px',
+          textAlign: 'center',
+          marginBottom: '48px',
+          color: '#636E72'
+        }}>
+          点击了解每个功能如何帮助你成长
+        </p>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '20px',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {[
+            { icon: "🎯", title: "OPC能力测评", desc: "25道题发现你的潜力", color: "#D4A5F9", link: "/register" },
+            { icon: "📋", title: "任务大厅", desc: "AI智能匹配适合你的任务", color: "#A8D8EA", link: "/tasks" },
+            { icon: "🤖", title: "AI导师", desc: "24小时在线引导和答疑", color: "#FFE082", link: "/mentor" },
+            { icon: "📊", title: "六维能力", desc: "可视化你的成长轨迹", color: "#D4F291", link: "/ability" },
+            { icon: "💰", title: "收入管理", desc: "查看收益和提现记录", color: "#F9C6D9", link: "/profile" },
+            { icon: "📖", title: "故事墙", desc: "分享你的OPC成长故事", color: "#FFB84D", link: "/story" },
+            { icon: "👥", title: "组队接单", desc: "和伙伴一起完成大任务", color: "#A8D8EA", link: "/tasks" },
+            { icon: "🎓", title: "OPC报告", desc: "深度分析你的职业方向", color: "#D4A5F9", link: "/reports" },
+          ].map((item) => (
+            <Link key={item.title} href={item.link} style={{
+              padding: '24px',
+              borderRadius: '20px',
+              background: 'white',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
+              transition: 'all 0.3s',
+              cursor: 'pointer',
+              border: '2px solid transparent',
+              textDecoration: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px'
+            }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '14px',
+                background: item.color + '30',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px'
+              }}>{item.icon}</div>
+              <div>
+                <h3 style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  marginBottom: '4px',
+                  color: '#2D3436'
+                }}>{item.title}</h3>
+                <p style={{
+                  fontSize: '13px',
+                  color: '#636E72',
+                  lineHeight: '1.5'
+                }}>{item.desc}</p>
+              </div>
+              <div style={{
+                fontSize: '13px',
+                color: item.color,
+                fontWeight: '600',
+                marginTop: 'auto'
+              }}>
+                立即体验 →
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* 功能特性 */}
       <section className="container" style={{ paddingTop: '60px', paddingBottom: '60px' }}>
         <h2 style={{
@@ -234,14 +320,16 @@ export default function HomePage() {
           gap: '24px'
         }}>
           {features.map((f) => (
-            <div key={f.title} className="fade-in" style={{
+            <Link key={f.title} href={f.link} className="fade-in" style={{
               padding: '32px',
               borderRadius: '24px',
               background: 'white',
               boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06)',
               transition: 'all 0.3s',
               cursor: 'pointer',
-              border: '1px solid #E5D4E8'
+              border: '1px solid #E5D4E8',
+              textDecoration: 'none',
+              display: 'block'
             }}>
               <div style={{
                 width: '64px',
@@ -263,8 +351,168 @@ export default function HomePage() {
               <p style={{
                 fontSize: '14px',
                 color: '#636E72',
-                lineHeight: '1.6'
+                lineHeight: '1.6',
+                marginBottom: '12px'
               }}>{f.desc}</p>
+              <div style={{
+                fontSize: '14px',
+                color: f.color,
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}>
+                了解更多 →
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 用户旅程 */}
+      <section className="container" style={{ paddingTop: '60px', paddingBottom: '60px' }}>
+        <h2 style={{
+          fontSize: '32px',
+          fontWeight: '700',
+          textAlign: 'center',
+          marginBottom: '16px',
+          color: '#2D3436'
+        }}>
+          你的OPC成长路径
+        </h2>
+        <p style={{
+          fontSize: '16px',
+          textAlign: 'center',
+          marginBottom: '48px',
+          color: '#636E72',
+          maxWidth: '600px',
+          margin: '0 auto 48px'
+        }}>
+          从新手到独立创造者，每一步都有AI导师陪伴
+        </p>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gap: '32px',
+          maxWidth: '1000px',
+          margin: '0 auto',
+          position: 'relative'
+        }}>
+          {[
+            {
+              step: "01",
+              title: "注册并测评",
+              desc: "10分钟了解你的能力和兴趣",
+              icon: "🎯",
+              color: "#F9C6D9",
+              action: "开始测评",
+              link: "/register"
+            },
+            {
+              step: "02",
+              title: "接收任务推荐",
+              desc: "AI为你匹配2-3个适合的任务",
+              icon: "📋",
+              color: "#A8D8EA",
+              action: "查看任务",
+              link: "/tasks"
+            },
+            {
+              step: "03",
+              title: "AI导师辅导",
+              desc: "遇到困难随时求助，启发式引导",
+              icon: "🤖",
+              color: "#D4F291",
+              action: "咨询导师",
+              link: "/mentor"
+            },
+            {
+              step: "04",
+              title: "完成并成长",
+              desc: "24小时到账，六维能力更新",
+              icon: "📈",
+              color: "#FFE082",
+              action: "查看成长",
+              link: "/ability"
+            },
+          ].map((item, idx) => (
+            <div key={item.step} style={{
+              position: 'relative',
+              padding: '28px',
+              borderRadius: '24px',
+              background: 'white',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+              border: '2px solid ' + item.color + '40',
+              transition: 'all 0.3s'
+            }}>
+              {/* 连接线 */}
+              {idx < 3 && (
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '-32px',
+                  width: '32px',
+                  height: '2px',
+                  background: 'linear-gradient(90deg, ' + item.color + ' 0%, transparent 100%)',
+                  transform: 'translateY(-50%)'
+                }} className="hidden md:block" />
+              )}
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                marginBottom: '16px'
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '14px',
+                  background: item.color + '30',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '24px'
+                }}>{item.icon}</div>
+                <div style={{
+                  fontSize: '28px',
+                  fontWeight: '800',
+                  color: item.color,
+                  opacity: 0.6
+                }}>{item.step}</div>
+              </div>
+
+              <h3 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                marginBottom: '8px',
+                color: '#2D3436'
+              }}>{item.title}</h3>
+
+              <p style={{
+                fontSize: '14px',
+                color: '#636E72',
+                lineHeight: '1.6',
+                marginBottom: '16px'
+              }}>{item.desc}</p>
+
+              <Link href={item.link} style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 16px',
+                borderRadius: '12px',
+                background: item.color + '20',
+                color: item.color,
+                fontSize: '13px',
+                fontWeight: '600',
+                textDecoration: 'none',
+                transition: 'all 0.2s',
+                border: '1px solid ' + item.color + '40'
+              }}>
+                {item.action} →
+              </Link>
             </div>
           ))}
         </div>
@@ -276,11 +524,19 @@ export default function HomePage() {
           fontSize: '32px',
           fontWeight: '700',
           textAlign: 'center',
-          marginBottom: '48px',
+          marginBottom: '16px',
           color: '#2D3436'
         }}>
-          就这样开始
+          为什么选择启程？
         </h2>
+        <p style={{
+          fontSize: '16px',
+          textAlign: 'center',
+          marginBottom: '48px',
+          color: '#636E72'
+        }}>
+          我们不只是任务平台，更是你的成长伙伴
+        </p>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -321,6 +577,66 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* 企业端入口 */}
+      <section className="container" style={{ paddingTop: '40px', paddingBottom: '60px' }}>
+        <div style={{
+          padding: '48px',
+          borderRadius: '32px',
+          background: 'linear-gradient(135deg, #A8D8EA 0%, #D4A5F9 100%)',
+          textAlign: 'center',
+          color: 'white'
+        }}>
+          <h2 style={{
+            fontSize: '28px',
+            fontWeight: '700',
+            marginBottom: '16px'
+          }}>
+            企业合作伙伴
+          </h2>
+          <p style={{
+            fontSize: '16px',
+            marginBottom: '32px',
+            opacity: 0.9
+          }}>
+            寻找优质的AI人才？发布任务，让AI为你匹配最合适的学生
+          </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link
+              href="/company/register"
+              style={{
+                padding: '14px 32px',
+                borderRadius: '24px',
+                background: 'white',
+                color: '#2D3436',
+                fontWeight: '600',
+                fontSize: '16px',
+                textDecoration: 'none',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s'
+              }}
+            >
+              企业注册
+            </Link>
+            <Link
+              href="/company/login"
+              style={{
+                padding: '14px 32px',
+                borderRadius: '24px',
+                border: '2px solid white',
+                background: 'transparent',
+                color: 'white',
+                fontWeight: '600',
+                fontSize: '16px',
+                textDecoration: 'none',
+                transition: 'all 0.3s'
+              }}
+            >
+              企业登录
+            </Link>
+          </div>
         </div>
       </section>
 

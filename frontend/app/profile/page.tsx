@@ -204,31 +204,134 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* 余额操作 */}
-      <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium" style={{ color: "#8b949e" }}>收入与提现</h3>
-          <Badge color="green">¥{(profile.balance ?? 0).toFixed(2)} 可提</Badge>
+      {/* 功能菜单 */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <Link href="/my-tasks" className="p-4 rounded-lg no-underline group hover:scale-105 transition-transform"
+          style={{ background: "#161b22", border: "1px solid #30363d" }}>
+          <div className="text-2xl mb-2">📋</div>
+          <div className="text-sm font-medium mb-1" style={{ color: "#e6edf3" }}>我的任务</div>
+          <div className="text-xs" style={{ color: "#8b949e" }}>查看进行中和已完成的任务</div>
+        </Link>
+
+        <Link href="/withdraw" className="p-4 rounded-lg no-underline group hover:scale-105 transition-transform"
+          style={{ background: "#161b22", border: "1px solid #30363d" }}>
+          <div className="text-2xl mb-2">💰</div>
+          <div className="text-sm font-medium mb-1" style={{ color: "#e6edf3" }}>提现</div>
+          <div className="text-xs" style={{ color: "#8b949e" }}>余额满¥50可申请提现</div>
+        </Link>
+
+        <Link href="/ability" className="p-4 rounded-lg no-underline group hover:scale-105 transition-transform"
+          style={{ background: "#161b22", border: "1px solid #30363d" }}>
+          <div className="text-2xl mb-2">📊</div>
+          <div className="text-sm font-medium mb-1" style={{ color: "#e6edf3" }}>能力分析</div>
+          <div className="text-xs" style={{ color: "#8b949e" }}>查看六维能力雷达图</div>
+        </Link>
+
+        <Link href="/reports" className="p-4 rounded-lg no-underline group hover:scale-105 transition-transform"
+          style={{ background: "#161b22", border: "1px solid #30363d" }}>
+          <div className="text-2xl mb-2">📄</div>
+          <div className="text-sm font-medium mb-1" style={{ color: "#e6edf3" }}>OPC报告</div>
+          <div className="text-xs" style={{ color: "#8b949e" }}>解锁深度职业分析报告</div>
+        </Link>
+
+        <Link href="/timeline" className="p-4 rounded-lg no-underline group hover:scale-105 transition-transform"
+          style={{ background: "#161b22", border: "1px solid #30363d" }}>
+          <div className="text-2xl mb-2">🎯</div>
+          <div className="text-sm font-medium mb-1" style={{ color: "#e6edf3" }}>成长时间线</div>
+          <div className="text-xs" style={{ color: "#8b949e" }}>回顾你的成长历程</div>
+        </Link>
+
+        <Link href="/story" className="p-4 rounded-lg no-underline group hover:scale-105 transition-transform"
+          style={{ background: "#161b22", border: "1px solid #30363d" }}>
+          <div className="text-2xl mb-2">✨</div>
+          <div className="text-sm font-medium mb-1" style={{ color: "#e6edf3" }}>故事墙</div>
+          <div className="text-xs" style={{ color: "#8b949e" }}>分享你的OPC故事</div>
+        </Link>
+      </div>
+
+      {/* 高级功能 */}
+      <div className="p-5 rounded-lg mb-4" style={{ background: "#161b22", border: "1px solid #30363d" }}>
+        <h3 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>进阶功能</h3>
+        <div className="space-y-2">
+          <Link href="/challenge" className="flex items-center justify-between p-3 rounded-lg no-underline hover:bg-opacity-80 transition-colors"
+            style={{ background: "#21262d" }}>
+            <div className="flex items-center gap-3">
+              <div className="text-xl">🚀</div>
+              <div>
+                <div className="text-sm font-medium" style={{ color: "#e6edf3" }}>跳级挑战</div>
+                <div className="text-xs" style={{ color: "#8b949e" }}>挑战更高等级任务</div>
+              </div>
+            </div>
+            <div className="text-xs" style={{ color: "#58a6ff" }}>→</div>
+          </Link>
+
+          <Link href="/team" className="flex items-center justify-between p-3 rounded-lg no-underline hover:bg-opacity-80 transition-colors"
+            style={{ background: "#21262d" }}>
+            <div className="flex items-center gap-3">
+              <div className="text-xl">👥</div>
+              <div>
+                <div className="text-sm font-medium" style={{ color: "#e6edf3" }}>组队接单</div>
+                <div className="text-xs" style={{ color: "#8b949e" }}>与他人协作完成任务</div>
+              </div>
+            </div>
+            <div className="text-xs" style={{ color: "#58a6ff" }}>→</div>
+          </Link>
+
+          <Link href="/invitation" className="flex items-center justify-between p-3 rounded-lg no-underline hover:bg-opacity-80 transition-colors"
+            style={{ background: "#21262d" }}>
+            <div className="flex items-center gap-3">
+              <div className="text-xl">💌</div>
+              <div>
+                <div className="text-sm font-medium" style={{ color: "#e6edf3" }}>邀请任务</div>
+                <div className="text-xs" style={{ color: "#8b949e" }}>满级后解锁企业邀请</div>
+              </div>
+            </div>
+            {profile.level_a === 7 ? (
+              <Badge color="green">已解锁</Badge>
+            ) : (
+              <Badge color="gray">Lv.7解锁</Badge>
+            )}
+          </Link>
         </div>
-        <p className="text-xs mb-4" style={{ color: "#484f58" }}>
-          完成任务后，企业审核通过即可结算。首单24小时到账，后续7个工作日到账。满¥50可申请提现。
-        </p>
-        <Link
-          href="/withdraw"
-          className="inline-block px-3 py-1.5 rounded-md text-xs font-medium no-underline"
-          style={{
-            background: (profile.balance ?? 0) >= 50 ? "#21262d" : "#161b22",
-            border: "1px solid #30363d",
-            color: (profile.balance ?? 0) >= 50 ? "#e6edf3" : "#484f58",
-            pointerEvents: (profile.balance ?? 0) >= 50 ? "auto" : "none",
-          }}
-        >
-          申请提现
-        </Link>
-        <Link href="/reports" className="inline-block px-3 py-1.5 rounded-md text-xs font-medium no-underline ml-2"
-          style={{ background: "#21262d", border: "1px solid #30363d", color: "#e6edf3" }}>
-          OPC报告
-        </Link>
+      </div>
+
+      {/* 设置 */}
+      <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
+        <h3 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>设置</h3>
+        <div className="space-y-2">
+          <button className="w-full flex items-center justify-between p-3 rounded-lg text-left hover:bg-opacity-80 transition-colors"
+            style={{ background: "#21262d", border: "none", cursor: "pointer" }}>
+            <div className="flex items-center gap-3">
+              <div className="text-xl">🔔</div>
+              <div className="text-sm" style={{ color: "#e6edf3" }}>通知设置</div>
+            </div>
+            <div className="text-xs" style={{ color: "#58a6ff" }}>→</div>
+          </button>
+
+          <button className="w-full flex items-center justify-between p-3 rounded-lg text-left hover:bg-opacity-80 transition-colors"
+            style={{ background: "#21262d", border: "none", cursor: "pointer" }}>
+            <div className="flex items-center gap-3">
+              <div className="text-xl">🔒</div>
+              <div className="text-sm" style={{ color: "#e6edf3" }}>隐私设置</div>
+            </div>
+            <div className="text-xs" style={{ color: "#58a6ff" }}>→</div>
+          </button>
+
+          <button className="w-full flex items-center justify-between p-3 rounded-lg text-left hover:bg-opacity-80 transition-colors"
+            style={{ background: "#21262d", border: "none", cursor: "pointer" }}
+            onClick={() => {
+              if (confirm("确定要退出登录吗？")) {
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+              }
+            }}>
+            <div className="flex items-center gap-3">
+              <div className="text-xl">🚪</div>
+              <div className="text-sm" style={{ color: "#e6edf3" }}>退出登录</div>
+            </div>
+            <div className="text-xs" style={{ color: "#58a6ff" }}>→</div>
+          </button>
+        </div>
       </div>
     </div>
   );
