@@ -134,17 +134,6 @@ export default function Index() {
               <View className="tag tag-dark">持续更新</View>
             </View>
           </View>
-
-          <View className="popular-card card-dark" onClick={() => handleNavigate('/pages/mentor/index')}>
-            <View className="popular-icon">
-              <Image src={catLogo} className="cat-logo-img" mode="aspectFit" />
-            </View>
-            <View className="popular-content">
-              <Text className="popular-title-inline">启程小猫</Text>
-              <Text className="popular-subtitle">有问题随时找我，我一直在</Text>
-            </View>
-            <Text className="popular-arrow">→</Text>
-          </View>
         </View>
       )}
     </View>
