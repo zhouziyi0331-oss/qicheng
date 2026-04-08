@@ -9,7 +9,7 @@
   justify-content: space-around;
   align-items: flex-end;
   padding: 20px 32px 24px;
-  background: #FFFFFF;
+  background: #F5E6F0;
   border-radius: 48px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   z-index: 1000;
@@ -38,8 +38,8 @@
 
 // 图标容器
 .tab-icon-wrapper {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,10 +47,10 @@
 
 // SVG 图标样式
 .tab-icon {
-  width: 40px;
-  height: 40px;
-  stroke: #636E72;
-  stroke-width: 2.5;
+  width: 48px;
+  height: 48px;
+  stroke: #2D3436;
+  stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
@@ -60,7 +60,7 @@
 // 文字标签
 .tab-text {
   font-size: 24px;
-  color: #636E72;
+  color: #2D3436;
   font-weight: 500;
   transition: all 0.3s ease;
 }
@@ -70,14 +70,14 @@
   flex: 0 0 auto;
   margin: 0 16px;
   position: relative;
-  top: -24px; // 向上突出
+  top: -32px; // 向上突出更多
 }
 
-// 中央圆形黑色按钮
+// 中央圆形黑色按钮（放大）
 .center-mentor-btn {
-  width: 120px;
-  height: 120px;
-  border-radius: 60px;
+  width: 140px;
+  height: 140px;
+  border-radius: 70px;
   background: #2D3436;
   box-shadow: 0 8px 24px rgba(45, 52, 54, 0.3);
   display: flex;
@@ -90,8 +90,8 @@
   }
 
   .mentor-logo {
-    width: 80px;
-    height: 80px;
+    width: 96px;
+    height: 96px;
   }
 }
 

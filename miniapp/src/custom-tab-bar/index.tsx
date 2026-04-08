@@ -66,19 +66,22 @@ export default class CustomTabBar extends Component {
       ),
       tasks: (
         <svg viewBox="0 0 24 24" className="tab-icon">
-          <path d="M9 11l3 3L22 4" />
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M9 11l2 2 4-4" />
         </svg>
       ),
       story: (
         <svg viewBox="0 0 24 24" className="tab-icon">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          <circle cx="12" cy="12" r="10" />
+          <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+          <line x1="9" y1="9" x2="9.01" y2="9" />
+          <line x1="15" y1="9" x2="15.01" y2="9" />
         </svg>
       ),
       profile: (
         <svg viewBox="0 0 24 24" className="tab-icon">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
+          <circle cx="12" cy="8" r="5" />
+          <path d="M3 21c0-4 4-7 9-7s9 3 9 7" />
         </svg>
       ),
       add: (
