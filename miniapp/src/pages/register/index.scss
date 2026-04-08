@@ -1,6 +1,6 @@
 .register-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #06B6D4 100%);
+  background: linear-gradient(135deg, #F5E6F0 0%, #FFF5E6 100%);
   padding: 80px 32px 40px;
 }
 
@@ -18,21 +18,21 @@
   display: block;
   font-size: 32px;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #2D3436;
   margin-bottom: 12px;
 }
 
 .subtitle {
   display: block;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #636E72;
 }
 
 .register-form {
   background: #FFFFFF;
-  border-radius: 24px;
+  border-radius: 32px;
   padding: 32px 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .form-item {
@@ -42,9 +42,9 @@
 .form-label {
   display: block;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2D3436;
+  margin-bottom: 12px;
 }
 
 .role-options {
@@ -56,22 +56,38 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 12px 20px;
+  background: #F9F7F5;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.role-option:active {
+  transform: scale(0.98);
+  background: #FFF5E6;
 }
 
 .role-text {
   font-size: 16px;
-  color: #1F2937;
+  color: #2D3436;
+  font-weight: 500;
 }
 
 .form-input {
   width: 100%;
   height: 48px;
   padding: 0 16px;
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
+  background: #F9F7F5;
+  border: 2px solid transparent;
+  border-radius: 16px;
   font-size: 16px;
-  color: #1F2937;
+  color: #2D3436;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  background: #FFFFFF;
+  border-color: #D4F291;
 }
 
 .code-input-wrapper {
@@ -88,29 +104,36 @@
   flex-shrink: 0;
   height: 48px;
   padding: 0 20px;
-  background: #8B5CF6;
-  color: #FFFFFF;
+  background: #D4F291;
+  color: #2D3436;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .code-button[disabled] {
-  background: #D1D5DB;
-  color: #9CA3AF;
+  background: #E8E8E8;
+  color: #B2BEC3;
 }
 
 .register-button {
   width: 100%;
   height: 52px;
-  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-  color: #FFFFFF;
+  background: #D4F291;
+  color: #2D3436;
   border: none;
-  border-radius: 12px;
+  border-radius: 26px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   margin-top: 32px;
+  box-shadow: 0 4px 12px rgba(212, 242, 145, 0.3);
+  transition: all 0.3s ease;
+}
+
+.register-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(212, 242, 145, 0.2);
 }
 
 .login-tip {
@@ -120,12 +143,12 @@
 
 .tip-text {
   font-size: 14px;
-  color: #6B7280;
+  color: #636E72;
 }
 
 .tip-link {
   font-size: 14px;
-  color: #8B5CF6;
-  font-weight: 500;
+  color: #2D3436;
+  font-weight: 600;
   margin-left: 8px;
 }

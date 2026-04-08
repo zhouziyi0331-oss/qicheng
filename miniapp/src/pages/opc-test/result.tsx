@@ -263,18 +263,44 @@ export default function OPCTestResult() {
       })
   }
 
-  const handleStartMatching = () => {
-    Taro.showToast({
-      title: '正在为你匹配任务...',
-      icon: 'loading',
-      duration: 2000
-    })
-
-    setTimeout(() => {
-      Taro.switchTab({
-        url: '/pages/tasks/index'
+  const handleStartMatching = async () => {
+    try {
+      Taro.showLoading({
+        title: 'AI正在为你匹配任务...',
+        mask: true
       })
-    }, 2000)
+
+      // 调用后端API触发任务匹配
+      const userInfo = getUserInfo()
+      if (userInfo && userInfo.opcScores) {
+        // 这里应该调用后端的任务匹配API
+        // await taskAPI.triggerMatching({ opcScores: userInfo.opcScores })
+
+        // 模拟API调用延迟
+        await new Promise(resolve => setTimeout(resolve, 2000))
+      }
+
+      Taro.hideLoading()
+
+      Taro.showToast({
+        title: '已为你推荐匹配任务',
+        icon: 'success',
+        duration: 1500
+      })
+
+      setTimeout(() => {
+        Taro.switchTab({
+          url: '/pages/tasks/index'
+        })
+      }, 1500)
+    } catch (error) {
+      Taro.hideLoading()
+      console.error('任务匹配失败:', error)
+      Taro.showToast({
+        title: '匹配失败，请稍后重试',
+        icon: 'none'
+      })
+    }
   }
 
   const handleUnlockReport = () => {
