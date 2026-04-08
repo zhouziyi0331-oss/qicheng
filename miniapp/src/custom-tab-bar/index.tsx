@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import Taro from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
+import catLogo from '../assets/images/cat-logo.png'
 import './index.scss'
 
 export default class CustomTabBar extends Component {
@@ -18,10 +19,10 @@ export default class CustomTabBar extends Component {
         iconType: 'tasks'
       },
       {
-        // 中央大按钮
-        pagePath: '/pages/story/post',
-        text: '',
-        iconType: 'add',
+        // 中央启程小猫按钮
+        pagePath: '/pages/mentor/index',
+        text: '启程小猫',
+        iconType: 'mentor',
         isCenter: true
       },
       {
@@ -41,8 +42,9 @@ export default class CustomTabBar extends Component {
     const { isCenter } = this.state.list[index]
 
     if (isCenter) {
-      // 中央按钮：跳转到发布页面（非 tab 页面）
-      Taro.navigateTo({ url })
+      // 中央按钮：跳转到AI导师页面
+      Taro.switchTab({ url })
+      this.setSelected(index)
     } else {
       // 普通 tab：切换页面
       this.setSelected(index)
@@ -100,16 +102,17 @@ export default class CustomTabBar extends Component {
           const { isCenter } = item
 
           if (isCenter) {
-            // 中央荧光绿胶囊形大按钮
+            // 中央启程小猫按钮
             return (
               <View
                 key={index}
                 className="tab-item tab-center"
                 onClick={() => this.switchTab(index, item.pagePath)}
               >
-                <View className="center-btn">
-                  <Text className="tab-icon-add">+</Text>
+                <View className="center-mentor-btn">
+                  <Image src={catLogo} className="mentor-logo" mode="aspectFit" />
                 </View>
+                <Text className="tab-text center-text">启程小猫</Text>
               </View>
             )
           }

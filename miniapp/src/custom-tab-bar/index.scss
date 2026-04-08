@@ -1,16 +1,17 @@
-// 自定义 TabBar 样式 - 参考 MindMate 设计
+// 自定义 TabBar 样式 - 参考图片设计
 .custom-tab-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 680px;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  padding: 18px 24px 34px;
-  background: #F5F5F7;
-  border-radius: 32px 32px 0 0;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+  align-items: flex-end;
+  padding: 20px 32px 24px;
+  background: #FFFFFF;
+  border-radius: 48px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   z-index: 1000;
 }
 
@@ -24,12 +25,12 @@
 
   &.active {
     .tab-icon {
-      stroke: #1A1A1A;
-      fill: #1A1A1A;
+      stroke: #2D3436;
+      fill: #2D3436;
     }
 
     .tab-text {
-      color: #1A1A1A;
+      color: #2D3436;
       font-weight: 600;
     }
   }
@@ -37,8 +38,8 @@
 
 // 图标容器
 .tab-icon-wrapper {
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,10 +47,10 @@
 
 // SVG 图标样式
 .tab-icon {
-  width: 32px;
-  height: 32px;
-  stroke: #8E8E93;
-  stroke-width: 2.5;
+  width: 40px;
+  height: 40px;
+  stroke: #B2BEC3;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
@@ -58,63 +59,52 @@
 
 // 文字标签
 .tab-text {
-  font-size: 13px;
-  color: #8E8E93;
+  font-size: 24px;
+  color: #B2BEC3;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
-// 中央主按钮容器
+// 中央启程小猫按钮容器
 .tab-center {
   flex: 0 0 auto;
-  margin: 0 12px;
+  margin: 0 16px;
+  position: relative;
+  top: -24px; // 向上突出
 }
 
-// 荧光绿胶囊形大按钮 ⭐
-.center-btn {
-  width: 84px;
-  height: 60px;
-  border-radius: 30px; // 半高 = 完美胶囊形
-
-  // 柔和的嫩草绿渐变背景
-  background: linear-gradient(
-    135deg,
-    #D4F291 0%,
-    #E8F9B8 100%
-  );
-
-  // 柔和发光效果
-  box-shadow:
-    0 4px 16px rgba(212, 242, 145, 0.25),
-    inset 0 1px 2px rgba(255, 255, 255, 0.5);
-
-  // 居中加号图标
+// 中央圆形黑色按钮
+.center-mentor-btn {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background: #2D3436;
+  box-shadow: 0 8px 24px rgba(45, 52, 54, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-
-  // 按压效果
   transition: all 0.2s ease;
 
   &:active {
     transform: scale(0.95);
-    box-shadow:
-      0 2px 12px rgba(204, 255, 0, 0.3),
-      inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  }
+
+  .mentor-logo {
+    width: 80px;
+    height: 80px;
   }
 }
 
-// 中央加号图标
-.tab-icon-add {
-  font-size: 48px;
-  font-weight: 300;
-  color: #1A1A1A;
-  line-height: 1;
+// 中央文字
+.center-text {
+  margin-top: 8px;
+  color: #2D3436;
+  font-weight: 600;
 }
 
 // Home 图标选中时填充
 .tab-item.active {
   .tab-icon {
-    fill: #1A1A1A;
+    fill: #2D3436;
   }
 }
