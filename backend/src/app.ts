@@ -23,6 +23,9 @@ import uploadRoutes from './routes/upload';
 import mentorRoutes from './routes/mentor';
 import trustRoutes from './routes/trust';
 import invitationRoutes from './routes/invitation';
+import challengeRoutes from './routes/challenge';
+import subcontractRoutes from './routes/subcontract';
+import adminManagementRoutes from './routes/admin/adminRoutes';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -85,6 +88,9 @@ app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/mentor', mentorRoutes);
 app.use('/api/v1/trust', trustRoutes);
 app.use('/api/v1/invitation', invitationRoutes);
+app.use('/api/v1/challenge', challengeRoutes);
+app.use('/api/v1/subcontract', subcontractRoutes);
+app.use('/api/v1/admin-management', adminManagementRoutes);
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
