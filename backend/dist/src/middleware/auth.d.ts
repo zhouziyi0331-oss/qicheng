@@ -4,6 +4,9 @@ export interface JwtPayload {
     role: 'student' | 'company' | 'admin';
     adminRole?: 'super' | 'ops' | 'cs';
 }
+export interface AuthRequest extends Request {
+    user?: JwtPayload;
+}
 declare global {
     namespace Express {
         interface Request {

@@ -21,6 +21,7 @@ export declare const config: {
         serviceUrl: string;
         timeout: number;
         reportTimeout: number;
+        anthropicApiKey: string;
     };
     oss: {
         endpoint: string;

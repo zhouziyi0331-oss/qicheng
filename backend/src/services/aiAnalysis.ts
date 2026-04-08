@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { config } from '../../../config';
-import logger from '../../utils/logger';
+import { config } from '../../config';
+import logger from '../utils/logger';
 
 const anthropic = new Anthropic({
   apiKey: config.ai.anthropicApiKey || process.env.ANTHROPIC_API_KEY,

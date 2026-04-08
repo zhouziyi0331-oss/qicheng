@@ -29,6 +29,7 @@ exports.config = {
         serviceUrl: process.env.AI_SERVICE_URL || 'http://localhost:8000',
         timeout: 30000, // 30s for most AI calls
         reportTimeout: 120000, // 2min for report generation
+        anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
     },
     oss: {
         endpoint: process.env.OSS_ENDPOINT || '',

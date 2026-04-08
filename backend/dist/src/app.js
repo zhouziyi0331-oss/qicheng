@@ -28,6 +28,10 @@ const upload_1 = __importDefault(require("./routes/upload"));
 const mentor_1 = __importDefault(require("./routes/mentor"));
 const trust_1 = __importDefault(require("./routes/trust"));
 const invitation_1 = __importDefault(require("./routes/invitation"));
+const challenge_1 = __importDefault(require("./routes/challenge"));
+const subcontract_1 = __importDefault(require("./routes/subcontract"));
+const adminRoutes_1 = __importDefault(require("./routes/admin/adminRoutes"));
+const team_1 = __importDefault(require("./routes/team"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
@@ -83,6 +87,10 @@ app.use('/api/v1/upload', upload_1.default);
 app.use('/api/v1/mentor', mentor_1.default);
 app.use('/api/v1/trust', trust_1.default);
 app.use('/api/v1/invitation', invitation_1.default);
+app.use('/api/v1/challenge', challenge_1.default);
+app.use('/api/v1/subcontract', subcontract_1.default);
+app.use('/api/v1/admin-management', adminRoutes_1.default);
+app.use('/api/v1/team', team_1.default);
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================
