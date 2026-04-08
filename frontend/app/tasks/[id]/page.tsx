@@ -8,7 +8,6 @@ import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/components/ui/Toast";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import MentorChat from "@/components/mentor/MentorChat";
 
 interface Task {
   id: string;
@@ -51,7 +50,6 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
   const [loading, setLoading] = useState(true);
   const [accepting, setAccepting] = useState(false);
   const [sending, setSending] = useState(false);
-  const [showMentor, setShowMentor] = useState(false);
   const { role, userId } = useAuthStore();
   const { show } = useToast();
   const router = useRouter();
@@ -201,10 +199,11 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
       {/* AI导师悬浮按钮 */}
       {alreadyAccepted && (
         <button
-          onClick={() => setShowMentor(true)}
+          onClick={() => router.push(`/mentor?taskId=${id}`)}
           className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform z-40"
           style={{
-            background: "linear-gradient(135deg, #A78BFA 0%, #EC4899 100%)",
+            background: "#1f6feb",
+            border: "2px solid #58a6ff",
           }}
           title="问AI导师"
         >
@@ -280,15 +279,6 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
               style={{ background: "#21262d", border: "1px solid #30363d", color: "#e6edf3" }}
             />
             <Button onClick={handleSend} loading={sending} size="sm">发送</Button>
-          </div>
-        </div>
-      )}
-
-      {/* AI导师聊天弹窗 */}
-      {showMentor && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-2xl h-[600px] flex flex-col shadow-2xl">
-            <MentorChat taskId={id} onClose={() => setShowMentor(false)} />
           </div>
         </div>
       )}
