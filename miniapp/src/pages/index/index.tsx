@@ -79,23 +79,14 @@ export default function Index() {
           <View className="deco-circle deco-2" />
           <View className="deco-circle deco-3" />
 
-          {/* 中心插画人物 */}
+          {/* 中心Logo */}
           <View className="character">
-            <View className="character-head" />
-            <View className="character-body" />
-            <View className="character-arm-left" />
-            <View className="character-arm-right" />
+            <Image src={catLogo} className="center-logo" mode="aspectFit" />
           </View>
-
-          {/* 周围图标 */}
-          <View className="float-icon icon-1">📚</View>
-          <View className="float-icon icon-2">💡</View>
-          <View className="float-icon icon-3">✏️</View>
-          <View className="float-icon icon-4">⚙️</View>
         </View>
 
         <Text className="hero-title">乘着问题，飞跃山峰</Text>
-        <Text className="hero-subtitle">你的能力，值得被看见</Text>
+        <Text className="hero-subtitle">在真实任务中成长，让每一次尝试都成为你的勋章</Text>
       </View>
 
       {/* 登录按钮或推荐卡片 */}

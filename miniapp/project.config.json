@@ -53,5 +53,5 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "miniprogramRoot": "./dist/"
+  "miniprogramRoot": "dist/"
 }

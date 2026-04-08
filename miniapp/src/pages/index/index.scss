@@ -97,103 +97,18 @@
       animation: float 3.5s ease-in-out infinite 1s;
     }
 
-    // 中心人物
+    // 中心Logo
     .character {
       position: relative;
       z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      .character-head {
-        width: 120px;
-        height: 120px;
-        background: #2D3436;
-        border-radius: 60px;
-        margin: 0 auto 16px;
-        position: relative;
-
-        &::before {
-          content: '';
-          position: absolute;
-          width: 20px;
-          height: 20px;
-          background: #FFFFFF;
-          border-radius: 50%;
-          top: 40px;
-          left: 30px;
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          width: 20px;
-          height: 20px;
-          background: #FFFFFF;
-          border-radius: 50%;
-          top: 40px;
-          right: 30px;
-        }
-      }
-
-      .character-body {
-        width: 160px;
+      .center-logo {
+        width: 200px;
         height: 200px;
-        background: #FFFFFF;
-        border-radius: 80px 80px 40px 40px;
-        margin: 0 auto;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       }
-
-      .character-arm-left,
-      .character-arm-right {
-        position: absolute;
-        width: 60px;
-        height: 140px;
-        background: #FFFFFF;
-        border-radius: 30px;
-        top: 140px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      }
-
-      .character-arm-left {
-        left: -20px;
-        transform: rotate(-20deg);
-      }
-
-      .character-arm-right {
-        right: -20px;
-        transform: rotate(20deg);
-      }
-    }
-
-    // 浮动图标
-    .float-icon {
-      position: absolute;
-      font-size: 48px;
-      animation: float 3s ease-in-out infinite;
-      z-index: 3;
-    }
-
-    .icon-1 {
-      top: 40px;
-      left: 120px;
-      animation-delay: 0s;
-    }
-
-    .icon-2 {
-      top: 80px;
-      right: 100px;
-      animation-delay: 0.5s;
-    }
-
-    .icon-3 {
-      bottom: 100px;
-      right: 80px;
-      animation-delay: 1s;
-    }
-
-    .icon-4 {
-      bottom: 60px;
-      left: 60px;
-      animation-delay: 1.5s;
     }
   }
 
@@ -211,6 +126,7 @@
     color: #636E72;
     line-height: 1.6;
     display: block;
+    margin-bottom: 40px;
   }
 }
 

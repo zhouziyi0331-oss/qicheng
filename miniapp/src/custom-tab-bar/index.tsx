@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import Taro from '@tarojs/taro'
-import { View, CoverView, CoverImage } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import './index.scss'
 
 export default class CustomTabBar extends Component {
@@ -94,7 +94,7 @@ export default class CustomTabBar extends Component {
     const { selected, list } = this.state
 
     return (
-      <CoverView className="custom-tab-bar">
+      <View className="custom-tab-bar">
         {list.map((item, index) => {
           const isActive = selected === index
           const { isCenter } = item
@@ -102,33 +102,33 @@ export default class CustomTabBar extends Component {
           if (isCenter) {
             // 中央荧光绿胶囊形大按钮
             return (
-              <CoverView
+              <View
                 key={index}
                 className="tab-item tab-center"
                 onClick={() => this.switchTab(index, item.pagePath)}
               >
-                <CoverView className="center-btn">
-                  {this.renderIcon(item.iconType, false)}
-                </CoverView>
-              </CoverView>
+                <View className="center-btn">
+                  <Text className="tab-icon-add">+</Text>
+                </View>
+              </View>
             )
           }
 
           // 普通导航项
           return (
-            <CoverView
+            <View
               key={index}
               className={`tab-item ${isActive ? 'active' : ''}`}
               onClick={() => this.switchTab(index, item.pagePath)}
             >
-              <CoverView className="tab-icon-wrapper">
+              <View className="tab-icon-wrapper">
                 {this.renderIcon(item.iconType, isActive)}
-              </CoverView>
-              <CoverView className="tab-text">{item.text}</CoverView>
-            </CoverView>
+              </View>
+              <Text className="tab-text">{item.text}</Text>
+            </View>
           )
         })}
-      </CoverView>
+      </View>
     )
   }
 }
