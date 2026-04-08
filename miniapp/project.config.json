@@ -1,13 +1,14 @@
 {
   "description": "项目配置文件",
-  "appid": "你的AppID",
+  "appid": "wx1fee66066d2df5cd",
   "packOptions": {
     "ignore": [
       {
-        "type": "file",
-        "value": ".eslintrc.js"
+        "value": ".eslintrc.js",
+        "type": "file"
       }
-    ]
+    ],
+    "include": []
   },
   "setting": {
     "bundle": false,
@@ -43,7 +44,13 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "condition": false
+    "condition": false,
+    "compileWorklet": false,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "miniprogram",
   "libVersion": "3.0.0",
@@ -53,5 +60,6 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "miniprogramRoot": "dist/"
+  "miniprogramRoot": "dist/",
+  "simulatorPluginLibVersion": {}
 }
