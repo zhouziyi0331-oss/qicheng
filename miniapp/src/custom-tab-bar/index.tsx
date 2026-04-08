@@ -78,7 +78,7 @@ export default class CustomTabBar extends Component {
           const { isCenter } = item
 
           if (isCenter) {
-            // 中央启程小猫按钮
+            // 中央启程小猫按钮（只显示logo，不显示文字）
             return (
               <View
                 key={index}
@@ -88,7 +88,6 @@ export default class CustomTabBar extends Component {
                 <View className="center-mentor-btn">
                   <Image src={catLogo} className="mentor-logo" mode="aspectFit" />
                 </View>
-                <Text className="tab-text center-text">启程小猫</Text>
               </View>
             )
           }

@@ -65,8 +65,10 @@ export default function Tasks() {
   }
 
   const handleTaskClick = (task: any) => {
-    setSelectedTask(task)
-    setDialogVisible(true)
+    // 直接跳转到任务详情页
+    Taro.navigateTo({
+      url: `/pages/tasks/detail?id=${task.id}`
+    })
   }
 
   const handleAcceptTask = async () => {
