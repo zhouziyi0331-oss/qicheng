@@ -57,6 +57,14 @@ export default function Index() {
     Taro.navigateTo({ url })
   }
 
+  const handleStartTest = () => {
+    if (!user) {
+      Taro.showToast({ title: '请先登录', icon: 'none' })
+      return
+    }
+    Taro.navigateTo({ url: '/pages/opc-test/index' })
+  }
+
   return (
     <View className="index-page">
       {/* 顶部用户栏 */}
@@ -91,15 +99,46 @@ export default function Index() {
 
       {/* 登录按钮或推荐卡片 */}
       {!user ? (
-        <Button className="primary-btn" onClick={handleWechatLogin}>
-          开始你的第一步
-        </Button>
+        <View className="login-section">
+          <Button className="primary-btn" onClick={handleWechatLogin}>
+            开始你的第一步
+          </Button>
+          <Text className="login-hint">微信一键登录，开启成长之旅</Text>
+        </View>
       ) : (
         <View className="content-section">
+          {/* OPC测评卡片 */}
+          {!user.hasCompletedTest && (
+            <View className="opc-test-card" onClick={handleStartTest}>
+              <View className="test-card-header">
+                <Text className="test-card-title">发现你的OPC人格</Text>
+                <Text className="test-card-badge">必做</Text>
+              </View>
+              <Text className="test-card-desc">25道题，8分钟，了解你的六维能力</Text>
+              <View className="test-card-features">
+                <View className="feature-item">
+                  <Text className="feature-icon">✓</Text>
+                  <Text className="feature-text">获得专属标签</Text>
+                </View>
+                <View className="feature-item">
+                  <Text className="feature-icon">✓</Text>
+                  <Text className="feature-text">解锁任务推荐</Text>
+                </View>
+                <View className="feature-item">
+                  <Text className="feature-icon">✓</Text>
+                  <Text className="feature-text">看见成长轨迹</Text>
+                </View>
+              </View>
+              <View className="test-card-btn">
+                <Text className="btn-text">开始测评 →</Text>
+              </View>
+            </View>
+          )}
+
           {/* 推荐区域 */}
           <View className="section-header">
             <Text className="section-title">从这里开始</Text>
-            <Text className="section-link">查看全部</Text>
+            <Text className="section-link" onClick={() => Taro.switchTab({ url: '/pages/tasks/index' })}>查看全部</Text>
           </View>
 
           <View className="recommended-grid">
