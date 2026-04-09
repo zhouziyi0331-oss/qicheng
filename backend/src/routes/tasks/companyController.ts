@@ -192,11 +192,11 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
       );
 
       // 获取任务金额
-      const task = await client.query(
+      const taskResult = await client.query(
         'SELECT budget_net, is_first_task FROM tasks WHERE id = $1',
         [taskId]
       );
-      const { budget_net, is_first_task } = task.rows[0];
+      const { budget_net, is_first_task } = taskResult.rows[0];
 
       // 创建支付记录
       await client.query(
@@ -221,17 +221,17 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
       );
 
       // 智能更新六维分数（基于任务表现）
-      const taskDetail = await client.query(
+      const taskDetailResult = await client.query(
         `SELECT track_type, level_required FROM tasks WHERE id = $1`,
         [taskId]
       );
-      if (taskDetail.rows.length > 0) {
+      if (taskDetailResult.rows.length > 0) {
         await updateSixDimScores(
           submission.student_id,
           taskId,
           finalScore,
-          taskDetail.rows[0].track_type,
-          taskDetail.rows[0].level_required
+          taskDetailResult.rows[0].track_type,
+          taskDetailResult.rows[0].level_required
         );
       }
 
@@ -330,7 +330,7 @@ async function checkContactUnlock(
     'SELECT budget_net FROM tasks WHERE id = $1',
     [taskId]
   );
-  const earnings = taskResult.rows[0]?.budget_net || 0;
+  const earnings = taskResult[0]?.budget_net || 0;
 
   // 调用信任加速器MatchService记录合作
   const { MatchService } = require('../../services/trustAccelerator/matchService');

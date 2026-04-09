@@ -72,64 +72,83 @@ export default function AdminTasksPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin" className="text-sm no-underline" style={{ color: "#8b949e" }}>← 后台</Link>
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>需求管理</h1>
-      </div>
-
-      {loading ? (
-        <div className="flex flex-col gap-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 rounded-lg animate-pulse" style={{ background: "#161b22" }} />
-          ))}
+    <div style={{ minHeight: "100vh", background: "#F9F7F5" }}>
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        <div className="flex items-center gap-3 mb-8">
+          <Link href="/admin" className="text-sm no-underline hover:opacity-70 transition-opacity" style={{ color: "#636E72" }}>
+            ← 返回后台
+          </Link>
+          <h1 className="text-2xl font-bold" style={{ color: "#2D3436" }}>需求管理</h1>
         </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {tasks.map((task) => (
-            <div key={task.id} className="p-4 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <Badge color={STATUS_COLOR[task.status] || "gray"}>{task.status}</Badge>
-                    <Badge color="gray">赛道 {task.track_type}</Badge>
-                    <span className="text-xs" style={{ color: "#484f58" }}>{task.company_name}</span>
+
+        {loading ? (
+          <div className="flex flex-col gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-32 rounded-3xl animate-pulse" style={{ background: "#FFFFFF" }} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {tasks.map((task) => (
+              <div
+                key={task.id}
+                className="p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow"
+                style={{ background: "#FFFFFF" }}
+              >
+                <div className="flex items-start justify-between gap-6">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                      <Badge color={STATUS_COLOR[task.status] || "gray"}>{task.status}</Badge>
+                      <Badge color="gray">赛道 {task.track_type}</Badge>
+                      <span className="text-xs px-3 py-1 rounded-full" style={{
+                        background: "#F0F0F0",
+                        color: "#636E72"
+                      }}>
+                        {task.company_name}
+                      </span>
+                    </div>
+                    <p className="font-semibold text-base mb-2" style={{ color: "#2D3436" }}>
+                      {task.title}
+                    </p>
+                    <p className="text-sm" style={{ color: "#B2BEC3" }}>
+                      {task.assignee_count}/{task.max_assignees} 人接单 ·
+                      发布于 {new Date(task.created_at).toLocaleDateString("zh-CN")}
+                    </p>
                   </div>
-                  <p className="font-medium truncate" style={{ color: "#e6edf3" }}>{task.title}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "#484f58" }}>
-                    {task.assignee_count}/{task.max_assignees} 人接单 ·
-                    {new Date(task.created_at).toLocaleDateString("zh-CN")}
-                  </p>
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <div className="font-bold mb-2" style={{ color: "#3fb950" }}>¥{task.budget_gross}</div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      loading={acting === `bl-${task.id}`}
-                      onClick={() => handleBlacklist(task)}
-                    >
-                      黑名单
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      loading={acting === task.id}
-                      onClick={() => handleTakedown(task.id)}
-                    >
-                      下架
-                    </Button>
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-2xl font-bold mb-4" style={{ color: "#00B894" }}>
+                      ¥{task.budget_gross}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        loading={acting === `bl-${task.id}`}
+                        onClick={() => handleBlacklist(task)}
+                      >
+                        黑名单
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        loading={acting === task.id}
+                        onClick={() => handleTakedown(task.id)}
+                      >
+                        下架
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-          {tasks.length === 0 && (
-            <p className="text-center py-16 text-sm" style={{ color: "#484f58" }}>暂无任务</p>
-          )}
-        </div>
-      )}
+            ))}
+            {tasks.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-base" style={{ color: "#B2BEC3" }}>暂无任务需要审核</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

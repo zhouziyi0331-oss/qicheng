@@ -22,62 +22,93 @@ export default function AdminPage() {
   }, []);
 
   const modules = [
-    { href: "/admin/tasks", icon: "📋", label: "需求管理", desc: "审核、下架企业任务" },
-    { href: "/admin/students", icon: "🎓", label: "学生数据", desc: "查看学生档案与OPC标签" },
-    { href: "/admin/support", icon: "🛟", label: "客服工具", desc: "介入任务、发送通知" },
-    { href: "/admin/finance", icon: "💰", label: "财务管理", desc: "审核提现、首单垫付" },
-    { href: "/admin/broadcast", icon: "📢", label: "通知推送", desc: "全平台广播消息" },
-    { href: "/admin/logs", icon: "📜", label: "操作日志", desc: "不可删除的管理员记录" },
-    { href: "/admin/config", icon: "⚙️", label: "系统配置", desc: "超管专属参数调整" },
+    { href: "/admin/tasks", label: "需求管理", desc: "审核、下架企业任务", color: "#FF6B35" },
+    { href: "/admin/students", label: "学生数据", desc: "查看学生档案与OPC标签", color: "#4ECDC4" },
+    { href: "/admin/support", label: "客服工具", desc: "介入任务、发送通知", color: "#95E1D3" },
+    { href: "/admin/finance", label: "财务管理", desc: "审核提现、首单垫付", color: "#FFE66D" },
+    { href: "/admin/broadcast", label: "通知推送", desc: "全平台广播消息", color: "#C7CEEA" },
+    { href: "/admin/logs", label: "操作日志", desc: "不可删除的管理员记录", color: "#FFDAB9" },
+    { href: "/admin/config", label: "系统配置", desc: "超管专属参数调整", color: "#B4A7D6" },
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>后台管理</h1>
-        <p className="text-sm mt-1" style={{ color: "#8b949e" }}>启程平台管理中心</p>
-      </div>
+    <div style={{ minHeight: "100vh", background: "#F9F7F5" }}>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* 顶部标题 */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2" style={{ color: "#2D3436" }}>管理后台</h1>
+          <p className="text-sm" style={{ color: "#636E72" }}>启程平台数据中心</p>
+        </div>
 
-      {/* 数据概览 */}
-      {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-24 rounded-lg animate-pulse" style={{ background: "#161b22" }} />
+        {/* 数据概览卡片 */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-32 rounded-3xl animate-pulse" style={{ background: "#FFFFFF" }} />
+            ))}
+          </div>
+        ) : stats && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {[
+              { label: "总用户", value: stats.users.total, sub: `今日 +${stats.users.today}`, gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
+              { label: "活跃任务", value: stats.tasks.active, sub: `待审 ${stats.tasks.pending_review}`, gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" },
+              { label: "待处理提现", value: stats.finance.pending_withdrawals, sub: `垫付 ${stats.finance.pending_advances}`, gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" },
+              { label: "累计流水", value: `¥${stats.finance.total_gross}`, sub: `实得 ¥${stats.finance.total_net}`, gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)" },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow"
+                style={{ background: "#FFFFFF" }}
+              >
+                <div className="text-3xl font-bold mb-2" style={{
+                  background: s.gradient,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
+                }}>
+                  {s.value}
+                </div>
+                <div className="text-sm font-medium mb-1" style={{ color: "#2D3436" }}>{s.label}</div>
+                <div className="text-xs" style={{ color: "#B2BEC3" }}>{s.sub}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* 功能模块网格 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {modules.map((m) => (
+            <Link
+              key={m.href}
+              href={m.href}
+              className="no-underline group"
+            >
+              <div
+                className="p-6 rounded-3xl shadow-sm hover:shadow-lg transition-all duration-300"
+                style={{ background: "#FFFFFF" }}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: m.color, opacity: 0.15 }}
+                  >
+                    <div
+                      className="w-6 h-6 rounded-full"
+                      style={{ background: m.color }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-semibold mb-1" style={{ color: "#2D3436" }}>
+                      {m.label}
+                    </h3>
+                    <p className="text-sm leading-relaxed" style={{ color: "#636E72" }}>
+                      {m.desc}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
-      ) : stats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: "总用户", value: stats.users.total, sub: `今日新增 ${stats.users.today}`, color: "#58a6ff" },
-            { label: "活跃任务", value: stats.tasks.active, sub: `待审核 ${stats.tasks.pending_review}`, color: "#3fb950" },
-            { label: "待处理提现", value: stats.finance.pending_withdrawals, sub: `首单垫付 ${stats.finance.pending_advances}`, color: "#d29922" },
-            { label: "累计流水", value: `¥${stats.finance.total_gross}`, sub: `学生实得 ¥${stats.finance.total_net}`, color: "#a371f7" },
-          ].map((s) => (
-            <div key={s.label} className="p-4 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-              <div className="text-2xl font-bold mb-1" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-xs font-medium mb-0.5" style={{ color: "#e6edf3" }}>{s.label}</div>
-              <div className="text-xs" style={{ color: "#484f58" }}>{s.sub}</div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 模块导航 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {modules.map((m) => (
-          <Link
-            key={m.href}
-            href={m.href}
-            className="p-5 rounded-lg no-underline group transition-colors"
-            style={{ background: "#161b22", border: "1px solid #30363d" }}
-          >
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">{m.icon}</span>
-              <span className="font-semibold" style={{ color: "#e6edf3" }}>{m.label}</span>
-            </div>
-            <p className="text-sm" style={{ color: "#8b949e" }}>{m.desc}</p>
-          </Link>
-        ))}
       </div>
     </div>
   );

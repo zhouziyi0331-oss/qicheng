@@ -179,8 +179,8 @@ async function approveTask(req, res, next) {
             // 更新任务状态为完成
             await client.query(`UPDATE tasks SET status = 'completed' WHERE id = $1`, [taskId]);
             // 获取任务金额
-            const task = await client.query('SELECT budget_net, is_first_task FROM tasks WHERE id = $1', [taskId]);
-            const { budget_net, is_first_task } = task.rows[0];
+            const taskResult = await client.query('SELECT budget_net, is_first_task FROM tasks WHERE id = $1', [taskId]);
+            const { budget_net, is_first_task } = taskResult.rows[0];
             // 创建支付记录
             await client.query(`INSERT INTO payments
           (task_id, student_id, company_id, payer, gross_amount, platform_fee, net_amount,
@@ -196,9 +196,9 @@ async function approveTask(req, res, next) {
          SET task_count = task_count + 1, total_earnings = total_earnings + $1
          WHERE user_id = $2`, [budget_net, submission.student_id]);
             // 智能更新六维分数（基于任务表现）
-            const taskDetail = await client.query(`SELECT track_type, level_required FROM tasks WHERE id = $1`, [taskId]);
-            if (taskDetail.rows.length > 0) {
-                await (0, sixDimUpdater_1.updateSixDimScores)(submission.student_id, taskId, finalScore, taskDetail.rows[0].track_type, taskDetail.rows[0].level_required);
+            const taskDetailResult = await client.query(`SELECT track_type, level_required FROM tasks WHERE id = $1`, [taskId]);
+            if (taskDetailResult.rows.length > 0) {
+                await (0, sixDimUpdater_1.updateSixDimScores)(submission.student_id, taskId, finalScore, taskDetailResult.rows[0].track_type, taskDetailResult.rows[0].level_required);
             }
             // 检查联系方式解锁 (同企业完成2单)
             await checkContactUnlock(client, submission.student_id, companyId, taskId);
@@ -269,7 +269,7 @@ async function rejectTask(req, res, next) {
 async function checkContactUnlock(client, studentId, companyId, taskId) {
     // 获取任务收入
     const taskResult = await client.query('SELECT budget_net FROM tasks WHERE id = $1', [taskId]);
-    const earnings = taskResult.rows[0]?.budget_net || 0;
+    const earnings = taskResult[0]?.budget_net || 0;
     // 调用信任加速器MatchService记录合作
     const { MatchService } = require('../../services/trustAccelerator/matchService');
     const matchResult = await MatchService.recordTaskCompletion(studentId, companyId, earnings);

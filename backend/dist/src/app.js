@@ -32,6 +32,9 @@ const challenge_1 = __importDefault(require("./routes/challenge"));
 const subcontract_1 = __importDefault(require("./routes/subcontract"));
 const adminRoutes_1 = __importDefault(require("./routes/admin/adminRoutes"));
 const team_1 = __importDefault(require("./routes/team"));
+const disputes_1 = __importDefault(require("./routes/disputes"));
+const draftRoutes_1 = __importDefault(require("./routes/tasks/draftRoutes"));
+const pricing_1 = __importDefault(require("./routes/pricing"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
@@ -91,6 +94,9 @@ app.use('/api/v1/challenge', challenge_1.default);
 app.use('/api/v1/subcontract', subcontract_1.default);
 app.use('/api/v1/admin-management', adminRoutes_1.default);
 app.use('/api/v1/team', team_1.default);
+app.use('/api/v1/disputes', disputes_1.default);
+app.use('/api/v1/tasks', draftRoutes_1.default); // 草稿箱和追加需求路由
+app.use('/api/v1/pricing', pricing_1.default); // AI智能定价建议
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

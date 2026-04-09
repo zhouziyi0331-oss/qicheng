@@ -27,6 +27,9 @@ import challengeRoutes from './routes/challenge';
 import subcontractRoutes from './routes/subcontract';
 import adminManagementRoutes from './routes/admin/adminRoutes';
 import teamRoutes from './routes/team';
+import disputeRoutes from './routes/disputes';
+import draftRoutes from './routes/tasks/draftRoutes';
+import pricingRoutes from './routes/pricing';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -93,6 +96,9 @@ app.use('/api/v1/challenge', challengeRoutes);
 app.use('/api/v1/subcontract', subcontractRoutes);
 app.use('/api/v1/admin-management', adminManagementRoutes);
 app.use('/api/v1/team', teamRoutes);
+app.use('/api/v1/disputes', disputeRoutes);
+app.use('/api/v1/tasks', draftRoutes); // 草稿箱和追加需求路由
+app.use('/api/v1/pricing', pricingRoutes); // AI智能定价建议
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
