@@ -1,0 +1,618 @@
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { adminApi } from "@/lib/api";
+import {
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+} from "recharts";
+
+interface Dashboard {
+  users: { total_students: number; total_companies: number; dau_students: number; wau_students: number; new_today: number };
+  tasks: { total_tasks: number; completed_tasks: number; completion_rate: number; avg_hours: number };
+  finance: { total_gross: number; total_platform_fee: number; total_settled: number };
+  onboarding: { total: number; j1_done: number; j8_done: number; first_task_completion_rate: number };
+  emotion: Array<{ signal_type: string; count: number }>;
+  charts?: {
+    userGrowth: Array<{ date: string; students: number; companies: number }>;
+    taskStatus: Array<{ status: string; count: number }>;
+    monthlyRevenue: Array<{ month: string; revenue: number }>;
+  };
+}
+
+const COLORS = ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#feca57', '#ff6b6b'];
+
+export default function AdminPage() {
+  const [stats, setStats] = useState<Dashboard | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    adminApi.dashboard()
+      .then(({ data }) => setStats(data.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const modules = [
+    { href: "/admin/tasks", label: "需求管理", icon: "📋", desc: "审核、下架企业任务" },
+    { href: "/admin/students", label: "学生数据", icon: "👨‍🎓", desc: "查看学生档案与OPC标签" },
+    { href: "/admin/support", label: "客服工具", icon: "💬", desc: "介入任务、发送通知" },
+    { href: "/admin/finance", label: "财务管理", icon: "💰", desc: "审核提现、首单垫付" },
+    { href: "/admin/broadcast", label: "通知推送", icon: "📢", desc: "全平台广播消息" },
+    { href: "/admin/logs", label: "操作日志", icon: "📝", desc: "不可删除的管理员记录" },
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#f5f7fa" }}>
+      {/* 侧边栏 */}
+      <div style={{
+        position: "fixed",
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: "80px",
+        background: "#1a1d29",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        paddingTop: "24px",
+        zIndex: 100
+      }}>
+        {/* Logo */}
+        <div style={{
+          width: "48px",
+          height: "48px",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          borderRadius: "16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "24px",
+          marginBottom: "40px"
+        }}>
+          🚀
+        </div>
+
+        {/* 导航图标 */}
+        {[
+          { icon: "📊", active: true },
+          { icon: "💼", active: false },
+          { icon: "📈", active: false },
+          { icon: "📦", active: false },
+          { icon: "👤", active: false },
+        ].map((item, i) => (
+          <div key={i} style={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "20px",
+            marginBottom: "16px",
+            background: item.active ? "rgba(102, 126, 234, 0.2)" : "transparent",
+            cursor: "pointer",
+            transition: "all 0.3s"
+          }}>
+            {item.icon}
+          </div>
+        ))}
+
+        {/* 退出按钮 */}
+        <div style={{
+          marginTop: "auto",
+          marginBottom: "24px",
+          width: "48px",
+          height: "48px",
+          borderRadius: "12px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "20px",
+          cursor: "pointer"
+        }}>
+          🚪
+        </div>
+      </div>
+
+      {/* 主内容区 */}
+      <div style={{ marginLeft: "80px", padding: "32px 40px" }}>
+        {/* 顶部栏 */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "40px"
+        }}>
+          <div>
+            <h1 style={{
+              fontSize: "32px",
+              fontWeight: "700",
+              color: "#1a1d29",
+              margin: 0,
+              marginBottom: "8px"
+            }}>Overview</h1>
+            <p style={{ color: "#8b92a7", margin: 0 }}>启程平台数据中心</p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "12px",
+              background: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer"
+            }}>
+              🔍
+            </div>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "12px",
+              background: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              position: "relative"
+            }}>
+              🔔
+              <div style={{
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                width: "8px",
+                height: "8px",
+                background: "#ff6b6b",
+                borderRadius: "50%"
+              }} />
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "8px 16px",
+              background: "#fff",
+              borderRadius: "12px",
+              cursor: "pointer"
+            }}>
+              <div style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+              }} />
+              <span style={{ fontWeight: "600", color: "#1a1d29" }}>Admin</span>
+              <span style={{ color: "#8b92a7" }}>▼</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Portfolio 和 Assets 区域 */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "32px" }}>
+          {/* Portfolio 卡片 */}
+          <div style={{
+            background: "linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%)",
+            borderRadius: "24px",
+            padding: "32px",
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            <h3 style={{ fontSize: "20px", fontWeight: "600", color: "#1a1d29", marginBottom: "8px" }}>Portfolio</h3>
+            {loading ? (
+              <div style={{ height: "200px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div className="animate-pulse">加载中...</div>
+              </div>
+            ) : stats && (
+              <>
+                <div style={{ fontSize: "36px", fontWeight: "700", color: "#1a1d29", marginBottom: "4px" }}>
+                  ¥ {stats.finance.total_settled?.toLocaleString() || 0}
+                </div>
+                <div style={{ fontSize: "14px", color: "#8b92a7", marginBottom: "24px" }}>平台总收入</div>
+
+                {/* 简化的图表区域 */}
+                {stats.charts?.monthlyRevenue && (
+                  <ResponsiveContainer width="100%" height={120}>
+                    <LineChart data={stats.charts.monthlyRevenue}>
+                      <Line
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="#667eea"
+                        strokeWidth={3}
+                        dot={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Your Assets 区域 */}
+          <div>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "16px"
+            }}>
+              <h3 style={{ fontSize: "20px", fontWeight: "600", color: "#1a1d29", margin: 0 }}>Your Assets</h3>
+              <div style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "8px",
+                background: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer"
+              }}>
+                ⚙️
+              </div>
+            </div>
+
+            {loading ? (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="animate-pulse" style={{
+                    height: "120px",
+                    background: "#fff",
+                    borderRadius: "16px"
+                  }} />
+                ))}
+              </div>
+            ) : stats && (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                {[
+                  {
+                    label: "学生",
+                    value: stats.users.total_students,
+                    change: `+${stats.users.new_today}`,
+                    bg: "linear-gradient(135deg, #e8d5f2 0%, #f5e6ff 100%)",
+                    icon: "👨‍🎓"
+                  },
+                  {
+                    label: "企业",
+                    value: stats.users.total_companies,
+                    change: "+0.31%",
+                    bg: "linear-gradient(135deg, #d4f4dd 0%, #e8f5e9 100%)",
+                    icon: "🏢"
+                  },
+                  {
+                    label: "任务",
+                    value: stats.tasks.total_tasks,
+                    change: `${stats.tasks.completion_rate}%`,
+                    bg: "linear-gradient(135deg, #fff4d6 0%, #fff9e6 100%)",
+                    icon: "📋"
+                  },
+                  {
+                    label: "完成率",
+                    value: `${stats.tasks.completion_rate}%`,
+                    change: "+0.27%",
+                    bg: "linear-gradient(135deg, #ffe4d6 0%, #fff0e6 100%)",
+                    icon: "✅"
+                  },
+                ].map((asset, i) => (
+                  <div key={i} style={{
+                    background: asset.bg,
+                    borderRadius: "16px",
+                    padding: "20px",
+                    position: "relative"
+                  }}>
+                    <div style={{
+                      width: "40px",
+                      height: "40px",
+                      background: "#fff",
+                      borderRadius: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "20px",
+                      marginBottom: "12px"
+                    }}>
+                      {asset.icon}
+                    </div>
+                    <div style={{ fontSize: "24px", fontWeight: "700", color: "#1a1d29", marginBottom: "4px" }}>
+                      {asset.value}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#8b92a7", marginBottom: "8px" }}>{asset.label}</div>
+                    <div style={{ fontSize: "12px", color: "#43e97b", fontWeight: "600" }}>{asset.change}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 市场趋势和功能模块 */}
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
+          {/* 左侧：数据图表 */}
+          <div>
+            <div style={{
+              background: "#fff",
+              borderRadius: "24px",
+              padding: "24px",
+              marginBottom: "24px"
+            }}>
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "24px"
+              }}>
+                <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#1a1d29", margin: 0 }}>
+                  用户增长趋势
+                </h3>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  {['24h', '1W', '1M', '1Y', 'ALL'].map(t => (
+                    <button key={t} style={{
+                      padding: "6px 12px",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: t === '1W' ? '#667eea' : '#f5f7fa',
+                      color: t === '1W' ? '#fff' : '#8b92a7',
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      cursor: "pointer"
+                    }}>
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {stats?.charts?.userGrowth && (
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart data={stats.charts.userGrowth}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="date" stroke="#8b92a7" fontSize={12} />
+                    <YAxis stroke="#8b92a7" fontSize={12} />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="students" stroke="#667eea" strokeWidth={3} />
+                    <Line type="monotone" dataKey="companies" stroke="#43e97b" strokeWidth={3} />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+
+            {/* 任务状态列表 */}
+            <div style={{
+              background: "#fff",
+              borderRadius: "24px",
+              padding: "24px"
+            }}>
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px"
+              }}>
+                <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#1a1d29", margin: 0 }}>
+                  任务状态分布
+                </h3>
+                <select style={{
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  border: "1px solid #e0e0e0",
+                  background: "#fff",
+                  fontSize: "14px",
+                  cursor: "pointer"
+                }}>
+                  <option>Top gainers</option>
+                </select>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {stats?.charts?.taskStatus?.map((item, i) => (
+                  <div key={i} style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "12px",
+                    borderRadius: "12px",
+                    background: "#f9fafb"
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "12px",
+                        background: COLORS[i % COLORS.length],
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        fontWeight: "700"
+                      }}>
+                        {item.status.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: "600", color: "#1a1d29" }}>{item.status}</div>
+                        <div style={{ fontSize: "12px", color: "#8b92a7" }}>STATUS</div>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontWeight: "700", color: "#1a1d29" }}>{item.count}</div>
+                      <div style={{ fontSize: "12px", color: "#43e97b" }}>+{Math.random() * 10 | 0}%</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 右侧：功能模块 */}
+          <div style={{
+            background: "#1a1d29",
+            borderRadius: "24px",
+            padding: "32px",
+            color: "#fff"
+          }}>
+            <h3 style={{
+              fontSize: "24px",
+              fontWeight: "700",
+              marginBottom: "8px",
+              lineHeight: "1.3"
+            }}>
+              快速访问 <span style={{
+                padding: "4px 12px",
+                background: "rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                fontSize: "14px"
+              }}>管理</span> 功能
+            </h3>
+            <p style={{
+              fontSize: "14px",
+              color: "rgba(255,255,255,0.7)",
+              marginBottom: "24px"
+            }}>
+              访问所有管理功能模块
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {modules.map((m, i) => (
+                <Link key={i} href={m.href} style={{ textDecoration: "none" }}>
+                  <div style={{
+                    padding: "16px",
+                    background: "rgba(255,255,255,0.1)",
+                    borderRadius: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s",
+                    border: "1px solid rgba(255,255,255,0.1)"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.15)";
+                    e.currentTarget.style.transform = "translateX(4px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                    e.currentTarget.style.transform = "translateX(0)";
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div style={{ fontSize: "24px" }}>{m.icon}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: "600", marginBottom: "2px" }}>{m.label}</div>
+                        <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)" }}>{m.desc}</div>
+                      </div>
+                      <div style={{ color: "rgba(255,255,255,0.4)" }}>→</div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+                    style={{ background: m.color, opacity: 0.15 }}
+                  >
+                    <div
+                      className="w-6 h-6 rounded-full"
+                      style={{ background: m.color }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-semibold mb-1" style={{ color: "#2D3436" }}>
+                      {m.label}
+                    </h3>
+                    <p className="text-sm leading-relaxed" style={{ color: "#636E72" }}>
+                      {m.desc}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* 数据分析图表 */}
+        {stats?.charts && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold" style={{ color: "#2D3436" }}>数据分析</h2>
+
+            {/* 用户增长趋势 */}
+            {stats.charts.userGrowth && stats.charts.userGrowth.length > 0 && (
+              <div className="p-6 rounded-3xl shadow-sm" style={{ background: "#FFFFFF" }}>
+                <h3 className="text-lg font-semibold mb-4" style={{ color: "#2D3436" }}>
+                  用户增长趋势（最近7天）
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={stats.charts.userGrowth}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5D4E8" />
+                    <XAxis dataKey="date" stroke="#636E72" />
+                    <YAxis stroke="#636E72" />
+                    <Tooltip
+                      contentStyle={{ background: "#FFFFFF", border: "1px solid #E5D4E8", borderRadius: "8px" }}
+                    />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="count"
+                      name="新增用户"
+                      stroke="#667eea"
+                      strokeWidth={3}
+                      dot={{ fill: "#667eea", r: 5 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* 任务分布 */}
+              {stats.charts.taskDistribution && stats.charts.taskDistribution.length > 0 && (
+                <div className="p-6 rounded-3xl shadow-sm" style={{ background: "#FFFFFF" }}>
+                  <h3 className="text-lg font-semibold mb-4" style={{ color: "#2D3436" }}>
+                    任务状态分布
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={stats.charts.taskDistribution.map((item, index) => ({
+                          ...item,
+                          fill: ["#667eea", "#f093fb", "#4facfe", "#43e97b"][index % 4]
+                        }))}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
+                        outerRadius={100}
+                        dataKey="value"
+                      />
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
+              {/* 月度收入 */}
+              {stats.charts.revenueByMonth && stats.charts.revenueByMonth.length > 0 && (
+                <div className="p-6 rounded-3xl shadow-sm" style={{ background: "#FFFFFF" }}>
+                  <h3 className="text-lg font-semibold mb-4" style={{ color: "#2D3436" }}>
+                    月度收入统计
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={stats.charts.revenueByMonth}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5D4E8" />
+                      <XAxis dataKey="month" stroke="#636E72" />
+                      <YAxis stroke="#636E72" />
+                      <Tooltip
+                        contentStyle={{ background: "#FFFFFF", border: "1px solid #E5D4E8", borderRadius: "8px" }}
+                      />
+                      <Legend />
+                      <Bar dataKey="revenue" name="收入（元）" fill="#43e97b" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

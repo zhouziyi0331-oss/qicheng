@@ -1,0 +1,169 @@
+.notifications-page {
+  min-height: 100vh;
+  background: #F5E6F0;
+}
+
+.header {
+  background: #FFFFFF;
+  padding: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #E5D4E8;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: #2D3436;
+}
+
+.unread-badge {
+  background: #EC4899;
+  border-radius: 24px;
+  padding: 4px 16px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unread-text {
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.mark-all-btn {
+  font-size: 28px;
+  color: #EC4899;
+  font-weight: 600;
+}
+
+.notifications-list {
+  height: calc(100vh - 120px);
+  padding: 24px;
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160px 0;
+}
+
+.loading-text {
+  font-size: 28px;
+  color: #636E72;
+}
+
+.empty-icon {
+  font-size: 120px;
+  margin-bottom: 32px;
+}
+
+.empty-text {
+  font-size: 28px;
+  color: #B2BEC3;
+}
+
+.notification-item {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s;
+}
+
+.notification-item.unread {
+  border-left: 8px solid #EC4899;
+}
+
+.unread-dot {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  width: 16px;
+  height: 16px;
+  background: #EC4899;
+  border-radius: 50%;
+}
+
+.notification-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-emoji {
+  font-size: 48px;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.notification-title {
+  font-size: 30px;
+  font-weight: 600;
+  color: #2D3436;
+  flex: 1;
+}
+
+.notification-type {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.notification-text {
+  font-size: 26px;
+  color: #636E72;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.notification-time {
+  font-size: 24px;
+  color: #B2BEC3;
+  display: block;
+}
+
+.notification-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.arrow-icon {
+  font-size: 48px;
+  color: #B2BEC3;
+}
