@@ -299,12 +299,12 @@ export default function OPCTestResult() {
           <Text className="personality-desc">{personalityTag.description}</Text>
         </View>
 
-        {/* 你的河道 - 新增板块 */}
+        {/* 你的能力方向 - 新增板块 */}
         <View className="river-section">
-          <Text className="section-title">这是你的河，不是别人的</Text>
+          <Text className="section-title">这是你的特点，不是别人的</Text>
 
           <View className="river-card">
-            <Text className="river-card-title">你的热情火花在哪里？</Text>
+            <Text className="river-card-title">你的兴趣点在哪里？</Text>
             <Text className="river-card-content">
               {personalityTag.key === 'visual_storyteller' && '你可能在用画面讲故事时感到兴奋，在色彩和构图中找到乐趣'}
               {personalityTag.key === 'system_builder' && '你可能在设计规则和系统时感到兴奋，在理解底层逻辑中找到乐趣'}
@@ -312,12 +312,12 @@ export default function OPCTestResult() {
               {personalityTag.key === 'logic_analyzer' && '你可能在拆解复杂问题时感到兴奋，在逻辑推理中找到乐趣'}
               {personalityTag.key === 'stable_deliverer' && '你可能在稳定交付高质量作品时感到满足，在规划和执行中找到乐趣'}
               {personalityTag.key === 'explorer_integrator' && '你可能在探索新工具时感到兴奋，在跨领域整合中找到乐趣'}
-              {personalityTag.key === 'balanced' && '你的热情可能还没有明确的方向，通过前3个项目，你会逐渐发现自己真正喜欢什么'}
+              {personalityTag.key === 'balanced' && '你的兴趣可能还没有明确的方向，通过前3个项目，你会逐渐发现自己真正喜欢什么'}
             </Text>
           </View>
 
           <View className="river-card">
-            <Text className="river-card-title">你的生命资产是什么？</Text>
+            <Text className="river-card-title">你的优势是什么？</Text>
             <View className="asset-list">
               <View className="asset-item">
                 <Text className="asset-icon">✦</Text>
@@ -341,7 +341,7 @@ export default function OPCTestResult() {
           </View>
 
           <View className="river-card river-card-highlight">
-            <Text className="river-card-title">你可能在这些方向找到自己的河</Text>
+            <Text className="river-card-title">你可能在这些方向找到自己的路</Text>
             <Text className="river-card-content">
               不是技能清单，是可能性地图。这些方向不是限制，是起点。
             </Text>
@@ -354,8 +354,8 @@ export default function OPCTestResult() {
 
         {/* 六维雷达图（简化版 - 使用进度条） */}
         <View className="scores-section">
-          <Text className="section-title">你的河道地图</Text>
-          <Text className="section-subtitle">不是能力分数，是你流动的方式</Text>
+          <Text className="section-title">你的能力雷达图</Text>
+          <Text className="section-subtitle">不是能力分数，是你的特点</Text>
 
           <View className="score-item">
             <View className="score-header">

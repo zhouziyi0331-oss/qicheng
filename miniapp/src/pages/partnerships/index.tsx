@@ -5,12 +5,12 @@ import api from '../../services/api'
 import './index.scss'
 
 /**
- * 合伙人关系页面
+ * 合作伙伴关系页面
  *
- * 核心理念：从雇佣关系到合伙人关系的自然演进
+ * 核心理念：从雇佣关系到合作伙伴关系的自然演进
  * - 第1次合作：雇佣关系（hired）
  * - 第2次合作：建立信任（trusted）
- * - 第3次合作后：可以邀请成为合伙人（partner）
+ * - 第3次合作后：可以邀请成为合作伙伴（partner）
  */
 
 interface Partnership {
@@ -52,7 +52,7 @@ export default function Partnerships() {
     try {
       const studentId = Taro.getStorageSync('userId')
       await api.partnership.respondToInvitation(companyId, studentId, true)
-      Taro.showToast({ title: '恭喜！你们现在是合伙人了', icon: 'success' })
+      Taro.showToast({ title: '恭喜！你们现在是合作伙伴了', icon: 'success' })
       loadPartnerships()
     } catch (error) {
       console.error('接受邀请失败:', error)
@@ -74,7 +74,7 @@ export default function Partnerships() {
 
   const getRelationshipText = (level: string) => {
     switch (level) {
-      case 'partner': return '合伙人'
+      case 'partner': return '合作伙伴'
       case 'trusted': return '信任伙伴'
       case 'hired': return '合作过'
       default: return '未知'
@@ -93,7 +93,7 @@ export default function Partnerships() {
   const getRelationshipDesc = (level: string, count: number) => {
     switch (level) {
       case 'partner':
-        return '你们是合伙人关系，可以一起设计项目、分享想法'
+        return '你们是合作伙伴关系，可以一起设计项目、分享想法'
       case 'trusted':
         return `已合作${count}次，正在建立信任关系`
       case 'hired':
@@ -119,7 +119,7 @@ export default function Partnerships() {
         <View className='stats-grid'>
           <View className='stat-item'>
             <View className='stat-value' style={{ color: '#8B5CF6' }}>{stats.partners}</View>
-            <View className='stat-label'>合伙人</View>
+            <View className='stat-label'>合作伙伴</View>
           </View>
           <View className='stat-item'>
             <View className='stat-value' style={{ color: '#06B6D4' }}>{stats.trusted}</View>
@@ -140,7 +140,7 @@ export default function Partnerships() {
           <View className='concept-desc'>
             第1次合作，你们互相了解<br/>
             第2次合作，开始建立信任<br/>
-            第3次合作后，可能成为合伙人
+            第3次合作后，可能成为合作伙伴
           </View>
         </View>
       </View>
@@ -177,14 +177,14 @@ export default function Partnerships() {
                 {getRelationshipDesc(partnership.relationship_level, partnership.collaboration_count)}
               </View>
 
-              {/* 合伙人邀请 */}
+              {/* 合作伙伴邀请 */}
               {partnership.invited_at && partnership.relationship_level !== 'partner' && (
                 <View className='invitation-card'>
                   <View className='invitation-icon'>🎉</View>
                   <View className='invitation-content'>
-                    <View className='invitation-title'>合伙人邀请</View>
+                    <View className='invitation-title'>合作伙伴邀请</View>
                     <View className='invitation-text'>
-                      {partnership.company_name} 想和你建立长期合作关系，成为合伙人
+                      {partnership.company_name} 想和你建立长期合作关系，成为合作伙伴
                     </View>
                     {partnership.partnership_terms && (
                       <View className='invitation-terms'>
@@ -214,10 +214,10 @@ export default function Partnerships() {
                 </View>
               )}
 
-              {/* 合伙人权益 */}
+              {/* 合作伙伴权益 */}
               {partnership.relationship_level === 'partner' && (
                 <View className='partner-benefits'>
-                  <View className='benefits-title'>合伙人权益</View>
+                  <View className='benefits-title'>合作伙伴权益</View>
                   <View className='benefits-grid'>
                     <View className='benefit-item'>
                       <View className='benefit-icon'>💡</View>

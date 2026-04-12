@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { authAPI, abilityAPI, withdrawAPI, levelAPI } from '../../services/api'
 import LevelUpModal from '../../components/LevelUpModal'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 export default function Profile() {
@@ -114,11 +115,7 @@ export default function Profile() {
   }
 
   if (loading || !user) {
-    return (
-      <View className="profile-page">
-        <Text>加载中...</Text>
-      </View>
-    )
+    return <Loading text="正在加载你的成长数据..." />
   }
 
   const expPercent = radarData ? (radarData.exp / radarData.max_exp) * 100 : 0

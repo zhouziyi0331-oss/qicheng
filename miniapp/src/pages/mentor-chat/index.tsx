@@ -83,10 +83,10 @@ export default function MentorChat() {
 
         setMessages(prev => [...prev, mentorMessage]);
 
-        // 显示检测到的热情火花或穿越感
+        // 显示检测到的兴趣发现或专注时刻
         if (res.detectedPassionSpark) {
           Taro.showToast({
-            title: '✨ 捕捉到热情火花！',
+            title: '✨ 捕捉到兴趣发现！',
             icon: 'none',
             duration: 2000
           });
@@ -94,7 +94,7 @@ export default function MentorChat() {
 
         if (res.detectedFlowMoment) {
           Taro.showToast({
-            title: '🌊 记录穿越感时刻！',
+            title: '🌊 记录专注时刻！',
             icon: 'none',
             duration: 2000
           });
@@ -132,17 +132,17 @@ export default function MentorChat() {
             <View className='message-bubble'>
               <Text className='message-content'>{msg.content}</Text>
 
-              {/* 热情火花标记 */}
+              {/* 兴趣发现标记 */}
               {msg.detectedPassionSpark && (
                 <View className='spark-badge'>
-                  <Text className='badge-text'>✨ 热情火花</Text>
+                  <Text className='badge-text'>✨ 兴趣发现</Text>
                 </View>
               )}
 
-              {/* 穿越感标记 */}
+              {/* 专注时刻标记 */}
               {msg.detectedFlowMoment && (
                 <View className='flow-badge'>
-                  <Text className='badge-text'>🌊 穿越感时刻</Text>
+                  <Text className='badge-text'>🌊 专注时刻</Text>
                 </View>
               )}
             </View>

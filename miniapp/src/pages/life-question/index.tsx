@@ -24,13 +24,13 @@ export default function LifeQuestion() {
         setQuestion(result.question.question)
       }
     } catch (error) {
-      console.error('加载生命问题失败:', error)
+      console.error('加载目标失败:', error)
     }
   }
 
   const handleSave = async () => {
     if (!question.trim()) {
-      Taro.showToast({ title: '请输入你的生命问题', icon: 'none' })
+      Taro.showToast({ title: '请输入你的目标', icon: 'none' })
       return
     }
 
@@ -59,7 +59,7 @@ export default function LifeQuestion() {
   return (
     <View className="life-question-page">
       <View className="header">
-        <Text className="title">你当下人生的生命问题是什么？</Text>
+        <Text className="title">你当下最想探索的目标是什么？</Text>
         <Text className="subtitle">不是职业规划问题，不是技能学习问题，是你真正好奇的、困惑的、想探索的</Text>
       </View>
 
@@ -79,7 +79,7 @@ export default function LifeQuestion() {
       <View className="input-section">
         <Textarea
           className="question-input"
-          placeholder="写下你的生命问题..."
+          placeholder="写下你的目标..."
           value={question}
           onInput={(e) => setQuestion(e.detail.value)}
           maxlength={200}
@@ -89,18 +89,18 @@ export default function LifeQuestion() {
       </View>
 
       <View className="hint-section">
-        <Text className="hint-title">AI导师会怎么用这个问题？</Text>
+        <Text className="hint-title">AI导师会怎么用这个目标？</Text>
         <View className="hint-item">
           <Text className="hint-icon">✦</Text>
-          <Text className="hint-text">在项目执行中，会问："这个项目和你的生命问题有关系吗？"</Text>
+          <Text className="hint-text">在项目执行中，会问："这个项目和你的目标有关系吗？"</Text>
         </View>
         <View className="hint-item">
           <Text className="hint-icon">✦</Text>
-          <Text className="hint-text">在卡点时，会问："这个卡点是不是和你的生命问题有关？"</Text>
+          <Text className="hint-text">在卡点时，会问："这个卡点是不是和你的目标有关？"</Text>
         </View>
         <View className="hint-item">
           <Text className="hint-icon">✦</Text>
-          <Text className="hint-text">在完成时，会问："这个项目让你对自己的问题有新的看法吗？"</Text>
+          <Text className="hint-text">在完成时，会问："这个项目让你对自己的目标有新的看法吗？"</Text>
         </View>
       </View>
 
@@ -110,7 +110,7 @@ export default function LifeQuestion() {
         loading={loading}
         disabled={loading}
       >
-        {existingQuestion ? '更新我的生命问题' : '保存我的生命问题'}
+        {existingQuestion ? '更新我的目标' : '保存我的目标'}
       </Button>
     </View>
   )

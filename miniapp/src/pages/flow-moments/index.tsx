@@ -38,7 +38,7 @@ export default function FlowMoments() {
     try {
       setLoading(true);
 
-      // 加载穿越感时刻（从后端API获取）
+      // 加载专注时刻（从后端API获取）
       // TODO: 需要添加 flowMomentAPI.getList()
       const mockFlowMoments: FlowMoment[] = [
         {
@@ -111,7 +111,7 @@ export default function FlowMoments() {
           className={`tab-item ${activeTab === 'flow' ? 'active' : ''}`}
           onClick={() => setActiveTab('flow')}
         >
-          <Text className='tab-text'>🌊 穿越感时刻</Text>
+          <Text className='tab-text'>🌊 专注时刻</Text>
           {flowMoments.length > 0 && (
             <View className='tab-badge'>
               <Text className='badge-text'>{flowMoments.length}</Text>
@@ -122,7 +122,7 @@ export default function FlowMoments() {
           className={`tab-item ${activeTab === 'spark' ? 'active' : ''}`}
           onClick={() => setActiveTab('spark')}
         >
-          <Text className='tab-text'>✨ 热情火花</Text>
+          <Text className='tab-text'>✨ 兴趣发现</Text>
           {passionSparks.length > 0 && (
             <View className='tab-badge'>
               <Text className='badge-text'>{passionSparks.length}</Text>
@@ -139,7 +139,7 @@ export default function FlowMoments() {
           </View>
         ) : (
           <>
-            {/* 穿越感时刻列表 */}
+            {/* 专注时刻列表 */}
             {activeTab === 'flow' && (
               <View className='flow-list'>
                 {flowMoments.length === 0 ? (
@@ -147,7 +147,7 @@ export default function FlowMoments() {
                     <View className='empty-icon'>
                       <Text className='icon-text'>🌊</Text>
                     </View>
-                    <Text className='empty-title'>还没有穿越感时刻</Text>
+                    <Text className='empty-title'>还没有专注时刻</Text>
                     <Text className='empty-desc'>
                       当你在项目中感觉时间过得特别快时，AI导师会帮你记录下来
                     </Text>
@@ -176,22 +176,22 @@ export default function FlowMoments() {
                   ))
                 )}
 
-                {/* 穿越感模式分析 */}
+                {/* 专注模式分析 */}
                 {flowMoments.length > 0 && (
                   <View className='pattern-card'>
-                    <Text className='pattern-title'>你的穿越感模式</Text>
+                    <Text className='pattern-title'>你的专注模式</Text>
                     <Text className='pattern-desc'>
-                      你在「设计」和「开发」类型的事情上最有穿越感
+                      你在「设计」和「开发」类型的事情上最专注
                     </Text>
                     <Text className='pattern-hint'>
-                      这可能是你的热情所在
+                      这可能是你的兴趣所在
                     </Text>
                   </View>
                 )}
               </View>
             )}
 
-            {/* 热情火花列表 */}
+            {/* 兴趣发现列表 */}
             {activeTab === 'spark' && (
               <View className='spark-list'>
                 {passionSparks.length === 0 ? (
@@ -199,9 +199,9 @@ export default function FlowMoments() {
                     <View className='empty-icon'>
                       <Text className='icon-text'>✨</Text>
                     </View>
-                    <Text className='empty-title'>还没有热情火花</Text>
+                    <Text className='empty-title'>还没有兴趣发现</Text>
                     <Text className='empty-desc'>
-                      当你在对话中表现出热情时，AI导师会帮你捕捉下来
+                      当你在对话中表现出兴趣时，AI导师会帮你捕捉下来
                     </Text>
                   </View>
                 ) : (

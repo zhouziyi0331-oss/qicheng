@@ -5,10 +5,10 @@ import api from '../../services/api'
 import './index.scss'
 
 /**
- * 联合体页面
+ * 团队协作页面
  *
- * 核心理念：孵化计划学生可以组建联合体，一起接大项目
- * - 创始人发起联合体
+ * 核心理念：孵化计划学生可以组建团队，一起接大项目
+ * - 创始人发起团队
  * - 邀请其他孵化学生加入
  * - 一起接项目，分配收益
  */
@@ -39,7 +39,7 @@ export default function Alliances() {
       const response = await api.alliance.getStudentAlliances(studentId)
       setAlliances(response.alliances)
     } catch (error) {
-      console.error('加载联合体失败:', error)
+      console.error('加载团队失败:', error)
     } finally {
       setLoading(false)
     }
@@ -70,7 +70,7 @@ export default function Alliances() {
   const handleRespondInvitation = async (invitationId: string, accept: boolean) => {
     try {
       await api.alliance.respondToInvitation(invitationId, accept)
-      Taro.showToast({ title: accept ? '已加入联合体' : '已拒绝邀请', icon: 'success' })
+      Taro.showToast({ title: accept ? '已加入团队' : '已拒绝邀请', icon: 'success' })
       loadAlliances()
       loadInvitations()
     } catch (error) {
@@ -102,9 +102,9 @@ export default function Alliances() {
       <View className='concept-card'>
         <View className='concept-icon'>🤝</View>
         <View className='concept-text'>
-          <View className='concept-title'>联合体是什么？</View>
+          <View className='concept-title'>团队协作是什么？</View>
           <View className='concept-desc'>
-            孵化计划学生可以组建联合体，一起接大项目、分配收益、共同成长
+            孵化计划学生可以组建团队，一起接大项目、分配收益、共同成长
           </View>
         </View>
       </View>
@@ -143,10 +143,10 @@ export default function Alliances() {
         </View>
       )}
 
-      {/* 我的联合体 */}
+      {/* 我的团队 */}
       <View className='alliances-section'>
         <View className='section-header'>
-          <View className='section-title'>我的联合体</View>
+          <View className='section-title'>我的团队</View>
           <View className='create-btn' onClick={handleCreateAlliance}>
             + 创建
           </View>
@@ -155,8 +155,8 @@ export default function Alliances() {
         {alliances.length === 0 ? (
           <View className='empty-state'>
             <View className='empty-icon'>🌟</View>
-            <View className='empty-text'>还没有加入联合体</View>
-            <View className='empty-hint'>创建或加入联合体，一起接大项目</View>
+            <View className='empty-text'>还没有加入团队</View>
+            <View className='empty-hint'>创建或加入团队，一起接大项目</View>
           </View>
         ) : (
           <View className='alliances-list'>

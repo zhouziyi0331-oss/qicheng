@@ -5,7 +5,7 @@ import api from '../../services/api'
 import './index.scss'
 
 /**
- * OPC孵化计划页面
+ * 进阶成长计划页面
  *
  * 核心理念：Lv.4（自流者）解锁，帮助学生独立发展
  * 触发条件：完成20个项目 + 等级达到Lv.4 + 找到热情方向
@@ -159,7 +159,7 @@ export default function OPCIncubation() {
         <View className='header-card'>
           <View className='header-icon'>🌟</View>
           <View className='header-content'>
-            <View className='header-title'>OPC孵化计划</View>
+            <View className='header-title'>进阶成长计划</View>
             <View className='header-desc'>
               帮助自流者独立发展，提供创业资源支持
             </View>
@@ -216,7 +216,7 @@ export default function OPCIncubation() {
         <View className='header-content'>
           <View className='header-title'>恭喜！你符合孵化资格</View>
           <View className='header-desc'>
-            你已经完成了所有条件，可以申请加入OPC孵化计划
+            你已经完成了所有条件，可以申请加入进阶成长计划
           </View>
         </View>
       </View>
@@ -238,7 +238,7 @@ export default function OPCIncubation() {
               </View>
               <View className='benefit-card'>
                 <View className='benefit-icon'>👥</View>
-                <View className='benefit-name'>联合体支持</View>
+                <View className='benefit-name'>团队支持</View>
                 <View className='benefit-value'>组队创业</View>
               </View>
               <View className='benefit-card'>

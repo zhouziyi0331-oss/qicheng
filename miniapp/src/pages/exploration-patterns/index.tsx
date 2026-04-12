@@ -5,7 +5,7 @@ import api from '../../services/api'
 import './index.scss'
 
 /**
- * 探索模式库页面
+ * 我的方法库页面
  *
  * 核心理念：记录学生发现的可复用模式
  * - 不是技能清单，是"我发现的做事方法"
@@ -39,7 +39,7 @@ export default function ExplorationPatterns() {
       setPatterns(response.patterns)
       setStats(response.stats)
     } catch (error) {
-      console.error('加载探索模式失败:', error)
+      console.error('加载方法库失败:', error)
       Taro.showToast({ title: '加载失败', icon: 'none' })
     } finally {
       setLoading(false)
@@ -79,7 +79,7 @@ export default function ExplorationPatterns() {
     <View className='exploration-patterns-page'>
       {/* 统计卡片 */}
       <View className='stats-card'>
-        <View className='stats-title'>我的探索模式库</View>
+        <View className='stats-title'>我的方法库</View>
         <View className='stats-grid'>
           <View className='stat-item'>
             <View className='stat-value'>{stats.total}</View>
