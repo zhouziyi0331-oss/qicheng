@@ -39,6 +39,13 @@ router.get('/tasks/:taskId/detail/:userId', matchController.getTaskDetailWithMat
 // ==================== AI导师相关 ====================
 
 /**
+ * AI导师对话接口
+ * POST /api/mentor/chat
+ * Body: { studentId, taskId, message, conversationHistory }
+ */
+router.post('/mentor/chat', mentorController.mentorChat);
+
+/**
  * 记录导师观察
  * POST /api/mentor/observe
  * Body: { studentId, taskId, observationType, observationContent, observationData }

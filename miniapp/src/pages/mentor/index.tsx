@@ -138,6 +138,7 @@ export default function Mentor() {
         : undefined
 
       const res = await mentorAPI.sendMessage({
+        studentId: user?.id,
         taskId,
         message: messageToSend,
         context: validContext,

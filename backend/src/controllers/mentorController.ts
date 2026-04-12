@@ -187,7 +187,7 @@ export const mentorChat = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      response: aiResponse.response,
+      reply: aiResponse.response,
       detectedPassionSpark: aiResponse.detectedPassionSpark,
       detectedFlowMoment: aiResponse.detectedFlowMoment
     });
@@ -439,3 +439,38 @@ export const getStudentObservations = async (req: Request, res: Response) => {
     res.status(500).json({ error: '服务器错误' });
   }
 };
+
+/**
+ * 检测学生卡点（定时任务调用）
+ * POST /api/mentor/detect-stuck
+ */
+export const detectStuckPoints = async (req: Request, res: Response) => {
+  try {
+    // TODO: 实现卡点检测逻辑
+    res.json({
+      success: true,
+      message: '卡点检测功能待实现'
+    });
+  } catch (error) {
+    console.error('检测卡点失败:', error);
+    res.status(500).json({ error: '服务器错误' });
+  }
+};
+
+/**
+ * 检测习惯形成（定时任务调用）
+ * POST /api/mentor/detect-habits
+ */
+export const detectHabits = async (req: Request, res: Response) => {
+  try {
+    // TODO: 实现习惯检测逻辑
+    res.json({
+      success: true,
+      message: '习惯检测功能待实现'
+    });
+  } catch (error) {
+    console.error('检测习惯失败:', error);
+    res.status(500).json({ error: '服务器错误' });
+  }
+};
+
