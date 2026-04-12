@@ -129,11 +129,12 @@ export const mentorChat = async (req: Request, res: Response) => {
       [studentId]
     );
 
-    if (studentResult.rows.length === 0) {
+    // pool.query 直接返回数组，不是 { rows: [...] } 格式
+    if (!studentResult || studentResult.length === 0) {
       return res.status(404).json({ error: '学生不存在' });
     }
 
-    const studentData = studentResult.rows[0];
+    const studentData = studentResult[0];
 
     // 尝试获取OPC测试结果
     try {
@@ -141,8 +142,8 @@ export const mentorChat = async (req: Request, res: Response) => {
         `SELECT personality_tag FROM opc_test_results WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`,
         [studentId]
       );
-      if (opcResult.rows.length > 0) {
-        studentData.personality_tag = opcResult.rows[0].personality_tag;
+      if (opcResult.length > 0) {
+        studentData.personality_tag = opcResult[0].personality_tag;
       }
     } catch (err) {
       // OPC表可能不存在，忽略错误
@@ -154,8 +155,8 @@ export const mentorChat = async (req: Request, res: Response) => {
         `SELECT question FROM life_questions WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1`,
         [studentId]
       );
-      if (lifeQuestionResult.rows.length > 0) {
-        studentData.life_question = lifeQuestionResult.rows[0].question;
+      if (lifeQuestionResult.length > 0) {
+        studentData.life_question = lifeQuestionResult[0].question;
       }
     } catch (error) {
       // 表不存在时忽略错误
@@ -169,7 +170,7 @@ export const mentorChat = async (req: Request, res: Response) => {
         `SELECT id, title, description, required_personality_style FROM tasks WHERE id = $1`,
         [taskId]
       );
-      taskData = taskResult.rows[0] || null;
+      taskData = taskResult[0] || null;
     }
 
     // 4. 生成AI Prompt
