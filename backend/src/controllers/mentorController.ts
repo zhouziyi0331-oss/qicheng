@@ -126,10 +126,8 @@ export const mentorChat = async (req: Request, res: Response) => {
     // 1. 获取学生信息
     const studentResult = await pool.query(
       `SELECT
-        u.id, u.name, u.opc_personality_tag as personality_tag,
-        lq.question as life_question
+        u.id, u.name, u.opc_personality_tag as personality_tag
        FROM users u
-       LEFT JOIN life_questions lq ON lq.student_id = u.id
        WHERE u.id = $1`,
       [studentId]
     );
@@ -140,7 +138,21 @@ export const mentorChat = async (req: Request, res: Response) => {
 
     const studentData = studentResult.rows[0];
 
-    // 2. 获取任务信息
+    // 2. 尝试获取生命问题（如果表存在）
+    try {
+      const lifeQuestionResult = await pool.query(
+        `SELECT question FROM life_questions WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1`,
+        [studentId]
+      );
+      if (lifeQuestionResult.rows.length > 0) {
+        studentData.life_question = lifeQuestionResult.rows[0].question;
+      }
+    } catch (error) {
+      // 表不存在时忽略错误
+      console.log('life_questions表不存在，跳过');
+    }
+
+    // 3. 获取任务信息
     let taskData = null;
     if (taskId) {
       const taskResult = await pool.query(
@@ -150,40 +162,52 @@ export const mentorChat = async (req: Request, res: Response) => {
       taskData = taskResult.rows[0] || null;
     }
 
-    // 3. 生成AI Prompt
+    // 4. 生成AI Prompt
     const prompt = generateMentorPrompt(studentData, taskData, {
       conversationHistory: conversationHistory || [],
       currentMessage: message
     });
 
-    // 4. 调用AI生成回复（这里需要集成实际的AI服务，如OpenAI、Claude等）
+    // 5. 调用AI生成回复（这里需要集成实际的AI服务，如OpenAI、Claude等）
     // 暂时返回示例回复
     const aiResponse = await generateAIResponse(prompt, message, studentData, taskData);
 
-    // 5. 检测并记录热情火花
+    // 6. 检测并记录热情火花
     if (aiResponse.detectedPassionSpark) {
-      await pool.query(
-        `INSERT INTO passion_sparks (student_id, task_id, spark_text, context, detected_by)
-         VALUES ($1, $2, $3, $4, 'ai_mentor')`,
-        [studentId, taskId, aiResponse.detectedPassionSpark, message]
-      );
+      try {
+        await pool.query(
+          `INSERT INTO passion_sparks (student_id, task_id, spark_text, context, detected_by)
+           VALUES ($1, $2, $3, $4, 'ai_mentor')`,
+          [studentId, taskId, aiResponse.detectedPassionSpark, message]
+        );
+      } catch (error) {
+        console.log('passion_sparks表不存在，跳过');
+      }
     }
 
-    // 6. 检测并记录穿越感时刻
+    // 7. 检测并记录穿越感时刻
     if (aiResponse.detectedFlowMoment) {
-      await pool.query(
-        `INSERT INTO flow_moments (student_id, task_id, moment_text, captured_at)
-         VALUES ($1, $2, $3, NOW())`,
-        [studentId, taskId, aiResponse.detectedFlowMoment]
-      );
+      try {
+        await pool.query(
+          `INSERT INTO flow_moments (student_id, task_id, moment_text, captured_at)
+           VALUES ($1, $2, $3, NOW())`,
+          [studentId, taskId, aiResponse.detectedFlowMoment]
+        );
+      } catch (error) {
+        console.log('flow_moments表不存在，跳过');
+      }
     }
 
-    // 7. 保存对话记录
-    await pool.query(
-      `INSERT INTO mentor_conversations (student_id, task_id, student_message, mentor_response, created_at)
-       VALUES ($1, $2, $3, $4, NOW())`,
-      [studentId, taskId, message, aiResponse.response]
-    );
+    // 8. 保存对话记录
+    try {
+      await pool.query(
+        `INSERT INTO mentor_conversations (student_id, task_id, student_message, mentor_response, created_at)
+         VALUES ($1, $2, $3, $4, NOW())`,
+        [studentId, taskId, message, aiResponse.response]
+      );
+    } catch (error) {
+      console.log('mentor_conversations表不存在，跳过');
+    }
 
     res.json({
       success: true,
