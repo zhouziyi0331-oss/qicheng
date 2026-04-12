@@ -125,10 +125,7 @@ export const mentorChat = async (req: Request, res: Response) => {
   try {
     // 1. 获取学生信息
     const studentResult = await pool.query(
-      `SELECT
-        u.id, u.nickname as name, u.opc_personality_tag as personality_tag
-       FROM users u
-       WHERE u.id = $1`,
+      `SELECT u.id, u.nickname as name FROM users u WHERE u.id = $1`,
       [studentId]
     );
 
@@ -137,6 +134,19 @@ export const mentorChat = async (req: Request, res: Response) => {
     }
 
     const studentData = studentResult.rows[0];
+
+    // 尝试获取OPC测试结果
+    try {
+      const opcResult = await pool.query(
+        `SELECT personality_tag FROM opc_test_results WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`,
+        [studentId]
+      );
+      if (opcResult.rows.length > 0) {
+        studentData.personality_tag = opcResult.rows[0].personality_tag;
+      }
+    } catch (err) {
+      // OPC表可能不存在，忽略错误
+    }
 
     // 2. 尝试获取生命问题（如果表存在）
     try {
