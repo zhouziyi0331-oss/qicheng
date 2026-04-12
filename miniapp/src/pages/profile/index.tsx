@@ -199,8 +199,8 @@ export default function Profile() {
       {/* 河道地图 */}
       {radarData && radarData.dimensions && (
         <View className="ability-card" onClick={() => handleNavigate('/pages/ability/index')}>
-          <Text className="card-title">你的河道地图</Text>
-          <Text className="card-subtitle">不是能力分数，是你流动的方式</Text>
+          <Text className="card-title">能力雷达图</Text>
+          <Text className="card-subtitle">查看你的六维能力分布</Text>
           <View className="ability-list">
             {Object.entries(radarData.dimensions).map(([key, value]: [string, any]) => (
               <View key={key} className="ability-item">
@@ -224,23 +224,23 @@ export default function Profile() {
             <View className="menu-icon-circle menu-icon-green">
               <Text className="icon-text">✓</Text>
             </View>
-            <Text className="menu-label">我的探索轨迹</Text>
+            <Text className="menu-label">我的任务</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/flow-moments/index')}>
             <View className="menu-icon-circle menu-icon-blue">
-              <Text className="icon-text">🌊</Text>
+              <Text className="icon-text">⏱</Text>
             </View>
-            <Text className="menu-label">穿越感时刻</Text>
+            <Text className="menu-label">专注时刻</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/life-question/index')}>
             <View className="menu-icon-circle menu-icon-purple">
-              <Text className="icon-text">?</Text>
+              <Text className="icon-text">🎯</Text>
             </View>
-            <Text className="menu-label">我的生命问题</Text>
+            <Text className="menu-label">我的目标</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
@@ -248,31 +248,31 @@ export default function Profile() {
             <View className="menu-icon-circle menu-icon-orange">
               <Text className="icon-text">🤝</Text>
             </View>
-            <Text className="menu-label">合作关系</Text>
+            <Text className="menu-label">合作伙伴</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/exploration-patterns/index')}>
             <View className="menu-icon-circle menu-icon-cyan">
-              <Text className="icon-text">🧩</Text>
+              <Text className="icon-text">📚</Text>
             </View>
-            <Text className="menu-label">探索模式库</Text>
+            <Text className="menu-label">我的方法库</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/journey/index')}>
             <View className="menu-icon-circle menu-icon-pink">
-              <Text className="icon-text">◈</Text>
+              <Text className="icon-text">📈</Text>
             </View>
-            <Text className="menu-label">成长旅程</Text>
+            <Text className="menu-label">成长记录</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/reports/index')}>
             <View className="menu-icon-circle menu-icon-yellow">
-              <Text className="icon-text">◎</Text>
+              <Text className="icon-text">📊</Text>
             </View>
-            <Text className="menu-label">OPC成长报告</Text>
+            <Text className="menu-label">能力报告</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
