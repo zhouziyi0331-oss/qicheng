@@ -6,6 +6,7 @@ export default defineAppConfig({
     'pages/opc-test/result',       // OPC测评结果
     'pages/login/index',           // 登录
     'pages/register/index',        // 注册
+    'pages/bind-phone/index',      // 绑定手机号
     'pages/onboarding/index',      // 引导页
     'pages/test/index',            // OPC测评（旧）
     'pages/test/result',           // 测评结果
@@ -13,6 +14,7 @@ export default defineAppConfig({
     'pages/tasks/detail',          // 任务详情
     'pages/tasks/working',         // 任务执行
     'pages/tasks/submit',          // 任务提交
+    'pages/invitations/index',     // 任务邀请
     'pages/my-tasks/index',        // 我的任务
     'pages/mentor/index',          // AI导师聊天
     'pages/ability/index',         // 六维能力图
@@ -22,6 +24,10 @@ export default defineAppConfig({
     'pages/reports/index',         // OPC报告
     'pages/profile/index',         // 个人中心
     'pages/withdraw/index',        // 提现
+    'pages/chat-list/index',       // 聊天列表
+    'pages/chat-detail/index',     // 聊天详情
+    'pages/pending-ratings/index', // 待评价任务
+    'pages/rate-task/index',       // 评价任务
   ],
   window: {
     backgroundTextStyle: 'light',

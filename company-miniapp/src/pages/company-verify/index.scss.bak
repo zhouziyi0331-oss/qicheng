@@ -1,0 +1,340 @@
+.company-verify-page {
+  min-height: 100vh;
+  background: #0f0f1e;
+  padding: 20px;
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #8e8e93;
+    font-size: 28px;
+  }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+
+    .title {
+      display: block;
+      font-size: 40px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      display: block;
+      font-size: 26px;
+      color: #8e8e93;
+    }
+  }
+
+  .status-card {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #2a2a3e;
+
+      .status-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      .status-badge {
+        border-radius: 8px;
+        padding: 8px 16px;
+
+        &.pending {
+          background: rgba(251, 191, 36, 0.2);
+          .status-text {
+            color: #fbbf24;
+          }
+        }
+
+        &.approved {
+          background: rgba(52, 211, 153, 0.2);
+          .status-text {
+            color: #34d399;
+          }
+        }
+
+        &.rejected {
+          background: rgba(239, 68, 68, 0.2);
+          .status-text {
+            color: #ef4444;
+          }
+        }
+
+        .status-text {
+          font-size: 24px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .info-section {
+      margin-bottom: 24px;
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid #2a2a3e;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .info-label {
+          font-size: 26px;
+          color: #8e8e93;
+        }
+
+        .info-value {
+          font-size: 28px;
+          color: #ffffff;
+          text-align: right;
+          flex: 1;
+          margin-left: 20px;
+        }
+      }
+    }
+
+    .license-section {
+      margin-bottom: 24px;
+
+      .section-label {
+        display: block;
+        font-size: 26px;
+        color: #8e8e93;
+        margin-bottom: 12px;
+      }
+
+      .license-image {
+        width: 100%;
+        height: 400px;
+        border-radius: 12px;
+        background: #0f0f1e;
+      }
+    }
+
+    .reject-section {
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+
+      .reject-label {
+        display: block;
+        font-size: 26px;
+        color: #ef4444;
+        margin-bottom: 12px;
+        font-weight: 500;
+      }
+
+      .reject-reason {
+        display: block;
+        font-size: 28px;
+        color: #ffffff;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .resubmit-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+
+        .resubmit-text {
+          font-size: 28px;
+          font-weight: 600;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .success-tip,
+    .pending-tip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      border-radius: 12px;
+      gap: 12px;
+
+      .tip-icon {
+        font-size: 40px;
+      }
+
+      .tip-text {
+        font-size: 28px;
+        font-weight: 500;
+      }
+    }
+
+    .success-tip {
+      background: rgba(52, 211, 153, 0.1);
+      .tip-text {
+        color: #34d399;
+      }
+    }
+
+    .pending-tip {
+      background: rgba(251, 191, 36, 0.1);
+      .tip-text {
+        color: #fbbf24;
+      }
+    }
+  }
+
+  .form-card {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+
+    .form-item {
+      margin-bottom: 24px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 28px;
+        color: #ffffff;
+        margin-bottom: 12px;
+        font-weight: 500;
+      }
+
+      .form-input {
+        width: 100%;
+        background: #0f0f1e;
+        border-radius: 12px;
+        padding: 24px;
+        font-size: 28px;
+        color: #ffffff;
+        border: 2px solid #2a2a3e;
+        box-sizing: border-box;
+      }
+
+      .upload-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #0f0f1e;
+        border: 2px dashed #2a2a3e;
+        border-radius: 12px;
+        padding: 60px 20px;
+
+        .upload-icon {
+          font-size: 80px;
+          margin-bottom: 16px;
+        }
+
+        .upload-text {
+          font-size: 28px;
+          color: #ffffff;
+          margin-bottom: 8px;
+        }
+
+        .upload-hint {
+          font-size: 24px;
+          color: #8e8e93;
+        }
+      }
+
+      .image-preview {
+        .preview-image {
+          width: 100%;
+          height: 400px;
+          border-radius: 12px;
+          background: #0f0f1e;
+          margin-bottom: 12px;
+        }
+
+        .image-actions {
+          display: flex;
+          justify-content: center;
+
+          .action-btn {
+            background: #2a2a3e;
+            border-radius: 8px;
+            padding: 16px 32px;
+
+            .action-text {
+              font-size: 26px;
+              color: #ffffff;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .tips-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(59, 130, 246, 0.2);
+
+    .tips-title {
+      display: block;
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .tips-item {
+      display: block;
+      font-size: 26px;
+      color: #8e8e93;
+      line-height: 1.6;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .submit-section {
+    padding: 20px 0 40px;
+
+    .submit-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+
+      &.disabled {
+        opacity: 0.5;
+        box-shadow: none;
+      }
+
+      .submit-text {
+        font-size: 32px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+    }
+  }
+}

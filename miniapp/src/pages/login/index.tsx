@@ -6,10 +6,72 @@ import { saveUserInfo } from '../../utils'
 import './index.scss'
 
 export default function Login() {
+  const [loginType, setLoginType] = useState<'wechat' | 'phone'>('wechat')
   const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
   const [countdown, setCountdown] = useState(0)
   const [loading, setLoading] = useState(false)
+
+  // 微信一键登录
+  const handleWechatLogin = async () => {
+    setLoading(true)
+    try {
+      // 1. 获取微信登录code
+      const loginRes = await Taro.login()
+
+      // 2. 获取用户信息
+      const userInfoRes = await Taro.getUserProfile({
+        desc: '用于完善用户资料'
+      })
+
+      // 3. 调用后端微信登录接口
+      const res = await Taro.request({
+        url: 'http://localhost:3000/api/v1/auth/wechat/login',
+        method: 'POST',
+        data: {
+          code: loginRes.code,
+          userType: 'student',
+          userInfo: {
+            nickName: userInfoRes.userInfo.nickName,
+            avatarUrl: userInfoRes.userInfo.avatarUrl
+          }
+        }
+      })
+
+      if (res.data.success) {
+        const { userId, accessToken, refreshToken, isNewUser, needBindPhone } = res.data.data
+
+        // 保存token
+        Taro.setStorageSync('token', accessToken)
+        Taro.setStorageSync('refreshToken', refreshToken)
+        Taro.setStorageSync('userId', userId)
+
+        Taro.showToast({ title: isNewUser ? '注册成功' : '登录成功', icon: 'success' })
+
+        // 如果需要绑定手机号，跳转到绑定页面
+        if (needBindPhone) {
+          setTimeout(() => {
+            Taro.navigateTo({ url: '/pages/bind-phone/index' })
+          }, 1000)
+        } else {
+          setTimeout(() => {
+            Taro.switchTab({ url: '/pages/index/index' })
+          }, 1000)
+        }
+      } else {
+        Taro.showToast({ title: res.data.message || '登录失败', icon: 'none' })
+      }
+    } catch (error: any) {
+      console.error('微信登录失败:', error)
+      if (error.errMsg && error.errMsg.includes('getUserProfile')) {
+        Taro.showToast({ title: '需要授权才能登录', icon: 'none' })
+      } else {
+        Taro.showToast({ title: '登录失败，请重试', icon: 'none' })
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // 发送验证码
   const handleSendCode = async () => {
@@ -40,8 +102,8 @@ export default function Login() {
     }
   }
 
-  // 登录
-  const handleLogin = async () => {
+  // 手机号登录
+  const handlePhoneLogin = async () => {
     if (!phone || !code) {
       Taro.showToast({ title: '请填写完整信息', icon: 'none' })
       return
@@ -77,55 +139,90 @@ export default function Login() {
         <Text className="subtitle">登录启程，继续你的成长之旅</Text>
       </View>
 
-      <View className="login-form">
-        <View className="form-item">
-          <Text className="form-label">手机号</Text>
-          <Input
-            className="form-input"
-            type="number"
-            maxlength={11}
-            placeholder="请输入手机号"
-            value={phone}
-            onInput={(e) => setPhone(e.detail.value)}
-          />
-        </View>
-
-        <View className="form-item">
-          <Text className="form-label">验证码</Text>
-          <View className="code-input-wrapper">
-            <Input
-              className="form-input code-input"
-              type="number"
-              maxlength={6}
-              placeholder="请输入验证码"
-              value={code}
-              onInput={(e) => setCode(e.detail.value)}
-            />
-            <Button
-              className="code-button"
-              size="mini"
-              disabled={countdown > 0}
-              onClick={handleSendCode}
-            >
-              {countdown > 0 ? `${countdown}s` : '获取验证码'}
-            </Button>
-          </View>
-        </View>
-
-        <Button
-          className="login-button"
-          type="primary"
-          loading={loading}
-          onClick={handleLogin}
+      {/* 登录方式切换 */}
+      <View className="login-type-tabs">
+        <View
+          className={`tab ${loginType === 'wechat' ? 'active' : ''}`}
+          onClick={() => setLoginType('wechat')}
         >
-          登录
-        </Button>
-
-        <View className="register-tip">
-          <Text className="tip-text">还没有账号？</Text>
-          <Text className="tip-link" onClick={handleGoRegister}>立即注册</Text>
+          微信登录
+        </View>
+        <View
+          className={`tab ${loginType === 'phone' ? 'active' : ''}`}
+          onClick={() => setLoginType('phone')}
+        >
+          手机号登录
         </View>
       </View>
+
+      {/* 微信登录 */}
+      {loginType === 'wechat' && (
+        <View className="wechat-login">
+          <View className="wechat-icon">💚</View>
+          <Text className="wechat-tip">使用微信授权登录</Text>
+          <Text className="wechat-desc">自动同步微信昵称和头像</Text>
+          <Button
+            className="wechat-button"
+            loading={loading}
+            onClick={handleWechatLogin}
+          >
+            微信一键登录
+          </Button>
+        </View>
+      )}
+
+      {/* 手机号登录 */}
+      {loginType === 'phone' && (
+        <View className="login-form">
+          <View className="form-item">
+            <Text className="form-label">手机号</Text>
+            <Input
+              className="form-input"
+              type="number"
+              maxlength={11}
+              placeholder="请输入手机号"
+              value={phone}
+              onInput={(e) => setPhone(e.detail.value)}
+            />
+          </View>
+
+          <View className="form-item">
+            <Text className="form-label">验证码</Text>
+            <View className="code-input-wrapper">
+              <Input
+                className="form-input code-input"
+                type="number"
+                maxlength={6}
+                placeholder="请输入验证码"
+                value={code}
+                onInput={(e) => setCode(e.detail.value)}
+              />
+              <Button
+                className="code-button"
+                size="mini"
+                disabled={countdown > 0}
+                onClick={handleSendCode}
+              >
+                {countdown > 0 ? `${countdown}s` : '获取验证码'}
+              </Button>
+            </View>
+          </View>
+
+          <Button
+            className="login-button"
+            type="primary"
+            loading={loading}
+            onClick={handlePhoneLogin}
+          >
+            登录
+          </Button>
+
+          <View className="register-tip">
+            <Text className="tip-text">还没有账号？</Text>
+            <Text className="tip-link" onClick={handleGoRegister}>立即注册</Text>
+          </View>
+        </View>
+      )}
     </View>
   )
 }

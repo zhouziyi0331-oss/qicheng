@@ -1,0 +1,124 @@
+@import '../../styles/theme.scss';
+
+.bind-phone-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+
+  .logo-section {
+    text-align: center;
+    margin-bottom: 80px;
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto $spacing-lg;
+      backdrop-filter: blur(10px);
+
+      .logo-text {
+        font-size: 60rpx;
+        color: $text-white;
+        font-weight: bold;
+      }
+    }
+
+    .title {
+      font-size: $font-xl;
+      color: $text-white;
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+    }
+
+    .subtitle {
+      font-size: $font-sm;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .bind-card {
+    width: 100%;
+    background: $bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .card-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: $spacing-xl;
+    }
+
+    .form-item {
+      margin-bottom: $spacing-lg;
+
+      .input-wrapper {
+        @include input;
+        display: flex;
+        align-items: center;
+        padding: $spacing-md;
+
+        .input-icon {
+          font-size: 40rpx;
+          color: $text-tertiary;
+          margin-right: $spacing-sm;
+        }
+
+        .input {
+          flex: 1;
+          font-size: $font-md;
+          color: $text-primary;
+          border: none;
+          background: transparent;
+        }
+
+        .code-btn {
+          @include button-primary;
+          padding: 8rpx 20rpx;
+          font-size: $font-xs;
+          white-space: nowrap;
+
+          &.disabled {
+            background: $bg-section;
+            color: $text-tertiary;
+          }
+        }
+      }
+    }
+
+    .submit-btn {
+      @include button-primary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+      margin-top: $spacing-lg;
+
+      &.disabled {
+        opacity: 0.5;
+      }
+    }
+
+    .agreement {
+      text-align: center;
+      margin-top: $spacing-lg;
+      font-size: $font-xs;
+      color: $text-tertiary;
+      line-height: 1.6;
+
+      .link {
+        color: $primary-color;
+      }
+    }
+  }
+}

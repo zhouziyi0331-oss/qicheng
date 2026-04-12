@@ -1,0 +1,264 @@
+.rate-task-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F5E6F0 0%, #E8D5E8 100%);
+}
+
+.loading {
+  text-align: center;
+  padding: 100px 0;
+  color: #999;
+  font-size: 28px;
+}
+
+.content {
+  height: 100vh;
+  padding: 20px 20px 120px;
+}
+
+.task-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(194, 57, 179, 0.1);
+
+  .task-title {
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .task-hint {
+    display: block;
+    font-size: 24px;
+    color: #999;
+    line-height: 1.5;
+  }
+}
+
+.rating-section {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(194, 57, 179, 0.1);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+
+  .section-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .required {
+    color: #FF6B9D;
+    font-size: 28px;
+    margin-left: 5px;
+  }
+
+  .optional {
+    font-size: 24px;
+    color: #999;
+    margin-left: 10px;
+  }
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stars {
+  display: flex;
+  gap: 15px;
+
+  .star {
+    font-size: 50px;
+    color: #ddd;
+    transition: all 0.2s;
+
+    &.active {
+      color: #FFD700;
+    }
+  }
+}
+
+.rating-text {
+  font-size: 26px;
+  color: #666;
+  margin-left: 20px;
+}
+
+.rating-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-label {
+    font-size: 28px;
+    color: #333;
+    min-width: 180px;
+  }
+}
+
+.tags-group {
+  margin-bottom: 30px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .tags-label {
+    display: block;
+    font-size: 26px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tag {
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 24px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+
+  &.positive {
+    background: #F0F9FF;
+    color: #0284C7;
+    border-color: #E0F2FE;
+
+    &.selected {
+      background: #0284C7;
+      color: white;
+      border-color: #0284C7;
+    }
+  }
+
+  &.negative {
+    background: #FFF1F2;
+    color: #E11D48;
+    border-color: #FFE4E6;
+
+    &.selected {
+      background: #E11D48;
+      color: white;
+      border-color: #E11D48;
+    }
+  }
+
+  .tag-text {
+    display: block;
+  }
+}
+
+.comment-input {
+  width: 100%;
+  min-height: 200px;
+  padding: 20px;
+  background: #F9FAFB;
+  border-radius: 15px;
+  font-size: 26px;
+  color: #333;
+  line-height: 1.6;
+  border: 2px solid #F0F0F0;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #FF6B9D;
+  }
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 22px;
+  color: #999;
+  margin-top: 10px;
+}
+
+.anonymous-option {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #F9FAFB;
+  border-radius: 15px;
+
+  .checkbox {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    transition: all 0.2s;
+
+    &.checked {
+      background: #FF6B9D;
+      border-color: #FF6B9D;
+
+      .check-icon {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .option-text {
+    font-size: 28px;
+    color: #333;
+    margin-right: 10px;
+  }
+
+  .option-hint {
+    font-size: 22px;
+    color: #999;
+  }
+}
+
+.submit-section {
+  padding: 30px 0;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%);
+  border-radius: 50px;
+  padding: 25px 0;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(194, 57, 179, 0.3);
+
+  &.disabled {
+    opacity: 0.6;
+    box-shadow: none;
+  }
+
+  .submit-text {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+  }
+}

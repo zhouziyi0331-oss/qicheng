@@ -54,32 +54,48 @@ export default function TaskSubmit() {
       // 上传图片
       const uploadedImages: string[] = []
       for (const imagePath of images) {
-        const uploadRes = await Taro.uploadFile({
-          url: `${process.env.TARO_APP_API}/upload/image`,
-          filePath: imagePath,
-          name: 'file',
-          header: {
-            'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        try {
+          const uploadRes = await Taro.uploadFile({
+            url: `http://localhost:3000/api/v1/upload/image`,
+            filePath: imagePath,
+            name: 'file',
+            header: {
+              'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+            }
+          })
+          const data = JSON.parse(uploadRes.data)
+          if (data.url) {
+            uploadedImages.push(data.url)
           }
-        })
-        const data = JSON.parse(uploadRes.data)
-        if (data.url) {
-          uploadedImages.push(data.url)
+        } catch (uploadErr) {
+          console.error('图片上传失败:', uploadErr)
+          // 继续上传其他图片
         }
       }
 
-      // 提交任务
-      await taskAPI.submitTask(taskId, {
-        description: description.trim(),
-        images: uploadedImages,
-        links: links.trim().split('\n').filter(l => l.trim())
+      // 调用新的提交交付物API
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/tasks/flow/${taskId}/deliverable`,
+        method: 'POST',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        },
+        data: {
+          description: description.trim(),
+          fileUrls: uploadedImages,
+          links: links.trim().split('\n').filter(l => l.trim())
+        }
       })
 
-      Taro.showToast({ title: '提交成功，等待验收', icon: 'success' })
+      if (res.data.success) {
+        Taro.showToast({ title: '提交成功，等待AI审核', icon: 'success' })
 
-      setTimeout(() => {
-        Taro.redirectTo({ url: '/pages/my-tasks/index' })
-      }, 1500)
+        setTimeout(() => {
+          Taro.redirectTo({ url: '/pages/my-tasks/index' })
+        }, 1500)
+      } else {
+        throw new Error(res.data.message || '提交失败')
+      }
 
     } catch (err: any) {
       Taro.showToast({

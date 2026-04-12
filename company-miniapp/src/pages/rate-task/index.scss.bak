@@ -1,0 +1,264 @@
+.rate-task-page {
+  min-height: 100vh;
+  background: #0d1117;
+}
+
+.loading {
+  text-align: center;
+  padding: 100px 0;
+  color: #8b949e;
+  font-size: 28px;
+}
+
+.content {
+  height: 100vh;
+  padding: 20px 20px 120px;
+}
+
+.task-card {
+  background: #161b22;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border: 1px solid #30363d;
+
+  .task-title {
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+    color: #c9d1d9;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .task-hint {
+    display: block;
+    font-size: 24px;
+    color: #8b949e;
+    line-height: 1.5;
+  }
+}
+
+.rating-section {
+  background: #161b22;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border: 1px solid #30363d;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+
+  .section-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #c9d1d9;
+  }
+
+  .required {
+    color: #f85149;
+    font-size: 28px;
+    margin-left: 5px;
+  }
+
+  .optional {
+    font-size: 24px;
+    color: #8b949e;
+    margin-left: 10px;
+  }
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stars {
+  display: flex;
+  gap: 15px;
+
+  .star {
+    font-size: 50px;
+    color: #30363d;
+    transition: all 0.2s;
+
+    &.active {
+      color: #FFD700;
+    }
+  }
+}
+
+.rating-text {
+  font-size: 26px;
+  color: #8b949e;
+  margin-left: 20px;
+}
+
+.rating-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid #30363d;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-label {
+    font-size: 28px;
+    color: #c9d1d9;
+    min-width: 180px;
+  }
+}
+
+.tags-group {
+  margin-bottom: 30px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .tags-label {
+    display: block;
+    font-size: 26px;
+    color: #8b949e;
+    margin-bottom: 15px;
+  }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tag {
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 24px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+
+  &.positive {
+    background: rgba(31, 111, 235, 0.15);
+    color: #58a6ff;
+    border-color: rgba(31, 111, 235, 0.3);
+
+    &.selected {
+      background: #1f6feb;
+      color: white;
+      border-color: #1f6feb;
+    }
+  }
+
+  &.negative {
+    background: rgba(248, 81, 73, 0.15);
+    color: #ff7b72;
+    border-color: rgba(248, 81, 73, 0.3);
+
+    &.selected {
+      background: #f85149;
+      color: white;
+      border-color: #f85149;
+    }
+  }
+
+  .tag-text {
+    display: block;
+  }
+}
+
+.comment-input {
+  width: 100%;
+  min-height: 200px;
+  padding: 20px;
+  background: #0d1117;
+  border-radius: 15px;
+  font-size: 26px;
+  color: #c9d1d9;
+  line-height: 1.6;
+  border: 2px solid #30363d;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #1f6feb;
+  }
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 22px;
+  color: #8b949e;
+  margin-top: 10px;
+}
+
+.anonymous-option {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #0d1117;
+  border-radius: 15px;
+
+  .checkbox {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #30363d;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    transition: all 0.2s;
+
+    &.checked {
+      background: #1f6feb;
+      border-color: #1f6feb;
+
+      .check-icon {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .option-text {
+    font-size: 28px;
+    color: #c9d1d9;
+    margin-right: 10px;
+  }
+
+  .option-hint {
+    font-size: 22px;
+    color: #8b949e;
+  }
+}
+
+.submit-section {
+  padding: 30px 0;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #1f6feb 0%, #0969da 100%);
+  border-radius: 50px;
+  padding: 25px 0;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(31, 111, 235, 0.3);
+
+  &.disabled {
+    opacity: 0.6;
+    box-shadow: none;
+  }
+
+  .submit-text {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+  }
+}

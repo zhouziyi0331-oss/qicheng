@@ -1,0 +1,244 @@
+@import '../../styles/theme.scss';
+
+.student-profile {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+
+  &.loading,
+  &.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    font-size: $font-base;
+  }
+}
+
+// 学生基本信息
+.profile-header {
+  @include glass-card;
+  padding: $spacing-xl;
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-lg;
+
+  .avatar {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: $radius-full;
+    border: 4rpx solid $gradient-purple;
+  }
+
+  .info {
+    flex: 1;
+
+    .name {
+      font-size: $font-xl;
+      font-weight: $font-bold;
+      color: $text-primary;
+      display: block;
+      margin-bottom: $spacing-sm;
+    }
+
+    .stats {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      font-size: $font-sm;
+      color: $text-secondary;
+
+      .stat-divider {
+        color: $border-color;
+      }
+    }
+  }
+}
+
+// 区块
+.section {
+  @include glass-card;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+
+  .section-header {
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      font-size: $font-lg;
+      font-weight: $font-bold;
+      color: $text-primary;
+      display: block;
+      margin-bottom: $spacing-xs;
+    }
+
+    .section-subtitle {
+      font-size: $font-sm;
+      color: $text-secondary;
+      display: block;
+    }
+  }
+
+  .section-title {
+    font-size: $font-lg;
+    font-weight: $font-bold;
+    color: $text-primary;
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// 雷达图（条形图展示）
+.radar-chart {
+  .radar-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+
+    .radar-label {
+      width: 140rpx;
+      font-size: $font-base;
+      color: $text-secondary;
+    }
+
+    .radar-bar {
+      flex: 1;
+      height: 24rpx;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: $radius-full;
+      overflow: hidden;
+
+      .radar-fill {
+        height: 100%;
+        background: $gradient-purple;
+        border-radius: $radius-full;
+        transition: width 0.3s ease;
+      }
+    }
+
+    .radar-value {
+      width: 60rpx;
+      text-align: right;
+      font-size: $font-base;
+      font-weight: $font-bold;
+      color: $accent-cyan;
+    }
+  }
+}
+
+// 赛道信息
+.tracks {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+
+  .track-item {
+    flex: 1;
+    padding: $spacing-lg;
+    border-radius: $radius-md;
+    text-align: center;
+
+    &.primary {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+      border: 2rpx solid rgba(139, 92, 246, 0.3);
+    }
+
+    &.secondary {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(52, 211, 153, 0.2) 100%);
+      border: 2rpx solid rgba(59, 130, 246, 0.3);
+    }
+
+    .track-label {
+      display: block;
+      font-size: $font-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .track-value {
+      display: block;
+      font-size: $font-lg;
+      font-weight: $font-bold;
+      color: $text-primary;
+    }
+  }
+}
+
+// 标签
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+
+  .tag {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-full;
+    font-size: $font-sm;
+    font-weight: $font-medium;
+
+    &.interest-tag {
+      background: rgba(139, 92, 246, 0.15);
+      color: #A78BFA;
+      border: 2rpx solid rgba(139, 92, 246, 0.3);
+    }
+
+    &.skill-tag {
+      background: rgba(0, 245, 255, 0.15);
+      color: $accent-cyan;
+      border: 2rpx solid rgba(0, 245, 255, 0.3);
+    }
+  }
+}
+
+// 作品集
+.portfolio-item {
+  padding: $spacing-lg;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: $radius-md;
+  border: 1px solid $border-color;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xs;
+
+    .portfolio-title {
+      font-size: $font-base;
+      font-weight: $font-medium;
+      color: $text-primary;
+    }
+
+    .portfolio-rating {
+      font-size: $font-sm;
+      color: #FBBF24;
+    }
+  }
+
+  .portfolio-date {
+    font-size: $font-sm;
+    color: $text-secondary;
+    display: block;
+    margin-bottom: $spacing-md;
+  }
+
+  .portfolio-images {
+    display: flex;
+    gap: $spacing-sm;
+    overflow-x: auto;
+
+    .portfolio-image {
+      width: 200rpx;
+      height: 200rpx;
+      border-radius: $radius-md;
+      flex-shrink: 0;
+    }
+  }
+}

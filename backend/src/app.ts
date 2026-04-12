@@ -9,6 +9,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 // Route imports (指令1-8 实现)
 import authRoutes from './routes/auth';
+import userRoutes from './routes/user';
 import studentRoutes from './routes/student';
 import companyRoutes from './routes/company';
 import taskRoutes from './routes/tasks';
@@ -30,6 +31,7 @@ import teamRoutes from './routes/team';
 import disputeRoutes from './routes/disputes';
 import draftRoutes from './routes/tasks/draftRoutes';
 import pricingRoutes from './routes/pricing';
+import ratingRoutes from './routes/rating';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -37,6 +39,20 @@ if (process.env.NODE_ENV !== 'test') {
   require('./jobs/firstTaskSettlement');
   require('./cron/mentorNudge').startMentorNudgeCron();
   require('./jobs/invitationCron');
+
+  // 启动定时任务调度器（7天自动确认等）
+  const { pool } = require('./db');
+  const { CronScheduler } = require('./cron/scheduler');
+  const cronScheduler = new CronScheduler(pool);
+  cronScheduler.start();
+
+  // 优雅关闭时停止定时任务
+  process.on('SIGTERM', () => {
+    cronScheduler.stop();
+  });
+  process.on('SIGINT', () => {
+    cronScheduler.stop();
+  });
 }
 
 const app = express();
@@ -78,6 +94,7 @@ app.get('/health', (_req, res) => {
 // Routes
 // ============================================================
 app.use('/api/v1/auth', authLimiter, authRoutes);
+app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/student', studentRoutes);
 app.use('/api/v1/company', companyRoutes);
 app.use('/api/v1/tasks', taskRoutes);
@@ -99,6 +116,7 @@ app.use('/api/v1/team', teamRoutes);
 app.use('/api/v1/disputes', disputeRoutes);
 app.use('/api/v1/tasks', draftRoutes); // 草稿箱和追加需求路由
 app.use('/api/v1/pricing', pricingRoutes); // AI智能定价建议
+app.use('/api/v1/rating', ratingRoutes); // 评价系统
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));

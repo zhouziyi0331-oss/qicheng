@@ -1,0 +1,176 @@
+.chat-list {
+  min-height: 100vh;
+  background: #F5E6F0;
+}
+
+.loading {
+  padding: 100rpx 0;
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.empty {
+  padding: 200rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  opacity: 0.3;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.session-list {
+  height: 100vh;
+}
+
+.session-item {
+  background: #fff;
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+
+  &:active {
+    background: #f8f8f8;
+  }
+}
+
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.badge {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  min-width: 36rpx;
+  height: 36rpx;
+  background: #E91E63;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8rpx;
+  border: 2px solid #fff;
+}
+
+.badge-text {
+  font-size: 20rpx;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #999;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.task-title {
+  font-size: 26rpx;
+  color: #666;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-status {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+
+  &.status-pending {
+    background: #FFF3E0;
+    color: #F57C00;
+  }
+
+  &.status-in_progress {
+    background: #E3F2FD;
+    color: #1976D2;
+  }
+
+  &.status-submitted {
+    background: #F3E5F5;
+    color: #7B1FA2;
+  }
+
+  &.status-completed {
+    background: #E8F5E9;
+    color: #388E3C;
+  }
+
+  &.status-cancelled {
+    background: #FFEBEE;
+    color: #D32F2F;
+  }
+}
+
+.last-message {
+  font-size: 26rpx;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrow {
+  font-size: 48rpx;
+  color: #ddd;
+  flex-shrink: 0;
+  line-height: 1;
+}

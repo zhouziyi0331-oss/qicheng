@@ -1,0 +1,176 @@
+@import '../../styles/theme.scss';
+
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+
+  // Logo区域
+  .logo-section {
+    text-align: center;
+    margin-bottom: 80px;
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto $spacing-lg;
+      backdrop-filter: blur(10px);
+
+      .logo-text {
+        font-size: 72rpx;
+        color: $text-white;
+        font-weight: bold;
+      }
+    }
+
+    .app-name {
+      font-size: $font-2xl;
+      color: $text-white;
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+    }
+
+    .app-slogan {
+      font-size: $font-sm;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  // 登录卡片
+  .login-card {
+    width: 100%;
+    background: $bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .card-title {
+      font-size: $font-xl;
+      color: $text-primary;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: $spacing-xl;
+    }
+
+    .login-form {
+      .form-item {
+        margin-bottom: $spacing-lg;
+
+        .input-wrapper {
+          @include input;
+          display: flex;
+          align-items: center;
+          padding: $spacing-md;
+
+          .input-icon {
+            font-size: 40rpx;
+            color: $text-tertiary;
+            margin-right: $spacing-sm;
+          }
+
+          .input {
+            flex: 1;
+            font-size: $font-md;
+            color: $text-primary;
+            border: none;
+            background: transparent;
+          }
+
+          .code-btn {
+            @include button-primary;
+            padding: 8rpx 20rpx;
+            font-size: $font-xs;
+            white-space: nowrap;
+
+            &.disabled {
+              background: $bg-section;
+              color: $text-tertiary;
+            }
+          }
+        }
+      }
+
+      .login-btn {
+        @include button-primary;
+        width: 100%;
+        padding: $spacing-md;
+        font-size: $font-md;
+        font-weight: 500;
+        margin-top: $spacing-lg;
+      }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: $spacing-xl 0;
+
+      .divider-line {
+        flex: 1;
+        height: 1px;
+        background: $divider-color;
+      }
+
+      .divider-text {
+        padding: 0 $spacing-md;
+        font-size: $font-xs;
+        color: $text-tertiary;
+      }
+    }
+
+    .wechat-login {
+      .wechat-btn {
+        @include button-secondary;
+        width: 100%;
+        padding: $spacing-md;
+        font-size: $font-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-sm;
+
+        .wechat-icon {
+          font-size: 40rpx;
+          color: $success-color;
+        }
+
+        .btn-text {
+          color: $text-primary;
+        }
+      }
+    }
+
+    .agreement {
+      text-align: center;
+      margin-top: $spacing-lg;
+      font-size: $font-xs;
+      color: $text-tertiary;
+      line-height: 1.6;
+
+      .link {
+        color: $primary-color;
+      }
+    }
+  }
+
+  // 底部信息
+  .footer {
+    margin-top: 60px;
+    text-align: center;
+
+    .footer-text {
+      font-size: $font-xs;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.8;
+    }
+  }
+}

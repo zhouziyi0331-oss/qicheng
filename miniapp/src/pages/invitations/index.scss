@@ -1,0 +1,320 @@
+.invitations-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F5E6F0 0%, #FFF5F8 100%);
+  padding: 20px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .count {
+      font-size: 24px;
+      color: #999;
+    }
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    color: #999;
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+
+    .empty-text {
+      font-size: 28px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    .empty-hint {
+      font-size: 24px;
+      color: #ccc;
+    }
+  }
+
+  .invitation-list {
+    height: calc(100vh - 120px);
+  }
+
+  .invitation-card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    .match-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%);
+      border-radius: 20px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .match-score {
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .match-text {
+        font-size: 22px;
+        color: white;
+      }
+    }
+
+    .task-info {
+      margin-bottom: 16px;
+      padding-right: 100px;
+
+      .task-title {
+        font-size: 30px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .task-meta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+
+        .meta-item {
+          font-size: 22px;
+          color: #999;
+          padding: 4px 12px;
+          background: #F5F5F5;
+          border-radius: 8px;
+        }
+      }
+    }
+
+    .task-details {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+      padding: 16px;
+      background: #F9F9F9;
+      border-radius: 12px;
+
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .detail-label {
+          font-size: 22px;
+          color: #999;
+        }
+
+        .detail-value {
+          font-size: 26px;
+          font-weight: bold;
+          color: #333;
+
+          &.price {
+            color: #FF6B9D;
+            font-size: 32px;
+          }
+        }
+      }
+    }
+
+    .match-reason {
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #FFF5F8;
+      border-radius: 12px;
+      border-left: 4px solid #FF6B9D;
+
+      .reason-label {
+        font-size: 22px;
+        color: #999;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .reason-text {
+        font-size: 26px;
+        color: #666;
+        line-height: 1.6;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+
+      button {
+        flex: 1;
+        height: 80px;
+        border-radius: 12px;
+        font-size: 26px;
+        font-weight: bold;
+        border: none;
+      }
+
+      .btn-detail {
+        background: #F5F5F5;
+        color: #666;
+      }
+
+      .btn-reject {
+        background: #FFF;
+        color: #999;
+        border: 2px solid #E5E5E5;
+      }
+
+      .btn-accept {
+        background: linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%);
+        color: white;
+      }
+    }
+  }
+
+  .detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .modal-content {
+      width: 90%;
+      max-height: 80vh;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px;
+        border-bottom: 1px solid #F0F0F0;
+
+        .modal-title {
+          font-size: 32px;
+          font-weight: bold;
+          color: #333;
+          flex: 1;
+        }
+
+        .modal-close {
+          font-size: 48px;
+          color: #999;
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .modal-body {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+
+        .modal-section {
+          margin-bottom: 24px;
+
+          .section-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+          }
+
+          .section-content {
+            font-size: 26px;
+            color: #666;
+            line-height: 1.6;
+          }
+
+          .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F5F5F5;
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            .info-label {
+              font-size: 26px;
+              color: #999;
+            }
+
+            .info-value {
+              font-size: 26px;
+              color: #333;
+              font-weight: bold;
+
+              &.price {
+                color: #FF6B9D;
+                font-size: 30px;
+              }
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        display: flex;
+        gap: 12px;
+        padding: 20px 24px;
+        border-top: 1px solid #F0F0F0;
+
+        button {
+          flex: 1;
+          height: 88px;
+          border-radius: 12px;
+          font-size: 28px;
+          font-weight: bold;
+          border: none;
+        }
+
+        .modal-btn-reject {
+          background: #F5F5F5;
+          color: #999;
+        }
+
+        .modal-btn-accept {
+          background: linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%);
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -12,13 +12,34 @@
  * GET  /company/tasks              — 企业: 获取任务列表
  * POST /company/tasks/:id/approve  — 企业: 验收通过
  * POST /company/tasks/:id/reject   — 企业: 验收打回
+ *
+ * 完整业务流程路由 (新增):
+ * POST /tasks/flow/ai-price-suggestion      — 企业: 获取AI价格建议
+ * POST /tasks/flow/publish-with-deposit     — 企业: 发布任务并支付定金
+ * GET  /tasks/flow/:taskId/matched-students — 企业: 查看AI匹配的10个学生
+ * POST /tasks/flow/:taskId/select-students  — 企业: 选择5个学生发送邀请
+ * GET  /tasks/flow/invitations              — 学生: 查看收到的任务邀请
+ * POST /tasks/flow/:taskId/accept           — 学生: 接受任务邀请
+ * POST /tasks/flow/:taskId/reject           — 学生: 拒绝任务邀请
+ * POST /tasks/flow/:taskId/progress         — 学生: 更新任务进度
+ * POST /tasks/flow/:taskId/deliverables     — 学生: 提交交付物
+ * GET  /tasks/flow/:taskId/deliverables     — 企业: 查看交付物
+ * POST /tasks/flow/:taskId/approve-and-pay  — 企业: 验收通过并支付尾款
+ * POST /tasks/flow/:taskId/final-confirm    — 企业: 最终确认
+ * POST /tasks/flow/:taskId/supplement       — 企业: 补充需求
  */
 import { Router } from 'express';
 import { authenticate, requireRole } from '../../middleware/auth';
 import * as studentCtrl from './studentController';
 import * as companyCtrl from './companyController';
+import businessFlowRoutes from './businessFlowRoutes';
 
 const router = Router();
+
+// ============================================
+// 完整业务流程路由 (新增)
+// ============================================
+router.use('/flow', businessFlowRoutes);
 
 // 公开/登录可见
 router.get('/market', authenticate, studentCtrl.getMarketTasks);

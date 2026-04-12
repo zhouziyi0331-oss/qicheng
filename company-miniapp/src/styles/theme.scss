@@ -1,0 +1,383 @@
+// ============================================
+// AETHER Dashboard 深色主题系统 - 完全复刻版
+// ============================================
+
+// 1. 颜色系统
+// --------------------------------------------
+// 背景色
+$bg-primary: #0A0C10;                    // 画布背景（极深灰黑）
+$bg-sidebar: rgba(18, 22, 28, 0.8);      // 侧边栏背景（毛玻璃）
+$bg-card: rgba(20, 28, 40, 0.6);         // 卡片背景（半透明深蓝灰）
+$bg-card-hover: rgba(30, 41, 59, 0.8);   // 卡片悬停
+$bg-input: #1E293B;                      // 输入框背景
+$bg-section: rgba(20, 28, 40, 0.4);      // 区块背景（更浅）
+
+// 文字颜色
+$text-primary: #FFFFFF;                  // 主要文字（白色）
+$text-secondary: #9CA3AF;                // 次要文字（中灰）
+$text-muted: #6B7280;                    // 弱化文字（深灰）
+$text-label: #5A6370;                    // 标签文字（更深灰）
+$text-white: #FFFFFF;                    // 白色文字（别名）
+$text-tertiary: #4B5563;                 // 三级文字（更深灰）
+
+// 主题色
+$accent-blue: #3B82F6;                   // 蓝色强调
+$accent-purple: #8B5CF6;                 // 紫色强调
+$accent-green: #10B981;                  // 绿色（成功/上涨）
+$accent-cyan: #06B6D4;                   // 青色
+$accent-pink: #EC4899;                   // 粉色
+
+// 主题色别名（兼容旧代码）
+$primary-color: #6366F1;                 // 主色
+$primary-dark: #4F46E5;                  // 主色深色
+$primary-light: #818CF8;                 // 主色浅色
+$success-color: #10B981;                 // 成功色
+$warning-color: #F59E0B;                 // 警告色
+$error-color: #EF4444;                   // 错误色
+$info-color: #3B82F6;                    // 信息色
+
+// 渐变色
+$gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+$gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+$gradient-blue-green: linear-gradient(135deg, #60A5FA 0%, #34D399 100%);
+$gradient-chart: linear-gradient(180deg, #8B5CF6 0%, #6366F1 100%);
+
+// 状态颜色
+$status-success: #10B981;                // 成功（绿色）
+$status-warning: #F59E0B;                // 警告（橙色）
+$status-error: #EF4444;                  // 错误（红色）
+$status-info: #3B82F6;                   // 信息（蓝色）
+
+// 边框颜色
+$border-light: rgba(75, 85, 99, 0.2);    // 浅色边框
+$border-medium: rgba(75, 85, 99, 0.4);   // 中等边框
+$border-dark: #2D3748;                   // 深色边框
+
+// 边框颜色别名（兼容旧代码）
+$border-color: rgba(75, 85, 99, 0.2);    // 默认边框
+$divider-color: rgba(75, 85, 99, 0.15);  // 分割线颜色
+
+// 2. 尺寸系统
+// --------------------------------------------
+// 圆角
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+$radius-card: 12px;  // 卡片圆角别名
+
+// 间距
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 20px;
+$spacing-xl: 24px;
+$spacing-2xl: 32px;
+$spacing-3xl: 40px;
+
+// 3. 阴影系统
+// --------------------------------------------
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+$shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+$shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+
+// 4. 字体系统
+// --------------------------------------------
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-mono: 'SF Mono', 'JetBrains Mono', 'Consolas', monospace;
+$font-number: $font-mono;  // 数字字体别名
+
+// 字号
+$text-xs: 12px;
+$text-sm: 13px;
+$text-base: 14px;
+$text-lg: 15px;
+$text-xl: 16px;
+$text-2xl: 18px;
+$text-3xl: 24px;
+$text-4xl: 28px;
+$text-5xl: 36px;
+$text-6xl: 48px;
+
+// 字号（rpx单位，用于小程序）
+$font-xs: 32rpx;
+$font-sm: 34rpx;
+$font-base: 36rpx;
+$font-md: 38rpx;
+$font-lg: 40rpx;
+$font-xl: 44rpx;
+$font-2xl: 48rpx;
+$font-3xl: 56rpx;
+
+// 字重
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
+// 5. Mixins - 可复用样式
+// --------------------------------------------
+
+// 毛玻璃卡片效果
+@mixin glass-card {
+  background: $bg-card;
+  backdrop-filter: blur(20px);
+  border: 1px solid $border-light;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xl;
+}
+
+// card mixin（别名，兼容旧代码）
+@mixin card {
+  @include glass-card;
+}
+
+// 毛玻璃卡片（强化版）
+@mixin glass-card-strong {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(30px);
+  border: 1px solid $border-medium;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xl;
+}
+
+// 渐变卡片
+@mixin gradient-card {
+  background: $gradient-purple;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-glow;
+  border: none;
+}
+
+// 文字渐变
+@mixin text-gradient($gradient) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// 状态徽标
+@mixin status-badge($color, $bg-opacity: 0.1) {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: $radius-full;
+  font-size: $text-xs;
+  font-weight: $font-medium;
+  color: $color;
+  background: rgba($color, $bg-opacity);
+}
+
+// badge mixin（别名，兼容旧代码）
+@mixin badge($color, $bg-opacity: 0.1) {
+  @include status-badge($color, $bg-opacity);
+}
+
+// 输入框样式
+@mixin input {
+  background: $bg-input;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  padding: 12px 16px;
+  color: $text-primary;
+  font-size: $text-base;
+
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+// 主按钮样式
+@mixin button-primary {
+  background: $gradient-purple;
+  color: $text-white;
+  border: none;
+  border-radius: $radius-md;
+  padding: 12px 24px;
+  font-size: $text-base;
+  font-weight: $font-semibold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: $shadow-glow;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 次要按钮样式
+@mixin button-secondary {
+  background: transparent;
+  color: $text-primary;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  padding: 12px 24px;
+  font-size: $text-base;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $bg-card-hover;
+    border-color: $border-medium;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 菜单项样式
+@mixin menu-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: $bg-card;
+  border-radius: $radius-md;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: $bg-card-hover;
+    transform: translateX(4px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// 图标样式
+@mixin icon($size: 40rpx) {
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// Flex 居中
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex 两端对齐
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// 文字截断
+@mixin text-ellipsis($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// 平滑过渡
+@mixin smooth-transition($properties: all, $duration: 0.3s) {
+  transition: $properties $duration ease;
+}
+
+// 悬停效果
+@mixin hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:active {
+    transform: translateY(-2px);
+    box-shadow: $shadow-glow;
+  }
+}
+
+// 6. 动画
+// --------------------------------------------
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// 7. 工具类
+// --------------------------------------------
+.text-gradient-primary {
+  @include text-gradient($gradient-primary);
+}
+
+.text-gradient-blue-green {
+  @include text-gradient($gradient-blue-green);
+}
+
+.status-success {
+  @include status-badge($status-success);
+}
+
+.status-warning {
+  @include status-badge($status-warning);
+}
+
+.status-error {
+  @include status-badge($status-error);
+}
+
+.status-info {
+  @include status-badge($status-info);
+}

@@ -1,0 +1,358 @@
+@import '../../styles/theme.scss';
+
+.publish-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  // 步骤指示器 - 扁平圆形步骤
+  .steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-xl;
+    padding: $spacing-xl $spacing-lg;
+    background: $bg-card;
+    border-radius: $radius-card;
+    box-shadow: none;
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .step-number {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: $bg-section;
+        color: $text-tertiary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $font-lg;
+        font-weight: 600;
+        margin-bottom: $spacing-xs;
+        border: none;
+      }
+
+      .step-text {
+        font-size: $font-xs;
+        color: $text-tertiary;
+      }
+
+      &.active {
+        .step-number {
+          background: $primary-color;
+          color: $text-white;
+        }
+
+        .step-text {
+          color: $text-primary;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: $divider-color;
+      margin: 0 $spacing-sm;
+      margin-bottom: 30px;
+    }
+  }
+
+  // 表单容器
+  .form-container {
+    .form-section {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .section-title {
+        display: block;
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+      }
+
+      .form-item {
+        margin-bottom: $spacing-lg;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .label {
+          display: block;
+          font-size: $font-md;
+          color: $text-primary;
+          margin-bottom: $spacing-sm;
+          font-weight: 400;
+
+          .required {
+            color: $error-color;
+            margin-left: 4px;
+          }
+        }
+
+        .input,
+        .textarea,
+        .picker {
+          @include input;
+          width: 100%;
+        }
+
+        .textarea {
+          min-height: 120px;
+          padding: $spacing-md;
+          line-height: 1.6;
+        }
+
+        .picker {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+
+          .picker-text {
+            color: $text-primary;
+          }
+
+          .picker-placeholder {
+            color: $text-tertiary;
+          }
+
+          .picker-arrow {
+            color: $text-tertiary;
+            font-size: $font-sm;
+          }
+        }
+
+        .char-count {
+          display: block;
+          text-align: right;
+          font-size: $font-xs;
+          color: $text-tertiary;
+          margin-top: 6px;
+        }
+      }
+    }
+
+    .submit-btn {
+      @include button-primary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+    }
+  }
+
+  // AI价格建议
+  .price-suggestion {
+    .suggestion-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .card-title {
+        display: block;
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+      }
+
+      .price-range {
+        background: $bg-section;
+        border-radius: $radius-md;
+        padding: $spacing-xl;
+        text-align: center;
+        margin-bottom: $spacing-lg;
+
+        .price-label {
+          display: block;
+          font-size: $font-sm;
+          color: $text-secondary;
+          margin-bottom: $spacing-sm;
+        }
+
+        .price-value {
+          display: block;
+          font-size: $font-2xl;
+          color: $primary-color;
+          font-weight: 600;
+        }
+      }
+
+      .suggestion-text {
+        display: block;
+        font-size: $font-sm;
+        color: $text-secondary;
+        line-height: 1.6;
+        margin-bottom: $spacing-lg;
+      }
+
+      .factors {
+        .factors-title {
+          display: block;
+          font-size: $font-sm;
+          color: $text-primary;
+          font-weight: 500;
+          margin-bottom: $spacing-sm;
+        }
+
+        .factor-item {
+          display: block;
+          font-size: $font-xs;
+          color: $text-secondary;
+          line-height: 1.8;
+        }
+      }
+    }
+
+    .price-input-section {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .section-title {
+        display: block;
+        font-size: $font-md;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-md;
+      }
+
+      .price-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: $bg-section;
+        border: 1px solid $border-color;
+        border-radius: $radius-md;
+        padding: $spacing-md;
+        margin-bottom: $spacing-sm;
+
+        .currency {
+          font-size: $font-lg;
+          color: $warning-color;
+          margin-right: $spacing-xs;
+        }
+
+        .price-input {
+          flex: 1;
+          font-size: $font-lg;
+          color: $text-primary;
+          font-weight: 600;
+          border: none;
+          background: transparent;
+        }
+      }
+
+      .price-hint {
+        display: block;
+        font-size: $font-xs;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  // 支付页面
+  .payment-section {
+    .payment-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .card-title {
+        display: block;
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+      }
+
+      .payment-detail {
+        background: $bg-section;
+        border-radius: $radius-md;
+        padding: $spacing-md;
+        margin-bottom: $spacing-lg;
+
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $spacing-sm;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .detail-label {
+            font-size: $font-sm;
+            color: $text-secondary;
+          }
+
+          .detail-value {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 500;
+
+            &.highlight {
+              color: $warning-color;
+              font-size: $font-lg;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+
+      .payment-info {
+        .info-title {
+          display: block;
+          font-size: $font-sm;
+          color: $text-primary;
+          font-weight: 500;
+          margin-bottom: $spacing-sm;
+        }
+
+        .info-item {
+          display: block;
+          font-size: $font-xs;
+          color: $text-secondary;
+          line-height: 1.8;
+        }
+      }
+    }
+  }
+
+  // 按钮组
+  .button-group {
+    display: flex;
+    gap: $spacing-md;
+
+    .back-btn,
+    .next-btn,
+    .pay-btn {
+      flex: 1;
+      border-radius: $radius-md;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+      border: none;
+    }
+
+    .back-btn {
+      @include button-secondary;
+    }
+
+    .next-btn,
+    .pay-btn {
+      @include button-primary;
+    }
+  }
+}

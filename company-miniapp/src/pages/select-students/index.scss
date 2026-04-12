@@ -1,0 +1,204 @@
+@import '../../styles/theme.scss';
+
+.select-students-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding-bottom: 100px;
+
+  .search-bar {
+    background: $bg-card;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $divider-color;
+
+    .search-input {
+      @include input;
+      width: 100%;
+      padding-left: 40px;
+      background: $bg-section url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="%23999" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 12px center;
+    }
+  }
+
+  .filter-section {
+    background: $bg-card;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $divider-color;
+
+    .filter-tabs {
+      display: flex;
+      gap: $spacing-sm;
+
+      .tab-item {
+        padding: 8rpx 20rpx;
+        border-radius: $radius-md;
+        font-size: $font-sm;
+        color: $text-secondary;
+        background: $bg-section;
+        border: 1px solid $border-color;
+
+        &.active {
+          color: $primary-color;
+          background: rgba($primary-color, 0.08);
+          border-color: $primary-color;
+        }
+      }
+    }
+  }
+
+  .student-list {
+    padding: $spacing-lg;
+
+    .student-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+      border: 1px solid $border-color;
+
+      &.selected {
+        border-color: $primary-color;
+        background: rgba($primary-color, 0.02);
+      }
+
+      .student-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: $spacing-md;
+
+        .student-avatar {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: $primary-light;
+          margin-right: $spacing-md;
+        }
+
+        .student-info {
+          flex: 1;
+
+          .student-name {
+            font-size: $font-lg;
+            color: $text-primary;
+            font-weight: 600;
+            margin-bottom: 6rpx;
+          }
+
+          .student-school {
+            font-size: $font-sm;
+            color: $text-secondary;
+          }
+        }
+
+        .select-checkbox {
+          width: 24px;
+          height: 24px;
+          border: 2px solid $border-color;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &.checked {
+            background: $primary-color;
+            border-color: $primary-color;
+
+            .check-icon {
+              font-size: $font-md;
+              color: $text-white;
+            }
+          }
+        }
+      }
+
+      .student-stats {
+        display: flex;
+        gap: $spacing-lg;
+        padding: $spacing-md;
+        background: $bg-section;
+        border-radius: $radius-md;
+        margin-bottom: $spacing-md;
+
+        .stat-item {
+          flex: 1;
+          text-align: center;
+
+          .stat-value {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 600;
+            margin-bottom: 4rpx;
+          }
+
+          .stat-label {
+            font-size: $font-xs;
+            color: $text-secondary;
+          }
+        }
+      }
+
+      .student-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+
+        .tag {
+          @include badge($primary-color);
+          background: rgba($primary-color, 0.08);
+          padding: 6rpx 16rpx;
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 120px 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        margin-bottom: $spacing-lg;
+      }
+
+      .empty-text {
+        font-size: $font-md;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: $bg-card;
+    padding: $spacing-md $spacing-lg;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    z-index: 100;
+
+    .selected-info {
+      flex: 1;
+
+      .selected-count {
+        font-size: $font-md;
+        color: $text-primary;
+        font-weight: 500;
+
+        .count {
+          color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .confirm-btn {
+      @include button-primary;
+      padding: $spacing-sm $spacing-xl;
+      font-size: $font-sm;
+
+      &.disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}

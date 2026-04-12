@@ -1,0 +1,625 @@
+@import '../../styles/theme.scss';
+
+.index-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-xl $spacing-md;
+}
+
+// ============================================
+// 1. 顶部欢迎区域
+// ============================================
+.welcome-section {
+  @include flex-between;
+  margin-bottom: $spacing-xl;
+
+  .greeting {
+    .hello-text {
+      font-size: $text-4xl;
+      font-weight: $font-semibold;
+      color: $text-primary;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: $text-base;
+      color: $text-muted;
+    }
+  }
+
+  .time-stats {
+    display: flex;
+    gap: $spacing-sm;
+
+    .time-card {
+      @include glass-card;
+      padding: $spacing-sm $spacing-md;
+      min-width: 120px;
+
+      .time-value {
+        font-size: $text-xl;
+        font-weight: $font-bold;
+        color: $text-primary;
+        margin-bottom: 4px;
+      }
+
+      .time-label {
+        font-size: $text-xs;
+        color: $text-secondary;
+      }
+    }
+  }
+}
+
+// ============================================
+// 2. 核心指标卡片（三列）
+// ============================================
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+
+  .metric-card {
+    @include glass-card;
+    padding: $spacing-xl;
+    position: relative;
+
+    .metric-header {
+      @include flex-between;
+      margin-bottom: $spacing-md;
+
+      .metric-title {
+        font-size: $text-base;
+        font-weight: $font-medium;
+        color: $text-secondary;
+      }
+
+      .metric-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        @include flex-center;
+        font-size: $text-lg;
+      }
+    }
+
+    .metric-value {
+      font-size: $text-5xl;
+      font-weight: $font-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-xs;
+      font-feature-settings: 'tnum';
+    }
+
+    .metric-subtitle {
+      font-size: $text-sm;
+      color: $text-muted;
+    }
+  }
+}
+
+// ============================================
+// 3. 双栏布局（生产力趋势 + AI Insights）
+// ============================================
+.main-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+
+  // 左侧：生产力趋势
+  .productivity-card {
+    @include glass-card;
+    padding: $spacing-xl;
+
+    .card-header {
+      @include flex-between;
+      margin-bottom: $spacing-xl;
+
+      .card-title {
+        font-size: $text-xl;
+        font-weight: $font-semibold;
+        color: $text-primary;
+      }
+
+      .period-selector {
+        font-size: $text-sm;
+        color: $text-secondary;
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: $radius-md;
+        border: 1px solid $border-light;
+      }
+    }
+
+    .productivity-content {
+      display: flex;
+      gap: $spacing-2xl;
+
+      .stats-left {
+        flex: 1;
+
+        .main-stat {
+          font-size: $text-6xl;
+          font-weight: $font-bold;
+          @include text-gradient($gradient-blue-green);
+          margin-bottom: $spacing-sm;
+        }
+
+        .stat-detail {
+          font-size: $text-base;
+          color: $text-secondary;
+          margin-bottom: $spacing-xs;
+        }
+
+        .stat-change {
+          font-size: $text-sm;
+          color: $status-success;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          &::before {
+            content: '↑';
+            font-size: $text-lg;
+          }
+        }
+      }
+
+      .chart-right {
+        flex: 1;
+        position: relative;
+
+        .chart-container {
+          height: 120px;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 8px;
+          padding-bottom: $spacing-lg;
+
+          .chart-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+
+            .bar {
+              width: 100%;
+              background: $gradient-chart;
+              border-radius: $radius-sm $radius-sm 0 0;
+              min-height: 20px;
+              position: relative;
+              box-shadow: $shadow-glow;
+
+              &.inactive {
+                background: #374151;
+                box-shadow: none;
+              }
+            }
+
+            .bar-label {
+              font-size: $text-xs;
+              color: $text-muted;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 右侧：AI Insights
+  .insights-card {
+    @include gradient-card;
+    padding: $spacing-xl;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: glow-pulse 8s ease-in-out infinite;
+    }
+
+    .insights-content {
+      position: relative;
+      z-index: 1;
+
+      .insights-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: $radius-md;
+        @include flex-center;
+        margin-bottom: $spacing-md;
+        font-size: $text-3xl;
+      }
+
+      .insights-title {
+        font-size: $text-2xl;
+        font-weight: $font-bold;
+        color: $text-primary;
+        margin-bottom: $spacing-sm;
+      }
+
+      .insights-desc {
+        font-size: $text-base;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        margin-bottom: $spacing-lg;
+      }
+
+      .insights-button {
+        width: 100%;
+        padding: $spacing-md;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: $radius-md;
+        color: $text-primary;
+        font-size: $text-base;
+        font-weight: $font-medium;
+        text-align: center;
+        @include smooth-transition;
+
+        &:active {
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// 4. 快捷操作入口
+// ============================================
+.quick-entry-section {
+  margin-bottom: $spacing-xl;
+
+  .section-header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      font-size: $text-2xl;
+      font-weight: $font-semibold;
+      color: $text-primary;
+    }
+  }
+
+  .quick-entry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-md;
+
+    .quick-entry-item {
+      @include glass-card;
+      padding: $spacing-lg;
+      @include flex-center;
+      flex-direction: column;
+      gap: $spacing-sm;
+      cursor: pointer;
+      @include smooth-transition;
+
+      &:active {
+        transform: scale(0.95);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .entry-icon {
+        font-size: 48rpx;
+        margin-bottom: $spacing-xs;
+      }
+
+      .entry-text {
+        font-size: $text-sm;
+        color: $text-secondary;
+        font-weight: $font-medium;
+      }
+    }
+  }
+}
+
+// ============================================
+// 5. 待处理任务
+// ============================================
+.pending-tasks-section {
+  margin-bottom: $spacing-xl;
+
+  .section-header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      font-size: $text-2xl;
+      font-weight: $font-semibold;
+      color: $text-primary;
+    }
+
+    .view-all {
+      font-size: $text-sm;
+      color: $accent-blue;
+      @include smooth-transition;
+
+      &:active {
+        color: lighten($accent-blue, 10%);
+      }
+    }
+  }
+
+  .pending-task-card {
+    @include glass-card;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+    cursor: pointer;
+    @include smooth-transition;
+
+    &:active {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .task-header {
+      @include flex-between;
+      margin-bottom: $spacing-sm;
+
+      .task-title {
+        font-size: $text-lg;
+        font-weight: $font-semibold;
+        color: $text-primary;
+      }
+
+      .task-badge {
+        padding: 4px 12px;
+        border-radius: $radius-full;
+        font-size: $text-xs;
+        font-weight: $font-medium;
+
+        &.urgent {
+          background: rgba(239, 68, 68, 0.2);
+          color: #EF4444;
+          border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        &.info {
+          background: rgba(59, 130, 246, 0.2);
+          color: #3B82F6;
+          border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+      }
+    }
+
+    .task-desc {
+      font-size: $text-sm;
+      color: $text-secondary;
+      line-height: 1.5;
+      margin-bottom: $spacing-md;
+    }
+
+    .task-footer {
+      @include flex-between;
+      align-items: center;
+
+      .task-time {
+        font-size: $text-xs;
+        color: $text-muted;
+      }
+
+      .task-action {
+        font-size: $text-sm;
+        color: $accent-cyan;
+        font-weight: $font-medium;
+        padding: 6px 16px;
+        background: rgba(0, 245, 255, 0.1);
+        border-radius: $radius-md;
+        border: 1px solid rgba(0, 245, 255, 0.2);
+      }
+    }
+  }
+}
+
+// ============================================
+// 6. 性能分析表格
+// ============================================
+.performance-section {
+  @include glass-card;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+
+  .section-header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      font-size: $text-xl;
+      font-weight: $font-semibold;
+      color: $text-primary;
+    }
+
+    .view-all {
+      font-size: $text-sm;
+      color: $accent-blue;
+      @include smooth-transition;
+
+      &:active {
+        color: lighten($accent-blue, 10%);
+      }
+    }
+  }
+
+  .performance-table {
+    width: 100%;
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr;
+      gap: $spacing-md;
+      padding-bottom: $spacing-md;
+      border-bottom: 1px solid $border-dark;
+      margin-bottom: $spacing-sm;
+
+      .header-cell {
+        font-size: $text-xs;
+        font-weight: $font-semibold;
+        color: $text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr;
+      gap: $spacing-md;
+      padding: $spacing-md 0;
+      border-bottom: 1px solid rgba(45, 55, 72, 0.5);
+      align-items: center;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .cell {
+        font-size: $text-base;
+        color: $text-primary;
+
+        &.task-name {
+          font-weight: $font-medium;
+        }
+
+        &.date {
+          color: $text-secondary;
+          font-size: $text-sm;
+        }
+
+        &.duration {
+          font-family: $font-mono;
+          color: $text-secondary;
+        }
+      }
+
+      .status-badge {
+        &.success {
+          @include status-badge($status-success);
+        }
+
+        &.warning {
+          @include status-badge($status-warning);
+        }
+
+        &.error {
+          @include status-badge($status-error);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// 5. 底部双栏（AI Insights 列表 + 详情）
+// ============================================
+.insights-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-lg;
+
+  .insights-list-card {
+    @include glass-card;
+    padding: $spacing-xl;
+
+    .card-title {
+      font-size: $text-xl;
+      font-weight: $font-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      &::before {
+        content: '✨';
+        font-size: $text-2xl;
+      }
+    }
+
+    .insight-item {
+      padding: $spacing-md 0;
+      border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .insight-title {
+        font-size: $text-lg;
+        font-weight: $font-semibold;
+        color: $text-primary;
+        margin-bottom: $spacing-xs;
+      }
+
+      .insight-desc {
+        font-size: $text-sm;
+        color: $text-secondary;
+        line-height: 1.5;
+        margin-bottom: $spacing-sm;
+        @include text-ellipsis(2);
+      }
+
+      .insight-link {
+        font-size: $text-sm;
+        color: $accent-blue;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        &::after {
+          content: '→';
+          transition: transform 0.2s ease;
+        }
+
+        &:active::after {
+          transform: translateX(4px);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// 6. 响应式适配（小程序）
+// ============================================
+@media (max-width: 750px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .insights-section {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-table {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 1fr 1fr;
+
+      .header-cell:nth-child(3),
+      .header-cell:nth-child(4),
+      .cell:nth-child(3),
+      .cell:nth-child(4) {
+        display: none;
+      }
+    }
+  }
+}

@@ -1,18 +1,40 @@
+import express from 'express';
+import {
+  getOrCreateSession,
+  getChatSessions,
+  getChatMessages,
+  sendMessage,
+  markMessagesAsRead,
+  getUnreadCount,
+  archiveSession
+} from './chatController';
+
+const router = express.Router();
+
 /**
- * 指令8: 任务沟通中转机制
- * GET  /chat/:taskId/messages  — 获取沟通记录
- * POST /chat/:taskId/messages  — 发送消息 (含联系方式过滤)
+ * 聊天系统路由
+ * 基础路径: /api/chat
  */
-import { Router } from 'express';
-import { authenticate } from '../../middleware/auth';
-import { contactFilterMiddleware } from '../../middleware/contactFilter';
-import * as controller from './controller';
 
-const router = Router();
-router.use(authenticate);
+// 获取或创建聊天会话
+router.post('/sessions', getOrCreateSession);
 
-router.get('/:taskId/messages', controller.getMessages);
-// contactFilterMiddleware 在所有 POST 消息上强制过滤联系方式
-router.post('/:taskId/messages', contactFilterMiddleware, controller.sendMessage);
+// 获取用户的所有聊天会话列表
+router.get('/sessions', getChatSessions);
+
+// 获取会话的聊天记录
+router.get('/sessions/:sessionId/messages', getChatMessages);
+
+// 发送消息
+router.post('/sessions/:sessionId/messages', sendMessage);
+
+// 标记消息为已读
+router.post('/sessions/:sessionId/read', markMessagesAsRead);
+
+// 获取未读消息总数
+router.get('/unread-count', getUnreadCount);
+
+// 归档会话
+router.post('/sessions/:sessionId/archive', archiveSession);
 
 export default router;

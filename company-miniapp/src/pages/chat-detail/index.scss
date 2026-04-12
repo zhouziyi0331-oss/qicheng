@@ -1,0 +1,267 @@
+@import '../../styles/theme.scss';
+
+.chat-detail-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $bg-primary;
+
+  // 聊天头部
+  .chat-header {
+    background: $bg-card;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $divider-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      flex: 1;
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: $primary-light;
+        margin-right: $spacing-sm;
+      }
+
+      .user-info {
+        .user-name {
+          font-size: $font-md;
+          color: $text-primary;
+          font-weight: 500;
+          margin-bottom: 2rpx;
+        }
+
+        .user-status {
+          font-size: $font-xs;
+          color: $success-color;
+        }
+      }
+    }
+
+    .header-right {
+      .more-btn {
+        font-size: 48rpx;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  // 消息列表容器
+  .message-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-lg;
+
+    .message-item {
+      display: flex;
+      margin-bottom: $spacing-lg;
+
+      &.self {
+        flex-direction: row-reverse;
+
+        .message-bubble {
+          background: $primary-color;
+          color: $text-white;
+          border-radius: $radius-md $radius-md 4px $radius-md;
+        }
+
+        .message-time {
+          text-align: right;
+        }
+      }
+
+      .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: $primary-light;
+        flex-shrink: 0;
+      }
+
+      .message-content {
+        max-width: 70%;
+        margin: 0 $spacing-sm;
+
+        .message-bubble {
+          background: $bg-card;
+          color: $text-primary;
+          padding: $spacing-md;
+          border-radius: $radius-md $radius-md $radius-md 4px;
+          font-size: $font-md;
+          line-height: 1.6;
+          word-wrap: break-word;
+          box-shadow: none;
+          border: 1px solid $border-color;
+
+          &.image {
+            padding: 0;
+            background: transparent;
+            border: none;
+
+            image {
+              max-width: 100%;
+              border-radius: $radius-md;
+            }
+          }
+        }
+
+        .message-time {
+          font-size: $font-xs;
+          color: $text-tertiary;
+          margin-top: 6rpx;
+        }
+      }
+    }
+
+    // 系统消息
+    .system-message {
+      text-align: center;
+      margin: $spacing-lg 0;
+
+      .system-text {
+        display: inline-block;
+        font-size: $font-xs;
+        color: $text-tertiary;
+        background: $bg-section;
+        padding: 6rpx 16rpx;
+        border-radius: 20rpx;
+      }
+    }
+
+    // 时间分隔
+    .time-divider {
+      text-align: center;
+      margin: $spacing-lg 0;
+
+      .time-text {
+        display: inline-block;
+        font-size: $font-xs;
+        color: $text-tertiary;
+        background: $bg-section;
+        padding: 6rpx 16rpx;
+        border-radius: 20rpx;
+      }
+    }
+  }
+
+  // 输入栏
+  .input-bar {
+    background: $bg-card;
+    padding: $spacing-md $spacing-lg;
+    border-top: 1px solid $divider-color;
+    display: flex;
+    align-items: flex-end;
+    gap: $spacing-sm;
+
+    .tool-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      flex-shrink: 0;
+
+      &:active {
+        opacity: 0.6;
+      }
+
+      .tool-icon {
+        font-size: 48rpx;
+        color: $text-secondary;
+      }
+    }
+
+    .input-wrapper {
+      flex: 1;
+      background: $bg-section;
+      border: 1px solid $border-color;
+      border-radius: $radius-md;
+      padding: $spacing-sm $spacing-md;
+      max-height: 120px;
+      overflow-y: auto;
+
+      .message-input {
+        width: 100%;
+        font-size: $font-md;
+        color: $text-primary;
+        line-height: 1.6;
+        border: none;
+        background: transparent;
+        min-height: 40px;
+      }
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: $primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      flex-shrink: 0;
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      &.disabled {
+        background: $bg-section;
+
+        .send-icon {
+          color: $text-tertiary;
+        }
+      }
+
+      .send-icon {
+        font-size: 40rpx;
+        color: $text-white;
+      }
+    }
+  }
+
+  // 工具栏（表情、图片等）
+  .toolbar {
+    background: $bg-card;
+    border-top: 1px solid $divider-color;
+    padding: $spacing-md;
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-md;
+
+      .tool-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: $spacing-md;
+        background: $bg-section;
+        border-radius: $radius-md;
+        border: none;
+
+        &:active {
+          background: $divider-color;
+        }
+
+        .tool-icon {
+          font-size: 56rpx;
+          margin-bottom: 6rpx;
+        }
+
+        .tool-text {
+          font-size: $font-xs;
+          color: $text-secondary;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@import './styles/theme.scss';
+
+page {
+  background: $bg-primary;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: $text-primary;
+}
+
+.container {
+  min-height: 100vh;
+  background: $bg-primary;
+}

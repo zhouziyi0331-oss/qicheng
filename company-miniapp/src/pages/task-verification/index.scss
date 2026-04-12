@@ -1,0 +1,244 @@
+@import '../../styles/theme.scss';
+
+.task-verification {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 180rpx;
+
+  &.loading,
+  &.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    font-size: $font-base;
+  }
+}
+
+// 任务信息
+.task-info {
+  @include glass-card;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+
+  .task-title {
+    font-size: $font-xl;
+    font-weight: $font-bold;
+    color: $text-primary;
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+
+  .student-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+
+    .avatar {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: $radius-full;
+    }
+
+    .info {
+      flex: 1;
+
+      .name {
+        font-size: $font-base;
+        font-weight: $font-medium;
+        color: $text-primary;
+        display: block;
+        margin-bottom: $spacing-xs;
+      }
+
+      .time {
+        font-size: $font-sm;
+        color: $text-secondary;
+        display: block;
+      }
+    }
+  }
+}
+
+// 区块
+.section {
+  @include glass-card;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+
+  .section-title {
+    font-size: $font-lg;
+    font-weight: $font-bold;
+    color: $text-primary;
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+
+  .description {
+    font-size: $font-base;
+    color: $text-secondary;
+    line-height: 1.6;
+    display: block;
+  }
+}
+
+// 图片展示
+.images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+
+  .image {
+    width: 100%;
+    height: 200rpx;
+    border-radius: $radius-md;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+// 链接
+.link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: $radius-md;
+  border: 1px solid $border-color;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .link-text {
+    flex: 1;
+    font-size: $font-sm;
+    color: $accent-cyan;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .link-copy {
+    font-size: $font-sm;
+    color: $text-secondary;
+    padding: $spacing-xs $spacing-md;
+    background: rgba(139, 92, 246, 0.2);
+    border-radius: $radius-sm;
+  }
+}
+
+// 操作按钮
+.actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-lg;
+  background: rgba(10, 12, 16, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid $border-color;
+  display: flex;
+  gap: $spacing-md;
+
+  .btn-reject,
+  .btn-approve {
+    flex: 1;
+    height: 88rpx;
+    border-radius: $radius-lg;
+    font-size: $font-base;
+    font-weight: $font-bold;
+    border: none;
+
+    &::after {
+      border: none;
+    }
+  }
+
+  .btn-reject {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+    border: 2rpx solid rgba(239, 68, 68, 0.3);
+  }
+
+  .btn-approve {
+    background: $gradient-purple;
+    color: $text-white;
+    box-shadow: $shadow-glow;
+  }
+}
+
+// 打回原因弹窗
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $spacing-xl;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 600rpx;
+  @include glass-card;
+  padding: $spacing-xl;
+
+  .modal-title {
+    font-size: $font-lg;
+    font-weight: $font-bold;
+    color: $text-primary;
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+
+  .modal-textarea {
+    width: 100%;
+    min-height: 200rpx;
+    padding: $spacing-md;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    color: $text-primary;
+    font-size: $font-base;
+    line-height: 1.6;
+    margin-bottom: $spacing-lg;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: $spacing-md;
+
+    .modal-btn {
+      flex: 1;
+      height: 80rpx;
+      border-radius: $radius-lg;
+      font-size: $font-base;
+      font-weight: $font-bold;
+      border: none;
+
+      &::after {
+        border: none;
+      }
+
+      &.cancel {
+        background: rgba(255, 255, 255, 0.05);
+        color: $text-secondary;
+        border: 1px solid $border-color;
+      }
+
+      &.confirm {
+        background: $gradient-purple;
+        color: $text-white;
+      }
+    }
+  }
+}

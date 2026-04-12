@@ -1,0 +1,213 @@
+@import '../../styles/theme.scss';
+
+.task-progress {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+
+  &.loading,
+  &.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    font-size: $font-base;
+  }
+}
+
+// 任务头部
+.task-header {
+  @include glass-card;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+
+  .task-title {
+    font-size: $font-xl;
+    font-weight: $font-bold;
+    color: $text-primary;
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+
+  .current-status {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+    border-radius: $radius-lg;
+    border: 2rpx solid rgba(139, 92, 246, 0.3);
+
+    .status-label {
+      font-size: $font-sm;
+      color: $text-secondary;
+    }
+
+    .status-value {
+      font-size: $font-base;
+      font-weight: $font-bold;
+      color: $accent-cyan;
+    }
+  }
+}
+
+// 时间轴
+.timeline {
+  @include glass-card;
+  padding: $spacing-xl;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 80rpx;
+  padding-bottom: $spacing-xl;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  // 圆点
+  .timeline-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: $radius-full;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    .dot-icon {
+      font-size: $font-lg;
+      font-weight: $font-bold;
+    }
+  }
+
+  // 连接线
+  .timeline-line {
+    position: absolute;
+    left: 24rpx;
+    top: 48rpx;
+    bottom: -$spacing-xl;
+    width: 4rpx;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+
+    &.completed {
+      background: $gradient-purple;
+    }
+  }
+
+  // 已完成状态
+  &.completed {
+    .timeline-dot {
+      background: $gradient-purple;
+      box-shadow: 0 0 20rpx rgba(139, 92, 246, 0.5);
+
+      .dot-icon {
+        color: $text-white;
+      }
+    }
+
+    .step-title {
+      color: $text-primary;
+    }
+  }
+
+  // 当前状态
+  &.current {
+    .timeline-dot {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.3) 0%, rgba(0, 245, 255, 0.1) 100%);
+      border: 4rpx solid $accent-cyan;
+      box-shadow: 0 0 30rpx rgba(0, 245, 255, 0.6);
+
+      .dot-icon {
+        color: $accent-cyan;
+        animation: pulse 2s ease-in-out infinite;
+      }
+    }
+
+    .step-title {
+      color: $accent-cyan;
+      font-weight: $font-bold;
+    }
+
+    .timeline-content {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.05) 0%, rgba(0, 245, 255, 0.02) 100%);
+      border: 2rpx solid rgba(0, 245, 255, 0.2);
+      padding: $spacing-md;
+      border-radius: $radius-md;
+    }
+  }
+
+  // 待完成状态
+  &.pending {
+    .timeline-dot {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2rpx solid rgba(255, 255, 255, 0.2);
+
+      .dot-icon {
+        color: $text-secondary;
+      }
+    }
+
+    .step-title {
+      color: $text-secondary;
+    }
+
+    .step-description {
+      color: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+// 步骤内容
+.timeline-content {
+  .step-title {
+    font-size: $font-lg;
+    font-weight: $font-medium;
+    display: block;
+    margin-bottom: $spacing-xs;
+  }
+
+  .step-description {
+    font-size: $font-base;
+    color: $text-secondary;
+    line-height: 1.6;
+    display: block;
+    margin-bottom: $spacing-sm;
+  }
+
+  .step-meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-sm;
+
+    .meta-time {
+      color: $text-secondary;
+    }
+
+    .meta-divider {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .meta-operator {
+      color: $accent-cyan;
+    }
+  }
+}
+
+// 脉冲动画
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}

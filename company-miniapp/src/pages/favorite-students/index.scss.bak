@@ -1,0 +1,195 @@
+.favorite-students-page {
+  min-height: 100vh;
+  background: #0f0f1e;
+  padding: 20px;
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #8e8e93;
+    font-size: 28px;
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+
+    .empty-icon {
+      font-size: 120px;
+      margin-bottom: 24px;
+    }
+
+    .empty-text {
+      font-size: 32px;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .empty-hint {
+      font-size: 26px;
+      color: #8e8e93;
+    }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .title {
+      font-size: 36px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .count {
+      font-size: 28px;
+      color: #8e8e93;
+    }
+  }
+
+  .student-list {
+    height: calc(100vh - 120px);
+  }
+
+  .student-card {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+
+      .student-info {
+        display: flex;
+        align-items: center;
+        flex: 1;
+
+        .avatar {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          margin-right: 20px;
+        }
+
+        .info {
+          flex: 1;
+
+          .name {
+            display: block;
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+          }
+
+          .school {
+            display: block;
+            font-size: 24px;
+            color: #8e8e93;
+          }
+        }
+      }
+
+      .unfavorite-btn {
+        padding: 12px;
+
+        .unfavorite-icon {
+          font-size: 40px;
+          color: #fbbf24;
+        }
+      }
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: #0f0f1e;
+      border-radius: 12px;
+
+      .stat-item {
+        flex: 1;
+        text-align: center;
+
+        .stat-value {
+          display: block;
+          font-size: 36px;
+          font-weight: 600;
+          color: #3b82f6;
+          margin-bottom: 8px;
+        }
+
+        .stat-label {
+          display: block;
+          font-size: 24px;
+          color: #8e8e93;
+        }
+      }
+    }
+
+    .skills-section {
+      margin-bottom: 20px;
+
+      .section-label {
+        display: block;
+        font-size: 24px;
+        color: #8e8e93;
+        margin-bottom: 12px;
+      }
+
+      .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        .skill-tag {
+          background: rgba(59, 130, 246, 0.2);
+          border-radius: 8px;
+          padding: 8px 16px;
+
+          .skill-text {
+            font-size: 24px;
+            color: #3b82f6;
+          }
+        }
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #2a2a3e;
+
+      .favorite-time {
+        font-size: 24px;
+        color: #8e8e93;
+      }
+
+      .contact-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 8px;
+        padding: 12px 24px;
+
+        .contact-text {
+          font-size: 24px;
+          color: #ffffff;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

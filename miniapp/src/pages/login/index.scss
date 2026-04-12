@@ -28,6 +28,73 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* 登录方式切换 */
+.login-type-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 4px;
+  margin-bottom: 32px;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.tab.active {
+  background: #FFFFFF;
+  color: #8B5CF6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 微信登录 */
+.wechat-login {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 48px 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.wechat-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+}
+
+.wechat-tip {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 8px;
+}
+
+.wechat-desc {
+  display: block;
+  font-size: 14px;
+  color: #6B7280;
+  margin-bottom: 32px;
+}
+
+.wechat-button {
+  width: 100%;
+  height: 52px;
+  background: #07C160;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 手机号登录 */
 .login-form {
   background: #FFFFFF;
   border-radius: 24px;

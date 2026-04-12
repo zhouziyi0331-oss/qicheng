@@ -1,0 +1,178 @@
+@import '../../styles/theme.scss';
+
+.invoice-manage-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .filter-tabs {
+    display: flex;
+    gap: $spacing-sm;
+    background: $bg-card;
+    padding: 6rpx;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid $border-color;
+
+    .tab-item {
+      flex: 1;
+      text-align: center;
+      padding: $spacing-sm 0;
+      font-size: $font-sm;
+      color: $text-secondary;
+      border-radius: $radius-sm;
+      background: transparent;
+
+      &.active {
+        color: $primary-color;
+        background: rgba($primary-color, 0.08);
+        font-weight: 500;
+      }
+    }
+  }
+
+  .invoice-list {
+    .invoice-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+      border: 1px solid $border-color;
+
+      .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $divider-color;
+
+        .invoice-info {
+          flex: 1;
+
+          .invoice-title {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 500;
+            margin-bottom: 6rpx;
+          }
+
+          .invoice-no {
+            font-size: $font-xs;
+            color: $text-tertiary;
+          }
+        }
+
+        .invoice-status {
+          @include badge($success-color);
+          background: rgba($success-color, 0.08);
+          padding: 6rpx 16rpx;
+
+          &.pending {
+            color: $warning-color;
+            background: rgba($warning-color, 0.08);
+          }
+
+          &.rejected {
+            color: $error-color;
+            background: rgba($error-color, 0.08);
+          }
+        }
+      }
+
+      .invoice-detail {
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $spacing-sm;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .detail-label {
+            font-size: $font-sm;
+            color: $text-secondary;
+          }
+
+          .detail-value {
+            font-size: $font-sm;
+            color: $text-primary;
+            font-weight: 400;
+
+            &.amount {
+              color: $primary-color;
+              font-size: $font-lg;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+
+      .invoice-actions {
+        display: flex;
+        gap: $spacing-sm;
+        margin-top: $spacing-md;
+        padding-top: $spacing-md;
+        border-top: 1px solid $divider-color;
+
+        .action-btn {
+          flex: 1;
+          border-radius: $radius-md;
+          padding: $spacing-sm;
+          font-size: $font-sm;
+          border: none;
+
+          &.primary {
+            @include button-primary;
+          }
+
+          &.secondary {
+            @include button-secondary;
+          }
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 120px 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        margin-bottom: $spacing-lg;
+      }
+
+      .empty-text {
+        font-size: $font-md;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  .float-btn {
+    position: fixed;
+    right: 30px;
+    bottom: 100px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: $primary-color;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+
+    &:active {
+      opacity: 0.8;
+      transform: scale(0.95);
+    }
+
+    .btn-icon {
+      font-size: 48rpx;
+      color: $text-white;
+    }
+  }
+}

@@ -1,0 +1,189 @@
+@import '../../styles/theme.scss';
+
+.data-report-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .date-filter {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .filter-title {
+      font-size: $font-md;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-md;
+    }
+
+    .date-range {
+      display: flex;
+      gap: $spacing-sm;
+      align-items: center;
+
+      .date-picker {
+        @include input;
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      .separator {
+        font-size: $font-sm;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  .overview-section {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .section-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-md;
+
+      .stat-card {
+        background: $bg-section;
+        border-radius: $radius-md;
+        padding: $spacing-lg;
+        text-align: center;
+
+        .stat-icon {
+          font-size: 48rpx;
+          margin-bottom: $spacing-sm;
+        }
+
+        .stat-value {
+          font-size: $font-2xl;
+          font-weight: 600;
+          margin-bottom: 6rpx;
+          line-height: 1;
+
+          &.purple {
+            color: $primary-color;
+          }
+
+          &.blue {
+            color: $info-color;
+          }
+
+          &.green {
+            color: $success-color;
+          }
+
+          &.orange {
+            color: $warning-color;
+          }
+        }
+
+        .stat-label {
+          font-size: $font-sm;
+          color: $text-secondary;
+        }
+      }
+    }
+  }
+
+  .chart-section {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .section-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+    }
+
+    .chart-container {
+      height: 250px;
+      background: $bg-section;
+      border-radius: $radius-md;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .chart-placeholder {
+        font-size: $font-sm;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  .detail-section {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .section-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+    }
+
+    .detail-list {
+      .detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-md 0;
+        border-bottom: 1px solid $divider-color;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .item-label {
+          font-size: $font-sm;
+          color: $text-secondary;
+        }
+
+        .item-value {
+          font-size: $font-md;
+          color: $text-primary;
+          font-weight: 500;
+
+          &.highlight {
+            color: $primary-color;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .export-section {
+    .export-btn {
+      @include button-secondary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-sm;
+
+      .export-icon {
+        font-size: $font-lg;
+      }
+    }
+  }
+}

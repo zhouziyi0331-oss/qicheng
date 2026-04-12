@@ -19,6 +19,9 @@ export default function TaskWorking() {
   const [currentStep, setCurrentStep] = useState(1)
   const [timeLeft, setTimeLeft] = useState(0)
   const [showMentorTip, setShowMentorTip] = useState(false)
+  const [progressPercent, setProgressPercent] = useState(0)
+  const [progressNote, setProgressNote] = useState('')
+  const [showProgressModal, setShowProgressModal] = useState(false)
 
   useEffect(() => {
     loadTaskData()
@@ -109,6 +112,47 @@ export default function TaskWorking() {
     })
   }
 
+  const handleUpdateProgress = () => {
+    setShowProgressModal(true)
+  }
+
+  const handleProgressSubmit = async () => {
+    if (progressPercent < 0 || progressPercent > 100) {
+      Taro.showToast({ title: '进度必须在0-100之间', icon: 'none' })
+      return
+    }
+
+    try {
+      Taro.showLoading({ title: '更新中...' })
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/tasks/flow/${id}/progress`,
+        method: 'POST',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        },
+        data: {
+          progressPercent,
+          note: progressNote
+        }
+      })
+
+      Taro.hideLoading()
+
+      if (res.data.success) {
+        Taro.showToast({ title: '进度已更新', icon: 'success' })
+        setShowProgressModal(false)
+        setProgressNote('')
+        loadTaskData() // 重新加载任务数据
+      } else {
+        Taro.showToast({ title: res.data.message || '更新失败', icon: 'none' })
+      }
+    } catch (err) {
+      Taro.hideLoading()
+      console.error('更新进度失败:', err)
+      Taro.showToast({ title: '网络错误', icon: 'none' })
+    }
+  }
+
   if (!task) {
     return <View className="task-working-page">加载中...</View>
   }
@@ -188,6 +232,10 @@ export default function TaskWorking() {
             <Text className="action-icon">◈</Text>
             <Text className="action-text">我卡住了</Text>
           </View>
+          <View className="action-btn progress" onClick={handleUpdateProgress}>
+            <Text className="action-icon">◐</Text>
+            <Text className="action-text">更新进度</Text>
+          </View>
         </View>
       </View>
 
@@ -207,6 +255,60 @@ export default function TaskWorking() {
           <Text className="btn-text">提交作品</Text>
         </View>
       </View>
+
+      {/* 进度更新弹窗 */}
+      {showProgressModal && (
+        <View className="progress-modal" onClick={() => setShowProgressModal(false)}>
+          <View className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <View className="modal-header">
+              <Text className="modal-title">更新任务进度</Text>
+              <Text className="modal-close" onClick={() => setShowProgressModal(false)}>×</Text>
+            </View>
+
+            <View className="modal-body">
+              <View className="form-item">
+                <Text className="form-label">当前进度 (%)</Text>
+                <input
+                  className="form-input"
+                  type="number"
+                  value={progressPercent}
+                  onInput={(e) => setProgressPercent(Number(e.detail.value))}
+                  placeholder="请输入0-100的数字"
+                />
+              </View>
+
+              <View className="form-item">
+                <Text className="form-label">进度说明（选填）</Text>
+                <textarea
+                  className="form-textarea"
+                  value={progressNote}
+                  onInput={(e) => setProgressNote(e.detail.value)}
+                  placeholder="简单描述一下当前完成的内容..."
+                  maxlength={200}
+                />
+                <Text className="char-count">{progressNote.length}/200</Text>
+              </View>
+
+              <View className="progress-preview">
+                <Text className="preview-label">进度预览</Text>
+                <View className="progress-bar">
+                  <View className="progress-fill" style={{ width: `${progressPercent}%` }} />
+                </View>
+                <Text className="progress-text">{progressPercent}%</Text>
+              </View>
+            </View>
+
+            <View className="modal-footer">
+              <View className="modal-btn cancel" onClick={() => setShowProgressModal(false)}>
+                <Text>取消</Text>
+              </View>
+              <View className="modal-btn confirm" onClick={handleProgressSubmit}>
+                <Text>确认更新</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   )
 }

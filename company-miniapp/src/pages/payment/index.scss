@@ -1,0 +1,227 @@
+@import '../../styles/theme.scss';
+
+.payment-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .task-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+    border: none;
+
+    .task-title {
+      font-size: $font-lg;
+      color: $text-white;
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+      line-height: 1.4;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: $spacing-md;
+
+      .meta-item {
+        font-size: $font-sm;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  .payment-info-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .card-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+      padding-bottom: $spacing-md;
+      border-bottom: 1px solid $divider-color;
+    }
+
+    .amount-section {
+      text-align: center;
+      padding: $spacing-xl 0;
+      background: $bg-section;
+      border-radius: $radius-md;
+      margin-bottom: $spacing-lg;
+
+      .amount-label {
+        font-size: $font-sm;
+        color: $text-secondary;
+        margin-bottom: $spacing-sm;
+      }
+
+      .amount-value {
+        font-size: 72rpx;
+        color: $warning-color;
+        font-weight: 600;
+        line-height: 1;
+      }
+    }
+
+    .detail-list {
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-md 0;
+        border-bottom: 1px solid $divider-color;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .detail-label {
+          font-size: $font-sm;
+          color: $text-secondary;
+        }
+
+        .detail-value {
+          font-size: $font-sm;
+          color: $text-primary;
+          font-weight: 400;
+
+          &.highlight {
+            color: $primary-color;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .payment-method-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .card-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+    }
+
+    .method-item {
+      display: flex;
+      align-items: center;
+      padding: $spacing-md;
+      background: $bg-section;
+      border-radius: $radius-md;
+      margin-bottom: $spacing-sm;
+      border: 2px solid transparent;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.selected {
+        background: rgba($primary-color, 0.05);
+        border-color: $primary-color;
+      }
+
+      .method-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: $success-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: $spacing-md;
+
+        .icon {
+          font-size: 40rpx;
+          color: $text-white;
+        }
+      }
+
+      .method-info {
+        flex: 1;
+
+        .method-name {
+          font-size: $font-md;
+          color: $text-primary;
+          font-weight: 500;
+          margin-bottom: 4rpx;
+        }
+
+        .method-desc {
+          font-size: $font-xs;
+          color: $text-secondary;
+        }
+      }
+
+      .radio {
+        width: 20px;
+        height: 20px;
+        border: 2px solid $border-color;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.checked {
+          border-color: $primary-color;
+
+          .radio-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: $primary-color;
+          }
+        }
+      }
+    }
+  }
+
+  .tips-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    background: rgba($info-color, 0.05);
+    border: 1px solid rgba($info-color, 0.2);
+
+    .tips-title {
+      font-size: $font-md;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+    }
+
+    .tips-item {
+      font-size: $font-sm;
+      color: $text-secondary;
+      line-height: 1.6;
+      margin-bottom: 6rpx;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .submit-section {
+    .submit-btn {
+      @include button-primary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+
+      &.disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}

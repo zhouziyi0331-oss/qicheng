@@ -1,0 +1,170 @@
+@import '../../styles/theme.scss';
+
+.amendment-history-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .task-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+    border: none;
+
+    .task-title {
+      font-size: $font-lg;
+      color: $text-white;
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: $spacing-md;
+
+      .meta-item {
+        font-size: $font-sm;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  .amendment-list {
+    .amendment-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+      border: 1px solid $border-color;
+
+      .amendment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $divider-color;
+
+        .amendment-info {
+          flex: 1;
+
+          .amendment-type {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 500;
+            margin-bottom: 6rpx;
+          }
+
+          .amendment-time {
+            font-size: $font-xs;
+            color: $text-tertiary;
+          }
+        }
+
+        .amendment-status {
+          @include badge($warning-color);
+          background: rgba($warning-color, 0.08);
+          padding: 6rpx 16rpx;
+
+          &.approved {
+            color: $success-color;
+            background: rgba($success-color, 0.08);
+          }
+
+          &.rejected {
+            color: $error-color;
+            background: rgba($error-color, 0.08);
+          }
+        }
+      }
+
+      .amendment-detail {
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $spacing-sm;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .detail-label {
+            font-size: $font-sm;
+            color: $text-secondary;
+          }
+
+          .detail-value {
+            font-size: $font-sm;
+            color: $text-primary;
+            font-weight: 400;
+
+            &.highlight {
+              color: $primary-color;
+              font-weight: 600;
+            }
+          }
+        }
+
+        .description {
+          margin-top: $spacing-md;
+          padding: $spacing-md;
+          background: $bg-section;
+          border-radius: $radius-md;
+
+          .description-label {
+            font-size: $font-xs;
+            color: $text-secondary;
+            margin-bottom: 6rpx;
+          }
+
+          .description-text {
+            font-size: $font-sm;
+            color: $text-primary;
+            line-height: 1.6;
+          }
+        }
+      }
+
+      .amendment-actions {
+        display: flex;
+        gap: $spacing-sm;
+        margin-top: $spacing-md;
+        padding-top: $spacing-md;
+        border-top: 1px solid $divider-color;
+
+        .action-btn {
+          flex: 1;
+          border-radius: $radius-md;
+          padding: $spacing-sm;
+          font-size: $font-sm;
+          border: none;
+
+          &.primary {
+            @include button-primary;
+          }
+
+          &.secondary {
+            @include button-secondary;
+          }
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 120px 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        margin-bottom: $spacing-lg;
+      }
+
+      .empty-text {
+        font-size: $font-md;
+        color: $text-tertiary;
+      }
+    }
+  }
+}

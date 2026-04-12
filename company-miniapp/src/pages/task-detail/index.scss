@@ -1,0 +1,405 @@
+@import '../../styles/theme.scss';
+
+.task-detail-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding-bottom: 100px;
+
+  // 任务状态横幅
+  .status-banner {
+    background: $primary-color;
+    padding: $spacing-xl $spacing-lg;
+    text-align: center;
+
+    .status-text {
+      font-size: $font-lg;
+      color: $text-white;
+      font-weight: 500;
+    }
+
+    &.pending {
+      background: $warning-color;
+    }
+
+    &.in-progress {
+      background: $info-color;
+    }
+
+    &.completed {
+      background: $success-color;
+    }
+
+    &.cancelled {
+      background: $text-tertiary;
+    }
+  }
+
+  // 快捷操作栏
+  .quick-actions {
+    display: flex;
+    gap: $spacing-md;
+    padding: $spacing-lg;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid $border-color;
+    overflow-x: auto;
+
+    .quick-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 120rpx;
+      padding: $spacing-md;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: $radius-md;
+      border: 1px solid $border-color;
+      cursor: pointer;
+
+      &:active {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .quick-icon-wrapper {
+        width: 64rpx;
+        height: 64rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $gradient-purple;
+        border-radius: $radius-md;
+        margin-bottom: $spacing-sm;
+
+        .quick-icon-text {
+          font-size: 36rpx;
+        }
+      }
+
+      .quick-text {
+        font-size: $font-sm;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  // 内容区域
+  .content-section {
+    padding: $spacing-lg;
+
+    // 基本信息卡片
+    .info-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .card-title {
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $divider-color;
+      }
+
+      .task-title {
+        font-size: $font-xl;
+        color: $text-primary;
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: $spacing-lg;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-md;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .info-label {
+          font-size: $font-sm;
+          color: $text-secondary;
+          display: flex;
+          align-items: center;
+
+          .label-icon {
+            margin-right: 6rpx;
+            font-size: $font-md;
+          }
+        }
+
+        .info-value {
+          font-size: $font-md;
+          color: $text-primary;
+          font-weight: 500;
+
+          &.price {
+            color: $warning-color;
+            font-size: $font-lg;
+            font-weight: 600;
+          }
+
+          &.status {
+            @include badge($primary-color);
+            background: rgba($primary-color, 0.08);
+            padding: 6rpx 16rpx;
+          }
+        }
+      }
+
+      .task-description {
+        font-size: $font-md;
+        color: $text-primary;
+        line-height: 1.8;
+        white-space: pre-wrap;
+      }
+    }
+
+    // 学生信息卡片
+    .student-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .card-title {
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+      }
+
+      .student-info {
+        display: flex;
+        align-items: center;
+
+        .student-avatar {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: $primary-light;
+          margin-right: $spacing-md;
+        }
+
+        .student-detail {
+          flex: 1;
+
+          .student-name {
+            font-size: $font-lg;
+            color: $text-primary;
+            font-weight: 500;
+            margin-bottom: 6rpx;
+          }
+
+          .student-school {
+            font-size: $font-sm;
+            color: $text-secondary;
+          }
+        }
+
+        .contact-btn {
+          @include button-primary;
+          padding: 10rpx 24rpx;
+          font-size: $font-sm;
+        }
+      }
+    }
+
+    // 进度时间线
+    .timeline-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .card-title {
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+      }
+
+      .timeline {
+        .timeline-item {
+          display: flex;
+          padding-bottom: $spacing-lg;
+          position: relative;
+
+          &:last-child {
+            padding-bottom: 0;
+
+            .timeline-line {
+              display: none;
+            }
+          }
+
+          .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $divider-color;
+            margin-right: $spacing-md;
+            margin-top: 6rpx;
+            flex-shrink: 0;
+            z-index: 1;
+
+            &.active {
+              background: $primary-color;
+              box-shadow: 0 0 0 4px rgba($primary-color, 0.1);
+            }
+          }
+
+          .timeline-line {
+            position: absolute;
+            left: 5px;
+            top: 18px;
+            bottom: 0;
+            width: 2px;
+            background: $divider-color;
+          }
+
+          .timeline-content {
+            flex: 1;
+
+            .timeline-title {
+              font-size: $font-md;
+              color: $text-primary;
+              font-weight: 500;
+              margin-bottom: 6rpx;
+            }
+
+            .timeline-time {
+              font-size: $font-xs;
+              color: $text-tertiary;
+            }
+          }
+        }
+      }
+    }
+
+    // 附件列表
+    .attachment-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+
+      .card-title {
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+        margin-bottom: $spacing-lg;
+      }
+
+      .attachment-list {
+        .attachment-item {
+          display: flex;
+          align-items: center;
+          padding: $spacing-md;
+          background: $bg-section;
+          border-radius: $radius-md;
+          margin-bottom: $spacing-sm;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .attachment-icon {
+            font-size: 48rpx;
+            margin-right: $spacing-md;
+          }
+
+          .attachment-info {
+            flex: 1;
+
+            .attachment-name {
+              font-size: $font-sm;
+              color: $text-primary;
+              margin-bottom: 4rpx;
+            }
+
+            .attachment-size {
+              font-size: $font-xs;
+              color: $text-tertiary;
+            }
+          }
+
+          .download-btn {
+            font-size: $font-lg;
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+
+  // 底部操作栏
+  .bottom-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 12, 16, 0.95);
+    backdrop-filter: blur(20px);
+    padding: $spacing-lg;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+    border-top: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    z-index: 100;
+
+    .action-buttons {
+      display: flex;
+      gap: $spacing-md;
+    }
+
+    .btn-reject,
+    .btn-approve,
+    .btn-pay,
+    .btn-confirm,
+    .btn-cancel {
+      height: 88rpx;
+      border-radius: $radius-lg;
+      font-size: $font-base;
+      font-weight: $font-bold;
+      border: none;
+
+      &::after {
+        border: none;
+      }
+    }
+
+    .btn-reject {
+      flex: 1;
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+      border: 2rpx solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-approve {
+      flex: 1;
+      background: $gradient-purple;
+      color: $text-white;
+      box-shadow: $shadow-glow;
+    }
+
+    .btn-pay {
+      background: $gradient-purple;
+      color: $text-white;
+      box-shadow: $shadow-glow;
+    }
+
+    .btn-confirm {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: $text-white;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-cancel {
+      background: rgba(239, 68, 68, 0.1);
+      color: #F87171;
+      border: 2rpx solid rgba(239, 68, 68, 0.3);
+      margin-top: $spacing-sm;
+    }
+  }
+}

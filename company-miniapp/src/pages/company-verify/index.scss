@@ -1,0 +1,151 @@
+@import '../../styles/theme.scss';
+
+.company-verify-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .info-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+    background: rgba($info-color, 0.05);
+    border-color: rgba($info-color, 0.2);
+
+    .info-icon {
+      font-size: 40rpx;
+      color: $info-color;
+      margin-bottom: $spacing-sm;
+    }
+
+    .info-title {
+      font-size: $font-md;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+    }
+
+    .info-text {
+      font-size: $font-sm;
+      color: $text-secondary;
+      line-height: 1.6;
+    }
+  }
+
+  .form-section {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .section-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+      padding-bottom: $spacing-md;
+      border-bottom: 1px solid $divider-color;
+    }
+
+    .form-item {
+      margin-bottom: $spacing-lg;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        font-size: $font-md;
+        color: $text-primary;
+        margin-bottom: $spacing-sm;
+        display: flex;
+        align-items: center;
+
+        .required {
+          color: $error-color;
+          margin-left: 4rpx;
+        }
+      }
+
+      .input {
+        @include input;
+        width: 100%;
+      }
+
+      .upload-area {
+        background: $bg-section;
+        border: 2px dashed $border-color;
+        border-radius: $radius-md;
+        padding: $spacing-xl;
+        text-align: center;
+        cursor: pointer;
+
+        &:active {
+          background: $divider-color;
+        }
+
+        .upload-icon {
+          font-size: 80rpx;
+          color: $text-tertiary;
+          margin-bottom: $spacing-sm;
+        }
+
+        .upload-text {
+          font-size: $font-sm;
+          color: $text-secondary;
+          margin-bottom: 6rpx;
+        }
+
+        .upload-hint {
+          font-size: $font-xs;
+          color: $text-tertiary;
+        }
+      }
+
+      .image-preview {
+        position: relative;
+        border-radius: $radius-md;
+        overflow: hidden;
+
+        .preview-image {
+          width: 100%;
+          border-radius: $radius-md;
+        }
+
+        .delete-btn {
+          position: absolute;
+          top: $spacing-sm;
+          right: $spacing-sm;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .delete-icon {
+            font-size: $font-lg;
+            color: $text-white;
+          }
+        }
+      }
+    }
+  }
+
+  .submit-section {
+    .submit-btn {
+      @include button-primary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+
+      &.disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}

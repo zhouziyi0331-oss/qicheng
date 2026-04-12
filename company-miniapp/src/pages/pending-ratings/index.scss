@@ -1,0 +1,103 @@
+@import '../../styles/theme.scss';
+
+.pending-ratings-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .rating-list {
+    .rating-card {
+      @include card;
+      margin-bottom: $spacing-md;
+      box-shadow: none;
+      border: 1px solid $border-color;
+
+      .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $divider-color;
+
+        .task-info {
+          flex: 1;
+
+          .task-title {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 500;
+            margin-bottom: 6rpx;
+            line-height: 1.4;
+          }
+
+          .task-time {
+            font-size: $font-xs;
+            color: $text-tertiary;
+          }
+        }
+
+        .task-status {
+          @include badge($success-color);
+          background: rgba($success-color, 0.08);
+          padding: 6rpx 16rpx;
+        }
+      }
+
+      .student-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: $spacing-md;
+
+        .student-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: $primary-light;
+          margin-right: $spacing-md;
+        }
+
+        .student-detail {
+          flex: 1;
+
+          .student-name {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 500;
+            margin-bottom: 4rpx;
+          }
+
+          .student-school {
+            font-size: $font-xs;
+            color: $text-secondary;
+          }
+        }
+      }
+
+      .rating-action {
+        .rate-btn {
+          @include button-primary;
+          width: 100%;
+          padding: $spacing-sm;
+          font-size: $font-sm;
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 120px 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        margin-bottom: $spacing-lg;
+      }
+
+      .empty-text {
+        font-size: $font-md;
+        color: $text-tertiary;
+      }
+    }
+  }
+}

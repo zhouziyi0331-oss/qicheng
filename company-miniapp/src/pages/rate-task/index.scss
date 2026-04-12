@@ -1,0 +1,194 @@
+@import '../../styles/theme.scss';
+
+.rate-task-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  .task-card {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .task-title {
+      font-size: $font-lg;
+      color: $text-primary;
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+      line-height: 1.4;
+    }
+
+    .task-hint {
+      font-size: $font-sm;
+      color: $text-secondary;
+      line-height: 1.6;
+    }
+  }
+
+  .rating-section {
+    @include card;
+    margin-bottom: $spacing-md;
+    box-shadow: none;
+    border: 1px solid $border-color;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: $spacing-lg;
+
+      .section-title {
+        font-size: $font-lg;
+        color: $text-primary;
+        font-weight: 600;
+      }
+
+      .required {
+        color: $error-color;
+        margin-left: 6rpx;
+      }
+
+      .optional {
+        font-size: $font-xs;
+        color: $text-tertiary;
+        margin-left: $spacing-sm;
+      }
+    }
+
+    .rating-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $spacing-md 0;
+      border-bottom: 1px solid $divider-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .item-label {
+        font-size: $font-md;
+        color: $text-primary;
+      }
+
+      .stars {
+        display: flex;
+        gap: $spacing-sm;
+
+        .star {
+          font-size: 48rpx;
+          color: $divider-color;
+
+          &.active {
+            color: $warning-color;
+          }
+        }
+      }
+    }
+
+    .tags-group {
+      margin-bottom: $spacing-lg;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .tags-label {
+        font-size: $font-sm;
+        color: $text-secondary;
+        margin-bottom: $spacing-sm;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+
+        .tag {
+          padding: 8rpx 20rpx;
+          border-radius: $radius-md;
+          font-size: $font-xs;
+          background: $bg-section;
+          color: $text-secondary;
+          border: 1px solid $border-color;
+
+          &.selected {
+            background: rgba($primary-color, 0.08);
+            color: $primary-color;
+            border-color: $primary-color;
+          }
+        }
+      }
+    }
+
+    .comment-input {
+      @include input;
+      width: 100%;
+      min-height: 150px;
+      padding: $spacing-md;
+      line-height: 1.6;
+    }
+
+    .char-count {
+      font-size: $font-xs;
+      color: $text-tertiary;
+      text-align: right;
+      margin-top: 6rpx;
+    }
+
+    .anonymous-option {
+      display: flex;
+      align-items: center;
+      padding: $spacing-md;
+      background: $bg-section;
+      border-radius: $radius-md;
+
+      .checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid $border-color;
+        border-radius: 4px;
+        margin-right: $spacing-sm;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.checked {
+          background: $primary-color;
+          border-color: $primary-color;
+
+          .check-icon {
+            color: $text-white;
+            font-size: $font-sm;
+          }
+        }
+      }
+
+      .option-text {
+        font-size: $font-sm;
+        color: $text-primary;
+        margin-right: $spacing-xs;
+      }
+
+      .option-hint {
+        font-size: $font-xs;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  .submit-section {
+    .submit-btn {
+      @include button-primary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+
+      &.disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}

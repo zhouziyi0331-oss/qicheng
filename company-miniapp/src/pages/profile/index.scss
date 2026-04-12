@@ -1,0 +1,326 @@
+@import '../../styles/theme.scss';
+
+.profile-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  padding-bottom: 100px;
+
+  // 企业信息卡片
+  .company-card {
+    @include glass-card;
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-md;
+    padding: $spacing-xl;
+
+    .company-avatar {
+      width: 120rpx;
+      height: 120rpx;
+      border-radius: $radius-lg;
+      background: $gradient-purple;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: $spacing-lg;
+      box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+
+      .avatar-text {
+        font-size: 40rpx;
+        font-weight: 600;
+        color: $text-white;
+        font-family: $font-mono;
+      }
+    }
+
+    .company-info {
+      flex: 1;
+
+      .company-name {
+        display: block;
+        font-size: 36rpx;
+        font-weight: 600;
+        color: $text-primary;
+        margin-bottom: 12rpx;
+        letter-spacing: 0.5rpx;
+      }
+
+      .company-detail {
+        display: block;
+        font-size: $font-sm;
+        color: $text-secondary;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  // 统计数据卡片 - 三栏布局
+  .stats-section {
+    @include glass-card;
+    display: flex;
+    margin-bottom: $spacing-md;
+    padding: $spacing-xl;
+
+    .stat-item {
+      flex: 1;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      .stat-value {
+        display: block;
+        font-size: 56rpx;
+        font-weight: 600;
+        color: $accent-cyan;
+        margin-bottom: 12rpx;
+        line-height: 1;
+        font-family: $font-mono;
+      }
+
+      .stat-label {
+        display: block;
+        font-size: $font-sm;
+        color: $text-secondary;
+        opacity: 0.8;
+      }
+    }
+
+    .stat-divider {
+      width: 2rpx;
+      background: $divider-color;
+      margin: 0 $spacing-md;
+    }
+  }
+
+  // 快捷操作区域
+  .quick-actions-section {
+    @include glass-card;
+    display: flex;
+    justify-content: space-around;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    .quick-action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:active {
+        transform: scale(0.9);
+      }
+
+      .action-icon {
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: $radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48rpx;
+        margin-bottom: $spacing-sm;
+        position: relative;
+
+        &.publish {
+          background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        }
+
+        &.pending {
+          background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
+        }
+
+        &.message {
+          background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+        }
+
+        &.wallet {
+          background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
+        }
+      }
+
+      .action-text {
+        font-size: $font-sm;
+        color: $text-secondary;
+        font-weight: 500;
+      }
+
+      .action-badge {
+        position: absolute;
+        top: -4rpx;
+        right: -4rpx;
+        background: #EF4444;
+        color: $text-white;
+        font-size: 20rpx;
+        font-weight: 600;
+        padding: 4rpx 8rpx;
+        border-radius: $radius-full;
+        min-width: 32rpx;
+        text-align: center;
+        box-shadow: 0 4rpx 12rpx rgba(239, 68, 68, 0.4);
+      }
+    }
+  }
+
+  // 菜单列表
+  .menu-section {
+    @include glass-card;
+    margin-bottom: $spacing-md;
+    padding: 0;
+    overflow: hidden;
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $spacing-lg $spacing-xl;
+      border-bottom: 1rpx solid $divider-color;
+      transition: all 0.3s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:active {
+        background: rgba(102, 126, 234, 0.05);
+      }
+
+      .menu-left {
+        display: flex;
+        align-items: center;
+
+        .menu-icon {
+          width: 44rpx;
+          height: 44rpx;
+          border-radius: $radius-sm;
+          margin-right: $spacing-md;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+
+          &::before {
+            content: '';
+            width: 24rpx;
+            height: 24rpx;
+            border-radius: 4rpx;
+          }
+
+          // 不同图标的颜色
+          &.icon-task::before { background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%); }
+          &.icon-payment::before { background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%); }
+          &.icon-chat::before { background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%); }
+          &.icon-star::before { background: linear-gradient(135deg, #FFA726 0%, #FB8C00 100%); }
+          &.icon-user::before { background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%); }
+          &.icon-chart::before { background: linear-gradient(135deg, #FA709A 0%, #FEE140 100%); }
+          &.icon-invoice::before { background: linear-gradient(135deg, #30CFD0 0%, #330867 100%); }
+          &.icon-verify::before { background: linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%); }
+          &.icon-dispute::before { background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); }
+          &.icon-setting::before { background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%); }
+          &.icon-help::before { background: linear-gradient(135deg, #667EEA 0%, #06B6D4 100%); }
+        }
+
+        .menu-title {
+          font-size: 30rpx;
+          color: $text-primary;
+          font-weight: 400;
+          letter-spacing: 0.5rpx;
+        }
+      }
+
+      .menu-right {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+
+        .menu-badge {
+          background: #EF4444;
+          color: $text-white;
+          font-size: 20rpx;
+          font-weight: 600;
+          padding: 4rpx 12rpx;
+          border-radius: $radius-full;
+          min-width: 32rpx;
+          text-align: center;
+          box-shadow: 0 4rpx 12rpx rgba(239, 68, 68, 0.4);
+        }
+
+        .menu-arrow {
+          font-size: 40rpx;
+          color: $text-tertiary;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  // 企业信息卡片
+  .info-section {
+    @include glass-card;
+    margin-bottom: $spacing-md;
+
+    .section-title {
+      font-size: 32rpx;
+      font-weight: 600;
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+      letter-spacing: 0.5rpx;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-md 0;
+      border-bottom: 1rpx solid $divider-color;
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .info-label {
+        font-size: $font-sm;
+        color: $text-secondary;
+        opacity: 0.8;
+      }
+
+      .info-value {
+        font-size: 28rpx;
+        color: $text-primary;
+        font-weight: 400;
+        font-family: $font-mono;
+      }
+    }
+  }
+
+  // 退出登录按钮
+  .logout-section {
+    .logout-btn {
+      @include glass-card;
+      width: 100%;
+      text-align: center;
+      padding: $spacing-lg;
+      border: 2rpx solid rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.05);
+      transition: all 0.3s ease;
+
+      &:active {
+        background: rgba(239, 68, 68, 0.1);
+        transform: scale(0.98);
+      }
+
+      text {
+        font-size: 30rpx;
+        color: #EF4444;
+        font-weight: 500;
+        letter-spacing: 1rpx;
+      }
+    }
+  }
+}
