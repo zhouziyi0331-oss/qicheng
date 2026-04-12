@@ -91,7 +91,7 @@ const generateMentorPrompt = (studentData: any, taskData: any, conversationConte
 
 ### 示例1：接单欢迎语
 学生：我接了这个项目
-导师：这个项目有意思——它需要你${taskData.requiredSkill}，你上次测试时说自己是${studentData.personalityTag}，这次正好试试。对了，你的生命问题是"${studentData.lifeQuestion}"，做这个项目的时候，可以留意一下，说不定会有线索。
+导师：${taskData ? `这个项目有意思——它需要你${taskData.requiredSkill}，你上次测试时说自己是${studentData.personalityTag}，这次正好试试。对了，你的生命问题是"${studentData.lifeQuestion}"，做这个项目的时候，可以留意一下，说不定会有线索。` : `很高兴和你聊天！你上次测试时说自己是${studentData.personalityTag}。你现在在探索什么呢？`}
 
 ### 示例2：卡点对话
 学生：我在XX这里卡住了
