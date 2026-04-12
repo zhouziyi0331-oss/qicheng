@@ -101,9 +101,10 @@ export default function Index() {
       {!user ? (
         <View className="login-section">
           <Button className="primary-btn" onClick={handleWechatLogin}>
-            开始你的第一步
+            开始你的河
           </Button>
-          <Text className="login-hint">个性是AI时代的第一财产，创造力是最值钱的资产</Text>
+          <Text className="login-hint">热情火花转换成技能，让生命资产漏出来</Text>
+          <Text className="login-hint-sub">个性是AI时代的第一财产，创造力是最值钱的资产</Text>
         </View>
       ) : (
         <View className="content-section">
@@ -111,10 +112,10 @@ export default function Index() {
           {!user.hasCompletedTest && (
             <View className="opc-test-card" onClick={handleStartTest}>
               <View className="test-card-header">
-                <Text className="test-card-title">发现你的OPC人格</Text>
+                <Text className="test-card-title">发现你的河道</Text>
                 <Text className="test-card-badge">第一步</Text>
               </View>
-              <Text className="test-card-desc">这不是考试，是一面镜子——测的不是分数，是你适合用AI创造什么</Text>
+              <Text className="test-card-desc">这不是考试，是一面镜子——不是蒸馏常规技能，是找到你的不同</Text>
               <View className="test-card-features">
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
@@ -130,7 +131,7 @@ export default function Index() {
                 </View>
               </View>
               <View className="test-card-btn">
-                <Text className="btn-text">开始探索 →</Text>
+                <Text className="btn-text">开始你的河 →</Text>
               </View>
             </View>
           )}

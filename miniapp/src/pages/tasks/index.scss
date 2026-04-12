@@ -381,3 +381,18 @@
   font-size: 14px;
   color: $text-light;
 }
+
+/* 探索项目徽章 */
+.stretch-badge {
+  background: linear-gradient(135deg, #FFE082 0%, #FCD34D 100%);
+  padding: 12rpx 24rpx;
+  border-radius: 24rpx;
+  margin-bottom: 16rpx;
+  display: inline-block;
+}
+
+.stretch-text {
+  font-size: 24rpx;
+  color: #2D3436;
+  font-weight: 500;
+}

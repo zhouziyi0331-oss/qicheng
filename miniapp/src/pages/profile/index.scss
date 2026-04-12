@@ -372,3 +372,22 @@
     border: none;
   }
 }
+
+/* 生命资产卡片增强 */
+.balance-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.balance-hint {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.card-subtitle {
+  font-size: 26rpx;
+  color: #636E72;
+  margin-bottom: 32rpx;
+  display: block;
+}

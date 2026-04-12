@@ -136,7 +136,7 @@ export default function Tasks() {
           className={`filter-tab ${activeFilter === 'matched' ? 'active' : ''}`}
           onClick={() => setActiveFilter('matched')}
         >
-          <Text>为你推荐</Text>
+          <Text>你可能感兴趣的河道</Text>
         </View>
         <View
           className={`filter-tab ${activeFilter === 'all' ? 'active' : ''}`}
@@ -163,7 +163,14 @@ export default function Tasks() {
                   {/* AI推荐标签 */}
                   {activeFilter === 'matched' && task.match_score && (
                     <View className="match-badge">
-                      <Text className="match-text">这个项目适合你 {Math.round(task.match_score * 100)}%</Text>
+                      <Text className="match-text">这个项目可能让你发现自己</Text>
+                    </View>
+                  )}
+
+                  {/* 冒险项目标签 */}
+                  {task.is_stretch_project && (
+                    <View className="stretch-badge">
+                      <Text className="stretch-text">探索项目 - 这条河你没走过，要不要试试？</Text>
                     </View>
                   )}
 
@@ -214,7 +221,7 @@ export default function Tasks() {
             ) : (
               <View className="empty-state">
                 <Text className="empty-text">暂时没有适合你的项目</Text>
-                <Text className="empty-hint">试试探索更多，或者完善你的OPC画像</Text>
+                <Text className="empty-hint">试试探索更多，或者完善你的OPC画像，让我们更了解你</Text>
               </View>
             )}
           </View>

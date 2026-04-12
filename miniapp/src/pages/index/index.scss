@@ -157,9 +157,20 @@
   }
 
   .login-hint {
+    font-size: 28px;
+    color: #2D3436;
+    display: block;
+    margin-top: 32px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .login-hint-sub {
     font-size: 24px;
     color: #636E72;
     display: block;
+    margin-top: 16px;
+    line-height: 1.5;
   }
 }
 

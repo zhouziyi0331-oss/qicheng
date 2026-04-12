@@ -178,7 +178,7 @@ export default function Profile() {
         </View>
       </View>
 
-      {/* 余额卡片 */}
+      {/* 生命资产卡片 */}
       <View className="balance-card" onClick={() => handleNavigate('/pages/withdraw/index')}>
         <View className="balance-icon-circle">
           <svg viewBox="0 0 24 24" className="balance-icon">
@@ -188,15 +188,19 @@ export default function Profile() {
         </View>
         <View className="balance-content">
           <Text className="balance-label">你的生命资产</Text>
-          <Text className="balance-value">¥{balance.toFixed(2)}</Text>
+          <View className="balance-breakdown">
+            <Text className="balance-value">¥{balance.toFixed(2)}</Text>
+            <Text className="balance-hint">金钱只是一部分</Text>
+          </View>
         </View>
         <Text className="balance-arrow">→</Text>
       </View>
 
-      {/* 六维能力图 */}
+      {/* 河道地图 */}
       {radarData && radarData.dimensions && (
         <View className="ability-card" onClick={() => handleNavigate('/pages/ability/index')}>
           <Text className="card-title">你的河道地图</Text>
+          <Text className="card-subtitle">不是能力分数，是你流动的方式</Text>
           <View className="ability-list">
             {Object.entries(radarData.dimensions).map(([key, value]: [string, any]) => (
               <View key={key} className="ability-item">
@@ -220,7 +224,7 @@ export default function Profile() {
             <View className="menu-icon-circle menu-icon-green">
               <Text className="icon-text">✓</Text>
             </View>
-            <Text className="menu-label">我的项目</Text>
+            <Text className="menu-label">我的探索轨迹</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 

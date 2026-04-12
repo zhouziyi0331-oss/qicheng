@@ -209,3 +209,82 @@
   font-weight: 500;
   color: #2D3436;
 }
+
+/* 你的河道板块 */
+.river-section {
+  margin-bottom: 32rpx;
+}
+
+.river-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+}
+
+.river-card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2D3436;
+  margin-bottom: 20rpx;
+}
+
+.river-card-content {
+  font-size: 28rpx;
+  color: #636E72;
+  line-height: 1.8;
+}
+
+.asset-list {
+  margin-top: 16rpx;
+}
+
+.asset-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.asset-icon {
+  font-size: 28rpx;
+  color: #667EEA;
+  margin-right: 16rpx;
+  margin-top: 4rpx;
+}
+
+.asset-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #2D3436;
+  line-height: 1.6;
+}
+
+.direction-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.direction-tag {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  color: #FFFFFF;
+  padding: 16rpx 32rpx;
+  border-radius: 48rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.river-card-highlight {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFE8F0 100%);
+  border: 2rpx solid #F9C6D9;
+}
+
+.section-subtitle {
+  font-size: 26rpx;
+  color: #636E72;
+  margin-bottom: 32rpx;
+  text-align: center;
+  display: block;
+}
