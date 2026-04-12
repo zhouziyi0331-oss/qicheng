@@ -1,307 +1,471 @@
 import { View, Text } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useState } from 'react'
-import { getUserInfo, saveUserInfo } from '../../utils'
+import { useState, useEffect } from 'react'
 import './index.scss'
 
-// 测评题目数据 - 25题覆盖六维能力
+// 36道测试题数据 - 6维度 × 6题
 const testQuestions = [
-  // 学习力 (4题)
+  // 维度一：信息处理风格 (6题)
   {
     id: 1,
-    category: 'learning',
-    categoryName: '学习力',
-    question: '面对新知识时，你的第一反应是？',
+    dimension: 'information_processing',
+    dimensionName: '信息处理',
+    question: '接到一个模糊的需求时，你通常第一步做什么？',
     options: [
-      { text: '立即动手尝试，边做边学', score: 5 },
-      { text: '先系统学习理论，再实践', score: 3 },
-      { text: '观望他人经验，再决定学不学', score: 1 }
+      { text: '先把需求拆成几个小块，逐个确认具体要什么', score: 0 },
+      { text: '先问对方最终想要什么效果，倒推需要哪些东西', score: 3 },
+      { text: '先找类似案例看看别人怎么做的', score: 1 },
+      { text: '先自己画一个整体框架图，再和对方对齐', score: 3 }
     ]
   },
   {
     id: 2,
-    category: 'learning',
-    categoryName: '学习力',
-    question: '你更喜欢哪种学习方式？',
+    dimension: 'information_processing',
+    dimensionName: '信息处理',
+    question: '学习一个新领域时，你更习惯：',
     options: [
-      { text: '通过项目实战快速掌握', score: 5 },
-      { text: '系统学习课程和文档', score: 3 },
-      { text: '跟着教程一步步操作', score: 1 }
+      { text: '先学最核心的几个概念，再向外扩展', score: 1 },
+      { text: '先画出整个领域的知识地图，再决定从哪里切入', score: 3 },
+      { text: '直接从具体案例入手，边做边理解', score: 0 },
+      { text: '先找一本系统教材，按章节顺序学习', score: 2 }
     ]
   },
   {
     id: 3,
-    category: 'learning',
-    categoryName: '学习力',
-    question: '遇到技术难题时，你会？',
+    dimension: 'information_processing',
+    dimensionName: '信息处理',
+    question: '面对一个复杂问题时，你通常：',
     options: [
-      { text: '深入研究原理，彻底搞懂', score: 5 },
-      { text: '搜索解决方案，快速解决', score: 3 },
-      { text: '寻求他人帮助', score: 1 }
+      { text: '先把它分解成几个小问题，一个一个解决', score: 0 },
+      { text: '先找出问题的核心症结，只解决最关键的', score: 3 },
+      { text: '先想几种可能的方案，快速测试哪个方向对', score: 1 },
+      { text: '先收集足够的信息，确保理解全局后再动手', score: 3 }
     ]
   },
   {
     id: 4,
-    category: 'learning',
-    categoryName: '学习力',
-    question: '你如何保持技术更新？',
+    dimension: 'information_processing',
+    dimensionName: '信息处理',
+    question: '整理一份资料时，你更倾向于：',
     options: [
-      { text: '主动关注前沿技术，定期学习', score: 5 },
-      { text: '工作需要时再学习', score: 3 },
-      { text: '很少主动学习新技术', score: 1 }
+      { text: '按逻辑层级分类，层层递进', score: 1 },
+      { text: '按应用场景分类，方便查找使用', score: 2 },
+      { text: '按时间线或流程顺序整理', score: 0 },
+      { text: '用思维导图把各部分关系画出来', score: 3 }
     ]
   },
-
-  // 执行力 (4题)
   {
     id: 5,
-    category: 'execution',
-    categoryName: '执行力',
-    question: '接到任务后，你会？',
+    dimension: 'information_processing',
+    dimensionName: '信息处理',
+    question: '别人问你一个你懂的问题，你通常：',
     options: [
-      { text: '立即开始，快速推进', score: 5 },
-      { text: '先规划再执行', score: 3 },
-      { text: '等待更多信息再开始', score: 1 }
+      { text: '从最基础的概念开始讲，确保对方理解透彻', score: 0 },
+      { text: '直接给出结论，然后解释为什么', score: 2 },
+      { text: '用类比的方式讲，让对方快速建立直观理解', score: 1 },
+      { text: '问清楚对方已经知道什么，只补充缺失的部分', score: 3 }
     ]
   },
   {
     id: 6,
-    category: 'execution',
-    categoryName: '执行力',
-    question: '你的工作节奏是？',
+    dimension: 'information_processing',
+    dimensionName: '信息处理',
+    question: '做一个项目时，你更关注：',
     options: [
-      { text: '高效专注，快速完成', score: 5 },
-      { text: '稳步推进，按时交付', score: 3 },
-      { text: '容易拖延，临近deadline才冲刺', score: 1 }
+      { text: '每个环节是否按计划推进', score: 0 },
+      { text: '最终成果是否达到预期效果', score: 2 },
+      { text: '过程中是否发现了新的可能性', score: 1 },
+      { text: '各个部分之间是否协调一致', score: 3 }
     ]
   },
+
+  // 维度二：创作驱动偏好 (6题)
   {
     id: 7,
-    category: 'execution',
-    categoryName: '执行力',
-    question: '面对复杂任务，你会？',
+    dimension: 'creation_drive',
+    dimensionName: '创作驱动',
+    question: '看到一个好的作品，你更容易被什么打动？',
     options: [
-      { text: '拆解成小目标，逐个击破', score: 5 },
-      { text: '整体推进，遇到问题再调整', score: 3 },
-      { text: '感到压力，不知从何下手', score: 1 }
+      { text: '视觉冲击力——构图、色彩、光影', score: 0 },
+      { text: '结构设计——信息组织、逻辑层次、叙事节奏', score: 2 },
+      { text: '情感共鸣——传递的情绪和故事感', score: 1 },
+      { text: '技术实现——背后的技术方案和实现难度', score: 3 }
     ]
   },
   {
     id: 8,
-    category: 'execution',
-    categoryName: '执行力',
-    question: '你如何管理时间？',
+    dimension: 'creation_drive',
+    dimensionName: '创作驱动',
+    question: '你更享受哪种创作过程？',
     options: [
-      { text: '制定清晰计划，严格执行', score: 5 },
-      { text: '有大致安排，灵活调整', score: 3 },
-      { text: '随性而为，较少规划', score: 1 }
+      { text: '在空白画布上从无到有地构建画面', score: 0 },
+      { text: '把混乱的信息整理成清晰的结构', score: 2 },
+      { text: '用已有素材拼贴组合出新的东西', score: 1 },
+      { text: '设定一套规则，让系统自动生成内容', score: 3 }
     ]
   },
-
-  // 沟通力 (4题)
   {
     id: 9,
-    category: 'communication',
-    categoryName: '沟通力',
-    question: '在团队中，你更倾向于？',
+    dimension: 'creation_drive',
+    dimensionName: '创作驱动',
+    question: '描述一件事物时，你更习惯：',
     options: [
-      { text: '主动分享想法，推动讨论', score: 5 },
-      { text: '参与讨论，表达观点', score: 3 },
-      { text: '倾听为主，较少发言', score: 1 }
+      { text: '用画面感的语言，让人"看到"', score: 0 },
+      { text: '用结构化的语言，分点说明', score: 3 },
+      { text: '用故事的方式讲，有起承转合', score: 1 },
+      { text: '用类比和比喻，让人快速理解', score: 2 }
     ]
   },
   {
     id: 10,
-    category: 'communication',
-    categoryName: '沟通力',
-    question: '遇到分歧时，你会？',
+    dimension: 'creation_drive',
+    dimensionName: '创作驱动',
+    question: '给你一个"设计一个AI助手"的任务，你最先想到的是：',
     options: [
-      { text: '积极沟通，寻求共识', score: 5 },
-      { text: '表达观点，尊重差异', score: 3 },
-      { text: '避免冲突，保持沉默', score: 1 }
+      { text: '它的界面长什么样，交互方式是否自然', score: 0 },
+      { text: '它能解决什么问题，功能逻辑怎么设计', score: 2 },
+      { text: '它的"性格"是什么样的，说话语气如何', score: 1 },
+      { text: '它的技术架构怎么搭，用哪些模型和工具', score: 3 }
     ]
   },
   {
     id: 11,
-    category: 'communication',
-    categoryName: '沟通力',
-    question: '你如何表达复杂想法？',
+    dimension: 'creation_drive',
+    dimensionName: '创作驱动',
+    question: '你觉得自己在哪方面更有天赋？',
     options: [
-      { text: '清晰有条理，易于理解', score: 5 },
-      { text: '能表达清楚，偶尔需要补充', score: 3 },
-      { text: '表达困难，容易被误解', score: 1 }
+      { text: '视觉审美——能判断什么好看、什么不协调', score: 0 },
+      { text: '逻辑梳理——能把复杂的事情讲清楚', score: 2 },
+      { text: '情感洞察——能感知到别人的情绪和需求', score: 1 },
+      { text: '系统思维——能设计一套规则让事情自动运行', score: 3 }
     ]
   },
   {
     id: 12,
-    category: 'communication',
-    categoryName: '沟通力',
-    question: '收到反馈时，你的反应是？',
+    dimension: 'creation_drive',
+    dimensionName: '创作驱动',
+    question: '如果让你做一个内容账号，你更可能做：',
     options: [
-      { text: '虚心接受，积极改进', score: 5 },
-      { text: '理性分析，选择性采纳', score: 3 },
-      { text: '容易防御，难以接受', score: 1 }
+      { text: '视觉类——摄影、设计、插画、视频', score: 0 },
+      { text: '知识类——深度分析、行业观察、方法总结', score: 2 },
+      { text: '故事类——个人经历、人物访谈、叙事内容', score: 1 },
+      { text: '工具类——教程、资源推荐、效率技巧', score: 3 }
     ]
   },
 
-  // 创新力 (4题)
+  // 维度三：工具学习方式 (6题)
   {
     id: 13,
-    category: 'innovation',
-    categoryName: '创新力',
-    question: '面对问题时，你倾向于？',
+    dimension: 'tool_learning',
+    dimensionName: '工具学习',
+    question: '拿到一个从没用过的AI工具，你通常：',
     options: [
-      { text: '寻找创新解决方案', score: 5 },
-      { text: '优化现有方法', score: 3 },
-      { text: '使用成熟方案', score: 1 }
+      { text: '直接开始试用，边点边学', score: 0 },
+      { text: '先看别人用它的视频，再自己试', score: 1 },
+      { text: '先想清楚自己想用它做什么，再去找对应功能', score: 2 },
+      { text: '先看官方文档或教程，系统了解功能', score: 3 }
     ]
   },
   {
     id: 14,
-    category: 'innovation',
-    categoryName: '创新力',
-    question: '你对新想法的态度是？',
+    dimension: 'tool_learning',
+    dimensionName: '工具学习',
+    question: '遇到一个功能不知道怎么用时，你通常：',
     options: [
-      { text: '充满好奇，勇于尝试', score: 5 },
-      { text: '谨慎评估，选择性尝试', score: 3 },
-      { text: '保守稳健，较少尝试', score: 1 }
+      { text: '自己到处点点，总能试出来', score: 0 },
+      { text: '搜索一下，看有没有人分享过方法', score: 1 },
+      { text: '问身边用过的人或AI助手', score: 2 },
+      { text: '去看官方帮助文档', score: 3 }
     ]
   },
   {
     id: 15,
-    category: 'innovation',
-    categoryName: '创新力',
-    question: '在项目中，你更喜欢？',
+    dimension: 'tool_learning',
+    dimensionName: '工具学习',
+    question: '学习新工具时，你更看重：',
     options: [
-      { text: '探索新技术，创造新价值', score: 5 },
-      { text: '在稳定基础上优化改进', score: 3 },
-      { text: '遵循既定方案，稳步实施', score: 1 }
+      { text: '能不能快速上手做出第一个东西', score: 0 },
+      { text: '能不能找到足够多的教程和案例', score: 1 },
+      { text: '能不能理解它的底层逻辑和限制', score: 3 },
+      { text: '能不能把它整合到自己的工作流里', score: 2 }
     ]
   },
   {
     id: 16,
-    category: 'innovation',
-    categoryName: '创新力',
-    question: '你如何看待失败？',
+    dimension: 'tool_learning',
+    dimensionName: '工具学习',
+    question: '你对工具的态度更接近：',
     options: [
-      { text: '宝贵经验，快速迭代', score: 5 },
-      { text: '总结教训，避免重复', score: 3 },
-      { text: '尽量避免，害怕失败', score: 1 }
+      { text: '工具够用就行，不追求最新最全', score: 2 },
+      { text: '喜欢尝试新工具，但只深入用几款核心的', score: 1 },
+      { text: '会花时间精通一款工具，把它用到极致', score: 3 },
+      { text: '持续关注新工具，保持工具链更新', score: 0 }
     ]
   },
-
-  // 协作力 (5题)
   {
     id: 17,
-    category: 'collaboration',
-    categoryName: '协作力',
-    question: '你更擅长？',
+    dimension: 'tool_learning',
+    dimensionName: '工具学习',
+    question: '教别人用一款工具时，你通常：',
     options: [
-      { text: '团队协作，共同完成', score: 5 },
-      { text: '独立工作，偶尔协作', score: 3 },
-      { text: '独立工作，不喜欢协作', score: 1 }
+      { text: '直接演示一遍，让他跟着做', score: 0 },
+      { text: '告诉他核心逻辑，剩下的他自己摸索', score: 2 },
+      { text: '先问他想达成什么效果，告诉他对应的功能在哪', score: 1 },
+      { text: '从界面布局开始，系统讲一遍', score: 3 }
     ]
   },
   {
     id: 18,
-    category: 'collaboration',
-    categoryName: '协作力',
-    question: '在团队项目中，你通常？',
+    dimension: 'tool_learning',
+    dimensionName: '工具学习',
+    question: '你觉得一个好的工具应该：',
     options: [
-      { text: '主动承担责任，推动进度', score: 5 },
-      { text: '完成分配任务，配合团队', score: 3 },
-      { text: '被动等待安排', score: 1 }
+      { text: '上手简单，不需要看说明书就能用', score: 0 },
+      { text: '功能强大，能满足各种复杂需求', score: 2 },
+      { text: '有丰富的社区和教程资源', score: 1 },
+      { text: '能和其他工具灵活组合使用', score: 3 }
     ]
   },
+
+  // 维度四：任务执行节奏 (6题)
   {
     id: 19,
-    category: 'collaboration',
-    categoryName: '协作力',
-    question: '你如何帮助队友？',
+    dimension: 'task_execution',
+    dimensionName: '任务执行',
+    question: '开始一项新任务时，你通常：',
     options: [
-      { text: '主动分享经验，帮助成长', score: 5 },
-      { text: '有求必应，提供帮助', score: 3 },
-      { text: '专注自己任务，较少帮助他人', score: 1 }
+      { text: '先做一个详细计划，按步骤执行', score: 0 },
+      { text: '先快速出一个粗糙版本，看看方向对不对', score: 3 },
+      { text: '先收集足够的信息和参考，再动手', score: 1 },
+      { text: '先和需求方反复确认，确保理解一致', score: 2 }
     ]
   },
   {
     id: 20,
-    category: 'collaboration',
-    categoryName: '协作力',
-    question: '团队遇到困难时，你会？',
+    dimension: 'task_execution',
+    dimensionName: '任务执行',
+    question: '任务进行到一半发现方向可能有问题，你通常：',
     options: [
-      { text: '主动提出解决方案，带领团队', score: 5 },
-      { text: '参与讨论，贡献想法', score: 3 },
-      { text: '等待他人决策', score: 1 }
+      { text: '停下来重新评估，调整计划后继续', score: 1 },
+      { text: '先继续做，在过程中逐步修正', score: 3 },
+      { text: '先把当前版本做完，下一版再改', score: 2 },
+      { text: '立即和需求方沟通，确认是否需要调整', score: 0 }
     ]
   },
   {
     id: 21,
-    category: 'collaboration',
-    categoryName: '协作力',
-    question: '你如何看待团队成功？',
+    dimension: 'task_execution',
+    dimensionName: '任务执行',
+    question: '面对多个任务并行时，你通常：',
     options: [
-      { text: '团队成功比个人成就更重要', score: 5 },
-      { text: '平衡个人与团队目标', score: 3 },
-      { text: '更关注个人表现', score: 1 }
+      { text: '排好优先级，做完一个再做下一个', score: 0 },
+      { text: '几个任务轮着做，保持新鲜感', score: 2 },
+      { text: '看哪个任务最有灵感就先做哪个', score: 3 },
+      { text: '把相似的任务批量处理', score: 1 }
     ]
   },
-
-  // 抗压力 (4题)
   {
     id: 22,
-    category: 'resilience',
-    categoryName: '抗压力',
-    question: '面对高压任务，你会？',
+    dimension: 'task_execution',
+    dimensionName: '任务执行',
+    question: '交付前的时间压力下，你通常：',
     options: [
-      { text: '保持冷静，高效应对', score: 5 },
-      { text: '有些紧张，但能完成', score: 3 },
-      { text: '压力很大，影响发挥', score: 1 }
+      { text: '按既定计划推进，确保质量不降', score: 0 },
+      { text: '聚焦最核心的部分，砍掉非必需内容', score: 2 },
+      { text: '加快速度，能用捷径就用捷径', score: 3 },
+      { text: '沟通是否可以延期或分批交付', score: 1 }
     ]
   },
   {
     id: 23,
-    category: 'resilience',
-    categoryName: '抗压力',
-    question: '遇到挫折时，你会？',
+    dimension: 'task_execution',
+    dimensionName: '任务执行',
+    question: '你更适应哪种工作节奏？',
     options: [
-      { text: '快速调整，继续前进', score: 5 },
-      { text: '需要时间恢复，但能坚持', score: 3 },
-      { text: '容易沮丧，难以恢复', score: 1 }
+      { text: '稳定的日常节奏，每天推进固定进度', score: 0 },
+      { text: '冲刺式，集中一段时间高强度完成', score: 2 },
+      { text: '随性的，有灵感就多做，没灵感就少做', score: 3 },
+      { text: '看任务类型而定，不同任务不同节奏', score: 1 }
     ]
   },
   {
     id: 24,
-    category: 'resilience',
-    categoryName: '抗压力',
-    question: '你如何处理负面情绪？',
+    dimension: 'task_execution',
+    dimensionName: '任务执行',
+    question: '一个项目完成后，你通常会：',
     options: [
-      { text: '积极调节，快速恢复', score: 5 },
-      { text: '需要倾诉或休息', score: 3 },
-      { text: '容易陷入负面情绪', score: 1 }
+      { text: '复盘总结，记录可以优化的地方', score: 1 },
+      { text: '看最终效果是否达到预期，不太纠结过程', score: 2 },
+      { text: '收集反馈，看看哪里还可以更好', score: 0 },
+      { text: '直接进入下一个项目，不喜欢回头看', score: 3 }
+    ]
+  },
+
+  // 维度五：协作与沟通倾向 (6题)
+  {
+    id: 25,
+    dimension: 'collaboration',
+    dimensionName: '协作倾向',
+    question: '在一个项目中，你更享受：',
+    options: [
+      { text: '自己从头到尾负责一个完整模块', score: 0 },
+      { text: '和他人分工配合，各做自己擅长的部分', score: 3 },
+      { text: '负责整体统筹协调，把大家组织起来', score: 2 },
+      { text: '做那个提供关键解决方案的人', score: 1 }
     ]
   },
   {
-    id: 25,
-    category: 'resilience',
-    categoryName: '抗压力',
-    question: '面对不确定性，你的态度是？',
+    id: 26,
+    dimension: 'collaboration',
+    dimensionName: '协作倾向',
+    question: '和他人合作时，你更在意：',
     options: [
-      { text: '拥抱变化，灵活应对', score: 5 },
-      { text: '有些不安，但能适应', score: 3 },
-      { text: '焦虑不安，希望确定性', score: 1 }
+      { text: '分工是否清晰，边界是否明确', score: 1 },
+      { text: '沟通是否顺畅，信息是否同步', score: 3 },
+      { text: '对方的专业能力是否可靠', score: 0 },
+      { text: '大家的审美和标准是否一致', score: 2 }
+    ]
+  },
+  {
+    id: 27,
+    dimension: 'collaboration',
+    dimensionName: '协作倾向',
+    question: '当你对队友的交付物不满意时，你通常：',
+    options: [
+      { text: '自己动手改，比沟通快', score: 0 },
+      { text: '直接指出问题，给出具体修改意见', score: 2 },
+      { text: '先肯定做得好的部分，再提建议', score: 3 },
+      { text: '问清楚对方的思路，理解为什么这样做', score: 1 }
+    ]
+  },
+  {
+    id: 28,
+    dimension: 'collaboration',
+    dimensionName: '协作倾向',
+    question: '你更倾向于哪种沟通方式？',
+    options: [
+      { text: '文字沟通——异步、有记录、可回溯', score: 1 },
+      { text: '语音或面对面——同步、高效、有情感', score: 3 },
+      { text: '看情况——简单的事文字，复杂的事语音', score: 2 },
+      { text: '用具体案例或参考图代替语言描述', score: 0 }
+    ]
+  },
+  {
+    id: 29,
+    dimension: 'collaboration',
+    dimensionName: '协作倾向',
+    question: '你觉得一个理想的工作伙伴应该是：',
+    options: [
+      { text: '专业可靠，不需要我操心他的部分', score: 1 },
+      { text: '沟通顺畅，有问题能及时同步', score: 3 },
+      { text: '审美和标准一致，不用太多解释', score: 0 },
+      { text: '能互相启发，一起碰撞出更好的方案', score: 2 }
+    ]
+  },
+  {
+    id: 30,
+    dimension: 'collaboration',
+    dimensionName: '协作倾向',
+    question: '接到一个需要和别人合作完成的任务，你首先：',
+    options: [
+      { text: '明确自己的分工范围，确保自己能独立完成', score: 0 },
+      { text: '和对方对齐整体目标，确保方向一致', score: 3 },
+      { text: '了解对方擅长什么，思考怎么配合', score: 2 },
+      { text: '先自己理一遍整体思路，再和对方碰', score: 1 }
+    ]
+  },
+
+  // 维度六：风险与挑战态度 (6题)
+  {
+    id: 31,
+    dimension: 'risk_attitude',
+    dimensionName: '风险态度',
+    question: '面对一个从未做过的项目类型，你通常：',
+    options: [
+      { text: '先评估自己能不能做，不确定就拒绝', score: 0 },
+      { text: '愿意尝试，但会提前说明可能的风险', score: 2 },
+      { text: '兴奋，觉得是个学习机会，直接接', score: 3 },
+      { text: '先找有经验的人咨询，再决定是否接', score: 1 }
+    ]
+  },
+  {
+    id: 32,
+    dimension: 'risk_attitude',
+    dimensionName: '风险态度',
+    question: '当你在项目中遇到一个完全不会的技术点时，你通常：',
+    options: [
+      { text: '先自己研究，花时间学会它', score: 2 },
+      { text: '找替代方案，绕过这个技术点', score: 1 },
+      { text: '找人请教或外包这个部分', score: 0 },
+      { text: '评估这个点是否必须，不是必须就砍掉', score: 3 }
+    ]
+  },
+  {
+    id: 33,
+    dimension: 'risk_attitude',
+    dimensionName: '风险态度',
+    question: '你更喜欢接什么样的项目？',
+    options: [
+      { text: '自己熟悉领域的，能稳定高质量交付', score: 0 },
+      { text: '有一点挑战的，能学到新东西但不至于失控', score: 2 },
+      { text: '完全没做过的，边学边做才有意思', score: 3 },
+      { text: '看收入，收入高就愿意挑战难的', score: 1 }
+    ]
+  },
+  {
+    id: 34,
+    dimension: 'risk_attitude',
+    dimensionName: '风险态度',
+    question: '你觉得"冒险"对你来说意味着：',
+    options: [
+      { text: '谨慎评估后的有限尝试', score: 1 },
+      { text: '为了成长必须付出的代价', score: 2 },
+      { text: '工作中最让人兴奋的部分', score: 3 },
+      { text: '能避免就尽量避免', score: 0 }
+    ]
+  },
+  {
+    id: 35,
+    dimension: 'risk_attitude',
+    dimensionName: '风险态度',
+    question: '一个项目如果失败，你更可能归因于：',
+    options: [
+      { text: '前期评估不足，接了自己做不了的任务', score: 0 },
+      { text: '过程中某个环节出了问题', score: 1 },
+      { text: '需求不清晰或频繁变动', score: 2 },
+      { text: '运气不好，遇到不可控因素', score: 3 }
+    ]
+  },
+  {
+    id: 36,
+    dimension: 'risk_attitude',
+    dimensionName: '风险态度',
+    question: '你对"稳定"和"成长"的看法更接近：',
+    options: [
+      { text: '先有稳定交付能力，再追求成长', score: 0 },
+      { text: '在成长中建立稳定，两者同步', score: 2 },
+      { text: '成长优先，稳定是成长的副产品', score: 3 },
+      { text: '看阶段，初期追求成长，后期追求稳定', score: 1 }
     ]
   }
 ]
 
 export default function OPCTest() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<number[]>([])
+  const [answers, setAnswers] = useState<Array<{questionId: number, answer: string, score: number}>>([])
   const [isCompleted, setIsCompleted] = useState(false)
-  const [opcResult, setOpcResult] = useState<any>(null)
 
-  const handleAnswer = (score: number) => {
-    const newAnswers = [...answers, score]
+  const handleAnswer = (optionIndex: number) => {
+    const question = testQuestions[currentQuestion]
+    const selectedOption = question.options[optionIndex]
+
+    const newAnswer = {
+      questionId: question.id,
+      answer: String.fromCharCode(65 + optionIndex), // A, B, C, D
+      score: selectedOption.score
+    }
+
+    const newAnswers = [...answers, newAnswer]
     setAnswers(newAnswers)
 
     if (currentQuestion < testQuestions.length - 1) {
@@ -310,186 +474,16 @@ export default function OPCTest() {
         setCurrentQuestion(currentQuestion + 1)
       }, 300)
     } else {
-      // 测评完成，计算结果
-      calculateResult(newAnswers)
+      // 测评完成，跳转到结果页
+      setTimeout(() => {
+        Taro.navigateTo({
+          url: `/pages/opc-test/result?answers=${encodeURIComponent(JSON.stringify(newAnswers))}`
+        })
+      }, 300)
     }
-  }
-
-  const calculateResult = (allAnswers: number[]) => {
-    // 计算六维能力得分
-    const categoryScores: any = {
-      learning: [],
-      execution: [],
-      communication: [],
-      innovation: [],
-      collaboration: [],
-      resilience: []
-    }
-
-    // 按类别收集分数
-    allAnswers.forEach((score, index) => {
-      const category = testQuestions[index].category
-      categoryScores[category].push(score)
-    })
-
-    // 计算每个维度的平均分并归一化到0-100
-    const normalizedScores = {
-      learning: Math.round((categoryScores.learning.reduce((a: number, b: number) => a + b, 0) / categoryScores.learning.length / 5) * 100),
-      execution: Math.round((categoryScores.execution.reduce((a: number, b: number) => a + b, 0) / categoryScores.execution.length / 5) * 100),
-      communication: Math.round((categoryScores.communication.reduce((a: number, b: number) => a + b, 0) / categoryScores.communication.length / 5) * 100),
-      innovation: Math.round((categoryScores.innovation.reduce((a: number, b: number) => a + b, 0) / categoryScores.innovation.length / 5) * 100),
-      collaboration: Math.round((categoryScores.collaboration.reduce((a: number, b: number) => a + b, 0) / categoryScores.collaboration.length / 5) * 100),
-      resilience: Math.round((categoryScores.resilience.reduce((a: number, b: number) => a + b, 0) / categoryScores.resilience.length / 5) * 100)
-    }
-
-    // 生成OPC标签
-    const opcTag = generateOPCTag(normalizedScores)
-
-    const result = {
-      scores: normalizedScores,
-      tag: opcTag,
-      description: getTagDescription(normalizedScores)
-    }
-
-    setOpcResult(result)
-    setIsCompleted(true)
-
-    // 保存到用户信息
-    const userInfo = getUserInfo()
-    saveUserInfo({
-      ...userInfo,
-      opcTag: opcTag,
-      opcScores: normalizedScores,
-      hasCompletedTest: true
-    })
-
-    // 跳转到结果页面
-    setTimeout(() => {
-      Taro.redirectTo({
-        url: '/pages/opc-test/result'
-      })
-    }, 500)
-  }
-
-  const generateOPCTag = (scores: any) => {
-    const { learning, execution, communication, innovation, collaboration, resilience } = scores
-
-    // 找出最高的两个维度
-    const sortedDimensions = Object.entries(scores)
-      .sort(([, a]: any, [, b]: any) => b - a)
-      .slice(0, 2)
-
-    const dimensionNames: any = {
-      learning: '探索者',
-      execution: '行动派',
-      communication: '连接者',
-      innovation: '创造者',
-      collaboration: '共建者',
-      resilience: '韧性者'
-    }
-
-    return sortedDimensions.map(([key]) => dimensionNames[key]).join('·')
-  }
-
-  const getTagDescription = (scores: any) => {
-    const { learning, execution, communication, innovation, collaboration, resilience } = scores
-
-    const strengths = []
-    if (learning >= 70) strengths.push('热爱探索新知')
-    if (execution >= 70) strengths.push('说干就干')
-    if (communication >= 70) strengths.push('善于连接')
-    if (innovation >= 70) strengths.push('富有创造力')
-    if (collaboration >= 70) strengths.push('喜欢共建')
-    if (resilience >= 70) strengths.push('韧性十足')
-
-    if (strengths.length === 0) {
-      return '你是一个全面发展的人，各项能力均衡'
-    }
-
-    return `你身上有这些火花：${strengths.join('、')}`
-  }
-
-  const handleComplete = () => {
-    Taro.switchTab({
-      url: '/pages/index/index'
-    })
   }
 
   const progress = ((currentQuestion + 1) / testQuestions.length) * 100
-
-  if (isCompleted && opcResult) {
-    return (
-      <View className="opc-test-page">
-        <View className="result-container">
-          <View className="result-header">
-            <Text className="result-title">你被看见了</Text>
-            <Text className="result-subtitle">你的OPC标签是</Text>
-          </View>
-
-          <View className="opc-tag-display">
-            <Text className="tag-text">{opcResult.tag}</Text>
-          </View>
-
-          <Text className="tag-description">{opcResult.description}</Text>
-
-          <View className="scores-display">
-            <View className="score-item">
-              <Text className="score-label">探索力</Text>
-              <View className="score-bar">
-                <View className="score-fill" style={{ width: `${opcResult.scores.learning}%`, background: '#F9C6D9' }} />
-              </View>
-              <Text className="score-value">{opcResult.scores.learning}</Text>
-            </View>
-
-            <View className="score-item">
-              <Text className="score-label">行动力</Text>
-              <View className="score-bar">
-                <View className="score-fill" style={{ width: `${opcResult.scores.execution}%`, background: '#A8D8EA' }} />
-              </View>
-              <Text className="score-value">{opcResult.scores.execution}</Text>
-            </View>
-
-            <View className="score-item">
-              <Text className="score-label">连接力</Text>
-              <View className="score-bar">
-                <View className="score-fill" style={{ width: `${opcResult.scores.communication}%`, background: '#D4F291' }} />
-              </View>
-              <Text className="score-value">{opcResult.scores.communication}</Text>
-            </View>
-
-            <View className="score-item">
-              <Text className="score-label">创造力</Text>
-              <View className="score-bar">
-                <View className="score-fill" style={{ width: `${opcResult.scores.innovation}%`, background: '#FFE082' }} />
-              </View>
-              <Text className="score-value">{opcResult.scores.innovation}</Text>
-            </View>
-
-            <View className="score-item">
-              <Text className="score-label">共建力</Text>
-              <View className="score-bar">
-                <View className="score-fill" style={{ width: `${opcResult.scores.collaboration}%`, background: '#B39DDB' }} />
-              </View>
-              <Text className="score-value">{opcResult.scores.collaboration}</Text>
-            </View>
-
-            <View className="score-item">
-              <Text className="score-label">韧性</Text>
-              <View className="score-bar">
-                <View className="score-fill" style={{ width: `${opcResult.scores.resilience}%`, background: '#80CBC4' }} />
-              </View>
-              <Text className="score-value">{opcResult.scores.resilience}</Text>
-            </View>
-          </View>
-
-          <View className="complete-btn" onClick={handleComplete}>
-            <Text className="btn-text">开始你的河</Text>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
   const question = testQuestions[currentQuestion]
 
   return (
@@ -500,7 +494,7 @@ export default function OPCTest() {
 
       <View className="test-container">
         <View className="question-header">
-          <Text className="category-badge">{question.categoryName}</Text>
+          <Text className="category-badge">{question.dimensionName}</Text>
           <Text className="question-number">{currentQuestion + 1}/{testQuestions.length}</Text>
         </View>
 
@@ -511,7 +505,7 @@ export default function OPCTest() {
             <View
               key={index}
               className="option-card"
-              onClick={() => handleAnswer(option.score)}
+              onClick={() => handleAnswer(index)}
             >
               <Text className="option-text">{option.text}</Text>
             </View>
