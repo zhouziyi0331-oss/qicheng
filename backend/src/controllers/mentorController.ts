@@ -126,7 +126,7 @@ export const mentorChat = async (req: Request, res: Response) => {
     // 1. 获取学生信息
     const studentResult = await pool.query(
       `SELECT
-        u.id, u.name, u.opc_personality_tag as personality_tag
+        u.id, u.username as name, u.opc_personality_tag as personality_tag
        FROM users u
        WHERE u.id = $1`,
       [studentId]
