@@ -408,6 +408,64 @@ export const explorationAPI = {
     request('/exploration/suggestions', { method: 'POST', data: { taskId, taskDescription } })
 }
 
+// OPC孵化计划API
+export const incubationAPI = {
+  // 检查孵化资格
+  checkEligibility: (studentId: string) =>
+    request(`/incubation/eligibility/${studentId}`),
+
+  // 申请加入孵化计划
+  applyForIncubation: (studentId: string, passionDirection: string) =>
+    request('/incubation/apply', { method: 'POST', data: { studentId, passionDirection } }),
+
+  // 获取孵化状态
+  getIncubationStatus: (studentId: string) =>
+    request(`/incubation/status/${studentId}`),
+
+  // 提交月度更新
+  submitMonthlyUpdate: (studentId: string, updateMonth: string, growthSummary: string, explorationStories: string, challengesFaced: string, nextMonthPlan: string) =>
+    request('/incubation/monthly-update', { method: 'POST', data: { studentId, updateMonth, growthSummary, explorationStories, challengesFaced, nextMonthPlan } }),
+
+  // 对接创业资源
+  connectResource: (studentId: string, resourceType: string, resourceName: string, resourceDescription: string, contactInfo: string) =>
+    request('/incubation/resource', { method: 'POST', data: { studentId, resourceType, resourceName, resourceDescription, contactInfo } }),
+
+  // 毕业
+  graduate: (studentId: string) =>
+    request('/incubation/graduate', { method: 'POST', data: { studentId } })
+}
+
+// 联合体API
+export const allianceAPI = {
+  // 创建联合体
+  createAlliance: (founderId: string, name: string, description: string, vision: string) =>
+    request('/alliances/create', { method: 'POST', data: { founderId, name, description, vision } }),
+
+  // 邀请成员
+  inviteMember: (allianceId: string, inviterId: string, inviteeId: string, invitationMessage: string) =>
+    request('/alliances/invite', { method: 'POST', data: { allianceId, inviterId, inviteeId, invitationMessage } }),
+
+  // 响应邀请
+  respondToInvitation: (invitationId: string, accept: boolean) =>
+    request('/alliances/respond', { method: 'POST', data: { invitationId, accept } }),
+
+  // 获取学生的联合体
+  getStudentAlliances: (studentId: string) =>
+    request(`/alliances/student/${studentId}`),
+
+  // 获取联合体详情
+  getAllianceDetail: (allianceId: string) =>
+    request(`/alliances/${allianceId}`),
+
+  // 创建联合体项目
+  createAllianceProject: (allianceId: string, projectName: string, projectDescription: string, assignedMembers: string[], revenueShare: any) =>
+    request('/alliances/project', { method: 'POST', data: { allianceId, projectName, projectDescription, assignedMembers, revenueShare } }),
+
+  // 获取待处理邀请
+  getPendingInvitations: (studentId: string) =>
+    request(`/alliances/invitations/${studentId}`)
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -425,5 +483,7 @@ export default {
   lifeQuestion: lifeQuestionAPI,
   passionSpark: passionSparkAPI,
   partnership: partnershipAPI,
-  exploration: explorationAPI
+  exploration: explorationAPI,
+  incubation: incubationAPI,
+  alliance: allianceAPI
 }
