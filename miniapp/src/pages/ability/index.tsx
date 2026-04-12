@@ -74,7 +74,15 @@ export default function Ability() {
 
         const canvas = res[0].node
         const ctx = canvas.getContext('2d')
-        const dpr = Taro.getSystemInfoSync().pixelRatio
+
+        // 安全获取 pixelRatio
+        let dpr = 2
+        try {
+          const systemInfo = Taro.getSystemInfoSync()
+          dpr = systemInfo.pixelRatio || 2
+        } catch (error) {
+          console.error('获取系统信息失败，使用默认值:', error)
+        }
 
         // 设置Canvas尺寸
         const canvasWidth = res[0].width
