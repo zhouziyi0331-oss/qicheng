@@ -125,7 +125,7 @@ export const mentorChat = async (req: Request, res: Response) => {
   try {
     // 1. 获取学生信息
     const studentResult = await pool.query(
-      `SELECT u.id, u.nickname as name FROM users u WHERE u.id = $1`,
+      `SELECT u.id, COALESCE(u.nickname, '同学') as name FROM users u WHERE u.id = $1`,
       [studentId]
     );
 
