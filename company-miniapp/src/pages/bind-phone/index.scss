@@ -9,6 +9,98 @@
   justify-content: center;
   padding: $spacing-xl;
 
+  .bind-header {
+    text-align: center;
+    margin-bottom: 60rpx;
+
+    .icon {
+      width: 120rpx;
+      height: 120rpx;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 60rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto $spacing-lg;
+      backdrop-filter: blur(10px);
+      position: relative;
+
+      &.icon-phone::before {
+        content: '';
+        width: 60rpx;
+        height: 60rpx;
+        background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+        border-radius: 50%;
+      }
+    }
+
+    .title {
+      font-size: $font-2xl;
+      color: $text-white;
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+    }
+
+    .subtitle {
+      font-size: $font-base;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .bind-form {
+    width: 100%;
+    background: $bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .form-item {
+      margin-bottom: $spacing-lg;
+
+      .form-label {
+        display: block;
+        font-size: $font-base;
+        color: $text-secondary;
+        margin-bottom: $spacing-sm;
+      }
+
+      .form-input {
+        @include input;
+        width: 100%;
+        padding: $spacing-md;
+        font-size: $font-base;
+      }
+
+      .code-input-wrapper {
+        display: flex;
+        gap: $spacing-sm;
+
+        .code-input {
+          flex: 1;
+        }
+
+        .code-button {
+          flex-shrink: 0;
+          padding: $spacing-md $spacing-lg;
+          background: $gradient-purple;
+          color: $text-white;
+          border: none;
+          border-radius: $radius-md;
+          font-size: $font-sm;
+        }
+      }
+    }
+
+    .bind-button {
+      @include button-primary;
+      width: 100%;
+      padding: $spacing-md;
+      font-size: $font-md;
+      font-weight: 500;
+      margin-top: $spacing-lg;
+    }
+  }
+
   .logo-section {
     text-align: center;
     margin-bottom: 80px;

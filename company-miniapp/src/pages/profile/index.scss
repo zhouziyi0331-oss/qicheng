@@ -127,6 +127,13 @@
         margin-bottom: $spacing-sm;
         position: relative;
 
+        .icon-inner {
+          font-size: 48rpx;
+          font-weight: 600;
+          color: #fff;
+          line-height: 1;
+        }
+
         &.publish {
           background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
         }

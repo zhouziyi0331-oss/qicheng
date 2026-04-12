@@ -94,7 +94,7 @@ export default function BindPhone() {
   return (
     <View className="bind-phone-page">
       <View className="bind-header">
-        <View className="icon">📱</View>
+        <View className="icon icon-phone"></View>
         <Text className="title">绑定手机号</Text>
         <Text className="subtitle">绑定后可接收任务通知和重要消息</Text>
       </View>

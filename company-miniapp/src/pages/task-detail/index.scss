@@ -65,12 +65,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: $gradient-purple;
         border-radius: $radius-md;
         margin-bottom: $spacing-sm;
 
-        .quick-icon-text {
-          font-size: 36rpx;
+        &.icon-student {
+          background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        }
+
+        &.icon-progress {
+          background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
+        }
+
+        &.icon-chat {
+          background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+        }
+
+        &.icon-requirement {
+          background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
         }
       }
 

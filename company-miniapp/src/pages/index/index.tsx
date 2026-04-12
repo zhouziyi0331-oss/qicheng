@@ -109,7 +109,7 @@ export default function Index() {
         {/* 右侧：AI Insights 推广卡片 */}
         <View className='insights-card'>
           <View className='insights-content'>
-            <View className='insights-icon'>✨</View>
+            <View className='insights-icon-badge'></View>
             <Text className='insights-title'>立即升级到专业版！</Text>
             <Text className='insights-desc'>
               解锁高级分析功能，获得更深入的洞察，提升您的工作效率。
@@ -126,27 +126,39 @@ export default function Index() {
         </View>
         <View className='quick-entry-grid'>
           <View className='quick-entry-item' onClick={() => handleNavigate('/pages/publish/index')}>
-            <View className='entry-icon'>📝</View>
+            <View className='entry-icon icon-publish'>
+              <View className='icon-inner'>+</View>
+            </View>
             <Text className='entry-text'>发布任务</Text>
           </View>
           <View className='quick-entry-item' onClick={() => handleNavigate('/pages/tasks/index')}>
-            <View className='entry-icon'>📋</View>
+            <View className='entry-icon icon-tasks'>
+              <View className='icon-inner'>□</View>
+            </View>
             <Text className='entry-text'>我的任务</Text>
           </View>
           <View className='quick-entry-item' onClick={() => handleNavigate('/pages/chat-list/index')}>
-            <View className='entry-icon'>💬</View>
+            <View className='entry-icon icon-chat'>
+              <View className='icon-inner'>···</View>
+            </View>
             <Text className='entry-text'>消息中心</Text>
           </View>
           <View className='quick-entry-item' onClick={() => handleNavigate('/pages/payments/index')}>
-            <View className='entry-icon'>💰</View>
+            <View className='entry-icon icon-payment'>
+              <View className='icon-inner'>¥</View>
+            </View>
             <Text className='entry-text'>财务管理</Text>
           </View>
           <View className='quick-entry-item' onClick={() => handleNavigate('/pages/favorite-students/index')}>
-            <View className='entry-icon'>⭐</View>
+            <View className='entry-icon icon-favorite'>
+              <View className='icon-inner'>★</View>
+            </View>
             <Text className='entry-text'>收藏学生</Text>
           </View>
           <View className='quick-entry-item' onClick={() => handleNavigate('/pages/data-report/index')}>
-            <View className='entry-icon'>📊</View>
+            <View className='entry-icon icon-report'>
+              <View className='icon-inner'>▥</View>
+            </View>
             <Text className='entry-text'>数据报表</Text>
           </View>
         </View>

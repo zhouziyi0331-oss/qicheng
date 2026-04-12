@@ -81,21 +81,29 @@ export default function Profile() {
       {/* 快捷操作 */}
       <View className='quick-actions-section'>
         <View className='quick-action-item' onClick={() => Taro.navigateTo({ url: '/pages/publish/index' })}>
-          <View className='action-icon publish'>📝</View>
+          <View className='action-icon publish'>
+            <View className='icon-inner'>+</View>
+          </View>
           <Text className='action-text'>发布任务</Text>
         </View>
         <View className='quick-action-item' onClick={() => Taro.navigateTo({ url: '/pages/tasks/index?tab=pending' })}>
-          <View className='action-icon pending'>⏰</View>
+          <View className='action-icon pending'>
+            <View className='icon-inner'>⏱</View>
+          </View>
           <Text className='action-text'>待处理</Text>
           <View className='action-badge'>3</View>
         </View>
         <View className='quick-action-item' onClick={() => Taro.navigateTo({ url: '/pages/chat-list/index' })}>
-          <View className='action-icon message'>💬</View>
+          <View className='action-icon message'>
+            <View className='icon-inner'>···</View>
+          </View>
           <Text className='action-text'>消息</Text>
           <View className='action-badge'>5</View>
         </View>
         <View className='quick-action-item' onClick={() => Taro.navigateTo({ url: '/pages/payments/index' })}>
-          <View className='action-icon wallet'>💰</View>
+          <View className='action-icon wallet'>
+            <View className='icon-inner'>¥</View>
+          </View>
           <Text className='action-text'>财务</Text>
         </View>
       </View>

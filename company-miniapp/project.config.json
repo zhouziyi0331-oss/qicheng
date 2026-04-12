@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "qicheng-company",
   "description": "启程企业端小程序",
-  "appid": "touristappid",
+  "appid": "wx1fee66066d2df5cd",
   "setting": {
     "urlCheck": false,
     "es6": false,
@@ -23,11 +23,28 @@
       "outputPath": ""
     },
     "useCompilerModule": false,
-    "userConfirmedUseCompilerModuleSwitch": false
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
-  "libVersion": "3.5.8",
+  "libVersion": "3.15.2",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "compileType": "miniprogram",
-  "condition": {}
+  "condition": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {}
 }

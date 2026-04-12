@@ -233,14 +233,23 @@
       position: relative;
       z-index: 1;
 
-      .insights-icon {
+      .insights-icon-badge {
         width: 48px;
         height: 48px;
         background: rgba(255, 255, 255, 0.2);
         border-radius: $radius-md;
         @include flex-center;
         margin-bottom: $spacing-md;
-        font-size: $text-3xl;
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+          border-radius: 50%;
+        }
       }
 
       .insights-title {
@@ -315,8 +324,43 @@
       }
 
       .entry-icon {
-        font-size: 48rpx;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        @include flex-center;
         margin-bottom: $spacing-xs;
+        position: relative;
+
+        .icon-inner {
+          font-size: 24px;
+          font-weight: 600;
+          color: #fff;
+          line-height: 1;
+        }
+
+        &.icon-publish {
+          background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        }
+
+        &.icon-tasks {
+          background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
+        }
+
+        &.icon-chat {
+          background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+        }
+
+        &.icon-payment {
+          background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
+        }
+
+        &.icon-favorite {
+          background: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);
+        }
+
+        &.icon-report {
+          background: linear-gradient(135deg, #30CFD0 0%, #330867 100%);
+        }
       }
 
       .entry-text {

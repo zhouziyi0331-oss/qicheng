@@ -143,7 +143,7 @@ export default function InvoiceManage() {
 
       {invoices.length === 0 ? (
         <View className="empty">
-          <Text className="empty-icon">📄</Text>
+          <View className="empty-icon"></View>
           <Text className="empty-text">暂无发票记录</Text>
           <Text className="empty-hint">完成支付后可申请开具发票</Text>
         </View>

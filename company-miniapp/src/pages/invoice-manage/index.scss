@@ -140,8 +140,11 @@
       padding: 120px 0;
 
       .empty-icon {
-        font-size: 120rpx;
-        margin-bottom: $spacing-lg;
+        width: 120rpx;
+        height: 120rpx;
+        background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        border-radius: 60rpx;
+        margin: 0 auto $spacing-lg;
       }
 
       .empty-text {

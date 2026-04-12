@@ -416,9 +416,7 @@ export default function TaskDetail() {
               });
             }}
           >
-            <View className="quick-icon-wrapper">
-              <Text className="quick-icon-text">👤</Text>
-            </View>
+            <View className="quick-icon-wrapper icon-student"></View>
             <Text className="quick-text">学生资料</Text>
           </View>
         )}
@@ -431,9 +429,7 @@ export default function TaskDetail() {
             });
           }}
         >
-          <View className="quick-icon-wrapper">
-            <Text className="quick-icon-text">📊</Text>
-          </View>
+          <View className="quick-icon-wrapper icon-progress"></View>
           <Text className="quick-text">任务进度</Text>
         </View>
 
@@ -446,9 +442,7 @@ export default function TaskDetail() {
               });
             }}
           >
-            <View className="quick-icon-wrapper">
-              <Text className="quick-icon-text">💬</Text>
-            </View>
+            <View className="quick-icon-wrapper icon-chat"></View>
             <Text className="quick-text">联系学生</Text>
           </View>
         )}
@@ -462,9 +456,7 @@ export default function TaskDetail() {
               });
             }}
           >
-            <View className="quick-icon-wrapper">
-              <Text className="quick-icon-text">📝</Text>
-            </View>
+            <View className="quick-icon-wrapper icon-requirement"></View>
             <Text className="quick-text">追加需求</Text>
           </View>
         )}

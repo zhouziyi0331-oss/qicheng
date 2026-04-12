@@ -103,7 +103,7 @@ export default function AmendmentHistory() {
     return (
       <View className="amendment-history-page">
         <View className="empty">
-          <Text className="empty-icon">📝</Text>
+          <View className="empty-icon"></View>
           <Text className="empty-text">暂无追加需求记录</Text>
           <Text className="empty-hint">您可以在任务详情页面提交追加需求</Text>
         </View>

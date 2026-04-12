@@ -97,7 +97,7 @@ export default function ChatList() {
     return (
       <View className="chat-list-company">
         <View className="empty">
-          <Text className="empty-icon">💬</Text>
+          <View className="empty-icon"></View>
           <Text className="empty-text">暂无聊天记录</Text>
           <Text className="empty-hint">学生接单后可开启沟通</Text>
         </View>

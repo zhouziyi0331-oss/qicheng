@@ -171,7 +171,7 @@ export default function Payments() {
           </View>
         ) : payments.length === 0 ? (
           <View className='empty-state'>
-            <Text className='empty-icon'>💰</Text>
+            <View className='empty-icon'></View>
             <Text className='empty-text'>暂无付款记录</Text>
           </View>
         ) : (

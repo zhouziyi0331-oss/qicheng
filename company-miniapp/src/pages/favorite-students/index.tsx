@@ -110,7 +110,7 @@ export default function FavoriteStudents() {
     return (
       <View className="favorite-students-page">
         <View className="empty">
-          <Text className="empty-icon">⭐</Text>
+          <View className="empty-icon"></View>
           <Text className="empty-text">暂无收藏的学生</Text>
           <Text className="empty-hint">在任务中遇到优秀的学生可以收藏</Text>
         </View>

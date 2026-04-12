@@ -155,7 +155,7 @@ export default function StudentProfile() {
             <Text className="stat-divider">|</Text>
             <Text className="stat-item">{student.completedTasks}个任务</Text>
             <Text className="stat-divider">|</Text>
-            <Text className="stat-item">⭐ {student.rating}</Text>
+            <Text className="stat-item">{student.rating} 分</Text>
           </View>
         </View>
       </View>
