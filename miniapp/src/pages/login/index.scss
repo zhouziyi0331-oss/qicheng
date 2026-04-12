@@ -28,6 +28,22 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* 开发模式登录 */
+.dev-login {
+  margin-bottom: 24px;
+}
+
+.dev-button {
+  width: 100%;
+  height: 48px;
+  background: #F59E0B;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 /* 登录方式切换 */
 .login-type-tabs {
   display: flex;

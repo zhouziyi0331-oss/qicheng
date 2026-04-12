@@ -12,6 +12,27 @@ export default function Login() {
   const [countdown, setCountdown] = useState(0)
   const [loading, setLoading] = useState(false)
 
+  // 开发模式：快速登录（跳过真实认证）
+  const handleDevLogin = () => {
+    const mockUser = {
+      id: 'dev_user_001',
+      nickname: '测试用户',
+      avatar: 'https://via.placeholder.com/100',
+      phone: '13800138000',
+      opc_tags: ['创造力', '学习力', '执行力']
+    }
+    const mockToken = 'dev_token_' + Date.now()
+
+    Taro.setStorageSync('user', mockUser)
+    Taro.setStorageSync('token', mockToken)
+    Taro.setStorageSync('userId', mockUser.id)
+
+    Taro.showToast({ title: '开发模式登录成功', icon: 'success' })
+    setTimeout(() => {
+      Taro.switchTab({ url: '/pages/index/index' })
+    }, 1000)
+  }
+
   // 微信一键登录
   const handleWechatLogin = async () => {
     setLoading(true)
@@ -137,6 +158,17 @@ export default function Login() {
         <View className="logo">🚀</View>
         <Text className="title">欢迎回来</Text>
         <Text className="subtitle">登录启程，继续你的成长之旅</Text>
+      </View>
+
+      {/* 开发模式快速登录 */}
+      <View className="dev-login">
+        <Button
+          className="dev-button"
+          type="warn"
+          onClick={handleDevLogin}
+        >
+          🔧 开发模式登录（测试用）
+        </Button>
       </View>
 
       {/* 登录方式切换 */}
