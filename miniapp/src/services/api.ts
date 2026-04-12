@@ -373,6 +373,41 @@ export const partnershipAPI = {
     request('/partnerships/interaction', { method: 'POST', data: { companyId, studentId, interactionType, interactionData } })
 }
 
+// 探索模式加速器API
+export const explorationAPI = {
+  // 为任务添加探索标签
+  addExplorationTag: (taskId: string, tagType: string, tagLabel: string, explorationDescription: string) =>
+    request('/exploration/tag', { method: 'POST', data: { taskId, tagType, tagLabel, explorationDescription } }),
+
+  // 获取任务的探索标签
+  getTaskExplorationTags: (taskId: string) =>
+    request(`/exploration/tags/${taskId}`),
+
+  // 提交探索反思
+  submitReflection: (studentId: string, taskId: string, reflections: any[]) =>
+    request('/exploration/reflection', { method: 'POST', data: { studentId, taskId, reflections } }),
+
+  // 获取学生的探索反思历史
+  getStudentReflections: (studentId: string) =>
+    request(`/exploration/reflections/${studentId}`),
+
+  // 获取学生的探索模式库
+  getStudentPatterns: (studentId: string) =>
+    request(`/exploration/patterns/${studentId}`),
+
+  // 标记模式想应用到生活中
+  markPatternForLife: (patternId: string, wantApply: boolean) =>
+    request('/exploration/pattern/mark-life', { method: 'POST', data: { patternId, wantApply } }),
+
+  // 记录模式应用
+  recordPatternApplication: (patternId: string) =>
+    request('/exploration/pattern/apply', { method: 'POST', data: { patternId } }),
+
+  // AI生成探索建议
+  generateExplorationSuggestions: (taskId: string, taskDescription: string) =>
+    request('/exploration/suggestions', { method: 'POST', data: { taskId, taskDescription } })
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -389,5 +424,6 @@ export default {
   milestone: milestoneAPI,
   lifeQuestion: lifeQuestionAPI,
   passionSpark: passionSparkAPI,
-  partnership: partnershipAPI
+  partnership: partnershipAPI,
+  exploration: explorationAPI
 }

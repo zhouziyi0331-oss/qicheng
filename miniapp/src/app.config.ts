@@ -32,6 +32,8 @@ export default defineAppConfig({
     'pages/life-question/index',   // 生命问题记录器
     'pages/flow-moments/index',    // 穿越感时刻记录
     'pages/partnerships/index',    // 合伙人关系
+    'pages/exploration-reflection/index', // 探索反思
+    'pages/exploration-patterns/index',   // 探索模式库
   ],
   window: {
     backgroundTextStyle: 'light',

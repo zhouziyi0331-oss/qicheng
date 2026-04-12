@@ -1,0 +1,201 @@
+.exploration-patterns-page {
+  min-height: 100vh;
+  background: #F8F9FA;
+  padding: 32rpx;
+}
+
+.loading {
+  text-align: center;
+  padding: 200rpx 0;
+  color: #9CA3AF;
+  font-size: 28rpx;
+}
+
+/* 统计卡片 */
+.stats-card {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 24rpx;
+}
+
+.stats-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #92400E;
+  margin-bottom: 32rpx;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #B45309;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 26rpx;
+  color: #78350F;
+}
+
+/* 理念说明 */
+.concept-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  gap: 24rpx;
+}
+
+.concept-icon {
+  font-size: 48rpx;
+  flex-shrink: 0;
+}
+
+.concept-text {
+  flex: 1;
+}
+
+.concept-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 12rpx;
+}
+
+.concept-desc {
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.6;
+}
+
+/* 模式列表 */
+.patterns-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.pattern-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 32rpx;
+}
+
+.pattern-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.pattern-icon {
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.pattern-content {
+  flex: 1;
+}
+
+.pattern-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 12rpx;
+}
+
+.pattern-desc {
+  font-size: 28rpx;
+  color: #6B7280;
+  line-height: 1.6;
+}
+
+.pattern-meta {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #E5E7EB;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: #9CA3AF;
+}
+
+.meta-icon {
+  font-size: 28rpx;
+}
+
+.pattern-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 72rpx;
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.btn-apply {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  color: white;
+}
+
+.btn-life {
+  background: white;
+  color: #F59E0B;
+  border: 2rpx solid #F59E0B;
+}
+
+.btn-life.active {
+  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+  color: white;
+  border: none;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #1F2937;
+  font-weight: 500;
+  margin-bottom: 12rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #9CA3AF;
+}

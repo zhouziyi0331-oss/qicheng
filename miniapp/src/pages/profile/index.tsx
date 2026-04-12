@@ -252,6 +252,14 @@ export default function Profile() {
             <Text className="menu-arrow">→</Text>
           </View>
 
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/exploration-patterns/index')}>
+            <View className="menu-icon-circle menu-icon-cyan">
+              <Text className="icon-text">🧩</Text>
+            </View>
+            <Text className="menu-label">探索模式库</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/journey/index')}>
             <View className="menu-icon-circle menu-icon-pink">
               <Text className="icon-text">◈</Text>
