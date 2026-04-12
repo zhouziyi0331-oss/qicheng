@@ -27,7 +27,7 @@ const generateMentorPrompt = (studentData: any, taskData: any, conversationConte
 - 姓名：${studentData.name}
 - OPC人格标签：${studentData.personalityTag || '未测试'}
 - 生命问题：${studentData.lifeQuestion || '未填写'}
-- 当前项目：${taskData.title}
+- 当前项目：${taskData ? taskData.title : '自由探索'}
 
 ## 对话原则
 
