@@ -112,6 +112,59 @@ ${JSON.stringify(conversationContext, null, 2)}
 };
 
 /**
+ * 获取对话历史
+ * GET /api/mentor/:taskId/history
+ */
+export const getHistory = async (req: Request, res: Response) => {
+  try {
+    const { taskId } = req.params;
+
+    // 从数据库获取对话历史（如果有的话）
+    // 目前返回空数组，让前端使用默认欢迎消息
+    res.json({ messages: [] });
+  } catch (error) {
+    console.error('获取对话历史失败:', error);
+    res.status(500).json({ error: '获取对话历史失败' });
+  }
+};
+
+/**
+ * 获取第一步引导（接单后3秒推送）
+ * GET /api/mentor/:taskId/first-step
+ */
+export const getFirstStep = async (req: Request, res: Response) => {
+  try {
+    const { taskId } = req.params;
+
+    // 获取任务信息
+    const taskResult = await pool.query(
+      'SELECT * FROM tasks WHERE id = $1',
+      [taskId]
+    );
+    const task = taskResult[0];
+
+    if (!task) {
+      return res.json({ message: null });
+    }
+
+    // 生成第一步引导
+    const message = `我看到你接了「${task.title}」这个项目。
+
+这是一个关于${task.category || '探索'}的机会。在开始之前，我想问你：
+
+1. 你为什么选择这个项目？是什么吸引了你？
+2. 你觉得这个项目和你的目标有什么关系？
+
+不用急着开始做，先想想这些问题。有时候，开始前的思考比做的过程更重要。`;
+
+    res.json({ message });
+  } catch (error) {
+    console.error('获取第一步引导失败:', error);
+    res.status(500).json({ error: '获取第一步引导失败' });
+  }
+};
+
+/**
  * AI导师对话接口
  * POST /api/mentor/chat
  */
