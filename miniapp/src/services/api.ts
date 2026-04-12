@@ -223,7 +223,92 @@ export const levelAPI = {
   getNextLevelExp: () => request('/student/level/next'),
 
   // 检查是否可以升级
-  checkLevelUp: () => request('/student/level/check')
+  checkLevelUp: () => request('/student/level/check'),
+
+  // 获取用户等级信息（新OPC系统）
+  getUserLevel: (userId: string) => request(`/level/${userId}`),
+
+  // 检查升级条件（新OPC系统）
+  checkUpgrade: (userId: string) => request(`/level/check-upgrade/${userId}`),
+
+  // 执行升级（新OPC系统）
+  upgrade: (userId: string) => request('/level/upgrade', { method: 'POST', data: { userId } }),
+
+  // 申请跳级挑战
+  applyChallenge: (userId: string, taskId: string) =>
+    request('/level/challenge', { method: 'POST', data: { userId, taskId } }),
+
+  // 完成跳级挑战
+  completeChallenge: (challengeId: string, success: boolean) =>
+    request('/level/challenge/complete', { method: 'POST', data: { challengeId, success } })
+}
+
+// OPC测试系统API（新36题系统）
+export const opcAPI = {
+  // 提交OPC测试结果
+  submitTest: (userId: string, answers: Array<{ questionId: number; answer: string; score: number }>) =>
+    request('/opc/submit', { method: 'POST', data: { userId, answers } }),
+
+  // 获取用户OPC测试结果
+  getResult: (userId: string) => request(`/opc/result/${userId}`),
+
+  // 生成OPC成长报告
+  generateReport: (userId: string) => request(`/opc/report/${userId}`)
+}
+
+// 项目匹配系统API
+export const matchAPI = {
+  // 智能项目匹配（基于OPC人格标签）
+  getMatchedTasks: (userId: string, limit = 20) =>
+    request(`/tasks/match/${userId}?limit=${limit}`),
+
+  // 获取任务详情（含匹配理由）
+  getTaskDetail: (taskId: string, userId: string) =>
+    request(`/tasks/${taskId}/detail/${userId}`)
+}
+
+// AI导师系统API（新）
+export const mentorNewAPI = {
+  // 记录导师观察
+  recordObservation: (data: {
+    studentId: string;
+    taskId: string;
+    observationType: 'stuck_point' | 'breakthrough' | 'habit_formed';
+    observationContent: string;
+    observationData?: any;
+  }) => request('/mentor/observe', { method: 'POST', data }),
+
+  // 检测学生卡点（定时任务）
+  detectStuck: () => request('/mentor/detect-stuck', { method: 'POST' }),
+
+  // 生成AI导师欢迎消息
+  generateWelcome: (studentId: string, taskId: string) =>
+    request('/mentor/welcome-message', { method: 'POST', data: { studentId, taskId } }),
+
+  // 生成里程碑夸奖消息
+  generateMilestone: (studentId: string, taskId: string, milestoneType: string) =>
+    request('/mentor/milestone-message', { method: 'POST', data: { studentId, taskId, milestoneType } }),
+
+  // 生成打回修改消息
+  generateRejection: (studentId: string, taskId: string, rejectionReason: string, goodPoints: string[]) =>
+    request('/mentor/rejection-message', { method: 'POST', data: { studentId, taskId, rejectionReason, goodPoints } }),
+
+  // 检测习惯形成（定时任务）
+  detectHabits: () => request('/mentor/detect-habits', { method: 'POST' })
+}
+
+// 里程碑系统API
+export const milestoneAPI = {
+  // 第2单完成触发器
+  handleSecondTask: (userId: string) =>
+    request('/milestone/second-task-complete', { method: 'POST', data: { userId } }),
+
+  // 获取OPC故事墙
+  getStoryWall: () => request('/story-wall'),
+
+  // 提交故事到故事墙
+  submitStory: (userId: string, storyText: string, currentStatus: string) =>
+    request('/story-wall/submit', { method: 'POST', data: { userId, storyText, currentStatus } })
 }
 
 export default {
@@ -235,5 +320,9 @@ export default {
   story: storyAPI,
   report: reportAPI,
   withdraw: withdrawAPI,
-  level: levelAPI
+  level: levelAPI,
+  opc: opcAPI,
+  match: matchAPI,
+  mentorNew: mentorNewAPI,
+  milestone: milestoneAPI
 }

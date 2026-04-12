@@ -1,6 +1,7 @@
 import { View, Text } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
+import { opcAPI } from '../../services/api'
 import './index.scss'
 
 // 36道测试题数据 - 6维度 × 6题
@@ -454,8 +455,9 @@ export default function OPCTest() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Array<{questionId: number, answer: string, score: number}>>([])
   const [isCompleted, setIsCompleted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
-  const handleAnswer = (optionIndex: number) => {
+  const handleAnswer = async (optionIndex: number) => {
     const question = testQuestions[currentQuestion]
     const selectedOption = question.options[optionIndex]
 
@@ -474,12 +476,41 @@ export default function OPCTest() {
         setCurrentQuestion(currentQuestion + 1)
       }, 300)
     } else {
-      // 测评完成，跳转到结果页
-      setTimeout(() => {
-        Taro.navigateTo({
-          url: `/pages/opc-test/result?answers=${encodeURIComponent(JSON.stringify(newAnswers))}`
+      // 测评完成，提交到后端
+      setSubmitting(true)
+
+      try {
+        const user = Taro.getStorageSync('user')
+        if (!user || !user.id) {
+          Taro.showToast({ title: '请先登录', icon: 'none' })
+          return
+        }
+
+        // 调用后端API提交测试结果
+        const result = await opcAPI.submitTest(user.id, newAnswers)
+
+        // 保存结果到本地
+        Taro.setStorageSync('opc_result', result.result)
+
+        // 更新用户信息
+        const updatedUser = { ...user, hasCompletedTest: true }
+        Taro.setStorageSync('user', updatedUser)
+
+        // 跳转到结果页
+        setTimeout(() => {
+          Taro.navigateTo({
+            url: '/pages/opc-test/result'
+          })
+        }, 300)
+      } catch (error) {
+        console.error('提交测试失败:', error)
+        Taro.showToast({
+          title: '提交失败，请重试',
+          icon: 'none'
         })
-      }, 300)
+      } finally {
+        setSubmitting(false)
+      }
     }
   }
 
@@ -504,13 +535,19 @@ export default function OPCTest() {
           {question.options.map((option, index) => (
             <View
               key={index}
-              className="option-card"
-              onClick={() => handleAnswer(index)}
+              className={`option-card ${submitting ? 'disabled' : ''}`}
+              onClick={() => !submitting && handleAnswer(index)}
             >
               <Text className="option-text">{option.text}</Text>
             </View>
           ))}
         </View>
+
+        {submitting && (
+          <View className="submitting-overlay">
+            <Text className="submitting-text">正在生成你的OPC画像...</Text>
+          </View>
+        )}
       </View>
     </View>
   )

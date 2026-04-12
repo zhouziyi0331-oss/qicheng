@@ -1,7 +1,7 @@
 import { View, Text, Input, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
-import { taskAPI } from '../../services/api'
+import { taskAPI, matchAPI } from '../../services/api'
 import TaskDialog from '../../components/TaskDialog'
 import './index.scss'
 
@@ -31,9 +31,24 @@ export default function Tasks() {
     try {
       setLoading(true)
 
-      // 获取智能匹配任务（基于OPC标签、情绪状态、历史任务）
-      const matchedRes = await taskAPI.getMatched()
-      setMatchedTasks(matchedRes.tasks || [])
+      const user = Taro.getStorageSync('user')
+
+      if (user && user.id) {
+        // 使用新的OPC匹配API获取智能匹配任务
+        try {
+          const matchedRes = await matchAPI.getMatchedTasks(user.id, 20)
+          setMatchedTasks(matchedRes.tasks || [])
+        } catch (matchError) {
+          console.error('OPC匹配API失败，使用旧API:', matchError)
+          // 降级到旧API
+          const matchedRes = await taskAPI.getMatched()
+          setMatchedTasks(matchedRes.tasks || [])
+        }
+      } else {
+        // 未登录，使用旧API
+        const matchedRes = await taskAPI.getMatched()
+        setMatchedTasks(matchedRes.tasks || [])
+      }
 
       // 获取全部任务
       const allRes = await taskAPI.getList({ page: 1, limit: 20 })

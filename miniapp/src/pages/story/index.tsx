@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image, Button, Input } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
-import { storyAPI } from '../../services/api'
+import { storyAPI, milestoneAPI } from '../../services/api'
 import './index.scss'
 
 interface Story {
@@ -42,7 +42,36 @@ export default function Story() {
     try {
       setLoading(true)
 
-      // 尝试从API加载
+      // 优先尝试从新的OPC故事墙API加载
+      try {
+        const opcStories = await milestoneAPI.getStoryWall()
+        if (opcStories.success && opcStories.stories) {
+          // 转换OPC故事墙格式到Story格式
+          const formattedStories = opcStories.stories.map((s: any) => ({
+            id: s.studentId,
+            author: {
+              nickname: s.username,
+              avatar: s.avatar || s.username[0],
+              opc: s.opcTag
+            },
+            content: s.storyText,
+            images: [],
+            createdAt: '最近',
+            likes: 0,
+            comments: 0,
+            liked: false,
+            currentStatus: s.currentStatus,
+            level: s.level,
+            completedTasks: s.completedTasks
+          }))
+          setStories(formattedStories)
+          return
+        }
+      } catch (opcError) {
+        console.error('OPC故事墙API失败，尝试旧API:', opcError)
+      }
+
+      // 降级到旧API
       try {
         const data = await storyAPI.getFeed(1)
         setStories(data)

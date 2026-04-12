@@ -1,6 +1,7 @@
 import { View, Text } from '@tarojs/components'
 import Taro, { useLoad } from '@tarojs/taro'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { opcAPI } from '../../services/api'
 import './result.scss'
 
 // 人格标签定义
@@ -104,18 +105,56 @@ export default function OPCTestResult() {
   const [scores, setScores] = useState<any>(null)
   const [personalityTag, setPersonalityTag] = useState<any>(null)
   const [interpretations, setInterpretations] = useState<any>({})
+  const [loading, setLoading] = useState(true)
 
-  useLoad((options) => {
-    if (options.answers) {
-      try {
-        const answers = JSON.parse(decodeURIComponent(options.answers))
-        calculateResult(answers)
-      } catch (e) {
-        console.error('解析答案失败:', e)
-        Taro.showToast({ title: '数据错误', icon: 'none' })
+  useEffect(() => {
+    loadResult()
+  }, [])
+
+  const loadResult = async () => {
+    try {
+      setLoading(true)
+
+      // 先尝试从本地缓存获取
+      const cachedResult = Taro.getStorageSync('opc_result')
+      if (cachedResult && cachedResult.result) {
+        displayResult(cachedResult.result)
+        setLoading(false)
+        return
       }
+
+      // 如果没有缓存，从后端获取
+      const user = Taro.getStorageSync('user')
+      if (user && user.id) {
+        const result = await opcAPI.getResult(user.id)
+        if (result.success && result.result) {
+          displayResult(result.result)
+          // 保存到本地缓存
+          Taro.setStorageSync('opc_result', result)
+        } else {
+          Taro.showToast({ title: '暂无测试结果', icon: 'none' })
+        }
+      }
+    } catch (error) {
+      console.error('加载结果失败:', error)
+      Taro.showToast({ title: '加载失败', icon: 'none' })
+    } finally {
+      setLoading(false)
     }
-  })
+  }
+
+  const displayResult = (result: any) => {
+    // 显示后端返回的结果
+    setScores(result.scores)
+
+    // 设置人格标签
+    const tagKey = result.personalityTag.key
+    const tagInfo = PERSONALITY_TAGS[tagKey] || PERSONALITY_TAGS.balanced
+    setPersonalityTag({ key: tagKey, ...tagInfo })
+
+    // 设置维度解读
+    setInterpretations(result.interpretations)
+  }
 
   const calculateResult = (answers: Array<{questionId: number, answer: string, score: number}>) => {
     // 按维度分组计算得分
@@ -235,7 +274,7 @@ export default function OPCTestResult() {
     })
   }
 
-  if (!scores || !personalityTag) {
+  if (loading || !scores || !personalityTag) {
     return (
       <View className="result-page">
         <View className="loading">
