@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../config/database';
+import pool from '../utils/db';
 
 /**
  * 合伙人关系系统 Controller

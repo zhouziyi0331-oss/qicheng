@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { Pool } from 'pg';
 import { AutoConfirmationJob } from './autoConfirmationJob';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 
 /**
  * 定时任务调度器

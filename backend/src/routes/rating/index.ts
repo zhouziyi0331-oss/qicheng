@@ -10,12 +10,12 @@ import {
   checkRatingEligibility,
   getPendingRatingTasks
 } from './ratingController';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = Router();
 
 // 所有路由都需要认证
-router.use(authenticateToken);
+router.use(authenticate);
 
 // 提交评价
 router.post('/submit', submitRating);

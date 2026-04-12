@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../config/database';
+import pool from '../utils/db';
 
 /**
  * 第2单完成触发器

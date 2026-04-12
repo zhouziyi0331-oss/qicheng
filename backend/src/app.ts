@@ -41,7 +41,7 @@ if (process.env.NODE_ENV !== 'test') {
   require('./jobs/invitationCron');
 
   // 启动定时任务调度器（7天自动确认等）
-  const { pool } = require('./db');
+  const { pool } = require('./utils/db');
   const { CronScheduler } = require('./cron/scheduler');
   const cronScheduler = new CronScheduler(pool);
   cronScheduler.start();
