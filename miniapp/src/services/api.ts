@@ -359,3 +359,29 @@ export default {
   lifeQuestion: lifeQuestionAPI,
   passionSpark: passionSparkAPI
 }
+
+// AI导师系统API（使命是河版本）
+export const mentorAPI = {
+  // AI导师对话
+  chat: (studentId: string, taskId: string, message: string, conversationHistory: any[]) =>
+    request('/mentor/chat', { method: 'POST', data: { studentId, taskId, message, conversationHistory } }),
+
+  // 生成接单欢迎消息
+  getWelcomeMessage: (studentId: string, taskId: string) =>
+    request('/mentor/welcome', { method: 'POST', data: { studentId, taskId } }),
+
+  // 生成里程碑反馈消息
+  getMilestoneMessage: (studentId: string, taskId: string) =>
+    request('/mentor/milestone', { method: 'POST', data: { studentId, taskId } }),
+
+  // 生成打回修改消息
+  getRejectionMessage: (studentId: string, taskId: string, rejectionReason: string, goodPoints: string[]) =>
+    request('/mentor/rejection', { method: 'POST', data: { studentId, taskId, rejectionReason, goodPoints } }),
+
+  // 记录导师观察
+  recordObservation: (studentId: string, taskId: string, observationType: string, observationContent: string, observationData?: any) =>
+    request('/mentor/observe', { method: 'POST', data: { studentId, taskId, observationType, observationContent, observationData } }),
+
+  // 获取学生的观察记录
+  getObservations: (studentId: string) => request(`/mentor/observations/${studentId}`)
+}

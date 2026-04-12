@@ -1,0 +1,151 @@
+.mentor-chat-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #F8F9FA 0%, #FFFFFF 100%);
+}
+
+/* 顶部提示 */
+.chat-header {
+  padding: 32rpx 40rpx;
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  text-align: center;
+
+  .header-title {
+    display: block;
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 8rpx;
+  }
+
+  .header-subtitle {
+    display: block;
+    font-size: 24rpx;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+  }
+}
+
+/* 消息列表 */
+.message-list {
+  flex: 1;
+  padding: 32rpx 40rpx;
+  overflow-y: auto;
+}
+
+.message-item {
+  margin-bottom: 32rpx;
+  display: flex;
+
+  &.student {
+    justify-content: flex-end;
+
+    .message-bubble {
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: #FFFFFF;
+      border-radius: 32rpx 32rpx 8rpx 32rpx;
+    }
+  }
+
+  &.mentor {
+    justify-content: flex-start;
+
+    .message-bubble {
+      background: #FFFFFF;
+      color: #2D3436;
+      border-radius: 32rpx 32rpx 32rpx 8rpx;
+      box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+
+      &.loading {
+        background: rgba(102, 126, 234, 0.1);
+
+        .loading-text {
+          color: #667EEA;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+.message-bubble {
+  max-width: 520rpx;
+  padding: 24rpx 32rpx;
+  position: relative;
+
+  .message-content {
+    font-size: 28rpx;
+    line-height: 1.6;
+    word-wrap: break-word;
+  }
+}
+
+/* 热情火花标记 */
+.spark-badge {
+  margin-top: 16rpx;
+  padding: 8rpx 16rpx;
+  background: rgba(255, 193, 7, 0.2);
+  border-radius: 16rpx;
+  display: inline-block;
+
+  .badge-text {
+    font-size: 22rpx;
+    color: #F57C00;
+  }
+}
+
+/* 穿越感标记 */
+.flow-badge {
+  margin-top: 16rpx;
+  padding: 8rpx 16rpx;
+  background: rgba(33, 150, 243, 0.2);
+  border-radius: 16rpx;
+  display: inline-block;
+
+  .badge-text {
+    font-size: 22rpx;
+    color: #1976D2;
+  }
+}
+
+/* 输入框 */
+.input-bar {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 40rpx;
+  background: #FFFFFF;
+  border-top: 1rpx solid #E0E0E0;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+
+.message-input {
+  flex: 1;
+  height: 72rpx;
+  padding: 0 24rpx;
+  background: #F5F5F5;
+  border-radius: 36rpx;
+  font-size: 28rpx;
+  color: #2D3436;
+}
+
+.send-btn {
+  margin-left: 16rpx;
+  padding: 16rpx 32rpx;
+  background: #E0E0E0;
+  border-radius: 36rpx;
+  transition: all 0.3s;
+
+  &.active {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+
+    .btn-text {
+      color: #FFFFFF;
+    }
+  }
+
+  .btn-text {
+    font-size: 28rpx;
+    color: #9E9E9E;
+  }
+}

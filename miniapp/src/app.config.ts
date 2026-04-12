@@ -16,7 +16,8 @@ export default defineAppConfig({
     'pages/tasks/submit',          // 任务提交
     'pages/invitations/index',     // 任务邀请
     'pages/my-tasks/index',        // 我的任务
-    'pages/mentor/index',          // AI导师聊天
+    'pages/mentor/index',          // AI导师聊天（旧）
+    'pages/mentor-chat/index',     // AI导师聊天（使命是河版本）
     'pages/ability/index',         // 六维能力图
     'pages/timeline/index',        // 成长时间线
     'pages/story/index',           // 故事墙
