@@ -210,40 +210,171 @@ const generateAIResponse = async (prompt: string, userMessage: string, studentDa
     detectedFlowMoment: null
   };
 
+  const studentName = studentData.name || '同学';
+  const taskTitle = taskData?.title || '这个项目';
+  const lifeQuestion = studentData.life_question;
+
   // 检测热情火花关键词
-  const passionKeywords = ['很酷', '有意思', '我发现', '我觉得', '太棒了', '惊喜', '兴奋'];
+  const passionKeywords = ['很酷', '有意思', '我发现', '我觉得', '太棒了', '惊喜', '兴奋', '喜欢', '好玩'];
   for (const keyword of passionKeywords) {
     if (userMessage.includes(keyword)) {
       response.detectedPassionSpark = userMessage;
-      response.response = `你刚才说"${keyword}"的时候，听起来很有热情——这是你真正感兴趣的吗？做这个的时候，有没有感觉时间过得特别快？`;
+      response.response = `${studentName}，我注意到你刚才说"${keyword}"的时候，语气里有一种特别的能量。这让我想起一个问题：你做这件事的时候，是不是感觉时间过得特别快？或者说，你会不会不自觉地想要继续做下去？
+
+这种感觉其实很重要——它可能就是你的热情火花。很多人花很长时间都找不到自己真正感兴趣的东西，但你现在可能正在经历这个时刻。
+
+我想问你几个问题：
+1. 你在做${taskTitle}的哪个部分时，最有这种感觉？
+2. 这种感觉是第一次出现，还是之前也有过类似的体验？
+3. 如果让你用一句话描述，你会说这是一种什么样的感觉？
+
+${lifeQuestion ? `对了，你之前说你的生命问题是"${lifeQuestion}"。你觉得现在这个感觉，和你的这个问题有关系吗？不用急着回答，只是提醒你可以想想。` : ''}
+
+慢慢说，我在听。`;
       return response;
     }
   }
 
   // 检测穿越感关键词
-  const flowKeywords = ['时间过得很快', '忘记时间', '沉浸', '专注', '停不下来'];
+  const flowKeywords = ['时间过得很快', '忘记时间', '沉浸', '专注', '停不下来', '一直在做', '不知不觉'];
   for (const keyword of flowKeywords) {
     if (userMessage.includes(keyword)) {
       response.detectedFlowMoment = userMessage;
-      response.response = `这就是穿越感时刻！你注意到自己在做什么的时候会有这种感觉吗？这可能是你的热情所在。`;
+      response.response = `这就是我们说的"专注时刻"！你刚才描述的这种状态，其实是一个很重要的信号——它在告诉你，你可能找到了一个和自己很匹配的方向。
+
+我想和你聊聊这个。你知道吗，很多人做事的时候都是在"推着自己走"，需要不断提醒自己"该做了"、"要坚持"。但你刚才说的这种状态，是完全不一样的——你是被事情本身"拉着走"的，不需要强迫自己，反而是停不下来。
+
+这种状态不是每个人在每件事上都能体验到的。所以我想问你：
+
+1. 你在做${taskTitle}的具体哪个环节时，进入了这种状态？
+2. 这个环节有什么特点？是需要创造性思考，还是需要解决复杂问题，还是需要动手实践？
+3. 你之前在做其他事情的时候，有没有过类似的体验？
+
+如果你能找到让自己进入这种状态的规律，那你就找到了一个很重要的线索——关于你适合做什么、你的能力在哪里的线索。
+
+${lifeQuestion ? `另外，你的生命问题是"${lifeQuestion}"。你觉得这次的专注时刻，和你的这个问题有没有什么联系？` : ''}
+
+慢慢想，不着急。`;
       return response;
     }
   }
 
   // 检测卡点
-  if (userMessage.includes('卡住') || userMessage.includes('不知道') || userMessage.includes('困难')) {
-    response.response = `嗯，这里确实容易卡。你注意到这里可以不一样吗？试试换个角度？如果还是不行，我们再聊。`;
+  if (userMessage.includes('卡住') || userMessage.includes('不知道') || userMessage.includes('困难') || userMessage.includes('不会') || userMessage.includes('怎么办')) {
+    response.response = `${studentName}，先别着急。卡住是很正常的，其实每个人在做新东西的时候都会卡。我之前也在这种地方卡过很多次。
+
+我想先问你几个问题，帮你理清楚现在的状况：
+
+1. **你具体卡在哪里了？**
+   - 是完全不知道从哪里开始？
+   - 还是知道要做什么，但不知道怎么做？
+   - 还是做了一部分，但遇到了技术问题？
+
+2. **你已经尝试过什么了？**
+   - 你有没有试过搜索相关资料？
+   - 有没有看过类似的案例？
+   - 有没有尝试过其他方法？
+
+3. **你觉得问题出在哪里？**
+   - 是缺少某个工具或资源？
+   - 是对需求理解得不够清楚？
+   - 还是技术上有难点？
+
+你先告诉我这些，我们一起来看看。记住，卡住不是坏事——它说明你正在挑战自己的边界，这本身就是成长。
+
+${lifeQuestion ? `对了，你的生命问题是"${lifeQuestion}"。有时候，我们在项目中遇到的卡点，其实和我们的生命问题有关系。你可以想想，这次卡住的地方，是不是也反映了你在生活中经常遇到的某种困境？` : ''}
+
+慢慢说，我们一起解决。`;
     return response;
   }
 
   // 检测完成
-  if (userMessage.includes('完成') || userMessage.includes('做好了')) {
-    response.response = `完成得不错！这个项目做下来，你发现了什么关于自己的事？`;
+  if (userMessage.includes('完成') || userMessage.includes('做好了') || userMessage.includes('做完了') || userMessage.includes('搞定')) {
+    response.response = `${studentName}，恭喜你完成了${taskTitle}！
+
+但我不想只是说"做得好"就结束了。我更想和你聊聊，这个过程中你发现了什么关于自己的事。
+
+我想问你几个问题：
+
+1. **关于能力的发现**
+   - 在做这个项目的过程中，你发现自己在哪些方面做得特别顺手？
+   - 有没有哪个环节，你觉得"原来我还挺擅长这个的"？
+   - 有没有哪个部分，你做起来特别有感觉？
+
+2. **关于成长的感知**
+   - 和你之前做过的事情比，这次有什么不一样？
+   - 你觉得自己在哪些方面有了进步？
+   - 有没有什么是你之前不会、现在会了的？
+
+3. **关于自己的认识**
+   - 做完这个项目，你对自己有什么新的认识吗？
+   - 你发现自己是一个什么样的人？
+   - 你觉得自己适合做什么样的事情？
+
+${lifeQuestion ? `最后，你的生命问题是"${lifeQuestion}"。做完这个项目，你觉得对这个问题有没有一些新的想法？不用急着回答，只是提醒你可以想想。` : ''}
+
+慢慢说，我想听听你的真实感受。`;
     return response;
   }
 
-  // 默认回复
-  response.response = `我听到你说的了。继续说说，你在这个过程中有什么感受？`;
+  // 检测提问
+  if (userMessage.includes('怎么') || userMessage.includes('如何') || userMessage.includes('什么') || userMessage.includes('为什么') || userMessage.includes('?') || userMessage.includes('？')) {
+    response.response = `${studentName}，我看到你在问问题，这很好——会提问本身就是一种能力。
+
+不过在我直接给你答案之前，我想先和你一起想想。因为很多时候，答案其实就在问题里面。
+
+让我们一起来看看：
+
+1. **关于你的问题**
+   - 你为什么会想到问这个问题？
+   - 是因为遇到了什么具体的情况吗？
+   - 你自己对这个问题有什么想法？
+
+2. **关于你已经知道的**
+   - 你之前有没有遇到过类似的情况？
+   - 你当时是怎么处理的？
+   - 你觉得那个方法能不能用在现在这个情况上？
+
+3. **关于可能的方向**
+   - 如果让你自己试试看，你会从哪里开始？
+   - 你觉得可能有哪些解决方法？
+   - 你最担心的是什么？
+
+你先说说这些，然后我们再一起看看具体怎么做。我不是来直接给你答案的，而是来帮你找到自己的答案的。
+
+${taskData ? `对了，你现在在做${taskTitle}，这个问题是和项目的哪个部分有关？` : ''}
+
+慢慢说，我在听。`;
+    return response;
+  }
+
+  // 默认回复 - 开放式引导
+  response.response = `${studentName}，我听到你说的了。
+
+你知道吗，我不是那种会直接告诉你"该怎么做"的导师。我更想做的，是帮你看见自己——看见你在做事情的时候是什么样的，看见你的能力在哪里，看见你真正感兴趣的是什么。
+
+所以我想和你聊聊：
+
+1. **关于现在**
+   - 你现在在做什么？或者说，你现在在想什么？
+   - 你做这件事的时候，是什么感觉？
+   - 有没有什么让你觉得特别有意思的地方？
+
+2. **关于你自己**
+   - 你觉得自己是一个什么样的人？
+   - 你喜欢做什么样的事情？
+   - 你在做什么事情的时候，会感觉特别有劲儿？
+
+3. **关于你的方向**
+   - 你有没有想过，自己以后想做什么？
+   - 不是说具体的职业，而是说，你想过什么样的生活？
+   - 你希望自己成为什么样的人？
+
+${lifeQuestion ? `你之前说你的生命问题是"${lifeQuestion}"。我们可以从这里开始聊，你觉得呢？` : ''}
+
+${taskData ? `或者，我们也可以聊聊你现在在做的${taskTitle}。你接这个项目的时候，是怎么想的？` : ''}
+
+慢慢说，不着急。我想听听你的真实想法。`;
   return response;
 };
 
