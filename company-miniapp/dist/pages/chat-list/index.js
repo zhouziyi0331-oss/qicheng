@@ -1,1 +1,244 @@
-"use strict";(wx["webpackJsonp"]=wx["webpackJsonp"]||[]).push([[118],{5184:function(e,s,a){var t=a(7842),n=a(1212),c=a(467),r=a(5544),l=a(118),i=a(6540),o=a(758),u=a.n(o),h=a(4848);function m(){var e=(0,i.useState)([]),s=(0,r.A)(e,2),a=s[0],t=s[1],o=(0,i.useState)(!0),m=(0,r.A)(o,2),d=m[0],p=m[1],f=(0,i.useState)(!1),x=(0,r.A)(f,2),g=x[0],j=x[1];(0,i.useEffect)(function(){N()},[]);var N=function(){var e=(0,c.A)((0,n.A)().m(function e(){var s,a,c;return(0,n.A)().w(function(e){while(1)switch(e.p=e.n){case 0:return e.p=0,p(!0),s=u().getStorageSync("token"),e.n=1,u().request({url:"http://localhost:3000/api/v1/chat/sessions",method:"GET",header:{Authorization:"Bearer ".concat(s)}});case 1:a=e.v,a.data.success&&t(a.data.data),e.n=3;break;case 2:e.p=2,c=e.v,console.error("\u52a0\u8f7d\u4f1a\u8bdd\u5217\u8868\u5931\u8d25:",c),u().showToast({title:"\u52a0\u8f7d\u5931\u8d25",icon:"none"});case 3:return e.p=3,p(!1),j(!1),e.f(3);case 4:return e.a(2)}},e,null,[[0,2,3,4]])}));return function(){return e.apply(this,arguments)}}(),S=function(){j(!0),N()},_=function(e){u().navigateTo({url:"/pages/chat-detail/index?sessionId=".concat(e.id)})},v=function(e){var s=new Date(e),a=new Date,t=a.getTime()-s.getTime(),n=Math.floor(t/6e4),c=Math.floor(t/36e5),r=Math.floor(t/864e5);return n<1?"\u521a\u521a":n<60?"".concat(n,"\u5206\u949f\u524d"):c<24?"".concat(c,"\u5c0f\u65f6\u524d"):r<7?"".concat(r,"\u5929\u524d"):"".concat(s.getMonth()+1,"/").concat(s.getDate())},w=function(e){var s={pending:"\u5f85\u63a5\u5355",in_progress:"\u8fdb\u884c\u4e2d",submitted:"\u5f85\u9a8c\u6536",completed:"\u5df2\u5b8c\u6210",cancelled:"\u5df2\u53d6\u6d88"};return s[e]||e};return d?(0,h.jsx)(l.Ss,{className:"chat-list-company",children:(0,h.jsx)(l.Ss,{className:"loading",children:"\u52a0\u8f7d\u4e2d..."})}):0===a.length?(0,h.jsx)(l.Ss,{className:"chat-list-company",children:(0,h.jsxs)(l.Ss,{className:"empty",children:[(0,h.jsx)(l.Ss,{className:"empty-icon"}),(0,h.jsx)(l.EY,{className:"empty-text",children:"\u6682\u65e0\u804a\u5929\u8bb0\u5f55"}),(0,h.jsx)(l.EY,{className:"empty-hint",children:"\u5b66\u751f\u63a5\u5355\u540e\u53ef\u5f00\u542f\u6c9f\u901a"})]})}):(0,h.jsx)(l.Ss,{className:"chat-list-company",children:(0,h.jsx)(l.BM,{scrollY:!0,className:"session-list",refresherEnabled:!0,refresherTriggered:g,onRefresherRefresh:S,children:a.map(function(e){return(0,h.jsxs)(l.Ss,{className:"session-item",onClick:function(){return _(e)},children:[(0,h.jsxs)(l.Ss,{className:"avatar-wrapper",children:[(0,h.jsx)(l._V,{className:"avatar",src:e.other_user_avatar||"https://via.placeholder.com/100",mode:"aspectFill"}),e.my_unread_count>0&&(0,h.jsx)(l.Ss,{className:"badge",children:(0,h.jsx)(l.EY,{className:"badge-text",children:e.my_unread_count>99?"99+":e.my_unread_count})})]}),(0,h.jsxs)(l.Ss,{className:"content",children:[(0,h.jsxs)(l.Ss,{className:"header",children:[(0,h.jsx)(l.EY,{className:"name",children:e.other_user_name}),(0,h.jsx)(l.EY,{className:"time",children:v(e.last_message_at)})]}),(0,h.jsxs)(l.Ss,{className:"task-info",children:[(0,h.jsx)(l.EY,{className:"task-title",children:e.task_title}),(0,h.jsx)(l.EY,{className:"task-status status-".concat(e.task_status),children:w(e.task_status)})]}),(0,h.jsx)(l.EY,{className:"last-message",numberOfLines:1,children:e.last_message||"\u6682\u65e0\u6d88\u606f"})]}),(0,h.jsx)(l.Ss,{className:"arrow",children:"\u203a"})]},e.id)})})})}var d={};Page((0,t.createPageConfig)(m,"pages/chat-list/index",{root:{cn:[]}},d||{}))}},function(e){var s=function(s){return e(e.s=s)};e.O(0,[907,96],function(){return s(5184)});e.O()}]);
+"use strict";
+(wx["webpackJsonp"] = wx["webpackJsonp"] || []).push([["pages/chat-list/index"],{
+
+/***/ "./node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/chat-list/index!./src/pages/chat-list/index.tsx":
+/*!************************************************************************************************************************!*\
+  !*** ./node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/chat-list/index!./src/pages/chat-list/index.tsx ***!
+  \************************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ ChatList; }
+/* harmony export */ });
+/* harmony import */ var _Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/regenerator.js */ "./node_modules/@babel/runtime/helpers/esm/regenerator.js");
+/* harmony import */ var _Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var _tarojs_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @tarojs/components */ "./node_modules/@tarojs/plugin-platform-weapp/dist/components-react.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "webpack/container/remote/react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _tarojs_taro__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @tarojs/taro */ "webpack/container/remote/@tarojs/taro");
+/* harmony import */ var _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "webpack/container/remote/react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+
+function ChatList() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)([]),
+    _useState2 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState, 2),
+    sessions = _useState2[0],
+    setSessions = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(true),
+    _useState4 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState3, 2),
+    loading = _useState4[0],
+    setLoading = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(false),
+    _useState6 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState5, 2),
+    refreshing = _useState6[0],
+    setRefreshing = _useState6[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(function () {
+    loadSessions();
+  }, []);
+  var loadSessions = /*#__PURE__*/function () {
+    var _ref = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
+      var token, res, _t;
+      return (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            _context.p = 0;
+            setLoading(true);
+            token = _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().getStorageSync('token');
+            _context.n = 1;
+            return _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().request({
+              url: 'http://localhost:3000/api/v1/chat/sessions',
+              method: 'GET',
+              header: {
+                'Authorization': "Bearer ".concat(token)
+              }
+            });
+          case 1:
+            res = _context.v;
+            if (res.data.success) {
+              setSessions(res.data.data);
+            }
+            _context.n = 3;
+            break;
+          case 2:
+            _context.p = 2;
+            _t = _context.v;
+            console.error('加载会话列表失败:', _t);
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+              title: '加载失败',
+              icon: 'none'
+            });
+          case 3:
+            _context.p = 3;
+            setLoading(false);
+            setRefreshing(false);
+            return _context.f(3);
+          case 4:
+            return _context.a(2);
+        }
+      }, _callee, null, [[0, 2, 3, 4]]);
+    }));
+    return function loadSessions() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  var handleRefresh = function handleRefresh() {
+    setRefreshing(true);
+    loadSessions();
+  };
+  var handleChatClick = function handleChatClick(session) {
+    _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+      url: "/pages/chat-detail/index?sessionId=".concat(session.id)
+    });
+  };
+  var formatTime = function formatTime(dateString) {
+    var date = new Date(dateString);
+    var now = new Date();
+    var diff = now.getTime() - date.getTime();
+    var minutes = Math.floor(diff / 60000);
+    var hours = Math.floor(diff / 3600000);
+    var days = Math.floor(diff / 86400000);
+    if (minutes < 1) return '刚刚';
+    if (minutes < 60) return "".concat(minutes, "\u5206\u949F\u524D");
+    if (hours < 24) return "".concat(hours, "\u5C0F\u65F6\u524D");
+    if (days < 7) return "".concat(days, "\u5929\u524D");
+    return "".concat(date.getMonth() + 1, "/").concat(date.getDate());
+  };
+  var getTaskStatusText = function getTaskStatusText(status) {
+    var statusMap = {
+      'pending': '待接单',
+      'in_progress': '进行中',
+      'submitted': '待验收',
+      'completed': '已完成',
+      'cancelled': '已取消'
+    };
+    return statusMap[status] || status;
+  };
+  if (loading) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "chat-list-company",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "loading",
+        children: "\u52A0\u8F7D\u4E2D..."
+      })
+    });
+  }
+  if (sessions.length === 0) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "chat-list-company",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "empty",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "empty-icon"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+          className: "empty-text",
+          children: "\u6682\u65E0\u804A\u5929\u8BB0\u5F55"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+          className: "empty-hint",
+          children: "\u5B66\u751F\u63A5\u5355\u540E\u53EF\u5F00\u542F\u6C9F\u901A"
+        })]
+      })
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+    className: "chat-list-company",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.ScrollView, {
+      scrollY: true,
+      className: "session-list",
+      refresherEnabled: true,
+      refresherTriggered: refreshing,
+      onRefresherRefresh: handleRefresh,
+      children: sessions.map(function (session) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "session-item",
+          onClick: function onClick() {
+            return handleChatClick(session);
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "avatar-wrapper",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Image, {
+              className: "avatar",
+              src: session.other_user_avatar || 'https://via.placeholder.com/100',
+              mode: "aspectFill"
+            }), session.my_unread_count > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "badge",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+                className: "badge-text",
+                children: session.my_unread_count > 99 ? '99+' : session.my_unread_count
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "content",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "header",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+                className: "name",
+                children: session.other_user_name
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+                className: "time",
+                children: formatTime(session.last_message_at)
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "task-info",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+                className: "task-title",
+                children: session.task_title
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+                className: "task-status status-".concat(session.task_status),
+                children: getTaskStatusText(session.task_status)
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "last-message",
+              numberOfLines: 1,
+              children: session.last_message || '暂无消息'
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "arrow",
+            children: "\u203A"
+          })]
+        }, session.id);
+      })
+    })
+  });
+}
+
+/***/ }),
+
+/***/ "./src/pages/chat-list/index.tsx":
+/*!***************************************!*\
+  !*** ./src/pages/chat-list/index.tsx ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
+
+/* harmony import */ var _tarojs_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tarojs/runtime */ "webpack/container/remote/@tarojs/runtime");
+/* harmony import */ var _tarojs_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_tarojs_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_tarojs_taro_loader_lib_entry_cache_js_name_pages_chat_list_index_index_tsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/chat-list/index!./index.tsx */ "./node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/chat-list/index!./src/pages/chat-list/index.tsx");
+
+
+var config = {};
+
+
+var inst = Page((0,_tarojs_runtime__WEBPACK_IMPORTED_MODULE_0__.createPageConfig)(_node_modules_tarojs_taro_loader_lib_entry_cache_js_name_pages_chat_list_index_index_tsx__WEBPACK_IMPORTED_MODULE_1__["default"], 'pages/chat-list/index', {root:{cn:[]}}, config || {}))
+
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_tarojs_taro_loader_lib_entry_cache_js_name_pages_chat_list_index_index_tsx__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
+/***/ })
+
+},
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
+/******/ __webpack_require__.O(0, ["taro","vendors","common"], function() { return __webpack_exec__("./src/pages/chat-list/index.tsx"); });
+/******/ var __webpack_exports__ = __webpack_require__.O();
+/******/ }
+]);
+//# sourceMappingURL=index.js.map

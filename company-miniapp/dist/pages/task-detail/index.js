@@ -1,1 +1,769 @@
-"use strict";(wx["webpackJsonp"]=wx["webpackJsonp"]||[]).push([[834],{8286:function(e,s,a){var n=a(7842),c=a(1212),t=a(467),i=a(5544),r=a(118),l=a(6540),o=a(758),d=a.n(o),u=a(4848);function h(){var e=(0,o.useRouter)(),s=e.params.id,a=(0,l.useState)(null),n=(0,i.A)(a,2),h=n[0],m=n[1],p=(0,l.useState)(null),x=(0,i.A)(p,2),v=x[0],f=x[1],j=(0,l.useState)(!0),N=(0,i.A)(j,2),w=N[0],g=N[1],S=(0,l.useState)(!1),k=(0,i.A)(S,2),b=k[0],E=k[1],Y=(0,l.useState)("approve"),y=(0,i.A)(Y,2),A=y[0],T=y[1],q=(0,l.useState)(""),C=(0,i.A)(q,2),I=C[0],R=C[1];(0,l.useEffect)(function(){_()},[s]);var _=function(){var e=(0,t.A)((0,c.A)().m(function e(){var a,n,t;return(0,c.A)().w(function(e){while(1)switch(e.p=e.n){case 0:return g(!0),e.p=1,e.n=2,d().request({url:"http://localhost:3000/api/v1/tasks/".concat(s),method:"GET",header:{Authorization:"Bearer ".concat(d().getStorageSync("token"))}});case 2:return a=e.v,a.data.success&&m(a.data.data),e.n=3,d().request({url:"http://localhost:3000/api/v1/tasks/flow/".concat(s,"/deliverable"),method:"GET",header:{Authorization:"Bearer ".concat(d().getStorageSync("token"))}});case 3:n=e.v,n.data.success&&f(n.data.data),e.n=5;break;case 4:e.p=4,t=e.v,console.error("\u52a0\u8f7d\u4efb\u52a1\u8be6\u60c5\u5931\u8d25:",t),d().showToast({title:"\u52a0\u8f7d\u5931\u8d25",icon:"none"});case 5:return e.p=5,g(!1),e.f(5);case 6:return e.a(2)}},e,null,[[1,4,5,6]])}));return function(){return e.apply(this,arguments)}}(),L=function(e){T(e),E(!0)},P=function(){var e=(0,t.A)((0,c.A)().m(function e(){var a,n;return(0,c.A)().w(function(e){while(1)switch(e.p=e.n){case 0:if("reject"!==A||I.trim()){e.n=1;break}return d().showToast({title:"\u8bf7\u586b\u5199\u62d2\u7edd\u539f\u56e0",icon:"none"}),e.a(2);case 1:return e.p=1,d().showLoading({title:"\u63d0\u4ea4\u4e2d..."}),e.n=2,d().request({url:"http://localhost:3000/api/v1/tasks/flow/".concat(s,"/company-review"),method:"POST",header:{Authorization:"Bearer ".concat(d().getStorageSync("token"))},data:{approved:"approve"===A,feedback:I}});case 2:a=e.v,d().hideLoading(),a.data.success?(d().showToast({title:"approve"===A?"\u9a8c\u6536\u901a\u8fc7":"\u5df2\u62d2\u7edd",icon:"success"}),E(!1),R(""),"approve"===A?setTimeout(function(){d().navigateTo({url:"/pages/payment/index?taskId=".concat(s,"&type=final")})},1500):_()):d().showToast({title:a.data.message||"\u64cd\u4f5c\u5931\u8d25",icon:"none"}),e.n=4;break;case 3:e.p=3,n=e.v,d().hideLoading(),console.error("\u63d0\u4ea4\u9a8c\u6536\u5931\u8d25:",n),d().showToast({title:"\u7f51\u7edc\u9519\u8bef",icon:"none"});case 4:return e.a(2)}},e,null,[[1,3]])}));return function(){return e.apply(this,arguments)}}(),B=function(){d().navigateTo({url:"/pages/payment/index?taskId=".concat(s,"&type=final")})},F=function(){var e=(0,t.A)((0,c.A)().m(function e(){return(0,c.A)().w(function(e){while(1)switch(e.n){case 0:d().showModal({title:"\u786e\u8ba4\u5b8c\u6210",content:"\u786e\u8ba4\u4efb\u52a1\u5df2\u5b8c\u6210\u5e76\u6700\u7ec8\u9a8c\u6536\u901a\u8fc7\u5417\uff1f",success:function(){var e=(0,t.A)((0,c.A)().m(function e(a){var n,t;return(0,c.A)().w(function(e){while(1)switch(e.p=e.n){case 0:if(!a.confirm){e.n=4;break}return e.p=1,d().showLoading({title:"\u5904\u7406\u4e2d..."}),e.n=2,d().request({url:"http://localhost:3000/api/v1/tasks/flow/".concat(s,"/final-confirm"),method:"POST",header:{Authorization:"Bearer ".concat(d().getStorageSync("token"))}});case 2:n=e.v,d().hideLoading(),n.data.success?(d().showToast({title:"\u4efb\u52a1\u5df2\u5b8c\u6210",icon:"success"}),setTimeout(function(){d().navigateBack()},1500)):d().showToast({title:n.data.message||"\u64cd\u4f5c\u5931\u8d25",icon:"none"}),e.n=4;break;case 3:e.p=3,t=e.v,d().hideLoading(),console.error("\u786e\u8ba4\u5931\u8d25:",t),d().showToast({title:"\u7f51\u7edc\u9519\u8bef",icon:"none"});case 4:return e.a(2)}},e,null,[[1,3]])}));function a(s){return e.apply(this,arguments)}return a}()});case 1:return e.a(2)}},e)}));return function(){return e.apply(this,arguments)}}(),$=function(){d().showModal({title:"\u53d6\u6d88\u4efb\u52a1",content:"\u53d6\u6d88\u4efb\u52a1\u540e\u5c06\u6263\u966430%\u5b9a\u91d1\u4f5c\u4e3a\u8fdd\u7ea6\u91d1\uff0c\u786e\u8ba4\u53d6\u6d88\u5417\uff1f",confirmText:"\u786e\u8ba4\u53d6\u6d88",confirmColor:"#EF4444",success:function(){var e=(0,t.A)((0,c.A)().m(function e(a){var n,t;return(0,c.A)().w(function(e){while(1)switch(e.p=e.n){case 0:if(!a.confirm){e.n=4;break}return e.p=1,d().showLoading({title:"\u5904\u7406\u4e2d..."}),e.n=2,d().request({url:"http://localhost:3000/api/v1/tasks/".concat(s,"/cancel"),method:"POST",header:{Authorization:"Bearer ".concat(d().getStorageSync("token"))}});case 2:n=e.v,d().hideLoading(),n.data.success?(d().showToast({title:"\u4efb\u52a1\u5df2\u53d6\u6d88",icon:"success"}),setTimeout(function(){d().navigateBack()},1500)):d().showToast({title:n.data.message||"\u64cd\u4f5c\u5931\u8d25",icon:"none"}),e.n=4;break;case 3:e.p=3,t=e.v,d().hideLoading(),console.error("\u53d6\u6d88\u5931\u8d25:",t),d().showToast({title:"\u7f51\u7edc\u9519\u8bef",icon:"none"});case 4:return e.a(2)}},e,null,[[1,3]])}));function a(s){return e.apply(this,arguments)}return a}()})},z=function(e){var s=new Date(e);return"".concat(s.getMonth()+1,"\u6708").concat(s.getDate(),"\u65e5 ").concat(s.getHours(),":").concat(String(s.getMinutes()).padStart(2,"0"))},M=function(e){var s={pending_match:"\u5f85\u5339\u914d",matching:"\u5339\u914d\u4e2d",pending_accept:"\u5f85\u63a5\u5355",in_progress:"\u8fdb\u884c\u4e2d",pending_review:"\u5f85\u9a8c\u6536",reviewing:"AI\u5ba1\u6838\u4e2d",pending_payment:"\u5f85\u652f\u4ed8\u5c3e\u6b3e",completed:"\u5df2\u5b8c\u6210",cancelled:"\u5df2\u53d6\u6d88"};return s[e]||e};return w?(0,u.jsx)(r.Ss,{className:"task-detail-page",children:(0,u.jsx)(r.Ss,{className:"loading",children:"\u52a0\u8f7d\u4e2d..."})}):h?(0,u.jsxs)(r.Ss,{className:"task-detail-page",children:[(0,u.jsxs)(r.BM,{className:"content",scrollY:!0,children:[(0,u.jsxs)(r.Ss,{className:"info-card",children:[(0,u.jsxs)(r.Ss,{className:"card-header",children:[(0,u.jsx)(r.EY,{className:"card-title",children:"\u4efb\u52a1\u4fe1\u606f"}),(0,u.jsx)(r.Ss,{className:"status-badge status-".concat(h.status),children:M(h.status)})]}),(0,u.jsxs)(r.Ss,{className:"info-row",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u4efb\u52a1\u6807\u9898"}),(0,u.jsx)(r.EY,{className:"info-value",children:h.title})]}),(0,u.jsxs)(r.Ss,{className:"info-row",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u4efb\u52a1\u7c7b\u578b"}),(0,u.jsx)(r.EY,{className:"info-value",children:h.taskType})]}),(0,u.jsxs)(r.Ss,{className:"info-row",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u4efb\u52a1\u62a5\u916c"}),(0,u.jsxs)(r.EY,{className:"info-value price",children:["\xa5",h.price]})]}),(0,u.jsxs)(r.Ss,{className:"info-row",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u622a\u6b62\u65e5\u671f"}),(0,u.jsx)(r.EY,{className:"info-value",children:z(h.deadline)})]}),h.studentName&&(0,u.jsxs)(r.Ss,{className:"info-row",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u6267\u884c\u5b66\u751f"}),(0,u.jsx)(r.EY,{className:"info-value",children:h.studentName})]}),void 0!==h.progressPercent&&(0,u.jsxs)(r.Ss,{className:"info-row",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u4efb\u52a1\u8fdb\u5ea6"}),(0,u.jsxs)(r.Ss,{className:"progress-container",children:[(0,u.jsx)(r.Ss,{className:"progress-bar",children:(0,u.jsx)(r.Ss,{className:"progress-fill",style:{width:"".concat(h.progressPercent,"%")}})}),(0,u.jsxs)(r.EY,{className:"progress-text",children:[h.progressPercent,"%"]})]})]}),(0,u.jsxs)(r.Ss,{className:"info-row full",children:[(0,u.jsx)(r.EY,{className:"info-label",children:"\u4efb\u52a1\u63cf\u8ff0"}),(0,u.jsx)(r.EY,{className:"info-value desc",children:h.description})]})]}),v&&(0,u.jsxs)(r.Ss,{className:"info-card",children:[(0,u.jsxs)(r.Ss,{className:"card-header",children:[(0,u.jsx)(r.EY,{className:"card-title",children:"\u4ea4\u4ed8\u7269"}),(0,u.jsxs)(r.EY,{className:"submit-time",children:["\u63d0\u4ea4\u4e8e ",z(v.submittedAt)]})]}),(0,u.jsxs)(r.Ss,{className:"deliverable-section",children:[(0,u.jsx)(r.EY,{className:"section-label",children:"\u4f5c\u54c1\u8bf4\u660e"}),(0,u.jsx)(r.EY,{className:"section-content",children:v.description})]}),v.fileUrls&&v.fileUrls.length>0&&(0,u.jsxs)(r.Ss,{className:"deliverable-section",children:[(0,u.jsx)(r.EY,{className:"section-label",children:"\u4f5c\u54c1\u622a\u56fe"}),(0,u.jsx)(r.Ss,{className:"image-grid",children:v.fileUrls.map(function(e,s){return(0,u.jsx)(r._V,{src:e,className:"deliverable-image",mode:"aspectFill",onClick:function(){d().previewImage({urls:v.fileUrls,current:e})}},s)})})]}),v.links&&v.links.length>0&&(0,u.jsxs)(r.Ss,{className:"deliverable-section",children:[(0,u.jsx)(r.EY,{className:"section-label",children:"\u76f8\u5173\u94fe\u63a5"}),v.links.map(function(e,s){return(0,u.jsx)(r.EY,{className:"link-item",onClick:function(){d().setClipboardData({data:e}),d().showToast({title:"\u94fe\u63a5\u5df2\u590d\u5236",icon:"success"})},children:e},s)})]}),"approved"===v.aiReviewStatus&&(0,u.jsxs)(r.Ss,{className:"review-section ai-review",children:[(0,u.jsxs)(r.Ss,{className:"review-header",children:[(0,u.jsx)(r.EY,{className:"review-title",children:"AI\u5ba1\u6838"}),(0,u.jsx)(r.Ss,{className:"review-badge approved",children:"\u901a\u8fc7"})]}),v.aiReviewScore&&(0,u.jsxs)(r.EY,{className:"review-score",children:["\u8bc4\u5206\uff1a",v.aiReviewScore,"/100"]}),v.aiReviewFeedback&&(0,u.jsx)(r.EY,{className:"review-feedback",children:v.aiReviewFeedback})]}),"rejected"===v.aiReviewStatus&&(0,u.jsxs)(r.Ss,{className:"review-section ai-review",children:[(0,u.jsxs)(r.Ss,{className:"review-header",children:[(0,u.jsx)(r.EY,{className:"review-title",children:"AI\u5ba1\u6838"}),(0,u.jsx)(r.Ss,{className:"review-badge rejected",children:"\u672a\u901a\u8fc7"})]}),(0,u.jsx)(r.EY,{className:"review-feedback",children:v.aiReviewFeedback})]}),v.companyReviewStatus&&(0,u.jsxs)(r.Ss,{className:"review-section company-review",children:[(0,u.jsxs)(r.Ss,{className:"review-header",children:[(0,u.jsx)(r.EY,{className:"review-title",children:"\u4f01\u4e1a\u9a8c\u6536"}),(0,u.jsx)(r.Ss,{className:"review-badge ".concat(v.companyReviewStatus),children:"approved"===v.companyReviewStatus?"\u901a\u8fc7":"\u672a\u901a\u8fc7"})]}),v.companyReviewFeedback&&(0,u.jsx)(r.EY,{className:"review-feedback",children:v.companyReviewFeedback})]})]})]}),(0,u.jsxs)(r.Ss,{className:"quick-actions",children:[h.studentId&&(0,u.jsxs)(r.Ss,{className:"quick-btn",onClick:function(){d().navigateTo({url:"/pages/student-profile/index?studentId=".concat(h.studentId)})},children:[(0,u.jsx)(r.Ss,{className:"quick-icon-wrapper icon-student"}),(0,u.jsx)(r.EY,{className:"quick-text",children:"\u5b66\u751f\u8d44\u6599"})]}),(0,u.jsxs)(r.Ss,{className:"quick-btn",onClick:function(){d().navigateTo({url:"/pages/task-progress/index?taskId=".concat(s)})},children:[(0,u.jsx)(r.Ss,{className:"quick-icon-wrapper icon-progress"}),(0,u.jsx)(r.EY,{className:"quick-text",children:"\u4efb\u52a1\u8fdb\u5ea6"})]}),"in_progress"===h.status&&h.studentId&&(0,u.jsxs)(r.Ss,{className:"quick-btn",onClick:function(){d().navigateTo({url:"/pages/chat-detail/index?taskId=".concat(s,"&studentId=").concat(h.studentId)})},children:[(0,u.jsx)(r.Ss,{className:"quick-icon-wrapper icon-chat"}),(0,u.jsx)(r.EY,{className:"quick-text",children:"\u8054\u7cfb\u5b66\u751f"})]}),"in_progress"===h.status&&(0,u.jsxs)(r.Ss,{className:"quick-btn",onClick:function(){d().navigateTo({url:"/pages/add-requirement/index?taskId=".concat(s)})},children:[(0,u.jsx)(r.Ss,{className:"quick-icon-wrapper icon-requirement"}),(0,u.jsx)(r.EY,{className:"quick-text",children:"\u8ffd\u52a0\u9700\u6c42"})]})]}),(0,u.jsxs)(r.Ss,{className:"bottom-actions",children:[v&&"approved"===v.aiReviewStatus&&!v.companyReviewStatus&&(0,u.jsxs)(r.Ss,{className:"action-buttons",children:[(0,u.jsx)(r.$n,{className:"btn-reject",onClick:function(){return L("reject")},children:"\u62d2\u7edd"}),(0,u.jsx)(r.$n,{className:"btn-approve",onClick:function(){return L("approve")},children:"\u9a8c\u6536\u901a\u8fc7"})]}),v&&"approved"===v.companyReviewStatus&&"pending_payment"===h.status&&(0,u.jsxs)(r.$n,{className:"btn-pay",onClick:B,children:["\u652f\u4ed8\u5c3e\u6b3e (\xa5",(.7*h.price).toFixed(2),")"]}),"completed"===h.status&&(0,u.jsx)(r.$n,{className:"btn-confirm",onClick:F,children:"\u786e\u8ba4\u5b8c\u6210"}),("pending_match"===h.status||"matching"===h.status||"pending_accept"===h.status||"in_progress"===h.status)&&(0,u.jsx)(r.$n,{className:"btn-cancel",onClick:$,children:"\u53d6\u6d88\u4efb\u52a1"})]}),b&&(0,u.jsx)(r.Ss,{className:"review-modal",onClick:function(){return E(!1)},children:(0,u.jsxs)(r.Ss,{className:"modal-content",onClick:function(e){return e.stopPropagation()},children:[(0,u.jsxs)(r.Ss,{className:"modal-header",children:[(0,u.jsx)(r.EY,{className:"modal-title",children:"approve"===A?"\u9a8c\u6536\u901a\u8fc7":"\u62d2\u7edd\u9a8c\u6536"}),(0,u.jsx)(r.EY,{className:"modal-close",onClick:function(){return E(!1)},children:"\xd7"})]}),(0,u.jsx)(r.Ss,{className:"modal-body",children:(0,u.jsxs)(r.Ss,{className:"form-item",children:[(0,u.jsx)(r.EY,{className:"form-label",children:"approve"===A?"\u9a8c\u6536\u610f\u89c1\uff08\u9009\u586b\uff09":"\u62d2\u7edd\u539f\u56e0\uff08\u5fc5\u586b\uff09"}),(0,u.jsx)("textarea",{className:"form-textarea",value:I,onInput:function(e){return R(e.detail.value)},placeholder:"approve"===A?"\u53ef\u4ee5\u586b\u5199\u5bf9\u5b66\u751f\u7684\u8bc4\u4ef7\u548c\u5efa\u8bae...":"\u8bf7\u8bf4\u660e\u62d2\u7edd\u7684\u539f\u56e0\uff0c\u4ee5\u4fbf\u5b66\u751f\u6539\u8fdb...",maxlength:500}),(0,u.jsxs)(r.EY,{className:"char-count",children:[I.length,"/500"]})]})}),(0,u.jsxs)(r.Ss,{className:"modal-footer",children:[(0,u.jsx)(r.$n,{className:"modal-btn cancel",onClick:function(){return E(!1)},children:"\u53d6\u6d88"}),(0,u.jsxs)(r.$n,{className:"modal-btn confirm",onClick:P,children:["\u786e\u8ba4","approve"===A?"\u901a\u8fc7":"\u62d2\u7edd"]})]})]})})]}):(0,u.jsx)(r.Ss,{className:"task-detail-page",children:(0,u.jsx)(r.Ss,{className:"empty",children:"\u4efb\u52a1\u4e0d\u5b58\u5728"})})}var m={};Page((0,n.createPageConfig)(h,"pages/task-detail/index",{root:{cn:[]}},m||{}))}},function(e){var s=function(s){return e(e.s=s)};e.O(0,[907,96],function(){return s(8286)});e.O()}]);
+"use strict";
+(wx["webpackJsonp"] = wx["webpackJsonp"] || []).push([["pages/task-detail/index"],{
+
+/***/ "./node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/task-detail/index!./src/pages/task-detail/index.tsx":
+/*!****************************************************************************************************************************!*\
+  !*** ./node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/task-detail/index!./src/pages/task-detail/index.tsx ***!
+  \****************************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ TaskDetail; }
+/* harmony export */ });
+/* harmony import */ var _Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/regenerator.js */ "./node_modules/@babel/runtime/helpers/esm/regenerator.js");
+/* harmony import */ var _Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var _tarojs_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @tarojs/components */ "./node_modules/@tarojs/plugin-platform-weapp/dist/components-react.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "webpack/container/remote/react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _tarojs_taro__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @tarojs/taro */ "webpack/container/remote/@tarojs/taro");
+/* harmony import */ var _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "webpack/container/remote/react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+
+function TaskDetail() {
+  var router = (0,_tarojs_taro__WEBPACK_IMPORTED_MODULE_5__.useRouter)();
+  var id = router.params.id;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(null),
+    _useState2 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState, 2),
+    task = _useState2[0],
+    setTask = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(null),
+    _useState4 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState3, 2),
+    deliverable = _useState4[0],
+    setDeliverable = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(true),
+    _useState6 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState5, 2),
+    loading = _useState6[0],
+    setLoading = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(false),
+    _useState8 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState7, 2),
+    showReviewModal = _useState8[0],
+    setShowReviewModal = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)('approve'),
+    _useState0 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState9, 2),
+    reviewAction = _useState0[0],
+    setReviewAction = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(''),
+    _useState10 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_useState1, 2),
+    reviewFeedback = _useState10[0],
+    setReviewFeedback = _useState10[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(function () {
+    loadTaskDetail();
+  }, [id]);
+  var loadTaskDetail = /*#__PURE__*/function () {
+    var _ref = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
+      var taskRes, deliverableRes, _t;
+      return (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            setLoading(true);
+            _context.p = 1;
+            _context.n = 2;
+            return _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().request({
+              url: "http://localhost:3000/api/v1/tasks/".concat(id),
+              method: 'GET',
+              header: {
+                'Authorization': "Bearer ".concat(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().getStorageSync('token'))
+              }
+            });
+          case 2:
+            taskRes = _context.v;
+            if (taskRes.data.success) {
+              setTask(taskRes.data.data);
+            }
+
+            // 加载交付物
+            _context.n = 3;
+            return _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().request({
+              url: "http://localhost:3000/api/v1/tasks/flow/".concat(id, "/deliverable"),
+              method: 'GET',
+              header: {
+                'Authorization': "Bearer ".concat(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().getStorageSync('token'))
+              }
+            });
+          case 3:
+            deliverableRes = _context.v;
+            if (deliverableRes.data.success) {
+              setDeliverable(deliverableRes.data.data);
+            }
+            _context.n = 5;
+            break;
+          case 4:
+            _context.p = 4;
+            _t = _context.v;
+            console.error('加载任务详情失败:', _t);
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+              title: '加载失败',
+              icon: 'none'
+            });
+          case 5:
+            _context.p = 5;
+            setLoading(false);
+            return _context.f(5);
+          case 6:
+            return _context.a(2);
+        }
+      }, _callee, null, [[1, 4, 5, 6]]);
+    }));
+    return function loadTaskDetail() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  var handleReview = function handleReview(action) {
+    setReviewAction(action);
+    setShowReviewModal(true);
+  };
+  var handleSubmitReview = /*#__PURE__*/function () {
+    var _ref2 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
+      var res, _t2;
+      return (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            if (!(reviewAction === 'reject' && !reviewFeedback.trim())) {
+              _context2.n = 1;
+              break;
+            }
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+              title: '请填写拒绝原因',
+              icon: 'none'
+            });
+            return _context2.a(2);
+          case 1:
+            _context2.p = 1;
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showLoading({
+              title: '提交中...'
+            });
+            _context2.n = 2;
+            return _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().request({
+              url: "http://localhost:3000/api/v1/tasks/flow/".concat(id, "/company-review"),
+              method: 'POST',
+              header: {
+                'Authorization': "Bearer ".concat(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().getStorageSync('token'))
+              },
+              data: {
+                approved: reviewAction === 'approve',
+                feedback: reviewFeedback
+              }
+            });
+          case 2:
+            res = _context2.v;
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().hideLoading();
+            if (res.data.success) {
+              _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                title: reviewAction === 'approve' ? '验收通过' : '已拒绝',
+                icon: 'success'
+              });
+              setShowReviewModal(false);
+              setReviewFeedback('');
+
+              // 如果通过验收，跳转到支付页面
+              if (reviewAction === 'approve') {
+                setTimeout(function () {
+                  _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+                    url: "/pages/payment/index?taskId=".concat(id, "&type=final")
+                  });
+                }, 1500);
+              } else {
+                loadTaskDetail();
+              }
+            } else {
+              _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                title: res.data.message || '操作失败',
+                icon: 'none'
+              });
+            }
+            _context2.n = 4;
+            break;
+          case 3:
+            _context2.p = 3;
+            _t2 = _context2.v;
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().hideLoading();
+            console.error('提交验收失败:', _t2);
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+              title: '网络错误',
+              icon: 'none'
+            });
+          case 4:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[1, 3]]);
+    }));
+    return function handleSubmitReview() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  var handlePayFinal = function handlePayFinal() {
+    _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+      url: "/pages/payment/index?taskId=".concat(id, "&type=final")
+    });
+  };
+  var handleConfirm = /*#__PURE__*/function () {
+    var _ref3 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee4() {
+      return (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context4) {
+        while (1) switch (_context4.n) {
+          case 0:
+            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showModal({
+              title: '确认完成',
+              content: '确认任务已完成并最终验收通过吗？',
+              success: function () {
+                var _success = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3(modalRes) {
+                  var res, _t3;
+                  return (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
+                    while (1) switch (_context3.p = _context3.n) {
+                      case 0:
+                        if (!modalRes.confirm) {
+                          _context3.n = 4;
+                          break;
+                        }
+                        _context3.p = 1;
+                        _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showLoading({
+                          title: '处理中...'
+                        });
+                        _context3.n = 2;
+                        return _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().request({
+                          url: "http://localhost:3000/api/v1/tasks/flow/".concat(id, "/final-confirm"),
+                          method: 'POST',
+                          header: {
+                            'Authorization': "Bearer ".concat(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().getStorageSync('token'))
+                          }
+                        });
+                      case 2:
+                        res = _context3.v;
+                        _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().hideLoading();
+                        if (res.data.success) {
+                          _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                            title: '任务已完成',
+                            icon: 'success'
+                          });
+                          setTimeout(function () {
+                            _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateBack();
+                          }, 1500);
+                        } else {
+                          _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                            title: res.data.message || '操作失败',
+                            icon: 'none'
+                          });
+                        }
+                        _context3.n = 4;
+                        break;
+                      case 3:
+                        _context3.p = 3;
+                        _t3 = _context3.v;
+                        _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().hideLoading();
+                        console.error('确认失败:', _t3);
+                        _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                          title: '网络错误',
+                          icon: 'none'
+                        });
+                      case 4:
+                        return _context3.a(2);
+                    }
+                  }, _callee3, null, [[1, 3]]);
+                }));
+                function success(_x) {
+                  return _success.apply(this, arguments);
+                }
+                return success;
+              }()
+            });
+          case 1:
+            return _context4.a(2);
+        }
+      }, _callee4);
+    }));
+    return function handleConfirm() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  var handleCancelTask = function handleCancelTask() {
+    _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showModal({
+      title: '取消任务',
+      content: '取消任务后将扣除30%定金作为违约金，确认取消吗？',
+      confirmText: '确认取消',
+      confirmColor: '#EF4444',
+      success: function () {
+        var _success2 = (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee5(modalRes) {
+          var res, _t4;
+          return (0,_Users_alwan_code_qicheng_company_miniapp_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context5) {
+            while (1) switch (_context5.p = _context5.n) {
+              case 0:
+                if (!modalRes.confirm) {
+                  _context5.n = 4;
+                  break;
+                }
+                _context5.p = 1;
+                _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showLoading({
+                  title: '处理中...'
+                });
+                _context5.n = 2;
+                return _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().request({
+                  url: "http://localhost:3000/api/v1/tasks/".concat(id, "/cancel"),
+                  method: 'POST',
+                  header: {
+                    'Authorization': "Bearer ".concat(_tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().getStorageSync('token'))
+                  }
+                });
+              case 2:
+                res = _context5.v;
+                _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().hideLoading();
+                if (res.data.success) {
+                  _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                    title: '任务已取消',
+                    icon: 'success'
+                  });
+                  setTimeout(function () {
+                    _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateBack();
+                  }, 1500);
+                } else {
+                  _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                    title: res.data.message || '操作失败',
+                    icon: 'none'
+                  });
+                }
+                _context5.n = 4;
+                break;
+              case 3:
+                _context5.p = 3;
+                _t4 = _context5.v;
+                _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().hideLoading();
+                console.error('取消失败:', _t4);
+                _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                  title: '网络错误',
+                  icon: 'none'
+                });
+              case 4:
+                return _context5.a(2);
+            }
+          }, _callee5, null, [[1, 3]]);
+        }));
+        function success(_x2) {
+          return _success2.apply(this, arguments);
+        }
+        return success;
+      }()
+    });
+  };
+  var formatDate = function formatDate(dateStr) {
+    var date = new Date(dateStr);
+    return "".concat(date.getMonth() + 1, "\u6708").concat(date.getDate(), "\u65E5 ").concat(date.getHours(), ":").concat(String(date.getMinutes()).padStart(2, '0'));
+  };
+  var getStatusText = function getStatusText(status) {
+    var statusMap = {
+      'pending_match': '待匹配',
+      'matching': '匹配中',
+      'pending_accept': '待接单',
+      'in_progress': '进行中',
+      'pending_review': '待验收',
+      'reviewing': 'AI审核中',
+      'pending_payment': '待支付尾款',
+      'completed': '已完成',
+      'cancelled': '已取消'
+    };
+    return statusMap[status] || status;
+  };
+  if (loading) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "task-detail-page",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "loading",
+        children: "\u52A0\u8F7D\u4E2D..."
+      })
+    });
+  }
+  if (!task) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "task-detail-page",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "empty",
+        children: "\u4EFB\u52A1\u4E0D\u5B58\u5728"
+      })
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+    className: "task-detail-page",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.ScrollView, {
+      className: "content",
+      scrollY: true,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "info-card",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "card-header",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "card-title",
+            children: "\u4EFB\u52A1\u4FE1\u606F"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "status-badge status-".concat(task.status),
+            children: getStatusText(task.status)
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u4EFB\u52A1\u6807\u9898"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-value",
+            children: task.title
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u4EFB\u52A1\u7C7B\u578B"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-value",
+            children: task.taskType
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u4EFB\u52A1\u62A5\u916C"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-value price",
+            children: ["\xA5", task.price]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u622A\u6B62\u65E5\u671F"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-value",
+            children: formatDate(task.deadline)
+          })]
+        }), task.studentName && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u6267\u884C\u5B66\u751F"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-value",
+            children: task.studentName
+          })]
+        }), task.progressPercent !== undefined && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u4EFB\u52A1\u8FDB\u5EA6"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "progress-container",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "progress-bar",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+                className: "progress-fill",
+                style: {
+                  width: "".concat(task.progressPercent, "%")
+                }
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "progress-text",
+              children: [task.progressPercent, "%"]
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "info-row full",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-label",
+            children: "\u4EFB\u52A1\u63CF\u8FF0"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "info-value desc",
+            children: task.description
+          })]
+        })]
+      }), deliverable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "info-card",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "card-header",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "card-title",
+            children: "\u4EA4\u4ED8\u7269"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "submit-time",
+            children: ["\u63D0\u4EA4\u4E8E ", formatDate(deliverable.submittedAt)]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "deliverable-section",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "section-label",
+            children: "\u4F5C\u54C1\u8BF4\u660E"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "section-content",
+            children: deliverable.description
+          })]
+        }), deliverable.fileUrls && deliverable.fileUrls.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "deliverable-section",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "section-label",
+            children: "\u4F5C\u54C1\u622A\u56FE"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "image-grid",
+            children: deliverable.fileUrls.map(function (url, index) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Image, {
+                src: url,
+                className: "deliverable-image",
+                mode: "aspectFill",
+                onClick: function onClick() {
+                  _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().previewImage({
+                    urls: deliverable.fileUrls,
+                    current: url
+                  });
+                }
+              }, index);
+            })
+          })]
+        }), deliverable.links && deliverable.links.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "deliverable-section",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "section-label",
+            children: "\u76F8\u5173\u94FE\u63A5"
+          }), deliverable.links.map(function (link, index) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "link-item",
+              onClick: function onClick() {
+                _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().setClipboardData({
+                  data: link
+                });
+                _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().showToast({
+                  title: '链接已复制',
+                  icon: 'success'
+                });
+              },
+              children: link
+            }, index);
+          })]
+        }), deliverable.aiReviewStatus === 'approved' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "review-section ai-review",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "review-header",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "review-title",
+              children: "AI\u5BA1\u6838"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "review-badge approved",
+              children: "\u901A\u8FC7"
+            })]
+          }), deliverable.aiReviewScore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "review-score",
+            children: ["\u8BC4\u5206\uFF1A", deliverable.aiReviewScore, "/100"]
+          }), deliverable.aiReviewFeedback && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "review-feedback",
+            children: deliverable.aiReviewFeedback
+          })]
+        }), deliverable.aiReviewStatus === 'rejected' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "review-section ai-review",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "review-header",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "review-title",
+              children: "AI\u5BA1\u6838"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "review-badge rejected",
+              children: "\u672A\u901A\u8FC7"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "review-feedback",
+            children: deliverable.aiReviewFeedback
+          })]
+        }), deliverable.companyReviewStatus && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "review-section company-review",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "review-header",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "review-title",
+              children: "\u4F01\u4E1A\u9A8C\u6536"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+              className: "review-badge ".concat(deliverable.companyReviewStatus),
+              children: deliverable.companyReviewStatus === 'approved' ? '通过' : '未通过'
+            })]
+          }), deliverable.companyReviewFeedback && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "review-feedback",
+            children: deliverable.companyReviewFeedback
+          })]
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "quick-actions",
+      children: [task.studentId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "quick-btn",
+        onClick: function onClick() {
+          _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+            url: "/pages/student-profile/index?studentId=".concat(task.studentId)
+          });
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "quick-icon-wrapper icon-student"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+          className: "quick-text",
+          children: "\u5B66\u751F\u8D44\u6599"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "quick-btn",
+        onClick: function onClick() {
+          _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+            url: "/pages/task-progress/index?taskId=".concat(id)
+          });
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "quick-icon-wrapper icon-progress"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+          className: "quick-text",
+          children: "\u4EFB\u52A1\u8FDB\u5EA6"
+        })]
+      }), task.status === 'in_progress' && task.studentId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "quick-btn",
+        onClick: function onClick() {
+          _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+            url: "/pages/chat-detail/index?taskId=".concat(id, "&studentId=").concat(task.studentId)
+          });
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "quick-icon-wrapper icon-chat"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+          className: "quick-text",
+          children: "\u8054\u7CFB\u5B66\u751F"
+        })]
+      }), task.status === 'in_progress' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "quick-btn",
+        onClick: function onClick() {
+          _tarojs_taro__WEBPACK_IMPORTED_MODULE_5___default().navigateTo({
+            url: "/pages/add-requirement/index?taskId=".concat(id)
+          });
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "quick-icon-wrapper icon-requirement"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+          className: "quick-text",
+          children: "\u8FFD\u52A0\u9700\u6C42"
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "bottom-actions",
+      children: [deliverable && deliverable.aiReviewStatus === 'approved' && !deliverable.companyReviewStatus && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "action-buttons",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          className: "btn-reject",
+          onClick: function onClick() {
+            return handleReview('reject');
+          },
+          children: "\u62D2\u7EDD"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          className: "btn-approve",
+          onClick: function onClick() {
+            return handleReview('approve');
+          },
+          children: "\u9A8C\u6536\u901A\u8FC7"
+        })]
+      }), deliverable && deliverable.companyReviewStatus === 'approved' && task.status === 'pending_payment' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        className: "btn-pay",
+        onClick: handlePayFinal,
+        children: ["\u652F\u4ED8\u5C3E\u6B3E (\xA5", (task.price * 0.7).toFixed(2), ")"]
+      }), task.status === 'completed' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        className: "btn-confirm",
+        onClick: handleConfirm,
+        children: "\u786E\u8BA4\u5B8C\u6210"
+      }), (task.status === 'pending_match' || task.status === 'matching' || task.status === 'pending_accept' || task.status === 'in_progress') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        className: "btn-cancel",
+        onClick: handleCancelTask,
+        children: "\u53D6\u6D88\u4EFB\u52A1"
+      })]
+    }), showReviewModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+      className: "review-modal",
+      onClick: function onClick() {
+        return setShowReviewModal(false);
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+        className: "modal-content",
+        onClick: function onClick(e) {
+          return e.stopPropagation();
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "modal-header",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "modal-title",
+            children: reviewAction === 'approve' ? '验收通过' : '拒绝验收'
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+            className: "modal-close",
+            onClick: function onClick() {
+              return setShowReviewModal(false);
+            },
+            children: "\xD7"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "modal-body",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+            className: "form-item",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "form-label",
+              children: reviewAction === 'approve' ? '验收意见（选填）' : '拒绝原因（必填）'
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("textarea", {
+              className: "form-textarea",
+              value: reviewFeedback,
+              onInput: function onInput(e) {
+                return setReviewFeedback(e.detail.value);
+              },
+              placeholder: reviewAction === 'approve' ? '可以填写对学生的评价和建议...' : '请说明拒绝的原因，以便学生改进...',
+              maxlength: 500
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Text, {
+              className: "char-count",
+              children: [reviewFeedback.length, "/500"]
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.View, {
+          className: "modal-footer",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+            className: "modal-btn cancel",
+            onClick: function onClick() {
+              return setShowReviewModal(false);
+            },
+            children: "\u53D6\u6D88"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_tarojs_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+            className: "modal-btn confirm",
+            onClick: handleSubmitReview,
+            children: ["\u786E\u8BA4", reviewAction === 'approve' ? '通过' : '拒绝']
+          })]
+        })]
+      })
+    })]
+  });
+}
+
+/***/ }),
+
+/***/ "./src/pages/task-detail/index.tsx":
+/*!*****************************************!*\
+  !*** ./src/pages/task-detail/index.tsx ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
+
+/* harmony import */ var _tarojs_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tarojs/runtime */ "webpack/container/remote/@tarojs/runtime");
+/* harmony import */ var _tarojs_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_tarojs_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_tarojs_taro_loader_lib_entry_cache_js_name_pages_task_detail_index_index_tsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/task-detail/index!./index.tsx */ "./node_modules/@tarojs/taro-loader/lib/entry-cache.js?name=pages/task-detail/index!./src/pages/task-detail/index.tsx");
+
+
+var config = {};
+
+
+var inst = Page((0,_tarojs_runtime__WEBPACK_IMPORTED_MODULE_0__.createPageConfig)(_node_modules_tarojs_taro_loader_lib_entry_cache_js_name_pages_task_detail_index_index_tsx__WEBPACK_IMPORTED_MODULE_1__["default"], 'pages/task-detail/index', {root:{cn:[]}}, config || {}))
+
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_tarojs_taro_loader_lib_entry_cache_js_name_pages_task_detail_index_index_tsx__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
+/***/ })
+
+},
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
+/******/ __webpack_require__.O(0, ["taro","vendors","common"], function() { return __webpack_exec__("./src/pages/task-detail/index.tsx"); });
+/******/ var __webpack_exports__ = __webpack_require__.O();
+/******/ }
+]);
+//# sourceMappingURL=index.js.map
