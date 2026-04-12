@@ -43,16 +43,61 @@ export default function Story() {
     try {
       setLoading(true)
 
-      // 优先尝试从新的OPC故事墙API加载
+      // 模拟数据
+      const mockStories: Story[] = [
+        {
+          id: '1',
+          author: {
+            nickname: '小明',
+            avatar: 'https://via.placeholder.com/100',
+            opc: '创造力赛道'
+          },
+          content: '今天完成了第一个UI设计任务，虽然被打回了一次，但最终通过验收了！感觉自己在设计方面有了很大进步。',
+          images: [],
+          createdAt: '2小时前',
+          likes: 12,
+          comments: 3,
+          liked: false
+        },
+        {
+          id: '2',
+          author: {
+            nickname: '小红',
+            avatar: 'https://via.placeholder.com/100',
+            opc: '学习力赛道'
+          },
+          content: '用Python写了一个数据分析脚本，帮企业分析了销售数据。第一次把课堂知识应用到实际项目中，很有成就感！',
+          images: [],
+          createdAt: '5小时前',
+          likes: 18,
+          comments: 5,
+          liked: false
+        },
+        {
+          id: '3',
+          author: {
+            nickname: '小刚',
+            avatar: 'https://via.placeholder.com/100',
+            opc: '执行力赛道'
+          },
+          content: '连续完成了3个文案任务，发现自己越来越能抓住用户痛点了。感谢平台给我这么多实践机会！',
+          images: [],
+          createdAt: '1天前',
+          likes: 25,
+          comments: 8,
+          liked: false
+        }
+      ]
+
+      // 优先尝试从API加载
       try {
         const opcStories = await milestoneAPI.getStoryWall()
         if (opcStories.success && opcStories.stories) {
-          // 转换OPC故事墙格式到Story格式
           const formattedStories = opcStories.stories.map((s: any) => ({
             id: s.studentId,
             author: {
               nickname: s.username,
-              avatar: s.avatar || s.username[0],
+              avatar: s.avatar || 'https://via.placeholder.com/100',
               opc: s.opcTag
             },
             content: s.storyText,
@@ -60,56 +105,22 @@ export default function Story() {
             createdAt: '最近',
             likes: 0,
             comments: 0,
-            liked: false,
-            currentStatus: s.currentStatus,
-            level: s.level,
-            completedTasks: s.completedTasks
+            liked: false
           }))
           setStories(formattedStories)
           return
         }
       } catch (opcError) {
-        console.error('OPC故事墙API失败，尝试旧API:', opcError)
+        console.error('OPC故事墙API失败:', opcError)
       }
 
-      // 降级到旧API
+      // 尝试旧API
       try {
         const data = await storyAPI.getFeed(1)
         setStories(data)
       } catch (apiError) {
         console.error('API加载失败，使用模拟数据:', apiError)
-
         // 使用模拟数据
-        const mockStories: Story[] = [
-          {
-            id: '1',
-            author: {
-              nickname: '小明',
-              avatar: 'M',
-              opc: 'C, E'
-            },
-            content: '今天完成了第一个任务，感觉很有成就感！通过这个任务，我学会了如何更好地管理时间。',
-            images: [],
-            createdAt: '2小时前',
-            likes: 12,
-            comments: 3,
-            liked: false
-          },
-          {
-            id: '2',
-            author: {
-              nickname: '小红',
-              avatar: 'H',
-              opc: 'O, P'
-            },
-            content: '分享一下我的成长心得：坚持每天进步一点点，就能看到巨大的变化。',
-            images: [],
-            createdAt: '5小时前',
-            likes: 28,
-            comments: 7,
-            liked: false
-          }
-        ]
         setStories(mockStories)
       }
     } catch (err: any) {
