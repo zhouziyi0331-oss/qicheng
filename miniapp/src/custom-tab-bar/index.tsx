@@ -42,9 +42,8 @@ export default class CustomTabBar extends Component {
     const { isCenter } = this.state.list[index]
 
     if (isCenter) {
-      // 中央按钮：跳转到AI导师页面
-      Taro.switchTab({ url })
-      this.setSelected(index)
+      // 中央按钮：跳转到AI导师页面（使用navigateTo而不是switchTab）
+      Taro.navigateTo({ url })
     } else {
       // 普通 tab：切换页面
       this.setSelected(index)
