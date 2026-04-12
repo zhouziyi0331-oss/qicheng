@@ -34,6 +34,7 @@ export default defineAppConfig({
     'pages/partnerships/index',    // 合伙人关系
     'pages/exploration-reflection/index', // 探索反思
     'pages/exploration-patterns/index',   // 探索模式库
+    'pages/opc-incubation/index',  // OPC孵化计划
   ],
   window: {
     backgroundTextStyle: 'light',
