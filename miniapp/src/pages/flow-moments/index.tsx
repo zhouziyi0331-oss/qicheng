@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
 import { passionSparkAPI } from '../../services/api';
+import Loading from '../../components/Loading';
 import './index.scss';
 
 interface FlowMoment {
@@ -134,9 +135,7 @@ export default function FlowMoments() {
       {/* 内容区域 */}
       <ScrollView className='content-area' scrollY>
         {loading ? (
-          <View className='loading-state'>
-            <Text className='loading-text'>加载中...</Text>
-          </View>
+          <Loading text="正在加载记录..." />
         ) : (
           <>
             {/* 专注时刻列表 */}

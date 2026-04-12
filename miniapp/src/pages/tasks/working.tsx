@@ -2,6 +2,7 @@ import { View, Text } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { taskAPI } from '../../services/api'
+import Loading from '../../components/Loading'
 import './working.scss'
 
 interface TaskStep {
@@ -154,7 +155,7 @@ export default function TaskWorking() {
   }
 
   if (!task) {
-    return <View className="task-working-page">加载中...</View>
+    return <Loading text="正在加载任务..." />
   }
 
   return (

@@ -2,6 +2,7 @@ import { View, Text } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import api from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 /**
@@ -68,11 +69,7 @@ export default function ExplorationPatterns() {
   }
 
   if (loading) {
-    return (
-      <View className='exploration-patterns-page'>
-        <View className='loading'>加载中...</View>
-      </View>
-    )
+    return <Loading text="正在加载方法库..." />
   }
 
   return (

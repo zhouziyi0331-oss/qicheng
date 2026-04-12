@@ -1,6 +1,7 @@
 import { View, Text, ScrollView } from '@tarojs/components';
 import { useEffect, useState } from 'react';
 import Taro from '@tarojs/taro';
+import Loading from '../../components/Loading';
 import './index.scss';
 
 interface Task {
@@ -83,9 +84,7 @@ export default function PendingRatings() {
         onRefresherRefresh={loadPendingTasks}
       >
         {loading && tasks.length === 0 ? (
-          <View className="loading">
-            <Text>加载中...</Text>
-          </View>
+          <Loading text="正在加载待评价任务..." />
         ) : tasks.length === 0 ? (
           <View className="empty">
             <Text className="empty-icon">✓</Text>

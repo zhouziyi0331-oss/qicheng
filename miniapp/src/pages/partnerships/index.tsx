@@ -2,6 +2,7 @@ import { View, Text, Image } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import api from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 /**
@@ -104,11 +105,7 @@ export default function Partnerships() {
   }
 
   if (loading) {
-    return (
-      <View className='partnerships-page'>
-        <View className='loading'>加载中...</View>
-      </View>
-    )
+    return <Loading text="正在加载合作关系..." />
   }
 
   return (

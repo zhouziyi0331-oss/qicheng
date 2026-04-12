@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import { reportAPI } from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface Report {
@@ -131,11 +132,7 @@ export default function Reports() {
   }
 
   if (loading) {
-    return (
-      <View className="reports-page">
-        <View className="loading">加载中...</View>
-      </View>
-    )
+    return <Loading text="正在加载报告..." />
   }
 
   return (

@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, Button } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
+import Loading from '../../components/Loading';
 import './index.scss';
 
 interface Invitation {
@@ -148,9 +149,7 @@ export default function Invitations() {
       </View>
 
       {loading ? (
-        <View className="loading">
-          <Text>加载中...</Text>
-        </View>
+        <Loading text="正在加载任务邀请..." />
       ) : invitations.length === 0 ? (
         <View className="empty">
           <Text className="empty-text">暂无任务邀请</Text>

@@ -3,6 +3,7 @@ import Taro, { useRouter } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { getUserInfo, saveUserInfo } from '../../utils'
 import GuideDialog from '../../components/GuideDialog'
+import Loading from '../../components/Loading'
 import './detail.scss'
 import catLogo from '../../assets/images/cat-logo.png'
 
@@ -78,11 +79,7 @@ export default function TaskDetail() {
   }
 
   if (!task) {
-    return (
-      <View className="task-detail-page">
-        <Text>加载中...</Text>
-      </View>
-    )
+    return <Loading text="正在加载任务详情..." />
   }
 
   return (

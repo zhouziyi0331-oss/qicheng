@@ -1,6 +1,7 @@
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
+import Loading from '../../components/Loading';
 import './index.scss';
 
 interface ChatSession {
@@ -91,11 +92,7 @@ export default function ChatList() {
   };
 
   if (loading) {
-    return (
-      <View className="chat-list">
-        <View className="loading">加载中...</View>
-      </View>
-    );
+    return <Loading text="正在加载聊天列表..." />
   }
 
   if (sessions.length === 0) {

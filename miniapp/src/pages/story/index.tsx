@@ -2,6 +2,7 @@ import { View, Text, ScrollView, Image, Button, Input } from '@tarojs/components
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { storyAPI, milestoneAPI } from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface Story {
@@ -223,9 +224,7 @@ export default function Story() {
       {/* 故事列表 */}
       <ScrollView scrollY className="story-list">
         {loading ? (
-          <View className="loading-state">
-            <Text className="loading-text">加载中...</Text>
-          </View>
+          <Loading text="正在加载故事墙..." />
         ) : stories.length === 0 ? (
           <View className="empty-state">
             <Text className="empty-icon">📖</Text>

@@ -2,6 +2,7 @@ import { View, Text, Input, Button, ScrollView } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import { withdrawAPI } from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface WithdrawRecord {
@@ -153,9 +154,7 @@ export default function Withdraw() {
 
         <ScrollView className="records-list" scrollY>
           {loading ? (
-            <View className="loading-state">
-              <Text className="loading-text">加载中...</Text>
-            </View>
+            <Loading text="正在加载提现记录..." />
           ) : records.length === 0 ? (
             <View className="empty-state">
               <Text className="empty-icon">💰</Text>

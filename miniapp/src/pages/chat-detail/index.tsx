@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, Input, Image } from '@tarojs/components';
 import { useState, useEffect, useRef } from 'react';
 import Taro from '@tarojs/taro';
+import Loading from '../../components/Loading';
 import './index.scss';
 
 interface Message {
@@ -228,11 +229,7 @@ export default function ChatDetail() {
   };
 
   if (loading) {
-    return (
-      <View className="chat-detail">
-        <View className="loading">加载中...</View>
-      </View>
-    );
+    return <Loading text="正在加载聊天记录..." />
   }
 
   return (

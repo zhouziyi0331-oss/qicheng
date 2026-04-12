@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { taskAPI, matchAPI } from '../../services/api'
 import TaskDialog from '../../components/TaskDialog'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 export default function Tasks() {
@@ -148,9 +149,7 @@ export default function Tasks() {
 
       <ScrollView scrollY className="tasks-content">
         {loading ? (
-          <View className="loading-state">
-            <Text>加载中...</Text>
-          </View>
+          <Loading text="正在加载任务..." />
         ) : (
           <View className="task-list">
             {displayTasks.length > 0 ? (

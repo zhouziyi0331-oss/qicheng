@@ -2,6 +2,7 @@ import { View, Text, Canvas, ScrollView } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import { abilityAPI } from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface AbilityData {
@@ -213,13 +214,7 @@ export default function Ability() {
   }
 
   if (loading) {
-    return (
-      <View className="ability-page">
-        <View className="loading-state">
-          <Text className="loading-text">加载中...</Text>
-        </View>
-      </View>
-    )
+    return <Loading text="正在加载能力数据..." />
   }
 
   if (!abilityData) {

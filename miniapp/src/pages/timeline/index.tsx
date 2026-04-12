@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import { getGrowthTimeline } from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface TimelineItem {
@@ -143,11 +144,7 @@ export default function Timeline() {
   }
 
   if (loading) {
-    return (
-      <View className="timeline-page">
-        <View className="loading">加载中...</View>
-      </View>
-    )
+    return <Loading text="正在加载成长时间线..." />
   }
 
   return (

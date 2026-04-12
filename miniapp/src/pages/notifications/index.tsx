@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { notificationAPI } from '../../services/api'
 import { formatTime } from '../../utils'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface Notification {
@@ -101,9 +102,7 @@ export default function Notifications() {
       {/* 通知列表 */}
       <ScrollView scrollY className="notifications-list">
         {loading ? (
-          <View className="loading-state">
-            <Text className="loading-text">加载中...</Text>
-          </View>
+          <Loading text="正在加载通知..." />
         ) : notifications.length === 0 ? (
           <View className="empty-state">
             <Text className="empty-icon">📭</Text>

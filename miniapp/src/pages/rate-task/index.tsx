@@ -1,6 +1,7 @@
 import { View, Text, Textarea, ScrollView } from '@tarojs/components';
 import { useEffect, useState } from 'react';
 import Taro, { useRouter } from '@tarojs/taro';
+import Loading from '../../components/Loading';
 import './index.scss';
 
 interface RatingTag {
@@ -207,13 +208,7 @@ export default function RateTask() {
   };
 
   if (loading) {
-    return (
-      <View className="rate-task-page">
-        <View className="loading">
-          <Text>加载中...</Text>
-        </View>
-      </View>
-    );
+    return <Loading text="正在加载任务信息..." />
   }
 
   return (

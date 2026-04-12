@@ -2,6 +2,7 @@ import { View, Text, ScrollView, Button } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import { taskAPI } from '../../services/api'
+import Loading from '../../components/Loading'
 import './index.scss'
 
 interface Task {
@@ -193,9 +194,7 @@ export default function MyTasks() {
 
       <ScrollView className="tasks-list" scrollY>
         {loading ? (
-          <View className="loading-state">
-            <Text className="loading-text">加载中...</Text>
-          </View>
+          <Loading text="正在加载我的任务..." />
         ) : tasks.length === 0 ? (
           <View className="empty-state">
             <Text className="empty-icon">📋</Text>
