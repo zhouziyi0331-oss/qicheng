@@ -35,6 +35,8 @@ export default defineAppConfig({
     'pages/exploration-reflection/index', // 探索反思
     'pages/exploration-patterns/index',   // 探索模式库
     'pages/opc-incubation/index',  // OPC孵化计划
+    'pages/alliances/index',       // 团队协作
+    'pages/notifications/index',   // 通知中心
   ],
   window: {
     backgroundTextStyle: 'light',

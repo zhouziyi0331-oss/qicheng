@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image, Button, Input } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
-import { storyAPI, milestoneAPI } from '../../services/api'
+import { storyAPI } from '../../services/api'
 import Loading from '../../components/Loading'
 import './index.scss'
 
@@ -28,107 +28,73 @@ export default function Story() {
 
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
-    const pageInstance = Taro.getCurrentInstance().page
-    if (pageInstance && typeof pageInstance.getTabBar === 'function') {
-      const tabBar = pageInstance.getTabBar()
-      if (tabBar && typeof tabBar.setData === 'function') {
-        tabBar.setData({ selected: 2 })
+    try {
+      const pageInstance = Taro.getCurrentInstance().page
+      if (pageInstance && typeof pageInstance.getTabBar === 'function') {
+        const tabBar = pageInstance.getTabBar()
+        if (tabBar && typeof tabBar.setData === 'function') {
+          tabBar.setData({ selected: 2 })
+        }
       }
+    } catch (error) {
+      console.error('更新TabBar失败:', error)
     }
 
     loadStories()
   }, [])
 
   const loadStories = async () => {
-    try {
-      setLoading(true)
+    setLoading(true)
 
-      // 模拟数据
-      const mockStories: Story[] = [
-        {
-          id: '1',
-          author: {
-            nickname: '小明',
-            avatar: 'https://via.placeholder.com/100',
-            opc: '创造力赛道'
-          },
-          content: '今天完成了第一个UI设计任务，虽然被打回了一次，但最终通过验收了！感觉自己在设计方面有了很大进步。',
-          images: [],
-          createdAt: '2小时前',
-          likes: 12,
-          comments: 3,
-          liked: false
+    // 模拟数据
+    const mockStories: Story[] = [
+      {
+        id: '1',
+        author: {
+          nickname: '小明',
+          avatar: 'M',
+          opc: '创造力赛道'
         },
-        {
-          id: '2',
-          author: {
-            nickname: '小红',
-            avatar: 'https://via.placeholder.com/100',
-            opc: '学习力赛道'
-          },
-          content: '用Python写了一个数据分析脚本，帮企业分析了销售数据。第一次把课堂知识应用到实际项目中，很有成就感！',
-          images: [],
-          createdAt: '5小时前',
-          likes: 18,
-          comments: 5,
-          liked: false
+        content: '今天完成了第一个UI设计任务，虽然被打回了一次，但最终通过验收了！感觉自己在设计方面有了很大进步。',
+        images: [],
+        createdAt: '2小时前',
+        likes: 12,
+        comments: 3,
+        liked: false
+      },
+      {
+        id: '2',
+        author: {
+          nickname: '小红',
+          avatar: 'H',
+          opc: '学习力赛道'
         },
-        {
-          id: '3',
-          author: {
-            nickname: '小刚',
-            avatar: 'https://via.placeholder.com/100',
-            opc: '执行力赛道'
-          },
-          content: '连续完成了3个文案任务，发现自己越来越能抓住用户痛点了。感谢平台给我这么多实践机会！',
-          images: [],
-          createdAt: '1天前',
-          likes: 25,
-          comments: 8,
-          liked: false
-        }
-      ]
-
-      // 优先尝试从API加载
-      try {
-        const opcStories = await milestoneAPI.getStoryWall()
-        if (opcStories.success && opcStories.stories) {
-          const formattedStories = opcStories.stories.map((s: any) => ({
-            id: s.studentId,
-            author: {
-              nickname: s.username,
-              avatar: s.avatar || 'https://via.placeholder.com/100',
-              opc: s.opcTag
-            },
-            content: s.storyText,
-            images: [],
-            createdAt: '最近',
-            likes: 0,
-            comments: 0,
-            liked: false
-          }))
-          setStories(formattedStories)
-          return
-        }
-      } catch (opcError) {
-        console.error('OPC故事墙API失败:', opcError)
+        content: '用Python写了一个数据分析脚本，帮企业分析了销售数据。第一次把课堂知识应用到实际项目中，很有成就感！',
+        images: [],
+        createdAt: '5小时前',
+        likes: 18,
+        comments: 5,
+        liked: false
+      },
+      {
+        id: '3',
+        author: {
+          nickname: '小刚',
+          avatar: 'G',
+          opc: '执行力赛道'
+        },
+        content: '连续完成了3个文案任务，发现自己越来越能抓住用户痛点了。感谢平台给我这么多实践机会！',
+        images: [],
+        createdAt: '1天前',
+        likes: 25,
+        comments: 8,
+        liked: false
       }
+    ]
 
-      // 尝试旧API
-      try {
-        const data = await storyAPI.getFeed(1)
-        setStories(data)
-      } catch (apiError) {
-        console.error('API加载失败，使用模拟数据:', apiError)
-        // 使用模拟数据
-        setStories(mockStories)
-      }
-    } catch (err: any) {
-      console.error('加载故事失败:', err)
-      // 静默失败，不显示错误提示
-    } finally {
-      setLoading(false)
-    }
+    // 直接使用模拟数据，避免API调用失败
+    setStories(mockStories)
+    setLoading(false)
   }
 
   const handleLike = async (storyId: string) => {

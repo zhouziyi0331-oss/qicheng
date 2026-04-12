@@ -252,6 +252,66 @@
   }
 }
 
+/* 能力雷达图卡片 */
+.radar-card {
+  margin: 20px;
+  @include card-super-rounded;
+  padding: 24px;
+  background: linear-gradient(135deg, $accent-pink 0%, $accent-blue 100%);
+  box-shadow: $shadow-lg;
+  transition: all 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.radar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $card-white;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.card-arrow {
+  font-size: 24px;
+  color: $card-white;
+  opacity: 0.8;
+}
+
+.radar-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.radar-level {
+  font-size: 24px;
+  font-weight: 700;
+  color: $card-white;
+}
+
+.radar-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 /* 功能菜单 */
 .menu-section {
   padding: 0 40px;

@@ -9,12 +9,16 @@ export default function Index() {
 
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
-    const page = Taro.getCurrentInstance().page
-    if (page && typeof page.getTabBar === 'function') {
-      const tabBar = page.getTabBar()
-      if (tabBar && typeof tabBar.setData === 'function') {
-        tabBar.setData({ selected: 0 })
+    try {
+      const page = Taro.getCurrentInstance().page
+      if (page && typeof page.getTabBar === 'function') {
+        const tabBar = page.getTabBar()
+        if (tabBar && typeof tabBar.setData === 'function') {
+          tabBar.setData({ selected: 0 })
+        }
       }
+    } catch (error) {
+      console.log('TabBar更新失败:', error)
     }
 
     // 检查本地用户信息
