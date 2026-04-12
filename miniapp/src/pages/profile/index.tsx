@@ -165,15 +165,15 @@ export default function Profile() {
         <View className="user-stats">
           <View className="stat-item" onClick={() => handleNavigate('/pages/my-tasks/index')}>
             <Text className="stat-value">{radarData?.completed_tasks || 0}</Text>
-            <Text className="stat-label">完成任务</Text>
+            <Text className="stat-label">完成项目</Text>
           </View>
           <View className="stat-item" onClick={() => handleNavigate('/pages/journey/index')}>
             <Text className="stat-value">{radarData?.ongoing_tasks || 0}</Text>
-            <Text className="stat-label">进行中</Text>
+            <Text className="stat-label">正在流动</Text>
           </View>
           <View className="stat-item" onClick={() => Taro.switchTab({ url: '/pages/story/index' })}>
             <Text className="stat-value">{radarData?.stories || 0}</Text>
-            <Text className="stat-label">故事</Text>
+            <Text className="stat-label">成长故事</Text>
           </View>
         </View>
       </View>
@@ -187,7 +187,7 @@ export default function Profile() {
           </svg>
         </View>
         <View className="balance-content">
-          <Text className="balance-label">可提现余额</Text>
+          <Text className="balance-label">你的生命资产</Text>
           <Text className="balance-value">¥{balance.toFixed(2)}</Text>
         </View>
         <Text className="balance-arrow">→</Text>
@@ -196,7 +196,7 @@ export default function Profile() {
       {/* 六维能力图 */}
       {radarData && radarData.dimensions && (
         <View className="ability-card" onClick={() => handleNavigate('/pages/ability/index')}>
-          <Text className="card-title">六维能力</Text>
+          <Text className="card-title">你的河道地图</Text>
           <View className="ability-list">
             {Object.entries(radarData.dimensions).map(([key, value]: [string, any]) => (
               <View key={key} className="ability-item">
@@ -213,14 +213,14 @@ export default function Profile() {
 
       {/* 功能菜单 */}
       <View className="menu-section">
-        <Text className="section-title">六维能力</Text>
+        <Text className="section-title">成长工具</Text>
 
         <View className="menu-list">
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/my-tasks/index')}>
             <View className="menu-icon-circle menu-icon-green">
               <Text className="icon-text">✓</Text>
             </View>
-            <Text className="menu-label">我的任务</Text>
+            <Text className="menu-label">我的项目</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 
@@ -236,7 +236,7 @@ export default function Profile() {
             <View className="menu-icon-circle menu-icon-pink">
               <Text className="icon-text">◎</Text>
             </View>
-            <Text className="menu-label">OPC报告</Text>
+            <Text className="menu-label">OPC成长报告</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 

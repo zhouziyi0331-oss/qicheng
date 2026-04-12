@@ -94,7 +94,7 @@ export default function Index() {
         </View>
 
         <Text className="hero-title">乘着问题，飞跃山峰</Text>
-        <Text className="hero-subtitle">在真实任务中成长，让每一次尝试都成为你的勋章</Text>
+        <Text className="hero-subtitle">不是证明你多有用，而是对自己认真</Text>
       </View>
 
       {/* 登录按钮或推荐卡片 */}
@@ -103,7 +103,7 @@ export default function Index() {
           <Button className="primary-btn" onClick={handleWechatLogin}>
             开始你的第一步
           </Button>
-          <Text className="login-hint">微信一键登录，开启成长之旅</Text>
+          <Text className="login-hint">个性是AI时代的第一财产，创造力是最值钱的资产</Text>
         </View>
       ) : (
         <View className="content-section">
@@ -112,32 +112,32 @@ export default function Index() {
             <View className="opc-test-card" onClick={handleStartTest}>
               <View className="test-card-header">
                 <Text className="test-card-title">发现你的OPC人格</Text>
-                <Text className="test-card-badge">必做</Text>
+                <Text className="test-card-badge">第一步</Text>
               </View>
-              <Text className="test-card-desc">25道题，8分钟，了解你的六维能力</Text>
+              <Text className="test-card-desc">这不是考试，是一面镜子——测的不是分数，是你适合用AI创造什么</Text>
               <View className="test-card-features">
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
-                  <Text className="feature-text">获得专属标签</Text>
+                  <Text className="feature-text">让生命资产漏出来</Text>
                 </View>
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
-                  <Text className="feature-text">解锁任务推荐</Text>
+                  <Text className="feature-text">找到属于你的河道</Text>
                 </View>
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
-                  <Text className="feature-text">看见成长轨迹</Text>
+                  <Text className="feature-text">看见自己的可能性</Text>
                 </View>
               </View>
               <View className="test-card-btn">
-                <Text className="btn-text">开始测评 →</Text>
+                <Text className="btn-text">开始探索 →</Text>
               </View>
             </View>
           )}
 
           {/* 推荐区域 */}
           <View className="section-header">
-            <Text className="section-title">从这里开始</Text>
+            <Text className="section-title">你的河道</Text>
             <Text className="section-link" onClick={() => Taro.switchTab({ url: '/pages/tasks/index' })}>查看全部</Text>
           </View>
 
@@ -146,8 +146,8 @@ export default function Index() {
               <View className="card-icon-small">
                 <Text className="icon-symbol">✓</Text>
               </View>
-              <Text className="card-title-small">遇见任务</Text>
-              <Text className="card-desc-small">适合现在的你的那一个</Text>
+              <Text className="card-title-small">遇见项目</Text>
+              <Text className="card-desc-small">不是抢单，是被选中</Text>
             </View>
 
             <View className="recommend-card card-yellow" onClick={() => handleNavigate('/pages/ability/index')}>
@@ -155,21 +155,21 @@ export default function Index() {
                 <Text className="icon-symbol">◈</Text>
               </View>
               <Text className="card-title-small">看见成长</Text>
-              <Text className="card-desc-small">你的进步，一目了然</Text>
+              <Text className="card-desc-small">这条河又往前流了一段</Text>
             </View>
           </View>
 
           {/* 热门区域 */}
           <View className="section-header">
-            <Text className="section-title">他们的故事</Text>
+            <Text className="section-title">他们的河</Text>
           </View>
 
           <View className="popular-card card-pink" onClick={() => Taro.switchTab({ url: '/pages/story/index' })}>
             <Text className="popular-title">故事墙</Text>
-            <Text className="popular-desc">每个人都在用自己的方式成长，来看看他们的故事</Text>
+            <Text className="popular-desc">每个人都在用自己的方式流动，来看看他们找到了什么</Text>
             <View className="popular-tags">
-              <View className="tag tag-pink">真实经历</View>
-              <View className="tag tag-pink">共鸣时刻</View>
+              <View className="tag tag-pink">热情火花</View>
+              <View className="tag tag-pink">成长轨迹</View>
               <View className="tag tag-dark">持续更新</View>
             </View>
           </View>

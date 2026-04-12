@@ -380,12 +380,12 @@ export default function OPCTest() {
       .slice(0, 2)
 
     const dimensionNames: any = {
-      learning: '学习型',
+      learning: '探索者',
       execution: '行动派',
-      communication: '沟通者',
-      innovation: '创新者',
-      collaboration: '协作者',
-      resilience: '抗压王'
+      communication: '连接者',
+      innovation: '创造者',
+      collaboration: '共建者',
+      resilience: '韧性者'
     }
 
     return sortedDimensions.map(([key]) => dimensionNames[key]).join('·')
@@ -395,18 +395,18 @@ export default function OPCTest() {
     const { learning, execution, communication, innovation, collaboration, resilience } = scores
 
     const strengths = []
-    if (learning >= 70) strengths.push('学习能力强')
-    if (execution >= 70) strengths.push('执行力出色')
-    if (communication >= 70) strengths.push('善于沟通')
-    if (innovation >= 70) strengths.push('富有创新精神')
-    if (collaboration >= 70) strengths.push('团队协作能力强')
-    if (resilience >= 70) strengths.push('抗压能力优秀')
+    if (learning >= 70) strengths.push('热爱探索新知')
+    if (execution >= 70) strengths.push('说干就干')
+    if (communication >= 70) strengths.push('善于连接')
+    if (innovation >= 70) strengths.push('富有创造力')
+    if (collaboration >= 70) strengths.push('喜欢共建')
+    if (resilience >= 70) strengths.push('韧性十足')
 
     if (strengths.length === 0) {
-      return '你是一个全面发展的人才，各项能力均衡'
+      return '你是一个全面发展的人，各项能力均衡'
     }
 
-    return `你是一个${strengths.join('、')}的人才`
+    return `你身上有这些火花：${strengths.join('、')}`
   }
 
   const handleComplete = () => {
@@ -422,7 +422,7 @@ export default function OPCTest() {
       <View className="opc-test-page">
         <View className="result-container">
           <View className="result-header">
-            <Text className="result-title">测评完成！</Text>
+            <Text className="result-title">你被看见了</Text>
             <Text className="result-subtitle">你的OPC标签是</Text>
           </View>
 
@@ -434,7 +434,7 @@ export default function OPCTest() {
 
           <View className="scores-display">
             <View className="score-item">
-              <Text className="score-label">学习力</Text>
+              <Text className="score-label">探索力</Text>
               <View className="score-bar">
                 <View className="score-fill" style={{ width: `${opcResult.scores.learning}%`, background: '#F9C6D9' }} />
               </View>
@@ -442,7 +442,7 @@ export default function OPCTest() {
             </View>
 
             <View className="score-item">
-              <Text className="score-label">执行力</Text>
+              <Text className="score-label">行动力</Text>
               <View className="score-bar">
                 <View className="score-fill" style={{ width: `${opcResult.scores.execution}%`, background: '#A8D8EA' }} />
               </View>
@@ -450,7 +450,7 @@ export default function OPCTest() {
             </View>
 
             <View className="score-item">
-              <Text className="score-label">沟通力</Text>
+              <Text className="score-label">连接力</Text>
               <View className="score-bar">
                 <View className="score-fill" style={{ width: `${opcResult.scores.communication}%`, background: '#D4F291' }} />
               </View>
@@ -458,7 +458,7 @@ export default function OPCTest() {
             </View>
 
             <View className="score-item">
-              <Text className="score-label">创新力</Text>
+              <Text className="score-label">创造力</Text>
               <View className="score-bar">
                 <View className="score-fill" style={{ width: `${opcResult.scores.innovation}%`, background: '#FFE082' }} />
               </View>
@@ -466,7 +466,7 @@ export default function OPCTest() {
             </View>
 
             <View className="score-item">
-              <Text className="score-label">协作力</Text>
+              <Text className="score-label">共建力</Text>
               <View className="score-bar">
                 <View className="score-fill" style={{ width: `${opcResult.scores.collaboration}%`, background: '#B39DDB' }} />
               </View>
@@ -474,7 +474,7 @@ export default function OPCTest() {
             </View>
 
             <View className="score-item">
-              <Text className="score-label">抗压力</Text>
+              <Text className="score-label">韧性</Text>
               <View className="score-bar">
                 <View className="score-fill" style={{ width: `${opcResult.scores.resilience}%`, background: '#80CBC4' }} />
               </View>
@@ -483,7 +483,7 @@ export default function OPCTest() {
           </View>
 
           <View className="complete-btn" onClick={handleComplete}>
-            <Text className="btn-text">开启OPC之旅</Text>
+            <Text className="btn-text">开始你的河</Text>
           </View>
         </View>
       </View>

@@ -121,13 +121,13 @@ export default function Tasks() {
           className={`filter-tab ${activeFilter === 'matched' ? 'active' : ''}`}
           onClick={() => setActiveFilter('matched')}
         >
-          <Text>AI推荐</Text>
+          <Text>为你推荐</Text>
         </View>
         <View
           className={`filter-tab ${activeFilter === 'all' ? 'active' : ''}`}
           onClick={() => setActiveFilter('all')}
         >
-          <Text>全部任务</Text>
+          <Text>探索更多</Text>
         </View>
       </View>
 
@@ -148,7 +148,7 @@ export default function Tasks() {
                   {/* AI推荐标签 */}
                   {activeFilter === 'matched' && task.match_score && (
                     <View className="match-badge">
-                      <Text className="match-text">匹配度 {Math.round(task.match_score * 100)}%</Text>
+                      <Text className="match-text">这个项目适合你 {Math.round(task.match_score * 100)}%</Text>
                     </View>
                   )}
 
@@ -198,8 +198,8 @@ export default function Tasks() {
               ))
             ) : (
               <View className="empty-state">
-                <Text className="empty-text">没有找到相关任务</Text>
-                <Text className="empty-hint">试试其他关键词或筛选条件</Text>
+                <Text className="empty-text">暂时没有适合你的项目</Text>
+                <Text className="empty-hint">试试探索更多，或者完善你的OPC画像</Text>
               </View>
             )}
           </View>
