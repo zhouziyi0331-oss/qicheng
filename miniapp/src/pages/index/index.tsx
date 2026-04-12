@@ -105,7 +105,7 @@ export default function Index() {
       {!user ? (
         <View className="login-section">
           <Button className="primary-btn" onClick={handleWechatLogin}>
-            开始你的河
+            开始探索
           </Button>
           <Text className="login-hint">把兴趣转化为技能，让成长看得见</Text>
           <Text className="login-hint-sub">个性是AI时代的第一财产，创造力是最值钱的资产</Text>
@@ -119,23 +119,23 @@ export default function Index() {
                 <Text className="test-card-title">发现你的能力方向</Text>
                 <Text className="test-card-badge">第一步</Text>
               </View>
-              <Text className="test-card-desc">这不是考试，是一面镜子——不是蒸馏常规技能，是找到你的不同</Text>
+              <Text className="test-card-desc">不是标准答案的考试，而是发现你独特能力的测试</Text>
               <View className="test-card-features">
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
-                  <Text className="feature-text">让成长看得见</Text>
+                  <Text className="feature-text">了解你擅长什么</Text>
                 </View>
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
-                  <Text className="feature-text">找到属于你的能力方向</Text>
+                  <Text className="feature-text">发现你的优势在哪</Text>
                 </View>
                 <View className="feature-item">
                   <Text className="feature-icon">✓</Text>
-                  <Text className="feature-text">看见自己的可能性</Text>
+                  <Text className="feature-text">找到适合你的方向</Text>
                 </View>
               </View>
               <View className="test-card-btn">
-                <Text className="btn-text">开始你的河 →</Text>
+                <Text className="btn-text">开始测试 →</Text>
               </View>
             </View>
           )}
