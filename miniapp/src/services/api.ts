@@ -29,7 +29,8 @@ async function request(url: string, options: RequestOptions = {}) {
       url: `${BASE_URL}${url}`,
       method,
       data,
-      header
+      header,
+      timeout: 60000 // 设置60秒超时，AI回复需要较长时间
     })
 
     if (response.statusCode === 200) {

@@ -180,7 +180,7 @@ export default function Mentor() {
           <Image src={catLogo} className="mentor-logo-img" mode="aspectFit" />
         </View>
         <View className="mentor-info">
-          <Text className="mentor-name">启程小猫</Text>
+          <Text className="mentor-name">橙子</Text>
           <Text className="mentor-status">在线 · AI成长伙伴</Text>
         </View>
       </View>
@@ -260,8 +260,8 @@ export default function Mentor() {
                 <View className="quick-reply-item" onClick={() => setInputText('给我一些建议')}>
                   给点建议
                 </View>
-                <View className="quick-reply-item" onClick={() => setInputText('我想了解OPC')}>
-                  了解OPC
+                <View className="quick-reply-item" onClick={() => setInputText('我想了解能力测试')}>
+                  能力测试
                 </View>
               </>
             )}
