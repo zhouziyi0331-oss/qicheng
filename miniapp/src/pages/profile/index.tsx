@@ -228,8 +228,24 @@ export default function Profile() {
             <Text className="menu-arrow">→</Text>
           </View>
 
-          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/journey/index')}>
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/flow-moments/index')}>
             <View className="menu-icon-circle menu-icon-blue">
+              <Text className="icon-text">🌊</Text>
+            </View>
+            <Text className="menu-label">穿越感时刻</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/life-question/index')}>
+            <View className="menu-icon-circle menu-icon-purple">
+              <Text className="icon-text">?</Text>
+            </View>
+            <Text className="menu-label">我的生命问题</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/journey/index')}>
+            <View className="menu-icon-circle menu-icon-orange">
               <Text className="icon-text">◈</Text>
             </View>
             <Text className="menu-label">成长旅程</Text>
