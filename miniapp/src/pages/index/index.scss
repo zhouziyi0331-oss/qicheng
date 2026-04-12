@@ -463,3 +463,43 @@
     transform: translateY(-20px);
   }
 }
+
+/* 生命问题卡片 */
+.life-question-card {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFE8F0 100%);
+  border-radius: 32px;
+  padding: 48px 40px;
+  margin-bottom: 64px;
+  box-shadow: 0 12px 32px rgba(249, 198, 217, 0.3);
+  border: 2px solid #F9C6D9;
+}
+
+.life-question-title {
+  display: block;
+  font-size: 36px;
+  font-weight: 600;
+  color: #2D3436;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.life-question-desc {
+  display: block;
+  font-size: 28px;
+  color: #636E72;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.life-question-btn {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  border-radius: 24px;
+  padding: 24px 32px;
+  text-align: center;
+
+  .btn-text {
+    font-size: 28px;
+    font-weight: 500;
+    color: #FFFFFF;
+  }
+}

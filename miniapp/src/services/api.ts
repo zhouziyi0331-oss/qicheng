@@ -311,6 +311,37 @@ export const milestoneAPI = {
     request('/story-wall/submit', { method: 'POST', data: { userId, storyText, currentStatus } })
 }
 
+// 生命问题API
+export const lifeQuestionAPI = {
+  // 保存/更新生命问题
+  save: (userId: string, question: string) =>
+    request('/life-question/save', { method: 'POST', data: { userId, question } }),
+
+  // 获取生命问题
+  get: (userId: string) => request(`/life-question/${userId}`),
+
+  // 添加反思记录
+  addReflection: (userId: string, taskId: string, reflection: string) =>
+    request('/life-question/reflection', { method: 'POST', data: { userId, taskId, reflection } })
+}
+
+// 热情火花API
+export const passionSparkAPI = {
+  // 捕捉热情火花
+  capture: (studentId: string, taskId: string, sparkText: string, context: string) =>
+    request('/passion-spark/capture', { method: 'POST', data: { studentId, taskId, sparkText, context } }),
+
+  // 获取热情火花列表
+  getList: (studentId: string) => request(`/passion-spark/${studentId}`),
+
+  // 标记想要继续探索
+  markExplore: (sparkId: string, wantExplore: boolean) =>
+    request('/passion-spark/mark-explore', { method: 'POST', data: { sparkId, wantExplore } }),
+
+  // 获取想要探索的火花
+  getWantExplore: (studentId: string) => request(`/passion-spark/${studentId}/want-explore`)
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -324,5 +355,7 @@ export default {
   opc: opcAPI,
   match: matchAPI,
   mentorNew: mentorNewAPI,
-  milestone: milestoneAPI
+  milestone: milestoneAPI,
+  lifeQuestion: lifeQuestionAPI,
+  passionSpark: passionSparkAPI
 }

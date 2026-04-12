@@ -28,6 +28,7 @@ export default defineAppConfig({
     'pages/chat-detail/index',     // 聊天详情
     'pages/pending-ratings/index', // 待评价任务
     'pages/rate-task/index',       // 评价任务
+    'pages/life-question/index',   // 生命问题记录器
   ],
   window: {
     backgroundTextStyle: 'light',
