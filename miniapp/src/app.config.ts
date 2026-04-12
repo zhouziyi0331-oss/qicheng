@@ -31,6 +31,7 @@ export default defineAppConfig({
     'pages/rate-task/index',       // 评价任务
     'pages/life-question/index',   // 生命问题记录器
     'pages/flow-moments/index',    // 穿越感时刻记录
+    'pages/partnerships/index',    // 合伙人关系
   ],
   window: {
     backgroundTextStyle: 'light',

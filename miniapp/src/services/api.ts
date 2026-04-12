@@ -342,6 +342,37 @@ export const passionSparkAPI = {
   getWantExplore: (studentId: string) => request(`/passion-spark/${studentId}/want-explore`)
 }
 
+// 合伙人关系API
+export const partnershipAPI = {
+  // 获取企业与学生的合伙关系
+  getPartnership: (companyId: string, studentId: string) =>
+    request(`/partnerships/${companyId}/${studentId}`),
+
+  // 更新合作次数（任务完成后自动调用）
+  updateCollaborationCount: (companyId: string, studentId: string) =>
+    request('/partnerships/update-count', { method: 'POST', data: { companyId, studentId } }),
+
+  // 企业发起合伙人邀请
+  invitePartner: (companyId: string, studentId: string, partnershipTerms: any) =>
+    request('/partnerships/invite', { method: 'POST', data: { companyId, studentId, partnershipTerms } }),
+
+  // 学生接受/拒绝合伙人邀请
+  respondToInvitation: (companyId: string, studentId: string, accept: boolean) =>
+    request('/partnerships/respond', { method: 'POST', data: { companyId, studentId, accept } }),
+
+  // 获取学生的所有合伙关系
+  getStudentPartnerships: (studentId: string) =>
+    request(`/partnerships/student/${studentId}`),
+
+  // 获取企业的所有合伙关系
+  getCompanyPartnerships: (companyId: string) =>
+    request(`/partnerships/company/${companyId}`),
+
+  // 记录合伙人互动
+  recordInteraction: (companyId: string, studentId: string, interactionType: string, interactionData: any) =>
+    request('/partnerships/interaction', { method: 'POST', data: { companyId, studentId, interactionType, interactionData } })
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -357,31 +388,6 @@ export default {
   mentorNew: mentorNewAPI,
   milestone: milestoneAPI,
   lifeQuestion: lifeQuestionAPI,
-  passionSpark: passionSparkAPI
-}
-
-// AI导师系统API（使命是河版本）
-export const mentorAPI = {
-  // AI导师对话
-  chat: (studentId: string, taskId: string, message: string, conversationHistory: any[]) =>
-    request('/mentor/chat', { method: 'POST', data: { studentId, taskId, message, conversationHistory } }),
-
-  // 生成接单欢迎消息
-  getWelcomeMessage: (studentId: string, taskId: string) =>
-    request('/mentor/welcome', { method: 'POST', data: { studentId, taskId } }),
-
-  // 生成里程碑反馈消息
-  getMilestoneMessage: (studentId: string, taskId: string) =>
-    request('/mentor/milestone', { method: 'POST', data: { studentId, taskId } }),
-
-  // 生成打回修改消息
-  getRejectionMessage: (studentId: string, taskId: string, rejectionReason: string, goodPoints: string[]) =>
-    request('/mentor/rejection', { method: 'POST', data: { studentId, taskId, rejectionReason, goodPoints } }),
-
-  // 记录导师观察
-  recordObservation: (studentId: string, taskId: string, observationType: string, observationContent: string, observationData?: any) =>
-    request('/mentor/observe', { method: 'POST', data: { studentId, taskId, observationType, observationContent, observationData } }),
-
-  // 获取学生的观察记录
-  getObservations: (studentId: string) => request(`/mentor/observations/${studentId}`)
+  passionSpark: passionSparkAPI,
+  partnership: partnershipAPI
 }

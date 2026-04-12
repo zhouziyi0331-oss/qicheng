@@ -244,8 +244,16 @@ export default function Profile() {
             <Text className="menu-arrow">→</Text>
           </View>
 
-          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/journey/index')}>
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/partnerships/index')}>
             <View className="menu-icon-circle menu-icon-orange">
+              <Text className="icon-text">🤝</Text>
+            </View>
+            <Text className="menu-label">合作关系</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/journey/index')}>
+            <View className="menu-icon-circle menu-icon-pink">
               <Text className="icon-text">◈</Text>
             </View>
             <Text className="menu-label">成长旅程</Text>
@@ -253,7 +261,7 @@ export default function Profile() {
           </View>
 
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/reports/index')}>
-            <View className="menu-icon-circle menu-icon-pink">
+            <View className="menu-icon-circle menu-icon-yellow">
               <Text className="icon-text">◎</Text>
             </View>
             <Text className="menu-label">OPC成长报告</Text>
