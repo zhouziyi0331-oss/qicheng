@@ -193,15 +193,15 @@
 
 .quick-reply-item {
   flex-shrink: 0;
-  padding: 14px 20px;
+  padding: 20px 32px;
   background: rgba(0, 0, 0, 0.02);
   border-radius: $radius-full;
-  font-size: 15px;
+  font-size: 28px;
   color: $text-secondary;
   font-weight: 500;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-  min-height: 44px;
+  min-height: 80px;
   display: flex;
   align-items: center;
 

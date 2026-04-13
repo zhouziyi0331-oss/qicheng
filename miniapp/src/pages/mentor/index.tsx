@@ -163,9 +163,27 @@ export default function Mentor() {
       }, 100)
     } catch (error) {
       console.error('发送消息失败:', error)
+
+      // 临时使用模拟回复，避免用户体验中断
+      const mockReplies = [
+        '我理解你的想法。让我们一起来分析一下这个问题。',
+        '这是个很好的问题！根据你的情况，我建议你可以从以下几个方面入手...',
+        '我注意到你提到的这个点很关键。让我帮你梳理一下思路。',
+        '别担心，这种情况很常见。我们可以这样来解决...'
+      ]
+
+      const mentorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'mentor',
+        content: mockReplies[Math.floor(Math.random() * mockReplies.length)] + '\n\n（提示：当前使用模拟回复，请检查网络连接或联系管理员配置后端服务）',
+        timestamp: new Date().toISOString()
+      }
+      setMessages(prev => [...prev, mentorMessage])
+
       Taro.showToast({
-        title: '发送失败，请重试',
-        icon: 'none'
+        title: '网络连接异常，使用模拟回复',
+        icon: 'none',
+        duration: 2000
       })
     } finally {
       setLoading(false)
