@@ -467,6 +467,23 @@ export const allianceAPI = {
     request(`/alliances/invitations/${studentId}`)
 }
 
+// 通知中心API
+export const notificationAPI = {
+  // 获取通知列表
+  getList: () => request('/notifications'),
+
+  // 标记单个通知为已读
+  markRead: (id: string) =>
+    request(`/notifications/${id}/read`, { method: 'POST' }),
+
+  // 标记全部通知为已读
+  markAllRead: () =>
+    request('/notifications/read-all', { method: 'POST' }),
+
+  // 获取未读通知数量
+  getUnreadCount: () => request('/notifications/unread-count')
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -486,5 +503,6 @@ export default {
   partnership: partnershipAPI,
   exploration: explorationAPI,
   incubation: incubationAPI,
-  alliance: allianceAPI
+  alliance: allianceAPI,
+  notification: notificationAPI
 }
