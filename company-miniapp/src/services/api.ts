@@ -163,7 +163,89 @@ export const paymentAPI = {
     request('/company/payments/recharge', { method: 'POST', data: { amount } }),
 
   // 获取支付记录
-  getHistory: () => request('/company/payments/history')
+  getHistory: (params?: { page?: number; limit?: number; status?: string }) =>
+    request('/company/payments/history', { method: 'GET', data: params }),
+
+  // 创建支付订单
+  createPayment: (taskId: string, paymentType: 'deposit' | 'final', amount: number) =>
+    request('/payments/create', { method: 'POST', data: { taskId, paymentType, amount } }),
+
+  // 调用微信支付
+  requestWechatPayment: async (paymentData: any) => {
+    try {
+      await Taro.requestPayment({
+        timeStamp: paymentData.timeStamp,
+        nonceStr: paymentData.nonceStr,
+        package: paymentData.package,
+        signType: paymentData.signType || 'RSA',
+        paySign: paymentData.paySign
+      })
+      return { success: true }
+    } catch (error: any) {
+      if (error.errMsg === 'requestPayment:fail cancel') {
+        return { success: false, cancelled: true }
+      }
+      throw error
+    }
+  },
+
+  // 查询支付状态
+  queryPaymentStatus: (orderId: string) =>
+    request(`/payments/${orderId}/status`),
+
+  // 申请退款
+  requestRefund: (orderId: string, reason: string) =>
+    request(`/payments/${orderId}/refund`, { method: 'POST', data: { reason } })
+}
+
+// 通知API
+export const notificationAPI = {
+  // 请求订阅消息权限
+  requestSubscribeMessage: async (templateIds: string[]) => {
+    try {
+      if (process.env.TARO_ENV !== 'weapp') {
+        console.log('非微信环境，跳过订阅消息')
+        return { success: false }
+      }
+      const res = await Taro.requestSubscribeMessage({ tmplIds: templateIds })
+      return { success: true, data: res }
+    } catch (error: any) {
+      console.error('请求订阅消息失败:', error)
+      return { success: false, error }
+    }
+  },
+
+  // 获取未读消息数量
+  getUnreadCount: () => request('/notifications/unread-count'),
+
+  // 获取消息列表
+  getNotifications: (params?: { page?: number; limit?: number; type?: string }) =>
+    request('/notifications', { method: 'GET', data: params }),
+
+  // 标记消息为已读
+  markAsRead: (notificationIds: number[]) =>
+    request('/notifications/mark-read', { method: 'POST', data: { notificationIds } }),
+
+  // 清空所有消息
+  clearAll: () => request('/notifications/clear', { method: 'POST' }),
+
+  // 更新TabBar徽标
+  updateTabBarBadge: async () => {
+    try {
+      const result: any = await request('/notifications/unread-count')
+      const unreadCount = result?.count || 0
+      if (unreadCount > 0) {
+        Taro.setTabBarBadge({
+          index: 0,
+          text: unreadCount > 99 ? '99+' : String(unreadCount)
+        })
+      } else {
+        Taro.removeTabBarBadge({ index: 0 })
+      }
+    } catch (error) {
+      console.error('更新TabBar徽标失败:', error)
+    }
+  }
 }
 
 export default {
@@ -171,5 +253,6 @@ export default {
   match: matchAPI,
   auth: authAPI,
   chat: chatAPI,
-  payment: paymentAPI
+  payment: paymentAPI,
+  notification: notificationAPI
 }
