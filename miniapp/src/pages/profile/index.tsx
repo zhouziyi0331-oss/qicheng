@@ -207,6 +207,14 @@ export default function Profile() {
             <Text className="menu-arrow">→</Text>
           </View>
 
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/workout-timer/index')}>
+            <View className="menu-icon-circle menu-icon-red">
+              <Text className="icon-text">🏃</Text>
+            </View>
+            <Text className="menu-label">运动计时器</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/life-question/index')}>
             <View className="menu-icon-circle menu-icon-purple">
               <Text className="icon-text">🎯</Text>

@@ -37,6 +37,7 @@ export default defineAppConfig({
     'pages/opc-incubation/index',  // OPC孵化计划
     'pages/alliances/index',       // 团队协作
     'pages/notifications/index',   // 通知中心
+    'pages/workout-timer/index',    // 运动计时报数器
   ],
   window: {
     backgroundTextStyle: 'light',

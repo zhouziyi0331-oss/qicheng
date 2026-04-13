@@ -1,0 +1,235 @@
+.workout-timer-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F8F9FE 0%, #FFFFFF 100%);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.timer-header {
+  padding: 60px 40px 40px;
+  text-align: center;
+}
+
+.header-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #1A1A1A;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.header-subtitle {
+  font-size: 28px;
+  color: #8E8E93;
+  display: block;
+}
+
+.timer-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 40px 0;
+}
+
+.timer-circle {
+  position: relative;
+  width: 560px;
+  height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.circle-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  opacity: 0.1;
+}
+
+.timer-display {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-value {
+  font-size: 96px;
+  font-weight: 700;
+  color: #667EEA;
+  line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+}
+
+.time-label {
+  font-size: 24px;
+  color: #8E8E93;
+  margin-top: 8px;
+}
+
+.time-separator {
+  font-size: 80px;
+  font-weight: 600;
+  color: #667EEA;
+  line-height: 1;
+  margin: 0 -10px;
+}
+
+.seconds-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 48px;
+  background: rgba(102, 126, 234, 0.08);
+  border-radius: 60px;
+}
+
+.count-number {
+  font-size: 64px;
+  font-weight: 700;
+  color: #667EEA;
+  line-height: 1;
+}
+
+.count-label {
+  font-size: 24px;
+  color: #8E8E93;
+  margin-top: 8px;
+}
+
+.stats-row {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.stat-card {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.stat-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 22px;
+  color: #8E8E93;
+}
+
+.control-section {
+  padding: 60px 40px 80px;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 48px;
+
+  Button {
+    flex: 1;
+    height: 96px;
+    border-radius: 48px;
+    font-size: 32px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+
+    &::after {
+      border: none;
+    }
+
+    &:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(240, 147, 251, 0.4);
+}
+
+.btn-outline {
+  background: #FFFFFF;
+  color: #667EEA;
+  border: 3px solid #667EEA !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  &::after {
+    border: none !important;
+  }
+}
+
+.btn-text {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.tips-section {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px;
+  background: rgba(102, 126, 234, 0.06);
+  border-radius: 40px;
+}
+
+.tip-icon {
+  font-size: 32px;
+}
+
+.tip-text {
+  font-size: 24px;
+  color: #667EEA;
+  font-weight: 500;
+}

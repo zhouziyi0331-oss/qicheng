@@ -2,6 +2,7 @@ import { View, Text, Input, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { taskAPI, matchAPI } from '../../services/api'
+import { CONTENT_TRACK_LEVELS, TaskTrack, TaskLevel } from '../../types/task'
 import TaskDialog from '../../components/TaskDialog'
 import Loading from '../../components/Loading'
 import './index.scss'
@@ -14,6 +15,8 @@ export default function Tasks() {
   const [dialogVisible, setDialogVisible] = useState(false)
   const [selectedTask, setSelectedTask] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [userLevel, setUserLevel] = useState<TaskLevel>(0)
+  const [userTrack, setUserTrack] = useState<TaskTrack>('content')
 
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
@@ -36,51 +39,102 @@ export default function Tasks() {
     try {
       setLoading(true)
 
-      // 模拟数据（开发模式）
+      // 模拟数据（包含赛道和等级信息）
       const mockTasks = [
         {
           id: 1,
-          title: '设计一个小程序首页UI',
-          description: '需要设计一个简洁美观的小程序首页，包含导航、轮播图、功能入口等模块',
-          tags: ['UI设计', '小程序', '创意'],
-          budget_net: 500,
+          title: 'AI生成品牌宣传海报',
+          description: '使用AI工具为新产品生成3张不同风格的宣传海报，要求风格统一、色彩协调',
+          track: 'content' as TaskTrack,
+          level: 0 as TaskLevel,
+          tags: ['AI绘图', 'Midjourney', '平面设计'],
+          budget_net: 150,
+          budgetRange: '100-200元',
           deadline: '3天后',
-          publisher_name: '创业公司A',
+          duration: '2-3小时',
+          publisher_name: '创意工作室A',
           publisher_rating: 4.8,
-          match_score: 95
+          match_score: 95,
+          matchReason: '你的创造性很高，适合这类创意任务',
+          difficultyAssessment: '简单',
+          growthValue: '提升AI绘图能力 +5'
         },
         {
           id: 2,
-          title: '编写Python数据分析脚本',
-          description: '需要编写一个Python脚本，用于分析CSV格式的销售数据，生成可视化图表',
-          tags: ['Python', '数据分析', '编程'],
-          budget_net: 800,
+          title: '制作产品介绍短视频',
+          description: '使用AI工具制作一个30秒的产品介绍短视频，包含配音和字幕',
+          track: 'content' as TaskTrack,
+          level: 1 as TaskLevel,
+          tags: ['AI视频', '剪映', '内容创作'],
+          budget_net: 500,
+          budgetRange: '400-600元',
           deadline: '5天后',
-          publisher_name: '电商平台B',
+          duration: '1天',
+          publisher_name: '电商品牌B',
           publisher_rating: 4.9,
-          match_score: 88
+          match_score: 88,
+          matchReason: '你已完成2个Lv.0任务，可以尝试Lv.1挑战',
+          difficultyAssessment: '适中',
+          growthValue: '提升视频制作能力 +10'
         },
         {
           id: 3,
-          title: '撰写产品推广文案',
-          description: '为新产品撰写推广文案，包括产品介绍、卖点提炼、用户痛点分析等',
-          tags: ['文案', '营销', '创意'],
-          budget_net: 300,
-          deadline: '2天后',
-          publisher_name: '品牌公司C',
+          title: '开发简单的AI问答小程序',
+          description: '使用AI辅助开发一个简单的问答小程序，实现基础的对话功能',
+          track: 'tool' as TaskTrack,
+          level: 1 as TaskLevel,
+          tags: ['小程序开发', 'AI编程', 'JavaScript'],
+          budget_net: 600,
+          budgetRange: '500-800元',
+          deadline: '7天后',
+          duration: '2-3天',
+          publisher_name: '科技公司C',
           publisher_rating: 4.7,
-          match_score: 82
+          match_score: 82,
+          matchReason: '探索新赛道：AI工具开发，拓展技能树',
+          difficultyAssessment: '有挑战',
+          growthValue: '开启工具开发赛道',
+          is_stretch_project: true
+        },
+        {
+          id: 4,
+          title: 'AI生成系列表情包',
+          description: '使用AI工具生成一套10个表情包，风格可爱，适合社交媒体使用',
+          track: 'content' as TaskTrack,
+          level: 0 as TaskLevel,
+          tags: ['AI绘图', '表情包', '创意设计'],
+          budget_net: 120,
+          budgetRange: '100-150元',
+          deadline: '2天后',
+          duration: '1-2小时',
+          publisher_name: '自媒体工作室D',
+          publisher_rating: 4.6,
+          match_score: 90,
+          matchReason: '轻松的入门任务，快速积累经验',
+          difficultyAssessment: '简单',
+          growthValue: '提升创意表达 +3'
         }
       ]
 
       const user = Taro.getStorageSync('user')
+
+      // 获取用户等级和赛道
+      if (user && user.id) {
+        try {
+          const userInfo = await matchAPI.getMatchedTasks(user.id, 20)
+          setUserLevel(userInfo.currentLevel || 0)
+          setUserTrack(userInfo.primaryTrack || 'content')
+        } catch (error) {
+          console.log('获取用户信息失败，使用默认值')
+        }
+      }
 
       try {
         if (user && user.id) {
           // 尝试使用真实API
           try {
             const matchedRes = await matchAPI.getMatchedTasks(user.id, 20)
-            setMatchedTasks(matchedRes.tasks || [])
+            setMatchedTasks(matchedRes.tasks || mockTasks)
           } catch (matchError) {
             console.error('OPC匹配API失败，使用模拟数据:', matchError)
             setMatchedTasks(mockTasks)
@@ -92,7 +146,7 @@ export default function Tasks() {
         // 获取全部任务
         try {
           const allRes = await taskAPI.getList({ page: 1, limit: 20 })
-          setAllTasks(allRes.tasks || [])
+          setAllTasks(allRes.tasks || mockTasks)
         } catch (error) {
           console.error('获取全部任务失败，使用模拟数据:', error)
           setAllTasks(mockTasks)
@@ -122,6 +176,20 @@ export default function Tasks() {
     }
 
     return tasks
+  }
+
+  const getTrackName = (track: TaskTrack) => {
+    return track === 'content' ? 'AI内容创作' : 'AI工具开发'
+  }
+
+  const getLevelInfo = (level: TaskLevel, track: TaskTrack) => {
+    const levelInfo = CONTENT_TRACK_LEVELS[level]
+    const taskType = track === 'content' ? levelInfo.contentTask : levelInfo.toolTask
+    return {
+      name: levelInfo.name,
+      taskType,
+      reward: levelInfo.reward
+    }
   }
 
   const handleTaskClick = (task: any) => {
@@ -203,17 +271,25 @@ export default function Tasks() {
                   className="task-card"
                   onClick={() => handleTaskClick(task)}
                 >
+                  {/* 赛道和等级标签 */}
+                  {task.track && task.level !== undefined && (
+                    <View className="task-level-badge">
+                      <Text className="level-track">{getTrackName(task.track)}</Text>
+                      <Text className="level-name">{getLevelInfo(task.level, task.track).name}</Text>
+                    </View>
+                  )}
+
                   {/* AI推荐标签 */}
                   {activeFilter === 'matched' && task.match_score && (
                     <View className="match-badge">
-                      <Text className="match-text">这个项目可能让你发现自己</Text>
+                      <Text className="match-text">匹配度 {task.match_score}%</Text>
                     </View>
                   )}
 
                   {/* 冒险项目标签 */}
                   {task.is_stretch_project && (
                     <View className="stretch-badge">
-                      <Text className="stretch-text">探索项目 - 这条河你没走过，要不要试试？</Text>
+                      <Text className="stretch-text">🌟 探索项目 - 这条河你没走过，要不要试试？</Text>
                     </View>
                   )}
 
@@ -222,6 +298,18 @@ export default function Tasks() {
 
                   {/* 任务描述 */}
                   <Text className="task-desc">{task.description}</Text>
+
+                  {/* 匹配理由和成长价值 */}
+                  {activeFilter === 'matched' && (task.matchReason || task.growthValue) && (
+                    <View className="match-info">
+                      {task.matchReason && (
+                        <Text className="match-reason">💡 {task.matchReason}</Text>
+                      )}
+                      {task.growthValue && (
+                        <Text className="growth-value">📈 {task.growthValue}</Text>
+                      )}
+                    </View>
+                  )}
 
                   {/* 任务标签 */}
                   {task.tags && task.tags.length > 0 && (
@@ -256,7 +344,10 @@ export default function Tasks() {
                       <Text className="price-value">¥{task.budget_net}</Text>
                     </View>
                     <View className="task-meta">
-                      <Text className="meta-item">{task.deadline}</Text>
+                      <Text className="meta-item">⏰ {task.deadline}</Text>
+                      {task.duration && (
+                        <Text className="meta-item">⏱ {task.duration}</Text>
+                      )}
                     </View>
                   </View>
                 </View>

@@ -24,6 +24,11 @@ const config = {
     enable: false
   },
   mini: {
+    webpackChain(chain) {
+      chain.optimization.runtimeChunk({
+        name: 'runtime'
+      })
+    },
     postcss: {
       pxtransform: {
         enable: true,
