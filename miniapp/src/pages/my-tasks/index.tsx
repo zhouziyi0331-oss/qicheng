@@ -49,7 +49,7 @@ export default function MyTasks() {
     } else if (task.status === 'rejected') {
       // 被打回的任务，跳转到AI导师获取引导
       Taro.navigateTo({
-        url: `/pages/mentor/index?context=rejected&taskId=${task.id}`
+        url: `/pages/mentor-chat/index?context=rejected&taskId=${task.id}`
       })
     } else {
       Taro.navigateTo({ url: `/pages/tasks/detail?id=${task.id}` })
@@ -66,7 +66,7 @@ export default function MyTasks() {
 
   const handleAskMentor = (taskId: string) => {
     Taro.navigateTo({
-      url: `/pages/mentor/index?context=rejected&taskId=${taskId}`
+      url: `/pages/mentor-chat/index?context=rejected&taskId=${taskId}`
     })
   }
 

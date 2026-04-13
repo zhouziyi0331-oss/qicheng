@@ -1,7 +1,7 @@
 import { View, Text, Button, ScrollView } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
-import { graduationAPI } from '../../services/challengeGraduationAPI';
+import api from '../../services/api';
 import './index.scss';
 
 interface Eligibility {
@@ -36,8 +36,8 @@ export default function Graduation() {
     setLoading(true);
     try {
       const [eligibilityRes, benefitsRes] = await Promise.all([
-        graduationAPI.checkEligibility(),
-        graduationAPI.getGraduateBenefits()
+        api.challengeGraduation.checkEligibility(),
+        api.challengeGraduation.getGraduateBenefits()
       ]);
 
       if (eligibilityRes.success) {

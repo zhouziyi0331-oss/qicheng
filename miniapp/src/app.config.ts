@@ -8,16 +8,13 @@ export default defineAppConfig({
     'pages/register/index',        // 注册
     'pages/bind-phone/index',      // 绑定手机号
     'pages/onboarding/index',      // 引导页
-    'pages/test/index',            // OPC测评（旧）
-    'pages/test/result',           // 测评结果
     'pages/tasks/index',           // 任务大厅
     'pages/tasks/detail',          // 任务详情
     'pages/tasks/working',         // 任务执行
     'pages/tasks/submit',          // 任务提交
     'pages/invitations/index',     // 任务邀请
     'pages/my-tasks/index',        // 我的任务
-    'pages/mentor/index',          // AI导师聊天（旧）
-    'pages/mentor-chat/index',     // AI导师聊天（使命是河版本）
+    'pages/mentor-chat/index',     // AI导师聊天
     'pages/ability/index',         // 六维能力图
     'pages/timeline/index',        // 成长时间线
     'pages/story/index',           // 故事墙
@@ -26,7 +23,6 @@ export default defineAppConfig({
     'pages/profile/index',         // 个人中心
     'pages/wallet/index',          // 钱包
     'pages/wallet/withdraw/index', // 提现
-    'pages/withdraw/index',        // 提现（旧）
     'pages/task-communication/index', // 任务沟通
     'pages/challenge/index',       // 跳级挑战
     'pages/graduation/index',      // 毕业系统

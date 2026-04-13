@@ -89,13 +89,13 @@ export default function TaskWorking() {
 
   const handleAskMentor = () => {
     Taro.navigateTo({
-      url: `/pages/mentor/index?taskId=${id}&context=working&taskTitle=${encodeURIComponent(task?.title || '')}`
+      url: `/pages/mentor-chat/index?taskId=${id}&context=working&taskTitle=${encodeURIComponent(task?.title || '')}`
     })
   }
 
   const handleStuck = () => {
     Taro.navigateTo({
-      url: `/pages/mentor/index?taskId=${id}&context=stuck&taskTitle=${encodeURIComponent(task?.title || '')}`
+      url: `/pages/mentor-chat/index?taskId=${id}&context=stuck&taskTitle=${encodeURIComponent(task?.title || '')}`
     })
   }
 

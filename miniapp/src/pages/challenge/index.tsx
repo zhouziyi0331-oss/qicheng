@@ -1,7 +1,7 @@
 import { View, Text, Button, ScrollView, Image } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
-import { challengeAPI } from '../../services/challengeGraduationAPI';
+import api from '../../services/api';
 import './index.scss';
 
 interface Challenge {
@@ -43,8 +43,8 @@ export default function LevelChallenge() {
     setLoading(true);
     try {
       const [availableRes, historyRes] = await Promise.all([
-        challengeAPI.getAvailableChallenges(),
-        challengeAPI.getChallengeHistory()
+        api.challengeGraduation.getAvailableChallenges(),
+        api.challengeGraduation.getChallengeHistory()
       ]);
 
       if (availableRes.success) {
@@ -63,7 +63,7 @@ export default function LevelChallenge() {
 
   const handleStartChallenge = async (challengeTaskId: number) => {
     try {
-      const res = await challengeAPI.startChallenge(challengeTaskId);
+      const res = await api.challengeGraduation.startChallenge(challengeTaskId);
       if (res.success) {
         Taro.showToast({ title: '挑战已开始', icon: 'success' });
         loadData();

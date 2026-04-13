@@ -509,6 +509,248 @@ export const walletAPI = {
     request('/api/v1/escrow/withdrawals')
 }
 
+// 沟通中转API
+export const communicationAPI = {
+  // 企业补充说明
+  addClarification: (taskId: string, content: string) =>
+    request('/api/v1/communication/clarifications', { method: 'POST', data: { taskId, content } }),
+
+  // 获取任务说明列表
+  getClarifications: (taskId: string) =>
+    request(`/api/v1/communication/clarifications/${taskId}`),
+
+  // 学生提问
+  askQuestion: (taskId: string, question: string) =>
+    request('/api/v1/communication/questions', { method: 'POST', data: { taskId, question } }),
+
+  // 获取问题列表
+  getQuestions: (taskId: string) =>
+    request(`/api/v1/communication/questions/${taskId}`),
+
+  // 企业回答问题
+  answerQuestion: (questionId: string, answer: string) =>
+    request(`/api/v1/communication/questions/${questionId}/answer`, { method: 'POST', data: { answer } }),
+
+  // 获取中转消息
+  getRelayMessages: (taskId: string) =>
+    request(`/api/v1/communication/relay-messages/${taskId}`),
+
+  // 发送中转消息
+  sendRelayMessage: (taskId: string, content: string) =>
+    request('/api/v1/communication/relay-messages', { method: 'POST', data: { taskId, content } }),
+
+  // 获取未读消息数
+  getUnreadCount: (taskId: string) =>
+    request(`/api/v1/communication/unread-count/${taskId}`)
+}
+
+// 协议与授权API
+export const agreementAPI = {
+  // 获取协议列表
+  getAgreements: () =>
+    request('/api/v1/agreement/agreements'),
+
+  // 获取协议详情
+  getAgreementDetail: (agreementId: string) =>
+    request(`/api/v1/agreement/agreements/${agreementId}`),
+
+  // 签署协议
+  signAgreement: (agreementId: string, ipAddress: string) =>
+    request('/api/v1/agreement/sign', { method: 'POST', data: { agreementId, ipAddress } }),
+
+  // 获取签署记录
+  getSignatureHistory: () =>
+    request('/api/v1/agreement/signatures'),
+
+  // 获取数据授权设置
+  getAuthorizationSettings: () =>
+    request('/api/v1/agreement/authorization-settings'),
+
+  // 更新数据授权
+  updateAuthorization: (authorizationType: string, isAuthorized: boolean) =>
+    request('/api/v1/agreement/authorization', { method: 'POST', data: { authorizationType, isAuthorized } }),
+
+  // 获取授权历史
+  getAuthorizationHistory: () =>
+    request('/api/v1/agreement/authorization-history'),
+
+  // 获取必读条款
+  getMandatoryTerms: () =>
+    request('/api/v1/agreement/mandatory-terms'),
+
+  // 获取生效中的协议（用于注册流程）
+  getActiveAgreements: (type?: string) =>
+    request('/api/v1/agreement/active', { method: 'GET', data: { type } }),
+
+  // 确认必读条款
+  confirmTerm: (termType: string) =>
+    request('/api/v1/agreement/mandatory-terms/confirm', { method: 'POST', data: { termType } })
+}
+
+// 跳级挑战与毕业API
+export const challengeGraduationAPI = {
+  // 获取可用挑战
+  getAvailableChallenges: () =>
+    request('/api/v1/challenge-graduation/challenges/available'),
+
+  // 创建挑战任务
+  createChallenge: (targetLevel: number, taskDescription: string, requiredAbilities: any) =>
+    request('/api/v1/challenge-graduation/challenges', { method: 'POST', data: { targetLevel, taskDescription, requiredAbilities } }),
+
+  // 提交挑战
+  submitChallenge: (challengeId: string, submissionUrl: string, description: string) =>
+    request(`/api/v1/challenge-graduation/challenges/${challengeId}/submit`, { method: 'POST', data: { submissionUrl, description } }),
+
+  // 获取挑战历史
+  getChallengeHistory: () =>
+    request('/api/v1/challenge-graduation/challenges/history'),
+
+  // 审核挑战（企业端）
+  reviewChallenge: (attemptId: string, passed: boolean, feedback: string) =>
+    request(`/api/v1/challenge-graduation/challenges/attempts/${attemptId}/review`, { method: 'POST', data: { passed, feedback } }),
+
+  // 申请毕业
+  applyForGraduation: (portfolioUrl: string, achievements: string, futureGoals: string) =>
+    request('/api/v1/challenge-graduation/graduation/apply', { method: 'POST', data: { portfolioUrl, achievements, futureGoals } }),
+
+  // 获取毕业申请状态
+  getGraduationStatus: () =>
+    request('/api/v1/challenge-graduation/graduation/status'),
+
+  // 审核毕业申请（管理员）
+  reviewGraduation: (applicationId: string, approved: boolean, feedback: string) =>
+    request(`/api/v1/challenge-graduation/graduation/${applicationId}/review`, { method: 'POST', data: { approved, feedback } }),
+
+  // 获取毕业权益
+  getGraduationBenefits: () =>
+    request('/api/v1/challenge-graduation/graduation/benefits'),
+
+  // 检查毕业资格
+  checkEligibility: () =>
+    request('/api/v1/challenge-graduation/graduation/eligibility'),
+
+  // 获取毕业生权益
+  getGraduateBenefits: () =>
+    request('/api/v1/challenge-graduation/graduation/graduate-benefits'),
+
+  // 开始挑战
+  startChallenge: (challengeTaskId: number) =>
+    request('/api/v1/challenge-graduation/challenges/start', { method: 'POST', data: { challengeTaskId } })
+}
+
+// AI引擎API
+export const aiEngineAPI = {
+  // 需求确认对话
+  startRequirementChat: (taskId: string, initialDescription: string) =>
+    request('/api/v1/ai-engine/requirement/start', { method: 'POST', data: { taskId, initialDescription } }),
+
+  // 继续需求对话
+  continueRequirementChat: (sessionId: string, userMessage: string) =>
+    request('/api/v1/ai-engine/requirement/continue', { method: 'POST', data: { sessionId, userMessage } }),
+
+  // 获取需求确认结果
+  getRequirementResult: (sessionId: string) =>
+    request(`/api/v1/ai-engine/requirement/${sessionId}/result`),
+
+  // 任务拆解
+  decomposeTask: (taskId: string, confirmedRequirements: any) =>
+    request('/api/v1/ai-engine/decompose', { method: 'POST', data: { taskId, confirmedRequirements } }),
+
+  // 获取拆解结果
+  getDecompositionResult: (taskId: string) =>
+    request(`/api/v1/ai-engine/decompose/${taskId}`),
+
+  // 提交作品审核
+  submitForReview: (taskId: string, submissionUrl: string, description: string) =>
+    request('/api/v1/ai-engine/review/submit', { method: 'POST', data: { taskId, submissionUrl, description } }),
+
+  // 获取审核结果
+  getReviewResult: (reviewId: string) =>
+    request(`/api/v1/ai-engine/review/${reviewId}`),
+
+  // AI问答
+  askAI: (question: string, context?: any) =>
+    request('/api/v1/ai-engine/qa', { method: 'POST', data: { question, context } }),
+
+  // 获取问答历史
+  getQAHistory: () =>
+    request('/api/v1/ai-engine/qa/history')
+}
+
+// OPC测评与成长报告API
+export const opcGrowthAPI = {
+  // 提交OPC测评
+  submitAssessment: (answers: any) =>
+    request('/api/v1/opc-growth/assessments', { method: 'POST', data: { answers } }),
+
+  // 获取测评结果
+  getAssessmentResult: (assessmentId: string) =>
+    request(`/api/v1/opc-growth/assessments/${assessmentId}`),
+
+  // 获取成长报告
+  getGrowthReport: (reportId: string) =>
+    request(`/api/v1/opc-growth/reports/${reportId}`),
+
+  // 获取成长报告列表
+  getGrowthReports: () =>
+    request('/api/v1/opc-growth/reports'),
+
+  // 生成成长报告
+  generateGrowthReport: (startDate: string, endDate: string) =>
+    request('/api/v1/opc-growth/reports/generate', { method: 'POST', data: { startDate, endDate } }),
+
+  // 获取能力雷达图数据
+  getAbilityRadar: () =>
+    request('/api/v1/opc-growth/ability-radar'),
+
+  // 获取成长轨迹
+  getGrowthTrajectory: () =>
+    request('/api/v1/opc-growth/trajectory')
+}
+
+// 社群与作品展示API
+export const communityPortfolioAPI = {
+  // 获取社群列表
+  getCommunities: () =>
+    request('/api/v1/community-portfolio/communities'),
+
+  // 加入社群
+  joinCommunity: (communityId: string) =>
+    request(`/api/v1/community-portfolio/communities/${communityId}/join`, { method: 'POST' }),
+
+  // 退出社群
+  leaveCommunity: (communityId: string) =>
+    request(`/api/v1/community-portfolio/communities/${communityId}/leave`, { method: 'POST' }),
+
+  // 获取社群帖子
+  getCommunityPosts: (communityId: string) =>
+    request(`/api/v1/community-portfolio/communities/${communityId}/posts`),
+
+  // 发布帖子
+  createPost: (communityId: string, content: string, images?: string[]) =>
+    request('/api/v1/community-portfolio/posts', { method: 'POST', data: { communityId, content, images } }),
+
+  // 点赞帖子
+  likePost: (postId: string) =>
+    request(`/api/v1/community-portfolio/posts/${postId}/like`, { method: 'POST' }),
+
+  // 评论帖子
+  commentPost: (postId: string, content: string) =>
+    request(`/api/v1/community-portfolio/posts/${postId}/comments`, { method: 'POST', data: { content } }),
+
+  // 获取作品集
+  getPortfolio: (userId: string) =>
+    request(`/api/v1/community-portfolio/portfolios/${userId}`),
+
+  // 添加作品
+  addPortfolioItem: (title: string, description: string, coverImage: string, contentUrl: string, tags: string[]) =>
+    request('/api/v1/community-portfolio/portfolios/items', { method: 'POST', data: { title, description, coverImage, contentUrl, tags } }),
+
+  // 获取热门作品
+  getTrendingPortfolios: () =>
+    request('/api/v1/community-portfolio/portfolios/trending')
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -530,5 +772,11 @@ export default {
   incubation: incubationAPI,
   alliance: allianceAPI,
   notification: notificationAPI,
-  wallet: walletAPI
+  wallet: walletAPI,
+  communication: communicationAPI,
+  agreement: agreementAPI,
+  challengeGraduation: challengeGraduationAPI,
+  aiEngine: aiEngineAPI,
+  opcGrowth: opcGrowthAPI,
+  communityPortfolio: communityPortfolioAPI
 }

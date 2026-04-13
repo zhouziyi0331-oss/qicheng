@@ -1,7 +1,7 @@
 import { View, Text, Input, Button, ScrollView } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
-import { communicationAPI } from '../../services/communicationAPI';
+import api from '../../services/api';
 import './index.scss';
 
 interface Question {
@@ -60,7 +60,7 @@ export default function TaskCommunication() {
 
   const loadQuestions = async () => {
     try {
-      const res = await communicationAPI.getQuestions(taskId);
+      const res = await api.communication.getQuestions(taskId);
       if (res.success) {
         setQuestions(res.data);
       }
@@ -71,7 +71,7 @@ export default function TaskCommunication() {
 
   const loadClarifications = async () => {
     try {
-      const res = await communicationAPI.getClarifications(taskId);
+      const res = await api.communication.getClarifications(taskId);
       if (res.success) {
         setClarifications(res.data);
       }
@@ -88,7 +88,7 @@ export default function TaskCommunication() {
 
     setIsAsking(true);
     try {
-      const res = await communicationAPI.askQuestion(taskId, question);
+      const res = await api.communication.askQuestion(taskId, question);
       if (res.success) {
         Taro.showToast({ title: 'AI正在分析...', icon: 'loading' });
         setQuestion('');
@@ -107,7 +107,7 @@ export default function TaskCommunication() {
 
   const handleForwardToCompany = async (questionId: number) => {
     try {
-      const res = await communicationAPI.forwardToCompany(questionId);
+      const res = await api.communication.forwardToCompany(questionId);
       if (res.success) {
         Taro.showToast({ title: '已转发给企业', icon: 'success' });
         loadQuestions();
@@ -119,7 +119,7 @@ export default function TaskCommunication() {
 
   const handleMarkHelpful = async (questionId: number, isHelpful: boolean) => {
     try {
-      await communicationAPI.markAIAnswerHelpful(questionId, isHelpful);
+      await api.communication.markAIAnswerHelpful(questionId, isHelpful);
       Taro.showToast({ title: '感谢反馈', icon: 'success' });
     } catch (error) {
       console.error('标记失败:', error);
@@ -134,7 +134,7 @@ export default function TaskCommunication() {
 
     setIsAdding(true);
     try {
-      const res = await communicationAPI.addClarification(taskId, newClarification);
+      const res = await api.communication.addClarification(taskId, newClarification);
       if (res.success) {
         Taro.showToast({ title: '添加成功', icon: 'success' });
         setNewClarification('');
@@ -155,7 +155,7 @@ export default function TaskCommunication() {
       success: async (res) => {
         if (res.confirm && res.content) {
           try {
-            await communicationAPI.answerQuestion(questionId, res.content);
+            await api.communication.answerQuestion(questionId, res.content);
             Taro.showToast({ title: '回复成功', icon: 'success' });
             loadQuestions();
           } catch (error: any) {

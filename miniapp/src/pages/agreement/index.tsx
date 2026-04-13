@@ -1,7 +1,7 @@
 import { View, Text, Button, ScrollView, Checkbox } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
-import { agreementAPI, mandatoryTermsAPI } from '../../services/agreementAPI';
+import api from '../../services/api';
 import './index.scss';
 
 interface Agreement {
@@ -28,7 +28,7 @@ export default function AgreementPage() {
 
   const loadAgreements = async () => {
     try {
-      const res = await agreementAPI.getActiveAgreements();
+      const res = await api.agreement.getActiveAgreements();
       if (res.success) {
         setAgreements(res.data);
       }
@@ -79,13 +79,13 @@ export default function AgreementPage() {
     try {
       // 签署所有协议
       for (const agreementId of selectedAgreements) {
-        await agreementAPI.signAgreement(agreementId);
+        await api.agreement.signAgreement(agreementId);
       }
 
       // 确认所有必读条款
-      await mandatoryTermsAPI.confirmTerm('age_confirmation');
-      await mandatoryTermsAPI.confirmTerm('real_name_commitment');
-      await mandatoryTermsAPI.confirmTerm('data_usage_notice');
+      await api.agreement.confirmTerm('age_confirmation');
+      await api.agreement.confirmTerm('real_name_commitment');
+      await api.agreement.confirmTerm('data_usage_notice');
 
       Taro.showToast({ title: '协议签署成功', icon: 'success' });
 

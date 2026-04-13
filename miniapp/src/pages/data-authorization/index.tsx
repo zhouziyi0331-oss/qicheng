@@ -1,7 +1,7 @@
 import { View, Text, Button, ScrollView, Switch } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
-import { dataAuthorizationAPI } from '../../services/agreementAPI';
+import api from '../../services/api';
 import './index.scss';
 
 interface AuthSettings {
@@ -24,7 +24,7 @@ export default function DataAuthorizationSettings() {
 
   const loadSettings = async () => {
     try {
-      const res = await dataAuthorizationAPI.getAuthorizationSettings();
+      const res = await api.agreement.getAuthorizationSettings();
       if (res.success) {
         setSettings(res.data);
       }
@@ -42,7 +42,7 @@ export default function DataAuthorizationSettings() {
 
     setLoading(true);
     try {
-      await dataAuthorizationAPI.updateAuthorization(authType, value);
+      await api.agreement.updateAuthorization(authType, value);
       Taro.showToast({ title: '设置已更新', icon: 'success' });
       loadSettings();
     } catch (error: any) {

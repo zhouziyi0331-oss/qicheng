@@ -74,7 +74,7 @@ export default function TaskDetail() {
   const handleAskMentor = () => {
     // 跳转到AI导师页面，并传递任务上下文
     Taro.navigateTo({
-      url: `/pages/mentor/index?context=task&taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}`
+      url: `/pages/mentor-chat/index?context=task&taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}`
     })
   }
 

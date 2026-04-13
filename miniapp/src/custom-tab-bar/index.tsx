@@ -20,7 +20,7 @@ export default class CustomTabBar extends Component {
       },
       {
         // 中央启程小猫按钮
-        pagePath: '/pages/mentor/index',
+        pagePath: '/pages/mentor-chat/index',
         text: '启程小猫',
         iconType: 'mentor',
         isCenter: true
