@@ -42,6 +42,12 @@ export declare const config: {
         jpushMasterSecret: string;
         wechatServiceNotifyUrl: string;
     };
+    wechat: {
+        studentAppId: string;
+        studentAppSecret: string;
+        companyAppId: string;
+        companyAppSecret: string;
+    };
     platform: {
         firstTaskSettlementHours: number;
         normalTaskSettlementDays: number;

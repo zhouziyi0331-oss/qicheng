@@ -1,51 +1,28 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const chatController_1 = require("./chatController");
+const router = express_1.default.Router();
 /**
- * 指令8: 任务沟通中转机制
- * GET  /chat/:taskId/messages  — 获取沟通记录
- * POST /chat/:taskId/messages  — 发送消息 (含联系方式过滤)
+ * 聊天系统路由
+ * 基础路径: /api/chat
  */
-const express_1 = require("express");
-const auth_1 = require("../../middleware/auth");
-const contactFilter_1 = require("../../middleware/contactFilter");
-const controller = __importStar(require("./controller"));
-const router = (0, express_1.Router)();
-router.use(auth_1.authenticate);
-router.get('/:taskId/messages', controller.getMessages);
-// contactFilterMiddleware 在所有 POST 消息上强制过滤联系方式
-router.post('/:taskId/messages', contactFilter_1.contactFilterMiddleware, controller.sendMessage);
+// 获取或创建聊天会话
+router.post('/sessions', chatController_1.getOrCreateSession);
+// 获取用户的所有聊天会话列表
+router.get('/sessions', chatController_1.getChatSessions);
+// 获取会话的聊天记录
+router.get('/sessions/:sessionId/messages', chatController_1.getChatMessages);
+// 发送消息
+router.post('/sessions/:sessionId/messages', chatController_1.sendMessage);
+// 标记消息为已读
+router.post('/sessions/:sessionId/read', chatController_1.markMessagesAsRead);
+// 获取未读消息总数
+router.get('/unread-count', chatController_1.getUnreadCount);
+// 归档会话
+router.post('/sessions/:sessionId/archive', chatController_1.archiveSession);
 exports.default = router;
 //# sourceMappingURL=index.js.map

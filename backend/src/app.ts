@@ -32,6 +32,8 @@ import disputeRoutes from './routes/disputes';
 import draftRoutes from './routes/tasks/draftRoutes';
 import pricingRoutes from './routes/pricing';
 import ratingRoutes from './routes/rating';
+import taskLevelRoutes from './routes/taskLevel';
+import escrowRoutes from './routes/escrow';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -117,6 +119,8 @@ app.use('/api/v1/disputes', disputeRoutes);
 app.use('/api/v1/tasks', draftRoutes); // 草稿箱和追加需求路由
 app.use('/api/v1/pricing', pricingRoutes); // AI智能定价建议
 app.use('/api/v1/rating', ratingRoutes); // 评价系统
+app.use('/api/v1/task-level', taskLevelRoutes); // 任务分级和智能匹配
+app.use('/api/v1/escrow', escrowRoutes); // 支付托管和提现系统
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));

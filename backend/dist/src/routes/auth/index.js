@@ -40,11 +40,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * POST /auth/send-code      — 发送手机验证码
  * POST /auth/refresh        — 刷新 access token
  * POST /auth/logout         — 登出 (撤销 refresh token)
+ * POST /auth/wechat/login   — 微信小程序登录
+ * POST /auth/wechat/bind-phone — 微信登录后绑定手机号
+ * POST /auth/wechat/decrypt-phone — 解密微信手机号
  */
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const auth_1 = require("../../middleware/auth");
 const controller = __importStar(require("./controller"));
+const wechatController = __importStar(require("./wechatController"));
 const router = (0, express_1.Router)();
 // 发送验证码
 router.post('/send-code', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), controller.sendVerificationCode);
@@ -56,5 +60,11 @@ router.post('/login', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{
 router.post('/refresh', (0, express_validator_1.body)('refreshToken').notEmpty(), controller.refreshToken);
 // 登出
 router.post('/logout', auth_1.authenticate, controller.logout);
+// 微信登录
+router.post('/wechat/login', (0, express_validator_1.body)('code').notEmpty().withMessage('微信登录code不能为空'), (0, express_validator_1.body)('userType').isIn(['student', 'company']).withMessage('用户类型必须是 student 或 company'), wechatController.wechatLogin);
+// 微信登录后绑定手机号
+router.post('/wechat/bind-phone', auth_1.authenticate, (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), (0, express_validator_1.body)('code').isLength({ min: 4, max: 6 }).withMessage('验证码格式不正确'), wechatController.bindPhone);
+// 解密微信手机号
+router.post('/wechat/decrypt-phone', auth_1.authenticate, (0, express_validator_1.body)('encryptedData').notEmpty().withMessage('加密数据不能为空'), (0, express_validator_1.body)('iv').notEmpty().withMessage('iv不能为空'), wechatController.decryptWechatPhone);
 exports.default = router;
 //# sourceMappingURL=index.js.map

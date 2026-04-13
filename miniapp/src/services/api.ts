@@ -484,6 +484,31 @@ export const notificationAPI = {
   getUnreadCount: () => request('/notifications/unread-count')
 }
 
+// 钱包相关API
+export const walletAPI = {
+  // 获取账户信息
+  getAccount: () => request('/api/v1/escrow/account'),
+
+  // 获取交易流水
+  getTransactions: () =>
+    request('/api/v1/escrow/transactions'),
+
+  // 申请提现
+  requestWithdrawal: (data: {
+    amount: number
+    withdrawalMethod: 'wechat' | 'alipay'
+    accountName: string
+    accountNumber: string
+  }) => request('/api/v1/escrow/withdrawal', {
+    method: 'POST',
+    data
+  }),
+
+  // 获取提现记录
+  getWithdrawalHistory: () =>
+    request('/api/v1/escrow/withdrawals')
+}
+
 export default {
   auth: authAPI,
   test: testAPI,
@@ -504,5 +529,6 @@ export default {
   exploration: explorationAPI,
   incubation: incubationAPI,
   alliance: allianceAPI,
-  notification: notificationAPI
+  notification: notificationAPI,
+  wallet: walletAPI
 }

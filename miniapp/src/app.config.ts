@@ -24,7 +24,9 @@ export default defineAppConfig({
     'pages/story/post',            // 发布故事
     'pages/reports/index',         // OPC报告
     'pages/profile/index',         // 个人中心
-    'pages/withdraw/index',        // 提现
+    'pages/wallet/index',          // 钱包
+    'pages/wallet/withdraw/index', // 提现
+    'pages/withdraw/index',        // 提现（旧）
     'pages/chat-list/index',       // 聊天列表
     'pages/chat-detail/index',     // 聊天详情
     'pages/pending-ratings/index', // 待评价任务

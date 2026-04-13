@@ -14,6 +14,7 @@ const logger_1 = __importDefault(require("./utils/logger"));
 const errorHandler_1 = require("./middleware/errorHandler");
 // Route imports (指令1-8 实现)
 const auth_1 = __importDefault(require("./routes/auth"));
+const user_1 = __importDefault(require("./routes/user"));
 const student_1 = __importDefault(require("./routes/student"));
 const company_1 = __importDefault(require("./routes/company"));
 const tasks_1 = __importDefault(require("./routes/tasks"));
@@ -35,12 +36,26 @@ const team_1 = __importDefault(require("./routes/team"));
 const disputes_1 = __importDefault(require("./routes/disputes"));
 const draftRoutes_1 = __importDefault(require("./routes/tasks/draftRoutes"));
 const pricing_1 = __importDefault(require("./routes/pricing"));
+const rating_1 = __importDefault(require("./routes/rating"));
+const taskLevel_1 = __importDefault(require("./routes/taskLevel"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
     require('./jobs/firstTaskSettlement');
     require('./cron/mentorNudge').startMentorNudgeCron();
     require('./jobs/invitationCron');
+    // 启动定时任务调度器（7天自动确认等）
+    const { pool } = require('./utils/db');
+    const { CronScheduler } = require('./cron/scheduler');
+    const cronScheduler = new CronScheduler(pool);
+    cronScheduler.start();
+    // 优雅关闭时停止定时任务
+    process.on('SIGTERM', () => {
+        cronScheduler.stop();
+    });
+    process.on('SIGINT', () => {
+        cronScheduler.stop();
+    });
 }
 const app = (0, express_1.default)();
 exports.app = app;
@@ -76,6 +91,7 @@ app.get('/health', (_req, res) => {
 // Routes
 // ============================================================
 app.use('/api/v1/auth', authLimiter, auth_1.default);
+app.use('/api/v1/user', user_1.default);
 app.use('/api/v1/student', student_1.default);
 app.use('/api/v1/company', company_1.default);
 app.use('/api/v1/tasks', tasks_1.default);
@@ -97,6 +113,8 @@ app.use('/api/v1/team', team_1.default);
 app.use('/api/v1/disputes', disputes_1.default);
 app.use('/api/v1/tasks', draftRoutes_1.default); // 草稿箱和追加需求路由
 app.use('/api/v1/pricing', pricing_1.default); // AI智能定价建议
+app.use('/api/v1/rating', rating_1.default); // 评价系统
+app.use('/api/v1/task-level', taskLevel_1.default); // 任务分级和智能匹配
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

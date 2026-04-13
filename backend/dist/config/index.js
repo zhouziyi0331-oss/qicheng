@@ -50,6 +50,14 @@ exports.config = {
         jpushMasterSecret: process.env.JPUSH_MASTER_SECRET || '',
         wechatServiceNotifyUrl: process.env.WECHAT_SERVICE_NOTIFY_URL || '',
     },
+    wechat: {
+        // 学生端小程序
+        studentAppId: process.env.WECHAT_STUDENT_APP_ID || '',
+        studentAppSecret: process.env.WECHAT_STUDENT_APP_SECRET || '',
+        // 企业端小程序
+        companyAppId: process.env.WECHAT_COMPANY_APP_ID || '',
+        companyAppSecret: process.env.WECHAT_COMPANY_APP_SECRET || '',
+    },
     platform: {
         // 首单结算小时数
         firstTaskSettlementHours: parseInt(process.env.FIRST_TASK_SETTLEMENT_HOURS || '24', 10),
