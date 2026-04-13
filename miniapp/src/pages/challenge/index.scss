@@ -1,0 +1,299 @@
+.level-challenge {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 60px 32px 40px;
+  color: #fff;
+}
+
+.title {
+  display: block;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  display: block;
+  font-size: 28px;
+  opacity: 0.9;
+}
+
+.tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 32px 0;
+  font-size: 30px;
+  color: #666;
+  position: relative;
+}
+
+.tab.active {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #667eea;
+  border-radius: 2px;
+}
+
+.content {
+  height: calc(100vh - 300px);
+  padding: 24px;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 100px 0;
+  color: #999;
+  font-size: 28px;
+}
+
+.tip {
+  display: block;
+  margin-top: 12px;
+  font-size: 24px;
+  color: #bbb;
+}
+
+.challenge-card,
+.history-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.level-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.track-badge {
+  background: #f0f0f0;
+  color: #666;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 24px;
+}
+
+.status-badge {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.status-progress {
+  background: #fff7ed;
+  color: #f59e0b;
+}
+
+.status-submitted {
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+.status-passed {
+  background: #f0fdf4;
+  color: #10b981;
+}
+
+.status-failed {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.challenge-title {
+  display: block;
+  font-size: 32px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.challenge-desc {
+  display: block;
+  font-size: 28px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.requirements {
+  background: #f8f8f8;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  display: block;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.requirement-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.req-key {
+  color: #666;
+}
+
+.req-value {
+  color: #111;
+  font-weight: 500;
+}
+
+.challenge-info {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  flex: 1;
+}
+
+.label {
+  display: block;
+  font-size: 24px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.value {
+  display: block;
+  font-size: 32px;
+  font-weight: 600;
+  color: #111;
+}
+
+.start-btn,
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.timeline {
+  margin-bottom: 20px;
+}
+
+.timeline-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.time-label {
+  font-size: 26px;
+  color: #999;
+}
+
+.time-value {
+  font-size: 26px;
+  color: #111;
+}
+
+.score-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.score-label {
+  font-size: 28px;
+  color: #666;
+}
+
+.score-value {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.score-value.passed {
+  color: #10b981;
+}
+
+.score-value.failed {
+  color: #ef4444;
+}
+
+.feedback-section {
+  background: #fffbeb;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.feedback-label {
+  display: block;
+  font-size: 26px;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 12px;
+}
+
+.feedback-content {
+  display: block;
+  font-size: 28px;
+  color: #78350f;
+  line-height: 1.6;
+}
+
+.cooldown-notice {
+  background: #fef2f2;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  color: #991b1b;
+  font-size: 24px;
+}

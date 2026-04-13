@@ -27,6 +27,11 @@ export default defineAppConfig({
     'pages/wallet/index',          // 钱包
     'pages/wallet/withdraw/index', // 提现
     'pages/withdraw/index',        // 提现（旧）
+    'pages/task-communication/index', // 任务沟通
+    'pages/challenge/index',       // 跳级挑战
+    'pages/graduation/index',      // 毕业系统
+    'pages/agreement/index',       // 用户协议
+    'pages/data-authorization/index', // 数据授权设置
     'pages/chat-list/index',       // 聊天列表
     'pages/chat-detail/index',     // 聊天详情
     'pages/pending-ratings/index', // 待评价任务
