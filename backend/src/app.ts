@@ -35,7 +35,9 @@ import ratingRoutes from './routes/rating';
 import taskLevelRoutes from './routes/taskLevel';
 import escrowRoutes from './routes/escrow';
 import communicationRoutes from './routes/communication';
+import challengeGraduationRoutes from './routes/challengeGraduation';
 import agreementRoutes from './routes/agreement';
+import aiEngineRoutes from './routes/aiEngine';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -126,6 +128,7 @@ app.use('/api/v1/escrow', escrowRoutes); // 支付托管和提现系统
 app.use('/api/v1/communication', communicationRoutes); // 任务沟通中转系统
 app.use('/api/v1/challenge-graduation', challengeGraduationRoutes); // 跳级挑战与毕业系统
 app.use('/api/v1/agreement', agreementRoutes); // 注册协议与数据授权
+app.use('/api/v1/ai-engine', aiEngineRoutes); // AI引擎系统
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
