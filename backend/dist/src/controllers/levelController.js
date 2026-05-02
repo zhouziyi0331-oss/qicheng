@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.completeStretchChallenge = exports.applyStretchChallenge = exports.upgradeLevel = exports.checkUpgradeConditions = exports.getUserLevel = void 0;
-const db_1 = __importDefault(require("../utils/db"));
+const db_1 = require("../utils/db");
 /**
  * 等级名称映射
  */
@@ -23,11 +20,11 @@ const LEVEL_NAMES = {
 const getUserLevel = async (req, res) => {
     const { userId } = req.params;
     try {
-        const result = await db_1.default.query(`SELECT id, level, username FROM users WHERE id = $1`, [userId]);
-        if (result.rows.length === 0) {
+        const result = await (0, db_1.query)(`SELECT id, level, username FROM users WHERE id = $1`, [userId]);
+        if (result.length === 0) {
             return res.status(404).json({ error: '用户不存在' });
         }
-        const user = result.rows[0];
+        const user = result[0];
         const levelInfo = LEVEL_NAMES[user.level] || LEVEL_NAMES[0];
         res.json({
             success: true,
@@ -52,25 +49,25 @@ const checkUpgradeConditions = async (req, res) => {
     const { userId } = req.params;
     try {
         // 1. 获取用户当前等级
-        const userResult = await db_1.default.query(`SELECT id, level FROM users WHERE id = $1`, [userId]);
-        if (userResult.rows.length === 0) {
+        const userResult = await (0, db_1.query)(`SELECT id, level FROM users WHERE id = $1`, [userId]);
+        if (userResult.length === 0) {
             return res.status(404).json({ error: '用户不存在' });
         }
-        const user = userResult.rows[0];
+        const user = userResult[0];
         const currentLevel = user.level;
         // 2. 查询完成的任务数和平均评分
-        const taskStats = await db_1.default.query(`SELECT
+        const taskStats = await (0, db_1.query)(`SELECT
         COUNT(*) as completed_count,
         AVG(rating) as avg_rating
        FROM task_applications
        WHERE student_id = $1 AND status = 'completed'`, [userId]);
-        const completedCount = parseInt(taskStats.rows[0].completed_count) || 0;
-        const avgRating = parseFloat(taskStats.rows[0].avg_rating) || 0;
+        const completedCount = parseInt(taskStats[0].completed_count) || 0;
+        const avgRating = parseFloat(taskStats[0].avg_rating) || 0;
         // 3. 查询导师观察表中的"习惯形成"记录数
-        const habitResult = await db_1.default.query(`SELECT COUNT(*) as habit_count
+        const habitResult = await (0, db_1.query)(`SELECT COUNT(*) as habit_count
        FROM mentor_observations
        WHERE student_id = $1 AND observation_type = 'habit_formed'`, [userId]);
-        const habitCount = parseInt(habitResult.rows[0].habit_count) || 0;
+        const habitCount = parseInt(habitResult[0].habit_count) || 0;
         // 4. 判断是否满足升级条件
         const upgradeRequirements = {
             0: { tasks: 1, rating: 3.0, habits: 0 }, // Lv.0 → Lv.1
@@ -127,8 +124,8 @@ const upgradeLevel = async (req, res) => {
         // 这里简化处理，实际应该从checkResult中获取canUpgrade
         // 为了演示，直接执行升级
         // 2. 升级
-        const result = await db_1.default.query(`UPDATE users SET level = level + 1 WHERE id = $1 RETURNING level`, [userId]);
-        const newLevel = result.rows[0].level;
+        const result = await (0, db_1.query)(`UPDATE users SET level = level + 1 WHERE id = $1 RETURNING level`, [userId]);
+        const newLevel = result[0].level;
         const levelInfo = LEVEL_NAMES[newLevel];
         // 3. 生成升级提示消息
         const message = `你准备好了吗？可以试试更难的水域了。你现在是「${levelInfo.name}」。`;
@@ -156,62 +153,62 @@ const applyStretchChallenge = async (req, res) => {
     const { userId, taskId } = req.body;
     try {
         // 1. 获取用户当前等级
-        const userResult = await db_1.default.query(`SELECT id, level FROM users WHERE id = $1`, [userId]);
-        if (userResult.rows.length === 0) {
+        const userResult = await (0, db_1.query)(`SELECT id, level FROM users WHERE id = $1`, [userId]);
+        if (userResult.length === 0) {
             return res.status(404).json({ error: '用户不存在' });
         }
-        const user = userResult.rows[0];
+        const user = userResult[0];
         const currentLevel = user.level;
         // 2. 检查触发条件
         if (currentLevel < 1) {
             return res.status(400).json({ error: '当前等级不足，需要至少Lv.1' });
         }
         // 检查最近3单评分
-        const recentRatings = await db_1.default.query(`SELECT AVG(rating) as avg_rating
+        const recentRatings = await (0, db_1.query)(`SELECT AVG(rating) as avg_rating
        FROM (
          SELECT rating FROM task_applications
          WHERE student_id = $1 AND status = 'completed'
          ORDER BY completed_at DESC
          LIMIT 3
        ) recent`, [userId]);
-        const avgRating = parseFloat(recentRatings.rows[0].avg_rating) || 0;
+        const avgRating = parseFloat(recentRatings[0].avg_rating) || 0;
         if (avgRating < 4.5) {
             return res.status(400).json({ error: '最近3单平均评分需要≥4.5' });
         }
         // 检查是否有重复卡点
-        const stuckPoints = await db_1.default.query(`SELECT COUNT(*) as stuck_count
+        const stuckPoints = await (0, db_1.query)(`SELECT COUNT(*) as stuck_count
        FROM mentor_observations
        WHERE student_id = $1
          AND observation_type = 'stuck_point'
          AND created_at > NOW() - INTERVAL '30 days'`, [userId]);
-        const stuckCount = parseInt(stuckPoints.rows[0].stuck_count) || 0;
+        const stuckCount = parseInt(stuckPoints[0].stuck_count) || 0;
         if (stuckCount > 0) {
             return res.status(400).json({ error: '导师观察表中有未解决的卡点记录' });
         }
         // 检查30天内是否已申请过
-        const recentChallenge = await db_1.default.query(`SELECT id FROM stretch_challenges
+        const recentChallenge = await (0, db_1.query)(`SELECT id FROM stretch_challenges
        WHERE student_id = $1
          AND created_at > NOW() - INTERVAL '30 days'`, [userId]);
-        if (recentChallenge.rows.length > 0) {
+        if (recentChallenge.length > 0) {
             return res.status(400).json({ error: '30天内只能申请一次跳级挑战' });
         }
         // 3. 获取任务信息
-        const taskResult = await db_1.default.query(`SELECT id, required_level FROM tasks WHERE id = $1`, [taskId]);
-        if (taskResult.rows.length === 0) {
+        const taskResult = await (0, db_1.query)(`SELECT id, required_level FROM tasks WHERE id = $1`, [taskId]);
+        if (taskResult.length === 0) {
             return res.status(404).json({ error: '任务不存在' });
         }
-        const task = taskResult.rows[0];
+        const task = taskResult[0];
         // 检查任务等级是否符合跳级要求（高于当前等级2级）
         if (task.required_level !== currentLevel + 2) {
             return res.status(400).json({ error: '跳级挑战需要选择高于当前等级2级的项目' });
         }
         // 4. 创建跳级挑战记录
-        const challengeResult = await db_1.default.query(`INSERT INTO stretch_challenges (student_id, task_id, current_level, target_level, status)
+        const challengeResult = await (0, db_1.query)(`INSERT INTO stretch_challenges (student_id, task_id, current_level, target_level, status)
        VALUES ($1, $2, $3, $4, 'pending')
        RETURNING id`, [userId, taskId, currentLevel, currentLevel + 2]);
         res.json({
             success: true,
-            challengeId: challengeResult.rows[0].id,
+            challengeId: challengeResult[0].id,
             message: '跳级挑战申请成功！完成这个项目后，你将直接升到Lv.' + (currentLevel + 2)
         });
     }
@@ -229,16 +226,16 @@ const completeStretchChallenge = async (req, res) => {
     const { challengeId, success } = req.body;
     try {
         // 1. 获取挑战信息
-        const challengeResult = await db_1.default.query(`SELECT * FROM stretch_challenges WHERE id = $1`, [challengeId]);
-        if (challengeResult.rows.length === 0) {
+        const challengeResult = await (0, db_1.query)(`SELECT * FROM stretch_challenges WHERE id = $1`, [challengeId]);
+        if (challengeResult.length === 0) {
             return res.status(404).json({ error: '挑战不存在' });
         }
-        const challenge = challengeResult.rows[0];
+        const challenge = challengeResult[0];
         // 2. 更新挑战状态
-        await db_1.default.query(`UPDATE stretch_challenges SET status = $1, completed_at = NOW() WHERE id = $2`, [success ? 'success' : 'failed', challengeId]);
+        await (0, db_1.query)(`UPDATE stretch_challenges SET status = $1, completed_at = NOW() WHERE id = $2`, [success ? 'success' : 'failed', challengeId]);
         // 3. 如果成功，直接跳级
         if (success) {
-            await db_1.default.query(`UPDATE users SET level = $1 WHERE id = $2`, [challenge.target_level, challenge.student_id]);
+            await (0, db_1.query)(`UPDATE users SET level = $1 WHERE id = $2`, [challenge.target_level, challenge.student_id]);
             const levelInfo = LEVEL_NAMES[challenge.target_level];
             res.json({
                 success: true,

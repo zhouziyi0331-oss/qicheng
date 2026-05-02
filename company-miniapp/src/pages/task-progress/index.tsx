@@ -31,88 +31,22 @@ export default function TaskProgress() {
 
   const loadProgress = async () => {
     try {
-      // TODO: 调用真实API
-      // const res = await api.get(`/company/tasks/${taskId}/progress`)
-
-      // 模拟数据
-      setProgress({
-        taskId: taskId || '1',
-        taskTitle: '企业官网UI设计',
-        currentStatus: '学生执行中',
-        steps: [
-          {
-            id: '1',
-            title: '任务发布',
-            description: '企业发布任务并支付30%定金',
-            status: 'completed',
-            timestamp: '2025-12-15 10:00',
-            operator: '企业方'
-          },
-          {
-            id: '2',
-            title: 'AI匹配学生',
-            description: 'AI为您匹配了10位合适的学生',
-            status: 'completed',
-            timestamp: '2025-12-15 10:05',
-            operator: '系统'
-          },
-          {
-            id: '3',
-            title: '企业选择学生',
-            description: '您选择了5位学生并发送邀请',
-            status: 'completed',
-            timestamp: '2025-12-15 11:30',
-            operator: '企业方'
-          },
-          {
-            id: '4',
-            title: '学生接单',
-            description: '张小明接受了任务邀请',
-            status: 'completed',
-            timestamp: '2025-12-15 14:20',
-            operator: '张小明'
-          },
-          {
-            id: '5',
-            title: '学生执行中',
-            description: '学生正在完成任务，当前进度60%',
-            status: 'current',
-            timestamp: '2025-12-18 16:00',
-            operator: '张小明'
-          },
-          {
-            id: '6',
-            title: '学生提交交付物',
-            description: '等待学生提交任务成果',
-            status: 'pending'
-          },
-          {
-            id: '7',
-            title: 'AI初审',
-            description: 'AI将对交付物进行初步审核',
-            status: 'pending'
-          },
-          {
-            id: '8',
-            title: '企业验收',
-            description: '您需要验收交付物并决定通过或打回',
-            status: 'pending'
-          },
-          {
-            id: '9',
-            title: '支付尾款',
-            description: '验收通过后支付70%尾款',
-            status: 'pending'
-          },
-          {
-            id: '10',
-            title: '任务完成',
-            description: '平台将款项支付给学生，任务结束',
-            status: 'pending'
-          }
-        ]
+      const token = Taro.getStorageSync('token')
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/company/tasks/${taskId}/progress`,
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${token}`
+        }
       })
+
+      if (res.statusCode === 200 && res.data.success) {
+        setProgress(res.data.data)
+      } else {
+        throw new Error(res.data.message || '加载失败')
+      }
     } catch (error) {
+      console.error('加载任务进度失败:', error)
       Taro.showToast({ title: '加载失败', icon: 'none' })
     } finally {
       setLoading(false)

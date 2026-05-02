@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../utils/db';
+import { query, queryOne } from '../utils/db';
 
 /**
  * 提交OPC测试结果
@@ -59,7 +59,7 @@ export const submitOPCTest = async (req: Request, res: Response) => {
     const recommendations = generateRecommendations(personalityTag);
 
     // 6. 保存到数据库
-    const result = await pool.query(
+    const result = await query<{ id: string }>(
       `INSERT INTO user_opc_results (
         user_id, test_version,
         information_processing_score, creation_drive_score, tool_learning_score,
@@ -82,7 +82,7 @@ export const submitOPCTest = async (req: Request, res: Response) => {
     );
 
     // 7. 更新用户表
-    await pool.query(
+    await query(
       `UPDATE users SET opc_personality_tag = $1, opc_completed_at = NOW(), opc_test_version = $2 WHERE id = $3`,
       [personalityTag.key, '2.0', userId]
     );
@@ -90,7 +90,7 @@ export const submitOPCTest = async (req: Request, res: Response) => {
     res.json({
       success: true,
       result: {
-        id: result.rows[0].id,
+        id: result[0].id,
         scores: normalizedScores,
         personalityTag: personalityTag,
         interpretations: interpretations,
@@ -111,16 +111,30 @@ export const getOPCResult = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   try {
-    const result = await pool.query(
+    const result = await query<{
+      information_processing_normalized: number;
+      creation_drive_normalized: number;
+      tool_learning_normalized: number;
+      task_execution_normalized: number;
+      collaboration_normalized: number;
+      risk_attitude_normalized: number;
+      personality_tag: string;
+      personality_description: string;
+      dimension_interpretations: any;
+      recommended_track: string;
+      recommended_level: string;
+      recommended_first_task: string;
+      completed_at: Date;
+    }>(
       `SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`,
       [userId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return res.status(404).json({ error: '未找到测试结果' });
     }
 
-    const data = result.rows[0];
+    const data = result[0];
 
     res.json({
       success: true,

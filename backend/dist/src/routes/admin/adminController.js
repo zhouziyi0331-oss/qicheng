@@ -22,7 +22,7 @@ const logger_1 = __importDefault(require("../../utils/logger"));
 async function requireAdmin(req, res, next) {
     try {
         const userId = req.user.userId;
-        const admin = await (0, db_1.queryOne)('SELECT admin_role, is_active FROM admins WHERE user_id = $1 AND deleted_at IS NULL', [userId]);
+        const admin = await (0, db_1.queryOne)('SELECT role as admin_role, is_active FROM admin_users WHERE user_id = $1 AND deleted_at IS NULL', [userId]);
         if (!admin || !admin.is_active) {
             throw new errorHandler_1.AppError(403, '需要管理员权限', 'ADMIN_REQUIRED');
         }
@@ -54,15 +54,15 @@ async function getDashboard(req, res, next) {
        FROM tasks WHERE deleted_at IS NULL`);
         // 3. 财务统计
         const financeStats = await (0, db_1.queryOne)(`SELECT
-         COALESCE(SUM(gross_amount), 0) as total_paid,
-         COALESCE(SUM(net_amount), 0) as total_withdrawn,
+         COALESCE(SUM(amount), 0) as total_paid,
+         COALESCE(SUM(amount), 0) as total_withdrawn,
          COALESCE(SUM(platform_fee), 0) as platform_revenue
-       FROM payments WHERE status = 'settled'`);
+       FROM income_records WHERE status = 'completed'`);
         // 4. 待处理事项
         const pendingItems = await (0, db_1.query)(`SELECT 'task_review' as type, COUNT(*) as count
-       FROM task_review_queue WHERE status = 'pending'
+       FROM tasks WHERE status = 'pending_review'
        UNION ALL
-       SELECT 'withdrawal', COUNT(*) FROM withdrawals WHERE status = 'pending'
+       SELECT 'withdrawal', COUNT(*) FROM withdrawal_requests WHERE status = 'pending'
        UNION ALL
        SELECT 'company_verify', COUNT(*) FROM company_profiles WHERE verified_at IS NULL`);
         // 5. 最近活动
@@ -297,13 +297,13 @@ async function getWithdrawals(req, res, next) {
         const withdrawals = await (0, db_1.query)(`SELECT
          w.*, u.nickname, u.phone,
          sb.balance as current_balance
-       FROM withdrawals w
+       FROM withdrawal_requests w
        JOIN users u ON w.user_id = u.id
        LEFT JOIN student_balances sb ON w.user_id = sb.user_id
        ${whereClause}
-       ORDER BY w.requested_at DESC
+       ORDER BY w.created_at DESC
        LIMIT $${params.length - 1} OFFSET $${params.length}`, params);
-        const total = await (0, db_1.queryOne)(`SELECT COUNT(*) as count FROM withdrawals w ${whereClause}`, params.slice(0, -2));
+        const total = await (0, db_1.queryOne)(`SELECT COUNT(*) as count FROM withdrawal_requests w ${whereClause}`, params.slice(0, -2));
         res.json({
             success: true,
             data: {
@@ -328,7 +328,7 @@ async function processWithdrawal(req, res, next) {
         const { id } = req.params;
         const { action, notes } = req.body; // action: approve/reject
         const adminId = req.user.userId;
-        const withdrawal = await (0, db_1.queryOne)('SELECT * FROM withdrawals WHERE id = $1', [id]);
+        const withdrawal = await (0, db_1.queryOne)('SELECT * FROM withdrawal_requests WHERE id = $1', [id]);
         if (!withdrawal) {
             throw new errorHandler_1.AppError(404, '提现申请不存在', 'WITHDRAWAL_NOT_FOUND');
         }
@@ -341,13 +341,13 @@ async function processWithdrawal(req, res, next) {
                 await client.query(`UPDATE student_balances
            SET balance = balance - $1, total_withdrawn = total_withdrawn + $1, updated_at = NOW()
            WHERE user_id = $2`, [withdrawal.amount, withdrawal.user_id]);
-                await client.query(`UPDATE withdrawals
-           SET status = 'done', processor_id = $1, process_note = $2, processed_at = NOW()
+                await client.query(`UPDATE withdrawal_requests
+           SET status = 'approved', admin_id = $1, admin_note = $2, processed_at = NOW()
            WHERE id = $3`, [adminId, notes, id]);
             }
             else {
-                await client.query(`UPDATE withdrawals
-           SET status = 'failed', processor_id = $1, process_note = $2, processed_at = NOW()
+                await client.query(`UPDATE withdrawal_requests
+           SET status = 'rejected', admin_id = $1, admin_note = $2, processed_at = NOW()
            WHERE id = $3`, [adminId, notes, id]);
             }
             // 记录操作日志

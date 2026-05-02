@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../utils/db';
+import { query, queryOne } from '../utils/db';
 
 /**
  * AI导师系统 2.0 - 使命是河版本
@@ -137,7 +137,7 @@ export const getFirstStep = async (req: Request, res: Response) => {
     const { taskId } = req.params;
 
     // 获取任务信息
-    const taskResult = await pool.query(
+    const taskResult = await query<{ id: string; title: string; category: string }>(
       'SELECT * FROM tasks WHERE id = $1',
       [taskId]
     );
@@ -177,12 +177,12 @@ export const mentorChat = async (req: Request, res: Response) => {
 
   try {
     // 1. 获取学生信息
-    const studentResult = await pool.query(
+    const studentResult = await query<{ id: string; name: string; personality_tag?: string; life_question?: string }>(
       `SELECT u.id, COALESCE(u.nickname, '同学') as name FROM users u WHERE u.id = $1`,
       [studentId]
     );
 
-    // pool.query 直接返回数组，不是 { rows: [...] } 格式
+    // query 直接返回数组，不是 { rows: [...] } 格式
     if (!studentResult || studentResult.length === 0) {
       return res.status(404).json({ error: '学生不存在' });
     }
@@ -191,7 +191,7 @@ export const mentorChat = async (req: Request, res: Response) => {
 
     // 尝试获取OPC测试结果
     try {
-      const opcResult = await pool.query(
+      const opcResult = await query<{ personality_tag: string }>(
         `SELECT personality_tag FROM opc_test_results WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`,
         [studentId]
       );
@@ -204,7 +204,7 @@ export const mentorChat = async (req: Request, res: Response) => {
 
     // 2. 尝试获取生命问题（如果表存在）
     try {
-      const lifeQuestionResult = await pool.query(
+      const lifeQuestionResult = await query<{ question: string }>(
         `SELECT question FROM life_questions WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1`,
         [studentId]
       );
@@ -219,7 +219,7 @@ export const mentorChat = async (req: Request, res: Response) => {
     // 3. 获取任务信息
     let taskData = null;
     if (taskId) {
-      const taskResult = await pool.query(
+      const taskResult = await query<{ id: string; title: string; description: string; required_personality_style: string }>(
         `SELECT id, title, description, required_personality_style FROM tasks WHERE id = $1`,
         [taskId]
       );
@@ -239,7 +239,7 @@ export const mentorChat = async (req: Request, res: Response) => {
     // 6. 检测并记录热情火花
     if (aiResponse.detectedPassionSpark) {
       try {
-        await pool.query(
+        await query(
           `INSERT INTO passion_sparks (student_id, task_id, spark_text, context, detected_by)
            VALUES ($1, $2, $3, $4, 'ai_mentor')`,
           [studentId, taskId, aiResponse.detectedPassionSpark, message]
@@ -252,7 +252,7 @@ export const mentorChat = async (req: Request, res: Response) => {
     // 7. 检测并记录穿越感时刻
     if (aiResponse.detectedFlowMoment) {
       try {
-        await pool.query(
+        await query(
           `INSERT INTO flow_moments (student_id, task_id, moment_text, captured_at)
            VALUES ($1, $2, $3, NOW())`,
           [studentId, taskId, aiResponse.detectedFlowMoment]
@@ -264,7 +264,7 @@ export const mentorChat = async (req: Request, res: Response) => {
 
     // 8. 保存对话记录
     try {
-      await pool.query(
+      await query(
         `INSERT INTO mentor_conversations (student_id, task_id, student_message, mentor_response, created_at)
          VALUES ($1, $2, $3, $4, NOW())`,
         [studentId, taskId, message, aiResponse.response]
@@ -475,7 +475,12 @@ export const generateWelcomeMessage = async (req: Request, res: Response) => {
 
   try {
     // 1. 获取学生信息
-    const studentResult = await pool.query(
+    const studentResult = await query<{
+      id: string;
+      name: string;
+      opc_personality_tag: string;
+      life_question: string;
+    }>(
       `SELECT
         u.id, u.name, u.opc_personality_tag as personality_tag,
         lq.question as life_question
@@ -485,15 +490,15 @@ export const generateWelcomeMessage = async (req: Request, res: Response) => {
       [studentId]
     );
 
-    const studentData = studentResult.rows[0];
+    const studentData = studentResult[0];
 
     // 2. 获取任务信息
-    const taskResult = await pool.query(
+    const taskResult = await query<{ title: string; description: string; required_personality_style: string }>(
       `SELECT title, description, required_personality_style FROM tasks WHERE id = $1`,
       [taskId]
     );
 
-    const taskData = taskResult.rows[0];
+    const taskData = taskResult[0];
 
     // 3. 生成欢迎消息
     let message = `这个项目有意思——`;
@@ -507,8 +512,8 @@ export const generateWelcomeMessage = async (req: Request, res: Response) => {
       'explorer_integrator': '它需要你整合多个工具'
     };
 
-    if (studentData.personality_tag && taskData.required_personality_style === studentData.personality_tag) {
-      message += styleMessages[studentData.personality_tag] || '它需要你的能力';
+    if (studentData.opc_personality_tag && taskData.required_personality_style === studentData.opc_personality_tag) {
+      message += styleMessages[studentData.opc_personality_tag] || '它需要你的能力';
       message += `，你上次测试时说自己擅长这个方向，这次正好试试。`;
     } else {
       message += `「${taskData.title}」可能让你发现一些新东西。`;
@@ -538,7 +543,11 @@ export const generateMilestoneMessage = async (req: Request, res: Response) => {
 
   try {
     // 1. 查询学生的历史卡点记录
-    const stuckHistory = await pool.query(
+    const stuckHistory = await query<{
+      observation_content: string;
+      observation_data: any;
+      created_at: Date;
+    }>(
       `SELECT observation_content, observation_data, created_at
        FROM mentor_observations
        WHERE student_id = $1
@@ -551,8 +560,8 @@ export const generateMilestoneMessage = async (req: Request, res: Response) => {
     // 2. 生成自我对比式反馈
     let message = '';
 
-    if (stuckHistory.rows.length > 0) {
-      const lastStuck = stuckHistory.rows[0];
+    if (stuckHistory.length > 0) {
+      const lastStuck = stuckHistory[0];
       const stuckData = lastStuck.observation_data;
 
       if (stuckData && stuckData.step) {
@@ -616,7 +625,7 @@ export const recordObservation = async (req: Request, res: Response) => {
   }
 
   try {
-    const result = await pool.query(
+    const result = await query<{ id: string }>(
       `INSERT INTO mentor_observations (student_id, task_id, observation_type, observation_content, observation_data)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id`,
@@ -625,7 +634,7 @@ export const recordObservation = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      observationId: result.rows[0].id
+      observationId: result[0].id
     });
   } catch (error) {
     console.error('记录导师观察失败:', error);
@@ -641,7 +650,13 @@ export const getStudentObservations = async (req: Request, res: Response) => {
   const { studentId } = req.params;
 
   try {
-    const result = await pool.query(
+    const result = await query<{
+      id: string;
+      observation_type: string;
+      observation_content: string;
+      observation_data: any;
+      created_at: Date;
+    }>(
       `SELECT * FROM mentor_observations
        WHERE student_id = $1
        ORDER BY created_at DESC
@@ -651,7 +666,7 @@ export const getStudentObservations = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      observations: result.rows
+      observations: result
     });
   } catch (error) {
     console.error('获取观察记录失败:', error);

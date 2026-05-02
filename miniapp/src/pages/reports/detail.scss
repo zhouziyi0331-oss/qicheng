@@ -1,0 +1,445 @@
+.report-detail-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+  padding: 40px 32px;
+
+  .header {
+    margin-bottom: 40px;
+    text-align: center;
+
+    .title {
+      display: block;
+      font-size: 48px;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      display: block;
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+
+    .btn-download,
+    .btn-share {
+      flex: 1;
+      height: 80px;
+      line-height: 80px;
+      font-size: 30px;
+      border-radius: 40px;
+      border: none;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #FF6B9D 0%, #FFA07A 100%);
+      color: #ffffff;
+    }
+
+    .btn-share {
+      background: linear-gradient(135deg, #C71585 0%, #FF1493 100%);
+      color: #ffffff;
+    }
+  }
+
+  .content-container {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 32px;
+    padding: 40px 32px;
+    min-height: 600px;
+  }
+
+  .preview-section {
+    .preview-content {
+      position: relative;
+      padding: 32px;
+      background: #FFF0F5;
+      border-radius: 16px;
+
+      .preview-text {
+        display: block;
+        font-size: 32px;
+        line-height: 1.6;
+        color: #333333;
+        margin-bottom: 32px;
+      }
+
+      .blur-overlay {
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        border: 2px dashed #FFB6C1;
+
+        .blur-hint {
+          display: block;
+          font-size: 28px;
+          color: #FF69B4;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .status-section {
+    text-align: center;
+    padding: 80px 32px;
+
+    .status-text {
+      display: block;
+      font-size: 36px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 16px;
+    }
+
+    .status-hint {
+      display: block;
+      font-size: 28px;
+      color: #999999;
+    }
+  }
+
+  .full-report {
+    &.r6-report {
+      .report-section {
+        margin-bottom: 48px;
+
+        .section-title {
+          display: block;
+          font-size: 36px;
+          font-weight: bold;
+          color: #FF1493;
+          margin-bottom: 24px;
+          padding-bottom: 16px;
+          border-bottom: 3px solid #FFB6C1;
+        }
+
+        .section-content {
+          font-size: 30px;
+          line-height: 1.8;
+          color: #333333;
+          white-space: pre-wrap;
+        }
+
+        // 创业方向卡片
+        .possibility-card,
+        .product-card {
+          margin-bottom: 32px;
+          padding: 28px;
+          background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%);
+          border-radius: 16px;
+          border-left: 4px solid #FF69B4;
+
+          .card-title {
+            display: block;
+            font-size: 32px;
+            font-weight: bold;
+            color: #C71585;
+            margin-bottom: 16px;
+          }
+
+          .card-content {
+            display: block;
+            font-size: 28px;
+            line-height: 1.8;
+            color: #333333;
+            margin-bottom: 16px;
+          }
+
+          .card-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+
+            .meta-tag {
+              padding: 8px 16px;
+              background: #ffffff;
+              border-radius: 20px;
+              font-size: 24px;
+              color: #FF1493;
+            }
+          }
+
+          .card-info {
+            display: block;
+            font-size: 26px;
+            color: #666666;
+            margin-bottom: 8px;
+          }
+
+          .action-plan {
+            margin-top: 16px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+
+            .plan-title {
+              display: block;
+              font-size: 28px;
+              font-weight: bold;
+              color: #FF69B4;
+              margin-bottom: 12px;
+            }
+
+            .plan-content {
+              display: block;
+              font-size: 26px;
+              line-height: 1.6;
+              color: #333333;
+            }
+          }
+        }
+
+        // 行动步骤
+        .step-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 24px;
+          padding: 20px;
+          background: #FFF0F5;
+          border-radius: 12px;
+
+          .step-number {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: 20px;
+          }
+
+          .step-content {
+            flex: 1;
+            font-size: 28px;
+            line-height: 1.8;
+            color: #333333;
+          }
+        }
+
+        // 路径部分
+        &.path-section {
+          padding: 32px;
+          background: linear-gradient(135deg, #FFF5EE 0%, #FFE4E1 100%);
+          border-radius: 20px;
+
+          .path-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+
+            .meta-item {
+              padding: 12px 24px;
+              background: #ffffff;
+              border-radius: 24px;
+              font-size: 26px;
+              color: #FF1493;
+              font-weight: bold;
+            }
+          }
+
+          .path-cost {
+            display: block;
+            font-size: 30px;
+            font-weight: bold;
+            color: #C71585;
+            margin-bottom: 24px;
+          }
+
+          .path-step {
+            margin-bottom: 32px;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 16px;
+            border-left: 4px solid #FF69B4;
+
+            .step-title {
+              display: block;
+              font-size: 30px;
+              font-weight: bold;
+              color: #FF1493;
+              margin-bottom: 12px;
+            }
+
+            .step-desc {
+              display: block;
+              font-size: 28px;
+              line-height: 1.8;
+              color: #333333;
+              margin-bottom: 12px;
+            }
+
+            .step-time {
+              display: block;
+              font-size: 26px;
+              color: #FF69B4;
+              margin-bottom: 16px;
+            }
+
+            .resources {
+              margin-top: 16px;
+              padding: 16px;
+              background: #FFF0F5;
+              border-radius: 12px;
+
+              .resources-title {
+                display: block;
+                font-size: 26px;
+                font-weight: bold;
+                color: #C71585;
+                margin-bottom: 12px;
+              }
+
+              .resource-item {
+                display: block;
+                font-size: 24px;
+                line-height: 1.6;
+                color: #666666;
+                margin-bottom: 8px;
+              }
+            }
+          }
+
+          .service-card {
+            margin-bottom: 28px;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 16px;
+            border-left: 4px solid #FF69B4;
+
+            .service-title {
+              display: block;
+              font-size: 30px;
+              font-weight: bold;
+              color: #FF1493;
+              margin-bottom: 12px;
+            }
+
+            .service-desc {
+              display: block;
+              font-size: 28px;
+              line-height: 1.8;
+              color: #333333;
+              margin-bottom: 12px;
+            }
+
+            .service-cost {
+              display: block;
+              font-size: 28px;
+              font-weight: bold;
+              color: #C71585;
+              margin-bottom: 16px;
+            }
+
+            .providers {
+              margin-top: 16px;
+              padding: 16px;
+              background: #FFF0F5;
+              border-radius: 12px;
+
+              .providers-title {
+                display: block;
+                font-size: 26px;
+                font-weight: bold;
+                color: #C71585;
+                margin-bottom: 12px;
+              }
+
+              .provider-item {
+                display: block;
+                font-size: 24px;
+                line-height: 1.6;
+                color: #666666;
+                margin-bottom: 8px;
+              }
+            }
+          }
+
+          .advantages {
+            margin-top: 24px;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 16px;
+
+            .advantages-title {
+              display: block;
+              font-size: 28px;
+              font-weight: bold;
+              color: #FF1493;
+              margin-bottom: 16px;
+            }
+
+            .advantage-item {
+              display: block;
+              font-size: 26px;
+              line-height: 1.8;
+              color: #333333;
+              margin-bottom: 12px;
+            }
+          }
+        }
+
+        // 通用指南卡片
+        .guide-card {
+          margin-bottom: 32px;
+          padding: 28px;
+          background: #FFF0F5;
+          border-radius: 16px;
+          border-left: 4px solid #FF69B4;
+
+          .guide-title {
+            display: block;
+            font-size: 32px;
+            font-weight: bold;
+            color: #C71585;
+            margin-bottom: 16px;
+          }
+
+          .guide-content {
+            display: block;
+            font-size: 28px;
+            line-height: 1.8;
+            color: #333333;
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
+
+    .report-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 2px solid #FFB6C1;
+      text-align: center;
+
+      .footer-text {
+        display: block;
+        font-size: 26px;
+        color: #FF69B4;
+      }
+    }
+  }
+
+  .error-page {
+    text-align: center;
+    padding: 80px 32px;
+
+    .error-text {
+      display: block;
+      font-size: 36px;
+      color: #999999;
+    }
+  }
+}

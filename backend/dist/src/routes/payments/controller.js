@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -155,6 +188,25 @@ async function processPaymentSuccess(paymentId) {
             await client.query(`UPDATE payments SET status = 'settled', settled_at = NOW() WHERE payment_id = $1`, [paymentId]);
         }
     });
+    // 检查是否是报告支付
+    const report = await (0, db_1.queryOne)(`SELECT id, report_type, user_id FROM opc_reports WHERE payment_id = $1`, [payment.id]);
+    if (report) {
+        // 更新报告支付状态
+        await (0, db_1.query)(`UPDATE opc_reports SET paid_at = NOW(), paid_amount = $1 WHERE id = $2`, [payment.net_amount, report.id]);
+        // R6 创业综合报告：支付后立即生成
+        if (report.report_type === 'R6') {
+            logger_1.default.info('Triggering R6 report generation immediately', { reportId: report.id, userId: report.user_id });
+            const { triggerReportGeneration } = await Promise.resolve().then(() => __importStar(require('../reports/controller')));
+            // 异步触发，不阻塞支付回调
+            triggerReportGeneration(report.id, report.user_id).catch(err => {
+                logger_1.default.error('Failed to trigger R6 report generation', { reportId: report.id, error: err.message });
+            });
+        }
+        else {
+            // 其他报告：24小时内异步生成（由定时任务处理）
+            logger_1.default.info('Report payment confirmed, will generate within 24h', { reportId: report.id, reportType: report.report_type });
+        }
+    }
     logger_1.default.info('Payment processed', { paymentId, studentId: payment.student_id });
 }
 //# sourceMappingURL=controller.js.map

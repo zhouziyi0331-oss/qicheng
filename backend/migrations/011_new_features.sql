@@ -7,32 +7,43 @@
 -- ============================================================
 -- 1. 跳级挑战记录表
 -- ============================================================
-CREATE TABLE IF NOT EXISTS level_challenges (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  old_level INT NOT NULL CHECK (old_level >= 0 AND old_level <= 10),
-  new_level INT NOT NULL CHECK (new_level >= 0 AND new_level <= 10),
-  score INT NOT NULL CHECK (score >= 0 AND score <= 100),
-  passed BOOLEAN NOT NULL DEFAULT false,
-  answers JSONB NOT NULL DEFAULT '{}'::jsonb,
-  feedback TEXT,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
+-- 注意：level_challenges 表已在之前的迁移中创建，这里只添加缺失的列和索引
 
--- 索引
-CREATE INDEX IF NOT EXISTS idx_level_challenges_user_id ON level_challenges(user_id);
-CREATE INDEX IF NOT EXISTS idx_level_challenges_created_at ON level_challenges(created_at DESC);
+-- 添加 score 列（如果不存在）
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'level_challenges' AND column_name = 'score'
+  ) THEN
+    ALTER TABLE level_challenges
+    ADD COLUMN score INT CHECK (score >= 0 AND score <= 100);
+  END IF;
+END $$;
+
+-- 添加 answers 列（如果不存在）
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'level_challenges' AND column_name = 'answers'
+  ) THEN
+    ALTER TABLE level_challenges
+    ADD COLUMN answers JSONB DEFAULT '{}'::jsonb;
+  END IF;
+END $$;
+
+-- 索引（使用实际的列名 student_id）
+CREATE INDEX IF NOT EXISTS idx_level_challenges_student_id ON level_challenges(student_id);
+CREATE INDEX IF NOT EXISTS idx_level_challenges_started_at ON level_challenges(started_at DESC);
 CREATE INDEX IF NOT EXISTS idx_level_challenges_passed ON level_challenges(passed) WHERE passed = true;
 
 -- 注释
 COMMENT ON TABLE level_challenges IS '跳级挑战记录表';
-COMMENT ON COLUMN level_challenges.user_id IS '学生用户ID';
-COMMENT ON COLUMN level_challenges.old_level IS '挑战前等级';
-COMMENT ON COLUMN level_challenges.new_level IS '挑战后等级';
-COMMENT ON COLUMN level_challenges.score IS '挑战得分(0-100)';
+COMMENT ON COLUMN level_challenges.student_id IS '学生用户ID';
+COMMENT ON COLUMN level_challenges.from_level IS '挑战前等级';
+COMMENT ON COLUMN level_challenges.to_level IS '挑战后等级';
 COMMENT ON COLUMN level_challenges.passed IS '是否通过';
-COMMENT ON COLUMN level_challenges.answers IS '答题内容(JSON)';
 COMMENT ON COLUMN level_challenges.feedback IS 'AI评估反馈';
 
 -- ============================================================
@@ -142,21 +153,6 @@ END $$;
 -- 5. 触发器：自动更新 updated_at
 -- ============================================================
 
--- level_challenges 表触发器
-CREATE OR REPLACE FUNCTION update_level_challenges_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS trigger_level_challenges_updated_at ON level_challenges;
-CREATE TRIGGER trigger_level_challenges_updated_at
-  BEFORE UPDATE ON level_challenges
-  FOR EACH ROW
-  EXECUTE FUNCTION update_level_challenges_updated_at();
-
 -- student_tags 表触发器
 CREATE OR REPLACE FUNCTION update_student_tags_updated_at()
 RETURNS TRIGGER AS $$
@@ -192,6 +188,7 @@ CREATE TRIGGER trigger_task_steps_updated_at
 -- ============================================================
 
 -- 为现有学生添加一些默认标签（基于OPC标签）
+-- 注意：先确保唯一索引存在，然后再插入数据
 INSERT INTO student_tags (user_id, tag_name, tag_type, source)
 SELECT
   sp.user_id,
@@ -205,7 +202,17 @@ SELECT
   'system'
 FROM student_profiles sp
 WHERE sp.opc_label IS NOT NULL
-ON CONFLICT (user_id, tag_name) DO NOTHING;
+  AND NOT EXISTS (
+    SELECT 1 FROM student_tags st
+    WHERE st.user_id = sp.user_id
+      AND st.tag_name = CASE
+        WHEN sp.opc_label LIKE '%探索%' THEN 'AI探索者'
+        WHEN sp.opc_label LIKE '%实践%' THEN 'AI实践者'
+        WHEN sp.opc_label LIKE '%创作%' THEN '内容创作'
+        ELSE 'AI学习者'
+      END
+      AND st.deleted_at IS NULL
+  );
 
 -- ============================================================
 -- 完成

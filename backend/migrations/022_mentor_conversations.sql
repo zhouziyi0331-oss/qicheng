@@ -1,14 +1,30 @@
--- AI导师对话记录表
-CREATE TABLE IF NOT EXISTS mentor_conversations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  student_id UUID NOT NULL REFERENCES users(id),
-  task_id UUID REFERENCES tasks(id),
-  student_message TEXT NOT NULL,
-  mentor_response TEXT NOT NULL,
-  detected_passion_spark BOOLEAN DEFAULT false,
-  detected_flow_moment BOOLEAN DEFAULT false,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+-- AI导师对话记录表（表已存在，只添加缺失的列）
+DO $$
+BEGIN
+  -- 添加 student_message 列（如果不存在）
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                 WHERE table_name='mentor_conversations' AND column_name='student_message') THEN
+    ALTER TABLE mentor_conversations ADD COLUMN student_message TEXT;
+  END IF;
+
+  -- 添加 mentor_response 列（如果不存在）
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                 WHERE table_name='mentor_conversations' AND column_name='mentor_response') THEN
+    ALTER TABLE mentor_conversations ADD COLUMN mentor_response TEXT;
+  END IF;
+
+  -- 添加 detected_passion_spark 列（如果不存在）
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                 WHERE table_name='mentor_conversations' AND column_name='detected_passion_spark') THEN
+    ALTER TABLE mentor_conversations ADD COLUMN detected_passion_spark BOOLEAN DEFAULT false;
+  END IF;
+
+  -- 添加 detected_flow_moment 列（如果不存在）
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                 WHERE table_name='mentor_conversations' AND column_name='detected_flow_moment') THEN
+    ALTER TABLE mentor_conversations ADD COLUMN detected_flow_moment BOOLEAN DEFAULT false;
+  END IF;
+END $$;
 
 -- 穿越感时刻记录表
 CREATE TABLE IF NOT EXISTS flow_moments (
@@ -21,9 +37,9 @@ CREATE TABLE IF NOT EXISTS flow_moments (
 );
 
 -- 为查询优化添加索引
-CREATE INDEX idx_mentor_conversations_student ON mentor_conversations(student_id, created_at DESC);
-CREATE INDEX idx_mentor_conversations_task ON mentor_conversations(task_id);
-CREATE INDEX idx_flow_moments_student ON flow_moments(student_id, captured_at DESC);
+CREATE INDEX IF NOT EXISTS idx_mentor_conversations_student ON mentor_conversations(student_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_mentor_conversations_task ON mentor_conversations(task_id);
+CREATE INDEX IF NOT EXISTS idx_flow_moments_student ON flow_moments(student_id, captured_at DESC);
 
 -- 添加注释
 COMMENT ON TABLE mentor_conversations IS 'AI导师对话记录 - 使命是河版本';

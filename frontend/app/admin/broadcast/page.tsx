@@ -1,10 +1,8 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import AdminLayout, { Card, Button } from "@/components/admin/AdminLayout";
 
 export default function AdminBroadcastPage() {
   const [title, setTitle] = useState("");
@@ -37,62 +35,279 @@ export default function AdminBroadcastPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin" className="text-sm no-underline" style={{ color: "#8b949e" }}>← 后台</Link>
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>通知推送</h1>
-      </div>
-
-      <div className="p-5 rounded-lg flex flex-col gap-4" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-        <Input
-          label="通知标题 *"
-          placeholder="如：平台维护通知"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          maxLength={100}
-        />
-        <div>
-          <label className="text-xs mb-1 block" style={{ color: "#8b949e" }}>通知内容 *</label>
-          <textarea
-            className="w-full h-32 resize-none p-3 rounded-lg text-sm"
-            placeholder="通知正文..."
-            style={{ background: "#21262d", border: "1px solid #30363d", color: "#e6edf3" }}
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="text-xs mb-2 block" style={{ color: "#8b949e" }}>目标用户组</label>
-          <div className="flex gap-3">
-            {[
-              { value: "student", label: "🎓 学生" },
-              { value: "company", label: "🏢 企业" },
-            ].map((opt) => (
-              <label key={opt.value} className="flex items-center gap-2 cursor-pointer p-3 rounded-lg"
-                style={{
-                  background: roles.includes(opt.value) ? "#1f3358" : "#21262d",
-                  border: `1px solid ${roles.includes(opt.value) ? "#58a6ff" : "#30363d"}`,
-                }}>
-                <input
-                  type="checkbox"
-                  checked={roles.includes(opt.value)}
-                  onChange={() => toggleRole(opt.value)}
-                  style={{ width: "auto" }}
-                />
-                <span className="text-sm" style={{ color: roles.includes(opt.value) ? "#58a6ff" : "#e6edf3" }}>
-                  {opt.label}
-                </span>
-              </label>
-            ))}
+    <AdminLayout
+      title="📢 通知推送"
+      subtitle="向所有用户或特定用户组发送广播通知"
+    >
+      {/* 警告提示 */}
+      <Card style={{
+        padding: "16px 20px",
+        marginBottom: "24px",
+        background: "rgba(245, 158, 11, 0.1)",
+        border: "1px solid rgba(245, 158, 11, 0.3)"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <span style={{ fontSize: "24px" }}>⚠️</span>
+          <div>
+            <div style={{ fontSize: "14px", fontWeight: "600", color: "#F59E0B", marginBottom: "4px" }}>
+              广播通知注意事项
+            </div>
+            <div style={{ fontSize: "12px", color: "#FBBF24" }}>
+              广播通知将发送给所有符合条件的用户，操作不可撤销，且会写入管理员日志。请谨慎使用。
+            </div>
           </div>
         </div>
-        <div className="p-3 rounded-lg text-xs" style={{ background: "#1a2535", border: "1px solid #1f4a8a", color: "#8b949e" }}>
-          ⚠️ 广播通知将发送给所有符合条件的用户，操作不可撤销，且会写入管理员日志。
+      </Card>
+
+      {/* 广播表单 */}
+      <Card style={{ padding: "32px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+          {/* 通知标题 */}
+          <div>
+            <label style={{
+              display: "block",
+              fontSize: "13px",
+              color: "#8E96A5",
+              fontWeight: "600",
+              marginBottom: "8px"
+            }}>
+              通知标题 <span style={{ color: "#EF4444" }}>*</span>
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="如：平台维护通知"
+              maxLength={100}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                background: "rgba(0,0,0,0.2)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "#F1F5F9",
+                fontSize: "14px",
+                outline: "none",
+                transition: "all 0.2s"
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.5)";
+                e.currentTarget.style.background = "rgba(0,0,0,0.3)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                e.currentTarget.style.background = "rgba(0,0,0,0.2)";
+              }}
+            />
+            <div style={{
+              fontSize: "11px",
+              color: "#6B7280",
+              marginTop: "6px",
+              textAlign: "right"
+            }}>
+              {title.length}/100
+            </div>
+          </div>
+
+          {/* 通知内容 */}
+          <div>
+            <label style={{
+              display: "block",
+              fontSize: "13px",
+              color: "#8E96A5",
+              fontWeight: "600",
+              marginBottom: "8px"
+            }}>
+              通知内容 <span style={{ color: "#EF4444" }}>*</span>
+            </label>
+            <textarea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder="通知正文..."
+              style={{
+                width: "100%",
+                height: "160px",
+                resize: "vertical",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                background: "rgba(0,0,0,0.2)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "#F1F5F9",
+                fontSize: "14px",
+                fontFamily: "inherit",
+                outline: "none",
+                transition: "all 0.2s",
+                lineHeight: "1.6"
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.5)";
+                e.currentTarget.style.background = "rgba(0,0,0,0.3)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                e.currentTarget.style.background = "rgba(0,0,0,0.2)";
+              }}
+            />
+          </div>
+
+          {/* 目标用户组 */}
+          <div>
+            <label style={{
+              display: "block",
+              fontSize: "13px",
+              color: "#8E96A5",
+              fontWeight: "600",
+              marginBottom: "12px"
+            }}>
+              目标用户组 <span style={{ color: "#EF4444" }}>*</span>
+            </label>
+            <div style={{ display: "flex", gap: "16px" }}>
+              {[
+                { value: "student", label: "学生", icon: "🎓", color: "#3B82F6" },
+                { value: "company", label: "企业", icon: "🏢", color: "#10B981" },
+              ].map((opt) => {
+                const isSelected = roles.includes(opt.value);
+                return (
+                  <label
+                    key={opt.value}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "16px 20px",
+                      borderRadius: "12px",
+                      background: isSelected ? `${opt.color}20` : "rgba(255,255,255,0.03)",
+                      border: `2px solid ${isSelected ? opt.color : "rgba(255,255,255,0.1)"}`,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      userSelect: "none"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                      }
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleRole(opt.value)}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        cursor: "pointer",
+                        accentColor: opt.color
+                      }}
+                    />
+                    <span style={{ fontSize: "24px" }}>{opt.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        fontSize: "15px",
+                        fontWeight: "700",
+                        color: isSelected ? opt.color : "#F1F5F9"
+                      }}>
+                        {opt.label}
+                      </div>
+                      <div style={{
+                        fontSize: "11px",
+                        color: "#8E96A5",
+                        marginTop: "2px"
+                      }}>
+                        {opt.value === "student" ? "所有学生用户" : "所有企业用户"}
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 预览区域 */}
+          {(title || body) && (
+            <div>
+              <label style={{
+                display: "block",
+                fontSize: "13px",
+                color: "#8E96A5",
+                fontWeight: "600",
+                marginBottom: "12px"
+              }}>
+                通知预览
+              </label>
+              <div style={{
+                padding: "20px",
+                borderRadius: "12px",
+                background: "rgba(59, 130, 246, 0.1)",
+                border: "1px solid rgba(59, 130, 246, 0.3)"
+              }}>
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  marginBottom: "12px"
+                }}>
+                  <div style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "10px",
+                    background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "20px"
+                  }}>
+                    📢
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontSize: "15px",
+                      fontWeight: "700",
+                      color: "#F1F5F9",
+                      marginBottom: "4px"
+                    }}>
+                      {title || "通知标题"}
+                    </div>
+                    <div style={{
+                      fontSize: "12px",
+                      color: "#8E96A5"
+                    }}>
+                      系统通知 · 刚刚
+                    </div>
+                  </div>
+                </div>
+                <p style={{
+                  fontSize: "14px",
+                  color: "#D1D5DB",
+                  lineHeight: "1.6",
+                  margin: 0
+                }}>
+                  {body || "通知内容"}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* 发送按钮 */}
+          <Button
+            loading={loading}
+            onClick={handleBroadcast}
+            style={{
+              width: "100%",
+              padding: "14px",
+              fontSize: "15px",
+              fontWeight: "700"
+            }}
+          >
+            {loading ? "发送中..." : `发送广播通知给 ${roles.length === 0 ? "无" : roles.map(r => r === "student" ? "学生" : "企业").join(" 和 ")}`}
+          </Button>
         </div>
-        <Button loading={loading} onClick={handleBroadcast} className="w-full">
-          发送广播通知
-        </Button>
-      </div>
-    </div>
+      </Card>
+    </AdminLayout>
   );
 }

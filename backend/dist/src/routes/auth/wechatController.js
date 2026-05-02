@@ -77,7 +77,7 @@ async function wechatLogin(req, res, next) {
         }
         const { openid, session_key, unionid } = wxResponse.data;
         // 2. 查找是否已有该微信用户
-        let user = await (0, db_1.queryOne)(`SELECT id, role, user_type, is_active, nickname, avatar
+        let user = await (0, db_1.queryOne)(`SELECT id, role, user_type, is_active, nickname, avatar, phone
        FROM users
        WHERE wechat_openid = $1 AND deleted_at IS NULL`, [openid]);
         let userId;

@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import AdminLayout, { Card, SearchInput, Button, StatusBadge, Table, TableRow, TableCell, EmptyState, LoadingSkeleton } from "@/components/admin/AdminLayout";
 
 interface AdminTask {
   id: string;
@@ -18,19 +17,11 @@ interface AdminTask {
   created_at: string;
 }
 
-const STATUS_COLOR: Record<string, "blue" | "orange" | "green" | "gray" | "red"> = {
-  pending_review: "orange",
-  active: "blue",
-  in_progress: "blue",
-  completed: "green",
-  cancelled: "red",
-  draft: "gray",
-};
-
 export default function AdminTasksPage() {
   const [tasks, setTasks] = useState<AdminTask[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const { show } = useToast();
 
   useEffect(() => {
@@ -48,107 +39,237 @@ export default function AdminTasksPage() {
       await adminApi.takedownTask(id, reason);
       show("已下架", "success");
       setTasks((ts) => ts.filter((t) => t.id !== id));
-    } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      show(msg || "操作失败", "error");
+    } catch {
+      show("操作失败", "error");
     } finally {
       setActing(null);
     }
   };
 
-  const handleBlacklist = async (task: AdminTask) => {
-    const reason = window.prompt(`将企业「${task.company_name}」加入黑名单的原因：`);
-    if (!reason) return;
-    setActing(`bl-${task.id}`);
-    try {
-      await adminApi.blacklistCompany(task.id, reason);
-      show("已加入黑名单", "success");
-    } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      show(msg || "操作失败", "error");
-    } finally {
-      setActing(null);
-    }
+  const getStatusInfo = (status: string) => {
+    const map: Record<string, { type: "success" | "warning" | "error" | "info"; label: string }> = {
+      pending_review: { type: "warning", label: "待审核" },
+      active: { type: "info", label: "进行中" },
+      in_progress: { type: "info", label: "进行中" },
+      completed: { type: "success", label: "已完成" },
+      cancelled: { type: "error", label: "已取消" },
+      draft: { type: "warning", label: "草稿" },
+    };
+    return map[status] || { type: "info", label: status };
   };
+
+  const filteredTasks = tasks.filter(t =>
+    statusFilter === "all" || t.status === statusFilter
+  );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F9F7F5" }}>
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="flex items-center gap-3 mb-8">
-          <Link href="/admin" className="text-sm no-underline hover:opacity-70 transition-opacity" style={{ color: "#636E72" }}>
-            ← 返回后台
-          </Link>
-          <h1 className="text-2xl font-bold" style={{ color: "#2D3436" }}>需求管理</h1>
-        </div>
+    <AdminLayout
+      title="📋 任务管理"
+      subtitle={`共 ${tasks.length} 个任务`}
+      actions={
+        <Button onClick={() => show("导出功能开发中", "info")}>
+          📥 导出数据
+        </Button>
+      }
+    >
+      {/* 状态筛选 */}
+      <div style={{ marginBottom: "24px", display: "flex", gap: "8px" }}>
+        {[
+          { value: "all", label: "全部" },
+          { value: "pending_review", label: "待审核" },
+          { value: "active", label: "进行中" },
+          { value: "completed", label: "已完成" },
+          { value: "cancelled", label: "已取消" }
+        ].map((status) => (
+          <button
+            key={status.value}
+            onClick={() => setStatusFilter(status.value)}
+            style={{
+              padding: "10px 16px",
+              borderRadius: "10px",
+              background: statusFilter === status.value ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.05)",
+              border: statusFilter === status.value ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.1)",
+              color: statusFilter === status.value ? "#3B82F6" : "#8E96A5",
+              fontSize: "13px",
+              fontWeight: "600",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            {status.label}
+          </button>
+        ))}
+      </div>
 
-        {loading ? (
-          <div className="flex flex-col gap-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 rounded-3xl animate-pulse" style={{ background: "#FFFFFF" }} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {tasks.map((task) => (
-              <div
-                key={task.id}
-                className="p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow"
-                style={{ background: "#FFFFFF" }}
-              >
-                <div className="flex items-start justify-between gap-6">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-3 flex-wrap">
-                      <Badge color={STATUS_COLOR[task.status] || "gray"}>{task.status}</Badge>
-                      <Badge color="gray">赛道 {task.track_type}</Badge>
-                      <span className="text-xs px-3 py-1 rounded-full" style={{
-                        background: "#F0F0F0",
-                        color: "#636E72"
-                      }}>
-                        {task.company_name}
-                      </span>
-                    </div>
-                    <p className="font-semibold text-base mb-2" style={{ color: "#2D3436" }}>
-                      {task.title}
-                    </p>
-                    <p className="text-sm" style={{ color: "#B2BEC3" }}>
-                      {task.assignee_count}/{task.max_assignees} 人接单 ·
-                      发布于 {new Date(task.created_at).toLocaleDateString("zh-CN")}
-                    </p>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <div className="text-2xl font-bold mb-4" style={{ color: "#00B894" }}>
-                      ¥{task.budget_gross}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        loading={acting === `bl-${task.id}`}
-                        onClick={() => handleBlacklist(task)}
-                      >
-                        黑名单
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        loading={acting === task.id}
-                        onClick={() => handleTakedown(task.id)}
-                      >
-                        下架
-                      </Button>
-                    </div>
-                  </div>
+      {/* 统计卡片 */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "16px",
+        marginBottom: "24px"
+      }}>
+        {[
+          { label: "总任务数", value: tasks.length, icon: "📋", color: "#3B82F6" },
+          { label: "待审核", value: tasks.filter(t => t.status === "pending_review").length, icon: "⏳", color: "#F59E0B" },
+          { label: "进行中", value: tasks.filter(t => t.status === "active" || t.status === "in_progress").length, icon: "⚡", color: "#10B981" },
+          { label: "总预算", value: `¥${Math.round(tasks.reduce((sum, t) => sum + t.budget_gross, 0) / 100)}`, icon: "💰", color: "#8B5CF6" }
+        ].map((stat, idx) => (
+          <Card key={idx} style={{ padding: "20px" }}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "12px"
+            }}>
+              <div style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                background: `${stat.color}20`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "20px"
+              }}>
+                {stat.icon}
+              </div>
+              <div>
+                <div style={{
+                  fontSize: "24px",
+                  fontWeight: "700",
+                  color: "#F1F5F9",
+                  fontFamily: "'JetBrains Mono', monospace"
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: "12px",
+                  color: "#8E96A5",
+                  fontWeight: "500"
+                }}>
+                  {stat.label}
                 </div>
               </div>
-            ))}
-            {tasks.length === 0 && (
-              <div className="text-center py-20">
-                <p className="text-base" style={{ color: "#B2BEC3" }}>暂无任务需要审核</p>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          </Card>
+        ))}
       </div>
-    </div>
+
+      {/* 任务列表 */}
+      {loading ? (
+        <LoadingSkeleton count={5} />
+      ) : filteredTasks.length === 0 ? (
+        <EmptyState icon="📋" message="暂无任务数据" />
+      ) : (
+        <Table headers={["任务", "企业", "状态", "赛道", "预算", "进度", "创建时间", "操作"]}>
+          {filteredTasks.map((t) => {
+            const statusInfo = getStatusInfo(t.status);
+            return (
+              <TableRow key={t.id}>
+                <TableCell>
+                  <div style={{ fontWeight: "600", maxWidth: "300px" }}>{t.title}</div>
+                </TableCell>
+                <TableCell>
+                  <span style={{
+                    padding: "4px 10px",
+                    borderRadius: "6px",
+                    background: "rgba(139,92,246,0.15)",
+                    color: "#8B5CF6",
+                    fontSize: "12px",
+                    fontWeight: "600"
+                  }}>
+                    {t.company_name}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <StatusBadge status={statusInfo.type} label={statusInfo.label} />
+                </TableCell>
+                <TableCell style={{ color: "#8E96A5", fontSize: "13px" }}>
+                  {t.track_type || "未分类"}
+                </TableCell>
+                <TableCell>
+                  <span style={{
+                    color: "#10B981",
+                    fontWeight: "700",
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    ¥{Math.round(t.budget_gross / 100)}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{
+                      flex: 1,
+                      height: "6px",
+                      borderRadius: "3px",
+                      background: "rgba(255,255,255,0.1)",
+                      overflow: "hidden"
+                    }}>
+                      <div style={{
+                        width: `${(t.assignee_count / t.max_assignees) * 100}%`,
+                        height: "100%",
+                        background: "linear-gradient(90deg, #3B82F6, #10B981)",
+                        transition: "width 0.3s"
+                      }} />
+                    </div>
+                    <span style={{
+                      fontSize: "12px",
+                      color: "#8E96A5",
+                      fontFamily: "'JetBrains Mono', monospace"
+                    }}>
+                      {t.assignee_count}/{t.max_assignees}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell style={{ color: "#8E96A5", fontSize: "13px" }}>
+                  {new Date(t.created_at).toLocaleDateString('zh-CN')}
+                </TableCell>
+                <TableCell>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Link
+                      href={`/admin/tasks/${t.id}`}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: "8px",
+                        background: "rgba(59,130,246,0.15)",
+                        border: "1px solid rgba(59,130,246,0.3)",
+                        color: "#3B82F6",
+                        fontSize: "12px",
+                        fontWeight: "600",
+                        textDecoration: "none",
+                        display: "inline-block",
+                        transition: "all 0.2s"
+                      }}
+                    >
+                      详情
+                    </Link>
+                    {t.status !== "cancelled" && (
+                      <button
+                        onClick={() => handleTakedown(t.id)}
+                        disabled={acting === t.id}
+                        style={{
+                          padding: "6px 12px",
+                          borderRadius: "8px",
+                          background: "rgba(239,68,68,0.15)",
+                          border: "1px solid rgba(239,68,68,0.3)",
+                          color: "#EF4444",
+                          fontSize: "12px",
+                          fontWeight: "600",
+                          cursor: acting === t.id ? "not-allowed" : "pointer",
+                          opacity: acting === t.id ? 0.6 : 1,
+                          transition: "all 0.2s"
+                        }}
+                      >
+                        {acting === t.id ? "处理中..." : "下架"}
+                      </button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </Table>
+      )}
+    </AdminLayout>
   );
 }

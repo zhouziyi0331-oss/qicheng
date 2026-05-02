@@ -1,9 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Badge from "@/components/ui/Badge";
+import AdminLayout, { Card, StatusBadge, Table, TableRow, TableCell, EmptyState, LoadingSkeleton } from "@/components/admin/AdminLayout";
 
 interface LogEntry {
   id: string;
@@ -15,18 +14,6 @@ interface LogEntry {
   note: string;
   created_at: string;
 }
-
-const ACTION_COLOR: Record<string, "blue" | "orange" | "red" | "green" | "gray"> = {
-  task_takedown: "red",
-  company_blacklist: "red",
-  withdrawal_approve: "green",
-  broadcast_notification: "blue",
-  task_intervene: "orange",
-  send_notification: "blue",
-  config_update: "orange",
-  student_data_export: "gray",
-  tag_update: "gray",
-};
 
 export default function AdminLogsPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -50,61 +37,181 @@ export default function AdminLogsPage() {
 
   useEffect(() => { load(1); }, []);
 
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-2">
-        <Link href="/admin" className="text-sm no-underline" style={{ color: "#8b949e" }}>← 后台</Link>
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>操作日志</h1>
-      </div>
-      <p className="text-xs mb-6" style={{ color: "#484f58" }}>
-        所有管理员操作均不可删除、不可修改 · 仅超级管理员可查看全部日志
-      </p>
+  const getActionInfo = (action: string) => {
+    const map: Record<string, { type: "success" | "warning" | "error" | "info"; label: string }> = {
+      task_takedown: { type: "error", label: "任务下架" },
+      company_blacklist: { type: "error", label: "企业拉黑" },
+      withdrawal_approve: { type: "success", label: "提现审批" },
+      broadcast_notification: { type: "info", label: "广播通知" },
+      task_intervene: { type: "warning", label: "任务介入" },
+      send_notification: { type: "info", label: "发送通知" },
+      config_update: { type: "warning", label: "配置更新" },
+      student_data_export: { type: "info", label: "数据导出" },
+      tag_update: { type: "info", label: "标签更新" },
+    };
+    return map[action] || { type: "info", label: action.replace(/_/g, " ") };
+  };
 
+  return (
+    <AdminLayout
+      title="📋 操作日志"
+      subtitle="所有管理员操作均不可删除、不可修改"
+    >
+      {/* 统计卡片 */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "16px",
+        marginBottom: "24px"
+      }}>
+        {[
+          { label: "总操作数", value: logs.length, icon: "📝", color: "#3B82F6" },
+          { label: "今日操作", value: logs.filter(l => new Date(l.created_at).toDateString() === new Date().toDateString()).length, icon: "📅", color: "#10B981" },
+          { label: "活跃管理员", value: new Set(logs.map(l => l.admin_id)).size, icon: "👥", color: "#F59E0B" },
+          { label: "高危操作", value: logs.filter(l => ["task_takedown", "company_blacklist"].includes(l.action)).length, icon: "⚠️", color: "#EF4444" }
+        ].map((stat, idx) => (
+          <Card key={idx} style={{ padding: "20px" }}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "12px"
+            }}>
+              <div style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                background: `${stat.color}20`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "20px"
+              }}>
+                {stat.icon}
+              </div>
+              <div>
+                <div style={{
+                  fontSize: "24px",
+                  fontWeight: "700",
+                  color: "#F1F5F9",
+                  fontFamily: "'JetBrains Mono', monospace"
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: "12px",
+                  color: "#8E96A5",
+                  fontWeight: "500"
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* 日志列表 */}
       {loading && page === 1 ? (
-        <div className="flex flex-col gap-2">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-14 rounded-lg animate-pulse" style={{ background: "#161b22" }} />
-          ))}
-        </div>
+        <LoadingSkeleton count={5} />
+      ) : logs.length === 0 ? (
+        <EmptyState icon="📋" message="暂无操作记录" />
       ) : (
         <>
-          <div className="flex flex-col gap-2">
-            {logs.map((log) => (
-              <div key={log.id} className="px-4 py-3 rounded-lg flex items-start gap-3"
-                style={{ background: "#161b22", border: "1px solid #30363d" }}>
-                <Badge color={ACTION_COLOR[log.action] || "gray"}>{log.action.replace(/_/g, " ")}</Badge>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm" style={{ color: "#e6edf3" }}>{log.admin_nickname}</span>
-                    <span className="text-xs" style={{ color: "#484f58" }}>
-                      {log.target_type} #{log.target_id?.slice(0, 8)}
-                    </span>
-                  </div>
-                  {log.note && (
-                    <p className="text-xs mt-0.5 truncate" style={{ color: "#8b949e" }}>{log.note}</p>
-                  )}
-                </div>
-                <span className="text-xs flex-shrink-0" style={{ color: "#484f58" }}>
-                  {new Date(log.created_at).toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-                </span>
-              </div>
-            ))}
-            {logs.length === 0 && (
-              <p className="text-center py-16 text-sm" style={{ color: "#484f58" }}>暂无操作记录</p>
-            )}
-          </div>
+          <Table headers={["操作类型", "管理员", "目标", "说明", "操作时间"]}>
+            {logs.map((log) => {
+              const actionInfo = getActionInfo(log.action);
+              return (
+                <TableRow key={log.id}>
+                  <TableCell>
+                    <StatusBadge status={actionInfo.type} label={actionInfo.label} />
+                  </TableCell>
+                  <TableCell>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "8px",
+                        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        fontSize: "14px",
+                        fontWeight: "700"
+                      }}>
+                        {log.admin_nickname.charAt(0)}
+                      </div>
+                      <span style={{ fontWeight: "600" }}>{log.admin_nickname}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <div style={{ fontSize: "12px", color: "#8E96A5" }}>
+                        {log.target_type}
+                      </div>
+                      <div style={{
+                        fontSize: "11px",
+                        color: "#6B7280",
+                        fontFamily: "'JetBrains Mono', monospace"
+                      }}>
+                        #{log.target_id?.slice(0, 8)}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div style={{
+                      maxWidth: "300px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      color: "#8E96A5",
+                      fontSize: "13px"
+                    }}>
+                      {log.note || "-"}
+                    </div>
+                  </TableCell>
+                  <TableCell style={{ color: "#8E96A5", fontSize: "13px" }}>
+                    {new Date(log.created_at).toLocaleString("zh-CN")}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </Table>
+
           {hasMore && (
-            <button
-              onClick={() => { const next = page + 1; setPage(next); load(next); }}
-              disabled={loading}
-              className="w-full mt-4 py-3 rounded-lg text-sm"
-              style={{ background: "#21262d", border: "1px solid #30363d", color: "#8b949e" }}
-            >
-              {loading ? "加载中..." : "加载更多"}
-            </button>
+            <div style={{ marginTop: "24px", textAlign: "center" }}>
+              <button
+                onClick={() => { const next = page + 1; setPage(next); load(next); }}
+                disabled={loading}
+                style={{
+                  padding: "12px 32px",
+                  borderRadius: "12px",
+                  background: loading ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: loading ? "#6B7280" : "#F1F5F9",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  transition: "all 0.2s"
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                  }
+                }}
+              >
+                {loading ? "加载中..." : "加载更多"}
+              </button>
+            </div>
           )}
         </>
       )}
-    </div>
+    </AdminLayout>
   );
 }

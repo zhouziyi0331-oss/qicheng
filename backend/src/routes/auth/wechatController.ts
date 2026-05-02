@@ -68,8 +68,8 @@ export async function wechatLogin(req: Request, res: Response, next: NextFunctio
     const { openid, session_key, unionid } = wxResponse.data;
 
     // 2. 查找是否已有该微信用户
-    let user = await queryOne<{ id: string; role: string; user_type: string; is_active: boolean; nickname: string; avatar: string }>(
-      `SELECT id, role, user_type, is_active, nickname, avatar
+    let user = await queryOne<{ id: string; role: string; user_type: string; is_active: boolean; nickname: string; avatar: string; phone?: string }>(
+      `SELECT id, role, user_type, is_active, nickname, avatar, phone
        FROM users
        WHERE wechat_openid = $1 AND deleted_at IS NULL`,
       [openid]

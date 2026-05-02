@@ -47,5 +47,6 @@ router.use(auth_1.authenticate, (0, auth_1.requireRole)('student'));
 router.get('/', controller.listReports);
 router.post('/order', controller.orderReport);
 router.get('/:id', controller.getReport);
+router.get('/:id/pdf', controller.downloadReportPDF);
 exports.default = router;
 //# sourceMappingURL=index.js.map

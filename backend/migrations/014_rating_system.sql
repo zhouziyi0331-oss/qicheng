@@ -3,11 +3,11 @@
 
 -- 1. 创建评价表
 CREATE TABLE IF NOT EXISTS task_ratings (
-  id SERIAL PRIMARY KEY,
-  task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-  rater_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  rater_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   rater_type VARCHAR(20) NOT NULL CHECK (rater_type IN ('student', 'company')),
-  ratee_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  ratee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   ratee_type VARCHAR(20) NOT NULL CHECK (ratee_type IN ('student', 'company')),
 
   -- 评分（1-5星）
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS task_ratings (
 
 -- 2. 创建用户评分统计表
 CREATE TABLE IF NOT EXISTS user_rating_stats (
-  user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('student', 'company')),
 
   -- 总体统计
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS user_rating_stats (
 
 -- 3. 创建评价标签预设表
 CREATE TABLE IF NOT EXISTS rating_tag_presets (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tag_type VARCHAR(20) NOT NULL CHECK (tag_type IN ('student_positive', 'student_negative', 'company_positive', 'company_negative')),
   tag_name VARCHAR(50) NOT NULL,
   display_order INTEGER DEFAULT 0,
@@ -153,7 +153,7 @@ CREATE TRIGGER trigger_update_user_rating_stats_updated_at
 CREATE OR REPLACE FUNCTION update_user_rating_stats()
 RETURNS TRIGGER AS $$
 DECLARE
-  v_user_id INTEGER;
+  v_user_id UUID;
   v_user_type VARCHAR(20);
 BEGIN
   -- 确定被评价的用户
@@ -240,9 +240,9 @@ ALTER TABLE tasks ADD COLUMN IF NOT EXISTS company_rated BOOLEAN DEFAULT false;
 
 -- 9. 创建评价提醒表
 CREATE TABLE IF NOT EXISTS rating_reminders (
-  id SERIAL PRIMARY KEY,
-  task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('student', 'company')),
   reminder_count INTEGER DEFAULT 0,
   last_reminded_at TIMESTAMP,

@@ -58,7 +58,7 @@ describe('New Features API Tests', () => {
             .set('Authorization', `Bearer ${studentToken}`);
         // 获取assignment ID
         const assignment = await (0, db_1.queryOne)('SELECT id FROM task_assignments WHERE task_id = $1 AND student_id = $2', [testTaskId, testStudentId]);
-        testAssignmentId = assignment?.id;
+        testAssignmentId = assignment?.id || '';
     });
     // 测试后清理
     afterAll(async () => {

@@ -3,10 +3,10 @@
 
 -- 1. 创建支付订单表
 CREATE TABLE IF NOT EXISTS payment_orders (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   order_no VARCHAR(64) UNIQUE NOT NULL, -- 订单号（系统生成）
-  task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('student', 'company')),
 
   -- 支付类型
@@ -51,9 +51,9 @@ CREATE TABLE IF NOT EXISTS payment_orders (
 
 -- 2. 创建支付交易记录表
 CREATE TABLE IF NOT EXISTS payment_transactions (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   transaction_no VARCHAR(64) UNIQUE NOT NULL, -- 交易流水号
-  order_id INTEGER NOT NULL REFERENCES payment_orders(id) ON DELETE CASCADE,
+  order_id UUID NOT NULL REFERENCES payment_orders(id) ON DELETE CASCADE,
 
   -- 交易类型
   transaction_type VARCHAR(20) NOT NULL CHECK (transaction_type IN (
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS payment_transactions (
 
 -- 3. 创建用户钱包表
 CREATE TABLE IF NOT EXISTS user_wallets (
-  user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
 
   -- 余额（单位：分）
   balance INTEGER DEFAULT 0, -- 可用余额
@@ -110,9 +110,9 @@ CREATE TABLE IF NOT EXISTS user_wallets (
 
 -- 4. 创建钱包流水表
 CREATE TABLE IF NOT EXISTS wallet_transactions (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   transaction_no VARCHAR(64) UNIQUE NOT NULL, -- 流水号
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
   -- 交易类型
   transaction_type VARCHAR(30) NOT NULL CHECK (transaction_type IN (
@@ -136,8 +136,8 @@ CREATE TABLE IF NOT EXISTS wallet_transactions (
   balance_after INTEGER NOT NULL, -- 交易后余额
 
   -- 关联信息
-  related_order_id INTEGER REFERENCES payment_orders(id),
-  related_task_id INTEGER REFERENCES tasks(id),
+  related_order_id UUID REFERENCES payment_orders(id),
+  related_task_id UUID REFERENCES tasks(id),
 
   -- 描述
   description TEXT,
@@ -147,9 +147,9 @@ CREATE TABLE IF NOT EXISTS wallet_transactions (
 
 -- 5. 创建提现申请表
 CREATE TABLE IF NOT EXISTS withdrawal_requests (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   request_no VARCHAR(64) UNIQUE NOT NULL, -- 申请单号
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
   -- 提现金额（单位：分）
   amount INTEGER NOT NULL,
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS withdrawal_requests (
   )),
 
   -- 审核信息
-  reviewer_id INTEGER REFERENCES users(id),
+  reviewer_id UUID REFERENCES users(id),
   review_remark TEXT,
   reviewed_at TIMESTAMP,
 
@@ -188,9 +188,9 @@ CREATE TABLE IF NOT EXISTS withdrawal_requests (
 
 -- 6. 创建平台收入记录表
 CREATE TABLE IF NOT EXISTS platform_revenues (
-  id SERIAL PRIMARY KEY,
-  task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-  order_id INTEGER REFERENCES payment_orders(id),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  order_id UUID REFERENCES payment_orders(id),
 
   -- 金额（单位：分）
   total_amount INTEGER NOT NULL, -- 任务总金额
@@ -210,26 +210,26 @@ CREATE TABLE IF NOT EXISTS platform_revenues (
 );
 
 -- 7. 创建索引
-CREATE INDEX idx_payment_orders_order_no ON payment_orders(order_no);
-CREATE INDEX idx_payment_orders_task_id ON payment_orders(task_id);
-CREATE INDEX idx_payment_orders_user_id ON payment_orders(user_id);
-CREATE INDEX idx_payment_orders_status ON payment_orders(status);
-CREATE INDEX idx_payment_orders_created_at ON payment_orders(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_order_no ON payment_orders(order_no);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_task_id ON payment_orders(task_id);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_user_id ON payment_orders(user_id);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_status ON payment_orders(status);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_created_at ON payment_orders(created_at DESC);
 
-CREATE INDEX idx_payment_transactions_order_id ON payment_transactions(order_id);
-CREATE INDEX idx_payment_transactions_status ON payment_transactions(status);
-CREATE INDEX idx_payment_transactions_created_at ON payment_transactions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_order_id ON payment_transactions(order_id);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_status ON payment_transactions(status);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_created_at ON payment_transactions(created_at DESC);
 
-CREATE INDEX idx_wallet_transactions_user_id ON wallet_transactions(user_id);
-CREATE INDEX idx_wallet_transactions_type ON wallet_transactions(transaction_type);
-CREATE INDEX idx_wallet_transactions_created_at ON wallet_transactions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_wallet_transactions_user_id ON wallet_transactions(user_id);
+CREATE INDEX IF NOT EXISTS idx_wallet_transactions_type ON wallet_transactions(transaction_type);
+CREATE INDEX IF NOT EXISTS idx_wallet_transactions_created_at ON wallet_transactions(created_at DESC);
 
-CREATE INDEX idx_withdrawal_requests_user_id ON withdrawal_requests(user_id);
-CREATE INDEX idx_withdrawal_requests_status ON withdrawal_requests(status);
-CREATE INDEX idx_withdrawal_requests_created_at ON withdrawal_requests(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_user_id ON withdrawal_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_status ON withdrawal_requests(status);
+CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_created_at ON withdrawal_requests(created_at DESC);
 
-CREATE INDEX idx_platform_revenues_task_id ON platform_revenues(task_id);
-CREATE INDEX idx_platform_revenues_status ON platform_revenues(status);
+CREATE INDEX IF NOT EXISTS idx_platform_revenues_task_id ON platform_revenues(task_id);
+CREATE INDEX IF NOT EXISTS idx_platform_revenues_status ON platform_revenues(status);
 
 -- 8. 创建触发器：自动更新updated_at
 CREATE OR REPLACE FUNCTION update_payment_updated_at()

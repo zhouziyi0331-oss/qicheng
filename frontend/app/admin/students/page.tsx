@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Badge from "@/components/ui/Badge";
+import AdminLayout, { Card, SearchInput, Button, StatusBadge, Table, TableRow, TableCell, EmptyState, LoadingSkeleton } from "@/components/admin/AdminLayout";
 
 interface Student {
   id: string;
@@ -23,106 +23,238 @@ export default function AdminStudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("");
+  const [levelFilter, setLevelFilter] = useState<string>("all");
   const { show } = useToast();
 
-  const load = (q: string) => {
+  const load = () => {
     setLoading(true);
-    adminApi.listStudents(1, q || undefined)
+    adminApi.listStudents(1, search || undefined)
       .then(({ data }) => setStudents(data.data || []))
       .catch(() => show("加载失败", "error"))
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { load(""); }, []);
+  useEffect(() => { load(); }, []);
+
+  const filteredStudents = students.filter(s =>
+    levelFilter === "all" || s.level_a === parseInt(levelFilter)
+  );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F9F7F5" }}>
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex items-center gap-3 mb-8">
-          <Link href="/admin" className="text-sm no-underline hover:opacity-70 transition-opacity" style={{ color: "#636E72" }}>
-            ← 返回后台
-          </Link>
-          <h1 className="text-2xl font-bold" style={{ color: "#2D3436" }}>学生数据</h1>
-        </div>
-
-        <div className="flex gap-3 mb-6">
-          <input
+    <AdminLayout
+      title="👨‍🎓 学生管理"
+      subtitle={`共 ${students.length} 名学生`}
+      actions={
+        <Button onClick={() => show("导出功能开发中", "info")}>
+          📥 导出数据
+        </Button>
+      }
+    >
+      {/* 筛选和搜索 */}
+      <div style={{ marginBottom: "24px", display: "flex", gap: "16px", alignItems: "center" }}>
+        <div style={{ flex: 1, maxWidth: "400px" }}>
+          <SearchInput
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && (setQuery(search), load(search))}
-            placeholder="搜索昵称 / 手机号 / 学校..."
-            className="flex-1 px-4 py-3 rounded-2xl text-sm"
-            style={{ background: "#FFFFFF", border: "1px solid #DFE6E9", color: "#2D3436" }}
+            onChange={setSearch}
+            placeholder="搜索学生姓名或手机号..."
           />
-          <button
-            onClick={() => { setQuery(search); load(search); }}
-            className="px-6 py-3 rounded-2xl text-sm font-medium hover:opacity-90 transition-opacity"
-            style={{ background: "#FF6B35", color: "#FFFFFF" }}
-          >
-            搜索
-          </button>
         </div>
+        <Button variant="secondary" onClick={load}>
+          🔍 搜索
+        </Button>
 
-        {loading ? (
-          <div className="flex flex-col gap-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-20 rounded-3xl animate-pulse" style={{ background: "#FFFFFF" }} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-3xl overflow-hidden shadow-sm" style={{ background: "#FFFFFF" }}>
-            <table className="w-full text-sm">
-              <thead>
-                <tr style={{ background: "#F9F7F5", borderBottom: "1px solid #DFE6E9" }}>
-                  {["昵称", "学校", "OPC标签", "等级", "完成任务", "余额", "注册时间"].map((h) => (
-                    <th key={h} className="px-4 py-4 text-left text-xs font-semibold" style={{ color: "#636E72" }}>
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {students.map((s, i) => (
-                  <tr
-                    key={s.id}
-                    style={{
-                      background: i % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
-                      borderBottom: "1px solid #F0F0F0",
-                    }}
-                  >
-                    <td className="px-4 py-4">
-                      <Link href={`/admin/students/${s.id}`} className="no-underline font-medium hover:opacity-70 transition-opacity" style={{ color: "#0984E3" }}>
-                        {s.nickname}
-                      </Link>
-                      <p className="text-xs mt-1" style={{ color: "#B2BEC3" }}>{s.phone?.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2")}</p>
-                    </td>
-                    <td className="px-4 py-4" style={{ color: "#636E72" }}>{s.university || "—"}</td>
-                    <td className="px-4 py-4">
-                      {s.opc_label ? <Badge color="blue">{s.opc_label}</Badge> : <span style={{ color: "#B2BEC3" }}>未测试</span>}
-                    </td>
-                    <td className="px-4 py-4" style={{ color: "#636E72" }}>
-                      {s.level_a != null ? `Lv.${s.level_a} ${LEVEL_NAMES[s.level_a]}` : "—"}
-                    </td>
-                    <td className="px-4 py-4 text-center font-medium" style={{ color: "#2D3436" }}>{s.task_count ?? 0}</td>
-                    <td className="px-4 py-4 font-semibold" style={{ color: "#00B894" }}>¥{(s.balance ?? 0).toFixed(0)}</td>
-                    <td className="px-4 py-4 text-xs" style={{ color: "#B2BEC3" }}>
-                      {new Date(s.created_at).toLocaleDateString("zh-CN")}
-                    </td>
-                  </tr>
-                ))}
-                {students.length === 0 && (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-16 text-center text-sm" style={{ color: "#B2BEC3" }}>
-                      {query ? `没有找到「${query}」` : "暂无学生数据"}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+        {/* 等级筛选 */}
+        <div style={{ display: "flex", gap: "8px" }}>
+          <button
+            onClick={() => setLevelFilter("all")}
+            style={{
+              padding: "10px 16px",
+              borderRadius: "10px",
+              background: levelFilter === "all" ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.05)",
+              border: levelFilter === "all" ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.1)",
+              color: levelFilter === "all" ? "#3B82F6" : "#8E96A5",
+              fontSize: "13px",
+              fontWeight: "600",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            全部
+          </button>
+          {LEVEL_NAMES.map((name, idx) => (
+            <button
+              key={idx}
+              onClick={() => setLevelFilter(idx.toString())}
+              style={{
+                padding: "10px 16px",
+                borderRadius: "10px",
+                background: levelFilter === idx.toString() ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.05)",
+                border: levelFilter === idx.toString() ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.1)",
+                color: levelFilter === idx.toString() ? "#3B82F6" : "#8E96A5",
+                fontSize: "13px",
+                fontWeight: "600",
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* 统计卡片 */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "16px",
+        marginBottom: "24px"
+      }}>
+        {[
+          { label: "总学生数", value: students.length, icon: "👥", color: "#3B82F6" },
+          { label: "活跃学生", value: students.filter(s => s.task_count > 0).length, icon: "⚡", color: "#10B981" },
+          { label: "高级以上", value: students.filter(s => s.level_a >= 3).length, icon: "🏆", color: "#F59E0B" },
+          { label: "平均任务数", value: Math.round(students.reduce((sum, s) => sum + s.task_count, 0) / students.length || 0), icon: "📊", color: "#8B5CF6" }
+        ].map((stat, idx) => (
+          <Card key={idx} style={{ padding: "20px" }}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "12px"
+            }}>
+              <div style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                background: `${stat.color}20`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "20px"
+              }}>
+                {stat.icon}
+              </div>
+              <div>
+                <div style={{
+                  fontSize: "24px",
+                  fontWeight: "700",
+                  color: "#F1F5F9",
+                  fontFamily: "'JetBrains Mono', monospace"
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: "12px",
+                  color: "#8E96A5",
+                  fontWeight: "500"
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* 学生列表 */}
+      {loading ? (
+        <LoadingSkeleton count={5} />
+      ) : filteredStudents.length === 0 ? (
+        <EmptyState icon="👨‍🎓" message="暂无学生数据" />
+      ) : (
+        <Table headers={["学生", "等级", "OPC标签", "任务数", "余额", "注册时间", "操作"]}>
+          {filteredStudents.map((s) => (
+            <TableRow key={s.id}>
+              <TableCell>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "10px",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#fff",
+                    fontSize: "16px",
+                    fontWeight: "700"
+                  }}>
+                    {s.nickname.charAt(0)}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: "600", marginBottom: "2px" }}>{s.nickname}</div>
+                    <div style={{ fontSize: "12px", color: "#8E96A5" }}>{s.phone}</div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <StatusBadge
+                  status={s.level_a >= 4 ? "success" : s.level_a >= 2 ? "info" : "warning"}
+                  label={LEVEL_NAMES[s.level_a] || "未知"}
+                />
+              </TableCell>
+              <TableCell>
+                <span style={{
+                  padding: "4px 10px",
+                  borderRadius: "6px",
+                  background: "rgba(139,92,246,0.15)",
+                  color: "#8B5CF6",
+                  fontSize: "12px",
+                  fontWeight: "600"
+                }}>
+                  {s.opc_label || "未标记"}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontWeight: "600"
+                }}>
+                  {s.task_count}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span style={{
+                  color: "#10B981",
+                  fontWeight: "700",
+                  fontFamily: "'JetBrains Mono', monospace"
+                }}>
+                  ¥{s.balance || 0}
+                </span>
+              </TableCell>
+              <TableCell style={{ color: "#8E96A5", fontSize: "13px" }}>
+                {new Date(s.created_at).toLocaleDateString('zh-CN')}
+              </TableCell>
+              <TableCell>
+                <Link
+                  href={`/admin/students/${s.id}`}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    background: "rgba(59,130,246,0.15)",
+                    border: "1px solid rgba(59,130,246,0.3)",
+                    color: "#3B82F6",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    textDecoration: "none",
+                    display: "inline-block",
+                    transition: "all 0.2s"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(59,130,246,0.25)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(59,130,246,0.15)";
+                  }}
+                >
+                  查看详情
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </Table>
+      )}
+    </AdminLayout>
   );
 }

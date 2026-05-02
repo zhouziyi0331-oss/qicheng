@@ -10,12 +10,14 @@ import { Request, Response, NextFunction } from 'express';
  */
 export declare function getTaskDeliverables(req: Request, res: Response, next: NextFunction): Promise<void>;
 export declare function approveAndPayFinal(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function rejectDeliverable(req: Request, res: Response, next: NextFunction): Promise<void>;
 export declare function finalConfirmation(req: Request, res: Response, next: NextFunction): Promise<void>;
 export declare function autoConfirmTasks(): Promise<void>;
 export declare function addRequirementSupplement(req: Request, res: Response, next: NextFunction): Promise<void>;
 declare const _default: {
     getTaskDeliverables: typeof getTaskDeliverables;
     approveAndPayFinal: typeof approveAndPayFinal;
+    rejectDeliverable: typeof rejectDeliverable;
     finalConfirmation: typeof finalConfirmation;
     autoConfirmTasks: typeof autoConfirmTasks;
     addRequirementSupplement: typeof addRequirementSupplement;

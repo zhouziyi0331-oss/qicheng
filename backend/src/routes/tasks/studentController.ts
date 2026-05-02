@@ -45,17 +45,35 @@ export async function getRecommendedTasks(req: Request, res: Response, next: Nex
     const excludeIds = assignedTaskIds.map(r => r.task_id);
 
     // 获取候选任务
-    const candidates = await query(
-      `SELECT t.id, t.title, t.description, t.task_type, t.track, t.level_required,
-              t.budget_net, t.estimated_minutes, t.deadline
-       FROM tasks t
-       WHERE t.status = 'active'
-         AND t.level_required <= $1
-         AND t.deleted_at IS NULL
-         ${excludeIds.length > 0 ? `AND t.id != ALL($3::uuid[])` : ''}
-       ORDER BY t.created_at DESC LIMIT 20`,
-      excludeIds.length > 0 ? [targetLevel, userId, excludeIds] : [targetLevel, userId]
-    );
+    logger.info(`Getting candidates: targetLevel=${targetLevel}, excludeIds.length=${excludeIds.length}`);
+    let candidates;
+    if (excludeIds.length > 0) {
+      logger.info('Using query with excludeIds', { targetLevel, excludeIdsCount: excludeIds.length });
+      candidates = await query(
+        `SELECT t.id, t.title, t.description, t.track, t.level_required,
+                t.budget_net, t.estimated_minutes, t.deadline
+         FROM tasks t
+         WHERE t.status = 'active'
+           AND t.level_required <= $1
+           AND t.deleted_at IS NULL
+           AND t.id != ALL($2::uuid[])
+         ORDER BY t.created_at DESC LIMIT 20`,
+        [targetLevel, excludeIds]
+      );
+    } else {
+      logger.info('Using query without excludeIds', { targetLevel });
+      candidates = await query(
+        `SELECT t.id, t.title, t.description, t.track, t.level_required,
+                t.budget_net, t.estimated_minutes, t.deadline
+         FROM tasks t
+         WHERE t.status = 'active'
+           AND t.level_required <= $1
+           AND t.deleted_at IS NULL
+         ORDER BY t.created_at DESC LIMIT 20`,
+        [targetLevel]
+      );
+    }
+    logger.info(`Got ${candidates.length} candidates`);
 
     if (candidates.length === 0) {
       res.json({ success: true, data: [], message: '暂无匹配任务，请稍后查看' });
@@ -450,11 +468,7 @@ export async function getMarketTasks(req: Request, res: Response, next: NextFunc
     const tasks = await query(
       `SELECT t.id, t.title, t.description, t.track, t.level_required,
               t.budget_gross, t.budget_net, t.estimated_minutes,
-              t.max_assignees, t.assigned_count, t.tags, t.created_at,
-              COALESCE(
-                (SELECT jsonb_agg(s.tag) FROM unnest(t.tags) s(tag)),
-                '[]'::jsonb
-              ) as tag_list
+              t.max_assignees, t.assigned_count, t.created_at
        FROM tasks t
        WHERE t.status = 'active' AND t.deleted_at IS NULL
        ORDER BY t.created_at DESC
@@ -525,6 +539,144 @@ export async function getTaskDetail(req: Request, res: Response, next: NextFunct
     if (!task) throw new AppError(404, '任务不存在', 'NOT_FOUND');
 
     res.json({ success: true, data: task });
+  } catch (err) { next(err); }
+}
+
+// ============================================================
+// GET /tasks/:id/supplements — 查询追加需求历史
+// ============================================================
+export async function getTaskSupplements(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+    const { id: taskId } = req.params;
+
+    // 验证学生是否接了这个任务
+    const assignment = await queryOne(
+      `SELECT id FROM task_assignments WHERE task_id = $1 AND student_id = $2`,
+      [taskId, userId]
+    );
+    if (!assignment) {
+      throw new AppError(403, '你没有权限查看此任务的追加需求', 'FORBIDDEN');
+    }
+
+    // 查询追加需求历史
+    const supplements = await query(
+      `SELECT id, content, estimated_days, additional_budget,
+              old_deadline, new_deadline, student_response,
+              status, created_at, responded_at
+       FROM requirement_supplements
+       WHERE task_id = $1
+       ORDER BY created_at ASC`,
+      [taskId]
+    );
+
+    res.json({ success: true, data: supplements });
+  } catch (err) { next(err); }
+}
+
+// ============================================================
+// POST /tasks/:id/supplements/:supplementId/respond — 接受/拒绝追加需求
+// ============================================================
+export async function respondToSupplement(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+    const { id: taskId, supplementId } = req.params;
+    const { accept, response } = req.body;
+
+    if (typeof accept !== 'boolean') {
+      throw new AppError(400, '请指定是否接受追加需求', 'INVALID_PARAMS');
+    }
+
+    // 验证学生是否接了这个任务
+    const assignment = await queryOne(
+      `SELECT id FROM task_assignments WHERE task_id = $1 AND student_id = $2`,
+      [taskId, userId]
+    );
+    if (!assignment) {
+      throw new AppError(403, '你没有权限操作此任务的追加需求', 'FORBIDDEN');
+    }
+
+    // 验证追加需求存在且状态为pending
+    const supplement = await queryOne<{
+      id: string;
+      status: string;
+      new_deadline: string;
+      additional_budget: number;
+    }>(
+      `SELECT id, status, new_deadline, additional_budget
+       FROM requirement_supplements
+       WHERE id = $1 AND task_id = $2`,
+      [supplementId, taskId]
+    );
+
+    if (!supplement) {
+      throw new AppError(404, '追加需求不存在', 'NOT_FOUND');
+    }
+
+    if (supplement.status !== 'pending') {
+      throw new AppError(400, '此追加需求已被处理', 'ALREADY_RESPONDED');
+    }
+
+    await withTransaction(async (client) => {
+      // 更新追加需求状态
+      await client.query(
+        `UPDATE requirement_supplements
+         SET status = $1, student_response = $2, responded_at = NOW()
+         WHERE id = $3`,
+        [accept ? 'accepted' : 'rejected', response || null, supplementId]
+      );
+
+      if (accept) {
+        // 接受：更新任务截止日期和预算
+        await client.query(
+          `UPDATE tasks
+           SET deadline = $1,
+               budget_gross = budget_gross + $2,
+               budget_net = budget_net + $2
+           WHERE id = $3`,
+          [supplement.new_deadline, supplement.additional_budget, taskId]
+        );
+
+        // 通知企业
+        const task = await queryOne<{ company_id: string; title: string }>(
+          `SELECT company_id, title FROM tasks WHERE id = $1`,
+          [taskId]
+        );
+        if (task) {
+          await client.query(
+            `INSERT INTO notifications (user_id, type, title, content, action_url)
+             VALUES ($1, 'supplement_accepted', '学生已接受追加需求', $2, $3)`,
+            [
+              task.company_id,
+              `学生已接受任务「${task.title}」的追加需求，新截止日期已生效。`,
+              `/tasks/${taskId}`,
+            ]
+          );
+        }
+      } else {
+        // 拒绝：通知企业
+        const task = await queryOne<{ company_id: string; title: string }>(
+          `SELECT company_id, title FROM tasks WHERE id = $1`,
+          [taskId]
+        );
+        if (task) {
+          await client.query(
+            `INSERT INTO notifications (user_id, type, title, content, action_url)
+             VALUES ($1, 'supplement_rejected', '学生拒绝了追加需求', $2, $3)`,
+            [
+              task.company_id,
+              `学生拒绝了任务「${task.title}」的追加需求${response ? `，原因：${response}` : ''}`,
+              `/tasks/${taskId}`,
+            ]
+          );
+        }
+      }
+    });
+
+    res.json({
+      success: true,
+      message: accept ? '已接受追加需求，截止日期已更新' : '已拒绝追加需求',
+    });
   } catch (err) { next(err); }
 }
 

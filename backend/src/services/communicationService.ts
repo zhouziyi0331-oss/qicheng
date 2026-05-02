@@ -1,4 +1,4 @@
-import pool from '../config/database';
+import { pool } from '../utils/db';
 
 /**
  * 联系方式过滤服务

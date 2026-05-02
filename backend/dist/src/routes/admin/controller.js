@@ -48,10 +48,10 @@ async function getDashboard(req, res, next) {
             // 财务统计
             (0, db_1.queryOne)(`
         SELECT
-          SUM(gross_amount) as total_gross,
+          SUM(amount) as total_gross,
           SUM(platform_fee) as total_platform_fee,
-          SUM(net_amount) FILTER (WHERE status = 'settled') as total_settled
-        FROM payments WHERE deleted_at IS NULL`),
+          SUM(amount - platform_fee) as total_settled
+        FROM income_records WHERE deleted_at IS NULL`),
             // Onboarding 各节点转化率 (核心指标)
             (0, db_1.queryOne)(`
         SELECT
@@ -167,7 +167,7 @@ async function getStudentDetail(req, res, next) {
         JOIN tasks t ON t.id = ta.task_id
         LEFT JOIN task_submissions ts ON ts.task_id = ta.task_id AND ts.student_id = ta.student_id
         WHERE ta.student_id = $1 ORDER BY ta.assigned_at DESC LIMIT 50`, [userId]),
-            (0, db_1.query)(`SELECT * FROM payments WHERE student_id = $1 ORDER BY created_at DESC LIMIT 50`, [userId]),
+            (0, db_1.query)(`SELECT * FROM income_records WHERE user_id = $1 ORDER BY created_at DESC LIMIT 50`, [userId]),
         ]);
         res.json({ success: true, data: { profile, testHistory, taskHistory, financeHistory } });
     }
@@ -253,7 +253,7 @@ async function getPayments(req, res, next) {
     try {
         const payments = await (0, db_1.query)(`
       SELECT p.*, u.phone, t.title as task_title
-      FROM payments p
+      FROM income_records p
       LEFT JOIN users u ON u.id = p.student_id
       LEFT JOIN tasks t ON t.id = p.task_id
       WHERE p.deleted_at IS NULL ORDER BY p.created_at DESC LIMIT 100`);
@@ -266,7 +266,7 @@ async function getPayments(req, res, next) {
 async function getWithdrawals(req, res, next) {
     try {
         const withdrawals = await (0, db_1.query)(`
-      SELECT w.*, u.phone FROM withdrawals w
+      SELECT w.*, u.phone FROM withdrawal_requests w
       JOIN users u ON u.id = w.user_id
       WHERE w.deleted_at IS NULL ORDER BY w.requested_at DESC LIMIT 100`);
         res.json({ success: true, data: withdrawals });
@@ -278,7 +278,7 @@ async function getWithdrawals(req, res, next) {
 async function approveWithdrawal(req, res, next) {
     try {
         const { id } = req.params;
-        await (0, db_1.query)(`UPDATE withdrawals SET status = 'processing', processor_id = $1, processed_at = NOW()
+        await (0, db_1.query)(`UPDATE withdrawal_requests SET status = 'processing', admin_id = $1, processed_at = NOW()
        WHERE id = $2 AND status = 'pending'`, [req.user.userId, id]);
         res.json({ success: true, message: '提现已审核通过，处理中' });
     }
@@ -290,7 +290,7 @@ async function getFirstTaskAdvances(req, res, next) {
     try {
         const advances = await (0, db_1.query)(`
       SELECT p.id, p.net_amount, p.settled_at, p.created_at, u.phone, u.university
-      FROM payments p JOIN users u ON u.id = p.student_id
+      FROM income_records p JOIN users u ON u.id = p.user_id
       WHERE p.is_first_task = TRUE AND p.payer = 'platform'
       ORDER BY p.created_at DESC LIMIT 100`);
         res.json({ success: true, data: advances });

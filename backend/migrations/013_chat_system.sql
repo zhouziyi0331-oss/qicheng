@@ -3,10 +3,10 @@
 
 -- 1. 聊天会话表
 CREATE TABLE IF NOT EXISTS chat_sessions (
-  id SERIAL PRIMARY KEY,
-  task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-  student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  company_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  company_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   status VARCHAR(20) DEFAULT 'active', -- active, archived, blocked
   last_message_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   student_unread_count INTEGER DEFAULT 0,
@@ -16,28 +16,67 @@ CREATE TABLE IF NOT EXISTS chat_sessions (
   UNIQUE(task_id, student_id, company_id)
 );
 
--- 2. 聊天消息表
-CREATE TABLE IF NOT EXISTS chat_messages (
-  id SERIAL PRIMARY KEY,
-  session_id INTEGER NOT NULL REFERENCES chat_sessions(id) ON DELETE CASCADE,
-  sender_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  sender_type VARCHAR(20) NOT NULL, -- student, company
-  message_type VARCHAR(20) DEFAULT 'text', -- text, image, file, system
-  content TEXT NOT NULL,
-  file_url TEXT,
-  file_name TEXT,
-  file_size INTEGER,
-  is_read BOOLEAN DEFAULT FALSE,
-  read_at TIMESTAMP,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- 2. 聊天消息表 - 添加缺失列到现有表
+DO $$
+BEGIN
+  -- 检查表是否存在，如果不存在则创建
+  IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='chat_messages') THEN
+    CREATE TABLE chat_messages (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id UUID REFERENCES chat_sessions(id) ON DELETE CASCADE,
+      sender_id UUID REFERENCES users(id) ON DELETE CASCADE,
+      sender_type VARCHAR(20),
+      message_type VARCHAR(20) DEFAULT 'text',
+      content TEXT,
+      file_url TEXT,
+      file_name TEXT,
+      file_size INTEGER,
+      is_read BOOLEAN DEFAULT FALSE,
+      read_at TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  ELSE
+    -- 表已存在，添加缺失的列
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='session_id') THEN
+      ALTER TABLE chat_messages ADD COLUMN session_id UUID REFERENCES chat_sessions(id) ON DELETE CASCADE;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='message_type') THEN
+      ALTER TABLE chat_messages ADD COLUMN message_type VARCHAR(20) DEFAULT 'text';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='file_url') THEN
+      ALTER TABLE chat_messages ADD COLUMN file_url TEXT;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='file_name') THEN
+      ALTER TABLE chat_messages ADD COLUMN file_name TEXT;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='file_size') THEN
+      ALTER TABLE chat_messages ADD COLUMN file_size INTEGER;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='is_read') THEN
+      ALTER TABLE chat_messages ADD COLUMN is_read BOOLEAN DEFAULT FALSE;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='read_at') THEN
+      ALTER TABLE chat_messages ADD COLUMN read_at TIMESTAMP;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='chat_messages' AND column_name='updated_at') THEN
+      ALTER TABLE chat_messages ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+    END IF;
+  END IF;
+END $$;
 
 -- 3. 消息已读记录表（用于群聊场景扩展）
 CREATE TABLE IF NOT EXISTS message_read_status (
-  id SERIAL PRIMARY KEY,
-  message_id INTEGER NOT NULL REFERENCES chat_messages(id) ON DELETE CASCADE,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  message_id UUID NOT NULL REFERENCES chat_messages(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   read_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(message_id, user_id)
 );
@@ -89,7 +128,7 @@ EXECUTE FUNCTION update_chat_session_last_message();
 CREATE OR REPLACE FUNCTION update_chat_session_unread_count()
 RETURNS TRIGGER AS $$
 DECLARE
-  v_session_id INTEGER;
+  v_session_id UUID;
   v_sender_type VARCHAR(20);
 BEGIN
   -- 获取消息的会话ID和发送者类型

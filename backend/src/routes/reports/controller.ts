@@ -6,14 +6,16 @@ import { AppError } from '../../middleware/errorHandler';
 import { config } from '../../../config';
 import logger from '../../utils/logger';
 import { generateWechatPayParams, generateAlipayParams } from '../../utils/payment';
+import { StartupReportService } from '../../services/startupReportService';
+import { PDFGeneratorService } from '../../services/pdfGeneratorService';
 
 const REPORT_PRICES: Record<string, number> = {
-  R1: 69, R2: 69, R3: 99, R4: 99, R5: 199, full: 299,
+  R1: 69, R2: 69, R3: 99, R4: 99, R5: 199, R6: 349, full: 299,
 };
 
 const REPORT_NAMES: Record<string, string> = {
   R1: '能力全景图', R2: '执行力档案', R3: '学习成长曲线',
-  R4: '简历包装方案', R5: 'OPC方向报告', full: '完整版报告（R1-R5）',
+  R4: '简历包装方案', R5: 'OPC方向报告', R6: '创业综合报告', full: '完整版报告（R1-R5）',
 };
 
 // GET /reports — 列表 + 预览钩子 (v7)
@@ -63,6 +65,17 @@ export async function orderReport(req: Request, res: Response, next: NextFunctio
 
     if (!reportType || !REPORT_PRICES[reportType]) {
       throw new AppError(400, '无效的报告类型', 'INVALID_REPORT_TYPE');
+    }
+
+    // R6 创业综合报告需要4级及以上学生才能购买
+    if (reportType === 'R6') {
+      const profile = await queryOne<{ level_a: number }>(
+        'SELECT level_a FROM student_profiles WHERE user_id = $1',
+        [userId]
+      );
+      if (!profile || profile.level_a < 4) {
+        throw new AppError(403, '创业综合报告需要达到4级及以上才能购买', 'LEVEL_TOO_LOW');
+      }
     }
 
     const alreadyPurchased = await queryOne(
@@ -171,6 +184,11 @@ function buildPreviewHook(
       previewFirstLines: `基于你的「${profile.opc_label || 'OPC'}」人格标签和实际任务经历...`,
       blurredHint: `你的OPC方向最适合「[模糊显示]」，第一步建议你...`,
     },
+    R6: {
+      tableOfContents: ['个人能力分析', '创业方向建议', '目标市场分析', '客户获取策略', '公司注册指南', '税务合规要点'],
+      previewFirstLines: `基于你完成的 ${profile.task_count || 0} 个任务和能力评估，我们为你定制了创业路径...`,
+      blurredHint: `你最适合的创业方向是「[模糊显示]」，目标客户群体是...`,
+    },
     full: {
       tableOfContents: ['R1 能力全景图', 'R2 执行力档案', 'R3 学习成长曲线', 'R4 简历包装方案', 'R5 OPC方向报告'],
       previewFirstLines: `这份报告整合了你从注册到现在的完整成长轨迹...`,
@@ -217,17 +235,30 @@ export async function triggerReportGeneration(reportId: string, userId: string):
     );
     if (!report) return;
 
-    const aiResponse = await axios.post(
-      `${config.ai.serviceUrl}/ai/generate-report`,
-      { report_id: reportId, user_id: userId, report_type: report.report_type, user_data: userData },
-      { timeout: config.ai.reportTimeout }
-    );
+    let reportContent: any;
+    let rawResponse: string | null = null;
+
+    // R6 创业综合报告使用专门的服务
+    if (report.report_type === 'R6') {
+      const { StartupReportService } = await import('../../services/startupReportService');
+      reportContent = await StartupReportService.generateStartupReport(userId, reportId);
+      rawResponse = JSON.stringify(reportContent);
+    } else {
+      // 其他报告类型使用现有的 AI 服务
+      const aiResponse = await axios.post(
+        `${config.ai.serviceUrl}/ai/generate-report`,
+        { report_id: reportId, user_id: userId, report_type: report.report_type, user_data: userData },
+        { timeout: config.ai.reportTimeout }
+      );
+      reportContent = aiResponse.data.content;
+      rawResponse = aiResponse.data.raw_response;
+    }
 
     await query(
       `UPDATE opc_reports
        SET status = 'done', content_json = $1::jsonb, generated_at = NOW(), ai_raw_response = $2
        WHERE id = $3`,
-      [JSON.stringify(aiResponse.data.content), aiResponse.data.raw_response, reportId]
+      [JSON.stringify(reportContent), rawResponse, reportId]
     );
 
     // 通知用户
@@ -242,5 +273,64 @@ export async function triggerReportGeneration(reportId: string, userId: string):
       [reportId]
     );
     logger.error('Report generation failed', { reportId, error: (err as Error).message });
+  }
+}
+
+// ============================================================
+// GET /reports/:id/pdf — 下载报告PDF
+// ============================================================
+export async function downloadReportPDF(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { id } = req.params;
+    const userId = req.user!.userId;
+
+    // 获取报告
+    const report = await queryOne<{
+      id: string;
+      report_type: string;
+      status: string;
+      content_json: any;
+      user_id: string;
+    }>(
+      `SELECT id, report_type, status, content_json, user_id
+       FROM opc_reports
+       WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL`,
+      [id, userId]
+    );
+
+    if (!report) {
+      throw new AppError(404, '报告不存在', 'REPORT_NOT_FOUND');
+    }
+
+    if (report.status !== 'done') {
+      throw new AppError(403, '报告未完成，无法下载', 'REPORT_NOT_READY');
+    }
+
+    // 获取用户信息
+    const user = await queryOne<{ username: string }>(
+      'SELECT username FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (!user) {
+      throw new AppError(404, '用户不存在', 'USER_NOT_FOUND');
+    }
+
+    // 生成PDF
+    const pdfBuffer = await PDFGeneratorService.generateStartupReportPDF(
+      report.content_json,
+      user.username
+    );
+
+    // 设置响应头
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="startup-report-${id}.pdf"`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    // 发送PDF
+    res.send(pdfBuffer);
+  } catch (err) {
+    logger.error('Error downloading report PDF:', err);
+    next(err);
   }
 }

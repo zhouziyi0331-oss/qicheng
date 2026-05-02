@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,6 +40,7 @@ exports.listReports = listReports;
 exports.orderReport = orderReport;
 exports.getReport = getReport;
 exports.triggerReportGeneration = triggerReportGeneration;
+exports.downloadReportPDF = downloadReportPDF;
 const axios_1 = __importDefault(require("axios"));
 const uuid_1 = require("uuid");
 const db_1 = require("../../utils/db");
@@ -14,12 +48,13 @@ const errorHandler_1 = require("../../middleware/errorHandler");
 const config_1 = require("../../../config");
 const logger_1 = __importDefault(require("../../utils/logger"));
 const payment_1 = require("../../utils/payment");
+const pdfGeneratorService_1 = require("../../services/pdfGeneratorService");
 const REPORT_PRICES = {
-    R1: 69, R2: 69, R3: 99, R4: 99, R5: 199, full: 299,
+    R1: 69, R2: 69, R3: 99, R4: 99, R5: 199, R6: 349, full: 299,
 };
 const REPORT_NAMES = {
     R1: '能力全景图', R2: '执行力档案', R3: '学习成长曲线',
-    R4: '简历包装方案', R5: 'OPC方向报告', full: '完整版报告（R1-R5）',
+    R4: '简历包装方案', R5: 'OPC方向报告', R6: '创业综合报告', full: '完整版报告（R1-R5）',
 };
 // GET /reports — 列表 + 预览钩子 (v7)
 async function listReports(req, res, next) {
@@ -56,6 +91,13 @@ async function orderReport(req, res, next) {
         const { reportType, paymentMethod = 'wechat' } = req.body;
         if (!reportType || !REPORT_PRICES[reportType]) {
             throw new errorHandler_1.AppError(400, '无效的报告类型', 'INVALID_REPORT_TYPE');
+        }
+        // R6 创业综合报告需要4级及以上学生才能购买
+        if (reportType === 'R6') {
+            const profile = await (0, db_1.queryOne)('SELECT level_a FROM student_profiles WHERE user_id = $1', [userId]);
+            if (!profile || profile.level_a < 4) {
+                throw new errorHandler_1.AppError(403, '创业综合报告需要达到4级及以上才能购买', 'LEVEL_TOO_LOW');
+            }
         }
         const alreadyPurchased = await (0, db_1.queryOne)(`SELECT id FROM opc_reports WHERE user_id = $1 AND report_type = $2 AND deleted_at IS NULL`, [userId, reportType]);
         if (alreadyPurchased)
@@ -144,6 +186,11 @@ function buildPreviewHook(reportType, profile) {
             previewFirstLines: `基于你的「${profile.opc_label || 'OPC'}」人格标签和实际任务经历...`,
             blurredHint: `你的OPC方向最适合「[模糊显示]」，第一步建议你...`,
         },
+        R6: {
+            tableOfContents: ['个人能力分析', '创业方向建议', '目标市场分析', '客户获取策略', '公司注册指南', '税务合规要点'],
+            previewFirstLines: `基于你完成的 ${profile.task_count || 0} 个任务和能力评估，我们为你定制了创业路径...`,
+            blurredHint: `你最适合的创业方向是「[模糊显示]」，目标客户群体是...`,
+        },
         full: {
             tableOfContents: ['R1 能力全景图', 'R2 执行力档案', 'R3 学习成长曲线', 'R4 简历包装方案', 'R5 OPC方向报告'],
             previewFirstLines: `这份报告整合了你从注册到现在的完整成长轨迹...`,
@@ -177,10 +224,23 @@ async function triggerReportGeneration(reportId, userId) {
         const report = await (0, db_1.queryOne)('SELECT report_type FROM opc_reports WHERE id = $1', [reportId]);
         if (!report)
             return;
-        const aiResponse = await axios_1.default.post(`${config_1.config.ai.serviceUrl}/ai/generate-report`, { report_id: reportId, user_id: userId, report_type: report.report_type, user_data: userData }, { timeout: config_1.config.ai.reportTimeout });
+        let reportContent;
+        let rawResponse = null;
+        // R6 创业综合报告使用专门的服务
+        if (report.report_type === 'R6') {
+            const { StartupReportService } = await Promise.resolve().then(() => __importStar(require('../../services/startupReportService')));
+            reportContent = await StartupReportService.generateStartupReport(userId, reportId);
+            rawResponse = JSON.stringify(reportContent);
+        }
+        else {
+            // 其他报告类型使用现有的 AI 服务
+            const aiResponse = await axios_1.default.post(`${config_1.config.ai.serviceUrl}/ai/generate-report`, { report_id: reportId, user_id: userId, report_type: report.report_type, user_data: userData }, { timeout: config_1.config.ai.reportTimeout });
+            reportContent = aiResponse.data.content;
+            rawResponse = aiResponse.data.raw_response;
+        }
         await (0, db_1.query)(`UPDATE opc_reports
        SET status = 'done', content_json = $1::jsonb, generated_at = NOW(), ai_raw_response = $2
-       WHERE id = $3`, [JSON.stringify(aiResponse.data.content), aiResponse.data.raw_response, reportId]);
+       WHERE id = $3`, [JSON.stringify(reportContent), rawResponse, reportId]);
         // 通知用户
         await (0, db_1.query)(`INSERT INTO notifications (user_id, type, title, content, action_url)
        VALUES ($1, 'report_ready', '你的报告已生成', '你的OPC成长报告已准备好，点击查看', $2)`, [userId, `/reports/${reportId}`]);
@@ -188,6 +248,42 @@ async function triggerReportGeneration(reportId, userId) {
     catch (err) {
         await (0, db_1.query)(`UPDATE opc_reports SET status = 'failed' WHERE id = $1`, [reportId]);
         logger_1.default.error('Report generation failed', { reportId, error: err.message });
+    }
+}
+// ============================================================
+// GET /reports/:id/pdf — 下载报告PDF
+// ============================================================
+async function downloadReportPDF(req, res, next) {
+    try {
+        const { id } = req.params;
+        const userId = req.user.userId;
+        // 获取报告
+        const report = await (0, db_1.queryOne)(`SELECT id, report_type, status, content_json, user_id
+       FROM opc_reports
+       WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL`, [id, userId]);
+        if (!report) {
+            throw new errorHandler_1.AppError(404, '报告不存在', 'REPORT_NOT_FOUND');
+        }
+        if (report.status !== 'done') {
+            throw new errorHandler_1.AppError(403, '报告未完成，无法下载', 'REPORT_NOT_READY');
+        }
+        // 获取用户信息
+        const user = await (0, db_1.queryOne)('SELECT username FROM users WHERE id = $1', [userId]);
+        if (!user) {
+            throw new errorHandler_1.AppError(404, '用户不存在', 'USER_NOT_FOUND');
+        }
+        // 生成PDF
+        const pdfBuffer = await pdfGeneratorService_1.PDFGeneratorService.generateStartupReportPDF(report.content_json, user.username);
+        // 设置响应头
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="startup-report-${id}.pdf"`);
+        res.setHeader('Content-Length', pdfBuffer.length);
+        // 发送PDF
+        res.send(pdfBuffer);
+    }
+    catch (err) {
+        logger_1.default.error('Error downloading report PDF:', err);
+        next(err);
     }
 }
 //# sourceMappingURL=controller.js.map

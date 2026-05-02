@@ -30,11 +30,22 @@ interface Deliverable {
   companyReviewFeedback?: string;
 }
 
+interface RequirementSupplement {
+  id: string;
+  description: string;
+  additionalBudget: number;
+  status: string;
+  createdAt: string;
+  respondedAt?: string;
+  studentResponse?: string;
+}
+
 export default function TaskDetail() {
   const router = useRouter();
   const { id } = router.params;
   const [task, setTask] = useState<Task | null>(null);
   const [deliverable, setDeliverable] = useState<Deliverable | null>(null);
+  const [supplements, setSupplements] = useState<RequirementSupplement[]>([]);
   const [loading, setLoading] = useState(true);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewAction, setReviewAction] = useState<'approve' | 'reject'>('approve');
@@ -62,7 +73,7 @@ export default function TaskDetail() {
 
       // 加载交付物
       const deliverableRes = await Taro.request({
-        url: `http://localhost:3000/api/v1/tasks/flow/${id}/deliverable`,
+        url: `http://localhost:3000/api/v1/tasks/flow/${id}/deliverables`,
         method: 'GET',
         header: {
           'Authorization': `Bearer ${Taro.getStorageSync('token')}`
@@ -71,6 +82,19 @@ export default function TaskDetail() {
 
       if (deliverableRes.data.success) {
         setDeliverable(deliverableRes.data.data);
+      }
+
+      // 加载追加需求历史
+      const supplementsRes = await Taro.request({
+        url: `http://localhost:3000/api/v1/company/tasks/${id}/supplements`,
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        }
+      });
+
+      if (supplementsRes.data.success) {
+        setSupplements(supplementsRes.data.data);
       }
     } catch (err) {
       console.error('加载任务详情失败:', err);
@@ -93,17 +117,35 @@ export default function TaskDetail() {
 
     try {
       Taro.showLoading({ title: '提交中...' });
-      const res = await Taro.request({
-        url: `http://localhost:3000/api/v1/tasks/flow/${id}/company-review`,
-        method: 'POST',
-        header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
-        },
-        data: {
-          approved: reviewAction === 'approve',
-          feedback: reviewFeedback
-        }
-      });
+
+      let res;
+      if (reviewAction === 'approve') {
+        // 验收通过并支付尾款
+        res = await Taro.request({
+          url: `http://localhost:3000/api/v1/tasks/flow/${id}/approve-and-pay`,
+          method: 'POST',
+          header: {
+            'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          },
+          data: {
+            feedback: reviewFeedback,
+            paymentMethod: 'wechat',
+            transactionId: 'mock_transaction_' + Date.now()
+          }
+        });
+      } else {
+        // 拒绝验收
+        res = await Taro.request({
+          url: `http://localhost:3000/api/v1/tasks/flow/${id}/reject-deliverable`,
+          method: 'POST',
+          header: {
+            'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          },
+          data: {
+            feedback: reviewFeedback
+          }
+        });
+      }
 
       Taro.hideLoading();
 
@@ -231,6 +273,15 @@ export default function TaskDetail() {
       'pending_payment': '待支付尾款',
       'completed': '已完成',
       'cancelled': '已取消'
+    };
+    return statusMap[status] || status;
+  };
+
+  const getSupplementStatusText = (status: string) => {
+    const statusMap = {
+      'pending': '待学生确认',
+      'accepted': '学生已接受',
+      'rejected': '学生已拒绝'
     };
     return statusMap[status] || status;
   };
@@ -401,6 +452,48 @@ export default function TaskDetail() {
                 )}
               </View>
             )}
+          </View>
+        )}
+
+        {/* 追加需求历史 */}
+        {supplements.length > 0 && (
+          <View className="info-card">
+            <View className="card-header">
+              <Text className="card-title">追加需求历史</Text>
+              <Text className="supplement-count">{supplements.length}条记录</Text>
+            </View>
+
+            {supplements.map((supplement, index) => (
+              <View key={supplement.id} className="supplement-item">
+                <View className="supplement-header">
+                  <Text className="supplement-index">#{index + 1}</Text>
+                  <View className={`supplement-status status-${supplement.status}`}>
+                    {getSupplementStatusText(supplement.status)}
+                  </View>
+                </View>
+
+                <View className="supplement-content">
+                  <Text className="supplement-desc">{supplement.description}</Text>
+                  {supplement.additionalBudget > 0 && (
+                    <Text className="supplement-budget">追加预算：¥{supplement.additionalBudget}</Text>
+                  )}
+                </View>
+
+                <View className="supplement-footer">
+                  <Text className="supplement-time">发起于 {formatDate(supplement.createdAt)}</Text>
+                  {supplement.respondedAt && (
+                    <Text className="supplement-time">回复于 {formatDate(supplement.respondedAt)}</Text>
+                  )}
+                </View>
+
+                {supplement.studentResponse && (
+                  <View className="supplement-response">
+                    <Text className="response-label">学生回复：</Text>
+                    <Text className="response-content">{supplement.studentResponse}</Text>
+                  </View>
+                )}
+              </View>
+            ))}
           </View>
         )}
       </ScrollView>

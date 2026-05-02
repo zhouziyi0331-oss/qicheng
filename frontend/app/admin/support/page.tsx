@@ -1,10 +1,8 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import AdminLayout, { Card, Button, Input } from "@/components/admin/AdminLayout";
 
 interface Message {
   id: string;
@@ -27,20 +25,21 @@ export default function AdminSupportPage() {
   const { show } = useToast();
 
   const loadMessages = async () => {
-    if (!taskId.trim()) return show("请输入任务ID", "error");
+    if (!taskId.trim()) return show("请输入任务编号", "error");
     setMsgLoading(true);
     try {
       const { data } = await adminApi.getTaskMessages(taskId.trim());
       setMessages(data.data || []);
+      show("加载成功", "success");
     } catch {
-      show("加载失败，请确认任务ID", "error");
+      show("加载失败，请确认任务编号", "error");
     } finally {
       setMsgLoading(false);
     }
   };
 
   const handleIntervene = async () => {
-    if (!taskId.trim() || !interveneNote.trim()) return show("请填写任务ID和介入说明", "error");
+    if (!taskId.trim() || !interveneNote.trim()) return show("请填写任务编号和介入说明", "error");
     setInterveneLoading(true);
     try {
       await adminApi.interveneTask(taskId.trim(), "intervene", interveneNote.trim());
@@ -55,7 +54,7 @@ export default function AdminSupportPage() {
   };
 
   const handleSendNotif = async () => {
-    if (!userId.trim() || !notifTitle.trim() || !notifBody.trim()) return show("请填写用户ID和通知内容", "error");
+    if (!userId.trim() || !notifTitle.trim() || !notifBody.trim()) return show("请填写用户编号和通知内容", "error");
     setNotifLoading(true);
     try {
       await adminApi.sendNotification(userId.trim(), notifTitle.trim(), notifBody.trim());
@@ -71,66 +70,243 @@ export default function AdminSupportPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin" className="text-sm no-underline" style={{ color: "#8b949e" }}>← 后台</Link>
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>客服工具</h1>
-      </div>
-
-      <div className="flex flex-col gap-5">
+    <AdminLayout
+      title="🛠️ 客服工具"
+      subtitle="任务介入、沟通记录查看、点对点通知"
+    >
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
+        gap: "24px"
+      }}>
         {/* 查看聊天记录 */}
-        <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-          <h2 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>查看任务沟通记录</h2>
-          <div className="flex gap-2 mb-3">
-            <input
+        <Card style={{ padding: "24px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              💬
+            </div>
+            <div>
+              <h2 style={{
+                fontSize: "16px",
+                fontWeight: "700",
+                color: "#F1F5F9",
+                margin: 0
+              }}>
+                查看任务沟通记录
+              </h2>
+              <p style={{
+                fontSize: "12px",
+                color: "#8E96A5",
+                margin: 0
+              }}>
+                查看学生和企业的沟通内容
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
+            <Input
               value={taskId}
               onChange={(e) => setTaskId(e.target.value)}
-              placeholder="任务 ID (UUID)"
-              className="flex-1 p-2.5 rounded-lg text-sm"
-              style={{ background: "#21262d", border: "1px solid #30363d", color: "#e6edf3" }}
+              placeholder="任务编号"
+              style={{ flex: 1 }}
             />
-            <Button size="sm" loading={msgLoading} onClick={loadMessages}>查询</Button>
+            <Button loading={msgLoading} onClick={loadMessages}>
+              查询
+            </Button>
           </div>
+
           {messages.length > 0 && (
-            <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+            <div style={{
+              maxHeight: "400px",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              padding: "16px",
+              borderRadius: "12px",
+              background: "rgba(0,0,0,0.2)",
+              border: "1px solid rgba(255,255,255,0.05)"
+            }}>
               {messages.map((m) => (
-                <div key={m.id} className="flex gap-2 text-sm p-2 rounded"
-                  style={{ background: "#21262d" }}>
-                  <span className="flex-shrink-0 text-xs font-medium w-12" style={{ color: "#8b949e" }}>
+                <div key={m.id} style={{
+                  padding: "12px 16px",
+                  borderRadius: "10px",
+                  background: m.sender_role === "company" ? "rgba(59, 130, 246, 0.1)" : "rgba(16, 185, 129, 0.1)",
+                  border: `1px solid ${m.sender_role === "company" ? "rgba(59, 130, 246, 0.2)" : "rgba(16, 185, 129, 0.2)"}`,
+                  display: "flex",
+                  gap: "12px"
+                }}>
+                  <div style={{
+                    fontSize: "24px",
+                    flexShrink: 0
+                  }}>
                     {m.sender_role === "company" ? "🏢" : "🎓"}
-                  </span>
-                  <p style={{ color: m.is_filtered ? "#d29922" : "#e6edf3" }}>
-                    {m.content}
-                    {m.is_filtered && " [含过滤内容]"}
-                  </p>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontSize: "11px",
+                      color: "#8E96A5",
+                      marginBottom: "4px",
+                      fontWeight: "600"
+                    }}>
+                      {m.sender_role === "company" ? "企业" : "学生"} · {new Date(m.created_at).toLocaleString("zh-CN")}
+                    </div>
+                    <p style={{
+                      fontSize: "14px",
+                      color: m.is_filtered ? "#F59E0B" : "#F1F5F9",
+                      margin: 0,
+                      lineHeight: "1.6"
+                    }}>
+                      {m.content}
+                      {m.is_filtered && <span style={{ fontSize: "12px", marginLeft: "8px" }}>[含过滤内容]</span>}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
+        </Card>
 
         {/* 任务介入 */}
-        <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-          <h2 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>任务介入</h2>
+        <Card style={{ padding: "24px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              ⚡
+            </div>
+            <div>
+              <h2 style={{
+                fontSize: "16px",
+                fontWeight: "700",
+                color: "#F1F5F9",
+                margin: 0
+              }}>
+                任务介入
+              </h2>
+              <p style={{
+                fontSize: "12px",
+                color: "#8E96A5",
+                margin: 0
+              }}>
+                强制介入任务处理流程
+              </p>
+            </div>
+          </div>
+
           <textarea
-            className="w-full h-20 resize-none p-3 rounded-lg text-sm mb-3"
+            style={{
+              width: "100%",
+              height: "120px",
+              resize: "none",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              background: "rgba(0,0,0,0.2)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "#F1F5F9",
+              fontSize: "14px",
+              fontFamily: "inherit",
+              marginBottom: "16px",
+              outline: "none",
+              transition: "all 0.2s"
+            }}
             placeholder="介入说明（将记入操作日志）..."
-            style={{ background: "#21262d", border: "1px solid #30363d", color: "#e6edf3" }}
             value={interveneNote}
             onChange={(e) => setInterveneNote(e.target.value)}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.5)";
+              e.currentTarget.style.background = "rgba(0,0,0,0.3)";
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+              e.currentTarget.style.background = "rgba(0,0,0,0.2)";
+            }}
           />
-          <Button size="sm" variant="secondary" loading={interveneLoading} onClick={handleIntervene}>
-            执行介入（任务 ID 同上）
+
+          <Button
+            variant="secondary"
+            loading={interveneLoading}
+            onClick={handleIntervene}
+            style={{ width: "100%" }}
+          >
+            执行介入（任务编号同上）
           </Button>
-        </div>
+        </Card>
 
         {/* 点对点通知 */}
-        <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-          <h2 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>发送点对点通知</h2>
-          <div className="flex flex-col gap-3">
+        <Card style={{ padding: "24px", gridColumn: "1 / -1" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              📨
+            </div>
+            <div>
+              <h2 style={{
+                fontSize: "16px",
+                fontWeight: "700",
+                color: "#F1F5F9",
+                margin: 0
+              }}>
+                发送点对点通知
+              </h2>
+              <p style={{
+                fontSize: "12px",
+                color: "#8E96A5",
+                margin: 0
+              }}>
+                向指定用户发送系统通知
+              </p>
+            </div>
+          </div>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "16px"
+          }}>
             <Input
-              label="用户 ID"
-              placeholder="用户 UUID"
+              label="用户编号"
+              placeholder="用户编号"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
             />
@@ -140,18 +316,54 @@ export default function AdminSupportPage() {
               value={notifTitle}
               onChange={(e) => setNotifTitle(e.target.value)}
             />
-            <Input
-              label="通知内容"
-              placeholder="通知正文..."
-              value={notifBody}
-              onChange={(e) => setNotifBody(e.target.value)}
-            />
-            <Button size="sm" loading={notifLoading} onClick={handleSendNotif}>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <label style={{
+                display: "block",
+                fontSize: "12px",
+                color: "#8E96A5",
+                fontWeight: "600",
+                marginBottom: "8px"
+              }}>
+                通知内容
+              </label>
+              <textarea
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  resize: "none",
+                  padding: "12px 16px",
+                  borderRadius: "12px",
+                  background: "rgba(0,0,0,0.2)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "#F1F5F9",
+                  fontSize: "14px",
+                  fontFamily: "inherit",
+                  outline: "none",
+                  transition: "all 0.2s"
+                }}
+                placeholder="通知正文..."
+                value={notifBody}
+                onChange={(e) => setNotifBody(e.target.value)}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.5)";
+                  e.currentTarget.style.background = "rgba(0,0,0,0.3)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                  e.currentTarget.style.background = "rgba(0,0,0,0.2)";
+                }}
+              />
+            </div>
+            <Button
+              loading={notifLoading}
+              onClick={handleSendNotif}
+              style={{ gridColumn: "1 / -1" }}
+            >
               发送通知
             </Button>
           </div>
-        </div>
+        </Card>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

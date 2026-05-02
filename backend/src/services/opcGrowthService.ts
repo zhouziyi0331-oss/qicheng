@@ -1,4 +1,4 @@
-import pool from '../config/database';
+import { pool } from '../utils/db';
 
 /**
  * OPC测评服务
@@ -7,7 +7,7 @@ export class OPCAssessmentService {
   /**
    * 开始测评
    */
-  static async startAssessment(studentId: number, assessmentType: string = 'full') {
+  static async startAssessment(studentId: string, assessmentType: string = 'full') {
     // 获取题目
     const questionsResult = await pool.query(
       `SELECT * FROM opc_assessment_questions WHERE is_active = TRUE ORDER BY RANDOM() LIMIT 20`
@@ -164,7 +164,7 @@ export class GrowthReportService {
   /**
    * 生成成长报告
    */
-  static async generateReport(studentId: number, reportPeriod: string, periodStart: Date, periodEnd: Date) {
+  static async generateReport(studentId: string, reportPeriod: string, periodStart: Date, periodEnd: Date) {
     // 获取任务统计
     const tasksResult = await pool.query(
       `SELECT COUNT(*) as completed, SUM(payment) as earnings
@@ -222,7 +222,7 @@ export class GrowthReportService {
   /**
    * 获取能力变化
    */
-  private static async getAbilityChanges(studentId: number, periodStart: Date, periodEnd: Date) {
+  private static async getAbilityChanges(studentId: string, periodStart: Date, periodEnd: Date) {
     const startSnapshot = await pool.query(
       `SELECT * FROM ability_snapshots WHERE student_id = $1 AND snapshot_date <= $2 ORDER BY snapshot_date DESC LIMIT 1`,
       [studentId, periodStart]
@@ -253,7 +253,7 @@ export class GrowthReportService {
   /**
    * 获取等级变化
    */
-  private static async getLevelChanges(studentId: number, periodStart: Date, periodEnd: Date) {
+  private static async getLevelChanges(studentId: string, periodStart: Date, periodEnd: Date) {
     const result = await pool.query(
       `SELECT * FROM growth_history WHERE student_id = $1 AND created_at BETWEEN $2 AND $3 ORDER BY created_at`,
       [studentId, periodStart, periodEnd]
@@ -265,7 +265,7 @@ export class GrowthReportService {
   /**
    * 获取成长亮点
    */
-  private static async getHighlights(studentId: number, periodStart: Date, periodEnd: Date) {
+  private static async getHighlights(studentId: string, periodStart: Date, periodEnd: Date) {
     return [
       '完成首个AI视频任务',
       '技术能力提升20分',
@@ -276,7 +276,7 @@ export class GrowthReportService {
   /**
    * 获取里程碑
    */
-  private static async getMilestones(studentId: number, periodStart: Date, periodEnd: Date) {
+  private static async getMilestones(studentId: string, periodStart: Date, periodEnd: Date) {
     const result = await pool.query(
       `SELECT * FROM growth_milestones WHERE student_id = $1 AND achieved_at BETWEEN $2 AND $3`,
       [studentId, periodStart, periodEnd]
@@ -288,7 +288,7 @@ export class GrowthReportService {
   /**
    * 获取雷达图数据
    */
-  private static async getRadarChartData(studentId: number) {
+  private static async getRadarChartData(studentId: string) {
     const result = await pool.query(
       `SELECT * FROM student_abilities WHERE student_id = $1`,
       [studentId]
@@ -312,7 +312,7 @@ export class GrowthReportService {
   /**
    * 获取趋势数据
    */
-  private static async getTrendData(studentId: number, periodStart: Date, periodEnd: Date) {
+  private static async getTrendData(studentId: string, periodStart: Date, periodEnd: Date) {
     const result = await pool.query(
       `SELECT * FROM ability_snapshots WHERE student_id = $1 AND snapshot_date BETWEEN $2 AND $3 ORDER BY snapshot_date`,
       [studentId, periodStart, periodEnd]
@@ -338,7 +338,7 @@ export class GrowthReportService {
   /**
    * 创建能力快照
    */
-  static async createAbilitySnapshot(studentId: number) {
+  static async createAbilitySnapshot(studentId: string) {
     const abilityResult = await pool.query(
       `SELECT * FROM student_abilities WHERE student_id = $1`,
       [studentId]

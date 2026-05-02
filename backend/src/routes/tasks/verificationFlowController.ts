@@ -178,6 +178,88 @@ export async function approveAndPayFinal(req: Request, res: Response, next: Next
 }
 
 // ============================================
+// 2.5 企业拒绝验收（打回重做）
+// ============================================
+export async function rejectDeliverable(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const companyId = req.user!.userId;
+    const { taskId } = req.params;
+    const { feedback } = req.body;
+
+    if (!feedback || !feedback.trim()) {
+      throw new AppError(400, '请填写拒绝原因', 'MISSING_FEEDBACK');
+    }
+
+    await withTransaction(async (client) => {
+      // 1. 验证任务状态
+      const task = await client.query(
+        `SELECT * FROM tasks WHERE id = $1 AND company_id = $2 FOR UPDATE`,
+        [taskId, companyId]
+      );
+
+      if (task.rows.length === 0) {
+        throw new AppError(404, '任务不存在', 'TASK_NOT_FOUND');
+      }
+
+      const taskData = task.rows[0];
+
+      if (taskData.status !== 'pending_verification') {
+        throw new AppError(400, '任务状态不正确', 'INVALID_STATUS');
+      }
+
+      // 2. 更新任务状态为进行中
+      await client.query(
+        `UPDATE tasks SET status = 'in_progress' WHERE id = $1`,
+        [taskId]
+      );
+
+      // 3. 记录拒绝原因
+      await client.query(
+        `INSERT INTO task_flow_logs (
+          task_id, action_type, description, actor_type, actor_id, actor_name
+        ) VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          taskId,
+          'verification_rejected',
+          feedback,
+          'company',
+          companyId,
+          '企业'
+        ]
+      );
+
+      // 4. 通知学生
+      await client.query(
+        `INSERT INTO notifications (user_id, user_type, type, title, content, related_task_id)
+         VALUES ($1, 'student', 'verification_rejected', '验收未通过', $2, $3)`,
+        [
+          taskData.accepted_student_id,
+          `任务《${taskData.title}》验收未通过，企业反馈：${feedback}。请根据反馈修改后重新提交。`,
+          taskId
+        ]
+      );
+
+      logger.info('Task verification rejected', {
+        taskId,
+        companyId,
+        feedback
+      });
+
+      res.json({
+        success: true,
+        data: {
+          taskId,
+          status: 'in_progress',
+          message: '已拒绝验收，学生将收到反馈并重新提交'
+        }
+      });
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================
 // 3. 企业最终确认（7天内）
 // ============================================
 export async function finalConfirmation(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -561,6 +643,7 @@ export async function addRequirementSupplement(req: Request, res: Response, next
 export default {
   getTaskDeliverables,
   approveAndPayFinal,
+  rejectDeliverable,
   finalConfirmation,
   autoConfirmTasks,
   addRequirementSupplement

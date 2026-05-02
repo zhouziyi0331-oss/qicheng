@@ -92,9 +92,9 @@ export const taskAPI = {
   // 获取智能推荐任务（基于OPC标签和情绪状态）
   getRecommended: () => request('/tasks/recommended'),
 
-  // 获取任务列表
+  // 获取任务列表 - 使用市场端点
   getList: (params?: { status?: string; track?: string; page?: number; limit?: number }) =>
-    request('/tasks', { method: 'GET', data: params }),
+    request('/tasks/market', { method: 'GET', data: params }),
 
   // 获取任务详情
   getDetail: (id: string) => request(`/tasks/${id}`),
@@ -193,10 +193,22 @@ export const reportAPI = {
   getList: () => request('/reports'),
 
   // 购买报告
-  order: () => request('/reports/order', { method: 'POST' }),
+  order: (data: { reportType: string; paymentMethod?: string }) =>
+    request('/reports/order', { method: 'POST', data }),
 
   // 获取报告详情
-  getDetail: (id: string) => request(`/reports/${id}`)
+  getDetail: (id: string) => request(`/reports/${id}`),
+
+  // 下载PDF
+  downloadPDF: (id: string) => {
+    const token = Taro.getStorageSync('token')
+    return Taro.downloadFile({
+      url: `${BASE_URL}/reports/${id}/pdf`,
+      header: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+  }
 }
 
 // 提现API
@@ -257,11 +269,43 @@ export const opcAPI = {
   generateReport: (userId: string) => request(`/opc/report/${userId}`)
 }
 
+// OPC v2.0 能力画像测试 API
+export const opcV2API = {
+  // 开始测试
+  startAssessment: () =>
+    request('/opc-v2/start', { method: 'POST' }),
+
+  // 提交答案（前置题或选择题）
+  submitAnswer: (assessmentId: string, data: {
+    questionId: string;
+    answerType: 'definition' | 'choice';
+    answerText?: string;
+    selectedOption?: string;
+  }) =>
+    request('/opc-v2/answer', { method: 'POST', data: { assessmentId, ...data } }),
+
+  // 完成测试
+  completeAssessment: (assessmentId: string) =>
+    request(`/opc-v2/${assessmentId}/complete`, { method: 'POST' }),
+
+  // 获取测试进度
+  getProgress: (assessmentId: string) =>
+    request(`/opc-v2/${assessmentId}/progress`),
+
+  // 获取测试结果
+  getResult: (assessmentId: string) =>
+    request(`/opc-v2/${assessmentId}/result`),
+
+  // 获取最新测试结果
+  getLatestResult: () =>
+    request('/opc-v2/latest')
+}
+
 // 项目匹配系统API
 export const matchAPI = {
-  // 智能项目匹配（基于OPC人格标签）
+  // 智能项目匹配（基于OPC人格标签）- 使用后端已有的 recommended 端点
   getMatchedTasks: (userId: string, limit = 20) =>
-    request(`/tasks/match/${userId}?limit=${limit}`),
+    request(`/tasks/recommended?limit=${limit}`),
 
   // 获取任务详情（含匹配理由）
   getTaskDetail: (taskId: string, userId: string) =>

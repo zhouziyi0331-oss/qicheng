@@ -1,0 +1,307 @@
+.task-detail {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+
+  .loading,
+  .empty {
+    text-align: center;
+    padding: 100px 20px;
+    color: #999;
+    font-size: 28px;
+  }
+
+  .task-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 20px;
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+
+      .task-title {
+        flex: 1;
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin-right: 20px;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .status-badge {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 24px;
+        white-space: nowrap;
+
+        &.status-draft {
+          background: #f0f0f0;
+          color: #666;
+        }
+
+        &.status-published {
+          background: #e6f7ff;
+          color: #1890ff;
+        }
+
+        &.status-matched,
+        &.status-accepted,
+        &.status-in_progress {
+          background: #fff7e6;
+          color: #fa8c16;
+        }
+
+        &.status-submitted {
+          background: #f9f0ff;
+          color: #722ed1;
+        }
+
+        &.status-verified,
+        &.status-paid,
+        &.status-completed {
+          background: #f6ffed;
+          color: #52c41a;
+        }
+
+        &.status-cancelled {
+          background: #fff1f0;
+          color: #f5222d;
+        }
+      }
+    }
+
+    .company-info {
+      margin-bottom: 20px;
+
+      .company-name {
+        font-size: 28px;
+        color: #666;
+      }
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+
+      .meta-item {
+        flex: 1;
+
+        .meta-label {
+          display: block;
+          font-size: 24px;
+          color: #999;
+          margin-bottom: 8px;
+        }
+
+        .meta-value {
+          display: block;
+          font-size: 28px;
+          color: #333;
+          font-weight: 500;
+
+          &.budget {
+            color: #ff4d4f;
+            font-size: 32px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  .section-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 20px;
+
+    .section-title {
+      font-size: 30px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .section-content {
+      font-size: 28px;
+      color: #666;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .supplement-item {
+      border: 1px solid #e8e8e8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .supplement-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .supplement-index {
+          font-size: 28px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .supplement-status {
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-size: 24px;
+
+          &.status-pending {
+            background: #fff7e6;
+            color: #fa8c16;
+          }
+
+          &.status-accepted {
+            background: #f6ffed;
+            color: #52c41a;
+          }
+
+          &.status-rejected {
+            background: #fff1f0;
+            color: #f5222d;
+          }
+        }
+      }
+
+      .supplement-content {
+        .supplement-desc {
+          display: block;
+          font-size: 28px;
+          color: #333;
+          line-height: 1.6;
+          margin-bottom: 16px;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .supplement-meta {
+          background: #fafafa;
+          border-radius: 8px;
+          padding: 16px;
+          margin-bottom: 16px;
+
+          .meta-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            .meta-label {
+              font-size: 26px;
+              color: #666;
+              min-width: 180px;
+            }
+
+            .meta-value {
+              font-size: 26px;
+              color: #333;
+              flex: 1;
+
+              &.budget {
+                color: #ff4d4f;
+                font-weight: bold;
+              }
+
+              &.highlight {
+                color: #1890ff;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+
+        .student-response {
+          background: #e6f7ff;
+          border-radius: 8px;
+          padding: 16px;
+          margin-bottom: 16px;
+
+          .response-label {
+            display: block;
+            font-size: 26px;
+            color: #666;
+            margin-bottom: 8px;
+          }
+
+          .response-content {
+            display: block;
+            font-size: 26px;
+            color: #333;
+            line-height: 1.5;
+            white-space: pre-wrap;
+          }
+        }
+
+        .supplement-actions {
+          display: flex;
+          gap: 16px;
+          margin-top: 16px;
+
+          button {
+            flex: 1;
+            height: 80px;
+            border-radius: 8px;
+            font-size: 28px;
+            border: none;
+
+            &.btn-accept {
+              background: #52c41a;
+              color: white;
+            }
+
+            &.btn-reject {
+              background: #f5222d;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .action-area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+
+    .btn-primary {
+      width: 100%;
+      height: 88px;
+      background: #1890ff;
+      color: white;
+      border-radius: 12px;
+      font-size: 32px;
+      border: none;
+    }
+  }
+}

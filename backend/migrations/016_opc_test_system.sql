@@ -19,11 +19,11 @@ CREATE TABLE IF NOT EXISTS opc_test_questions (
   score_c INTEGER NOT NULL CHECK (score_c >= 0 AND score_c <= 3),
   score_d INTEGER NOT NULL CHECK (score_d >= 0 AND score_d <= 3),
   created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
-
-  INDEX idx_question_dimension (dimension),
-  INDEX idx_question_number (question_number)
+  updated_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX IF NOT EXISTS idx_question_dimension ON opc_test_questions(dimension);
+CREATE INDEX IF NOT EXISTS idx_question_number ON opc_test_questions(question_number);
 
 COMMENT ON TABLE opc_test_questions IS 'OPC能力画像测试题库 - 36题六维测试';
 COMMENT ON COLUMN opc_test_questions.dimension IS '六个维度：information_processing=信息处理, creation_drive=创作驱动, tool_learning=工具学习, task_execution=任务执行, collaboration=协作倾向, risk_attitude=风险态度';
@@ -65,11 +65,11 @@ CREATE TABLE IF NOT EXISTS user_opc_results (
   -- 答题记录
   answers JSONB NOT NULL, -- 36道题的答案记录 [{question_id, answer, score}]
 
-  completed_at TIMESTAMP DEFAULT NOW(),
-
-  INDEX idx_user_opc (user_id, completed_at DESC),
-  INDEX idx_personality_tag (personality_tag)
+  completed_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX IF NOT EXISTS idx_user_opc ON user_opc_results(user_id, completed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_personality_tag ON user_opc_results(personality_tag);
 
 COMMENT ON TABLE user_opc_results IS '用户OPC测试结果记录';
 COMMENT ON COLUMN user_opc_results.answers IS '答题记录JSON格式：[{question_number: 1, answer: "A", score: 3}, ...]';
@@ -82,11 +82,11 @@ CREATE TABLE IF NOT EXISTS mentor_observations (
   observation_type VARCHAR(50) NOT NULL, -- 'stuck_point', 'breakthrough', 'habit_formed', 'work_style_shift'
   observation_content TEXT NOT NULL, -- 观察内容描述
   observation_data JSONB, -- 结构化数据
-  created_at TIMESTAMP DEFAULT NOW(),
-
-  INDEX idx_observation_student (student_id, created_at DESC),
-  INDEX idx_observation_type (observation_type, created_at DESC)
+  created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX IF NOT EXISTS idx_observation_student ON mentor_observations(student_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_observation_type ON mentor_observations(observation_type, created_at DESC);
 
 COMMENT ON TABLE mentor_observations IS 'AI导师观察记录 - 记录学生的卡点、突破、习惯形成等';
 COMMENT ON COLUMN mentor_observations.observation_type IS '观察类型：stuck_point=卡点, breakthrough=突破, habit_formed=习惯形成, work_style_shift=工作风格转变';

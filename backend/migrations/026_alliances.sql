@@ -67,6 +67,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS alliances_updated_at_trigger ON alliances;
 CREATE TRIGGER alliances_updated_at_trigger
 BEFORE UPDATE ON alliances
 FOR EACH ROW

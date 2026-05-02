@@ -51,6 +51,7 @@ const express_1 = require("express");
 const auth_1 = require("../../middleware/auth");
 const adminLogger_1 = require("../../middleware/adminLogger");
 const controller = __importStar(require("./controller"));
+const startupGuidesController = __importStar(require("./startupGuidesController"));
 const router = (0, express_1.Router)();
 router.use(auth_1.authenticate, (0, auth_1.requireRole)('admin'));
 // M1 数据看板 (所有管理员)
@@ -82,5 +83,11 @@ router.get('/logs', controller.getAdminLogs);
 // M9 系统配置 (仅超级管理员)
 router.get('/config', (0, auth_1.requireAdminRole)('super'), controller.getSystemConfig);
 router.put('/config/:key', (0, auth_1.requireAdminRole)('super'), (0, adminLogger_1.adminOperationLogger)('config_update', 'system_config'), controller.updateSystemConfig);
+// M10 创业指南管理 (super + ops)
+router.get('/startup-guides', (0, auth_1.requireAdminRole)('super', 'ops'), startupGuidesController.listStartupGuides);
+router.get('/startup-guides/:id', (0, auth_1.requireAdminRole)('super', 'ops'), startupGuidesController.getStartupGuide);
+router.post('/startup-guides', (0, auth_1.requireAdminRole)('super', 'ops'), (0, adminLogger_1.adminOperationLogger)('startup_guide_create', 'startup_guide'), startupGuidesController.createStartupGuide);
+router.put('/startup-guides/:id', (0, auth_1.requireAdminRole)('super', 'ops'), (0, adminLogger_1.adminOperationLogger)('startup_guide_update', 'startup_guide'), startupGuidesController.updateStartupGuide);
+router.delete('/startup-guides/:id', (0, auth_1.requireAdminRole)('super'), (0, adminLogger_1.adminOperationLogger)('startup_guide_delete', 'startup_guide'), startupGuidesController.deleteStartupGuide);
 exports.default = router;
 //# sourceMappingURL=index.js.map

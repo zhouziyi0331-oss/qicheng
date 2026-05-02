@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../utils/db';
+import { query, queryOne } from '../utils/db';
 
 /**
  * 第2单完成触发器
@@ -10,33 +10,33 @@ export const handleSecondTaskComplete = async (req: Request, res: Response) => {
 
   try {
     // 1. 检查是否是第2单
-    const taskCount = await pool.query(
+    const taskCount = await query<{ count: string }>(
       `SELECT COUNT(*) as count FROM task_applications
        WHERE student_id = $1 AND status = 'completed'`,
       [userId]
     );
 
-    const count = parseInt(taskCount.rows[0].count) || 0;
+    const count = parseInt(taskCount[0].count) || 0;
 
     if (count !== 2) {
       return res.json({ success: true, message: '不是第2单，无需推送' });
     }
 
     // 2. 检查是否已推送过
-    const notificationCheck = await pool.query(
+    const notificationCheck = await query<{ id: string }>(
       `SELECT id FROM notifications
        WHERE user_id = $1 AND type = 'second_task_milestone'`,
       [userId]
     );
 
-    if (notificationCheck.rows.length > 0) {
+    if (notificationCheck.length > 0) {
       return res.json({ success: true, message: '已推送过，跳过' });
     }
 
     // 3. 创建推送通知
     const message = '你现在可以独立接单了。平台不锁住你，但你的成长报告永远在这里，随时回来更新。';
 
-    await pool.query(
+    await query(
       `INSERT INTO notifications (user_id, type, title, content, created_at)
        VALUES ($1, 'second_task_milestone', '恭喜完成第2单', $2, NOW())`,
       [userId, message]
@@ -59,7 +59,17 @@ export const handleSecondTaskComplete = async (req: Request, res: Response) => {
 export const getStoryWall = async (req: Request, res: Response) => {
   try {
     // 查询已经独立接单或创建OPC的学生
-    const result = await pool.query(
+    const result = await query<{
+      id: string;
+      username: string;
+      avatar: string;
+      opc_personality_tag: string;
+      level: number;
+      completed_tasks: number;
+      story_text: string;
+      current_status: string;
+      created_at: Date;
+    }>(
       `SELECT
         u.id,
         u.username,
@@ -81,7 +91,7 @@ export const getStoryWall = async (req: Request, res: Response) => {
        LIMIT 50`
     );
 
-    const stories = result.rows.map(row => ({
+    const stories = result.map(row => ({
       studentId: row.id,
       username: row.username,
       avatar: row.avatar,
@@ -115,23 +125,23 @@ export const submitStory = async (req: Request, res: Response) => {
 
   try {
     // 检查用户等级是否≥Lv.4
-    const userResult = await pool.query(
+    const userResult = await query<{ level: number }>(
       `SELECT level FROM users WHERE id = $1`,
       [userId]
     );
 
-    if (userResult.rows.length === 0) {
+    if (userResult.length === 0) {
       return res.status(404).json({ error: '用户不存在' });
     }
 
-    const level = userResult.rows[0].level;
+    const level = userResult[0].level;
 
     if (level < 4) {
       return res.status(400).json({ error: '需要达到Lv.4（自流者）才能提交故事' });
     }
 
     // 插入或更新故事
-    await pool.query(
+    await query(
       `INSERT INTO story_wall (student_id, story_text, current_status)
        VALUES ($1, $2, $3)
        ON CONFLICT (student_id)

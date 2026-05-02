@@ -1,7 +1,7 @@
 import { View, Text, Input, ScrollView } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
-import { taskAPI, matchAPI } from '../../services/api'
+import { taskAPI } from '../../services/api'
 import { CONTENT_TRACK_LEVELS, TaskTrack, TaskLevel } from '../../types/task'
 import TaskDialog from '../../components/TaskDialog'
 import Loading from '../../components/Loading'
@@ -15,8 +15,6 @@ export default function Tasks() {
   const [dialogVisible, setDialogVisible] = useState(false)
   const [selectedTask, setSelectedTask] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const [userLevel, setUserLevel] = useState<TaskLevel>(0)
-  const [userTrack, setUserTrack] = useState<TaskTrack>('content')
 
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
@@ -116,44 +114,29 @@ export default function Tasks() {
         }
       ]
 
-      const user = Taro.getStorageSync('user')
-
-      // 获取用户等级和赛道
-      if (user && user.id) {
-        try {
-          const userInfo = await matchAPI.getMatchedTasks(user.id, 20)
-          setUserLevel(userInfo.currentLevel || 0)
-          setUserTrack(userInfo.primaryTrack || 'content')
-        } catch (error) {
-          console.log('获取用户信息失败，使用默认值')
-        }
-      }
-
+      // 获取推荐任务（基于OPC匹配）
       try {
-        if (user && user.id) {
-          // 尝试使用真实API
-          try {
-            const matchedRes = await matchAPI.getMatchedTasks(user.id, 20)
-            setMatchedTasks(matchedRes.tasks || mockTasks)
-          } catch (matchError) {
-            console.error('OPC匹配API失败，使用模拟数据:', matchError)
-            setMatchedTasks(mockTasks)
-          }
+        const matchedRes = await taskAPI.getRecommended()
+        if (matchedRes.success && matchedRes.data) {
+          setMatchedTasks(matchedRes.data)
         } else {
           setMatchedTasks(mockTasks)
         }
+      } catch (matchError) {
+        console.error('获取推荐任务失败，使用模拟数据:', matchError)
+        setMatchedTasks(mockTasks)
+      }
 
-        // 获取全部任务
-        try {
-          const allRes = await taskAPI.getList({ page: 1, limit: 20 })
-          setAllTasks(allRes.tasks || mockTasks)
-        } catch (error) {
-          console.error('获取全部任务失败，使用模拟数据:', error)
+      // 获取全部任务（任务市场）
+      try {
+        const allRes = await taskAPI.getList({ page: 1, limit: 20 })
+        if (allRes.success && allRes.data) {
+          setAllTasks(allRes.data)
+        } else {
           setAllTasks(mockTasks)
         }
       } catch (error) {
-        console.error('加载任务失败，使用模拟数据:', error)
-        setMatchedTasks(mockTasks)
+        console.error('获取任务市场失败，使用模拟数据:', error)
         setAllTasks(mockTasks)
       }
     } catch (error) {

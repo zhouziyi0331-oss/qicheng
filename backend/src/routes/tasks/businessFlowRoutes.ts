@@ -97,6 +97,13 @@ router.post(
   verificationFlowController.approveAndPayFinal
 );
 
+// 2.5 拒绝验收（打回重做）
+router.post(
+  '/:taskId/reject-deliverable',
+  authenticate,
+  verificationFlowController.rejectDeliverable
+);
+
 // 3. 最终确认
 router.post(
   '/:taskId/final-confirm',

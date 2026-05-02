@@ -160,7 +160,7 @@ export class AITaskReviewController {
       const { reviewId } = req.params;
       const { approved, feedback } = req.body;
 
-      await AITaskReviewEngine.humanReview(parseInt(reviewId), reviewerId, approved, feedback);
+      await AITaskReviewEngine.humanReview(parseInt(reviewId), parseInt(reviewerId), approved, feedback);
 
       res.json({
         success: true,

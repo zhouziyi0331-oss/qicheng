@@ -14,12 +14,14 @@ export default defineAppConfig({
     'pages/tasks/submit',          // 任务提交
     'pages/invitations/index',     // 任务邀请
     'pages/my-tasks/index',        // 我的任务
+    'pages/mentor/index',          // AI导师（启程小猫）
     'pages/mentor-chat/index',     // AI导师聊天
     'pages/ability/index',         // 六维能力图
     'pages/timeline/index',        // 成长时间线
     'pages/story/index',           // 故事墙
     'pages/story/post',            // 发布故事
     'pages/reports/index',         // OPC报告
+    'pages/reports/detail',        // 报告详情
     'pages/profile/index',         // 个人中心
     'pages/wallet/index',          // 钱包
     'pages/wallet/withdraw/index', // 提现

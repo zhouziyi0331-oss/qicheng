@@ -1,4 +1,4 @@
-import pool from '../config/database';
+import { pool } from '../utils/db';
 
 /**
  * 协议管理服务
@@ -9,7 +9,7 @@ export class AgreementService {
    */
   static async getActiveAgreements() {
     const result = await pool.query(
-      `SELECT * FROM user_agreements
+      `SELECT * FROM agreements
        WHERE is_active = TRUE
        ORDER BY agreement_type, version DESC`
     );
@@ -22,7 +22,7 @@ export class AgreementService {
    */
   static async getAgreementByType(agreementType: string) {
     const result = await pool.query(
-      `SELECT * FROM user_agreements
+      `SELECT * FROM agreements
        WHERE agreement_type = $1 AND is_active = TRUE
        ORDER BY version DESC
        LIMIT 1`,
@@ -36,14 +36,14 @@ export class AgreementService {
    * 签署协议
    */
   static async signAgreement(
-    userId: number,
+    userId: string,
     agreementId: number,
     ipAddress?: string,
     deviceInfo?: string
   ) {
     // 获取协议信息
     const agreementResult = await pool.query(
-      `SELECT agreement_type, version FROM user_agreements WHERE id = $1`,
+      `SELECT agreement_type, version FROM agreements WHERE id = $1`,
       [agreementId]
     );
 
@@ -79,7 +79,7 @@ export class AgreementService {
   /**
    * 检查用户是否已签署所有必要协议
    */
-  static async checkUserAgreements(userId: number) {
+  static async checkUserAgreements(userId: string) {
     const requiredTypes = ['service_terms', 'privacy_policy', 'data_authorization'];
 
     const result = await pool.query(
@@ -102,7 +102,7 @@ export class AgreementService {
   /**
    * 获取用户的协议签署历史
    */
-  static async getUserSignatures(userId: number) {
+  static async getUserSignatures(userId: string) {
     const result = await pool.query(
       `SELECT uas.*, ua.title, ua.version
        FROM user_agreement_signatures uas
@@ -123,7 +123,7 @@ export class DataAuthorizationService {
   /**
    * 初始化用户数据授权设置（注册时调用）
    */
-  static async initializeAuthorization(userId: number) {
+  static async initializeAuthorization(userId: string) {
     const result = await pool.query(
       `INSERT INTO data_authorization_settings
        (user_id, basic_data_authorized, task_data_authorized, ability_data_authorized)
@@ -139,7 +139,7 @@ export class DataAuthorizationService {
   /**
    * 获取用户授权设置
    */
-  static async getAuthorizationSettings(userId: number) {
+  static async getAuthorizationSettings(userId: string) {
     const result = await pool.query(
       `SELECT * FROM data_authorization_settings WHERE user_id = $1`,
       [userId]
@@ -152,7 +152,7 @@ export class DataAuthorizationService {
    * 更新商业化授权设置
    */
   static async updateCommercialAuthorization(
-    userId: number,
+    userId: string,
     authorizationType: string,
     authorized: boolean,
     changeReason?: string,
@@ -194,7 +194,7 @@ export class DataAuthorizationService {
   /**
    * 获取授权变更历史
    */
-  static async getAuthorizationHistory(userId: number) {
+  static async getAuthorizationHistory(userId: string) {
     const result = await pool.query(
       `SELECT * FROM data_authorization_history
        WHERE user_id = $1
@@ -209,7 +209,7 @@ export class DataAuthorizationService {
    * 批量更新商业化授权
    */
   static async batchUpdateAuthorizations(
-    userId: number,
+    userId: string,
     authorizations: {
       commercial_use_authorized?: boolean;
       marketing_authorized?: boolean;
@@ -260,7 +260,7 @@ export class MandatoryTermsService {
    * 确认必读条款
    */
   static async confirmTerm(
-    userId: number,
+    userId: string,
     termType: string,
     ipAddress?: string
   ) {
@@ -280,7 +280,7 @@ export class MandatoryTermsService {
   /**
    * 检查用户是否已确认所有必读条款
    */
-  static async checkUserTerms(userId: number) {
+  static async checkUserTerms(userId: string) {
     const requiredTerms = ['age_confirmation', 'real_name_commitment', 'data_usage_notice'];
 
     const result = await pool.query(
@@ -306,7 +306,7 @@ export class MandatoryTermsService {
   /**
    * 获取用户的条款确认记录
    */
-  static async getUserTerms(userId: number) {
+  static async getUserTerms(userId: string) {
     const result = await pool.query(
       `SELECT * FROM mandatory_terms_confirmations
        WHERE user_id = $1

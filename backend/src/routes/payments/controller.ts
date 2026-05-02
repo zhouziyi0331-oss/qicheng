@@ -186,5 +186,32 @@ async function processPaymentSuccess(paymentId: string): Promise<void> {
     }
   });
 
+  // 检查是否是报告支付
+  const report = await queryOne<{ id: string; report_type: string; user_id: string }>(
+    `SELECT id, report_type, user_id FROM opc_reports WHERE payment_id = $1`,
+    [payment.id]
+  );
+
+  if (report) {
+    // 更新报告支付状态
+    await query(
+      `UPDATE opc_reports SET paid_at = NOW(), paid_amount = $1 WHERE id = $2`,
+      [payment.net_amount, report.id]
+    );
+
+    // R6 创业综合报告：支付后立即生成
+    if (report.report_type === 'R6') {
+      logger.info('Triggering R6 report generation immediately', { reportId: report.id, userId: report.user_id });
+      const { triggerReportGeneration } = await import('../reports/controller');
+      // 异步触发，不阻塞支付回调
+      triggerReportGeneration(report.id, report.user_id).catch(err => {
+        logger.error('Failed to trigger R6 report generation', { reportId: report.id, error: err.message });
+      });
+    } else {
+      // 其他报告：24小时内异步生成（由定时任务处理）
+      logger.info('Report payment confirmed, will generate within 24h', { reportId: report.id, reportType: report.report_type });
+    }
+  }
+
   logger.info('Payment processed', { paymentId, studentId: payment.student_id });
 }

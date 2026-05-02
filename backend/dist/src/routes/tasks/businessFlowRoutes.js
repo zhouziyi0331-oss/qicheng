@@ -71,6 +71,8 @@ router.post('/:taskId/deliverables', auth_1.authenticate, studentFlowController.
 router.get('/:taskId/deliverables', auth_1.authenticate, verificationFlowController.getTaskDeliverables);
 // 2. 验收通过并支付尾款
 router.post('/:taskId/approve-and-pay', auth_1.authenticate, verificationFlowController.approveAndPayFinal);
+// 2.5 拒绝验收（打回重做）
+router.post('/:taskId/reject-deliverable', auth_1.authenticate, verificationFlowController.rejectDeliverable);
 // 3. 最终确认
 router.post('/:taskId/final-confirm', auth_1.authenticate, verificationFlowController.finalConfirmation);
 // 4. 企业补充需求

@@ -1,9 +1,8 @@
 "use client";
 import { useState, useEffect, use } from "react";
-import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Badge from "@/components/ui/Badge";
+import AdminLayout, { Card, StatusBadge, EmptyState, LoadingSkeleton } from "@/components/admin/AdminLayout";
 
 interface StudentDetail {
   id: string;
@@ -47,114 +46,361 @@ export default function StudentDetailPage({ params }: { params: Promise<{ id: st
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-28 rounded-lg animate-pulse mb-4" style={{ background: "#161b22" }} />
-        ))}
-      </div>
+      <AdminLayout title="学生详情" subtitle="加载中...">
+        <LoadingSkeleton count={3} />
+      </AdminLayout>
     );
   }
 
   if (!student) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-16 text-center" style={{ color: "#484f58" }}>
-        <p>学生不存在</p>
-        <Link href="/admin/students" className="text-sm mt-3 block" style={{ color: "#58a6ff" }}>← 返回列表</Link>
-      </div>
+      <AdminLayout title="学生详情" subtitle="学生不存在">
+        <EmptyState icon="🎓" message="学生不存在" />
+      </AdminLayout>
     );
   }
 
+  const getTaskStatusInfo = (status: string) => {
+    const map: Record<string, { type: "success" | "warning" | "error" | "info"; label: string }> = {
+      completed: { type: "success", label: "已完成" },
+      accepted: { type: "info", label: "进行中" },
+      pending: { type: "warning", label: "待接单" },
+      cancelled: { type: "error", label: "已取消" },
+    };
+    return map[status] || { type: "info", label: status };
+  };
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin/students" className="text-sm no-underline" style={{ color: "#8b949e" }}>← 学生数据</Link>
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>{student.nickname}</h1>
-        {student.opc_label && <Badge color="blue">{student.opc_label}</Badge>}
+    <AdminLayout
+      title={`🎓 ${student.nickname}`}
+      subtitle={`学生编号: ${id.substring(0, 8)}...`}
+      backLink="/admin/students"
+    >
+      {/* 头部信息卡片 */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "16px",
+        marginBottom: "24px"
+      }}>
+        {[
+          { label: "完成任务", value: student.task_count ?? 0, icon: "✅", color: "#3B82F6" },
+          { label: "累计收入", value: `¥${(student.total_earnings ?? 0).toFixed(0)}`, icon: "💰", color: "#10B981" },
+          { label: "当前余额", value: `¥${(student.balance ?? 0).toFixed(0)}`, icon: "💳", color: "#F59E0B" },
+          { label: "等级", value: `Lv.${student.level_a ?? 0} ${LEVEL_NAMES[student.level_a ?? 0]}`, icon: "⭐", color: "#8B5CF6" }
+        ].map((stat, idx) => (
+          <Card key={idx} style={{ padding: "20px" }}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "12px"
+            }}>
+              <div style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                background: `${stat.color}20`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "20px"
+              }}>
+                {stat.icon}
+              </div>
+              <div>
+                <div style={{
+                  fontSize: "24px",
+                  fontWeight: "700",
+                  color: "#F1F5F9",
+                  fontFamily: "'JetBrains Mono', monospace"
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: "12px",
+                  color: "#8E96A5",
+                  fontWeight: "500"
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+        gap: "24px",
+        marginBottom: "24px"
+      }}>
         {/* 基本信息 */}
-        <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-          <h3 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>基本信息</h3>
-          {[
-            ["手机", student.phone?.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2")],
-            ["学校", student.university || "—"],
-            ["城市", student.city || "—"],
-            ["专业", student.major || "—"],
-            ["年级", student.grade || "—"],
-            ["注册时间", new Date(student.created_at).toLocaleDateString("zh-CN")],
-            ["毕业时间", student.graduated_at ? new Date(student.graduated_at).toLocaleDateString("zh-CN") : "未毕业"],
-          ].map(([k, v]) => (
-            <div key={k} className="flex justify-between py-1.5 border-b" style={{ borderColor: "#21262d" }}>
-              <span className="text-xs" style={{ color: "#484f58" }}>{k}</span>
-              <span className="text-xs" style={{ color: "#e6edf3" }}>{v}</span>
+        <Card style={{ padding: "24px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              📋
             </div>
-          ))}
-        </div>
+            <h2 style={{
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#F1F5F9",
+              margin: 0
+            }}>
+              基本信息
+            </h2>
+          </div>
 
-        {/* OPC & 等级 */}
-        <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-          <h3 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>OPC & 等级</h3>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {student.opc_label && <Badge color="blue">主标签：{student.opc_label}</Badge>}
-            {student.opc_label_secondary && <Badge color="gray">副标签：{student.opc_label_secondary}</Badge>}
-            {student.level_a != null && (
-              <Badge color="gray">赛道A：Lv.{student.level_a} {LEVEL_NAMES[student.level_a]}</Badge>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {[
+              ["手机", student.phone?.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2")],
+              ["学校", student.university || "—"],
+              ["城市", student.city || "—"],
+              ["专业", student.major || "—"],
+              ["年级", student.grade || "—"],
+              ["注册时间", new Date(student.created_at).toLocaleDateString("zh-CN")],
+              ["毕业时间", student.graduated_at ? new Date(student.graduated_at).toLocaleDateString("zh-CN") : "未毕业"],
+            ].map(([k, v]) => (
+              <div key={k} style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "10px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.05)"
+              }}>
+                <span style={{ fontSize: "13px", color: "#8E96A5", fontWeight: "600" }}>{k}</span>
+                <span style={{ fontSize: "13px", color: "#F1F5F9", fontWeight: "600" }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* OPC标签 */}
+        <Card style={{ padding: "24px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              🏷️
+            </div>
+            <h2 style={{
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#F1F5F9",
+              margin: 0
+            }}>
+              OPC标签
+            </h2>
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
+            {student.opc_label && (
+              <div style={{
+                padding: "8px 16px",
+                borderRadius: "10px",
+                background: "rgba(59, 130, 246, 0.15)",
+                border: "1px solid rgba(59, 130, 246, 0.3)"
+              }}>
+                <div style={{ fontSize: "11px", color: "#8E96A5", marginBottom: "2px" }}>主标签</div>
+                <div style={{ fontSize: "14px", color: "#3B82F6", fontWeight: "700" }}>{student.opc_label}</div>
+              </div>
+            )}
+            {student.opc_label_secondary && (
+              <div style={{
+                padding: "8px 16px",
+                borderRadius: "10px",
+                background: "rgba(139, 92, 246, 0.15)",
+                border: "1px solid rgba(139, 92, 246, 0.3)"
+              }}>
+                <div style={{ fontSize: "11px", color: "#8E96A5", marginBottom: "2px" }}>副标签</div>
+                <div style={{ fontSize: "14px", color: "#8B5CF6", fontWeight: "700" }}>{student.opc_label_secondary}</div>
+              </div>
             )}
           </div>
-          {student.six_dim_scores && (
-            <div className="flex flex-col gap-2">
-              {Object.entries(student.six_dim_scores).map(([k, v]) => (
-                <div key={k}>
-                  <div className="flex justify-between text-xs mb-0.5">
-                    <span style={{ color: "#8b949e" }}>{DIM_NAMES[k] || k}</span>
-                    <span style={{ color: "#58a6ff" }}>{v}</span>
-                  </div>
-                  <div className="h-1.5 rounded-full" style={{ background: "#21262d" }}>
-                    <div className="h-full rounded-full" style={{ width: `${Math.min(v, 100)}%`, background: "#58a6ff" }} />
-                  </div>
+        </Card>
+      </div>
+
+      {/* 六维能力 */}
+      {student.six_dim_scores && Object.keys(student.six_dim_scores).length > 0 && (
+        <Card style={{ padding: "24px", marginBottom: "24px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              📊
+            </div>
+            <h2 style={{
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#F1F5F9",
+              margin: 0
+            }}>
+              六维能力画像
+            </h2>
+          </div>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "16px"
+          }}>
+            {Object.entries(student.six_dim_scores).map(([k, v]) => (
+              <div key={k}>
+                <div style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "8px"
+                }}>
+                  <span style={{ fontSize: "13px", color: "#8E96A5", fontWeight: "600" }}>
+                    {DIM_NAMES[k] || k}
+                  </span>
+                  <span style={{
+                    fontSize: "14px",
+                    color: "#3B82F6",
+                    fontWeight: "700",
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    {v}
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* 收入统计 */}
-      <div className="p-5 rounded-lg mb-4" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-        <h3 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>收入统计</h3>
-        <div className="grid grid-cols-3 gap-4">
-          {[
-            { label: "完成任务", value: student.task_count ?? 0, color: "#e6edf3" },
-            { label: "累计收入", value: `¥${(student.total_earnings ?? 0).toFixed(0)}`, color: "#3fb950" },
-            { label: "当前余额", value: `¥${(student.balance ?? 0).toFixed(0)}`, color: "#58a6ff" },
-          ].map((s) => (
-            <div key={s.label} className="text-center p-3 rounded-lg" style={{ background: "#21262d" }}>
-              <div className="text-xl font-bold mb-1" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-xs" style={{ color: "#8b949e" }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 任务历史 */}
-      {student.tasks && student.tasks.length > 0 && (
-        <div className="p-5 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-          <h3 className="text-sm font-medium mb-3" style={{ color: "#8b949e" }}>任务历史</h3>
-          <div className="flex flex-col gap-2">
-            {student.tasks.map((t, i) => (
-              <div key={i} className="flex items-center justify-between py-2 border-b"
-                style={{ borderColor: "#21262d" }}>
-                <p className="text-sm flex-1 truncate" style={{ color: "#e6edf3" }}>{t.title}</p>
-                <div className="flex items-center gap-3 flex-shrink-0">
-                  <span className="text-sm font-medium" style={{ color: "#3fb950" }}>¥{t.budget_net}</span>
-                  <Badge color={t.status === "completed" ? "green" : "gray"}>{t.status}</Badge>
+                <div style={{
+                  height: "8px",
+                  borderRadius: "10px",
+                  background: "rgba(255,255,255,0.05)",
+                  overflow: "hidden"
+                }}>
+                  <div style={{
+                    height: "100%",
+                    width: `${Math.min(v, 100)}%`,
+                    background: "linear-gradient(90deg, #3B82F6 0%, #2563EB 100%)",
+                    borderRadius: "10px",
+                    transition: "width 0.3s ease"
+                  }} />
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
-    </div>
+
+      {/* 任务历史 */}
+      {student.tasks && student.tasks.length > 0 && (
+        <Card style={{ padding: "24px" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px"
+            }}>
+              📝
+            </div>
+            <h2 style={{
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#F1F5F9",
+              margin: 0
+            }}>
+              任务历史 ({student.tasks.length})
+            </h2>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {student.tasks.map((t, i) => {
+              const statusInfo = getTaskStatusInfo(t.status);
+              return (
+                <div key={i} style={{
+                  padding: "16px",
+                  borderRadius: "12px",
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "16px"
+                }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      color: "#F1F5F9",
+                      marginBottom: "4px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap"
+                    }}>
+                      {t.title}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#8E96A5" }}>
+                      {new Date(t.created_at).toLocaleDateString("zh-CN")}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", flexShrink: 0 }}>
+                    <span style={{
+                      fontSize: "15px",
+                      fontWeight: "700",
+                      color: "#10B981",
+                      fontFamily: "'JetBrains Mono', monospace"
+                    }}>
+                      ¥{t.budget_net}
+                    </span>
+                    <StatusBadge status={statusInfo.type} label={statusInfo.label} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
+    </AdminLayout>
   );
 }

@@ -52,6 +52,8 @@ router.post('/:id/accept', authenticate, requireRole('student'), studentCtrl.acc
 router.get('/:id/steps', authenticate, requireRole('student'), studentCtrl.getTaskSteps);
 router.post('/:id/steps/:num/done', authenticate, requireRole('student'), studentCtrl.completeStep);
 router.post('/:id/submit', authenticate, requireRole('student'), studentCtrl.submitTask);
+router.get('/:id/supplements', authenticate, requireRole('student'), studentCtrl.getTaskSupplements);
+router.post('/:id/supplements/:supplementId/respond', authenticate, requireRole('student'), studentCtrl.respondToSupplement);
 
 // 企业端
 router.post('/company', authenticate, requireRole('company'), companyCtrl.createTask);

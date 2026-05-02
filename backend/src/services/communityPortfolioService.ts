@@ -1,4 +1,4 @@
-import pool from '../config/database';
+import { pool } from '../utils/db';
 
 /**
  * 社群服务
@@ -30,7 +30,7 @@ export class CommunityService {
   /**
    * 加入社群
    */
-  static async joinCommunity(communityId: number, userId: number) {
+  static async joinCommunity(communityId: number, userId: string) {
     await pool.query(
       `INSERT INTO community_members (community_id, user_id) VALUES ($1, $2)
        ON CONFLICT (community_id, user_id) DO NOTHING`,
@@ -46,7 +46,7 @@ export class CommunityService {
   /**
    * 发布帖子
    */
-  static async createPost(communityId: number, authorId: number, postData: any) {
+  static async createPost(communityId: number, authorId: string, postData: any) {
     const result = await pool.query(
       `INSERT INTO community_posts
        (community_id, author_id, post_type, title, content, images, tags)
@@ -76,7 +76,7 @@ export class CommunityService {
    */
   static async getPosts(communityId: number, filters?: any) {
     let query = `
-      SELECT p.*, u.username as author_name, u.avatar as author_avatar
+      SELECT p.*, u.nickname as author_name, u.avatar_url as author_avatar
       FROM community_posts p
       JOIN users u ON p.author_id = u.id
       WHERE p.community_id = $1 AND p.status = 'published'
@@ -97,7 +97,7 @@ export class CommunityService {
   /**
    * 点赞帖子
    */
-  static async likePost(postId: number, userId: number) {
+  static async likePost(postId: number, userId: string) {
     await pool.query(
       `INSERT INTO post_likes (post_id, user_id) VALUES ($1, $2)
        ON CONFLICT (post_id, user_id) DO NOTHING`,
@@ -113,7 +113,7 @@ export class CommunityService {
   /**
    * 评论帖子
    */
-  static async commentPost(postId: number, authorId: number, content: string, parentCommentId?: number) {
+  static async commentPost(postId: number, authorId: string, content: string, parentCommentId?: number) {
     const result = await pool.query(
       `INSERT INTO post_comments (post_id, author_id, content, parent_comment_id)
        VALUES ($1, $2, $3, $4)
@@ -137,7 +137,7 @@ export class PortfolioService {
   /**
    * 创建作品
    */
-  static async createPortfolio(studentId: number, portfolioData: any) {
+  static async createPortfolio(studentId: string, portfolioData: any) {
     const result = await pool.query(
       `INSERT INTO portfolios
        (student_id, title, description, portfolio_type, track, cover_image,
@@ -171,29 +171,19 @@ export class PortfolioService {
    */
   static async getPortfolios(filters?: any) {
     let query = `
-      SELECT p.*, u.username as author_name, u.avatar as author_avatar
+      SELECT p.*, u.nickname as author_name, u.avatar_url as author_avatar
       FROM portfolios p
       JOIN users u ON p.student_id = u.id
-      WHERE p.is_public = TRUE AND p.status = 'published'
+      WHERE p.visibility = 'public'
     `;
     const params: any[] = [];
-
-    if (filters?.portfolio_type) {
-      params.push(filters.portfolio_type);
-      query += ` AND p.portfolio_type = $${params.length}`;
-    }
-
-    if (filters?.track) {
-      params.push(filters.track);
-      query += ` AND p.track = $${params.length}`;
-    }
 
     if (filters?.student_id) {
       params.push(filters.student_id);
       query += ` AND p.student_id = $${params.length}`;
     }
 
-    query += ` ORDER BY p.is_featured DESC, p.created_at DESC`;
+    query += ` ORDER BY p.created_at DESC`;
 
     const result = await pool.query(query, params);
     return result.rows;
@@ -204,7 +194,7 @@ export class PortfolioService {
    */
   static async getPortfolioDetail(portfolioId: number) {
     const result = await pool.query(
-      `SELECT p.*, u.username as author_name, u.avatar as author_avatar
+      `SELECT p.*, u.nickname as author_name, u.avatar_url as author_avatar
        FROM portfolios p
        JOIN users u ON p.student_id = u.id
        WHERE p.id = $1`,
@@ -227,7 +217,7 @@ export class PortfolioService {
   /**
    * 点赞作品
    */
-  static async likePortfolio(portfolioId: number, userId: number) {
+  static async likePortfolio(portfolioId: number, userId: string) {
     await pool.query(
       `INSERT INTO portfolio_likes (portfolio_id, user_id) VALUES ($1, $2)
        ON CONFLICT (portfolio_id, user_id) DO NOTHING`,
@@ -243,7 +233,7 @@ export class PortfolioService {
   /**
    * 评论作品
    */
-  static async commentPortfolio(portfolioId: number, authorId: number, content: string, parentCommentId?: number) {
+  static async commentPortfolio(portfolioId: number, authorId: string, content: string, parentCommentId?: number) {
     const result = await pool.query(
       `INSERT INTO portfolio_comments (portfolio_id, author_id, content, parent_comment_id)
        VALUES ($1, $2, $3, $4)
@@ -264,7 +254,7 @@ export class PortfolioService {
    */
   static async getFeaturedPortfolios() {
     const result = await pool.query(
-      `SELECT p.*, u.username as author_name, u.avatar as author_avatar, fp.featured_reason
+      `SELECT p.*, u.nickname as author_name, u.avatar_url as author_avatar, fp.featured_reason
        FROM featured_portfolios fp
        JOIN portfolios p ON fp.portfolio_id = p.id
        JOIN users u ON p.student_id = u.id

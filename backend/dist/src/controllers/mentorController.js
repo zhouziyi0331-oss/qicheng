@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.detectHabits = exports.detectStuckPoints = exports.getStudentObservations = exports.recordObservation = exports.generateRejectionMessage = exports.generateMilestoneMessage = exports.generateWelcomeMessage = exports.mentorChat = exports.getFirstStep = exports.getHistory = void 0;
-const db_1 = __importDefault(require("../utils/db"));
+const db_1 = require("../utils/db");
 /**
  * AI导师系统 2.0 - 使命是河版本
  *
@@ -138,7 +135,7 @@ const getFirstStep = async (req, res) => {
     try {
         const { taskId } = req.params;
         // 获取任务信息
-        const taskResult = await db_1.default.query('SELECT * FROM tasks WHERE id = $1', [taskId]);
+        const taskResult = await (0, db_1.query)('SELECT * FROM tasks WHERE id = $1', [taskId]);
         const task = taskResult[0];
         if (!task) {
             return res.json({ message: null });
@@ -171,15 +168,15 @@ const mentorChat = async (req, res) => {
     }
     try {
         // 1. 获取学生信息
-        const studentResult = await db_1.default.query(`SELECT u.id, COALESCE(u.nickname, '同学') as name FROM users u WHERE u.id = $1`, [studentId]);
-        // pool.query 直接返回数组，不是 { rows: [...] } 格式
+        const studentResult = await (0, db_1.query)(`SELECT u.id, COALESCE(u.nickname, '同学') as name FROM users u WHERE u.id = $1`, [studentId]);
+        // query 直接返回数组，不是 { rows: [...] } 格式
         if (!studentResult || studentResult.length === 0) {
             return res.status(404).json({ error: '学生不存在' });
         }
         const studentData = studentResult[0];
         // 尝试获取OPC测试结果
         try {
-            const opcResult = await db_1.default.query(`SELECT personality_tag FROM opc_test_results WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`, [studentId]);
+            const opcResult = await (0, db_1.query)(`SELECT personality_tag FROM opc_test_results WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`, [studentId]);
             if (opcResult.length > 0) {
                 studentData.personality_tag = opcResult[0].personality_tag;
             }
@@ -189,7 +186,7 @@ const mentorChat = async (req, res) => {
         }
         // 2. 尝试获取生命问题（如果表存在）
         try {
-            const lifeQuestionResult = await db_1.default.query(`SELECT question FROM life_questions WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1`, [studentId]);
+            const lifeQuestionResult = await (0, db_1.query)(`SELECT question FROM life_questions WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1`, [studentId]);
             if (lifeQuestionResult.length > 0) {
                 studentData.life_question = lifeQuestionResult[0].question;
             }
@@ -201,7 +198,7 @@ const mentorChat = async (req, res) => {
         // 3. 获取任务信息
         let taskData = null;
         if (taskId) {
-            const taskResult = await db_1.default.query(`SELECT id, title, description, required_personality_style FROM tasks WHERE id = $1`, [taskId]);
+            const taskResult = await (0, db_1.query)(`SELECT id, title, description, required_personality_style FROM tasks WHERE id = $1`, [taskId]);
             taskData = taskResult[0] || null;
         }
         // 4. 生成AI Prompt
@@ -215,7 +212,7 @@ const mentorChat = async (req, res) => {
         // 6. 检测并记录热情火花
         if (aiResponse.detectedPassionSpark) {
             try {
-                await db_1.default.query(`INSERT INTO passion_sparks (student_id, task_id, spark_text, context, detected_by)
+                await (0, db_1.query)(`INSERT INTO passion_sparks (student_id, task_id, spark_text, context, detected_by)
            VALUES ($1, $2, $3, $4, 'ai_mentor')`, [studentId, taskId, aiResponse.detectedPassionSpark, message]);
             }
             catch (error) {
@@ -225,7 +222,7 @@ const mentorChat = async (req, res) => {
         // 7. 检测并记录穿越感时刻
         if (aiResponse.detectedFlowMoment) {
             try {
-                await db_1.default.query(`INSERT INTO flow_moments (student_id, task_id, moment_text, captured_at)
+                await (0, db_1.query)(`INSERT INTO flow_moments (student_id, task_id, moment_text, captured_at)
            VALUES ($1, $2, $3, NOW())`, [studentId, taskId, aiResponse.detectedFlowMoment]);
             }
             catch (error) {
@@ -234,7 +231,7 @@ const mentorChat = async (req, res) => {
         }
         // 8. 保存对话记录
         try {
-            await db_1.default.query(`INSERT INTO mentor_conversations (student_id, task_id, student_message, mentor_response, created_at)
+            await (0, db_1.query)(`INSERT INTO mentor_conversations (student_id, task_id, student_message, mentor_response, created_at)
          VALUES ($1, $2, $3, $4, NOW())`, [studentId, taskId, message, aiResponse.response]);
         }
         catch (error) {
@@ -433,16 +430,16 @@ const generateWelcomeMessage = async (req, res) => {
     const { studentId, taskId } = req.body;
     try {
         // 1. 获取学生信息
-        const studentResult = await db_1.default.query(`SELECT
+        const studentResult = await (0, db_1.query)(`SELECT
         u.id, u.name, u.opc_personality_tag as personality_tag,
         lq.question as life_question
        FROM users u
        LEFT JOIN life_questions lq ON lq.student_id = u.id
        WHERE u.id = $1`, [studentId]);
-        const studentData = studentResult.rows[0];
+        const studentData = studentResult[0];
         // 2. 获取任务信息
-        const taskResult = await db_1.default.query(`SELECT title, description, required_personality_style FROM tasks WHERE id = $1`, [taskId]);
-        const taskData = taskResult.rows[0];
+        const taskResult = await (0, db_1.query)(`SELECT title, description, required_personality_style FROM tasks WHERE id = $1`, [taskId]);
+        const taskData = taskResult[0];
         // 3. 生成欢迎消息
         let message = `这个项目有意思——`;
         const styleMessages = {
@@ -453,8 +450,8 @@ const generateWelcomeMessage = async (req, res) => {
             'stable_deliverer': '它需要稳定高质量的交付',
             'explorer_integrator': '它需要你整合多个工具'
         };
-        if (studentData.personality_tag && taskData.required_personality_style === studentData.personality_tag) {
-            message += styleMessages[studentData.personality_tag] || '它需要你的能力';
+        if (studentData.opc_personality_tag && taskData.required_personality_style === studentData.opc_personality_tag) {
+            message += styleMessages[studentData.opc_personality_tag] || '它需要你的能力';
             message += `，你上次测试时说自己擅长这个方向，这次正好试试。`;
         }
         else {
@@ -483,7 +480,7 @@ const generateMilestoneMessage = async (req, res) => {
     const { studentId, taskId } = req.body;
     try {
         // 1. 查询学生的历史卡点记录
-        const stuckHistory = await db_1.default.query(`SELECT observation_content, observation_data, created_at
+        const stuckHistory = await (0, db_1.query)(`SELECT observation_content, observation_data, created_at
        FROM mentor_observations
        WHERE student_id = $1
          AND observation_type = 'stuck_point'
@@ -491,8 +488,8 @@ const generateMilestoneMessage = async (req, res) => {
        LIMIT 5`, [studentId]);
         // 2. 生成自我对比式反馈
         let message = '';
-        if (stuckHistory.rows.length > 0) {
-            const lastStuck = stuckHistory.rows[0];
+        if (stuckHistory.length > 0) {
+            const lastStuck = stuckHistory[0];
             const stuckData = lastStuck.observation_data;
             if (stuckData && stuckData.step) {
                 message = `上次你在"${stuckData.step}"这里卡了很久，这次你直接就处理好了——你自己有感觉到吗？\n\n这个项目做下来，你发现了什么关于自己的事？`;
@@ -553,12 +550,12 @@ const recordObservation = async (req, res) => {
         return res.status(400).json({ error: '参数错误' });
     }
     try {
-        const result = await db_1.default.query(`INSERT INTO mentor_observations (student_id, task_id, observation_type, observation_content, observation_data)
+        const result = await (0, db_1.query)(`INSERT INTO mentor_observations (student_id, task_id, observation_type, observation_content, observation_data)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id`, [studentId, taskId, observationType, observationContent, JSON.stringify(observationData || {})]);
         res.json({
             success: true,
-            observationId: result.rows[0].id
+            observationId: result[0].id
         });
     }
     catch (error) {
@@ -574,13 +571,13 @@ exports.recordObservation = recordObservation;
 const getStudentObservations = async (req, res) => {
     const { studentId } = req.params;
     try {
-        const result = await db_1.default.query(`SELECT * FROM mentor_observations
+        const result = await (0, db_1.query)(`SELECT * FROM mentor_observations
        WHERE student_id = $1
        ORDER BY created_at DESC
        LIMIT 50`, [studentId]);
         res.json({
             success: true,
-            observations: result.rows
+            observations: result
         });
     }
     catch (error) {

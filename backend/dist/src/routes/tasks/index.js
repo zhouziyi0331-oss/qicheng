@@ -86,6 +86,8 @@ router.post('/:id/accept', auth_1.authenticate, (0, auth_1.requireRole)('student
 router.get('/:id/steps', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getTaskSteps);
 router.post('/:id/steps/:num/done', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.completeStep);
 router.post('/:id/submit', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.submitTask);
+router.get('/:id/supplements', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getTaskSupplements);
+router.post('/:id/supplements/:supplementId/respond', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.respondToSupplement);
 // 企业端
 router.post('/company', auth_1.authenticate, (0, auth_1.requireRole)('company'), companyCtrl.createTask);
 router.get('/company', auth_1.authenticate, (0, auth_1.requireRole)('company'), companyCtrl.getCompanyTasks);

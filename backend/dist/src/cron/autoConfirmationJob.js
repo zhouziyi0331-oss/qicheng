@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoConfirmationJob = void 0;
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 7天自动确认定时任务
  * 每天凌晨2点执行，检查所有支付尾款超过7天但未最终确认的任务
@@ -17,7 +20,7 @@ class AutoConfirmationJob {
     async execute() {
         const client = await this.pool.connect();
         try {
-            logger_1.logger.info('开始执行7天自动确认任务');
+            logger_1.default.info('开始执行7天自动确认任务');
             // 查找所有需要自动确认的任务
             // 条件：状态为completed，尾款已支付，距离尾款支付时间超过7天，且未最终确认
             const query = `
@@ -41,7 +44,7 @@ class AutoConfirmationJob {
       `;
             const result = await client.query(query);
             const tasksToConfirm = result.rows;
-            logger_1.logger.info(`找到${tasksToConfirm.length}个需要自动确认的任务`);
+            logger_1.default.info(`找到${tasksToConfirm.length}个需要自动确认的任务`);
             if (tasksToConfirm.length === 0) {
                 return;
             }
@@ -50,20 +53,20 @@ class AutoConfirmationJob {
             for (const task of tasksToConfirm) {
                 try {
                     await this.confirmTask(client, task);
-                    logger_1.logger.info(`任务 ${task.task_id} 自动确认成功`);
+                    logger_1.default.info(`任务 ${task.task_id} 自动确认成功`);
                 }
                 catch (err) {
-                    logger_1.logger.error(`任务 ${task.task_id} 自动确认失败:`, err);
+                    logger_1.default.error(`任务 ${task.task_id} 自动确认失败:`, err);
                     // 继续处理其他任务
                 }
             }
             // 提交事务
             await client.query('COMMIT');
-            logger_1.logger.info(`7天自动确认任务执行完成，成功确认${tasksToConfirm.length}个任务`);
+            logger_1.default.info(`7天自动确认任务执行完成，成功确认${tasksToConfirm.length}个任务`);
         }
         catch (err) {
             await client.query('ROLLBACK');
-            logger_1.logger.error('7天自动确认任务执行失败:', err);
+            logger_1.default.error('7天自动确认任务执行失败:', err);
             throw err;
         }
         finally {

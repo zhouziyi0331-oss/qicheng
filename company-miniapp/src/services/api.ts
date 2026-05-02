@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Task, StudentMatch, TaskTrack, TaskLevel } from '../types/task'
+import security from '../utils/security'
 
 const BASE_URL = 'http://localhost:3000/api/v1'
 
@@ -9,7 +10,7 @@ interface RequestOptions {
   needAuth?: boolean
 }
 
-// 通用请求方法
+// 通用请求方法（集成安全防护）
 async function request(url: string, options: RequestOptions = {}) {
   const { method = 'GET', data, needAuth = true } = options
 
@@ -17,13 +18,66 @@ async function request(url: string, options: RequestOptions = {}) {
     'Content-Type': 'application/json'
   }
 
-  // 添加认证token
+  // ========== 安全检查开始 ==========
+
+  // 1. 安全请求拦截器
+  const securityCheck = security.secureRequestInterceptor({
+    url,
+    method,
+    data,
+    header
+  })
+
+  if (!securityCheck.success) {
+    Taro.showToast({
+      title: securityCheck.message || '安全检查失败',
+      icon: 'none'
+    })
+    throw new Error(securityCheck.message || '安全检查失败')
+  }
+
+  // 2. 添加认证token
   if (needAuth) {
-    const token = Taro.getStorageSync('token')
+    const token = security.getToken()
     if (token) {
+      // 检查token是否过期
+      if (security.isTokenExpired(token)) {
+        security.clearToken()
+        Taro.redirectTo({ url: '/pages/login/index' })
+        throw new Error('登录已过期，请重新登录')
+      }
       header['Authorization'] = `Bearer ${token}`
+    } else {
+      // 需要认证但没有token
+      Taro.redirectTo({ url: '/pages/login/index' })
+      throw new Error('请先登录')
     }
   }
+
+  // 3. 输入数据验证和PII脱敏（用于日志）
+  if (data) {
+    const dataStr = JSON.stringify(data)
+    const validationResult = security.validateInput(dataStr)
+
+    if (!validationResult.success) {
+      security.logSecurityEvent({
+        userId: Taro.getStorageSync('user')?.id || 'anonymous',
+        action: 'INPUT_VALIDATION_FAILED',
+        resource: url,
+        success: false,
+        error: validationResult.error,
+        details: { method, url }
+      })
+
+      Taro.showToast({
+        title: validationResult.message || '输入数据不合法',
+        icon: 'none'
+      })
+      throw new Error(validationResult.message || '输入数据不合法')
+    }
+  }
+
+  // ========== 安全检查结束 ==========
 
   try {
     const response = await Taro.request({
@@ -34,17 +88,67 @@ async function request(url: string, options: RequestOptions = {}) {
       timeout: 60000
     })
 
+    // 记录成功的请求
+    security.logSecurityEvent({
+      userId: Taro.getStorageSync('user')?.id || 'anonymous',
+      action: 'API_REQUEST_SUCCESS',
+      resource: url,
+      success: true,
+      details: { method, statusCode: response.statusCode }
+    })
+
     if (response.statusCode === 200) {
       return response.data
     } else if (response.statusCode === 401) {
-      Taro.removeStorageSync('token')
-      Taro.removeStorageSync('user')
+      // 未授权，清除token并跳转登录
+      security.clearToken()
+
+      security.logSecurityEvent({
+        userId: 'anonymous',
+        action: 'UNAUTHORIZED_ACCESS',
+        resource: url,
+        success: false,
+        error: 'UNAUTHORIZED'
+      })
+
       Taro.redirectTo({ url: '/pages/login/index' })
       throw new Error('请先登录')
+    } else if (response.statusCode === 403) {
+      // 权限不足
+      security.logSecurityEvent({
+        userId: Taro.getStorageSync('user')?.id || 'anonymous',
+        action: 'FORBIDDEN_ACCESS',
+        resource: url,
+        success: false,
+        error: 'FORBIDDEN'
+      })
+
+      throw new Error('权限不足')
+    } else if (response.statusCode === 429) {
+      // 频率限制
+      security.logSecurityEvent({
+        userId: Taro.getStorageSync('user')?.id || 'anonymous',
+        action: 'RATE_LIMIT_EXCEEDED_SERVER',
+        resource: url,
+        success: false,
+        error: 'RATE_LIMIT_EXCEEDED'
+      })
+
+      throw new Error('请求过于频繁，请稍后再试')
     } else {
       throw new Error(response.data?.message || '请求失败')
     }
   } catch (error: any) {
+    // 记录失败的请求
+    security.logSecurityEvent({
+      userId: Taro.getStorageSync('user')?.id || 'anonymous',
+      action: 'API_REQUEST_FAILED',
+      resource: url,
+      success: false,
+      error: error.message,
+      details: { method, url }
+    })
+
     Taro.showToast({
       title: error.message || '网络错误',
       icon: 'none'
@@ -124,19 +228,82 @@ export const matchAPI = {
 // 企业认证API
 export const authAPI = {
   // 注册
-  register: (data: { phone: string; code: string; companyName: string }) =>
-    request('/auth/register', { method: 'POST', data: { ...data, role: 'company' }, needAuth: false }),
+  register: async (data: { phone: string; code: string; companyName: string }) => {
+    // 输入验证
+    const phoneValidation = security.validateInput(data.phone)
+    if (!phoneValidation.success) {
+      throw new Error(phoneValidation.message)
+    }
+
+    const companyNameValidation = security.validateInput(data.companyName)
+    if (!companyNameValidation.success) {
+      throw new Error(companyNameValidation.message)
+    }
+
+    const result = await request('/auth/register', {
+      method: 'POST',
+      data: { ...data, role: 'company' },
+      needAuth: false
+    })
+
+    // 保存token
+    if (result.token) {
+      security.saveToken(result.token)
+    }
+
+    return result
+  },
 
   // 登录
-  login: (data: { phone: string; code: string }) =>
-    request('/auth/login', { method: 'POST', data, needAuth: false }),
+  login: async (data: { phone: string; code: string }) => {
+    // 输入验证
+    const phoneValidation = security.validateInput(data.phone)
+    if (!phoneValidation.success) {
+      throw new Error(phoneValidation.message)
+    }
+
+    const result = await request('/auth/login', {
+      method: 'POST',
+      data,
+      needAuth: false
+    })
+
+    // 保存token
+    if (result.token) {
+      security.saveToken(result.token)
+    }
+
+    return result
+  },
 
   // 发送验证码
-  sendCode: (phone: string) =>
-    request('/auth/send-code', { method: 'POST', data: { phone }, needAuth: false }),
+  sendCode: (phone: string) => {
+    // 输入验证
+    const phoneValidation = security.validateInput(phone)
+    if (!phoneValidation.success) {
+      throw new Error(phoneValidation.message)
+    }
+
+    return request('/auth/send-code', {
+      method: 'POST',
+      data: { phone },
+      needAuth: false
+    })
+  },
 
   // 获取当前企业信息
-  getCurrentUser: () => request('/auth/me')
+  getCurrentUser: () => request('/auth/me'),
+
+  // 登出
+  logout: () => {
+    security.clearToken()
+    security.logSecurityEvent({
+      userId: Taro.getStorageSync('user')?.id || 'anonymous',
+      action: 'USER_LOGOUT',
+      resource: 'auth',
+      success: true
+    })
+  }
 }
 
 // 聊天API
@@ -148,9 +315,33 @@ export const chatAPI = {
   getChatHistory: (studentId: string, taskId?: string) =>
     request(`/company/chats/${studentId}`, { method: 'GET', data: { taskId } }),
 
-  // 发送消息
-  sendMessage: (studentId: string, taskId: string, message: string) =>
-    request('/company/chats/send', { method: 'POST', data: { studentId, taskId, message } })
+  // 发送消息（带安全检查）
+  sendMessage: async (studentId: string, taskId: string, message: string) => {
+    // 输入验证
+    const messageValidation = security.validateInput(message)
+    if (!messageValidation.success) {
+      Taro.showToast({
+        title: messageValidation.message || '消息内容不合法',
+        icon: 'none'
+      })
+      throw new Error(messageValidation.message)
+    }
+
+    // 敏感词检测
+    const sensitiveCheck = security.checkSensitiveWords(message)
+    if (!sensitiveCheck.success) {
+      Taro.showToast({
+        title: '消息包含敏感词，请修改后重试',
+        icon: 'none'
+      })
+      throw new Error('消息包含敏感词')
+    }
+
+    return request('/company/chats/send', {
+      method: 'POST',
+      data: { studentId, taskId, message }
+    })
+  }
 }
 
 // 支付API

@@ -48,6 +48,8 @@
       @include glass-card;
       margin-bottom: $spacing-lg;
       transition: all 0.3s ease;
+      overflow: hidden;
+      box-sizing: border-box;
 
       &:active {
         transform: translateY(-4rpx);
@@ -68,6 +70,9 @@
           line-height: 1.5;
           margin-right: $spacing-md;
           letter-spacing: 0.5rpx;
+          word-wrap: break-word;
+          word-break: break-word;
+          overflow-wrap: break-word;
         }
 
         .task-status {
@@ -114,17 +119,20 @@
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 40rpx;
         width: fit-content;
+        max-width: 100%;
 
         .level-track {
           font-size: 24rpx;
           color: white;
           font-weight: 500;
+          white-space: nowrap;
         }
 
         .level-name {
           font-size: 24rpx;
           color: white;
           font-weight: 600;
+          white-space: nowrap;
         }
       }
 
@@ -153,18 +161,22 @@
 
       .task-meta {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16rpx;
         margin-bottom: $spacing-md;
 
         .meta-item {
           display: flex;
           align-items: center;
           gap: 8rpx;
+          min-width: 0;
+          flex: 0 1 auto;
 
           .meta-label {
             font-size: 26rpx;
             color: $text-secondary;
             opacity: 0.8;
+            white-space: nowrap;
           }
 
           .meta-value {
@@ -172,6 +184,8 @@
             color: $text-primary;
             font-weight: 500;
             font-family: $font-mono;
+            word-wrap: break-word;
+            word-break: break-word;
           }
         }
       }

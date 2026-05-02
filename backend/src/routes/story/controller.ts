@@ -162,7 +162,7 @@ export async function getPeersFeed(req: Request, res: Response, next: NextFuncti
            ELSE '一位' || CASE sp.level_a WHEN 0 THEN '探索者' WHEN 1 THEN '入门者'
                           WHEN 2 THEN '实践者' WHEN 3 THEN '熟练者' ELSE '专业者' END
          END as actor_label,
-         t.task_type,
+         t.track,
          t.title as task_title,
          ta.completed_at,
          sp.track

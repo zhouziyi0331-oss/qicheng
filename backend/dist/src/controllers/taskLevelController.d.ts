@@ -6,7 +6,7 @@ export declare const publishTask: (req: Request, res: Response) => Promise<Respo
 /**
  * 企业确认发布任务（从草稿到已发布）
  */
-export declare const confirmPublishTask: (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
+export declare const confirmPublishTask: (req: Request, res: Response) => Promise<void>;
 /**
  * 获取任务的匹配学生列表（Top 3）
  */
@@ -18,7 +18,7 @@ export declare const getRecommendedTasks: (req: Request, res: Response) => Promi
 /**
  * 学生接受任务
  */
-export declare const acceptTask: (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
+export declare const acceptTask: (req: Request, res: Response) => Promise<void>;
 /**
  * 获取任务详情（包含匹配信息）
  */

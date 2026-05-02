@@ -31,7 +31,7 @@ export async function getTaskInvitations(req: Request, res: Response, next: Next
         t.id as task_id,
         t.title,
         t.description,
-        t.task_type,
+        t.track,
         t.student_price,
         t.deadline,
         t.estimated_minutes,

@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOPCResult = exports.submitOPCTest = void 0;
-const db_1 = __importDefault(require("../utils/db"));
+const db_1 = require("../utils/db");
 /**
  * 提交OPC测试结果
  * POST /api/opc/submit
@@ -53,7 +50,7 @@ const submitOPCTest = async (req, res) => {
         // 5. 生成推荐信息
         const recommendations = generateRecommendations(personalityTag);
         // 6. 保存到数据库
-        const result = await db_1.default.query(`INSERT INTO user_opc_results (
+        const result = await (0, db_1.query)(`INSERT INTO user_opc_results (
         user_id, test_version,
         information_processing_score, creation_drive_score, tool_learning_score,
         task_execution_score, collaboration_score, risk_attitude_score,
@@ -72,11 +69,11 @@ const submitOPCTest = async (req, res) => {
             recommendations.track, recommendations.level, recommendations.firstTask, JSON.stringify(answers)
         ]);
         // 7. 更新用户表
-        await db_1.default.query(`UPDATE users SET opc_personality_tag = $1, opc_completed_at = NOW(), opc_test_version = $2 WHERE id = $3`, [personalityTag.key, '2.0', userId]);
+        await (0, db_1.query)(`UPDATE users SET opc_personality_tag = $1, opc_completed_at = NOW(), opc_test_version = $2 WHERE id = $3`, [personalityTag.key, '2.0', userId]);
         res.json({
             success: true,
             result: {
-                id: result.rows[0].id,
+                id: result[0].id,
                 scores: normalizedScores,
                 personalityTag: personalityTag,
                 interpretations: interpretations,
@@ -97,11 +94,11 @@ exports.submitOPCTest = submitOPCTest;
 const getOPCResult = async (req, res) => {
     const { userId } = req.params;
     try {
-        const result = await db_1.default.query(`SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`, [userId]);
-        if (result.rows.length === 0) {
+        const result = await (0, db_1.query)(`SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`, [userId]);
+        if (result.length === 0) {
             return res.status(404).json({ error: '未找到测试结果' });
         }
-        const data = result.rows[0];
+        const data = result[0];
         res.json({
             success: true,
             result: {

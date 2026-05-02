@@ -41,44 +41,22 @@ export default function StudentProfile() {
 
   const loadStudentProfile = async () => {
     try {
-      // TODO: 调用真实API
-      // const res = await api.get(`/company/students/${studentId}/profile`)
-
-      // 模拟数据
-      setStudent({
-        id: studentId || '1',
-        name: '张小明',
-        avatar: 'https://via.placeholder.com/100',
-        level: 5,
-        completedTasks: 23,
-        rating: 4.8,
-        opcResult: {
-          openness: 85,
-          conscientiousness: 92,
-          extraversion: 68,
-          agreeableness: 78,
-          neuroticism: 45,
-          primaryTrack: 'A',
-          secondaryTrack: 'B',
-          interests: ['UI设计', '前端开发', '用户体验', '交互设计'],
-          skills: ['Figma', 'React', 'TypeScript', 'CSS动画']
-        },
-        portfolio: [
-          {
-            taskTitle: '企业官网设计',
-            completedAt: '2025-12-15',
-            rating: 5.0,
-            images: ['https://via.placeholder.com/200']
-          },
-          {
-            taskTitle: '移动端UI优化',
-            completedAt: '2025-12-10',
-            rating: 4.8,
-            images: ['https://via.placeholder.com/200']
-          }
-        ]
+      const token = Taro.getStorageSync('token')
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/company/students/${studentId}/profile`,
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${token}`
+        }
       })
+
+      if (res.statusCode === 200 && res.data.success) {
+        setStudent(res.data.data)
+      } else {
+        throw new Error(res.data.message || '加载失败')
+      }
     } catch (error) {
+      console.error('加载学生资料失败:', error)
       Taro.showToast({ title: '加载失败', icon: 'none' })
     } finally {
       setLoading(false)

@@ -82,6 +82,75 @@
   line-height: 1.5;
 }
 
+.option-card.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 前置定义题样式 */
+.definition-input-container {
+  background: white;
+  border-radius: 28rpx;
+  padding: 32rpx;
+  margin-bottom: 48rpx;
+  position: relative;
+}
+
+.definition-textarea {
+  width: 100%;
+  min-height: 300rpx;
+  font-size: 32rpx;
+  color: #2D3436;
+  line-height: 1.6;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 16rpx;
+  right: 24rpx;
+  font-size: 24rpx;
+  color: #B2BEC3;
+}
+
+.next-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #D4F291 0%, #A8D8EA 100%);
+  border-radius: 28rpx;
+  padding: 32rpx;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.next-btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.next-btn:active {
+  transform: scale(0.98);
+}
+
+.submitting-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.submitting-text {
+  background: white;
+  padding: 32rpx 64rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  color: #2D3436;
+}
+
 /* 结果页面 */
 .result-container {
   padding: 120rpx 40rpx 40rpx;

@@ -37,6 +37,7 @@
 .message-item {
   margin-bottom: 32rpx;
   display: flex;
+  align-items: flex-start;
 
   &.student {
     justify-content: flex-end;
@@ -50,6 +51,14 @@
 
   &.mentor {
     justify-content: flex-start;
+
+    .avatar {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 50%;
+      margin-right: 16rpx;
+      flex-shrink: 0;
+    }
 
     .message-bubble {
       background: #FFFFFF;

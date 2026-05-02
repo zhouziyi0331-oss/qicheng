@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTaskDetailWithMatch = exports.matchTasksForStudent = void 0;
-const db_1 = __importDefault(require("../utils/db"));
+const db_1 = require("../utils/db");
 /**
  * 智能项目匹配（升级版）
  * GET /api/tasks/match/:userId
@@ -19,27 +16,27 @@ const matchTasksForStudent = async (req, res) => {
     const { limit = 20 } = req.query;
     try {
         // 1. 获取学生信息（包括OPC人格标签）
-        const studentResult = await db_1.default.query(`SELECT id, level, opc_personality_tag, skills FROM users WHERE id = $1`, [userId]);
-        if (studentResult.rows.length === 0) {
+        const studentResult = await (0, db_1.query)(`SELECT id, level, opc_personality_tag, skills FROM users WHERE id = $1`, [userId]);
+        if (studentResult.length === 0) {
             return res.status(404).json({ error: '学生不存在' });
         }
-        const student = studentResult.rows[0];
+        const student = studentResult[0];
         const studentLevel = student.level || 0;
         const opcTag = student.opc_personality_tag;
         // 2. 获取学生的OPC测试结果（用于生成匹配理由）
-        const opcResult = await db_1.default.query(`SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`, [userId]);
-        const opcScores = opcResult.rows.length > 0 ? {
-            information_processing: opcResult.rows[0].information_processing_normalized,
-            creation_drive: opcResult.rows[0].creation_drive_normalized,
-            tool_learning: opcResult.rows[0].tool_learning_normalized,
-            task_execution: opcResult.rows[0].task_execution_normalized,
-            collaboration: opcResult.rows[0].collaboration_normalized,
-            risk_attitude: opcResult.rows[0].risk_attitude_normalized
+        const opcResult = await (0, db_1.query)(`SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`, [userId]);
+        const opcScores = opcResult.length > 0 ? {
+            information_processing: opcResult[0].information_processing_normalized,
+            creation_drive: opcResult[0].creation_drive_normalized,
+            tool_learning: opcResult[0].tool_learning_normalized,
+            task_execution: opcResult[0].task_execution_normalized,
+            collaboration: opcResult[0].collaboration_normalized,
+            risk_attitude: opcResult[0].risk_attitude_normalized
         } : null;
         // 3. 查询可匹配的任务
         // 常规项目：student_level >= task_level
         // 冒险项目：student_level + 2 >= task_level
-        const tasksResult = await db_1.default.query(`SELECT
+        const tasksResult = await (0, db_1.query)(`SELECT
         t.*,
         u.company_name,
         CASE
@@ -59,7 +56,7 @@ const matchTasksForStudent = async (req, res) => {
         t.created_at DESC
       LIMIT $4`, [studentLevel, userId, opcTag, limit]);
         // 4. 计算匹配分数并生成匹配理由
-        const tasks = tasksResult.rows.map(task => {
+        const tasks = tasksResult.map((task) => {
             const matchScore = calculateMatchScore(student, task, opcScores);
             const matchReason = generateMatchReason(student, task, opcScores);
             return {
@@ -72,8 +69,8 @@ const matchTasksForStudent = async (req, res) => {
         // 5. 按匹配分数排序
         tasks.sort((a, b) => b.match_score - a.match_score);
         // 6. 确保冒险项目占比20%
-        const stretchTasks = tasks.filter(t => t.is_stretch_project);
-        const regularTasks = tasks.filter(t => !t.is_stretch_project);
+        const stretchTasks = tasks.filter((t) => t.is_stretch_project);
+        const regularTasks = tasks.filter((t) => !t.is_stretch_project);
         const targetStretchCount = Math.ceil(tasks.length * 0.2);
         const finalTasks = [
             ...stretchTasks.slice(0, targetStretchCount),
@@ -193,29 +190,29 @@ const getTaskDetailWithMatch = async (req, res) => {
     const { taskId, userId } = req.params;
     try {
         // 1. 获取任务详情
-        const taskResult = await db_1.default.query(`SELECT t.*, u.company_name, u.avatar as company_avatar
+        const taskResult = await (0, db_1.query)(`SELECT t.*, u.company_name, u.avatar as company_avatar
        FROM tasks t
        JOIN users u ON t.company_id = u.id
        WHERE t.id = $1`, [taskId]);
-        if (taskResult.rows.length === 0) {
+        if (taskResult.length === 0) {
             return res.status(404).json({ error: '任务不存在' });
         }
-        const task = taskResult.rows[0];
+        const task = taskResult[0];
         // 2. 获取学生信息
-        const studentResult = await db_1.default.query(`SELECT id, level, opc_personality_tag, skills FROM users WHERE id = $1`, [userId]);
-        if (studentResult.rows.length === 0) {
+        const studentResult = await (0, db_1.query)(`SELECT id, level, opc_personality_tag, skills FROM users WHERE id = $1`, [userId]);
+        if (studentResult.length === 0) {
             return res.status(404).json({ error: '学生不存在' });
         }
-        const student = studentResult.rows[0];
+        const student = studentResult[0];
         // 3. 获取OPC测试结果
-        const opcResult = await db_1.default.query(`SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`, [userId]);
-        const opcScores = opcResult.rows.length > 0 ? {
-            information_processing: opcResult.rows[0].information_processing_normalized,
-            creation_drive: opcResult.rows[0].creation_drive_normalized,
-            tool_learning: opcResult.rows[0].tool_learning_normalized,
-            task_execution: opcResult.rows[0].task_execution_normalized,
-            collaboration: opcResult.rows[0].collaboration_normalized,
-            risk_attitude: opcResult.rows[0].risk_attitude_normalized
+        const opcResult = await (0, db_1.query)(`SELECT * FROM user_opc_results WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 1`, [userId]);
+        const opcScores = opcResult.length > 0 ? {
+            information_processing: opcResult[0].information_processing_normalized,
+            creation_drive: opcResult[0].creation_drive_normalized,
+            tool_learning: opcResult[0].tool_learning_normalized,
+            task_execution: opcResult[0].task_execution_normalized,
+            collaboration: opcResult[0].collaboration_normalized,
+            risk_attitude: opcResult[0].risk_attitude_normalized
         } : null;
         // 4. 计算匹配分数和理由
         const matchScore = calculateMatchScore(student, task, opcScores);

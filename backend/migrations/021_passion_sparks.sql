@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS passion_sparks (
   spark_text TEXT NOT NULL,
   context TEXT,
   captured_at TIMESTAMP DEFAULT NOW(),
-  want_explore BOOLEAN DEFAULT false,
-
-  INDEX idx_passion_spark_student (student_id, captured_at DESC),
-  INDEX idx_passion_spark_explore (student_id, want_explore)
+  want_explore BOOLEAN DEFAULT false
 );
+
+CREATE INDEX IF NOT EXISTS idx_passion_spark_student ON passion_sparks(student_id, captured_at DESC);
+CREATE INDEX IF NOT EXISTS idx_passion_spark_explore ON passion_sparks(student_id, want_explore);
 
 COMMENT ON TABLE passion_sparks IS '热情火花捕捉记录';
 COMMENT ON COLUMN passion_sparks.spark_text IS '火花描述：我发现自己在XX上有穿越感';

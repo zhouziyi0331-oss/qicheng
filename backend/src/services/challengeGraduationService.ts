@@ -1,4 +1,4 @@
-import pool from '../config/database';
+import { pool } from '../utils/db';
 
 /**
  * 跳级挑战服务
@@ -7,7 +7,7 @@ export class ChallengeService {
   /**
    * 获取可用的挑战任务
    */
-  static async getAvailableChallenges(studentId: number) {
+  static async getAvailableChallenges(studentId: string) {
     // 获取学生当前等级
     const studentResult = await pool.query(
       `SELECT current_level, track FROM student_abilities WHERE student_id = $1`,
@@ -33,7 +33,7 @@ export class ChallengeService {
   /**
    * 开始挑战
    */
-  static async startChallenge(studentId: number, challengeTaskId: number) {
+  static async startChallenge(studentId: string, challengeTaskId: number) {
     // 检查是否在冷却期
     const cooldownCheck = await pool.query(
       `SELECT * FROM student_challenges
@@ -88,7 +88,7 @@ export class ChallengeService {
    */
   static async submitChallenge(
     challengeId: number,
-    studentId: number,
+    studentId: string,
     submissionUrl: string,
     submissionContent: string
   ) {
@@ -115,7 +115,7 @@ export class ChallengeService {
    */
   static async reviewChallenge(
     challengeId: number,
-    reviewerId: number,
+    reviewerId: string,
     score: number,
     feedback: string
   ) {
@@ -179,7 +179,7 @@ export class ChallengeService {
   /**
    * 获取学生的挑战历史
    */
-  static async getChallengeHistory(studentId: number) {
+  static async getChallengeHistory(studentId: string) {
     const result = await pool.query(
       `SELECT sc.*, lct.title, lct.level, lct.track
        FROM student_challenges sc
@@ -200,7 +200,7 @@ export class GraduationService {
   /**
    * 检查毕业资格
    */
-  static async checkEligibility(studentId: number) {
+  static async checkEligibility(studentId: string) {
     // 检查是否达到Lv.4
     const levelResult = await pool.query(
       `SELECT current_level, track FROM student_abilities WHERE student_id = $1`,
@@ -257,7 +257,7 @@ export class GraduationService {
    * 提交毕业申请
    */
   static async applyForGraduation(
-    studentId: number,
+    studentId: string,
     portfolioUrl: string,
     selfIntroduction: string,
     careerGoals: string
@@ -304,7 +304,7 @@ export class GraduationService {
    */
   static async reviewGraduation(
     applicationId: number,
-    reviewerId: number,
+    reviewerId: string,
     approved: boolean,
     feedback: string
   ) {
@@ -359,7 +359,7 @@ export class GraduationService {
   /**
    * 获取毕业生权益
    */
-  static async getGraduateBenefits(studentId: number) {
+  static async getGraduateBenefits(studentId: string) {
     const result = await pool.query(
       `SELECT gb.*, gc.certification_number, gc.issued_at
        FROM graduate_benefits gb

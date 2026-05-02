@@ -1,4 +1,4 @@
-import pool from '../config/database';
+import { pool } from '../utils/db';
 
 /**
  * AI需求确认引擎
@@ -7,7 +7,7 @@ export class AIRequirementEngine {
   /**
    * 开始需求确认对话
    */
-  static async startDialogue(companyId: number, taskDraftId?: number) {
+  static async startDialogue(companyId: string, taskDraftId?: number) {
     const sessionId = `req_${Date.now()}_${companyId}`;
 
     // 创建初始对话
@@ -29,7 +29,7 @@ export class AIRequirementEngine {
   /**
    * 处理用户消息并生成AI回复
    */
-  static async processMessage(sessionId: string, companyId: number, message: string) {
+  static async processMessage(sessionId: string, companyId: string, message: string) {
     // 保存用户消息
     await pool.query(
       `INSERT INTO ai_requirement_dialogues
@@ -328,7 +328,7 @@ export class AIQAEngine {
   /**
    * 回答问题
    */
-  static async answerQuestion(userId: number, question: string, taskId?: number) {
+  static async answerQuestion(userId: string, question: string, taskId?: number) {
     const startTime = Date.now();
 
     // 从知识库匹配答案

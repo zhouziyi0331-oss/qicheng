@@ -53,6 +53,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS opc_incubation_updated_at_trigger ON opc_incubation;
 CREATE TRIGGER opc_incubation_updated_at_trigger
 BEFORE UPDATE ON opc_incubation
 FOR EACH ROW

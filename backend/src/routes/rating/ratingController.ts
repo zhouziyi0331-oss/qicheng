@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../../utils/db';
+import pool, { query, queryOne, withTransaction } from '../../utils/db';
 
 /**
  * 评价系统控制器
@@ -7,9 +7,8 @@ import pool from '../../utils/db';
 
 // 1. 提交评价
 export const submitRating = async (req: Request, res: Response) => {
-  const client = await pool.connect();
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userType = req.user?.role; // 'student' or 'company'
     const {
       taskId,
@@ -35,114 +34,107 @@ export const submitRating = async (req: Request, res: Response) => {
       return res.status(400).json({ error: '评分必须在1-5之间' });
     }
 
-    await client.query('BEGIN');
-
-    // 获取任务信息
-    const taskResult = await client.query(
-      'SELECT * FROM tasks WHERE id = $1',
-      [taskId]
-    );
-
-    if (taskResult.rows.length === 0) {
-      await client.query('ROLLBACK');
-      return res.status(404).json({ error: '任务不存在' });
-    }
-
-    const task = taskResult.rows[0];
-
-    // 验证任务状态（必须是已完成）
-    if (task.status !== 'completed') {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: '只能评价已完成的任务' });
-    }
-
-    // 确定被评价者
-    let rateeId: number;
-    let rateeType: string;
-
-    if (userType === 'student') {
-      // 学生评价企业
-      rateeId = task.company_id;
-      rateeType = 'company';
-
-      // 检查是否已评价
-      if (task.student_rated) {
-        await client.query('ROLLBACK');
-        return res.status(400).json({ error: '您已经评价过此任务' });
-      }
-    } else if (userType === 'company') {
-      // 企业评价学生
-      rateeId = task.student_id;
-      rateeType = 'student';
-
-      // 检查是否已评价
-      if (task.company_rated) {
-        await client.query('ROLLBACK');
-        return res.status(400).json({ error: '您已经评价过此任务' });
-      }
-    } else {
-      await client.query('ROLLBACK');
-      return res.status(403).json({ error: '无权限评价' });
-    }
-
-    // 验证是否为任务参与者
-    if (userType === 'student' && task.student_id !== userId) {
-      await client.query('ROLLBACK');
-      return res.status(403).json({ error: '您不是此任务的学生' });
-    }
-    if (userType === 'company' && task.company_id !== userId) {
-      await client.query('ROLLBACK');
-      return res.status(403).json({ error: '您不是此任务的企业' });
-    }
-
-    // 插入评价
-    const ratingResult = await client.query(
-      `INSERT INTO task_ratings (
-        task_id, rater_id, rater_type, ratee_id, ratee_type,
-        overall_rating, requirement_clarity, communication_quality, payment_timeliness,
-        work_quality, delivery_timeliness, professional_attitude,
-        comment, tags, is_anonymous
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-      RETURNING *`,
-      [
-        taskId, userId, userType, rateeId, rateeType,
-        overallRating, requirementClarity, communicationQuality, paymentTimeliness,
-        workQuality, deliveryTimeliness, professionalAttitude,
-        comment, JSON.stringify(tags || []), isAnonymous || false
-      ]
-    );
-
-    // 更新任务的评价状态
-    if (userType === 'student') {
-      await client.query(
-        'UPDATE tasks SET student_rated = true WHERE id = $1',
+    const result = await withTransaction(async (client) => {
+      // 获取任务信息
+      const taskResult = await client.query(
+        'SELECT * FROM tasks WHERE id = $1',
         [taskId]
       );
-    } else {
-      await client.query(
-        'UPDATE tasks SET company_rated = true WHERE id = $1',
-        [taskId]
+
+      if (taskResult.rows.length === 0) {
+        throw new Error('任务不存在');
+      }
+
+      const task = taskResult.rows[0];
+
+      // 验证任务状态（必须是已完成）
+      if (task.status !== 'completed') {
+        throw new Error('只能评价已完成的任务');
+      }
+
+      // 确定被评价者
+      let rateeId: number;
+      let rateeType: string;
+
+      if (userType === 'student') {
+        // 学生评价企业
+        rateeId = task.company_id;
+        rateeType = 'company';
+
+        // 检查是否已评价
+        if (task.student_rated) {
+          throw new Error('您已经评价过此任务');
+        }
+      } else if (userType === 'company') {
+        // 企业评价学生
+        rateeId = task.student_id;
+        rateeType = 'student';
+
+        // 检查是否已评价
+        if (task.company_rated) {
+          throw new Error('您已经评价过此任务');
+        }
+      } else {
+        throw new Error('无权限评价');
+      }
+
+      // 验证是否为任务参与者
+      if (userType === 'student' && task.student_id !== userId) {
+        throw new Error('您不是此任务的学生');
+      }
+      if (userType === 'company' && task.company_id !== userId) {
+        throw new Error('您不是此任务的企业');
+      }
+
+      // 插入评价
+      const ratingResult = await client.query(
+        `INSERT INTO task_ratings (
+          task_id, rater_id, rater_type, ratee_id, ratee_type,
+          overall_rating, requirement_clarity, communication_quality, payment_timeliness,
+          work_quality, delivery_timeliness, professional_attitude,
+          comment, tags, is_anonymous
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+        RETURNING *`,
+        [
+          taskId, userId, userType, rateeId, rateeType,
+          overallRating, requirementClarity, communicationQuality, paymentTimeliness,
+          workQuality, deliveryTimeliness, professionalAttitude,
+          comment, JSON.stringify(tags || []), isAnonymous || false
+        ]
       );
-    }
 
-    // 标记评价提醒为已完成
-    await client.query(
-      'UPDATE rating_reminders SET is_completed = true WHERE task_id = $1 AND user_id = $2',
-      [taskId, userId]
-    );
+      // 更新任务的评价状态
+      if (userType === 'student') {
+        await client.query(
+          'UPDATE tasks SET student_rated = true WHERE id = $1',
+          [taskId]
+        );
+      } else {
+        await client.query(
+          'UPDATE tasks SET company_rated = true WHERE id = $1',
+          [taskId]
+        );
+      }
 
-    await client.query('COMMIT');
+      // 标记评价提醒为已完成
+      await client.query(
+        'UPDATE rating_reminders SET is_completed = true WHERE task_id = $1 AND user_id = $2',
+        [taskId, userId]
+      );
+
+      return ratingResult.rows[0];
+    });
 
     res.json({
       message: '评价提交成功',
-      rating: ratingResult.rows[0]
+      rating: result
     });
   } catch (error) {
-    await client.query('ROLLBACK');
     console.error('提交评价失败:', error);
-    res.status(500).json({ error: '提交评价失败' });
-  } finally {
-    client.release();
+    const errorMessage = error instanceof Error ? error.message : '提交评价失败';
+    const statusCode = errorMessage.includes('不存在') ? 404 :
+                       errorMessage.includes('无权限') || errorMessage.includes('不是此任务') ? 403 : 400;
+    res.status(statusCode).json({ error: errorMessage });
   }
 };
 
@@ -150,9 +142,9 @@ export const submitRating = async (req: Request, res: Response) => {
 export const getTaskRatings = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
 
-    const result = await pool.query(
+    const result = await query(
       `SELECT
         tr.*,
         rater.nickname as rater_nickname,
@@ -168,7 +160,7 @@ export const getTaskRatings = async (req: Request, res: Response) => {
     );
 
     // 如果是匿名评价，隐藏评价者信息
-    const ratings = result.rows.map(rating => {
+    const ratings = result.map((rating: any) => {
       if (rating.is_anonymous && rating.rater_id !== userId) {
         return {
           ...rating,
@@ -191,12 +183,12 @@ export const getUserRatingStats = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
-    const result = await pool.query(
+    const result = await query(
       'SELECT * FROM user_rating_stats WHERE user_id = $1',
       [userId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return res.json({
         stats: {
           total_ratings: 0,
@@ -210,7 +202,7 @@ export const getUserRatingStats = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({ stats: result.rows[0] });
+    res.json({ stats: result[0] });
   } catch (error) {
     console.error('获取用户评分统计失败:', error);
     res.status(500).json({ error: '获取用户评分统计失败' });
@@ -225,7 +217,7 @@ export const getUserReceivedRatings = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = (page - 1) * limit;
 
-    const result = await pool.query(
+    const result = await query(
       `SELECT
         tr.*,
         rater.nickname as rater_nickname,
@@ -241,13 +233,13 @@ export const getUserReceivedRatings = async (req: Request, res: Response) => {
       [userId, limit, offset]
     );
 
-    const countResult = await pool.query(
+    const countResult = await query(
       'SELECT COUNT(*) FROM task_ratings WHERE ratee_id = $1 AND is_public = true',
       [userId]
     );
 
     // 处理匿名评价
-    const ratings = result.rows.map(rating => {
+    const ratings = result.map((rating: any) => {
       if (rating.is_anonymous) {
         return {
           ...rating,
@@ -263,7 +255,7 @@ export const getUserReceivedRatings = async (req: Request, res: Response) => {
       pagination: {
         page,
         limit,
-        total: parseInt(countResult.rows[0].count)
+        total: parseInt(countResult[0].count as string)
       }
     });
   } catch (error) {
@@ -275,12 +267,12 @@ export const getUserReceivedRatings = async (req: Request, res: Response) => {
 // 5. 获取用户发出的评价列表
 export const getUserGivenRatings = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = (page - 1) * limit;
 
-    const result = await pool.query(
+    const result = await query(
       `SELECT
         tr.*,
         ratee.nickname as ratee_nickname,
@@ -296,17 +288,17 @@ export const getUserGivenRatings = async (req: Request, res: Response) => {
       [userId, limit, offset]
     );
 
-    const countResult = await pool.query(
+    const countResult = await query(
       'SELECT COUNT(*) FROM task_ratings WHERE rater_id = $1',
       [userId]
     );
 
     res.json({
-      ratings: result.rows,
+      ratings: result,
       pagination: {
         page,
         limit,
-        total: parseInt(countResult.rows[0].count)
+        total: parseInt(countResult[0].count as string)
       }
     });
   } catch (error) {
@@ -318,7 +310,7 @@ export const getUserGivenRatings = async (req: Request, res: Response) => {
 // 6. 企业回复评价
 export const replyToRating = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userType = req.user?.role;
     const { ratingId } = req.params;
     const { reply } = req.body;
@@ -332,17 +324,17 @@ export const replyToRating = async (req: Request, res: Response) => {
     }
 
     // 验证评价是否存在且是评价该企业的
-    const ratingResult = await pool.query(
+    const ratingResult = await query(
       'SELECT * FROM task_ratings WHERE id = $1 AND ratee_id = $2 AND ratee_type = $3',
       [ratingId, userId, 'company']
     );
 
-    if (ratingResult.rows.length === 0) {
+    if (ratingResult.length === 0) {
       return res.status(404).json({ error: '评价不存在或无权限回复' });
     }
 
     // 更新回复
-    const result = await pool.query(
+    const result = await query(
       `UPDATE task_ratings
        SET company_reply = $1, company_reply_at = CURRENT_TIMESTAMP
        WHERE id = $2
@@ -352,7 +344,7 @@ export const replyToRating = async (req: Request, res: Response) => {
 
     res.json({
       message: '回复成功',
-      rating: result.rows[0]
+      rating: result[0]
     });
   } catch (error) {
     console.error('回复评价失败:', error);
@@ -365,19 +357,19 @@ export const getRatingTagPresets = async (req: Request, res: Response) => {
   try {
     const { tagType } = req.query;
 
-    let query = 'SELECT * FROM rating_tag_presets WHERE is_active = true';
+    let queryStr = 'SELECT * FROM rating_tag_presets WHERE is_active = true';
     const params: any[] = [];
 
     if (tagType) {
-      query += ' AND tag_type = $1';
+      queryStr += ' AND tag_type = $1';
       params.push(tagType);
     }
 
-    query += ' ORDER BY display_order ASC';
+    queryStr += ' ORDER BY display_order ASC';
 
-    const result = await pool.query(query, params);
+    const result = await query(queryStr, params);
 
-    res.json({ tags: result.rows });
+    res.json({ tags: result });
   } catch (error) {
     console.error('获取评价标签失败:', error);
     res.status(500).json({ error: '获取评价标签失败' });
@@ -387,21 +379,21 @@ export const getRatingTagPresets = async (req: Request, res: Response) => {
 // 8. 检查任务是否可以评价
 export const checkRatingEligibility = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userType = req.user?.role;
     const { taskId } = req.params;
 
     // 获取任务信息
-    const taskResult = await pool.query(
+    const taskResult = await query(
       'SELECT * FROM tasks WHERE id = $1',
       [taskId]
     );
 
-    if (taskResult.rows.length === 0) {
+    if (taskResult.length === 0) {
       return res.status(404).json({ error: '任务不存在' });
     }
 
-    const task = taskResult.rows[0];
+    const task = taskResult[0];
 
     // 验证是否为任务参与者
     if (userType === 'student' && task.student_id !== userId) {
@@ -445,10 +437,10 @@ export const checkRatingEligibility = async (req: Request, res: Response) => {
 // 9. 获取待评价任务列表
 export const getPendingRatingTasks = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userType = req.user?.role;
 
-    let query = `
+    let queryStr = `
       SELECT t.*,
         u.nickname as other_party_nickname,
         u.avatar_url as other_party_avatar
@@ -456,12 +448,12 @@ export const getPendingRatingTasks = async (req: Request, res: Response) => {
     `;
 
     if (userType === 'student') {
-      query += `
+      queryStr += `
         LEFT JOIN users u ON t.company_id = u.id
         WHERE t.student_id = $1 AND t.status = 'completed' AND t.student_rated = false
       `;
     } else if (userType === 'company') {
-      query += `
+      queryStr += `
         LEFT JOIN users u ON t.student_id = u.id
         WHERE t.company_id = $1 AND t.status = 'completed' AND t.company_rated = false
       `;
@@ -469,11 +461,11 @@ export const getPendingRatingTasks = async (req: Request, res: Response) => {
       return res.status(403).json({ error: '无权限' });
     }
 
-    query += ' ORDER BY t.completed_at DESC';
+    queryStr += ' ORDER BY t.completed_at DESC';
 
-    const result = await pool.query(query, [userId]);
+    const result = await query(queryStr, [userId]);
 
-    res.json({ tasks: result.rows });
+    res.json({ tasks: result });
   } catch (error) {
     console.error('获取待评价任务失败:', error);
     res.status(500).json({ error: '获取待评价任务失败' });

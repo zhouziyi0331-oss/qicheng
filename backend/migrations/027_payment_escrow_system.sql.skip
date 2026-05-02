@@ -1,0 +1,265 @@
+-- 支付托管系统
+-- 实现报价净收入、托管账户、资金释放、提现等功能
+
+-- 1. 托管账户表
+-- 表已存在，只添加缺失的列
+DO $$
+BEGIN
+  -- 添加 user_type 列（如果不存在）
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'user_type'
+  ) THEN
+    ALTER TABLE escrow_accounts ADD COLUMN user_type VARCHAR(20) CHECK (user_type IN ('student', 'company'));
+  END IF;
+
+  -- 添加 total_balance 列（如果不存在）
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'total_balance'
+  ) THEN
+    ALTER TABLE escrow_accounts ADD COLUMN total_balance INTEGER DEFAULT 0 NOT NULL;
+  END IF;
+
+  -- 添加 frozen_balance 列（如果不存在）
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'frozen_balance'
+  ) THEN
+    ALTER TABLE escrow_accounts ADD COLUMN frozen_balance INTEGER DEFAULT 0 NOT NULL;
+  END IF;
+
+  -- 添加 pending_settlement 列（如果不存在）
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'pending_settlement'
+  ) THEN
+    ALTER TABLE escrow_accounts ADD COLUMN pending_settlement INTEGER DEFAULT 0 NOT NULL;
+  END IF;
+
+  -- 添加 total_income 列（如果不存在）
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'total_income'
+  ) THEN
+    ALTER TABLE escrow_accounts ADD COLUMN total_income INTEGER DEFAULT 0 NOT NULL;
+  END IF;
+
+  -- 添加 total_withdrawal 列（如果不存在）
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'total_withdrawal'
+  ) THEN
+    ALTER TABLE escrow_accounts ADD COLUMN total_withdrawal INTEGER DEFAULT 0 NOT NULL;
+  END IF;
+END $$;
+
+-- 创建索引（如果不存在）
+CREATE INDEX IF NOT EXISTS idx_escrow_accounts_user ON escrow_accounts(user_id, user_type);
+
+-- 2. 任务报价表
+CREATE TABLE IF NOT EXISTS task_quotes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  company_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+
+  -- 报价金额（单位：分）
+  quoted_amount INTEGER NOT NULL, -- 企业报价
+  platform_fee_rate DECIMAL(5,4) DEFAULT 0.05 NOT NULL, -- 平台费率（默认5%）
+  platform_fee INTEGER NOT NULL, -- 平台费用
+  student_net_income INTEGER NOT NULL, -- 学生净收入
+
+  -- 状态
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN (
+    'pending',      -- 待学生确认
+    'accepted',     -- 学生已接受
+    'rejected',     -- 学生已拒绝
+    'paid',         -- 企业已支付（进入托管）
+    'completed',    -- 任务完成（进入待结算）
+    'released',     -- 资金已释放（可提现）
+    'cancelled'     -- 已取消
+  )),
+
+  -- 时间节点
+  quoted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  accepted_at TIMESTAMP,
+  paid_at TIMESTAMP,
+  completed_at TIMESTAMP,
+  released_at TIMESTAMP,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_task_quotes_task ON task_quotes(task_id);
+CREATE INDEX IF NOT EXISTS idx_task_quotes_student ON task_quotes(student_id);
+CREATE INDEX IF NOT EXISTS idx_task_quotes_company ON task_quotes(company_id);
+CREATE INDEX IF NOT EXISTS idx_task_quotes_status ON task_quotes(status);
+
+-- 3. 资金流水表
+CREATE TABLE IF NOT EXISTS transaction_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('student', 'company')),
+
+  -- 交易类型
+  transaction_type VARCHAR(30) NOT NULL CHECK (transaction_type IN (
+    'payment',          -- 企业支付
+    'escrow',           -- 进入托管
+    'settlement',       -- 进入待结算
+    'release',          -- 释放到可提现
+    'withdrawal',       -- 提现
+    'refund',           -- 退款
+    'platform_fee'      -- 平台费用
+  )),
+
+  -- 金额（单位：分）
+  amount INTEGER NOT NULL,
+  balance_before INTEGER NOT NULL, -- 交易前余额
+  balance_after INTEGER NOT NULL, -- 交易后余额
+
+  -- 关联信息
+  task_id UUID REFERENCES tasks(id) ON DELETE SET NULL,
+  quote_id UUID REFERENCES task_quotes(id) ON DELETE SET NULL,
+  withdrawal_id UUID REFERENCES withdrawal_requests(id) ON DELETE SET NULL,
+
+  -- 描述
+  description TEXT,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_transaction_logs_user ON transaction_logs(user_id, user_type);
+CREATE INDEX IF NOT EXISTS idx_transaction_logs_type ON transaction_logs(transaction_type);
+CREATE INDEX IF NOT EXISTS idx_transaction_logs_task ON transaction_logs(task_id);
+CREATE INDEX IF NOT EXISTS idx_transaction_logs_created ON transaction_logs(created_at);
+
+-- 4. 提现申请表
+CREATE TABLE IF NOT EXISTS withdrawal_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+
+  -- 提现金额（单位：分）
+  amount INTEGER NOT NULL CHECK (amount >= 1000), -- 最低10元
+
+  -- 提现方式
+  withdrawal_method VARCHAR(20) NOT NULL CHECK (withdrawal_method IN ('wechat', 'alipay')),
+
+  -- 收款账户信息（加密存储）
+  account_name VARCHAR(100) NOT NULL, -- 真实姓名
+  account_number VARCHAR(100) NOT NULL, -- 账号
+
+  -- 状态
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN (
+    'pending',      -- 待审核
+    'approved',     -- 已批准
+    'processing',   -- 处理中
+    'completed',    -- 已完成
+    'rejected',     -- 已拒绝
+    'failed'        -- 失败
+  )),
+
+  -- 审核信息
+  reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+  reviewed_at TIMESTAMP,
+  reject_reason TEXT,
+
+  -- 第三方支付信息
+  payment_order_id VARCHAR(100), -- 支付订单号
+  payment_completed_at TIMESTAMP,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_user ON withdrawal_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_status ON withdrawal_requests(status);
+CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_created ON withdrawal_requests(created_at);
+
+-- 5. 支付订单表（企业支付）
+CREATE TABLE IF NOT EXISTS payment_orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  company_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  quote_id UUID NOT NULL REFERENCES task_quotes(id) ON DELETE CASCADE,
+
+  -- 订单金额（单位：分）
+  amount INTEGER NOT NULL,
+
+  -- 支付方式
+  payment_method VARCHAR(20) NOT NULL CHECK (payment_method IN ('wechat', 'alipay', 'balance')),
+
+  -- 订单状态
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN (
+    'pending',      -- 待支付
+    'processing',   -- 支付处理中
+    'completed',    -- 支付成功
+    'failed',       -- 支付失败
+    'cancelled',    -- 已取消
+    'refunded'      -- 已退款
+  )),
+
+  -- 第三方支付信息
+  payment_order_id VARCHAR(100), -- 第三方订单号
+  payment_completed_at TIMESTAMP,
+
+  -- 退款信息
+  refund_amount INTEGER,
+  refund_reason TEXT,
+  refunded_at TIMESTAMP,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_payment_orders_company ON payment_orders(company_id);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_task ON payment_orders(task_id);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_status ON payment_orders(status);
+
+-- 6. 扩展 tasks 表，添加支付相关字段
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT 'unpaid'
+  CHECK (payment_status IN ('unpaid', 'paid', 'in_escrow', 'in_settlement', 'released', 'refunded'));
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS escrow_amount INTEGER DEFAULT 0;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS settlement_date TIMESTAMP;
+
+-- 7. 创建触发器：自动更新 updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+DROP TRIGGER IF EXISTS update_escrow_accounts_updated_at ON escrow_accounts;
+CREATE TRIGGER update_escrow_accounts_updated_at BEFORE UPDATE ON escrow_accounts
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_task_quotes_updated_at ON task_quotes;
+CREATE TRIGGER update_task_quotes_updated_at BEFORE UPDATE ON task_quotes
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_withdrawal_requests_updated_at ON withdrawal_requests;
+CREATE TRIGGER update_withdrawal_requests_updated_at BEFORE UPDATE ON withdrawal_requests
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_payment_orders_updated_at ON payment_orders;
+CREATE TRIGGER update_payment_orders_updated_at BEFORE UPDATE ON payment_orders
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- 8. 初始化所有用户的托管账户（如果 user_type 列存在）
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'escrow_accounts' AND column_name = 'user_type'
+  ) THEN
+    INSERT INTO escrow_accounts (user_id, user_type)
+    SELECT id, role FROM users
+    WHERE NOT EXISTS (
+      SELECT 1 FROM escrow_accounts WHERE escrow_accounts.user_id = users.id
+    )
+    ON CONFLICT DO NOTHING;
+  END IF;
+END $$;

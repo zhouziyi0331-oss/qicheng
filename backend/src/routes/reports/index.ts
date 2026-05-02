@@ -14,5 +14,6 @@ router.use(authenticate, requireRole('student'));
 router.get('/', controller.listReports);
 router.post('/order', controller.orderReport);
 router.get('/:id', controller.getReport);
+router.get('/:id/pdf', controller.downloadReportPDF);
 
 export default router;

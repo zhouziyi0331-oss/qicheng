@@ -1,7 +1,7 @@
 import { View, Text } from '@tarojs/components'
 import Taro, { useLoad } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
-import { opcAPI } from '../../services/api'
+import { opcV2API } from '../../services/api'
 import './result.scss'
 
 // 人格标签定义
@@ -106,34 +106,45 @@ export default function OPCTestResult() {
   const [personalityTag, setPersonalityTag] = useState<any>(null)
   const [interpretations, setInterpretations] = useState<any>({})
   const [loading, setLoading] = useState(true)
+  const [assessmentId, setAssessmentId] = useState<string>('')
 
   useEffect(() => {
-    loadResult()
+    // 从URL参数获取assessmentId
+    const params = Taro.getCurrentInstance().router?.params
+    if (params?.assessmentId) {
+      setAssessmentId(params.assessmentId)
+      loadResult(params.assessmentId)
+    } else {
+      // 如果没有传assessmentId，尝试获取最新结果
+      loadLatestResult()
+    }
   }, [])
 
-  const loadResult = async () => {
+  const loadLatestResult = async () => {
     try {
       setLoading(true)
-
-      // 先尝试从本地缓存获取
-      const cachedResult = Taro.getStorageSync('opc_result')
-      if (cachedResult && cachedResult.result) {
-        displayResult(cachedResult.result)
-        setLoading(false)
-        return
+      const result = await opcV2API.getLatestResult()
+      if (result.success && result.data) {
+        displayResult(result.data)
+      } else {
+        Taro.showToast({ title: '暂无测试结果', icon: 'none' })
       }
+    } catch (error) {
+      console.error('加载结果失败:', error)
+      Taro.showToast({ title: '加载失败', icon: 'none' })
+    } finally {
+      setLoading(false)
+    }
+  }
 
-      // 如果没有缓存，从后端获取
-      const user = Taro.getStorageSync('user')
-      if (user && user.id) {
-        const result = await opcAPI.getResult(user.id)
-        if (result.success && result.result) {
-          displayResult(result.result)
-          // 保存到本地缓存
-          Taro.setStorageSync('opc_result', result)
-        } else {
-          Taro.showToast({ title: '暂无测试结果', icon: 'none' })
-        }
+  const loadResult = async (id: string) => {
+    try {
+      setLoading(true)
+      const result = await opcV2API.getResult(id)
+      if (result.success && result.data) {
+        displayResult(result.data)
+      } else {
+        Taro.showToast({ title: '暂无测试结果', icon: 'none' })
       }
     } catch (error) {
       console.error('加载结果失败:', error)
@@ -145,127 +156,30 @@ export default function OPCTestResult() {
 
   const displayResult = (result: any) => {
     // 显示后端返回的结果
-    setScores(result.scores)
+    setScores(result.dimensionScores)
 
     // 设置人格标签
-    const tagKey = result.personalityTag.key
+    const tagKey = result.personalityTag
     const tagInfo = PERSONALITY_TAGS[tagKey] || PERSONALITY_TAGS.balanced
     setPersonalityTag({ key: tagKey, ...tagInfo })
 
     // 设置维度解读
-    setInterpretations(result.interpretations)
-  }
-
-  const calculateResult = (answers: Array<{questionId: number, answer: string, score: number}>) => {
-    // 按维度分组计算得分
-    const dimensionScores: any = {
-      information_processing: [],
-      creation_drive: [],
-      tool_learning: [],
-      task_execution: [],
-      collaboration: [],
-      risk_attitude: []
-    }
-
-    // 题目维度映射（每个维度6题）
-    const questionDimensions = [
-      'information_processing', 'information_processing', 'information_processing', 'information_processing', 'information_processing', 'information_processing',
-      'creation_drive', 'creation_drive', 'creation_drive', 'creation_drive', 'creation_drive', 'creation_drive',
-      'tool_learning', 'tool_learning', 'tool_learning', 'tool_learning', 'tool_learning', 'tool_learning',
-      'task_execution', 'task_execution', 'task_execution', 'task_execution', 'task_execution', 'task_execution',
-      'collaboration', 'collaboration', 'collaboration', 'collaboration', 'collaboration', 'collaboration',
-      'risk_attitude', 'risk_attitude', 'risk_attitude', 'risk_attitude', 'risk_attitude', 'risk_attitude'
-    ]
-
-    answers.forEach((answer, index) => {
-      const dimension = questionDimensions[index]
-      dimensionScores[dimension].push(answer.score)
-    })
-
-    // 计算每个维度的原始分（0-18）和归一化分（0-100）
-    const rawScores: any = {}
-    const normalizedScores: any = {}
-
-    Object.keys(dimensionScores).forEach(dimension => {
-      const scores = dimensionScores[dimension]
-      const rawScore = scores.reduce((a: number, b: number) => a + b, 0)
-      rawScores[dimension] = rawScore
-      normalizedScores[dimension] = Math.round((rawScore / 18) * 100)
-    })
-
-    setScores(normalizedScores)
-
-    // 生成人格标签
-    const tag = generatePersonalityTag(normalizedScores)
-    setPersonalityTag(tag)
-
-    // 生成维度解读
-    const interps = generateInterpretations(normalizedScores)
-    setInterpretations(interps)
-
-    // 保存到本地存储
-    Taro.setStorageSync('opcResult', {
-      scores: normalizedScores,
-      personalityTag: tag.key,
-      completedAt: new Date().toISOString()
-    })
-  }
-
-  const generatePersonalityTag = (scores: any) => {
-    const { information_processing, creation_drive, tool_learning, task_execution, collaboration, risk_attitude } = scores
-
-    // 判断人格标签
-    // 视觉叙事者：创作驱动-视觉高分(低分) + 信息处理-整合高分
-    if (creation_drive <= 40 && information_processing >= 60) {
-      return { key: 'visual_storyteller', ...PERSONALITY_TAGS.visual_storyteller }
-    }
-
-    // 系统构建者：创作驱动-逻辑高分 + 信息处理-整合高分 + 工具学习-手册高分
-    if (creation_drive >= 60 && information_processing >= 60 && tool_learning >= 60) {
-      return { key: 'system_builder', ...PERSONALITY_TAGS.system_builder }
-    }
-
-    // 创意执行者：创作驱动-视觉高分 + 任务执行-迭代高分 + 风险态度-冒险高分
-    if (creation_drive <= 40 && task_execution >= 60 && risk_attitude >= 60) {
-      return { key: 'creative_executor', ...PERSONALITY_TAGS.creative_executor }
-    }
-
-    // 逻辑拆解者：信息处理-拆解高分(低分) + 创作驱动-逻辑高分 + 协作倾向-独立高分(低分)
-    if (information_processing <= 40 && creation_drive >= 60 && collaboration <= 40) {
-      return { key: 'logic_analyzer', ...PERSONALITY_TAGS.logic_analyzer }
-    }
-
-    // 稳健交付者：任务执行-规划高分(低分) + 风险态度-稳健高分(低分) + 协作倾向-独立高分(低分)
-    if (task_execution <= 40 && risk_attitude <= 40 && collaboration <= 40) {
-      return { key: 'stable_deliverer', ...PERSONALITY_TAGS.stable_deliverer }
-    }
-
-    // 探索整合者：工具学习-探索高分(低分) + 信息处理-整合高分 + 风险态度-冒险高分
-    if (tool_learning <= 40 && information_processing >= 60 && risk_attitude >= 60) {
-      return { key: 'explorer_integrator', ...PERSONALITY_TAGS.explorer_integrator }
-    }
-
-    // 默认：混合型
-    return { key: 'balanced', ...PERSONALITY_TAGS.balanced }
-  }
-
-  const generateInterpretations = (scores: any) => {
     const interps: any = {}
-
-    Object.keys(scores).forEach(dimension => {
-      const score = scores[dimension]
+    Object.keys(result.dimensionScores).forEach(dimension => {
+      const score = result.dimensionScores[dimension]
       const templates = DIMENSION_INTERPRETATIONS[dimension]
 
-      if (score <= 40) {
-        interps[dimension] = templates.low
-      } else if (score <= 60) {
-        interps[dimension] = templates.mid
-      } else {
-        interps[dimension] = templates.high
+      if (templates) {
+        if (score <= 40) {
+          interps[dimension] = templates.low
+        } else if (score <= 60) {
+          interps[dimension] = templates.mid
+        } else {
+          interps[dimension] = templates.high
+        }
       }
     })
-
-    return interps
+    setInterpretations(interps)
   }
 
   const handleComplete = () => {

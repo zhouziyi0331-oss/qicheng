@@ -16,17 +16,16 @@ import taskRoutes from './routes/tasks';
 import abilityRoutes from './routes/ability';
 import reportRoutes from './routes/reports';
 import storyRoutes from './routes/story';
-import adminRoutes from './routes/admin';
+import adminMainRoutes from './routes/admin/mainRoutes';
 import paymentRoutes from './routes/payments';
 import chatRoutes from './routes/chat';
-import notificationRoutes from './routes/notification';
+import notificationRoutes from './routes/notifications';
 import uploadRoutes from './routes/upload';
 import mentorRoutes from './routes/mentor';
 import trustRoutes from './routes/trust';
 import invitationRoutes from './routes/invitation';
 import challengeRoutes from './routes/challenge';
 import subcontractRoutes from './routes/subcontract';
-import adminManagementRoutes from './routes/admin/adminRoutes';
 import teamRoutes from './routes/team';
 import disputeRoutes from './routes/disputes';
 import draftRoutes from './routes/tasks/draftRoutes';
@@ -40,6 +39,8 @@ import agreementRoutes from './routes/agreement';
 import aiEngineRoutes from './routes/aiEngine';
 import opcGrowthRoutes from './routes/opcGrowth';
 import communityPortfolioRoutes from './routes/communityPortfolio';
+import opcV2AssessmentRoutes from './routes/opcV2Assessment';
+import opcRoutes from './routes/opcRoutes';
 
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -109,17 +110,16 @@ app.use('/api/v1/tasks', taskRoutes);
 app.use('/api/v1/ability', abilityRoutes);
 app.use('/api/v1/reports', reportRoutes);
 app.use('/api/v1/story', storyRoutes);
-app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/admin', adminMainRoutes); // 新的管理端路由（包含认证、数据看板等）
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/chat', chatRoutes);
-app.use('/api/v1/notification', notificationRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/mentor', mentorRoutes);
 app.use('/api/v1/trust', trustRoutes);
 app.use('/api/v1/invitation', invitationRoutes);
 app.use('/api/v1/challenge', challengeRoutes);
 app.use('/api/v1/subcontract', subcontractRoutes);
-app.use('/api/v1/admin-management', adminManagementRoutes);
 app.use('/api/v1/team', teamRoutes);
 app.use('/api/v1/disputes', disputeRoutes);
 app.use('/api/v1/tasks', draftRoutes); // 草稿箱和追加需求路由
@@ -133,6 +133,8 @@ app.use('/api/v1/agreement', agreementRoutes); // 注册协议与数据授权
 app.use('/api/v1/ai-engine', aiEngineRoutes); // AI引擎系统
 app.use('/api/v1/opc-growth', opcGrowthRoutes); // OPC测评和成长报告系统
 app.use('/api/v1/community-portfolio', communityPortfolioRoutes); // 社群和作品展示系统
+app.use('/api/v1/opc-v2', opcV2AssessmentRoutes); // OPC v2.0 能力画像测试系统
+app.use('/api/v1', opcRoutes); // OPC测试、匹配、导师、等级系统
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));

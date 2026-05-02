@@ -1,8 +1,22 @@
-import { View, Text } from '@tarojs/components'
+import { View, Text, Textarea } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
-import { opcAPI } from '../../services/api'
+import { opcV2API } from '../../services/api'
 import './index.scss'
+
+// 2道前置定义题
+const definitionQuestions = [
+  {
+    id: 'def_1',
+    question: '用一句话定义你自己',
+    placeholder: '例如：我是一个喜欢用视觉讲故事的人...'
+  },
+  {
+    id: 'def_2',
+    question: '你觉得自己什么地方厉害？',
+    placeholder: '例如：我能把复杂的东西用简单的方式表达出来...'
+  }
+]
 
 // 36道测试题数据 - 6维度 × 6题
 const testQuestions = [
@@ -452,69 +466,176 @@ const testQuestions = [
 ]
 
 export default function OPCTest() {
+  const [stage, setStage] = useState<'definition' | 'choice'>('definition')
+  const [currentDefinitionIndex, setCurrentDefinitionIndex] = useState(0)
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Array<{questionId: number, answer: string, score: number}>>([])
-  const [isCompleted, setIsCompleted] = useState(false)
+  const [definitionAnswers, setDefinitionAnswers] = useState<string[]>(['', ''])
+  const [assessmentId, setAssessmentId] = useState<string>('')
   const [submitting, setSubmitting] = useState(false)
 
-  const handleAnswer = async (optionIndex: number) => {
-    const question = testQuestions[currentQuestion]
-    const selectedOption = question.options[optionIndex]
+  useEffect(() => {
+    startAssessment()
+  }, [])
 
-    const newAnswer = {
-      questionId: question.id,
-      answer: String.fromCharCode(65 + optionIndex), // A, B, C, D
-      score: selectedOption.score
-    }
-
-    const newAnswers = [...answers, newAnswer]
-    setAnswers(newAnswers)
-
-    if (currentQuestion < testQuestions.length - 1) {
-      // 下一题
-      setTimeout(() => {
-        setCurrentQuestion(currentQuestion + 1)
-      }, 300)
-    } else {
-      // 测评完成，提交到后端
-      setSubmitting(true)
-
-      try {
-        const user = Taro.getStorageSync('user')
-        if (!user || !user.id) {
-          Taro.showToast({ title: '请先登录', icon: 'none' })
-          return
-        }
-
-        // 调用后端API提交测试结果
-        const result = await opcAPI.submitTest(user.id, newAnswers)
-
-        // 保存结果到本地
-        Taro.setStorageSync('opc_result', result.result)
-
-        // 更新用户信息
-        const updatedUser = { ...user, hasCompletedTest: true }
-        Taro.setStorageSync('user', updatedUser)
-
-        // 跳转到结果页
-        setTimeout(() => {
-          Taro.navigateTo({
-            url: '/pages/opc-test/result'
-          })
-        }, 300)
-      } catch (error) {
-        console.error('提交测试失败:', error)
-        Taro.showToast({
-          title: '提交失败，请重试',
-          icon: 'none'
-        })
-      } finally {
-        setSubmitting(false)
+  const startAssessment = async () => {
+    try {
+      const result = await opcV2API.startAssessment()
+      if (result.success && result.assessmentId) {
+        setAssessmentId(result.assessmentId)
       }
+    } catch (error) {
+      console.error('开始测试失败:', error)
+      Taro.showToast({ title: '初始化失败，请重试', icon: 'none' })
     }
   }
 
-  const progress = ((currentQuestion + 1) / testQuestions.length) * 100
+  const handleDefinitionInput = (value: string) => {
+    const newAnswers = [...definitionAnswers]
+    newAnswers[currentDefinitionIndex] = value
+    setDefinitionAnswers(newAnswers)
+  }
+
+  const handleDefinitionNext = async () => {
+    const currentAnswer = definitionAnswers[currentDefinitionIndex]
+
+    if (!currentAnswer.trim()) {
+      Taro.showToast({ title: '请输入你的答案', icon: 'none' })
+      return
+    }
+
+    if (currentAnswer.trim().length < 5) {
+      Taro.showToast({ title: '请至少输入5个字', icon: 'none' })
+      return
+    }
+
+    setSubmitting(true)
+
+    try {
+      // 提交当前定义题答案
+      const question = definitionQuestions[currentDefinitionIndex]
+      await opcV2API.submitAnswer(assessmentId, {
+        questionId: question.id,
+        answerType: 'definition',
+        answerText: currentAnswer
+      })
+
+      if (currentDefinitionIndex < definitionQuestions.length - 1) {
+        // 下一道定义题
+        setTimeout(() => {
+          setCurrentDefinitionIndex(currentDefinitionIndex + 1)
+          setSubmitting(false)
+        }, 300)
+      } else {
+        // 进入选择题阶段
+        setTimeout(() => {
+          setStage('choice')
+          setSubmitting(false)
+        }, 300)
+      }
+    } catch (error) {
+      console.error('提交答案失败:', error)
+      Taro.showToast({ title: '提交失败，请重试', icon: 'none' })
+      setSubmitting(false)
+    }
+  }
+
+  const handleChoiceAnswer = async (optionIndex: number) => {
+    const question = testQuestions[currentQuestion]
+    const selectedOption = question.options[optionIndex]
+
+    setSubmitting(true)
+
+    try {
+      // 提交选择题答案
+      await opcV2API.submitAnswer(assessmentId, {
+        questionId: `choice_${question.id}`,
+        answerType: 'choice',
+        selectedOption: String.fromCharCode(65 + optionIndex) // A, B, C, D
+      })
+
+      if (currentQuestion < testQuestions.length - 1) {
+        // 下一题
+        setTimeout(() => {
+          setCurrentQuestion(currentQuestion + 1)
+          setSubmitting(false)
+        }, 300)
+      } else {
+        // 测评完成，计算结果
+        try {
+          await opcV2API.completeAssessment(assessmentId)
+
+          // 跳转到结果页
+          setTimeout(() => {
+            Taro.navigateTo({
+              url: `/pages/opc-test/result?assessmentId=${assessmentId}`
+            })
+          }, 300)
+        } catch (error) {
+          console.error('完成测试失败:', error)
+          Taro.showToast({ title: '提交失败，请重试', icon: 'none' })
+          setSubmitting(false)
+        }
+      }
+    } catch (error) {
+      console.error('提交答案失败:', error)
+      Taro.showToast({ title: '提交失败，请重试', icon: 'none' })
+      setSubmitting(false)
+    }
+  }
+
+  // 定义题阶段
+  if (stage === 'definition') {
+    const question = definitionQuestions[currentDefinitionIndex]
+    const progress = ((currentDefinitionIndex + 1) / (definitionQuestions.length + testQuestions.length)) * 100
+
+    return (
+      <View className="opc-test-page">
+        <View className="progress-bar">
+          <View className="progress-fill" style={{ width: `${progress}%` }} />
+        </View>
+
+        <View className="test-container">
+          <View className="question-header">
+            <Text className="category-badge">前置问题</Text>
+            <Text className="question-number">{currentDefinitionIndex + 1}/{definitionQuestions.length}</Text>
+          </View>
+
+          <Text className="question-text">{question.question}</Text>
+
+          <View className="definition-input-container">
+            <Textarea
+              className="definition-textarea"
+              placeholder={question.placeholder}
+              value={definitionAnswers[currentDefinitionIndex]}
+              onInput={(e) => handleDefinitionInput(e.detail.value)}
+              maxlength={200}
+              autoHeight
+              disabled={submitting}
+            />
+            <Text className="char-count">{definitionAnswers[currentDefinitionIndex].length}/200</Text>
+          </View>
+
+          <View
+            className={`next-btn ${submitting || !definitionAnswers[currentDefinitionIndex].trim() ? 'disabled' : ''}`}
+            onClick={handleDefinitionNext}
+          >
+            <Text className="btn-text">
+              {currentDefinitionIndex < definitionQuestions.length - 1 ? '下一题' : '开始选择题'}
+            </Text>
+          </View>
+
+          {submitting && (
+            <View className="submitting-overlay">
+              <Text className="submitting-text">提交中...</Text>
+            </View>
+          )}
+        </View>
+      </View>
+    )
+  }
+
+  // 选择题阶段
+  const progress = ((definitionQuestions.length + currentQuestion + 1) / (definitionQuestions.length + testQuestions.length)) * 100
   const question = testQuestions[currentQuestion]
 
   return (
@@ -536,7 +657,7 @@ export default function OPCTest() {
             <View
               key={index}
               className={`option-card ${submitting ? 'disabled' : ''}`}
-              onClick={() => !submitting && handleAnswer(index)}
+              onClick={() => !submitting && handleChoiceAnswer(index)}
             >
               <Text className="option-text">{option.text}</Text>
             </View>
@@ -545,7 +666,9 @@ export default function OPCTest() {
 
         {submitting && (
           <View className="submitting-overlay">
-            <Text className="submitting-text">正在生成你的OPC画像...</Text>
+            <Text className="submitting-text">
+              {currentQuestion === testQuestions.length - 1 ? '正在生成你的OPC画像...' : '提交中...'}
+            </Text>
           </View>
         )}
       </View>

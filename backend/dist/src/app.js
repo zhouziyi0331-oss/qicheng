@@ -21,23 +21,31 @@ const tasks_1 = __importDefault(require("./routes/tasks"));
 const ability_1 = __importDefault(require("./routes/ability"));
 const reports_1 = __importDefault(require("./routes/reports"));
 const story_1 = __importDefault(require("./routes/story"));
-const admin_1 = __importDefault(require("./routes/admin"));
+const mainRoutes_1 = __importDefault(require("./routes/admin/mainRoutes"));
 const payments_1 = __importDefault(require("./routes/payments"));
 const chat_1 = __importDefault(require("./routes/chat"));
-const notification_1 = __importDefault(require("./routes/notification"));
+const notifications_1 = __importDefault(require("./routes/notifications"));
 const upload_1 = __importDefault(require("./routes/upload"));
 const mentor_1 = __importDefault(require("./routes/mentor"));
 const trust_1 = __importDefault(require("./routes/trust"));
 const invitation_1 = __importDefault(require("./routes/invitation"));
 const challenge_1 = __importDefault(require("./routes/challenge"));
 const subcontract_1 = __importDefault(require("./routes/subcontract"));
-const adminRoutes_1 = __importDefault(require("./routes/admin/adminRoutes"));
 const team_1 = __importDefault(require("./routes/team"));
 const disputes_1 = __importDefault(require("./routes/disputes"));
 const draftRoutes_1 = __importDefault(require("./routes/tasks/draftRoutes"));
 const pricing_1 = __importDefault(require("./routes/pricing"));
 const rating_1 = __importDefault(require("./routes/rating"));
 const taskLevel_1 = __importDefault(require("./routes/taskLevel"));
+const escrow_1 = __importDefault(require("./routes/escrow"));
+const communication_1 = __importDefault(require("./routes/communication"));
+const challengeGraduation_1 = __importDefault(require("./routes/challengeGraduation"));
+const agreement_1 = __importDefault(require("./routes/agreement"));
+const aiEngine_1 = __importDefault(require("./routes/aiEngine"));
+const opcGrowth_1 = __importDefault(require("./routes/opcGrowth"));
+const communityPortfolio_1 = __importDefault(require("./routes/communityPortfolio"));
+const opcV2Assessment_1 = __importDefault(require("./routes/opcV2Assessment"));
+const opcRoutes_1 = __importDefault(require("./routes/opcRoutes"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
@@ -98,23 +106,31 @@ app.use('/api/v1/tasks', tasks_1.default);
 app.use('/api/v1/ability', ability_1.default);
 app.use('/api/v1/reports', reports_1.default);
 app.use('/api/v1/story', story_1.default);
-app.use('/api/v1/admin', admin_1.default);
+app.use('/api/v1/admin', mainRoutes_1.default); // 新的管理端路由（包含认证、数据看板等）
 app.use('/api/v1/payments', payments_1.default);
 app.use('/api/v1/chat', chat_1.default);
-app.use('/api/v1/notification', notification_1.default);
+app.use('/api/v1/notifications', notifications_1.default);
 app.use('/api/v1/upload', upload_1.default);
 app.use('/api/v1/mentor', mentor_1.default);
 app.use('/api/v1/trust', trust_1.default);
 app.use('/api/v1/invitation', invitation_1.default);
 app.use('/api/v1/challenge', challenge_1.default);
 app.use('/api/v1/subcontract', subcontract_1.default);
-app.use('/api/v1/admin-management', adminRoutes_1.default);
 app.use('/api/v1/team', team_1.default);
 app.use('/api/v1/disputes', disputes_1.default);
 app.use('/api/v1/tasks', draftRoutes_1.default); // 草稿箱和追加需求路由
 app.use('/api/v1/pricing', pricing_1.default); // AI智能定价建议
 app.use('/api/v1/rating', rating_1.default); // 评价系统
 app.use('/api/v1/task-level', taskLevel_1.default); // 任务分级和智能匹配
+app.use('/api/v1/escrow', escrow_1.default); // 支付托管和提现系统
+app.use('/api/v1/communication', communication_1.default); // 任务沟通中转系统
+app.use('/api/v1/challenge-graduation', challengeGraduation_1.default); // 跳级挑战与毕业系统
+app.use('/api/v1/agreement', agreement_1.default); // 注册协议与数据授权
+app.use('/api/v1/ai-engine', aiEngine_1.default); // AI引擎系统
+app.use('/api/v1/opc-growth', opcGrowth_1.default); // OPC测评和成长报告系统
+app.use('/api/v1/community-portfolio', communityPortfolio_1.default); // 社群和作品展示系统
+app.use('/api/v1/opc-v2', opcV2Assessment_1.default); // OPC v2.0 能力画像测试系统
+app.use('/api/v1', opcRoutes_1.default); // OPC测试、匹配、导师、等级系统
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

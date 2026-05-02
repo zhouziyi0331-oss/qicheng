@@ -226,13 +226,13 @@ async function getMatchedStudents(req, res, next) {
         u.id as student_id,
         u.nickname,
         u.avatar_url,
-        sp.level,
-        sp.total_score,
-        sp.completed_tasks,
-        sp.average_rating
+        sa.current_level as level,
+        sa.total_growth_points as total_score,
+        sa.total_completed_tasks as completed_tasks,
+        0 as average_rating
        FROM ai_matches am
        JOIN users u ON am.student_id = u.id
-       JOIN student_profiles sp ON u.id = sp.user_id
+       JOIN student_abilities sa ON u.id = sa.user_id
        WHERE am.task_id = $1
        ORDER BY am.match_score DESC`, [taskId]);
         res.json({

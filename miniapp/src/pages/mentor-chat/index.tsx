@@ -1,7 +1,8 @@
-import { View, Text, ScrollView, Input } from '@tarojs/components';
+import { View, Text, ScrollView, Input, Image } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
 import { mentorAPI } from '../../services/api';
+import catAvatar from '../../assets/images/cat-logo.png';
 import './index.scss';
 
 interface Message {
@@ -129,6 +130,11 @@ export default function MentorChat() {
             id={`msg-${index}`}
             className={`message-item ${msg.role === 'student' ? 'student' : 'mentor'}`}
           >
+            {/* 导师头像 */}
+            {msg.role === 'mentor' && (
+              <Image className='avatar' src={catAvatar} mode='aspectFill' />
+            )}
+
             <View className='message-bubble'>
               <Text className='message-content'>{msg.content}</Text>
 
@@ -151,6 +157,7 @@ export default function MentorChat() {
 
         {loading && (
           <View className='message-item mentor'>
+            <Image className='avatar' src={catAvatar} mode='aspectFill' />
             <View className='message-bubble loading'>
               <Text className='loading-text'>导师正在思考...</Text>
             </View>

@@ -1,9 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { adminApi } from "@/lib/api";
 import { useToast } from "@/components/ui/Toast";
-import Button from "@/components/ui/Button";
+import AdminLayout, { Card, Button, EmptyState, LoadingSkeleton } from "@/components/admin/AdminLayout";
 
 interface ConfigEntry {
   key: string;
@@ -51,63 +50,145 @@ export default function AdminConfigPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-2">
-        <Link href="/admin" className="text-sm no-underline" style={{ color: "#8b949e" }}>← 后台</Link>
-        <h1 className="text-xl font-bold" style={{ color: "#e6edf3" }}>系统配置</h1>
-      </div>
-      <p className="text-xs mb-6" style={{ color: "#484f58" }}>仅超级管理员可访问 · 所有修改记入操作日志</p>
-
-      {loading ? (
-        <div className="flex flex-col gap-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 rounded-lg animate-pulse" style={{ background: "#161b22" }} />
-          ))}
+    <AdminLayout
+      title="⚙️ 系统配置"
+      subtitle="仅超级管理员可访问 · 所有修改记入操作日志"
+    >
+      {/* 警告提示 */}
+      <Card style={{
+        padding: "16px 20px",
+        marginBottom: "24px",
+        background: "rgba(239, 68, 68, 0.1)",
+        border: "1px solid rgba(239, 68, 68, 0.3)"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <span style={{ fontSize: "24px" }}>⚠️</span>
+          <div>
+            <div style={{ fontSize: "14px", fontWeight: "600", color: "#EF4444", marginBottom: "4px" }}>
+              高危操作区域
+            </div>
+            <div style={{ fontSize: "12px", color: "#F87171" }}>
+              修改系统配置可能影响平台运行，请谨慎操作。所有修改都会被记录到操作日志中。
+            </div>
+          </div>
         </div>
+      </Card>
+
+      {/* 配置列表 */}
+      {loading ? (
+        <LoadingSkeleton count={3} />
+      ) : configs.length === 0 ? (
+        <EmptyState icon="⚙️" message="暂无配置项" />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {configs.map((cfg) => (
-            <div key={cfg.key} className="p-4 rounded-lg" style={{ background: "#161b22", border: "1px solid #30363d" }}>
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium font-mono" style={{ color: "#58a6ff" }}>{cfg.key}</p>
+            <Card key={cfg.key} style={{ padding: "24px" }}>
+              <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between", gap: "24px" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {/* 配置键名 */}
+                  <div style={{
+                    display: "inline-block",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    background: "rgba(59, 130, 246, 0.15)",
+                    border: "1px solid rgba(59, 130, 246, 0.3)",
+                    marginBottom: "12px"
+                  }}>
+                    <span style={{
+                      fontSize: "13px",
+                      fontWeight: "700",
+                      color: "#3B82F6",
+                      fontFamily: "'JetBrains Mono', monospace"
+                    }}>
+                      {cfg.key}
+                    </span>
+                  </div>
+
+                  {/* 配置描述 */}
                   {cfg.description && (
-                    <p className="text-xs mt-0.5" style={{ color: "#8b949e" }}>{cfg.description}</p>
+                    <p style={{
+                      fontSize: "13px",
+                      color: "#8E96A5",
+                      marginBottom: "16px",
+                      lineHeight: "1.6"
+                    }}>
+                      {cfg.description}
+                    </p>
                   )}
+
+                  {/* 配置值 */}
                   {editing === cfg.key ? (
                     <textarea
-                      className="w-full mt-2 h-24 resize-none p-2 rounded text-xs font-mono"
-                      style={{ background: "#21262d", border: "1px solid #30363d", color: "#e6edf3" }}
+                      style={{
+                        width: "100%",
+                        height: "120px",
+                        resize: "vertical",
+                        padding: "12px 16px",
+                        borderRadius: "12px",
+                        background: "rgba(0,0,0,0.3)",
+                        border: "1px solid rgba(59, 130, 246, 0.5)",
+                        color: "#F1F5F9",
+                        fontSize: "13px",
+                        fontFamily: "'JetBrains Mono', monospace",
+                        outline: "none",
+                        lineHeight: "1.6"
+                      }}
                       value={editValue}
                       onChange={(e) => setEditValue(e.target.value)}
                     />
                   ) : (
-                    <p className="text-xs mt-1 font-mono truncate" style={{ color: "#e6edf3" }}>
-                      {typeof cfg.value === "object" ? JSON.stringify(cfg.value) : String(cfg.value)}
-                    </p>
+                    <div style={{
+                      padding: "12px 16px",
+                      borderRadius: "12px",
+                      background: "rgba(0,0,0,0.2)",
+                      border: "1px solid rgba(255,255,255,0.05)"
+                    }}>
+                      <pre style={{
+                        fontSize: "13px",
+                        color: "#10B981",
+                        fontFamily: "'JetBrains Mono', monospace",
+                        margin: 0,
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-all"
+                      }}>
+                        {typeof cfg.value === "object" ? JSON.stringify(cfg.value, null, 2) : String(cfg.value)}
+                      </pre>
+                    </div>
                   )}
+
+                  {/* 更新时间 */}
+                  <p style={{
+                    fontSize: "11px",
+                    color: "#6B7280",
+                    marginTop: "12px",
+                    marginBottom: 0
+                  }}>
+                    最后更新：{new Date(cfg.updated_at).toLocaleString("zh-CN")}
+                  </p>
                 </div>
-                <div className="flex gap-2 flex-shrink-0">
+
+                {/* 操作按钮 */}
+                <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
                   {editing === cfg.key ? (
                     <>
-                      <Button size="sm" loading={saving} onClick={() => handleSave(cfg.key)}>保存</Button>
-                      <Button size="sm" variant="ghost" onClick={() => setEditing(null)}>取消</Button>
+                      <Button loading={saving} onClick={() => handleSave(cfg.key)}>
+                        保存
+                      </Button>
+                      <Button variant="secondary" onClick={() => setEditing(null)}>
+                        取消
+                      </Button>
                     </>
                   ) : (
-                    <Button size="sm" variant="ghost" onClick={() => startEdit(cfg)}>编辑</Button>
+                    <Button variant="secondary" onClick={() => startEdit(cfg)}>
+                      编辑
+                    </Button>
                   )}
                 </div>
               </div>
-              <p className="text-xs mt-2" style={{ color: "#484f58" }}>
-                最后更新：{new Date(cfg.updated_at).toLocaleString("zh-CN")}
-              </p>
-            </div>
+            </Card>
           ))}
-          {configs.length === 0 && (
-            <p className="text-center py-16 text-sm" style={{ color: "#484f58" }}>暂无配置项</p>
-          )}
         </div>
       )}
-    </div>
+    </AdminLayout>
   );
 }

@@ -5,13 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCompanyTasks = exports.getTaskDetail = exports.acceptTask = exports.getRecommendedTasks = exports.getMatchedStudents = exports.confirmPublishTask = exports.publishTask = void 0;
 const db_1 = require("../utils/db");
-const matchingService_1 = require("../services/matchingService");
+const hybridMatchingService_1 = require("../services/hybridMatchingService");
 const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 企业发布任务（增强版，包含赛道和等级）
  */
 const publishTask = async (req, res) => {
-    const client = await db_1.pool.connect();
     try {
         const { title, description, track, // 'content' 或 'tool'
         level, // 0-4
@@ -39,40 +38,44 @@ const publishTask = async (req, res) => {
                 message: '等级必须在 0-4 之间',
             });
         }
-        await client.query('BEGIN');
-        // 计算平台抽成（15%）
-        const platformFeeRate = 0.15;
-        const platformFee = budget * platformFeeRate;
-        const studentPrice = budget - platformFee;
-        // 生成预算区间显示
-        const budgetRange = generateBudgetRange(level);
-        // 插入任务
-        const taskResult = await client.query(`INSERT INTO tasks
-       (company_id, title, description, track, level,
-        required_openness, required_persistence, required_creativity,
-        company_price, student_price, platform_fee, budget_range,
-        deadline, duration, deliverables, tags, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'draft')
-       RETURNING *`, [
-            companyId,
-            title,
-            description,
-            track,
-            level,
-            requiredAbilities?.openness || 50,
-            requiredAbilities?.persistence || 50,
-            requiredAbilities?.creativity || 50,
-            budget,
-            studentPrice,
-            platformFee,
-            budgetRange,
-            deadline,
-            duration,
-            JSON.stringify(deliverables || []),
-            JSON.stringify(tags || []),
-        ]);
-        const task = taskResult.rows[0];
-        await client.query('COMMIT');
+        const task = await (0, db_1.withTransaction)(async (client) => {
+            // 计算平台抽成（15%）
+            const platformFeeRate = 0.15;
+            const platformFee = budget * platformFeeRate;
+            const studentPrice = budget - platformFee;
+            // 生成预算区间显示
+            const budgetRange = generateBudgetRange(level);
+            // 插入任务
+            const taskResult = await client.query(`INSERT INTO tasks
+         (company_id, title, description, track, level,
+          required_openness, required_persistence, required_creativity,
+          company_price, student_price, platform_fee, budget_range,
+          deadline, duration, deliverables, tags, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'draft')
+         RETURNING *`, [
+                companyId,
+                title,
+                description,
+                track,
+                level,
+                requiredAbilities?.openness || 50,
+                requiredAbilities?.persistence || 50,
+                requiredAbilities?.creativity || 50,
+                budget,
+                studentPrice,
+                platformFee,
+                budgetRange,
+                deadline,
+                duration,
+                JSON.stringify(deliverables || []),
+                JSON.stringify(tags || []),
+            ]);
+            return taskResult.rows[0];
+        });
+        // 异步生成任务embedding（不阻塞响应）
+        hybridMatchingService_1.hybridMatchingService.generateTaskEmbedding(task.id).catch((error) => {
+            logger_1.default.error('Failed to generate task embedding', { taskId: task.id, error });
+        });
         res.json({
             success: true,
             message: '任务创建成功',
@@ -87,15 +90,11 @@ const publishTask = async (req, res) => {
         });
     }
     catch (error) {
-        await client.query('ROLLBACK');
         logger_1.default.error('Error publishing task', { error });
         res.status(500).json({
             success: false,
             message: '发布任务失败',
         });
-    }
-    finally {
-        client.release();
     }
 };
 exports.publishTask = publishTask;
@@ -116,47 +115,40 @@ function generateBudgetRange(level) {
  * 企业确认发布任务（从草稿到已发布）
  */
 const confirmPublishTask = async (req, res) => {
-    const client = await db_1.pool.connect();
     try {
         const { taskId } = req.params;
         const companyId = req.user?.userId;
-        await client.query('BEGIN');
-        // 验证任务所有权
-        const taskResult = await client.query('SELECT * FROM tasks WHERE id = $1 AND company_id = $2', [taskId, companyId]);
-        if (taskResult.rows.length === 0) {
-            await client.query('ROLLBACK');
-            return res.status(404).json({
-                success: false,
-                message: '任务不存在或无权限',
-            });
-        }
-        const task = taskResult.rows[0];
-        // 更新任务状态为已发布
-        await client.query(`UPDATE tasks SET status = 'published', published_at = CURRENT_TIMESTAMP
-       WHERE id = $1`, [taskId]);
-        // 触发智能匹配
-        const matches = await matchingService_1.matchingService.matchStudentsForTask(parseInt(taskId), 10);
-        await matchingService_1.matchingService.saveMatchResults(matches);
-        await client.query('COMMIT');
+        const result = await (0, db_1.withTransaction)(async (client) => {
+            // 验证任务所有权
+            const taskResult = await client.query('SELECT * FROM tasks WHERE id = $1 AND company_id = $2', [taskId, companyId]);
+            if (taskResult.rows.length === 0) {
+                throw new Error('任务不存在或无权限');
+            }
+            const task = taskResult.rows[0];
+            // 更新任务状态为已发布
+            await client.query(`UPDATE tasks SET status = 'published', published_at = CURRENT_TIMESTAMP
+         WHERE id = $1`, [taskId]);
+            // 触发智能匹配（混合算法：规则 + AI向量）
+            const matches = await hybridMatchingService_1.hybridMatchingService.matchStudentsForTask(parseInt(taskId), 10);
+            return {
+                taskId: task.id,
+                matchedStudentsCount: matches.length,
+            };
+        });
         res.json({
             success: true,
             message: '任务已发布，正在匹配合适的学生',
-            data: {
-                taskId: task.id,
-                matchedStudentsCount: matches.length,
-            },
+            data: result,
         });
     }
     catch (error) {
-        await client.query('ROLLBACK');
         logger_1.default.error('Error confirming task publication', { error });
-        res.status(500).json({
+        const errorMessage = error instanceof Error ? error.message : '发布任务失败';
+        const statusCode = errorMessage === '任务不存在或无权限' ? 404 : 500;
+        res.status(statusCode).json({
             success: false,
-            message: '发布任务失败',
+            message: errorMessage,
         });
-    }
-    finally {
-        client.release();
     }
 };
 exports.confirmPublishTask = confirmPublishTask;
@@ -168,15 +160,15 @@ const getMatchedStudents = async (req, res) => {
         const { taskId } = req.params;
         const companyId = req.user?.userId;
         // 验证任务所有权
-        const taskResult = await db_1.pool.query('SELECT * FROM tasks WHERE id = $1 AND company_id = $2', [taskId, companyId]);
-        if (taskResult.rows.length === 0) {
+        const taskResult = await (0, db_1.query)('SELECT * FROM tasks WHERE id = $1 AND company_id = $2', [taskId, companyId]);
+        if (taskResult.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: '任务不存在或无权限',
             });
         }
         // 获取匹配的学生（Top 3）
-        const matchedStudents = await matchingService_1.matchingService.getMatchedStudentsForTask(parseInt(taskId), 3);
+        const matchedStudents = await hybridMatchingService_1.hybridMatchingService.matchStudentsForTask(parseInt(taskId), 3);
         res.json({
             success: true,
             data: {
@@ -208,16 +200,15 @@ const getRecommendedTasks = async (req, res) => {
         }
         const userIdNum = parseInt(userId);
         // 检查是否已有匹配结果，如果没有则触发匹配
-        const existingMatches = await db_1.pool.query('SELECT COUNT(*) FROM ai_matches WHERE student_id = $1', [userIdNum]);
-        if (parseInt(existingMatches.rows[0].count) === 0) {
+        const existingMatches = await (0, db_1.query)('SELECT COUNT(*) FROM ai_matches WHERE student_id = $1', [userIdNum]);
+        if (parseInt(existingMatches[0].count) === 0) {
             // 首次访问，触发匹配
             const limitNum = typeof limit === 'string' ? parseInt(limit) : 20;
-            const matches = await matchingService_1.matchingService.matchTasksForStudent(userIdNum, limitNum);
-            await matchingService_1.matchingService.saveMatchResults(matches);
+            const matches = await hybridMatchingService_1.hybridMatchingService.matchTasksForStudent(userIdNum, limitNum);
         }
         // 获取推荐任务
         const limitNum = typeof limit === 'string' ? parseInt(limit) : 20;
-        const recommendedTasks = await matchingService_1.matchingService.getMatchedTasksForStudent(userIdNum, limitNum);
+        const recommendedTasks = await hybridMatchingService_1.hybridMatchingService.matchTasksForStudent(userIdNum, limitNum);
         res.json({
             success: true,
             data: {
@@ -238,67 +229,51 @@ exports.getRecommendedTasks = getRecommendedTasks;
  * 学生接受任务
  */
 const acceptTask = async (req, res) => {
-    const client = await db_1.pool.connect();
     try {
         const { taskId } = req.params;
         const studentId = req.user?.userId;
-        await client.query('BEGIN');
-        // 检查任务是否可接
-        const taskResult = await client.query(`SELECT * FROM tasks
-       WHERE id = $1 AND status = 'published' AND accepted_student_id IS NULL`, [taskId]);
-        if (taskResult.rows.length === 0) {
-            await client.query('ROLLBACK');
-            return res.status(400).json({
-                success: false,
-                message: '任务不可接取',
-            });
-        }
-        const task = taskResult.rows[0];
-        // 检查学生等级是否符合
-        const studentResult = await client.query('SELECT current_level FROM student_abilities WHERE user_id = $1', [studentId]);
-        if (studentResult.rows.length === 0) {
-            await client.query('ROLLBACK');
-            return res.status(400).json({
-                success: false,
-                message: '学生能力画像不存在',
-            });
-        }
-        const studentLevel = studentResult.rows[0].current_level;
-        const levelDiff = Math.abs(task.level - studentLevel);
-        if (levelDiff > 1) {
-            await client.query('ROLLBACK');
-            return res.status(400).json({
-                success: false,
-                message: '任务等级与您的等级差距过大',
-            });
-        }
-        // 更新任务状态
-        await client.query(`UPDATE tasks
-       SET accepted_student_id = $1, status = 'in_progress', accepted_at = CURRENT_TIMESTAMP
-       WHERE id = $2`, [studentId, taskId]);
-        // 更新匹配记录
-        await client.query(`UPDATE ai_matches
-       SET invitation_status = 'accepted', responded_at = CURRENT_TIMESTAMP
-       WHERE task_id = $1 AND student_id = $2`, [taskId, studentId]);
-        await client.query('COMMIT');
+        const result = await (0, db_1.withTransaction)(async (client) => {
+            // 检查任务是否可接
+            const taskResult = await client.query(`SELECT * FROM tasks
+         WHERE id = $1 AND status = 'published' AND accepted_student_id IS NULL`, [taskId]);
+            if (taskResult.rows.length === 0) {
+                throw new Error('任务不可接取');
+            }
+            const task = taskResult.rows[0];
+            // 检查学生等级是否符合
+            const studentResult = await client.query('SELECT current_level FROM student_abilities WHERE user_id = $1', [studentId]);
+            if (studentResult.rows.length === 0) {
+                throw new Error('学生能力画像不存在');
+            }
+            const studentLevel = studentResult.rows[0].current_level;
+            const levelDiff = Math.abs(task.level - studentLevel);
+            if (levelDiff > 1) {
+                throw new Error('任务等级与您的等级差距过大');
+            }
+            // 更新任务状态
+            await client.query(`UPDATE tasks
+         SET accepted_student_id = $1, status = 'in_progress', accepted_at = CURRENT_TIMESTAMP
+         WHERE id = $2`, [studentId, taskId]);
+            // 更新匹配记录
+            await client.query(`UPDATE ai_matches
+         SET invitation_status = 'accepted', responded_at = CURRENT_TIMESTAMP
+         WHERE task_id = $1 AND student_id = $2`, [taskId, studentId]);
+            return { taskId: task.id };
+        });
         res.json({
             success: true,
             message: '任务接取成功',
-            data: {
-                taskId: task.id,
-            },
+            data: result,
         });
     }
     catch (error) {
-        await client.query('ROLLBACK');
         logger_1.default.error('Error accepting task', { error });
-        res.status(500).json({
+        const errorMessage = error instanceof Error ? error.message : '接取任务失败';
+        const statusCode = errorMessage === '任务不可接取' || errorMessage === '学生能力画像不存在' || errorMessage === '任务等级与您的等级差距过大' ? 400 : 500;
+        res.status(statusCode).json({
             success: false,
-            message: '接取任务失败',
+            message: errorMessage,
         });
-    }
-    finally {
-        client.release();
     }
 };
 exports.acceptTask = acceptTask;
@@ -311,26 +286,26 @@ const getTaskDetail = async (req, res) => {
         const userId = req.user?.userId;
         const userRole = req.user?.role;
         // 获取任务基本信息
-        const taskResult = await db_1.pool.query(`SELECT t.*, c.company_name, c.rating as company_rating
+        const taskResult = await (0, db_1.query)(`SELECT t.*, c.company_name, c.rating as company_rating
        FROM tasks t
        JOIN companies c ON t.company_id = c.id
        WHERE t.id = $1`, [taskId]);
-        if (taskResult.rows.length === 0) {
+        if (taskResult.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: '任务不存在',
             });
         }
-        const task = taskResult.rows[0];
+        const task = taskResult[0];
         // 如果是学生，获取匹配信息
         let matchInfo = null;
         if (userRole === 'student') {
-            const matchResult = await db_1.pool.query(`SELECT match_score, difficulty_level, match_reasons,
+            const matchResult = await (0, db_1.query)(`SELECT match_score, difficulty_level, match_reasons,
                 estimated_growth_openness, estimated_growth_persistence, estimated_growth_creativity
          FROM ai_matches
          WHERE task_id = $1 AND student_id = $2`, [taskId, userId]);
-            if (matchResult.rows.length > 0) {
-                const match = matchResult.rows[0];
+            if (matchResult.length > 0) {
+                const match = matchResult[0];
                 matchInfo = {
                     matchScore: match.match_score,
                     difficultyLevel: match.difficulty_level,
@@ -371,7 +346,7 @@ const getCompanyTasks = async (req, res) => {
     try {
         const companyId = req.user?.userId;
         const { status, page = 1, limit = 20 } = req.query;
-        let query = `
+        let queryStr = `
       SELECT t.*, COUNT(am.id) as matched_students_count
       FROM tasks t
       LEFT JOIN ai_matches am ON t.id = am.task_id
@@ -379,21 +354,21 @@ const getCompanyTasks = async (req, res) => {
     `;
         const params = [companyId];
         if (status) {
-            query += ` AND t.status = $${params.length + 1}`;
+            queryStr += ` AND t.status = $${params.length + 1}`;
             params.push(status);
         }
-        query += `
+        queryStr += `
       GROUP BY t.id
       ORDER BY t.created_at DESC
       LIMIT $${params.length + 1} OFFSET $${params.length + 2}
     `;
         params.push(parseInt(limit));
         params.push((parseInt(page) - 1) * parseInt(limit));
-        const result = await db_1.pool.query(query, params);
+        const result = await (0, db_1.query)(queryStr, params);
         res.json({
             success: true,
             data: {
-                tasks: result.rows.map((task) => ({
+                tasks: result.map((task) => ({
                     ...task,
                     deliverables: JSON.parse(task.deliverables || '[]'),
                     tags: JSON.parse(task.tags || '[]'),

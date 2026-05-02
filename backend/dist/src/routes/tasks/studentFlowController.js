@@ -36,7 +36,7 @@ async function getTaskInvitations(req, res, next) {
         t.id as task_id,
         t.title,
         t.description,
-        t.task_type,
+        t.track,
         t.student_price,
         t.deadline,
         t.estimated_minutes,
