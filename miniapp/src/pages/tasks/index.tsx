@@ -5,6 +5,8 @@ import { taskAPI } from '../../services/api'
 import { CONTENT_TRACK_LEVELS, TaskTrack, TaskLevel } from '../../types/task'
 import TaskDialog from '../../components/TaskDialog'
 import Loading from '../../components/Loading'
+import Empty from '../../components/Empty'
+import toast from '../../utils/toast'
 import './index.scss'
 
 export default function Tasks() {
@@ -15,6 +17,9 @@ export default function Tasks() {
   const [dialogVisible, setDialogVisible] = useState(false)
   const [selectedTask, setSelectedTask] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [studentLevel, setStudentLevel] = useState(0)
+  const [studentTrack, setStudentTrack] = useState('content')
+  const [allowedDifficulties, setAllowedDifficulties] = useState<number[]>([1])
 
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
@@ -37,94 +42,28 @@ export default function Tasks() {
     try {
       setLoading(true)
 
-      // 模拟数据（包含赛道和等级信息）
-      const mockTasks = [
-        {
-          id: 1,
-          title: 'AI生成品牌宣传海报',
-          description: '使用AI工具为新产品生成3张不同风格的宣传海报，要求风格统一、色彩协调',
-          track: 'content' as TaskTrack,
-          level: 0 as TaskLevel,
-          tags: ['AI绘图', 'Midjourney', '平面设计'],
-          budget_net: 150,
-          budgetRange: '100-200元',
-          deadline: '3天后',
-          duration: '2-3小时',
-          publisher_name: '创意工作室A',
-          publisher_rating: 4.8,
-          match_score: 95,
-          matchReason: '你的创造性很高，适合这类创意任务',
-          difficultyAssessment: '简单',
-          growthValue: '提升AI绘图能力 +5'
-        },
-        {
-          id: 2,
-          title: '制作产品介绍短视频',
-          description: '使用AI工具制作一个30秒的产品介绍短视频，包含配音和字幕',
-          track: 'content' as TaskTrack,
-          level: 1 as TaskLevel,
-          tags: ['AI视频', '剪映', '内容创作'],
-          budget_net: 500,
-          budgetRange: '400-600元',
-          deadline: '5天后',
-          duration: '1天',
-          publisher_name: '电商品牌B',
-          publisher_rating: 4.9,
-          match_score: 88,
-          matchReason: '你已完成2个Lv.0任务，可以尝试Lv.1挑战',
-          difficultyAssessment: '适中',
-          growthValue: '提升视频制作能力 +10'
-        },
-        {
-          id: 3,
-          title: '开发简单的AI问答小程序',
-          description: '使用AI辅助开发一个简单的问答小程序，实现基础的对话功能',
-          track: 'tool' as TaskTrack,
-          level: 1 as TaskLevel,
-          tags: ['小程序开发', 'AI编程', 'JavaScript'],
-          budget_net: 600,
-          budgetRange: '500-800元',
-          deadline: '7天后',
-          duration: '2-3天',
-          publisher_name: '科技公司C',
-          publisher_rating: 4.7,
-          match_score: 82,
-          matchReason: '探索新赛道：AI工具开发，拓展技能树',
-          difficultyAssessment: '有挑战',
-          growthValue: '开启工具开发赛道',
-          is_stretch_project: true
-        },
-        {
-          id: 4,
-          title: 'AI生成系列表情包',
-          description: '使用AI工具生成一套10个表情包，风格可爱，适合社交媒体使用',
-          track: 'content' as TaskTrack,
-          level: 0 as TaskLevel,
-          tags: ['AI绘图', '表情包', '创意设计'],
-          budget_net: 120,
-          budgetRange: '100-150元',
-          deadline: '2天后',
-          duration: '1-2小时',
-          publisher_name: '自媒体工作室D',
-          publisher_rating: 4.6,
-          match_score: 90,
-          matchReason: '轻松的入门任务，快速积累经验',
-          difficultyAssessment: '简单',
-          growthValue: '提升创意表达 +3'
-        }
-      ]
-
-      // 获取推荐任务（基于OPC匹配）
+      // 获取推荐任务（基于等级过滤）
       try {
-        const matchedRes = await taskAPI.getRecommended()
+        const matchedRes = await taskAPI.getMatched()
         if (matchedRes.success && matchedRes.data) {
           setMatchedTasks(matchedRes.data)
-        } else {
-          setMatchedTasks(mockTasks)
+          // 保存学生等级信息
+          if (matchedRes.studentLevel !== undefined) {
+            setStudentLevel(matchedRes.studentLevel)
+          }
+          if (matchedRes.studentTrack) {
+            setStudentTrack(matchedRes.studentTrack)
+          }
+          if (matchedRes.allowedDifficulties) {
+            setAllowedDifficulties(matchedRes.allowedDifficulties)
+          }
         }
       } catch (matchError) {
-        console.error('获取推荐任务失败，使用模拟数据:', matchError)
-        setMatchedTasks(mockTasks)
+        console.error('获取推荐任务失败:', matchError)
+        Taro.showToast({
+          title: '加载失败，请重试',
+          icon: 'none'
+        })
       }
 
       // 获取全部任务（任务市场）
@@ -132,12 +71,9 @@ export default function Tasks() {
         const allRes = await taskAPI.getList({ page: 1, limit: 20 })
         if (allRes.success && allRes.data) {
           setAllTasks(allRes.data)
-        } else {
-          setAllTasks(mockTasks)
         }
       } catch (error) {
-        console.error('获取任务市场失败，使用模拟数据:', error)
-        setAllTasks(mockTasks)
+        console.error('获取任务市场失败:', error)
       }
     } catch (error) {
       console.error('加载任务失败:', error)
@@ -148,6 +84,34 @@ export default function Tasks() {
 
   const getDisplayTasks = () => {
     let tasks = activeFilter === 'matched' ? matchedTasks : allTasks
+
+    // 赛道过滤（只显示学生选择赛道的任务）
+    if (studentTrack && activeFilter === 'all') {
+      tasks = tasks.filter(task =>
+        !task.track || task.track === studentTrack || task.track === 'both'
+      )
+    }
+
+    // 等级过滤（只显示符合等级的任务 + 挑战项目）
+    if (studentLevel !== undefined && activeFilter === 'all') {
+      tasks = tasks.filter(task => {
+        if (!task.level && !task.required_level) return true
+        const taskLevel = task.required_level || task.level || 0
+        // 显示当前等级及以下的任务，以及高一级的挑战项目
+        return taskLevel <= studentLevel + 1
+      })
+    }
+
+    // 标记挑战项目（高一级项目）
+    tasks = tasks.map(task => {
+      const taskLevel = task.required_level || task.level || 0
+      const isChallenge = taskLevel === studentLevel + 1
+      return {
+        ...task,
+        is_challenge: isChallenge,
+        is_stretch_project: task.is_stretch_project || isChallenge
+      }
+    })
 
     // 搜索过滤
     if (searchText) {
@@ -176,6 +140,13 @@ export default function Tasks() {
   }
 
   const handleTaskClick = (task: any) => {
+    // 检查等级权限
+    const taskLevel = task.required_level || task.level || 0
+    if (taskLevel > studentLevel + 1) {
+      toast.warning(`此任务需要 Lv.${taskLevel}，当前等级不足`)
+      return
+    }
+
     // 直接跳转到任务详情页
     Taro.navigateTo({
       url: `/pages/tasks/detail?id=${task.id}`
@@ -242,6 +213,28 @@ export default function Tasks() {
         </View>
       </View>
 
+      {/* 等级过滤提示 */}
+      {activeFilter === 'matched' && studentLevel !== undefined && (
+        <View className="level-filter-tip">
+          <View className="tip-icon">ℹ️</View>
+          <Text className="tip-text">
+            当前等级 Lv.{studentLevel} ({studentTrack === 'content' ? 'AI内容创作' : 'AI工具开发'})，
+            为你推荐难度 {allowedDifficulties.join(', ')} 的任务
+          </Text>
+        </View>
+      )}
+
+      {/* 赛道过滤提示 */}
+      {activeFilter === 'all' && studentTrack && (
+        <View className="level-filter-tip">
+          <View className="tip-icon">🎯</View>
+          <Text className="tip-text">
+            只显示 {studentTrack === 'content' ? 'AI内容创作' : 'AI工具开发'} 赛道的任务
+            （Lv.{studentLevel} 及以下 + 挑战项目）
+          </Text>
+        </View>
+      )}
+
       <ScrollView scrollY className="tasks-content">
         {loading ? (
           <Loading text="正在加载任务..." />
@@ -269,6 +262,13 @@ export default function Tasks() {
                     </View>
                   )}
 
+                  {/* 挑战项目标签 */}
+                  {task.is_challenge && !task.is_stretch_project && (
+                    <View className="challenge-badge">
+                      <Text className="challenge-text">🔥 挑战项目 - 高一级任务，完成可快速升级</Text>
+                    </View>
+                  )}
+
                   {/* 冒险项目标签 */}
                   {task.is_stretch_project && (
                     <View className="stretch-badge">
@@ -286,10 +286,10 @@ export default function Tasks() {
                   {activeFilter === 'matched' && (task.matchReason || task.growthValue) && (
                     <View className="match-info">
                       {task.matchReason && (
-                        <Text className="match-reason">💡 {task.matchReason}</Text>
+                        <Text className="match-reason">💡 推荐理由：{task.matchReason}</Text>
                       )}
                       {task.growthValue && (
-                        <Text className="growth-value">📈 {task.growthValue}</Text>
+                        <Text className="growth-value">📈 成长价值：{task.growthValue}</Text>
                       )}
                     </View>
                   )}
@@ -336,10 +336,13 @@ export default function Tasks() {
                 </View>
               ))
             ) : (
-              <View className="empty-state">
-                <Text className="empty-text">暂时没有适合你的项目</Text>
-                <Text className="empty-hint">试试探索更多，或者完善你的OPC画像，让我们更了解你</Text>
-              </View>
+              <Empty
+                icon={activeFilter === 'matched' ? '🎯' : '🔍'}
+                text={activeFilter === 'matched' ? '暂时没有适合你的推荐任务' : '没有找到相关任务'}
+                hint={activeFilter === 'matched'
+                  ? '试试探索更多，或者完善你的OPC画像，让我们更了解你'
+                  : '试试调整搜索关键词，或者查看推荐任务'}
+              />
             )}
           </View>
         )}

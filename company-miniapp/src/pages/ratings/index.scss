@@ -1,0 +1,221 @@
+@import '../../styles/theme.scss';
+
+.ratings-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: 32rpx;
+
+  .title {
+    font-size: $font-2xl;
+    font-weight: $font-bold;
+    color: $text-primary;
+    margin-bottom: 32rpx;
+  }
+
+  // 统计卡片
+  .stats-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16rpx;
+    margin-bottom: 32rpx;
+
+    .stat-card {
+      @include glass-card;
+      padding: 32rpx 24rpx;
+      text-align: center;
+
+      .stat-label {
+        font-size: $font-xs;
+        color: $text-secondary;
+        margin-bottom: 16rpx;
+      }
+
+      .stat-value {
+        font-size: $font-3xl;
+        font-weight: $font-bold;
+        color: $text-primary;
+        font-family: $font-mono;
+
+        &.rating {
+          color: $warning-color;
+        }
+      }
+
+      .stars {
+        display: flex;
+        justify-content: center;
+        gap: 4rpx;
+        margin-top: 8rpx;
+
+        .star {
+          font-size: $font-lg;
+        }
+      }
+    }
+  }
+
+  // 标签页
+  .tabs {
+    display: flex;
+    gap: 16rpx;
+    margin-bottom: 32rpx;
+
+    .tab-btn {
+      padding: 16rpx 32rpx;
+      background: $bg-card;
+      border: 1px solid $border-light;
+      border-radius: $radius-md;
+      color: $text-secondary;
+      font-size: $font-sm;
+      transition: all 0.3s;
+
+      &.active {
+        background: $accent-purple;
+        color: $text-white;
+        border-color: $accent-purple;
+      }
+    }
+  }
+
+  // 评价列表
+  .ratings-list {
+    height: calc(100vh - 600rpx);
+
+    .loading {
+      text-align: center;
+      padding: 80rpx 0;
+      color: $text-secondary;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 120rpx 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        display: block;
+        margin-bottom: 24rpx;
+      }
+
+      .empty-text {
+        color: $text-secondary;
+        font-size: $font-base;
+      }
+    }
+
+    .rating-card {
+      @include glass-card;
+      padding: 32rpx;
+      margin-bottom: 24rpx;
+
+      .card-header {
+        @include flex-between;
+        margin-bottom: 24rpx;
+
+        .user-info {
+          .user-name {
+            font-size: $font-base;
+            font-weight: $font-semibold;
+            color: $text-primary;
+            margin-bottom: 8rpx;
+          }
+
+          .task-title {
+            font-size: $font-sm;
+            color: $text-secondary;
+          }
+        }
+
+        .rating-time {
+          font-size: $font-xs;
+          color: $text-muted;
+        }
+      }
+
+      .rating-stars {
+        display: flex;
+        gap: 8rpx;
+        margin-bottom: 16rpx;
+
+        .star {
+          font-size: $font-xl;
+
+          &.filled {
+            color: $warning-color;
+          }
+
+          &.empty {
+            color: $text-muted;
+          }
+        }
+      }
+
+      .rating-comment {
+        font-size: $font-base;
+        color: $text-primary;
+        line-height: 1.6;
+        margin-bottom: 16rpx;
+      }
+
+      .rating-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12rpx;
+        margin-bottom: 16rpx;
+
+        .tag {
+          padding: 8rpx 20rpx;
+          background: $bg-section;
+          color: $text-secondary;
+          border-radius: $radius-full;
+          font-size: $font-xs;
+        }
+      }
+
+      .rating-response {
+        padding: 24rpx;
+        background: $bg-section;
+        border-radius: $radius-md;
+        margin-bottom: 16rpx;
+
+        .response-label {
+          font-size: $font-xs;
+          color: $text-secondary;
+          margin-bottom: 8rpx;
+        }
+
+        .response-text {
+          font-size: $font-sm;
+          color: $text-primary;
+          line-height: 1.6;
+        }
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 16rpx;
+        padding-top: 24rpx;
+        border-top: 1px solid $border-light;
+
+        .btn-respond {
+          flex: 1;
+          padding: 16rpx;
+          background: $gradient-purple;
+          color: $text-white;
+          border-radius: $radius-md;
+          font-size: $font-sm;
+          text-align: center;
+        }
+
+        .btn-helpful {
+          padding: 16rpx 24rpx;
+          background: $bg-section;
+          border: 1px solid $border-light;
+          border-radius: $radius-md;
+          color: $text-secondary;
+          font-size: $font-sm;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,337 @@
+@import '../../styles/theme.scss';
+
+.jump-level-page {
+  min-height: 100vh;
+  background: $gradient-bg;
+  padding: 20px;
+  padding-bottom: 100px;
+}
+
+/* 页面标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: $text-secondary;
+  display: block;
+}
+
+/* 等级卡片 */
+.level-card {
+  @include card-super-rounded;
+  padding: 24px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, $accent-pink 0%, $accent-blue 100%);
+}
+
+.level-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.current-level,
+.target-level {
+  text-align: center;
+}
+
+.level-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.level-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: $card-white;
+  display: block;
+}
+
+.arrow {
+  font-size: 24px;
+  color: $card-white;
+  font-weight: 700;
+}
+
+/* 条件卡片 */
+.conditions-card {
+  @include card-super-rounded;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.conditions-met {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $accent-green 0%, $accent-blue 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: $card-white;
+  margin: 0 auto 16px;
+}
+
+.success-text {
+  font-size: 16px;
+  color: $text-primary;
+  font-weight: 600;
+}
+
+.conditions-list {
+  margin-bottom: 20px;
+}
+
+.condition-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.condition-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.condition-item.unmet .condition-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+.condition-text {
+  font-size: 14px;
+  color: $text-secondary;
+  flex: 1;
+}
+
+.missing-details {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(147, 197, 253, 0.1);
+  border-radius: $radius-lg;
+}
+
+.detail-text {
+  font-size: 13px;
+  color: $text-secondary;
+  display: block;
+  margin-bottom: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* 申请按钮 */
+.apply-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: $radius-2xl;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s ease;
+
+  &.enabled {
+    background: $gradient-primary;
+    color: $text-primary;
+    box-shadow: $shadow-md;
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &.disabled {
+    background: $bg-secondary;
+    color: $text-tertiary;
+  }
+}
+
+/* 信息卡片 */
+.info-card {
+  @include card-super-rounded;
+  padding: 20px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.1) 0%, rgba(196, 181, 253, 0.1) 100%);
+}
+
+.info-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-item {
+  font-size: 13px;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+/* 历史记录 */
+.records-section {
+  margin-top: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.record-card {
+  @include card-super-rounded;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.record-level {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.record-status {
+  padding: 4px 12px;
+  border-radius: $radius-full;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pending {
+  background: rgba(251, 191, 36, 0.2);
+  color: #F59E0B;
+}
+
+.status-submitted {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3B82F6;
+}
+
+.status-reviewing {
+  background: rgba(168, 85, 247, 0.2);
+  color: #A855F7;
+}
+
+.status-passed {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22C55E;
+}
+
+.status-failed {
+  background: rgba(239, 68, 68, 0.2);
+  color: #EF4444;
+}
+
+.status-text {
+  font-size: 12px;
+}
+
+.record-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.score-label {
+  font-size: 13px;
+  color: $text-secondary;
+}
+
+.score-value {
+  font-size: 18px;
+  font-weight: 700;
+
+  &.passed {
+    color: #22C55E;
+  }
+
+  &.failed {
+    color: #EF4444;
+  }
+}
+
+.record-review {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: $bg-secondary;
+  border-radius: $radius-lg;
+}
+
+.review-label {
+  font-size: 12px;
+  color: $text-tertiary;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.review-text {
+  font-size: 13px;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+.record-date {
+  font-size: 12px;
+  color: $text-tertiary;
+}

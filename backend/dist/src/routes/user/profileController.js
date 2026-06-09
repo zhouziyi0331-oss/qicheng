@@ -47,9 +47,9 @@ async function getProfile(req, res, next) {
           sp.real_name, sp.gender, sp.birth_date, sp.university, sp.major,
           sp.grade, sp.student_id, sp.id_card, sp.bio,
           sb.balance, sb.frozen_balance, sb.total_earned
-        FROM student_profiles sp
-        LEFT JOIN student_balances sb ON sp.user_id = sb.user_id
-        WHERE sp.user_id = $1`, [userId]);
+        FROM users u
+        LEFT JOIN student_balances sb ON u.id = sb.user_id
+        WHERE u.id = $1`, [userId]);
             profileData.studentProfile = studentProfile;
         }
         else if (user.user_type === 'company') {
@@ -212,7 +212,7 @@ async function updateProfile(req, res, next) {
             }
             if (updates.length > 0) {
                 values.push(userId);
-                await (0, db_1.query)(`UPDATE student_profiles SET ${updates.join(', ')} WHERE user_id = $${paramIndex}`, values);
+                await (0, db_1.query)(`UPDATE student_capabilities SET ${updates.join(', ')} WHERE student_id = $${paramIndex}`, values);
             }
         }
         // 更新企业资料
@@ -251,7 +251,7 @@ async function updateProfile(req, res, next) {
             }
             if (updates.length > 0) {
                 values.push(userId);
-                await (0, db_1.query)(`UPDATE company_profiles SET ${updates.join(', ')} WHERE user_id = $${paramIndex}`, values);
+                await (0, db_1.query)(`UPDATE company_profiles SET ${updates.join(', ')} WHERE student_id = $${paramIndex}`, values);
             }
         }
         logger_1.default.info('User profile updated', { userId });

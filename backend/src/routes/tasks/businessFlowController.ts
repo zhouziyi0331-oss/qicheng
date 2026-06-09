@@ -213,7 +213,7 @@ export async function triggerAIMatching(taskId: string): Promise<void> {
     const students = await query<any>(
       `SELECT u.id, u.nickname, sp.level, sp.total_score
        FROM users u
-       JOIN student_profiles sp ON u.id = sp.user_id
+       JOIN users u ON u.id = u.id
        WHERE u.role = 'student'
          AND u.is_active = true
          AND sp.level >= $1

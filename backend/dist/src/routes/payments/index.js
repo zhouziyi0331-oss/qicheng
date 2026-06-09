@@ -35,11 +35,12 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 指令8: 支付与提现系统
- * POST /payments/withdraw     — 学生申请提现
- * GET  /payments/balance      — 获取余额
- * GET  /payments/history      — 收支历史
- * POST /payments/notify/wechat — 微信支付回调
- * POST /payments/notify/alipay — 支付宝回调
+ * POST /payments/withdraw         — 学生申请提现
+ * GET  /payments/withdraw/history — 提现历史记录
+ * GET  /payments/balance          — 获取余额
+ * GET  /payments/history          — 收支历史
+ * POST /payments/notify/wechat    — 微信支付回调
+ * POST /payments/notify/alipay    — 支付宝回调
  */
 const express_1 = require("express");
 const auth_1 = require("../../middleware/auth");
@@ -49,6 +50,7 @@ const router = (0, express_1.Router)();
 router.get('/balance', auth_1.authenticate, (0, auth_1.requireRole)('student'), controller.getBalance);
 router.get('/history', auth_1.authenticate, (0, auth_1.requireRole)('student'), controller.getHistory);
 router.post('/withdraw', auth_1.authenticate, (0, auth_1.requireRole)('student'), controller.requestWithdrawal);
+router.get('/withdraw/history', auth_1.authenticate, (0, auth_1.requireRole)('student'), controller.getWithdrawalHistory);
 // 支付回调 (不需要 JWT 认证, 由支付平台签名验证)
 router.post('/notify/wechat', controller.wechatNotify);
 router.post('/notify/alipay', controller.alipayNotify);

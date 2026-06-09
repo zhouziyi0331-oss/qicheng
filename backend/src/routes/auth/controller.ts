@@ -61,45 +61,53 @@ export async function register(req: Request, res: Response, next: NextFunction):
       return;
     }
 
-    const { phone, code, role, password, deviceType, sourceChannel, userType } = req.body;
+    const { phone, code, deviceType, sourceChannel, userType } = req.body;
 
     // 1. 验证userType必填且有效
     if (!userType || !['student', 'company'].includes(userType)) {
       throw new AppError(400, '请选择用户身份（学生或企业）', 'INVALID_USER_TYPE');
     }
 
-    // 2. 验证码校验
+    // 2. 根据userType自动设置role
+    const role = userType;
+
+    // 3. 验证码校验
     const codeValid = await verifySmsCode(phone, code);
     if (!codeValid) {
       throw new AppError(400, '验证码错误或已过期', 'INVALID_CODE');
     }
 
-    // 3. 检查手机号是否已注册
+    // 4. 检查手机号是否已注册
     const existing = await queryOne('SELECT id, role, user_type FROM users WHERE phone = $1 AND deleted_at IS NULL', [phone]);
     if (existing) {
       throw new AppError(409, '该手机号已注册', 'PHONE_EXISTS');
     }
 
-    // 4. userType和role必须匹配
-    if ((userType === 'student' && role !== 'student') || (userType === 'company' && role !== 'company')) {
-      throw new AppError(400, '用户身份与角色不匹配', 'TYPE_ROLE_MISMATCH');
-    }
-
-    const passwordHash = await bcrypt.hash(password, 12);
     const userId = uuidv4();
 
     await withTransaction(async (client) => {
-      // 5. 创建用户（包含user_type字段）
+      // 5. 创建用户（不再需要密码）
       await client.query(
-        `INSERT INTO users (id, role, user_type, phone, password_hash, device_type, source_channel)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [userId, role, userType, phone, passwordHash, deviceType || null, sourceChannel || 'direct']
+        `INSERT INTO users (id, role, user_type, phone, device_type, source_channel, profile_completed)
+         VALUES ($1, $2, $3, $4, $5, $6, FALSE)`,
+        [userId, role, userType, phone, deviceType || null, sourceChannel || 'direct']
       );
 
       if (userType === 'student') {
-        // 6a. 创建学生档案
+        // 6a. 创建学生档案（旧系统，保持兼容）
         await client.query(
-          'INSERT INTO student_profiles (user_id) VALUES ($1)',
+          "INSERT INTO student_capabilities (student_id, skills, tasks_completed) VALUES ($1, '{}'::jsonb, 0)",
+          [userId]
+        );
+        // 6a-new. 初始化新等级系统字段
+        await client.query(
+          `UPDATE users SET track = 'content', current_level = 0 WHERE id = $1`,
+          [userId]
+        );
+        // 6a-new2. 初始化学生能力画像
+        await client.query(
+          `INSERT INTO student_capabilities (student_id, skills, tasks_completed)
+           VALUES ($1, '{}'::jsonb, 0)`,
           [userId]
         );
         // 6b. 创建余额账户
@@ -159,8 +167,9 @@ export async function register(req: Request, res: Response, next: NextFunction):
         userType,
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
-        // 学生注册后进入 Onboarding，企业注册后等待审核
-        nextStep: userType === 'student' ? 'onboarding' : 'pending_review',
+        // 注册后需要完善资料
+        nextStep: 'complete_profile',
+        profileCompleted: false,
       },
     });
   } catch (err) {
@@ -179,32 +188,31 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
       return;
     }
 
-    const { phone, password, code } = req.body;
+    const { phone, code } = req.body;
 
-    const user = await queryOne<{ id: string; role: string; user_type: string; password_hash: string; is_active: boolean }>(
-      `SELECT u.id, u.role, u.user_type, u.password_hash, u.is_active
+    const user = await queryOne<{ id: string; role: string; user_type: string; is_active: boolean; profile_completed: boolean }>(
+      `SELECT u.id, u.role, u.user_type, u.is_active, u.profile_completed
        FROM users u
        WHERE u.phone = $1 AND u.deleted_at IS NULL`,
       [phone]
     );
 
     if (!user) {
-      throw new AppError(401, '手机号或密码错误', 'INVALID_CREDENTIALS');
+      throw new AppError(401, '手机号未注册', 'USER_NOT_FOUND');
     }
 
     if (!user.is_active) {
       throw new AppError(403, '账号已被禁用，请联系客服', 'ACCOUNT_DISABLED');
     }
 
-    // 支持密码或验证码登录
-    if (code) {
-      const codeValid = await verifySmsCode(phone, code);
-      if (!codeValid) throw new AppError(401, '验证码错误或已过期', 'INVALID_CODE');
-    } else if (password) {
-      const passwordValid = await bcrypt.compare(password, user.password_hash);
-      if (!passwordValid) throw new AppError(401, '手机号或密码错误', 'INVALID_CREDENTIALS');
-    } else {
-      throw new AppError(400, '请提供密码或验证码', 'MISSING_AUTH');
+    // 仅支持验证码登录
+    if (!code) {
+      throw new AppError(400, '请提供验证码', 'MISSING_CODE');
+    }
+
+    const codeValid = await verifySmsCode(phone, code);
+    if (!codeValid) {
+      throw new AppError(401, '验证码错误或已过期', 'INVALID_CODE');
     }
 
     // 更新最后登录时间 + 触发情绪信号检测
@@ -241,6 +249,8 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
         userType: user.user_type,
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
+        profileCompleted: user.profile_completed || false,
+        nextStep: user.profile_completed ? 'home' : 'complete_profile',
       },
     });
   } catch (err) {
@@ -347,5 +357,71 @@ async function checkAndUpdateEmotionOnLogin(userId: string): Promise<void> {
     }
   } catch (err) {
     logger.error('Error checking emotion signal on login', { userId, error: (err as Error).message });
+  }
+}
+
+// ============================================================
+// GET /auth/me
+// ============================================================
+export async function getCurrentUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new AppError(401, '未授权', 'UNAUTHORIZED');
+    }
+
+    const user = await queryOne<{
+      id: string;
+      phone: string;
+      role: string;
+      user_type: string;
+      created_at: Date;
+      last_login_at: Date | null;
+    }>(
+      `SELECT id, phone, role, user_type, created_at, last_login_at
+       FROM users
+       WHERE id = $1`,
+      [userId]
+    );
+
+    if (!user) {
+      throw new AppError(404, '用户不存在', 'USER_NOT_FOUND');
+    }
+
+    // 根据用户类型获取额外信息
+    let profile: any = null;
+    if (user.user_type === 'student') {
+      profile = await queryOne(
+        `SELECT u.current_level as level_a, u.current_level as level_b, sc.opc_label, sc.life_question,
+                u.track, sc.total_earnings, sc.tasks_completed as task_count,
+                u.nickname, u.avatar_url
+         FROM users u
+         LEFT JOIN student_capabilities sc ON u.id = sc.student_id
+         WHERE u.id = $1`,
+        [userId]
+      );
+    } else if (user.user_type === 'company') {
+      profile = await queryOne(
+        `SELECT company_name, contact_name, contact_phone, industry
+         FROM company_profiles
+         WHERE user_id = $1`,
+        [userId]
+      );
+    }
+
+    res.json({
+      success: true,
+      data: {
+        id: user.id,
+        phone: user.phone,
+        role: user.role,
+        userType: user.user_type,
+        createdAt: user.created_at,
+        lastLoginAt: user.last_login_at,
+        profile,
+      },
+    });
+  } catch (err) {
+    next(err);
   }
 }

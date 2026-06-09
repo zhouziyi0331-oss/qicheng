@@ -13,6 +13,15 @@ export default function Profile() {
   const [showLevelUp, setShowLevelUp] = useState(false)
   const [newLevel] = useState(1)
 
+  // 获取等级名称
+  const getLevelName = (level: number, track: string) => {
+    const levelNames = {
+      content: ['Lv.0 启程者', 'Lv.1 探索者', 'Lv.2 实践者', 'Lv.3 创作者', 'Lv.4 引领者', 'Lv.5 创造者'],
+      dev: ['Lv.0 启程者', 'Lv.1 探索者', 'Lv.2 构建者', 'Lv.3 工程师', 'Lv.4 架构师', 'Lv.5 创造者']
+    }
+    return levelNames[track]?.[level] || `Lv.${level}`
+  }
+
   useEffect(() => {
     // 更新自定义 TabBar 选中状态
     try {
@@ -34,37 +43,74 @@ export default function Profile() {
   const loadUserData = async () => {
     setLoading(true)
 
-    // 使用模拟数据，避免API调用失败
-    const mockUser = {
-      id: 'mock-user-001',
-      nickname: '启程用户',
-      avatar: 'https://via.placeholder.com/100',
-      phone: '138****8000',
-      opc_tags: ['C', 'E'],
-      bio: '正在探索自己的方向'
-    }
+    try {
+      // 获取用户信息
+      const userResponse = await Taro.request({
+        url: 'http://localhost:3000/api/v1/student/profile',
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('accessToken')}`
+        }
+      })
 
-    const mockRadarData = {
-      level: 3,
-      exp: 450,
-      max_exp: 1000,
-      completed_tasks: 8,
-      ongoing_tasks: 2,
-      stories: 5,
-      dimensions: {
-        creativity: { name: '创造力', score: 75 },
-        learning: { name: '学习力', score: 68 },
-        execution: { name: '执行力', score: 82 },
-        communication: { name: '沟通力', score: 70 },
-        collaboration: { name: '协作力', score: 65 },
-        leadership: { name: '领导力', score: 58 }
+      if (userResponse.statusCode === 200 && userResponse.data.success) {
+        const userData = userResponse.data.data
+        setUser({
+          id: userData.id,
+          nickname: userData.nickname,
+          avatar: userData.avatar_url,
+          phone: userData.phone,
+          opc_tags: userData.opc_label ? [userData.opc_label] : [],
+          bio: userData.bio || '正在探索自己的方向',
+          track: userData.track,
+          current_level: userData.current_level
+        })
       }
-    }
 
-    setUser(mockUser)
-    setBalance(1280)
-    setRadarData(mockRadarData)
-    setLoading(false)
+      // 获取余额
+      const balanceResponse = await Taro.request({
+        url: 'http://localhost:3000/api/v1/student/balance',
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('accessToken')}`
+        }
+      })
+
+      if (balanceResponse.statusCode === 200 && balanceResponse.data.success) {
+        setBalance(balanceResponse.data.data.balance || 0)
+      }
+
+      // 获取能力雷达图数据
+      const radarResponse = await Taro.request({
+        url: 'http://localhost:3000/api/v1/ability/radar',
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('accessToken')}`
+        }
+      })
+
+      if (radarResponse.statusCode === 200 && radarResponse.data.success) {
+        const radarData = radarResponse.data.data
+        setRadarData({
+          level: radarData.level?.a || 0,
+          current_level: radarData.level?.a || 0,
+          track: radarData.track,
+          completed_tasks: radarData.taskCount || 0,
+          ongoing_tasks: 0, // 需要从其他接口获取
+          stories: 0, // 需要从其他接口获取
+          dimensions: radarData.scores || {}
+        })
+      }
+
+    } catch (error) {
+      console.error('加载用户数据失败:', error)
+      Taro.showToast({
+        title: '加载失败，请重试',
+        icon: 'none'
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const checkLevelUp = async () => {
@@ -121,15 +167,17 @@ export default function Profile() {
           </View>
         </View>
 
-        {/* 等级进度 */}
+        {/* 等级和赛道信息 */}
         {radarData && (
           <View className="level-section">
             <View className="level-header">
-              <Text className="level-text">Lv.{radarData.level || 1}</Text>
-              <Text className="level-exp">{radarData.exp || 0}/{radarData.max_exp || 100} EXP</Text>
-            </View>
-            <View className="level-bar">
-              <View className="level-progress" style={{ width: `${expPercent}%` }} />
+              <View className="level-info">
+                <Text className="level-text">Lv.{radarData.current_level || 0}</Text>
+                {radarData.track && (
+                  <Text className="track-badge">{radarData.track === 'content' ? '内容赛道' : '开发赛道'}</Text>
+                )}
+              </View>
+              <Text className="level-name">{getLevelName(radarData.current_level, radarData.track)}</Text>
             </View>
           </View>
         )}
@@ -199,19 +247,27 @@ export default function Profile() {
             <Text className="menu-arrow">→</Text>
           </View>
 
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/jump-level/index')}>
+            <View className="menu-icon-circle menu-icon-red">
+              <Text className="icon-text">🚀</Text>
+            </View>
+            <Text className="menu-label">跳级申请</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
+          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/teams/index')}>
+            <View className="menu-icon-circle menu-icon-purple">
+              <Text className="icon-text">👥</Text>
+            </View>
+            <Text className="menu-label">我的队伍</Text>
+            <Text className="menu-arrow">→</Text>
+          </View>
+
           <View className="menu-item-simple" onClick={() => handleNavigate('/pages/flow-moments/index')}>
             <View className="menu-icon-circle menu-icon-blue">
               <Text className="icon-text">⏱</Text>
             </View>
             <Text className="menu-label">专注时刻</Text>
-            <Text className="menu-arrow">→</Text>
-          </View>
-
-          <View className="menu-item-simple" onClick={() => handleNavigate('/pages/workout-timer/index')}>
-            <View className="menu-icon-circle menu-icon-red">
-              <Text className="icon-text">🏃</Text>
-            </View>
-            <Text className="menu-label">运动计时器</Text>
             <Text className="menu-arrow">→</Text>
           </View>
 

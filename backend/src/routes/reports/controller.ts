@@ -32,9 +32,9 @@ export async function listReports(req: Request, res: Response, next: NextFunctio
 
     // 获取用户数据，生成预览钩子
     const profile = await queryOne<{
-      opc_label: string; six_dim_scores: Record<string, number>; task_count: number;
+      opc_label: string; six_dim_scores: Record<string, number>; tasks_completed: number;
     }>(
-      'SELECT opc_label, six_dim_scores, task_count FROM student_profiles WHERE user_id = $1',
+      'SELECT opc_label, six_dim_scores, tasks_completed FROM student_capabilities WHERE student_id = $1',
       [userId]
     );
 
@@ -69,11 +69,11 @@ export async function orderReport(req: Request, res: Response, next: NextFunctio
 
     // R6 创业综合报告需要4级及以上学生才能购买
     if (reportType === 'R6') {
-      const profile = await queryOne<{ level_a: number }>(
-        'SELECT level_a FROM student_profiles WHERE user_id = $1',
+      const profile = await queryOne<{ current_level: number }>(
+        'SELECT current_level FROM student_capabilities WHERE student_id = $1',
         [userId]
       );
-      if (!profile || profile.level_a < 4) {
+      if (!profile || profile.current_level < 4) {
         throw new AppError(403, '创业综合报告需要达到4级及以上才能购买', 'LEVEL_TOO_LOW');
       }
     }
@@ -164,7 +164,7 @@ export async function getReport(req: Request, res: Response, next: NextFunction)
 // ============================================================
 function buildPreviewHook(
   reportType: string,
-  profile: { opc_label?: string; six_dim_scores?: Record<string, number>; task_count?: number } | null
+  profile: { opc_label?: string; six_dim_scores?: Record<string, number>; tasks_completed?: number } | null
 ) {
   if (!profile) return null;
 
@@ -176,7 +176,7 @@ function buildPreviewHook(
     },
     R2: {
       tableOfContents: ['任务完成历史分析', '执行模式识别', '可靠度评级', '提升建议'],
-      previewFirstLines: `从你完成的 ${profile.task_count || 0} 个任务来看，你的执行模式属于...`,
+      previewFirstLines: `从你完成的 ${profile.tasks_completed || 0} 个任务来看，你的执行模式属于...`,
       blurredHint: `你的可靠度评级是「[模糊显示]」，这意味着...`,
     },
     R5: {
@@ -186,7 +186,7 @@ function buildPreviewHook(
     },
     R6: {
       tableOfContents: ['个人能力分析', '创业方向建议', '目标市场分析', '客户获取策略', '公司注册指南', '税务合规要点'],
-      previewFirstLines: `基于你完成的 ${profile.task_count || 0} 个任务和能力评估，我们为你定制了创业路径...`,
+      previewFirstLines: `基于你完成的 ${profile.tasks_completed || 0} 个任务和能力评估，我们为你定制了创业路径...`,
       blurredHint: `你最适合的创业方向是「[模糊显示]」，目标客户群体是...`,
     },
     full: {
@@ -219,12 +219,12 @@ export async function triggerReportGeneration(reportId: string, userId: string):
               gt.event_type, gt.event_title, gt.event_desc, gt.created_at as timeline_date,
               t.title as task_title, t.description as task_desc,
               ts.company_score, ts.submitted_at, ts.approved_at
-       FROM student_profiles sp
-       LEFT JOIN test_results tr ON tr.user_id = sp.user_id AND tr.is_current = TRUE
-       LEFT JOIN growth_timeline gt ON gt.user_id = sp.user_id
-       LEFT JOIN task_submissions ts ON ts.student_id = sp.user_id AND ts.status = 'approved'
+       FROM users u
+       LEFT JOIN test_results tr ON tr.user_id = u.id AND tr.is_current = TRUE
+       LEFT JOIN growth_timeline gt ON gt.user_id = u.id
+       LEFT JOIN task_submissions ts ON ts.student_id = u.id AND ts.status = 'approved'
        LEFT JOIN tasks t ON t.id = ts.task_id
-       WHERE sp.user_id = $1
+       WHERE u.id = $1
        ORDER BY ts.approved_at DESC`,
       [userId]
     );

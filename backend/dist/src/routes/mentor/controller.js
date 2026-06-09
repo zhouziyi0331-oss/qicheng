@@ -26,7 +26,7 @@ async function sendTaskStartGuidance(taskId, studentId) {
         if (!task)
             return;
         // 获取学生信息
-        const student = await (0, db_1.queryOne)('SELECT opc_label, level, task_count, six_dim_scores FROM student_profiles WHERE user_id = $1', [studentId]);
+        const student = await (0, db_1.queryOne)('SELECT opc_label, level, tasks_completed, six_dim_scores FROM student_capabilities WHERE student_id = $1', [studentId]);
         // 获取学生历史使用过的工具
         const toolHistory = await (0, db_1.query)(`SELECT DISTINCT jsonb_array_elements_text(milestone_data->'tools_used') as tool
        FROM student_milestones
@@ -44,7 +44,7 @@ async function sendTaskStartGuidance(taskId, studentId) {
 ## 学生信息
 - OPC标签：${student?.opc_label || '未测评'}
 - 等级：Lv.${student?.level || 0}
-- 历史任务数：${student?.task_count || 0}
+- 历史任务数：${student?.tasks_completed || 0}
 - 用过的工具：${usedTools}
 
 ## 你的任务
@@ -92,7 +92,7 @@ async function sendTaskStartGuidance(taskId, studentId) {
 ② 准备好需要的工具和素材
 ③ 按步骤完成，不确定的地方随时问我
 
-${student?.task_count === 0 ? '这是你的第一单，不用紧张，我会一直陪着你。' : ''}
+${student?.tasks_completed === 0 ? '这是你的第一单，不用紧张，我会一直陪着你。' : ''}
 
 如果卡住了，随时告诉我卡在哪里，我们一起想办法！`;
         }
@@ -357,7 +357,7 @@ async function checkIdleStudents() {
 async function celebrateMilestone(studentId, milestoneType, milestoneData) {
     try {
         // 获取学生信息
-        const student = await (0, db_1.queryOne)('SELECT opc_label, level, task_count FROM student_profiles WHERE user_id = $1', [studentId]);
+        const student = await (0, db_1.queryOne)('SELECT opc_label, level, tasks_completed FROM student_capabilities WHERE student_id = $1', [studentId]);
         // 获取历史里程碑
         const milestoneHistory = await (0, db_1.query)(`SELECT milestone_type, mentor_message FROM student_milestones
        WHERE student_id = $1
@@ -374,7 +374,7 @@ ${JSON.stringify(milestoneData, null, 2)}
 ## 学生信息
 - OPC标签：${student?.opc_label}
 - 等级：Lv.${student?.level}
-- 完成任务数：${student?.task_count}
+- 完成任务数：${student?.tasks_completed}
 
 ## 历史里程碑
 ${milestoneHistory.map((m) => `- ${m.milestone_type}: ${m.mentor_message}`).join('\n')}

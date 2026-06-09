@@ -2,6 +2,7 @@ import { View, Text, Canvas, ScrollView } from '@tarojs/components'
 import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import Loading from '../../components/Loading'
+import AbilityHistory from '../../components/AbilityHistory'
 import './index.scss'
 
 interface AbilityData {
@@ -16,36 +17,191 @@ interface AbilityData {
   rank: string
 }
 
+interface AbilitySnapshot {
+  id: string
+  timestamp: string
+  level: number
+  totalScore: number
+  dimensions: {
+    d1: number
+    d2: number
+    d3: number
+    d4: number
+    d5: number
+    d6: number
+  }
+  trigger: string
+  taskTitle?: string
+}
+
 export default function Ability() {
   const [abilityData, setAbilityData] = useState<AbilityData | null>(null)
   const [loading, setLoading] = useState(false)
+  const [hasCompletedFirstTask, setHasCompletedFirstTask] = useState(false)
+  const [checkingFirstTask, setCheckingFirstTask] = useState(true)
+  const [showHistory, setShowHistory] = useState(false)
+  const [historySnapshots, setHistorySnapshots] = useState<AbilitySnapshot[]>([])
 
   useEffect(() => {
-    loadAbilityData()
+    checkFirstTaskStatus()
   }, [])
+
+  const checkFirstTaskStatus = async () => {
+    try {
+      setCheckingFirstTask(true)
+      const token = Taro.getStorageSync('token')
+      if (!token) {
+        setCheckingFirstTask(false)
+        return
+      }
+
+      const res = await Taro.request({
+        url: '/api/v1/user/profile',
+        method: 'GET',
+        header: { 'Authorization': `Bearer ${token}` }
+      })
+
+      if (res.data.success) {
+        const completedTasks = res.data.data.completed_tasks || 0
+        setHasCompletedFirstTask(completedTasks > 0)
+
+        // 如果已完成首单，加载能力数据
+        if (completedTasks > 0) {
+          loadAbilityData()
+        }
+      }
+    } catch (error) {
+      console.error('检查首单状态失败:', error)
+    } finally {
+      setCheckingFirstTask(false)
+    }
+  }
 
   const loadAbilityData = async () => {
     setLoading(true)
 
-    // 直接使用模拟数据，避免API调用失败
-    const mockData: AbilityData = {
-      d1: 68, // 学习力
-      d2: 82, // 执行力
-      d3: 70, // 沟通力
-      d4: 75, // 创新力
-      d5: 65, // 协作力
-      d6: 58, // 抗压力
-      level: 3,
-      totalScore: 418,
-      rank: '成长中'
+    try {
+      // 调用真实API获取能力雷达图数据
+      const res = await abilityAPI.getRadar()
+
+      if (res.success && res.data) {
+        const data: AbilityData = {
+          d1: res.data.d1 || 0,
+          d2: res.data.d2 || 0,
+          d3: res.data.d3 || 0,
+          d4: res.data.d4 || 0,
+          d5: res.data.d5 || 0,
+          d6: res.data.d6 || 0,
+          level: res.data.level || 0,
+          totalScore: res.data.totalScore || 0,
+          rank: res.data.rank || '新手'
+        }
+
+        setAbilityData(data)
+
+        setTimeout(() => {
+          drawRadarChart(data)
+        }, 300)
+
+        // 加载历史快照
+        loadHistorySnapshots()
+      } else {
+        throw new Error('数据格式错误')
+      }
+    } catch (error) {
+      console.error('加载能力数据失败:', error)
+
+      // 失败时使用模拟数据作为fallback
+      const mockData: AbilityData = {
+        d1: 68,
+        d2: 82,
+        d3: 70,
+        d4: 75,
+        d5: 65,
+        d6: 58,
+        level: 3,
+        totalScore: 418,
+        rank: '成长中'
+      }
+
+      setAbilityData(mockData)
+
+      setTimeout(() => {
+        drawRadarChart(mockData)
+      }, 300)
+
+      // 加载模拟历史数据
+      loadMockHistorySnapshots()
+
+      Taro.showToast({
+        title: '加载失败，显示模拟数据',
+        icon: 'none',
+        duration: 2000
+      })
+    } finally {
+      setLoading(false)
     }
+  }
 
-    setAbilityData(mockData)
-    setLoading(false)
+  const loadHistorySnapshots = async () => {
+    try {
+      const token = Taro.getStorageSync('token')
+      if (!token) return
 
-    setTimeout(() => {
-      drawRadarChart(mockData)
-    }, 300)
+      const res = await Taro.request({
+        url: '/api/v1/ability/history',
+        method: 'GET',
+        header: { 'Authorization': `Bearer ${token}` }
+      })
+
+      if (res.data.success && res.data.data) {
+        setHistorySnapshots(res.data.data)
+      }
+    } catch (error) {
+      console.error('加载历史快照失败:', error)
+      loadMockHistorySnapshots()
+    }
+  }
+
+  const loadMockHistorySnapshots = () => {
+    const mockSnapshots: AbilitySnapshot[] = [
+      {
+        id: '1',
+        timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        level: 3,
+        totalScore: 418,
+        dimensions: { d1: 68, d2: 82, d3: 70, d4: 75, d5: 65, d6: 58 },
+        trigger: 'task_completed',
+        taskTitle: '企业官网开发'
+      },
+      {
+        id: '2',
+        timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        level: 2,
+        totalScore: 380,
+        dimensions: { d1: 62, d2: 75, d3: 65, d4: 70, d5: 58, d6: 50 },
+        trigger: 'level_up'
+      },
+      {
+        id: '3',
+        timestamp: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        level: 2,
+        totalScore: 350,
+        dimensions: { d1: 55, d2: 68, d3: 60, d4: 65, d5: 52, d6: 50 },
+        trigger: 'task_completed',
+        taskTitle: '小程序UI设计'
+      },
+      {
+        id: '4',
+        timestamp: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+        level: 1,
+        totalScore: 300,
+        dimensions: { d1: 50, d2: 50, d3: 50, d4: 50, d5: 50, d6: 50 },
+        trigger: 'task_completed',
+        taskTitle: '首次任务完成'
+      }
+    ]
+    setHistorySnapshots(mockSnapshots)
   }
 
   const drawRadarChart = (data: AbilityData) => {
@@ -204,6 +360,50 @@ export default function Ability() {
     return '#EF4444'
   }
 
+  if (checkingFirstTask) {
+    return <Loading text="正在加载..." />
+  }
+
+  // 首单前显示占位符
+  if (!hasCompletedFirstTask) {
+    return (
+      <View className="ability-page">
+        <View className="locked-state">
+          <View className="lock-icon">🔒</View>
+          <Text className="lock-title">能力画像未解锁</Text>
+          <Text className="lock-subtitle">完成首单后解锁</Text>
+          <View className="lock-description">
+            <Text className="description-text">
+              完成第一个任务后，系统会根据你的表现生成专属的六维能力画像
+            </Text>
+          </View>
+          <View className="unlock-benefits">
+            <Text className="benefits-title">解锁后你将获得：</Text>
+            <View className="benefit-item">
+              <Text className="benefit-icon">📊</Text>
+              <Text className="benefit-text">六维能力雷达图</Text>
+            </View>
+            <View className="benefit-item">
+              <Text className="benefit-icon">📈</Text>
+              <Text className="benefit-text">能力成长趋势</Text>
+            </View>
+            <View className="benefit-item">
+              <Text className="benefit-icon">🎯</Text>
+              <Text className="benefit-text">个性化提升建议</Text>
+            </View>
+            <View className="benefit-item">
+              <Text className="benefit-icon">🏆</Text>
+              <Text className="benefit-text">全站能力排名</Text>
+            </View>
+          </View>
+          <View className="action-hint">
+            <Text className="hint-text">💡 去任务大厅接取你的第一个任务吧！</Text>
+          </View>
+        </View>
+      </View>
+    )
+  }
+
   if (loading) {
     return <Loading text="正在加载能力数据..." />
   }
@@ -222,8 +422,16 @@ export default function Ability() {
     <View className="ability-page">
       {/* 头部卡片 - 固定 */}
       <View className="ability-header">
-        <Text className="header-title">六维能力图谱</Text>
-        <Text className="header-subtitle">完成任务自动更新能力值</Text>
+        <View className="header-top">
+          <View className="header-text">
+            <Text className="header-title">六维能力图谱</Text>
+            <Text className="header-subtitle">完成任务自动更新能力值</Text>
+          </View>
+          <View className="history-btn" onClick={() => setShowHistory(true)}>
+            <Text className="history-icon">📜</Text>
+            <Text className="history-text">历史</Text>
+          </View>
+        </View>
         <View className="header-stats">
           <View className="stat-item">
             <Text className="stat-value">Lv.{abilityData.level}</Text>
@@ -379,6 +587,14 @@ export default function Ability() {
           </View>
         </View>
       </ScrollView>
+
+      {/* 历史记录弹窗 */}
+      <AbilityHistory
+        visible={showHistory}
+        snapshots={historySnapshots}
+        currentData={abilityData}
+        onClose={() => setShowHistory(false)}
+      />
     </View>
   )
 }

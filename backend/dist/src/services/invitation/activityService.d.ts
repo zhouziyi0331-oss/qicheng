@@ -48,7 +48,7 @@ export declare class ActivityService {
         tags?: string[];
     }): Promise<Array<{
         student_id: string;
-        level_a: number;
+        current_level: number;
         abilities: Record<string, number>;
         tags: string[];
         last_login_at: Date;

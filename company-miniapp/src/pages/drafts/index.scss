@@ -1,0 +1,182 @@
+@import '../../styles/theme.scss';
+
+.drafts-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: 32rpx;
+
+  .header {
+    @include flex-between;
+    margin-bottom: 32rpx;
+
+    .title {
+      font-size: $font-2xl;
+      font-weight: $font-bold;
+      color: $text-primary;
+    }
+
+    .btn-new {
+      padding: 16rpx 32rpx;
+      background: $gradient-purple;
+      color: $text-white;
+      border-radius: $radius-md;
+      font-size: $font-sm;
+      font-weight: $font-semibold;
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 16rpx;
+    margin-bottom: 32rpx;
+
+    .filter-btn {
+      padding: 16rpx 32rpx;
+      background: $bg-card;
+      border: 1px solid $border-light;
+      border-radius: $radius-md;
+      color: $text-secondary;
+      font-size: $font-sm;
+      transition: all 0.3s;
+
+      &.active {
+        background: $accent-purple;
+        color: $text-white;
+        border-color: $accent-purple;
+      }
+    }
+  }
+
+  .draft-list {
+    height: calc(100vh - 300rpx);
+
+    .loading {
+      text-align: center;
+      padding: 80rpx 0;
+      color: $text-secondary;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 120rpx 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        display: block;
+        margin-bottom: 24rpx;
+      }
+
+      .empty-text {
+        color: $text-secondary;
+        font-size: $font-base;
+      }
+    }
+
+    .draft-card {
+      @include glass-card;
+      padding: 32rpx;
+      margin-bottom: 24rpx;
+
+      .card-header {
+        @include flex-between;
+        margin-bottom: 24rpx;
+
+        .status-tag {
+          padding: 8rpx 20rpx;
+          border-radius: $radius-full;
+          font-size: $font-xs;
+          font-weight: $font-medium;
+
+          &.published {
+            background: rgba($status-success, 0.1);
+            color: $status-success;
+          }
+
+          &.draft {
+            background: rgba($accent-purple, 0.1);
+            color: $accent-purple;
+          }
+
+          &.archived {
+            background: rgba($text-muted, 0.1);
+            color: $text-muted;
+          }
+        }
+
+        .category-tag {
+          padding: 8rpx 20rpx;
+          background: $bg-section;
+          color: $text-secondary;
+          border-radius: $radius-sm;
+          font-size: $font-xs;
+        }
+      }
+
+      .draft-title {
+        display: block;
+        font-size: $font-lg;
+        font-weight: $font-semibold;
+        color: $text-primary;
+        margin-bottom: 16rpx;
+        @include text-ellipsis(2);
+      }
+
+      .draft-desc {
+        display: block;
+        font-size: $font-sm;
+        color: $text-secondary;
+        margin-bottom: 16rpx;
+        @include text-ellipsis(2);
+      }
+
+      .draft-budget {
+        font-size: $font-sm;
+        color: $text-secondary;
+        margin-bottom: 16rpx;
+      }
+
+      .draft-time {
+        display: block;
+        font-size: $font-xs;
+        color: $text-muted;
+        margin-bottom: 24rpx;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 16rpx;
+        padding-top: 24rpx;
+        border-top: 1px solid $border-light;
+
+        .btn-edit {
+          flex: 1;
+          padding: 16rpx;
+          background: $bg-section;
+          border: 1px solid $border-light;
+          border-radius: $radius-md;
+          color: $text-primary;
+          font-size: $font-sm;
+          text-align: center;
+        }
+
+        .btn-publish {
+          flex: 1;
+          padding: 16rpx;
+          background: $gradient-purple;
+          color: $text-white;
+          border-radius: $radius-md;
+          font-size: $font-sm;
+          text-align: center;
+        }
+
+        .btn-icon {
+          padding: 16rpx 20rpx;
+          background: $bg-section;
+          border: 1px solid $border-light;
+          border-radius: $radius-md;
+          font-size: $font-lg;
+        }
+      }
+    }
+  }
+}

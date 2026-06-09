@@ -1,0 +1,210 @@
+.notification-center {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+/* 头部 */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 48rpx 32rpx 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: white;
+}
+
+.unread-badge {
+  background: #ff4d4f;
+  border-radius: 20rpx;
+  padding: 4rpx 12rpx;
+  min-width: 40rpx;
+  text-align: center;
+}
+
+.badge-text {
+  font-size: 22rpx;
+  color: white;
+  font-weight: 600;
+}
+
+/* 过滤器 */
+.filter-tabs {
+  display: flex;
+  background: white;
+  padding: 16rpx 32rpx;
+  gap: 16rpx;
+  border-bottom: 1rpx solid #e5e7eb;
+}
+
+.tab {
+  flex: 1;
+  padding: 16rpx 24rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+
+  &.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .tab-text {
+      color: white;
+    }
+  }
+}
+
+.tab-text {
+  font-size: 28rpx;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.tab-badge {
+  background: #ff4d4f;
+  border-radius: 16rpx;
+  padding: 2rpx 8rpx;
+  min-width: 32rpx;
+  text-align: center;
+
+  .badge-text {
+    font-size: 20rpx;
+  }
+}
+
+/* 操作按钮 */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24rpx;
+  padding: 16rpx 32rpx;
+  background: white;
+  border-bottom: 1rpx solid #e5e7eb;
+}
+
+.action-btn {
+  font-size: 24rpx;
+  color: #667eea;
+  padding: 8rpx 16rpx;
+
+  &.danger {
+    color: #ff4d4f;
+  }
+}
+
+/* 通知列表 */
+.notification-list {
+  height: calc(100vh - 300rpx);
+  padding: 16rpx 0;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 32rpx;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.3;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #9ca3af;
+}
+
+/* 通知项 */
+.notification-item {
+  background: white;
+  margin: 0 16rpx 16rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  position: relative;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+
+  &.unread {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4rpx solid #667eea;
+  }
+
+  &.read {
+    opacity: 0.7;
+  }
+}
+
+.unread-dot {
+  position: absolute;
+  top: 24rpx;
+  left: 8rpx;
+  width: 12rpx;
+  height: 12rpx;
+  background: #ff4d4f;
+  border-radius: 50%;
+}
+
+.notification-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-text {
+  font-size: 40rpx;
+}
+
+.notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.notification-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.notification-message {
+  font-size: 26rpx;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.notification-time {
+  font-size: 22rpx;
+  color: #9ca3af;
+  margin-top: 4rpx;
+}
+
+.notification-arrow {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.arrow-icon {
+  font-size: 48rpx;
+  color: #d1d5db;
+  font-weight: 300;
+}

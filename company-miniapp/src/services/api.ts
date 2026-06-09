@@ -439,11 +439,190 @@ export const notificationAPI = {
   }
 }
 
+// 任务草稿箱API
+export const draftAPI = {
+  // 获取草稿列表
+  getList: (params?: { status?: string; page?: number; limit?: number }) =>
+    request('/task-drafts', { method: 'GET', data: params }),
+
+  // 获取草稿详情
+  getDetail: (draftId: string) => request(`/task-drafts/${draftId}`),
+
+  // 创建草稿
+  create: (data: any) => request('/task-drafts', { method: 'POST', data }),
+
+  // 更新草稿
+  update: (draftId: string, data: any) =>
+    request(`/task-drafts/${draftId}`, { method: 'PUT', data }),
+
+  // 删除草稿
+  delete: (draftId: string) => request(`/task-drafts/${draftId}`, { method: 'DELETE' }),
+
+  // 发布草稿
+  publish: (draftId: string) =>
+    request(`/task-drafts/${draftId}/publish`, { method: 'POST' }),
+
+  // 复制草稿
+  duplicate: (draftId: string) =>
+    request(`/task-drafts/${draftId}/duplicate`, { method: 'POST' })
+}
+
+// AI智能定价API
+export const aiPricingAPI = {
+  // 获取定价建议
+  getSuggestion: (data: {
+    title: string
+    description: string
+    category: string
+    difficulty_level: 'easy' | 'medium' | 'hard' | 'expert'
+    estimated_hours?: number
+    required_skills?: string[]
+    deliverables?: string[]
+    deadline_days?: number
+  }) => request('/ai-pricing/suggest', { method: 'POST', data }),
+
+  // 获取定价历史
+  getHistory: (params?: { page?: number; limit?: number }) =>
+    request('/ai-pricing/history', { method: 'GET', data: params }),
+
+  // 获取市场基准价
+  getMarketBenchmark: (category: string, difficulty: string) =>
+    request('/ai-pricing/market-benchmark', { method: 'GET', data: { category, difficulty } })
+}
+
+// 评价系统API
+export const ratingAPI = {
+  // 创建评价
+  create: (data: {
+    task_id: string
+    ratee_id: string
+    rating: number
+    comment?: string
+    tags?: string[]
+    is_anonymous?: boolean
+  }) => request('/ratings-new', { method: 'POST', data }),
+
+  // 更新评价
+  update: (ratingId: string, data: any) =>
+    request(`/ratings-new/${ratingId}`, { method: 'PUT', data }),
+
+  // 回复评价
+  respond: (ratingId: string, response: string) =>
+    request(`/ratings-new/${ratingId}/respond`, { method: 'POST', data: { response } }),
+
+  // 获取任务的评价
+  getByTask: (taskId: string) => request(`/ratings-new/task/${taskId}`),
+
+  // 获取用户的评价
+  getByUser: (userId: string, params?: { page?: number; limit?: number }) =>
+    request(`/ratings-new/user/${userId}`, { method: 'GET', data: params }),
+
+  // 获取用户评价统计
+  getUserStats: (userId: string) => request(`/ratings-new/user/${userId}/stats`),
+
+  // 标记有用性
+  markHelpful: (ratingId: string, isHelpful: boolean) =>
+    request(`/ratings-new/${ratingId}/helpful`, { method: 'POST', data: { is_helpful: isHelpful } }),
+
+  // 举报评价
+  report: (ratingId: string, reason: string, description?: string) =>
+    request(`/ratings-new/${ratingId}/report`, { method: 'POST', data: { reason, description } }),
+
+  // 获取评价标签
+  getTags: () => request('/ratings-new/tags')
+}
+
+// 托管提现API
+export const escrowAPI = {
+  // 获取账户信息
+  getAccount: () => request('/escrow/account'),
+
+  // 托管资金
+  deposit: (data: { task_id: string; amount: number }) =>
+    request('/escrow/deposit', { method: 'POST', data }),
+
+  // 释放资金
+  release: (data: { task_id: string }) =>
+    request('/escrow/release', { method: 'POST', data }),
+
+  // 退款
+  refund: (data: { task_id: string; reason: string }) =>
+    request('/escrow/refund', { method: 'POST', data }),
+
+  // 获取交易记录
+  getTransactions: (params?: { page?: number; limit?: number; type?: string }) =>
+    request('/escrow/transactions', { method: 'GET', data: params }),
+
+  // 申请提现
+  requestWithdrawal: (data: { amount: number; account_type: string; account_info: any }) =>
+    request('/escrow/withdraw', { method: 'POST', data }),
+
+  // 获取提现记录
+  getWithdrawals: (params?: { page?: number; limit?: number; status?: string }) =>
+    request('/escrow/withdrawals', { method: 'GET', data: params }),
+
+  // 取消提现
+  cancelWithdrawal: (withdrawalId: string) =>
+    request(`/escrow/withdrawals/${withdrawalId}/cancel`, { method: 'POST' })
+}
+
+// 安全相关API
+export const securityAPI = {
+  // 获取安全承诺列表
+  getCommitments: () => request('/security/commitments', { needAuth: false }),
+
+  // 获取合作进度
+  getCollaborationProgress: (studentId: string, companyId: string) =>
+    request(`/security/collaboration-progress/${studentId}/${companyId}`),
+
+  // 获取用户所有合作进度
+  getMyCollaborations: () => request('/security/my-collaborations'),
+
+  // 获取访问日志
+  getAccessLogs: (resourceType: string, resourceId: string, limit?: number) =>
+    request(`/security/access-logs/${resourceType}/${resourceId}`, {
+      method: 'GET',
+      data: { limit }
+    }),
+
+  // 获取用户访问历史
+  getMyAccessLogs: (limit?: number) =>
+    request('/security/my-access-logs', { method: 'GET', data: { limit } }),
+
+  // 申请解锁联系方式
+  requestUnlock: (data: { studentId: string; companyId: string; taskId: string }) =>
+    request('/security/unlock-contact/request', { method: 'POST', data }),
+
+  // 同意解锁
+  approveUnlock: (data: { studentId: string; companyId: string }) =>
+    request('/security/unlock-contact/approve', { method: 'POST', data }),
+
+  // 拒绝解锁
+  rejectUnlock: (data: { studentId: string; companyId: string }) =>
+    request('/security/unlock-contact/reject', { method: 'POST', data }),
+
+  // 获取已解锁的联系方式
+  getUnlockedContact: (studentId: string, companyId: string) =>
+    request(`/security/unlock-contact/${studentId}/${companyId}`),
+
+  // 获取解锁状态
+  getUnlockStatus: (studentId: string, companyId: string) =>
+    request(`/security/unlock-status/${studentId}/${companyId}`),
+
+  // 获取我的所有解锁请求
+  getMyUnlockRequests: () => request('/security/my-unlock-requests')
+}
+
 export default {
   task: taskAPI,
   match: matchAPI,
   auth: authAPI,
   chat: chatAPI,
   payment: paymentAPI,
-  notification: notificationAPI
+  notification: notificationAPI,
+  draft: draftAPI,
+  aiPricing: aiPricingAPI,
+  rating: ratingAPI,
+  escrow: escrowAPI,
+  security: securityAPI
 }

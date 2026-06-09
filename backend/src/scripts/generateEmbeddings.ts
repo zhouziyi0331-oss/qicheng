@@ -50,9 +50,9 @@ async function generateStudentEmbeddings() {
       u.university,
       u.major,
       u.opc_personality_tag,
-      sp.track,
-      sp.level_a,
-      sp.level_b,
+      u.track,
+      u.current_level,
+      u.current_level,
       sp.opc_label,
       sa.openness,
       sa.persistence,
@@ -60,7 +60,7 @@ async function generateStudentEmbeddings() {
       sa.primary_track,
       sa.current_level
     FROM users u
-    LEFT JOIN student_profiles sp ON u.id = sp.user_id
+    LEFT JOIN users u ON u.id = u.id
     LEFT JOIN student_abilities sa ON u.id = sa.user_id
     WHERE u.role = 'student' AND u.skills_embedding IS NULL
     LIMIT 100
@@ -77,7 +77,7 @@ async function generateStudentEmbeddings() {
         OPC性格标签: ${student.opc_personality_tag || ''}
         OPC标签: ${student.opc_label || ''}
         赛道: ${student.track || student.primary_track || ''}
-        等级: A赛道${student.level_a || 0}级, B赛道${student.level_b || 0}级, 当前${student.current_level || 0}级
+        等级: A赛道${student.current_level || 0}级, B赛道${student.level_b || 0}级, 当前${student.current_level || 0}级
         能力: 开放性${student.openness || 50}, 坚持性${student.persistence || 50}, 创造性${student.creativity || 50}
       `.trim();
 

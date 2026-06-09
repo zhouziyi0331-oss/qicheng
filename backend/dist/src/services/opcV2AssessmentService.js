@@ -196,6 +196,30 @@ class OPCV2AssessmentService {
         await db_1.pool.query(`UPDATE opc_v2_assessments
        SET status = 'completed', completed_at = CURRENT_TIMESTAMP
        WHERE id = $1`, [assessmentId]);
+        // 自动触发工作条件画像生成（异步队列）
+        try {
+            const { enqueueAITask, AITaskType } = require('./aiTaskQueue');
+            const studentId = assessmentInfo.rows[0].student_id;
+            // 获取完整的答案数据
+            const allAnswers = await db_1.pool.query(`SELECT question_id, answer_value FROM opc_v2_answers WHERE assessment_id = $1`, [assessmentId]);
+            const answers = {};
+            for (const ans of allAnswers.rows) {
+                answers[ans.question_id] = ans.answer_value;
+            }
+            // 添加到队列（异步处理）
+            await enqueueAITask({
+                type: AITaskType.PROFILE_ANALYSIS,
+                studentId,
+                assessmentId,
+                answers,
+                scores: result
+            });
+            console.log(`[OPC] Enqueued work condition profile generation for student ${studentId}`);
+        }
+        catch (error) {
+            console.error('[OPC] Failed to enqueue work condition profile generation:', error);
+            // 不影响测试完成流程，只记录错误
+        }
         return savedResult.rows[0];
     }
     /**

@@ -1,0 +1,352 @@
+.featured-projects-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+// 头部
+.featured-header {
+  padding: 40px 30px;
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .header-icon {
+      font-size: 64px;
+    }
+
+    .header-text {
+      flex: 1;
+
+      .header-title {
+        display: block;
+        font-size: 40px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 8px;
+      }
+
+      .header-subtitle {
+        display: block;
+        font-size: 24px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+}
+
+// 领域筛选
+.domain-filter {
+  display: flex;
+  padding: 20px 30px;
+  background: #1a1a2e;
+  white-space: nowrap;
+  border-bottom: 2px solid rgba(251, 191, 36, 0.2);
+
+  .domain-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 24px;
+    margin-right: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+
+    .domain-icon {
+      font-size: 32px;
+    }
+
+    .domain-label {
+      font-size: 22px;
+      color: rgba(255, 255, 255, 0.7);
+      white-space: nowrap;
+    }
+
+    &.active {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.3) 100%);
+      border-color: #FBBF24;
+      transform: scale(1.05);
+
+      .domain-label {
+        color: white;
+        font-weight: bold;
+      }
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+// 项目列表
+.projects-list {
+  flex: 1;
+  padding: 30px;
+
+  .empty-projects {
+    text-align: center;
+    padding: 120px 40px;
+
+    .empty-icon {
+      display: block;
+      font-size: 120px;
+      margin-bottom: 30px;
+      opacity: 0.5;
+    }
+
+    .empty-text {
+      display: block;
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .empty-hint {
+      display: block;
+      font-size: 26px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .featured-card {
+    position: relative;
+    margin-bottom: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 28px;
+    overflow: hidden;
+    border: 3px solid rgba(251, 191, 36, 0.3);
+    box-shadow: 0 8px 32px rgba(251, 191, 36, 0.2);
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: scale(0.98);
+      border-color: rgba(251, 191, 36, 0.6);
+      box-shadow: 0 4px 24px rgba(251, 191, 36, 0.3);
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+      border-radius: 35px;
+      box-shadow: 0 4px 16px rgba(251, 191, 36, 0.5);
+      z-index: 10;
+
+      .rank-number {
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+      }
+    }
+
+    .card-cover {
+      position: relative;
+      width: 100%;
+      height: 350px;
+
+      .cover-image {
+        width: 100%;
+        height: 100%;
+      }
+
+      .cover-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.3) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .placeholder-icon {
+          font-size: 100px;
+        }
+      }
+
+      .cover-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        padding: 20px;
+
+        .featured-star {
+          width: 80px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(251, 191, 36, 0.9);
+          border-radius: 40px;
+          font-size: 48px;
+          box-shadow: 0 4px 16px rgba(251, 191, 36, 0.5);
+        }
+      }
+    }
+
+    .card-content {
+      padding: 30px;
+
+      .project-title {
+        display: block;
+        font-size: 34px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 16px;
+        line-height: 1.4;
+      }
+
+      .project-description {
+        display: block;
+        font-size: 26px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+        margin-bottom: 24px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
+
+      .recommendation {
+        padding: 24px;
+        margin-bottom: 24px;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+        border-radius: 20px;
+        border-left: 4px solid #FBBF24;
+
+        .recommendation-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+
+          .recommendation-icon {
+            font-size: 28px;
+          }
+
+          .recommendation-label {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FBBF24;
+          }
+        }
+
+        .recommendation-text {
+          display: block;
+          font-size: 24px;
+          color: rgba(255, 255, 255, 0.8);
+          line-height: 1.6;
+          font-style: italic;
+        }
+      }
+
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 24px;
+
+        .tag-item {
+          padding: 10px 20px;
+          background: rgba(251, 191, 36, 0.2);
+          border-radius: 14px;
+          font-size: 22px;
+          color: #FCD34D;
+          border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+      }
+
+      .student-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 24px;
+        border-top: 2px solid rgba(251, 191, 36, 0.2);
+
+        .student-profile {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          .student-avatar,
+          .student-avatar-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            flex-shrink: 0;
+          }
+
+          .student-avatar {
+            display: block;
+            border: 2px solid #FBBF24;
+          }
+
+          .student-avatar-placeholder {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+          }
+
+          .student-name {
+            font-size: 26px;
+            color: white;
+            font-weight: bold;
+          }
+        }
+
+        .project-stats {
+          display: flex;
+          gap: 24px;
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .stat-icon {
+              font-size: 28px;
+            }
+
+            .stat-value {
+              font-size: 24px;
+              color: rgba(255, 255, 255, 0.7);
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loading-more,
+  .no-more {
+    text-align: center;
+    padding: 40px;
+    font-size: 26px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}

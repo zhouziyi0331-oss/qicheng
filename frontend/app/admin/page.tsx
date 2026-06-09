@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { adminApi } from "@/lib/api";
 
 interface Dashboard {
@@ -11,17 +12,32 @@ interface Dashboard {
 }
 
 export default function AdminPage() {
+  const router = useRouter();
   const [stats, setStats] = useState<Dashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeModule, setActiveModule] = useState("dashboard");
+  const [adminUser, setAdminUser] = useState<any>(null);
 
   useEffect(() => {
+    // 获取管理员信息
+    const userStr = localStorage.getItem("adminUser");
+    if (userStr) {
+      setAdminUser(JSON.parse(userStr));
+    }
+
     adminApi.dashboard()
       .then(({ data }) => setStats(data.data))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminUser");
+    document.cookie = "adminToken=; path=/; max-age=0";
+    router.push("/admin/login");
+  };
 
   const modules = [
     { id: "dashboard", href: "/admin", label: "数据看板", icon: "📊" },
@@ -30,10 +46,15 @@ export default function AdminPage() {
     { id: "tasks", href: "/admin/tasks", label: "任务管理", icon: "📋" },
     { id: "orders", href: "/admin/orders", label: "订单管理", icon: "📦" },
     { id: "mentors", href: "/admin/mentors", label: "导师管理", icon: "👨‍🏫" },
+    { id: "ratings", href: "/admin/ratings", label: "评价管理", icon: "⭐" },
     { id: "ai", href: "/admin/ai", label: "AI引擎", icon: "🤖" },
     { id: "content", href: "/admin/content", label: "内容管理", icon: "📝" },
     { id: "finance", href: "/admin/finance", label: "财务管理", icon: "💰" },
+    { id: "withdrawals", href: "/admin/platform/withdrawals", label: "提现审核", icon: "💸" },
+    { id: "metrics", href: "/admin/platform/metrics", label: "平台指标", icon: "📈" },
+    { id: "config", href: "/admin/config", label: "系统配置", icon: "⚙️" },
     { id: "support", href: "/admin/support", label: "客服工具", icon: "💬" },
+    { id: "logs", href: "/admin/logs", label: "审计日志", icon: "📋" },
   ];
 
   return (
@@ -154,13 +175,40 @@ export default function AdminPage() {
               fontSize: "16px",
               fontWeight: "700"
             }}>
-              A
+              {adminUser?.username?.[0]?.toUpperCase() || "A"}
             </div>
             {!sidebarCollapsed && (
               <div style={{ flex: 1 }}>
-                <div style={{ color: "#F1F5F9", fontSize: "13px", fontWeight: "600" }}>Admin</div>
-                <div style={{ color: "#8E96A5", fontSize: "11px" }}>超级管理员</div>
+                <div style={{ color: "#F1F5F9", fontSize: "13px", fontWeight: "600" }}>
+                  {adminUser?.username || "Admin"}
+                </div>
+                <div style={{ color: "#8E96A5", fontSize: "11px" }}>
+                  {adminUser?.role?.name || "超级管理员"}
+                </div>
               </div>
+            )}
+            {!sidebarCollapsed && (
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: "rgba(239, 68, 68, 0.1)",
+                  border: "1px solid rgba(239, 68, 68, 0.2)",
+                  borderRadius: "6px",
+                  padding: "6px 12px",
+                  color: "#EF4444",
+                  fontSize: "12px",
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(239, 68, 68, 0.2)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)";
+                }}
+              >
+                登出
+              </button>
             )}
           </div>
         </div>

@@ -98,6 +98,18 @@ async function createTask(req, res, next) {
                 logger_1.default.error('Failed to match students for invitation task', { taskId: task.id, error: err.message });
             });
         }
+        // 新增：所有任务发布后，立即触发语义匹配（异步执行，不阻塞响应）
+        try {
+            const matchingScheduler = require('../../services/matchingScheduler').default;
+            matchingScheduler.matchTaskToAllStudents(task.id).catch((err) => {
+                logger_1.default.error(`Failed to match new task ${task.id} to students:`, err);
+            });
+            logger_1.default.info(`Triggered matching for new task ${task.id}`);
+        }
+        catch (error) {
+            logger_1.default.error('Failed to trigger matching for new task:', error);
+            // 不抛出错误，匹配失败不应该影响任务创建
+        }
         logger_1.default.info('Company task created', { taskId: task.id, companyId, publishType });
         res.status(201).json({
             success: true,
@@ -177,7 +189,7 @@ async function approveTask(req, res, next) {
          SET status = 'approved', company_score = $1, company_feedback = $2, approved_at = NOW()
          WHERE id = $3`, [finalScore, finalFeedback, submission.id]);
             // 更新任务状态为完成
-            await client.query(`UPDATE tasks SET status = 'completed' WHERE id = $1`, [taskId]);
+            await client.query(`UPDATE tasks SET status = 'completed', completed_at = NOW() WHERE id = $1`, [taskId]);
             // 获取任务金额
             const taskResult = await client.query('SELECT budget_net, is_first_task FROM tasks WHERE id = $1', [taskId]);
             const { budget_net, is_first_task } = taskResult.rows[0];
@@ -192,7 +204,7 @@ async function approveTask(req, res, next) {
                 is_first_task,
             ]);
             // 更新学生任务统计
-            await client.query(`UPDATE student_profiles
+            await client.query(`UPDATE student_capabilities
          SET task_count = task_count + 1, total_earnings = total_earnings + $1
          WHERE user_id = $2`, [budget_net, submission.student_id]);
             // 智能更新六维分数（基于任务表现）
@@ -215,6 +227,26 @@ async function approveTask(req, res, next) {
             await client.query(`UPDATE emotion_signals SET resolved_at = NOW()
          WHERE user_id = $1 AND signal_type IN ('frustrated', 'cooling') AND resolved_at IS NULL`, [submission.student_id]);
         });
+        // 记录任务完成行为（第十一刀修复）
+        try {
+            const behaviorLearningService = require('../../services/behaviorLearningService').default;
+            await behaviorLearningService.logTaskComplete(submission.student_id, taskId);
+        }
+        catch (error) {
+            logger_1.default.error('Failed to log task complete behavior:', error);
+        }
+        // 任务完成后自动更新学生画像（第二刀深层修复）
+        try {
+            const studentCapabilityService = require('../../services/studentCapabilityService').default;
+            await studentCapabilityService.updateAfterTaskCompletion(submission.student_id, taskId, {
+                score: finalScore,
+                completedAt: new Date(),
+            });
+            logger_1.default.info(`Updated student capability after task completion: ${submission.student_id}`);
+        }
+        catch (error) {
+            logger_1.default.error('Failed to update student capability after task completion:', error);
+        }
         // 首单: 触发24h结算通知
         if (submission.is_first_task) {
             setImmediate(() => scheduleFirstTaskSettlement(submission.student_id, taskId).catch(logger_1.default.error));

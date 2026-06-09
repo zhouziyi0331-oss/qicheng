@@ -70,14 +70,29 @@ const express_1 = require("express");
 const auth_1 = require("../../middleware/auth");
 const studentCtrl = __importStar(require("./studentController"));
 const companyCtrl = __importStar(require("./companyController"));
+const matchingCtrl = __importStar(require("./matchingController"));
 const businessFlowRoutes_1 = __importDefault(require("./businessFlowRoutes"));
 const router = (0, express_1.Router)();
 // ============================================
 // 完整业务流程路由 (新增)
 // ============================================
 router.use('/flow', businessFlowRoutes_1.default);
+// ============================================
+// 语义匹配系统路由 (新增)
+// ============================================
+// 企业端匹配API
+router.post('/:taskId/trigger-matching', auth_1.authenticate, (0, auth_1.requireRole)('company'), matchingCtrl.triggerMatching);
+router.post('/:taskId/rematch', auth_1.authenticate, (0, auth_1.requireRole)('company'), matchingCtrl.rematchTask);
+router.get('/:taskId/matched-students', auth_1.authenticate, (0, auth_1.requireRole)('company'), matchingCtrl.getMatchedStudents);
+router.post('/:taskId/push-to-students', auth_1.authenticate, (0, auth_1.requireRole)('company'), matchingCtrl.pushToStudents);
+router.get('/:taskId/matching-stats', auth_1.authenticate, (0, auth_1.requireRole)('company'), matchingCtrl.getMatchingStats);
+// 学生端匹配API
+router.get('/students/recommended-tasks', auth_1.authenticate, (0, auth_1.requireRole)('student'), matchingCtrl.getRecommendedTasks);
+router.get('/:taskId/translation', auth_1.authenticate, matchingCtrl.getTaskTranslation);
+router.post('/:taskId/accept-recommendation', auth_1.authenticate, (0, auth_1.requireRole)('student'), matchingCtrl.acceptRecommendation);
 // 公开/登录可见
 router.get('/market', auth_1.authenticate, studentCtrl.getMarketTasks);
+router.get('/matched', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getMatchedTasks);
 router.get('/my', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getMyTasks);
 router.get('/recommended', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getRecommendedTasks);
 router.get('/:id', auth_1.authenticate, studentCtrl.getTaskDetail);
@@ -85,6 +100,7 @@ router.get('/:id', auth_1.authenticate, studentCtrl.getTaskDetail);
 router.post('/:id/accept', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.acceptTask);
 router.get('/:id/steps', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getTaskSteps);
 router.post('/:id/steps/:num/done', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.completeStep);
+router.post('/:id/progress', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.updateProgress);
 router.post('/:id/submit', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.submitTask);
 router.get('/:id/supplements', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.getTaskSupplements);
 router.post('/:id/supplements/:supplementId/respond', auth_1.authenticate, (0, auth_1.requireRole)('student'), studentCtrl.respondToSupplement);

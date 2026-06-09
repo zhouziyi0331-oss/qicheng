@@ -1,0 +1,429 @@
+@import '../../styles/theme.scss';
+
+.ability-trend-page {
+  min-height: 100vh;
+  background: $gradient-bg;
+  padding: 20px;
+  padding-bottom: 100px;
+}
+
+/* 页面标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: $text-secondary;
+  display: block;
+}
+
+/* 加载和空状态 */
+.loading,
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-secondary;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.empty-hint {
+  font-size: 13px;
+  color: $text-tertiary;
+  display: block;
+}
+
+/* 版本概览 */
+.version-overview {
+  @include card-super-rounded;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.1) 0%, rgba(196, 181, 253, 0.1) 100%);
+}
+
+.overview-item {
+  text-align: center;
+}
+
+.overview-label {
+  display: block;
+  font-size: 12px;
+  color: $text-tertiary;
+  margin-bottom: 4px;
+}
+
+.overview-value {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.overview-divider {
+  width: 1px;
+  height: 40px;
+  background: $border-light;
+}
+
+/* 对比卡片 */
+.comparison-card {
+  @include card-super-rounded;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  display: block;
+  font-size: 13px;
+  color: $text-secondary;
+  margin-bottom: 20px;
+}
+
+/* 维度列表 */
+.dimensions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dimension-item {
+  padding-bottom: 20px;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.dimension-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.dimension-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.dimension-change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.change-value {
+  font-size: 16px;
+  font-weight: 700;
+
+  &.positive {
+    color: #22c55e;
+  }
+
+  &.negative {
+    color: #ef4444;
+  }
+}
+
+.change-percent {
+  font-size: 12px;
+  color: $text-tertiary;
+}
+
+/* 进度条 */
+.dimension-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-label {
+  font-size: 12px;
+  color: $text-secondary;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.bar-container {
+  flex: 1;
+  height: 8px;
+  background: $bg-secondary;
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: $radius-full;
+  transition: width 0.3s ease;
+
+  &.initial {
+    opacity: 0.5;
+  }
+
+  &.current {
+    opacity: 1;
+  }
+}
+
+.bar-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-primary;
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 版本历史 */
+.version-history {
+  @include card-super-rounded;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: $border-light;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  padding: 12px 0 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.current {
+    .timeline-dot {
+      background: $primary-color;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+    }
+  }
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: $bg-secondary;
+  border: 2px solid $card-white;
+  transition: all 0.3s ease;
+}
+
+.timeline-content {
+  background: $bg-secondary;
+  padding: 12px 16px;
+  border-radius: $radius-lg;
+}
+
+.version-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.version-number {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.current-badge {
+  padding: 2px 8px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: $radius-full;
+}
+
+.badge-text {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.version-reason {
+  display: block;
+  font-size: 13px;
+  color: $text-secondary;
+  margin-bottom: 4px;
+}
+
+.version-date {
+  display: block;
+  font-size: 12px;
+  color: $text-tertiary;
+}
+
+/* 版本详情 */
+.version-detail {
+  @include card-super-rounded;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.description-item {
+  padding: 16px;
+  background: $bg-secondary;
+  border-radius: $radius-lg;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.desc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.desc-dimension {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.desc-scores {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.desc-old {
+  font-size: 14px;
+  color: $text-tertiary;
+}
+
+.desc-arrow {
+  font-size: 14px;
+  color: $text-tertiary;
+}
+
+.desc-new {
+  font-size: 14px;
+  font-weight: 600;
+  color: $primary-color;
+}
+
+.desc-reason {
+  display: block;
+  font-size: 13px;
+  color: $text-secondary;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: rgba(147, 197, 253, 0.1);
+  border-radius: $radius-md;
+}
+
+.desc-current {
+  display: block;
+  font-size: 13px;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+/* 雷达图（占位，实际需要canvas或图表库） */
+.radar-chart {
+  width: 240px;
+  height: 240px;
+  margin: 20px auto;
+  position: relative;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.radar-point {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.point-label {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.label-text {
+  display: block;
+  font-size: 11px;
+  color: $text-secondary;
+  margin-bottom: 2px;
+}
+
+.label-score {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-primary;
+}

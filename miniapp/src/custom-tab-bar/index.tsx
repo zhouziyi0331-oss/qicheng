@@ -7,6 +7,7 @@ import './index.scss'
 export default class CustomTabBar extends Component {
   state = {
     selected: 0,
+    userLevel: 0,
     list: [
       {
         pagePath: '/pages/index/index',
@@ -26,6 +27,12 @@ export default class CustomTabBar extends Component {
         isCenter: true
       },
       {
+        pagePath: '/pages/community/index',
+        text: '社区',
+        iconType: 'community',
+        requiredLevel: 4
+      },
+      {
         pagePath: '/pages/story/index',
         text: '故事墙',
         iconType: 'story'
@@ -38,8 +45,45 @@ export default class CustomTabBar extends Component {
     ]
   }
 
+  componentDidMount() {
+    this.loadUserLevel()
+  }
+
+  loadUserLevel = async () => {
+    try {
+      const token = Taro.getStorageSync('token')
+      if (!token) return
+
+      const res = await Taro.request({
+        url: '/api/v1/user/profile',
+        method: 'GET',
+        header: { 'Authorization': `Bearer ${token}` }
+      })
+
+      if (res.data.success) {
+        this.setState({
+          userLevel: res.data.data.current_level || 0
+        })
+      }
+    } catch (error) {
+      console.error('加载用户等级失败:', error)
+    }
+  }
+
   switchTab(index, url) {
-    const { isCenter } = this.state.list[index]
+    const { list, userLevel } = this.state
+    const item = list[index]
+    const { isCenter, requiredLevel } = item
+
+    // 检查等级权限
+    if (requiredLevel && userLevel < requiredLevel) {
+      Taro.showToast({
+        title: `达到Lv.${requiredLevel}后解锁`,
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
 
     if (isCenter) {
       // 中央按钮：跳转到AI导师页面（使用navigateTo而不是switchTab）
@@ -70,6 +114,7 @@ export default class CustomTabBar extends Component {
     const iconMap = {
       home: <Text className="tab-icon-text">⌂</Text>,
       tasks: <Text className="tab-icon-text">☐</Text>,
+      community: <Text className="tab-icon-text">💬</Text>,
       story: <Text className="tab-icon-text">◐</Text>,
       profile: <Text className="tab-icon-text">◯</Text>
     }
@@ -78,13 +123,14 @@ export default class CustomTabBar extends Component {
   }
 
   render() {
-    const { selected, list } = this.state
+    const { selected, list, userLevel } = this.state
 
     return (
       <View className="custom-tab-bar">
         {list.map((item, index) => {
           const isActive = selected === index
-          const { isCenter } = item
+          const { isCenter, requiredLevel } = item
+          const isLocked = requiredLevel && userLevel < requiredLevel
 
           if (isCenter) {
             // 中央启程小猫按钮（只显示logo，不显示文字）
@@ -105,13 +151,16 @@ export default class CustomTabBar extends Component {
           return (
             <View
               key={index}
-              className={`tab-item ${isActive ? 'active' : ''}`}
+              className={`tab-item ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => this.switchTab(index, item.pagePath)}
             >
               <View className="tab-icon-wrapper">
-                {this.renderIcon(item.iconType, isActive)}
+                {isLocked ? <Text className="tab-icon-text">🔒</Text> : this.renderIcon(item.iconType, isActive)}
               </View>
-              <Text className="tab-text">{item.text}</Text>
+              <Text className="tab-text">
+                {item.text}
+                {isLocked && <Text className="lock-hint"> Lv.{requiredLevel}</Text>}
+              </Text>
             </View>
           )
         })}

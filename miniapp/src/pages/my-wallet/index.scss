@@ -1,0 +1,307 @@
+@import '../../styles/theme.scss';
+
+.my-wallet-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: 32rpx;
+
+  .page-title {
+    font-size: 48rpx;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 32rpx;
+  }
+
+  // 账户余额卡片
+  .balance-card {
+    @include card-super-rounded;
+    background: linear-gradient(135deg, $accent-green 0%, $accent-blue 100%);
+    margin-bottom: 32rpx;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300rpx;
+      height: 300rpx;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .balance-info {
+      position: relative;
+      z-index: 1;
+
+      .balance-label {
+        font-size: 28rpx;
+        color: rgba(45, 52, 54, 0.8);
+        margin-bottom: 16rpx;
+      }
+
+      .balance-amount {
+        font-size: 72rpx;
+        font-weight: 700;
+        color: $text-primary;
+        font-family: -apple-system-font, sans-serif;
+        margin-bottom: 24rpx;
+
+        .currency {
+          font-size: 48rpx;
+          margin-right: 8rpx;
+        }
+      }
+
+      .balance-details {
+        display: flex;
+        gap: 48rpx;
+
+        .detail-item {
+          .detail-label {
+            font-size: 24rpx;
+            color: rgba(45, 52, 54, 0.7);
+            margin-bottom: 8rpx;
+          }
+
+          .detail-value {
+            font-size: 32rpx;
+            font-weight: 600;
+            color: $text-primary;
+          }
+        }
+      }
+    }
+
+    .withdraw-btn {
+      margin-top: 32rpx;
+      padding: 28rpx;
+      background: $card-white;
+      border-radius: $radius-lg;
+      text-align: center;
+      font-size: 32rpx;
+      font-weight: 600;
+      color: $text-primary;
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // 标签页
+  .tabs {
+    display: flex;
+    gap: 16rpx;
+    margin-bottom: 32rpx;
+
+    .tab-btn {
+      flex: 1;
+      padding: 24rpx;
+      background: $card-white;
+      border-radius: $radius-lg;
+      text-align: center;
+      font-size: 28rpx;
+      font-weight: 600;
+      color: $text-secondary;
+      box-shadow: $shadow-sm;
+      transition: all 0.3s;
+
+      &.active {
+        background: $gradient-primary;
+        color: $text-primary;
+        box-shadow: $shadow-md;
+      }
+    }
+  }
+
+  // 交易/提现列表
+  .records-list {
+    .loading {
+      text-align: center;
+      padding: 80rpx 0;
+      color: $text-secondary;
+      font-size: 28rpx;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 120rpx 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        display: block;
+        margin-bottom: 24rpx;
+      }
+
+      .empty-text {
+        color: $text-secondary;
+        font-size: 28rpx;
+      }
+    }
+
+    .record-card {
+      @include card-super-rounded;
+      margin-bottom: 24rpx;
+
+      .record-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16rpx;
+
+        .record-type {
+          display: flex;
+          align-items: center;
+          gap: 12rpx;
+
+          .type-icon {
+            font-size: 40rpx;
+          }
+
+          .type-info {
+            .type-name {
+              font-size: 32rpx;
+              font-weight: 600;
+              color: $text-primary;
+              margin-bottom: 4rpx;
+            }
+
+            .type-desc {
+              font-size: 24rpx;
+              color: $text-secondary;
+            }
+          }
+        }
+
+        .record-amount {
+          font-size: 40rpx;
+          font-weight: 700;
+          font-family: -apple-system-font, sans-serif;
+
+          &.income {
+            color: $accent-green;
+          }
+
+          &.expense {
+            color: $accent-orange;
+          }
+        }
+      }
+
+      .record-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 16rpx;
+        border-top: 2rpx solid $bg-secondary;
+
+        .record-time {
+          font-size: 24rpx;
+          color: $text-light;
+        }
+
+        .record-status {
+          padding: 8rpx 20rpx;
+          border-radius: $radius-full;
+          font-size: 24rpx;
+          font-weight: 600;
+
+          &.pending {
+            background: rgba(255, 183, 77, 0.2);
+            color: $accent-orange;
+          }
+
+          &.completed {
+            background: rgba(212, 242, 145, 0.3);
+            color: #7CB342;
+          }
+
+          &.failed {
+            background: rgba(239, 83, 80, 0.2);
+            color: #EF5350;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 提现弹窗
+.withdraw-modal {
+  .modal-content {
+    background: $card-white;
+    border-radius: $radius-xl;
+    padding: 48rpx;
+
+    .modal-title {
+      font-size: 40rpx;
+      font-weight: 700;
+      color: $text-primary;
+      text-align: center;
+      margin-bottom: 32rpx;
+    }
+
+    .form-group {
+      margin-bottom: 32rpx;
+
+      .form-label {
+        font-size: 28rpx;
+        color: $text-secondary;
+        margin-bottom: 16rpx;
+      }
+
+      .form-input {
+        padding: 24rpx;
+        background: $bg-secondary;
+        border-radius: $radius-lg;
+        font-size: 32rpx;
+        color: $text-primary;
+        border: 2rpx solid transparent;
+        transition: all 0.3s;
+
+        &:focus {
+          border-color: $accent-green;
+          background: $card-white;
+        }
+      }
+
+      .amount-input {
+        font-size: 48rpx;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .fee-info {
+        font-size: 24rpx;
+        color: $text-light;
+        margin-top: 12rpx;
+        text-align: center;
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 24rpx;
+      margin-top: 48rpx;
+
+      .btn {
+        flex: 1;
+        padding: 28rpx;
+        border-radius: $radius-lg;
+        text-align: center;
+        font-size: 32rpx;
+        font-weight: 600;
+
+        &.cancel {
+          background: $bg-secondary;
+          color: $text-secondary;
+        }
+
+        &.confirm {
+          background: $gradient-primary;
+          color: $text-primary;
+          box-shadow: $shadow-md;
+        }
+      }
+    }
+  }
+}

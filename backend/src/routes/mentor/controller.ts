@@ -30,9 +30,9 @@ export async function sendTaskStartGuidance(taskId: string, studentId: string): 
     const student = await queryOne<{
       opc_label: string;
       level: number;
-      task_count: number;
+      tasks_completed: number;
       six_dim_scores: any;
-    }>('SELECT opc_label, level, task_count, six_dim_scores FROM student_profiles WHERE user_id = $1', [studentId]);
+    }>('SELECT opc_label, level, tasks_completed, six_dim_scores FROM student_capabilities WHERE student_id = $1', [studentId]);
 
     // 获取学生历史使用过的工具
     const toolHistory = await query<{ tool: string }>(
@@ -56,7 +56,7 @@ export async function sendTaskStartGuidance(taskId: string, studentId: string): 
 ## 学生信息
 - OPC标签：${student?.opc_label || '未测评'}
 - 等级：Lv.${student?.level || 0}
-- 历史任务数：${student?.task_count || 0}
+- 历史任务数：${student?.tasks_completed || 0}
 - 用过的工具：${usedTools}
 
 ## 你的任务
@@ -106,7 +106,7 @@ export async function sendTaskStartGuidance(taskId: string, studentId: string): 
 ② 准备好需要的工具和素材
 ③ 按步骤完成，不确定的地方随时问我
 
-${student?.task_count === 0 ? '这是你的第一单，不用紧张，我会一直陪着你。' : ''}
+${student?.tasks_completed === 0 ? '这是你的第一单，不用紧张，我会一直陪着你。' : ''}
 
 如果卡住了，随时告诉我卡在哪里，我们一起想办法！`;
     }
@@ -478,8 +478,8 @@ export async function celebrateMilestone(
     const student = await queryOne<{
       opc_label: string;
       level: number;
-      task_count: number;
-    }>('SELECT opc_label, level, task_count FROM student_profiles WHERE user_id = $1', [studentId]);
+      tasks_completed: number;
+    }>('SELECT opc_label, level, tasks_completed FROM student_capabilities WHERE student_id = $1', [studentId]);
 
     // 获取历史里程碑
     const milestoneHistory = await query<{ milestone_type: string; mentor_message: string }>(
@@ -501,7 +501,7 @@ ${JSON.stringify(milestoneData, null, 2)}
 ## 学生信息
 - OPC标签：${student?.opc_label}
 - 等级：Lv.${student?.level}
-- 完成任务数：${student?.task_count}
+- 完成任务数：${student?.tasks_completed}
 
 ## 历史里程碑
 ${milestoneHistory.map((m: { milestone_type: string; mentor_message: string }) => `- ${m.milestone_type}: ${m.mentor_message}`).join('\n')}

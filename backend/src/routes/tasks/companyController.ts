@@ -77,6 +77,18 @@ export async function createTask(req: Request, res: Response, next: NextFunction
       });
     }
 
+    // 新增：所有任务发布后，立即触发语义匹配（异步执行，不阻塞响应）
+    try {
+      const matchingScheduler = require('../../services/matchingScheduler').default;
+      matchingScheduler.matchTaskToAllStudents(task.id).catch((err: Error) => {
+        logger.error(`Failed to match new task ${task.id} to students:`, err);
+      });
+      logger.info(`Triggered matching for new task ${task.id}`);
+    } catch (error) {
+      logger.error('Failed to trigger matching for new task:', error);
+      // 不抛出错误，匹配失败不应该影响任务创建
+    }
+
     logger.info('Company task created', { taskId: task.id, companyId, publishType });
 
     res.status(201).json({
@@ -187,7 +199,7 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
 
       // 更新任务状态为完成
       await client.query(
-        `UPDATE tasks SET status = 'completed' WHERE id = $1`,
+        `UPDATE tasks SET status = 'completed', completed_at = NOW() WHERE id = $1`,
         [taskId]
       );
 
@@ -214,7 +226,7 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
 
       // 更新学生任务统计
       await client.query(
-        `UPDATE student_profiles
+        `UPDATE student_capabilities
          SET task_count = task_count + 1, total_earnings = total_earnings + $1
          WHERE user_id = $2`,
         [budget_net, submission.student_id]
@@ -258,6 +270,26 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
         [submission.student_id]
       );
     });
+
+    // 记录任务完成行为（第十一刀修复）
+    try {
+      const behaviorLearningService = require('../../services/behaviorLearningService').default;
+      await behaviorLearningService.logTaskComplete(submission.student_id, taskId);
+    } catch (error) {
+      logger.error('Failed to log task complete behavior:', error);
+    }
+
+    // 任务完成后自动更新学生画像（第二刀深层修复）
+    try {
+      const studentCapabilityService = require('../../services/studentCapabilityService').default;
+      await studentCapabilityService.updateAfterTaskCompletion(submission.student_id, taskId, {
+        score: finalScore,
+        completedAt: new Date(),
+      });
+      logger.info(`Updated student capability after task completion: ${submission.student_id}`);
+    } catch (error) {
+      logger.error('Failed to update student capability after task completion:', error);
+    }
 
     // 首单: 触发24h结算通知
     if (submission.is_first_task) {

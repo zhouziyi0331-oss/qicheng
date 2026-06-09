@@ -28,14 +28,14 @@ class AutoConfirmationJob {
           t.id as task_id,
           t.title,
           t.company_id,
-          t.student_id,
+          t.accepted_student_id as student_id,
           t.budget_gross as price,
           p.paid_at as final_payment_at
         FROM tasks t
         INNER JOIN payments p ON t.id = p.task_id
         WHERE t.status = 'completed'
           AND p.payment_type = 'final'
-          AND p.status = 'completed'
+          AND p.status = 'settled'
           AND p.paid_at < NOW() - INTERVAL '7 days'
           AND NOT EXISTS (
             SELECT 1 FROM auto_confirmations ac

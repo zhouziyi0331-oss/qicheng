@@ -7,7 +7,9 @@ import './index.scss'
 
 export default function Login() {
   const [loginType, setLoginType] = useState<'wechat' | 'phone'>('wechat')
+  const [phoneLoginType, setPhoneLoginType] = useState<'password' | 'code'>('password')
   const [phone, setPhone] = useState('')
+  const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
   const [countdown, setCountdown] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -125,22 +127,45 @@ export default function Login() {
 
   // 手机号登录
   const handlePhoneLogin = async () => {
-    if (!phone || !code) {
-      Taro.showToast({ title: '请填写完整信息', icon: 'none' })
+    if (!phone) {
+      Taro.showToast({ title: '请输入手机号', icon: 'none' })
+      return
+    }
+
+    if (phoneLoginType === 'password' && !password) {
+      Taro.showToast({ title: '请输入密码', icon: 'none' })
+      return
+    }
+
+    if (phoneLoginType === 'code' && !code) {
+      Taro.showToast({ title: '请输入验证码', icon: 'none' })
       return
     }
 
     setLoading(true)
     try {
-      const res = await authAPI.login({ phone, code })
-      saveUserInfo(res.user, res.token)
+      const res = await authAPI.login(
+        phoneLoginType === 'password' 
+          ? { phone, password }
+          : { phone, code }
+      )
+      
+      // 保存token和用户信息
+      Taro.setStorageSync('accessToken', res.data.accessToken)
+      Taro.setStorageSync('refreshToken', res.data.refreshToken)
+      Taro.setStorageSync('userInfo', {
+        userId: res.data.userId,
+        role: res.data.role,
+        userType: res.data.userType
+      })
 
       Taro.showToast({ title: '登录成功', icon: 'success' })
 
       setTimeout(() => {
         Taro.switchTab({ url: '/pages/index/index' })
       }, 1000)
-    } catch (error) {
+    } catch (error: any) {
+      Taro.showToast({ title: error.message || '登录失败', icon: 'none' })
       console.error('登录失败:', error)
     } finally {
       setLoading(false)
@@ -218,26 +243,48 @@ export default function Login() {
             />
           </View>
 
-          <View className="form-item">
-            <Text className="form-label">验证码</Text>
-            <View className="code-input-wrapper">
+          {phoneLoginType === 'password' ? (
+            <View className="form-item">
+              <Text className="form-label">密码</Text>
               <Input
-                className="form-input code-input"
-                type="number"
-                maxlength={6}
-                placeholder="请输入验证码"
-                value={code}
-                onInput={(e) => setCode(e.detail.value)}
+                className="form-input"
+                type="password"
+                placeholder="请输入密码"
+                value={password}
+                onInput={(e) => setPassword(e.detail.value)}
               />
-              <Button
-                className="code-button"
-                size="mini"
-                disabled={countdown > 0}
-                onClick={handleSendCode}
-              >
-                {countdown > 0 ? `${countdown}s` : '获取验证码'}
-              </Button>
             </View>
+          ) : (
+            <View className="form-item">
+              <Text className="form-label">验证码</Text>
+              <View className="code-input-wrapper">
+                <Input
+                  className="form-input code-input"
+                  type="number"
+                  maxlength={6}
+                  placeholder="请输入验证码"
+                  value={code}
+                  onInput={(e) => setCode(e.detail.value)}
+                />
+                <Button
+                  className="code-button"
+                  size="mini"
+                  disabled={countdown > 0}
+                  onClick={handleSendCode}
+                >
+                  {countdown > 0 ? `${countdown}s` : '获取验证码'}
+                </Button>
+              </View>
+            </View>
+          )}
+
+          <View className="login-type-switch">
+            <Text 
+              className="switch-link" 
+              onClick={() => setPhoneLoginType(phoneLoginType === 'password' ? 'code' : 'password')}
+            >
+              {phoneLoginType === 'password' ? '验证码登录' : '密码登录'}
+            </Text>
           </View>
 
           <Button

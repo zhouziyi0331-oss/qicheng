@@ -7,6 +7,8 @@ export interface JwtPayload {
   userId: string;
   role: 'student' | 'company' | 'admin';
   adminRole?: 'super' | 'ops' | 'cs';
+  accountType?: 'student' | 'enterprise';
+  selectedTrack?: 'content' | 'dev';
 }
 
 export interface AuthRequest extends Request {

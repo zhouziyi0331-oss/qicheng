@@ -1,0 +1,419 @@
+.growth-challenges-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 32rpx;
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    color: #fff;
+    font-size: 32rpx;
+  }
+
+  .stats-header {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    padding: 32rpx;
+    margin-bottom: 32rpx;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .stat-value {
+        font-size: 48rpx;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 8rpx;
+      }
+
+      .stat-label {
+        font-size: 24rpx;
+        color: #6B7280;
+      }
+    }
+  }
+
+  .tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    padding: 8rpx;
+    margin-bottom: 32rpx;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+
+    .tab-item {
+      flex: 1;
+      padding: 20rpx;
+      text-align: center;
+      border-radius: 16rpx;
+      transition: all 0.3s ease;
+
+      .tab-text {
+        font-size: 28rpx;
+        color: #6B7280;
+        font-weight: 500;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .tab-text {
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .challenges-scroll {
+    height: calc(100vh - 360rpx);
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120rpx 64rpx;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 120rpx;
+      margin-bottom: 32rpx;
+    }
+
+    .empty-text {
+      font-size: 32rpx;
+      font-weight: bold;
+      color: #1F2937;
+      margin-bottom: 16rpx;
+    }
+
+    .empty-hint {
+      font-size: 28rpx;
+      color: #6B7280;
+      line-height: 1.6;
+    }
+  }
+
+  .challenges-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+    padding-bottom: 32rpx;
+  }
+
+  .challenge-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    padding: 32rpx;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    .challenge-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 24rpx;
+
+      .challenge-icon {
+        width: 96rpx;
+        height: 96rpx;
+        border-radius: 20rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 24rpx;
+
+        .icon-text {
+          font-size: 48rpx;
+        }
+      }
+
+      .challenge-info {
+        flex: 1;
+
+        .challenge-title {
+          font-size: 32rpx;
+          font-weight: bold;
+          color: #1F2937;
+          margin-bottom: 8rpx;
+          display: block;
+        }
+
+        .challenge-type {
+          display: inline-block;
+          padding: 6rpx 16rpx;
+          border-radius: 8rpx;
+          font-size: 24rpx;
+          color: #fff;
+          font-weight: 500;
+        }
+      }
+
+      .status-badge {
+        padding: 8rpx 20rpx;
+        border-radius: 12rpx;
+
+        .status-text {
+          font-size: 24rpx;
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .challenge-desc {
+      font-size: 28rpx;
+      color: #4B5563;
+      line-height: 1.6;
+      margin-bottom: 20rpx;
+      display: block;
+    }
+
+    .challenge-reason {
+      background: #FEF3C7;
+      border-left: 6rpx solid #F59E0B;
+      border-radius: 12rpx;
+      padding: 20rpx;
+      margin-bottom: 20rpx;
+
+      .reason-label {
+        font-size: 26rpx;
+        color: #92400E;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8rpx;
+      }
+
+      .reason-text {
+        font-size: 28rpx;
+        color: #78350F;
+        line-height: 1.6;
+        display: block;
+      }
+    }
+
+    .challenge-progress {
+      margin-bottom: 20rpx;
+
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12rpx;
+
+        .progress-label {
+          font-size: 26rpx;
+          font-weight: bold;
+          color: #1F2937;
+        }
+
+        .progress-value {
+          font-size: 26rpx;
+          font-weight: bold;
+          color: #667eea;
+        }
+      }
+
+      .progress-bar {
+        height: 16rpx;
+        background: #E5E7EB;
+        border-radius: 8rpx;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+          border-radius: 8rpx;
+          transition: all 0.3s ease;
+        }
+      }
+    }
+
+    .challenge-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20rpx;
+      border-top: 1rpx solid #E5E7EB;
+
+      .proposed-time,
+      .deadline-time {
+        font-size: 24rpx;
+        color: #9CA3AF;
+      }
+
+      .action-button {
+        padding: 12rpx 32rpx;
+        border-radius: 12rpx;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .button-text {
+          font-size: 26rpx;
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 64rpx;
+
+    .detail-content {
+      background: #fff;
+      border-radius: 32rpx;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 100%;
+
+      .detail-header {
+        display: flex;
+        align-items: center;
+        padding: 40rpx;
+        border-bottom: 1rpx solid #E5E7EB;
+
+        .detail-icon {
+          font-size: 64rpx;
+          margin-right: 24rpx;
+        }
+
+        .detail-title {
+          flex: 1;
+          font-size: 36rpx;
+          font-weight: bold;
+          color: #1F2937;
+        }
+
+        .detail-status {
+          padding: 8rpx 20rpx;
+          border-radius: 12rpx;
+
+          .status-text {
+            font-size: 24rpx;
+            color: #fff;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .detail-section {
+        padding: 32rpx 40rpx;
+        border-bottom: 1rpx solid #F3F4F6;
+
+        &:last-of-type {
+          border-bottom: none;
+        }
+
+        .section-title {
+          font-size: 28rpx;
+          font-weight: bold;
+          color: #1F2937;
+          margin-bottom: 16rpx;
+          display: block;
+        }
+
+        .section-text {
+          font-size: 28rpx;
+          color: #4B5563;
+          line-height: 1.8;
+          display: block;
+
+          &.empty {
+            color: #9CA3AF;
+            font-style: italic;
+          }
+        }
+
+        .step-item {
+          display: flex;
+          margin-bottom: 16rpx;
+
+          .step-number {
+            width: 48rpx;
+            height: 48rpx;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16rpx;
+            flex-shrink: 0;
+
+            .number-text {
+              font-size: 24rpx;
+              color: #fff;
+              font-weight: bold;
+            }
+          }
+
+          .step-text {
+            flex: 1;
+            font-size: 28rpx;
+            color: #4B5563;
+            line-height: 1.6;
+            padding-top: 8rpx;
+          }
+        }
+      }
+
+      .detail-footer {
+        padding: 32rpx 40rpx;
+        display: flex;
+        gap: 16rpx;
+
+        .footer-button {
+          flex: 1;
+          border-radius: 16rpx;
+          padding: 24rpx;
+          text-align: center;
+
+          &.secondary {
+            background: #F3F4F6;
+
+            .button-text {
+              color: #4B5563;
+            }
+          }
+
+          &.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+            .button-text {
+              color: #fff;
+            }
+          }
+
+          .button-text {
+            font-size: 32rpx;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

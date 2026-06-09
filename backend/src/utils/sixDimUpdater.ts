@@ -19,8 +19,8 @@ export async function updateSixDimScores(
 ): Promise<void> {
   try {
     // 获取当前六维分数和任务历史
-    const profile = await query<{ six_dim_scores: Record<string, number>; task_count: number }>(
-      `SELECT six_dim_scores, task_count FROM student_profiles WHERE user_id = $1`,
+    const profile = await query<{ six_dim_scores: Record<string, number>; tasks_completed: number }>(
+      `SELECT six_dim_scores, tasks_completed FROM student_capabilities WHERE student_id = $1`,
       [userId]
     );
 
@@ -52,7 +52,7 @@ export async function updateSixDimScores(
 
 ## 学生表现
 - 企业评分: ${companyScore}/100
-- 已完成任务数: ${profile[0].task_count}
+- 已完成任务数: ${profile[0].tasks_completed}
 
 ## 当前六维分数
 ${JSON.stringify(currentScores, null, 2)}
@@ -136,7 +136,7 @@ ${JSON.stringify(currentScores, null, 2)}
 
     // 更新数据库
     await query(
-      `UPDATE student_profiles SET six_dim_scores = $1, updated_at = NOW() WHERE user_id = $2`,
+      `UPDATE student_capabilities SET six_dim_scores = $1, updated_at = NOW() WHERE student_id = $2`,
       [JSON.stringify(newScores), userId]
     );
 

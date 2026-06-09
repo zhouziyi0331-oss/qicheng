@@ -224,10 +224,10 @@ class InvitationTaskService {
       SELECT
         ir.*,
         u.name as student_name,
-        sp.level_a as student_level
+        u.current_level as student_level
       FROM invitation_records ir
       JOIN users u ON ir.student_id = u.id
-      JOIN student_profiles sp ON ir.student_id = sp.user_id
+      JOIN users u ON ir.student_id = u.id
       WHERE ir.company_id = $1
     `;
         const params = [companyId];

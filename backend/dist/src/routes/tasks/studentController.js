@@ -3,10 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getMatchedTasks = getMatchedTasks;
 exports.getRecommendedTasks = getRecommendedTasks;
 exports.acceptTask = acceptTask;
 exports.getTaskSteps = getTaskSteps;
 exports.completeStep = completeStep;
+exports.updateProgress = updateProgress;
 exports.submitTask = submitTask;
 exports.getMarketTasks = getMarketTasks;
 exports.getMyTasks = getMyTasks;
@@ -19,6 +21,40 @@ const db_1 = require("../../utils/db");
 const errorHandler_1 = require("../../middleware/errorHandler");
 const config_1 = require("../../../config");
 const logger_1 = __importDefault(require("../../utils/logger"));
+const levelFilterService_1 = __importDefault(require("../../services/levelFilterService"));
+// ============================================================
+// GET /tasks/matched
+// 获取匹配的任务（基于能力画像和邀请）
+// ============================================================
+async function getMatchedTasks(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        // 获取学生收到的邀请任务
+        const invitedTasks = await (0, db_1.query)(`SELECT t.*, ti.custom_message, ti.created_at as invited_at
+       FROM tasks t
+       INNER JOIN task_invitations ti ON t.id = ti.task_id
+       WHERE ti.student_id = $1 AND ti.status = 'pending'
+       ORDER BY ti.created_at DESC`, [userId]);
+        // 使用等级过滤服务获取匹配的任务
+        const filteredResult = await levelFilterService_1.default.filterTasksByLevel(userId, {
+            limit: 10,
+            sortBy: 'match_score',
+            sortOrder: 'DESC',
+        });
+        res.json({
+            success: true,
+            data: {
+                invited: invitedTasks,
+                matched: filteredResult.tasks,
+                studentLevel: filteredResult.studentLevel,
+                allowedDifficulties: filteredResult.allowedDifficulties,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
 // ============================================================
 // GET /tasks/recommended
 // 指令4: AI-02 定向推送 2-3 个任务
@@ -26,66 +62,40 @@ const logger_1 = __importDefault(require("../../utils/logger"));
 async function getRecommendedTasks(req, res, next) {
     try {
         const userId = req.user.userId;
-        // 获取学生当前能力档案和情绪状态
-        const profile = await (0, db_1.queryOne)(`SELECT sp.level_a, sp.level_b, sp.track, sp.opc_label
-       FROM student_profiles sp WHERE sp.user_id = $1`, [userId]);
-        if (!profile)
-            throw new errorHandler_1.AppError(404, '请先完成初始测试', 'PROFILE_NOT_FOUND');
+        // 使用等级过滤服务获取候选任务
+        const filteredResult = await levelFilterService_1.default.filterTasksByLevel(userId, {
+            includeChallengeTasks: true, // 包含挑战任务
+            limit: 20,
+            sortBy: 'match_score',
+            sortOrder: 'DESC',
+        });
+        if (filteredResult.tasks.length === 0) {
+            res.json({ success: true, data: [], message: '暂无匹配任务，请稍后查看' });
+            return;
+        }
+        // 获取学生信息用于AI匹配
+        const student = await (0, db_1.queryOne)(`SELECT current_level, track FROM users WHERE id = $1`, [userId]);
         // 获取最新情绪状态
         const emotion = await (0, db_1.queryOne)(`SELECT signal_type FROM emotion_signals
        WHERE user_id = $1 AND resolved_at IS NULL
        ORDER BY detected_at DESC LIMIT 1`, [userId]);
-        // 根据情绪状态调整推荐难度
         const emotionState = emotion?.signal_type || 'calm';
-        const levelModifier = emotionState === 'frustrated' ? -1 : emotionState === 'excited' ? 1 : 0;
-        const targetLevel = Math.max(0, Math.min(5, profile.level_a + levelModifier));
-        // 获取已分配过的任务 (避免重复推送)
-        const assignedTaskIds = await (0, db_1.query)(`SELECT task_id FROM task_assignments WHERE student_id = $1`, [userId]);
-        const excludeIds = assignedTaskIds.map(r => r.task_id);
-        // 获取候选任务
-        logger_1.default.info(`Getting candidates: targetLevel=${targetLevel}, excludeIds.length=${excludeIds.length}`);
-        let candidates;
-        if (excludeIds.length > 0) {
-            logger_1.default.info('Using query with excludeIds', { targetLevel, excludeIdsCount: excludeIds.length });
-            candidates = await (0, db_1.query)(`SELECT t.id, t.title, t.description, t.track, t.level_required,
-                t.budget_net, t.estimated_minutes, t.deadline
-         FROM tasks t
-         WHERE t.status = 'active'
-           AND t.level_required <= $1
-           AND t.deleted_at IS NULL
-           AND t.id != ALL($2::uuid[])
-         ORDER BY t.created_at DESC LIMIT 20`, [targetLevel, excludeIds]);
-        }
-        else {
-            logger_1.default.info('Using query without excludeIds', { targetLevel });
-            candidates = await (0, db_1.query)(`SELECT t.id, t.title, t.description, t.track, t.level_required,
-                t.budget_net, t.estimated_minutes, t.deadline
-         FROM tasks t
-         WHERE t.status = 'active'
-           AND t.level_required <= $1
-           AND t.deleted_at IS NULL
-         ORDER BY t.created_at DESC LIMIT 20`, [targetLevel]);
-        }
-        logger_1.default.info(`Got ${candidates.length} candidates`);
-        if (candidates.length === 0) {
-            res.json({ success: true, data: [], message: '暂无匹配任务，请稍后查看' });
-            return;
-        }
         // 调用 AI-02 匹配服务
         let recommended;
         try {
             const aiResponse = await axios_1.default.post(`${config_1.config.ai.serviceUrl}/ai/match-task`, {
                 student_id: userId,
-                student_profile: profile,
+                student_level: student?.current_level || 0,
+                student_track: student?.track || 'content',
                 emotion_state: emotionState,
-                candidate_tasks: candidates,
-                max_results: config_1.config.platform.maxAssignees,
+                candidate_tasks: filteredResult.tasks,
+                max_results: config_1.config.platform.maxAssignees || 3,
             }, { timeout: config_1.config.ai.timeout });
             recommended = aiResponse.data.recommended_tasks;
         }
         catch {
             // 降级: 取前3个
-            recommended = candidates.slice(0, config_1.config.platform.maxAssignees).map(t => ({
+            recommended = filteredResult.tasks.slice(0, config_1.config.platform.maxAssignees || 3).map(t => ({
                 ...t, match_reason: '根据你的能力等级推荐'
             }));
         }
@@ -109,9 +119,9 @@ async function acceptTask(req, res, next) {
         if (!task)
             throw new errorHandler_1.AppError(404, '任务不存在或已关闭', 'TASK_NOT_FOUND');
         // 检查等级匹配 (硬性规则，不允许超纲接单)
-        const profile = await (0, db_1.queryOne)('SELECT level_a FROM student_profiles WHERE user_id = $1', [userId]);
-        if (!profile || profile.level_a < task.level_required) {
-            throw new errorHandler_1.AppError(403, `此任务需要 Lv.${task.level_required} 及以上`, 'LEVEL_TOO_LOW');
+        const canAccept = await levelFilterService_1.default.canAcceptTask(userId, taskId);
+        if (!canAccept.canAccept) {
+            throw new errorHandler_1.AppError(403, canAccept.reason || '无法接受此任务', 'CANNOT_ACCEPT_TASK');
         }
         // 检查是否已接单
         const existing = await (0, db_1.queryOne)(`SELECT id FROM task_assignments WHERE task_id = $1 AND student_id = $2`, [taskId, userId]);
@@ -123,6 +133,8 @@ async function acceptTask(req, res, next) {
         if (parseInt(activeCount?.count || '0') >= 3) {
             throw new errorHandler_1.AppError(400, '你最多同时进行3个任务', 'TOO_MANY_ACTIVE_TASKS');
         }
+        // 获取学生等级用于AI任务拆解
+        const student = await (0, db_1.queryOne)('SELECT current_level FROM users WHERE id = $1', [userId]);
         // 调用 AI-03: 任务拆解 (接单后 <3s 触发)
         let steps = [];
         try {
@@ -130,7 +142,7 @@ async function acceptTask(req, res, next) {
                 task_id: taskId,
                 task_description: task.description,
                 acceptance_criteria: task.acceptance_criteria,
-                student_level: profile.level_a,
+                student_level: student?.current_level || 0,
             }, { timeout: 5000 } // 严格5秒超时
             );
             steps = aiResponse.data.steps;
@@ -159,6 +171,14 @@ async function acceptTask(req, res, next) {
          SET j5_completed_at = NOW(), current_step = 'J6_ai_first_step_shown', updated_at = NOW()
          WHERE user_id = $1 AND j5_completed_at IS NULL`, [userId]);
         });
+        // 记录接受任务行为（第十一刀修复）
+        try {
+            const behaviorLearningService = require('../../services/behaviorLearningService').default;
+            await behaviorLearningService.logTaskAccept(userId, taskId);
+        }
+        catch (error) {
+            logger_1.default.error('Failed to log task accept behavior:', error);
+        }
         // 发送第一步推送通知
         setImmediate(async () => {
             try {
@@ -244,6 +264,38 @@ async function completeStep(req, res, next) {
                     : null,
                 isAllDone: !nextStep,
             },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// ============================================================
+// POST /tasks/:id/progress
+// 更新任务进度
+// ============================================================
+async function updateProgress(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const { id: taskId } = req.params;
+        const { progress } = req.body;
+        if (typeof progress !== 'number' || progress < 0 || progress > 100) {
+            throw new errorHandler_1.AppError(400, '进度值必须在0-100之间', 'INVALID_PROGRESS');
+        }
+        // 验证任务分配
+        const assignment = await (0, db_1.queryOne)('SELECT id, status FROM task_assignments WHERE task_id = $1 AND student_id = $2', [taskId, userId]);
+        if (!assignment) {
+            throw new errorHandler_1.AppError(404, '任务分配不存在', 'ASSIGNMENT_NOT_FOUND');
+        }
+        if (assignment.status === 'completed' || assignment.status === 'submitted') {
+            throw new errorHandler_1.AppError(400, '已完成或已提交的任务不能更新进度', 'TASK_ALREADY_DONE');
+        }
+        // 更新进度
+        await (0, db_1.query)('UPDATE task_assignments SET progress = $1, updated_at = NOW() WHERE id = $2', [progress, assignment.id]);
+        res.json({
+            success: true,
+            message: '进度更新成功',
+            data: { progress }
         });
     }
     catch (err) {
@@ -401,11 +453,11 @@ async function getMyTasks(req, res, next) {
               COALESCE(
                 (SELECT json_agg(
                   json_build_object(
-                    'id', ts.id, 'step_number', ts.step_number,
-                    'title', ts.title, 'description', ts.description,
-                    'tool', ts.tool_name, 'estimated_minutes', ts.estimated_minutes,
+                    'id', ts.id, 'step_number', ts.step_num,
+                    'title', ts.step_title, 'description', ts.step_desc,
+                    'tool', ts.tool_hint, 'estimated_minutes', ts.est_minutes,
                     'status', ts.status
-                  ) ORDER BY ts.step_number
+                  ) ORDER BY ts.step_num
                 )
                 FROM task_steps ts WHERE ts.task_id = t.id AND ts.student_id = $1
                 ), '[]'::json

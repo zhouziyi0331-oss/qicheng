@@ -10,6 +10,11 @@ exports.submitTest = submitTest;
 exports.getOnboardingStatus = getOnboardingStatus;
 exports.completeOnboardingStep = completeOnboardingStep;
 exports.getEmotionSignals = getEmotionSignals;
+exports.getBalance = getBalance;
+exports.getLevel = getLevel;
+exports.checkLevelUpgrade = checkLevelUpgrade;
+exports.getNextLevel = getNextLevel;
+exports.getTestResult = getTestResult;
 const axios_1 = __importDefault(require("axios"));
 const db_1 = require("../../utils/db");
 const errorHandler_1 = require("../../middleware/errorHandler");
@@ -20,11 +25,11 @@ async function getProfile(req, res, next) {
     try {
         const userId = req.user.userId;
         const profile = await (0, db_1.queryOne)(`SELECT u.id, u.phone, u.nickname, u.avatar_url, u.university, u.city, u.major, u.grade,
-              sp.track, sp.level_a, sp.level_b, sp.opc_label, sp.opc_label_secondary,
-              sp.six_dim_scores, sp.total_earnings, sp.task_count, sp.graduated_at,
+              u.track, u.current_level, u.current_level, sp.opc_label, sp.opc_label_secondary,
+              sp.six_dim_scores, sp.total_earnings, sp.tasks_completed, sp.graduated_at,
               sb.balance
        FROM users u
-       LEFT JOIN student_profiles sp ON sp.user_id = u.id
+       LEFT JOIN users u ON u.id = u.id
        LEFT JOIN student_balances sb ON sb.user_id = u.id
        WHERE u.id = $1 AND u.deleted_at IS NULL`, [userId]);
         if (!profile)
@@ -75,7 +80,7 @@ async function submitTest(req, res, next) {
         }
         // 检查测试间隔 (30天限制)
         const lastTest = await (0, db_1.queryOne)(`SELECT created_at FROM test_results
-       WHERE user_id = $1 AND is_current = TRUE ORDER BY created_at DESC LIMIT 1`, [userId]);
+       WHERE student_id = $1 AND is_current = TRUE ORDER BY created_at DESC LIMIT 1`, [userId]);
         if (lastTest) {
             const daysSince = (Date.now() - new Date(lastTest.created_at).getTime()) / (1000 * 60 * 60 * 24);
             if (daysSince < 30) {
@@ -96,7 +101,7 @@ async function submitTest(req, res, next) {
         const attemptCount = lastTest ? 2 : 1;
         await (0, db_1.withTransaction)(async (client) => {
             // 旧记录标记为非当前
-            await client.query('UPDATE test_results SET is_current = FALSE WHERE user_id = $1', [userId]);
+            await client.query('UPDATE test_results SET is_current = FALSE WHERE student_id = $1', [userId]);
             // 插入新测试结果
             await client.query(`INSERT INTO test_results
           (user_id, attempt_number, answers_json, d1_score, d2_score, d3_score, d4_score, d5_score,
@@ -112,16 +117,16 @@ async function submitTest(req, res, next) {
                 aiResult.raw_response,
             ]);
             // 更新学生档案的 OPC 标签
-            await client.query(`UPDATE student_profiles SET
+            await client.query(`UPDATE student_capabilities SET
           opc_label = $1, opc_label_secondary = $2,
           track = COALESCE($3::track_type, track),
           updated_at = NOW()
-         WHERE user_id = $4`, [aiResult.opc_label, aiResult.opc_label_secondary, aiResult.recommended_track, userId]);
+         WHERE student_id = $4`, [aiResult.opc_label, aiResult.opc_label_secondary, aiResult.recommended_track, userId]);
             // 更新 Onboarding 状态: J2 完成
             await client.query(`UPDATE onboarding_status
          SET j2_completed_at = NOW(), completed_steps = completed_steps || '["J2_test_done"]'::jsonb,
              current_step = 'J3_opc_label_shared', updated_at = NOW()
-         WHERE user_id = $1 AND j2_completed_at IS NULL`, [userId]);
+         WHERE student_id = $1 AND j2_completed_at IS NULL`, [userId]);
             // 记录成长时间线
             await client.query(`INSERT INTO growth_timeline (user_id, event_type, event_title, event_desc, event_data)
          VALUES ($1, 'task_completed', '完成OPC测试', $2, $3::jsonb)`, [userId,
@@ -152,7 +157,7 @@ async function submitTest(req, res, next) {
 async function getOnboardingStatus(req, res, next) {
     try {
         const userId = req.user.userId;
-        const status = await (0, db_1.queryOne)('SELECT * FROM onboarding_status WHERE user_id = $1', [userId]);
+        const status = await (0, db_1.queryOne)('SELECT * FROM onboarding_status WHERE student_id = $1', [userId]);
         res.json({ success: true, data: status });
     }
     catch (err) {
@@ -171,7 +176,7 @@ async function completeOnboardingStep(req, res, next) {
         const col = `${step.toLowerCase()}_completed_at`;
         await (0, db_1.query)(`UPDATE onboarding_status
        SET ${col} = NOW(), updated_at = NOW()
-       WHERE user_id = $1 AND ${col} IS NULL`, [userId]);
+       WHERE student_id = $1 AND ${col} IS NULL`, [userId]);
         res.json({ success: true, message: `${step} 已完成` });
     }
     catch (err) {
@@ -185,7 +190,7 @@ async function getEmotionSignals(req, res, next) {
         const signals = await (0, db_1.query)(`SELECT id, signal_type as "signalType", signal_value as "signalValue",
               trigger_event as "triggerEvent", detected_at as "detectedAt"
        FROM emotion_signals
-       WHERE user_id = $1
+       WHERE student_id = $1
        ORDER BY detected_at DESC
        LIMIT 5`, [userId]);
         res.json({ success: true, data: signals });
@@ -205,6 +210,191 @@ function buildFallbackAnalysis(answers) {
         share_card_caption: '我正在开启AI变现之旅',
         share_card_data: { label: '探索中的AI实践者', abilities: ['好奇心', '执行力', '学习力'] },
         raw_response: null,
+    };
+}
+// ============================================================
+// GET /student/balance
+// 获取学生余额信息
+// ============================================================
+async function getBalance(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const balance = await (0, db_1.queryOne)(`SELECT balance, frozen_balance, total_earnings, total_withdrawals
+       FROM student_balances
+       WHERE student_id = $1`, [userId]);
+        if (!balance) {
+            // 如果余额记录不存在，创建一个
+            await (0, db_1.query)(`INSERT INTO student_balances (user_id, balance, frozen_balance, total_earnings, total_withdrawals)
+         VALUES ($1, 0, 0, 0, 0)`, [userId]);
+            res.json({
+                success: true,
+                data: {
+                    balance: 0,
+                    frozenBalance: 0,
+                    totalEarnings: 0,
+                    totalWithdrawals: 0,
+                    availableBalance: 0,
+                },
+            });
+            return;
+        }
+        res.json({
+            success: true,
+            data: {
+                balance: balance.balance,
+                frozenBalance: balance.frozen_balance,
+                totalEarnings: balance.total_earnings,
+                totalWithdrawals: balance.total_withdrawals,
+                availableBalance: balance.balance - balance.frozen_balance,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// ============================================================
+// GET /student/level
+// 获取学生等级信息
+// ============================================================
+async function getLevel(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const profile = await (0, db_1.queryOne)(`SELECT current_level, level_b, track, tasks_completed, six_dim_scores, opc_label
+       FROM student_capabilities
+       WHERE student_id = $1`, [userId]);
+        if (!profile) {
+            throw new errorHandler_1.AppError(404, '学生画像不存在', 'PROFILE_NOT_FOUND');
+        }
+        // 计算升级进度
+        const nextLevelRequirements = calculateNextLevelRequirements(profile.current_level, profile.level_b);
+        res.json({
+            success: true,
+            data: {
+                currentLevel: {
+                    a: profile.current_level,
+                    b: profile.level_b,
+                    label: `${profile.track}${profile.current_level}.${profile.level_b}`,
+                },
+                track: profile.track,
+                taskCount: profile.tasks_completed,
+                opcLabel: profile.opc_label,
+                nextLevelRequirements,
+                canUpgrade: profile.tasks_completed >= nextLevelRequirements.requiredTasks,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// ============================================================
+// GET /student/level/check
+// 检查是否可以升级
+// ============================================================
+async function checkLevelUpgrade(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const profile = await (0, db_1.queryOne)('SELECT current_level, level_b, tasks_completed, six_dim_scores FROM student_capabilities WHERE student_id = $1', [userId]);
+        if (!profile) {
+            throw new errorHandler_1.AppError(404, '学生画像不存在', 'PROFILE_NOT_FOUND');
+        }
+        const requirements = calculateNextLevelRequirements(profile.current_level, profile.level_b);
+        const canUpgrade = profile.tasks_completed >= requirements.requiredTasks;
+        res.json({
+            success: true,
+            data: {
+                canUpgrade,
+                currentTaskCount: profile.tasks_completed,
+                requiredTasks: requirements.requiredTasks,
+                nextLevel: requirements.nextLevel,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// ============================================================
+// GET /student/level/next
+// 获取下一等级信息
+// ============================================================
+async function getNextLevel(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const profile = await (0, db_1.queryOne)('SELECT current_level, level_b, track, tasks_completed FROM student_capabilities WHERE student_id = $1', [userId]);
+        if (!profile) {
+            throw new errorHandler_1.AppError(404, '学生画像不存在', 'PROFILE_NOT_FOUND');
+        }
+        const requirements = calculateNextLevelRequirements(profile.current_level, profile.level_b);
+        res.json({
+            success: true,
+            data: {
+                currentLevel: { a: profile.current_level, b: profile.level_b },
+                nextLevel: requirements.nextLevel,
+                requirements: {
+                    tasks: requirements.requiredTasks,
+                    currentProgress: profile.tasks_completed,
+                    progressPercentage: Math.min(100, (profile.tasks_completed / requirements.requiredTasks) * 100),
+                },
+                benefits: requirements.benefits,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// ============================================================
+// GET /student/test/result
+// 获取学生测试结果（兼容旧版OPC测试）
+// ============================================================
+async function getTestResult(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        // 查询学生画像中的测试结果
+        const profile = await (0, db_1.queryOne)(`SELECT six_dim_scores, opc_label, opc_label_secondary, track, current_level, level_b
+       FROM student_capabilities
+       WHERE student_id = $1`, [userId]);
+        if (!profile) {
+            throw new errorHandler_1.AppError(404, '未找到测试结果', 'TEST_NOT_FOUND');
+        }
+        res.json({
+            success: true,
+            data: {
+                sixDimScores: profile.six_dim_scores,
+                opcLabel: profile.opc_label,
+                opcLabelSecondary: profile.opc_label_secondary,
+                recommendedTrack: profile.track,
+                currentLevel: { a: profile.current_level, b: profile.level_b },
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// ============================================================
+// 辅助函数：计算下一等级要求
+// ============================================================
+function calculateNextLevelRequirements(levelA, levelB) {
+    // 简化版升级逻辑
+    let nextA = levelA;
+    let nextB = levelB + 1;
+    if (nextB > 3) {
+        nextA += 1;
+        nextB = 0;
+    }
+    const requiredTasks = levelA * 5 + levelB * 2 + 3;
+    const benefits = [
+        '解锁更高难度任务',
+        '提升任务匹配优先级',
+        '获得更高的任务报酬',
+    ];
+    return {
+        nextLevel: { a: nextA, b: nextB },
+        requiredTasks,
+        benefits,
     };
 }
 //# sourceMappingURL=controller.js.map

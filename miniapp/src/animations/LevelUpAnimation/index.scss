@@ -1,0 +1,310 @@
+/**
+ * 等级提升动画样式
+ */
+
+.level-up-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-up-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  animation: fadeIn 0.3s ease;
+}
+
+.level-up-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+}
+
+/* ==================== 徽章动画 ==================== */
+
+.badge-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 32px;
+}
+
+.badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.badge-level {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+/* 等级颜色 */
+.badge-level-1 {
+  background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+}
+
+.badge-level-2 {
+  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+}
+
+.badge-level-3 {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+}
+
+.badge-level-4 {
+  background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+}
+
+.badge-level-5 {
+  background: linear-gradient(135deg, #1A1A1A 0%, #000000 100%);
+}
+
+/* 旧徽章缩小消失 */
+.badge-shrink {
+  animation: badgeShrink 0.3s ease forwards;
+}
+
+@keyframes badgeShrink {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+/* 新徽章弹跳出现 */
+.badge-pop {
+  animation: badgePop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==================== 星光粒子 ==================== */
+
+.star-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.star {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--mango-yellow);
+  border-radius: 50%;
+  transform-origin: center;
+  animation: starRotate 1.5s ease-out forwards;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
+}
+
+@keyframes starRotate {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(calc(var(--angle) + 720deg)) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* ==================== 等级名称 ==================== */
+
+.level-name-container {
+  text-align: center;
+  animation: riseUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  margin-bottom: 32px;
+}
+
+@keyframes riseUp {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.level-name {
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.level-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ==================== 特性列表 ==================== */
+
+.features-container {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+.features-title {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-medium);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.feature-item-show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.feature-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.feature-text {
+  font-size: 14px;
+  color: white;
+  flex: 1;
+}
+
+/* ==================== 导师留言 ==================== */
+
+.mentor-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-medium);
+  backdrop-filter: blur(10px);
+  max-width: 320px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.3s ease 0.2s backwards;
+}
+
+.mentor-avatar {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.mentor-text {
+  font-size: 14px;
+  color: white;
+  line-height: 1.6;
+}
+
+/* ==================== 关闭按钮 ==================== */
+
+.close-button {
+  padding: 14px 48px;
+  background: var(--theme-primary);
+  color: white;
+  border-radius: var(--radius-round);
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+  animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* ==================== 动画关键帧 ==================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -2,8 +2,12 @@ import { View, Text, Button, Image } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { getUserInfo, saveUserInfo } from '../../utils'
+import { taskAPI } from '../../services/api'
 import GuideDialog from '../../components/GuideDialog'
 import Loading from '../../components/Loading'
+import CollaborationProgressHint from '../../components/CollaborationProgressHint'
+import UnlockContactModal from '../../components/UnlockContactModal'
+import TaskTranslation from '../../components/TaskTranslation'
 import './detail.scss'
 import catLogo from '../../assets/images/cat-logo.png'
 
@@ -12,59 +16,131 @@ export default function TaskDetail() {
   const [task, setTask] = useState<any>(null)
   const [showGuide, setShowGuide] = useState(false)
   const [guideType, setGuideType] = useState<'first-task' | 'first-complete' | 'level-up'>('first-task')
+  const [loading, setLoading] = useState(true)
+  const [accepting, setAccepting] = useState(false)
+  const [showUnlockModal, setShowUnlockModal] = useState(false)
+  const [unlockStatus, setUnlockStatus] = useState<any>(null)
 
   useEffect(() => {
-    // 模拟任务数据
-    const mockTask = {
-      id: router.params.id || '1',
-      title: '设计一套品牌VI系统',
-      description: '为一家新创科技公司设计完整的品牌视觉识别系统，包括logo、配色方案、字体规范等。',
-      reward: 800,
-      difficulty: '中等',
-      deadline: '2024-03-20',
-      publisher: {
-        name: '创新科技',
-        avatar: 'C'
-      },
-      requirements: [
-        '具备平面设计经验',
-        '熟悉品牌设计流程',
-        '能够独立完成设计方案'
-      ],
-      tags: ['设计', '品牌', 'VI']
-    }
-    setTask(mockTask)
-
-    // 检查是否是首次接任务
-    const userInfo = getUserInfo()
-    if (userInfo && !userInfo.hasAcceptedFirstTask) {
-      setGuideType('first-task')
-      setShowGuide(true)
-    }
+    loadTaskDetail()
+    loadUnlockStatus()
   }, [])
 
-  const handleAcceptTask = () => {
-    const userInfo = getUserInfo()
+  const loadUnlockStatus = async () => {
+    if (!task?.companyId) return
 
-    // 标记已接受首个任务
-    if (!userInfo.hasAcceptedFirstTask) {
-      saveUserInfo({
-        ...userInfo,
-        hasAcceptedFirstTask: true
+    try {
+      const studentId = Taro.getStorageSync('userId')
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/security/unlock-status/${studentId}/${task.companyId}`,
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        }
       })
+
+      if (res.data.success) {
+        setUnlockStatus(res.data.data)
+      }
+    } catch (err) {
+      console.error('加载解锁状态失败:', err)
     }
+  }
 
-    Taro.showToast({
-      title: '接取成功',
-      icon: 'success'
-    })
+  const loadTaskDetail = async () => {
+    try {
+      setLoading(true)
+      const taskId = router.params.id
+      if (!taskId) {
+        Taro.showToast({ title: '任务ID不存在', icon: 'none' })
+        return
+      }
 
-    setTimeout(() => {
-      // 跳转到任务执行页面
-      Taro.redirectTo({
-        url: `/pages/tasks/working?id=${task.id}`
+      const res = await taskAPI.getDetail(taskId)
+      if (res.success && res.data) {
+        setTask(res.data)
+      } else {
+        // 降级到模拟数据
+        const mockTask = {
+          id: taskId,
+          title: '设计一套品牌VI系统',
+          description: '为一家新创科技公司设计完整的品牌视觉识别系统，包括logo、配色方案、字体规范等。',
+          budget_net: 800,
+          difficulty: '中等',
+          deadline: '2024-03-20',
+          publisher: {
+            name: '创新科技',
+            avatar: 'C'
+          },
+          requirements: [
+            '具备平面设计经验',
+            '熟悉品牌设计流程',
+            '能够独立完成设计方案'
+          ],
+          tags: ['设计', '品牌', 'VI']
+        }
+        setTask(mockTask)
+      }
+
+      // 检查是否是首次接任务
+      const userInfo = getUserInfo()
+      if (userInfo && !userInfo.hasAcceptedFirstTask) {
+        setGuideType('first-task')
+        setShowGuide(true)
+      }
+    } catch (error) {
+      console.error('加载任务详情失败:', error)
+      Taro.showToast({ title: '加载失败', icon: 'none' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleAcceptTask = async () => {
+    if (accepting) return
+    
+    try {
+      setAccepting(true)
+      const userInfo = getUserInfo()
+
+      // 调用接取任务API
+      const res = await taskAPI.accept(task.id)
+      
+      if (res.success) {
+        // 标记已接受首个任务
+        if (!userInfo.hasAcceptedFirstTask) {
+          saveUserInfo({
+            ...userInfo,
+            hasAcceptedFirstTask: true
+          })
+        }
+
+        Taro.showToast({
+          title: '接取成功',
+          icon: 'success'
+        })
+
+        setTimeout(() => {
+          // 跳转到任务执行页面
+          Taro.redirectTo({
+            url: `/pages/tasks/working?id=${task.id}`
+          })
+        }, 1500)
+      } else {
+        Taro.showToast({
+          title: res.message || '接取失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('接取任务失败:', error)
+      Taro.showToast({
+        title: '接取失败，请重试',
+        icon: 'none'
       })
-    }, 1500)
+    } finally {
+      setAccepting(false)
+    }
   }
 
   const handleCloseGuide = () => {
@@ -78,7 +154,7 @@ export default function TaskDetail() {
     })
   }
 
-  if (!task) {
+  if (loading || !task) {
     return <Loading text="正在加载任务详情..." />
   }
 
@@ -90,7 +166,7 @@ export default function TaskDetail() {
         <View className="task-meta">
           <View className="meta-item">
             <Text className="meta-label">难度</Text>
-            <Text className="meta-value">{task.difficulty}</Text>
+            <Text className="meta-value">{task.difficulty || '中等'}</Text>
           </View>
           <View className="meta-item">
             <Text className="meta-label">截止日期</Text>
@@ -106,45 +182,74 @@ export default function TaskDetail() {
           <Text className="section-text">{task.description}</Text>
         </View>
 
-        <View className="content-section">
-          <Text className="section-title">任务要求</Text>
-          {task.requirements.map((req, index) => (
-            <View key={index} className="requirement-item">
-              <Text className="requirement-text">• {req}</Text>
-            </View>
-          ))}
-        </View>
+        {/* 启程老师翻译 - 新增 */}
+        {task.id && (
+          <View className="translation-section">
+            <TaskTranslation taskId={task.id} />
+          </View>
+        )}
 
-        <View className="content-section">
-          <Text className="section-title">技能标签</Text>
-          <View className="tags-container">
-            {task.tags.map((tag, index) => (
-              <View key={index} className="tag-item">
-                <Text className="tag-text">{tag}</Text>
+        {/* 合作进度提示 */}
+        {task.companyId && (
+          <View className="collaboration-section">
+            <CollaborationProgressHint
+              companyId={task.companyId}
+              mode="card"
+              showAction={true}
+              onUnlockRequest={() => setShowUnlockModal(true)}
+            />
+          </View>
+        )}
+
+        {task.requirements && task.requirements.length > 0 && (
+          <View className="content-section">
+            <Text className="section-title">任务要求</Text>
+            {task.requirements.map((req, index) => (
+              <View key={index} className="requirement-item">
+                <Text className="requirement-text">• {req}</Text>
               </View>
             ))}
           </View>
-        </View>
+        )}
 
-        <View className="content-section">
-          <Text className="section-title">发布者</Text>
-          <View className="publisher-info">
-            <View className="publisher-avatar">
-              <Text className="avatar-text">{task.publisher.avatar}</Text>
+        {task.tags && task.tags.length > 0 && (
+          <View className="content-section">
+            <Text className="section-title">技能标签</Text>
+            <View className="tags-container">
+              {task.tags.map((tag, index) => (
+                <View key={index} className="tag-item">
+                  <Text className="tag-text">{tag}</Text>
+                </View>
+              ))}
             </View>
-            <Text className="publisher-name">{task.publisher.name}</Text>
           </View>
-        </View>
+        )}
+
+        {task.publisher && (
+          <View className="content-section">
+            <Text className="section-title">发布者</Text>
+            <View className="publisher-info">
+              <View className="publisher-avatar">
+                <Text className="avatar-text">{task.publisher.avatar || task.publisher.name?.charAt(0) || 'U'}</Text>
+              </View>
+              <Text className="publisher-name">{task.publisher.name || '匿名用户'}</Text>
+            </View>
+          </View>
+        )}
       </View>
 
       {/* 底部操作栏 */}
       <View className="task-footer">
         <View className="reward-info">
           <Text className="reward-label">任务报酬</Text>
-          <Text className="reward-value">¥{task.reward}</Text>
+          <Text className="reward-value">¥{task.budget_net || task.reward || 0}</Text>
         </View>
-        <Button className="accept-btn" onClick={handleAcceptTask}>
-          <Text className="btn-text">接取任务</Text>
+        <Button 
+          className={`accept-btn ${accepting ? 'disabled' : ''}`}
+          onClick={handleAcceptTask}
+          disabled={accepting}
+        >
+          <Text className="btn-text">{accepting ? '接取中...' : '接取任务'}</Text>
         </Button>
       </View>
 
@@ -160,6 +265,24 @@ export default function TaskDetail() {
         <Image src={catLogo} className="mentor-logo" mode="aspectFit" />
         <Text className="mentor-text">问AI导师</Text>
       </View>
+
+      {/* 解锁联系方式弹窗 */}
+      {task?.companyId && unlockStatus && (
+        <UnlockContactModal
+          visible={showUnlockModal}
+          studentId={Taro.getStorageSync('userId')}
+          companyId={task.companyId}
+          studentName="我"
+          companyName={task.publisher?.name || '企业'}
+          userType="student"
+          status={unlockStatus}
+          onClose={() => setShowUnlockModal(false)}
+          onSuccess={() => {
+            loadUnlockStatus()
+            Taro.showToast({ title: '操作成功', icon: 'success' })
+          }}
+        />
+      )}
     </View>
   )
 }

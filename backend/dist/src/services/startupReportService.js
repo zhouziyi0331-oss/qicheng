@@ -47,7 +47,7 @@ class StartupReportService {
     static async collectUserData(userId) {
         // 获取学生档案
         const profile = await (0, db_1.queryOne)(`SELECT opc_label, six_dim_scores, task_count, total_earnings
-       FROM student_profiles
+       FROM student_capabilities
        WHERE user_id = $1`, [userId]);
         if (!profile) {
             throw new Error('用户档案不存在');

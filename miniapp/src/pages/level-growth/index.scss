@@ -1,0 +1,483 @@
+.level-growth-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #F9FAFB 0%, #FFFFFF 100%);
+}
+
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32rpx;
+}
+
+/* 当前等级卡片 */
+.current-level-card {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  border-radius: 32rpx;
+  padding: 48rpx 40rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(139, 92, 246, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.level-badge {
+  width: 160rpx;
+  height: 160rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+}
+
+.badge-level {
+  font-size: 64rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.level-name {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 40rpx;
+}
+
+.progress-section {
+  width: 100%;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.progress-label {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.progress-value {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 16rpx;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FCD34D 0%, #F59E0B 100%);
+  border-radius: 8rpx;
+  transition: width 0.6s ease;
+}
+
+.progress-hint {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+/* 权限列表 */
+.permissions-section,
+.next-level-section {
+  margin-bottom: 32rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 24rpx;
+}
+
+.permissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.permission-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  padding: 24rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  border: 2rpx solid #E5E7EB;
+  transition: all 0.3s ease;
+
+  &.benefit {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-color: #F59E0B;
+  }
+
+  &.locked {
+    opacity: 0.6;
+  }
+}
+
+.permission-icon-wrapper {
+  position: relative;
+  width: 64rpx;
+  height: 64rpx;
+  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.permission-item.benefit .permission-icon-wrapper {
+  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+}
+
+.permission-icon {
+  font-size: 36rpx;
+}
+
+.unlocked-badge {
+  position: absolute;
+  bottom: -4rpx;
+  right: -4rpx;
+  width: 28rpx;
+  height: 28rpx;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #FFFFFF;
+}
+
+.unlocked-icon {
+  font-size: 16rpx;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.locked-badge {
+  position: absolute;
+  bottom: -4rpx;
+  right: -4rpx;
+  width: 28rpx;
+  height: 28rpx;
+  background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #FFFFFF;
+}
+
+.locked-icon {
+  font-size: 16rpx;
+}
+
+.permission-content {
+  flex: 1;
+}
+
+.permission-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 8rpx;
+}
+
+.permission-description {
+  display: block;
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.6;
+}
+
+/* 跳级区域 */
+.skip-level-section {
+  margin-bottom: 32rpx;
+}
+
+.skip-level-card {
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  border: 2rpx solid #3B82F6;
+
+  &.disabled {
+    background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+    border-color: #D1D5DB;
+    opacity: 0.7;
+  }
+}
+
+.skip-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1E40AF;
+  margin-bottom: 16rpx;
+}
+
+.skip-level-card.disabled .skip-title {
+  color: #6B7280;
+}
+
+.skip-description {
+  display: block;
+  font-size: 28rpx;
+  color: #1E3A8A;
+  line-height: 1.6;
+  margin-bottom: 24rpx;
+}
+
+.skip-level-card.disabled .skip-description {
+  color: #6B7280;
+}
+
+.skip-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12rpx;
+
+  &.met {
+    background: rgba(16, 185, 129, 0.1);
+  }
+}
+
+.requirement-icon {
+  width: 32rpx;
+  height: 32rpx;
+  background: #D1D5DB;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  color: #6B7280;
+  flex-shrink: 0;
+}
+
+.requirement-item.met .requirement-icon {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.requirement-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #4B5563;
+}
+
+.skip-button {
+  width: 100%;
+  height: 80rpx;
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  border-radius: 40rpx;
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(59, 130, 246, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &::after {
+    border: none;
+  }
+
+  .button-text {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+}
+
+/* 跳级确认弹窗 */
+.skip-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 40rpx;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.skip-confirm-modal {
+  width: 100%;
+  max-width: 600rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 48rpx 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(60rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1F2937;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.modal-content {
+  margin-bottom: 32rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #E5E7EB;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #6B7280;
+}
+
+.info-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.warning-box {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-radius: 16rpx;
+  border: 2rpx solid #F59E0B;
+  margin-top: 24rpx;
+}
+
+.warning-icon {
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.warning-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #92400E;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.cancel-button,
+.confirm-button {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  border: none;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &::after {
+    border: none;
+  }
+
+  .button-text {
+    font-size: 32rpx;
+    font-weight: 600;
+  }
+}
+
+.cancel-button {
+  background: #F3F4F6;
+
+  .button-text {
+    color: #6B7280;
+  }
+}
+
+.confirm-button {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  box-shadow: 0 8rpx 24rpx rgba(59, 130, 246, 0.3);
+
+  .button-text {
+    color: #FFFFFF;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #9CA3AF;
+}

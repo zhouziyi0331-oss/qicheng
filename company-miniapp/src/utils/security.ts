@@ -342,14 +342,19 @@ export function initBlacklist() {
 // ==================== 6. Token管理 ====================
 
 /**
- * 安全存储Token
+ * 安全保存Token
  */
-export function saveToken(token: string) {
+export function saveToken(accessToken: string, refreshToken?: string) {
   try {
-    // 加密后存储
-    const encryptedToken = encrypt(token)
-    Taro.setStorageSync('encrypted_token', encryptedToken)
-    Taro.setStorageSync('token', token) // 保留明文用于API调用
+    const encryptedAccessToken = encrypt(accessToken)
+    Taro.setStorageSync('encrypted_accessToken', encryptedAccessToken)
+    Taro.setStorageSync('accessToken', accessToken) // 保留明文用于API调用
+    
+    if (refreshToken) {
+      const encryptedRefreshToken = encrypt(refreshToken)
+      Taro.setStorageSync('encrypted_refreshToken', encryptedRefreshToken)
+      Taro.setStorageSync('refreshToken', refreshToken)
+    }
   } catch (error) {
     console.error('保存Token失败:', error)
   }
@@ -360,7 +365,7 @@ export function saveToken(token: string) {
  */
 export function getToken(): string | null {
   try {
-    return Taro.getStorageSync('token')
+    return Taro.getStorageSync('accessToken')
   } catch (error) {
     console.error('获取Token失败:', error)
     return null
@@ -372,9 +377,11 @@ export function getToken(): string | null {
  */
 export function clearToken() {
   try {
-    Taro.removeStorageSync('token')
-    Taro.removeStorageSync('encrypted_token')
-    Taro.removeStorageSync('user')
+    Taro.removeStorageSync('accessToken')
+    Taro.removeStorageSync('refreshToken')
+    Taro.removeStorageSync('encrypted_accessToken')
+    Taro.removeStorageSync('encrypted_refreshToken')
+    Taro.removeStorageSync('userInfo')
   } catch (error) {
     console.error('清除Token失败:', error)
   }

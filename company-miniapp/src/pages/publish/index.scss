@@ -6,6 +6,42 @@
   padding: $spacing-lg;
   padding-bottom: 100px;
 
+  // 2单解锁规则提示
+  .unlock-rule-banner {
+    display: flex;
+    align-items: flex-start;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16rpx;
+    padding: 24rpx;
+    margin-bottom: 24rpx;
+    box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.2);
+
+    .rule-icon {
+      font-size: 40rpx;
+      margin-right: 16rpx;
+      flex-shrink: 0;
+    }
+
+    .rule-content {
+      flex: 1;
+
+      .rule-title {
+        display: block;
+        color: #fff;
+        font-size: 30rpx;
+        font-weight: 600;
+        margin-bottom: 8rpx;
+      }
+
+      .rule-text {
+        display: block;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 24rpx;
+        line-height: 1.5;
+      }
+    }
+  }
+
   // 步骤指示器 - 扁平圆形步骤
   .steps {
     display: flex;
@@ -337,7 +373,9 @@
 
     .back-btn,
     .next-btn,
-    .pay-btn {
+    .pay-btn,
+    .skip-btn,
+    .push-btn {
       flex: 1;
       border-radius: $radius-md;
       padding: $spacing-md;
@@ -346,13 +384,267 @@
       border: none;
     }
 
-    .back-btn {
+    .back-btn,
+    .skip-btn {
       @include button-secondary;
     }
 
     .next-btn,
-    .pay-btn {
+    .pay-btn,
+    .push-btn {
       @include button-primary;
+    }
+  }
+
+  // 匹配学生页面
+  .matching-section {
+    .matching-header {
+      @include card;
+      text-align: center;
+      margin-bottom: $spacing-lg;
+      padding: $spacing-xl;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+
+      .header-icon {
+        display: block;
+        font-size: 48px;
+        margin-bottom: $spacing-sm;
+      }
+
+      .header-title {
+        display: block;
+        font-size: $font-xl;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: $spacing-xs;
+      }
+
+      .header-subtitle {
+        display: block;
+        font-size: $font-sm;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .students-list {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+      margin-bottom: $spacing-lg;
+    }
+
+    .student-card {
+      @include card;
+      padding: $spacing-lg;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: none;
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+      }
+
+      .rank-badge {
+        position: absolute;
+        top: $spacing-md;
+        left: $spacing-md;
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        border-radius: $radius-full;
+        padding: 4px 12px;
+
+        .rank-text {
+          font-size: $font-xs;
+          color: #fff;
+          font-weight: 600;
+        }
+      }
+
+      .checkbox {
+        position: absolute;
+        top: $spacing-md;
+        right: $spacing-md;
+        width: 24px;
+        height: 24px;
+        border: 2px solid $border-color;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $bg-card;
+        transition: all 0.3s ease;
+
+        .check-icon {
+          font-size: 16px;
+          color: #fff;
+          font-weight: 700;
+        }
+      }
+
+      &.selected .checkbox {
+        background: $primary-color;
+        border-color: $primary-color;
+      }
+
+      .student-header {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        margin-bottom: $spacing-md;
+        padding-top: $spacing-sm;
+      }
+
+      .student-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        .avatar-text {
+          font-size: $font-xl;
+          color: #fff;
+          font-weight: 600;
+        }
+      }
+
+      .student-info {
+        flex: 1;
+
+        .student-name {
+          display: block;
+          font-size: $font-lg;
+          color: $text-primary;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .student-meta {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+
+          .meta-item {
+            font-size: $font-xs;
+            color: $text-secondary;
+          }
+
+          .meta-divider {
+            font-size: $font-xs;
+            color: $text-tertiary;
+          }
+        }
+      }
+
+      .match-score {
+        text-align: center;
+        flex-shrink: 0;
+
+        .score-value {
+          display: block;
+          font-size: $font-xl;
+          color: $primary-color;
+          font-weight: 700;
+          margin-bottom: 2px;
+        }
+
+        .score-label {
+          display: block;
+          font-size: $font-xs;
+          color: $text-tertiary;
+        }
+      }
+
+      .match-reason {
+        background: linear-gradient(135deg, rgba(147, 197, 253, 0.1) 0%, rgba(196, 181, 253, 0.1) 100%);
+        border-radius: $radius-md;
+        padding: $spacing-sm $spacing-md;
+        margin-bottom: $spacing-md;
+
+        .reason-text {
+          font-size: $font-xs;
+          color: $text-secondary;
+          line-height: 1.6;
+        }
+      }
+
+      .student-skills {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: $spacing-md;
+        flex-wrap: wrap;
+
+        .skill-tag {
+          padding: 4px 12px;
+          background: $bg-section;
+          border-radius: $radius-full;
+
+          .skill-text {
+            font-size: $font-xs;
+            color: $text-secondary;
+          }
+        }
+
+        .more-skills {
+          font-size: $font-xs;
+          color: $text-tertiary;
+        }
+      }
+
+      .student-stats {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding-top: $spacing-md;
+        border-top: 1px solid $divider-color;
+
+        .stat-item {
+          text-align: center;
+
+          .stat-value {
+            display: block;
+            font-size: $font-lg;
+            color: $text-primary;
+            font-weight: 600;
+            margin-bottom: 2px;
+          }
+
+          .stat-label {
+            display: block;
+            font-size: $font-xs;
+            color: $text-tertiary;
+          }
+        }
+
+        .stat-divider {
+          width: 1px;
+          height: 24px;
+          background: $divider-color;
+        }
+      }
+    }
+
+    .selection-hint {
+      text-align: center;
+      margin-bottom: $spacing-lg;
+
+      .hint-text {
+        font-size: $font-sm;
+        color: $text-secondary;
+        font-weight: 500;
+      }
     }
   }
 }

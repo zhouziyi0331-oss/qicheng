@@ -6,4 +6,9 @@ export declare function submitTest(req: Request, res: Response, next: NextFuncti
 export declare function getOnboardingStatus(req: Request, res: Response, next: NextFunction): Promise<void>;
 export declare function completeOnboardingStep(req: Request, res: Response, next: NextFunction): Promise<void>;
 export declare function getEmotionSignals(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getBalance(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getLevel(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function checkLevelUpgrade(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getNextLevel(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getTestResult(req: Request, res: Response, next: NextFunction): Promise<void>;
 //# sourceMappingURL=controller.d.ts.map

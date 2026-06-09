@@ -23,7 +23,11 @@ export default defineAppConfig({
     'pages/dispute/index',
     'pages/student-profile/index',
     'pages/task-verification/index',
-    'pages/task-progress/index'
+    'pages/task-progress/index',
+    'pages/drafts/index',
+    'pages/escrow/index',
+    'pages/ratings/index',
+    'pages/security-commitments/index'
   ],
   window: {
     backgroundTextStyle: 'dark',

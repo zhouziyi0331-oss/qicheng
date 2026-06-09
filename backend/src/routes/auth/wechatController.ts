@@ -135,8 +135,19 @@ export async function wechatLogin(req: Request, res: Response, next: NextFunctio
         );
 
         if (userType === 'student') {
-          // 创建学生档案
-          await client.query('INSERT INTO student_profiles (user_id) VALUES ($1)', [userId]);
+          // 创建学生档案（旧系统，保持兼容）
+          await client.query("INSERT INTO student_capabilities (student_id, skills, tasks_completed) VALUES ($1, '{}'::jsonb, 0)", [userId]);
+          // 初始化新等级系统字段
+          await client.query(
+            `UPDATE users SET track = 'content', current_level = 0 WHERE id = $1`,
+            [userId]
+          );
+          // 初始化学生能力画像
+          await client.query(
+            `INSERT INTO student_capabilities (student_id, skills, tasks_completed)
+             VALUES ($1, '{}'::jsonb, 0)`,
+            [userId]
+          );
           // 创建余额账户
           await client.query('INSERT INTO student_balances (user_id) VALUES ($1)', [userId]);
           // 初始化 Onboarding 状态

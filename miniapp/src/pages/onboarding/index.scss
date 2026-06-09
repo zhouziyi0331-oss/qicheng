@@ -1,0 +1,167 @@
+.onboarding-page {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80rpx 60rpx 200rpx;
+
+    .slide-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      .slide-icon {
+        font-size: 120rpx;
+        margin-bottom: 60rpx;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .slide-title {
+        color: #fff;
+        font-size: 48rpx;
+        font-weight: 700;
+        margin-bottom: 32rpx;
+        line-height: 1.3;
+      }
+
+      .slide-description {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 28rpx;
+        line-height: 1.6;
+        max-width: 560rpx;
+      }
+
+      .highlight-box {
+        margin-top: 60rpx;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 24rpx;
+        padding: 32rpx;
+        width: 100%;
+        max-width: 560rpx;
+
+        .highlight-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 24rpx;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .highlight-icon {
+            width: 48rpx;
+            height: 48rpx;
+            background: #fff;
+            color: #f093fb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28rpx;
+            font-weight: 700;
+            margin-right: 16rpx;
+            flex-shrink: 0;
+          }
+
+          .highlight-text {
+            color: #fff;
+            font-size: 26rpx;
+            font-weight: 500;
+            line-height: 1.4;
+          }
+        }
+      }
+    }
+  }
+
+  // 指示器
+  .indicators {
+    position: absolute;
+    bottom: 160rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16rpx;
+    z-index: 10;
+
+    .indicator {
+      width: 16rpx;
+      height: 16rpx;
+      border-radius: 8rpx;
+      background: rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+
+      &.active {
+        width: 48rpx;
+        background: #fff;
+      }
+    }
+  }
+
+  // 底部按钮
+  .bottom-actions {
+    position: absolute;
+    bottom: 60rpx;
+    left: 0;
+    right: 0;
+    padding: 0 60rpx;
+    display: flex;
+    gap: 24rpx;
+    z-index: 10;
+
+    .skip-btn,
+    .next-btn,
+    .start-btn {
+      flex: 1;
+      height: 88rpx;
+      border-radius: 44rpx;
+      font-size: 32rpx;
+      font-weight: 600;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .skip-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+
+    .next-btn,
+    .start-btn {
+      background: #fff;
+      color: #667eea;
+      box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+    }
+
+    .start-btn {
+      flex: 1;
+    }
+  }
+
+  // 浮动动画
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20rpx);
+    }
+  }
+}

@@ -23,11 +23,11 @@ async function startChallenge(req, res, next) {
         const userId = req.user.userId;
         const { targetLevel } = req.body;
         // 1. 获取学生当前等级
-        const profile = await (0, db_1.queryOne)('SELECT track, level_a, level_b FROM student_profiles WHERE user_id = $1', [userId]);
+        const profile = await (0, db_1.queryOne)('SELECT track, current_level, level_b FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1', [userId]);
         if (!profile) {
             throw new errorHandler_1.AppError(404, '学生档案不存在', 'PROFILE_NOT_FOUND');
         }
-        const currentLevel = profile.track === 'A' ? profile.level_a : profile.level_b;
+        const currentLevel = profile.track === 'A' ? profile.current_level : profile.level_b;
         // 2. 验证目标等级
         if (targetLevel <= currentLevel) {
             throw new errorHandler_1.AppError(400, '目标等级必须高于当前等级', 'INVALID_TARGET_LEVEL');
@@ -37,13 +37,13 @@ async function startChallenge(req, res, next) {
         }
         // 3. 检查是否有未完成的挑战
         const pendingChallenge = await (0, db_1.queryOne)(`SELECT id FROM level_challenge_tests
-       WHERE user_id = $1 AND is_passed IS NULL AND deleted_at IS NULL`, [userId]);
+       WHERE student_id = $1 AND is_passed IS NULL AND deleted_at IS NULL`, [userId]);
         if (pendingChallenge) {
             throw new errorHandler_1.AppError(400, '你有一个正在进行的挑战测试，请先完成', 'CHALLENGE_IN_PROGRESS');
         }
         // 4. 检查是否在冷却期（失败后7天内不能重试）
         const recentFailed = await (0, db_1.queryOne)(`SELECT retry_allowed_at FROM level_challenge_tests
-       WHERE user_id = $1 AND is_passed = FALSE AND retry_allowed_at > NOW()
+       WHERE student_id = $1 AND is_passed = FALSE AND retry_allowed_at > NOW()
        ORDER BY created_at DESC LIMIT 1`, [userId]);
         if (recentFailed) {
             throw new errorHandler_1.AppError(400, `挑战失败后需要等待7天才能重试，请在 ${recentFailed.retry_allowed_at} 后再试`, 'CHALLENGE_COOLDOWN');
@@ -113,8 +113,8 @@ async function submitChallenge(req, res, next) {
             // 4. 如果通过，更新学生等级
             if (isPassed) {
                 const levelField = challenge.track === 'A' ? 'level_a' : 'level_b';
-                await client.query(`UPDATE student_profiles SET ${levelField} = $1, updated_at = NOW()
-           WHERE user_id = $2`, [challenge.target_level, userId]);
+                await client.query(`UPDATE student_capabilities SET ${levelField} = $1, updated_at = NOW()
+           WHERE student_id = $2`, [challenge.target_level, userId]);
                 // 5. 记录成长时间线
                 await client.query(`INSERT INTO growth_timeline
            (user_id, event_type, event_title, event_desc, level_before, level_after)
@@ -125,7 +125,7 @@ async function submitChallenge(req, res, next) {
                     challenge.target_level,
                 ]);
                 // 6. 记录六维能力变化（跳级会提升所有维度）
-                const profile = await client.query('SELECT six_dim_scores FROM student_profiles WHERE user_id = $1', [userId]);
+                const profile = await client.query('SELECT six_dim_scores FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1', [userId]);
                 const oldScores = profile.rows[0].six_dim_scores;
                 const newScores = {
                     d1: Math.min(100, oldScores.d1 + 10),
@@ -149,7 +149,7 @@ async function submitChallenge(req, res, next) {
                     oldScores.d6, newScores.d6,
                     `跳级挑战通过，等级从 ${challenge.current_level} 提升至 ${challenge.target_level}`,
                 ]);
-                await client.query('UPDATE student_profiles SET six_dim_scores = $1 WHERE user_id = $2', [JSON.stringify(newScores), userId]);
+                await client.query('UPDATE student_capabilities SET six_dim_scores = $1 WHERE student_id = $2', [JSON.stringify(newScores), userId]);
             }
         });
         logger_1.default.info('Challenge test completed', { userId, challengeId, isPassed, score: aiResult.score });
@@ -177,7 +177,7 @@ async function getChallengeHistory(req, res, next) {
         const challenges = await (0, db_1.query)(`SELECT id, current_level, target_level, track, ai_score, is_passed,
               created_at, completed_at, retry_allowed_at
        FROM level_challenge_tests
-       WHERE user_id = $1 AND deleted_at IS NULL
+       WHERE student_id = $1 AND deleted_at IS NULL
        ORDER BY created_at DESC`, [userId]);
         res.json({
             success: true,

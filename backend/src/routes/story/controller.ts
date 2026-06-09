@@ -17,8 +17,8 @@ export async function getFeed(req: Request, res: Response, next: NextFunction): 
     const offset = (page - 1) * limit;
 
     // 获取当前用户的 OPC 标签和等级
-    const profile = await queryOne<{ opc_label: string; level_a: number; track: string }>(
-      'SELECT opc_label, level_a, track FROM student_profiles WHERE user_id = $1',
+    const profile = await queryOne<{ opc_label: string; current_level: number; track: string }>(
+      'SELECT opc_label, current_level, track FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1',
       [userId]
     );
 
@@ -43,14 +43,14 @@ export async function getFeed(req: Request, res: Response, next: NextFunction): 
          END as similarity_score
        FROM story_wall_posts swp
        JOIN users u ON u.id = swp.user_id
-       LEFT JOIN student_profiles sp ON sp.user_id = swp.user_id
+       LEFT JOIN users u ON u.id = swp.user_id
        WHERE swp.status = 'approved'
          AND swp.deleted_at IS NULL
          AND swp.user_id != $1
        -- RULE: NO LEADERBOARD — ORDER BY similarity_score DESC, time DESC (never by likes)
        ORDER BY similarity_score DESC, swp.created_at DESC
        LIMIT $5 OFFSET $6`,
-      [userId, profile?.opc_label, profile?.level_a || 0, profile?.track || 'A', limit, offset]
+      [userId, profile?.opc_label, profile?.current_level || 0, profile?.track || 'A', limit, offset]
     );
 
     res.json({
@@ -78,13 +78,13 @@ export async function createPost(req: Request, res: Response, next: NextFunction
       throw new AppError(400, '故事内容不超过500字', 'CONTENT_TOO_LONG');
     }
 
-    const profile = await queryOne<{ track: string; level_a: number; task_count: number }>(
-      'SELECT track, level_a, task_count FROM student_profiles WHERE user_id = $1',
+    const profile = await queryOne<{ track: string; current_level: number; tasks_completed: number }>(
+      'SELECT track, current_level, tasks_completed FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1',
       [userId]
     );
 
     // 至少完成1单才能发布故事
-    if (!profile || profile.task_count === 0) {
+    if (!profile || profile.tasks_completed === 0) {
       throw new AppError(403, '完成至少1单后可以分享故事', 'NO_TASKS_COMPLETED');
     }
 
@@ -93,7 +93,7 @@ export async function createPost(req: Request, res: Response, next: NextFunction
         (user_id, is_anonymous, track, level, content, earnings, status)
        VALUES ($1,$2,$3,$4,$5,$6,'pending')
        RETURNING id`,
-      [userId, isAnonymous || false, profile.track, profile.level_a, content.trim(), earnings || null]
+      [userId, isAnonymous || false, profile.track, profile.current_level, content.trim(), earnings || null]
     );
 
     // AI 内容审核 (异步)
@@ -147,8 +147,8 @@ export async function getPeersFeed(req: Request, res: Response, next: NextFuncti
   try {
     const userId = req.user!.userId;
 
-    const profile = await queryOne<{ opc_label: string; level_a: number; track: string }>(
-      'SELECT opc_label, level_a, track FROM student_profiles WHERE user_id = $1',
+    const profile = await queryOne<{ opc_label: string; current_level: number; track: string }>(
+      'SELECT opc_label, current_level, track FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1',
       [userId]
     );
     if (!profile) throw new AppError(404, '请先完成测试', 'PROFILE_NOT_FOUND');
@@ -159,24 +159,24 @@ export async function getPeersFeed(req: Request, res: Response, next: NextFuncti
          'task_completed' as event_type,
          CASE WHEN sp.opc_label IS NOT NULL
            THEN '一位' || sp.opc_label
-           ELSE '一位' || CASE sp.level_a WHEN 0 THEN '探索者' WHEN 1 THEN '入门者'
+           ELSE '一位' || CASE u.current_level WHEN 0 THEN '探索者' WHEN 1 THEN '入门者'
                           WHEN 2 THEN '实践者' WHEN 3 THEN '熟练者' ELSE '专业者' END
          END as actor_label,
          t.track,
          t.title as task_title,
          ta.completed_at,
-         sp.track
+         u.track
        FROM task_assignments ta
-       JOIN student_profiles sp ON sp.user_id = ta.student_id
+       JOIN users u ON u.id = ta.student_id
        JOIN tasks t ON t.id = ta.task_id
        WHERE ta.status = 'completed'
          AND ta.student_id != $1
-         AND (sp.opc_label = $2 OR ABS(sp.level_a - $3) <= 1)
+         AND (sp.opc_label = $2 OR ABS(u.current_level - $3) <= 1)
          AND ta.completed_at > NOW() - interval '7 days'
        -- RULE: NO LEADERBOARD — ORDER BY time only, never by earnings/count
        ORDER BY ta.completed_at DESC
        LIMIT 20`,
-      [userId, profile.opc_label, profile.level_a]
+      [userId, profile.opc_label, profile.current_level]
     );
 
     res.json({
@@ -185,4 +185,85 @@ export async function getPeersFeed(req: Request, res: Response, next: NextFuncti
       message: `和你差不多的人最近在做什么`,
     });
   } catch (err) { next(err); }
+}
+
+// ============================================================
+// GET /story-wall
+// 获取故事墙列表（兼容前端路由）
+// ============================================================
+export async function getStoryWall(req: Request, res: Response, next: NextFunction): Promise<void> {
+  // 复用 getFeed 逻辑
+  return getFeed(req, res, next);
+}
+
+// ============================================================
+// POST /story-wall/submit
+// 提交故事（兼容前端路由）
+// ============================================================
+export async function submitStory(req: Request, res: Response, next: NextFunction): Promise<void> {
+  // 复用 createPost 逻辑
+  return createPost(req, res, next);
+}
+
+// ============================================================
+// POST /story/:id/comment
+// 评论故事
+// ============================================================
+export async function commentOnStory(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+    const { id: storyId } = req.params;
+    const { content } = req.body;
+
+    if (!content || content.trim().length === 0) {
+      throw new AppError(400, '评论内容不能为空', 'EMPTY_CONTENT');
+    }
+
+    // 检查故事是否存在
+    const story = await queryOne(
+      'SELECT id, author_id FROM story_wall_posts WHERE id = $1 AND deleted_at IS NULL',
+      [storyId]
+    );
+
+    if (!story) {
+      throw new AppError(404, '故事不存在', 'STORY_NOT_FOUND');
+    }
+
+    // 创建评论（使用 story_wall_comments 表）
+    const comment = await queryOne<{ id: string }>(
+      `INSERT INTO story_wall_comments (post_id, user_id, content, created_at)
+       VALUES ($1, $2, $3, NOW())
+       RETURNING id`,
+      [storyId, userId, content.trim()]
+    );
+
+    // 更新故事的评论数
+    await query(
+      `UPDATE story_wall_posts
+       SET comment_count = COALESCE(comment_count, 0) + 1
+       WHERE id = $1`,
+      [storyId]
+    );
+
+    // 如果评论的不是自己的故事，创建通知
+    if ((story as any).author_id !== userId) {
+      await query(
+        `INSERT INTO notifications (user_id, type, title, content, related_id, created_at)
+         VALUES ($1, 'story_comment', '新评论', '有人评论了你的故事', $2, NOW())`,
+        [(story as any).author_id, storyId]
+      ).catch(() => {
+        // 忽略通知创建失败
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        commentId: comment?.id,
+        message: '评论成功',
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 }

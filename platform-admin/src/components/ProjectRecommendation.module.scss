@@ -1,0 +1,646 @@
+.projectRecommendation {
+  padding: 40px;
+  background: #0d1117;
+  min-height: 100vh;
+  color: #c9d1d9;
+}
+
+// 头部
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #21262d;
+
+  .headerLeft {
+    .title {
+      font-size: 32px;
+      font-weight: 600;
+      color: #f0f6fc;
+      margin: 0 0 8px 0;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #8b949e;
+      margin: 0;
+    }
+  }
+
+  .headerStats {
+    display: flex;
+    gap: 24px;
+
+    .statItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 24px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+
+      .statValue {
+        font-size: 28px;
+        font-weight: 600;
+        color: #f0883e;
+        margin-bottom: 4px;
+      }
+
+      .statLabel {
+        font-size: 12px;
+        color: #8b949e;
+      }
+    }
+  }
+}
+
+// 标签页
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #21262d;
+
+  .tab {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #8b949e;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      color: #c9d1d9;
+      border-bottom-color: #30363d;
+    }
+
+    &.active {
+      color: #f0883e;
+      border-bottom-color: #f0883e;
+    }
+  }
+}
+
+// 筛选器
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+
+  .filterLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #c9d1d9;
+    white-space: nowrap;
+  }
+
+  .filterOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .filterBtn {
+      padding: 6px 16px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #8b949e;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #30363d;
+        color: #c9d1d9;
+      }
+
+      &.active {
+        background: #f0883e;
+        border-color: #f0883e;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// 项目列表
+.projectList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 24px;
+
+  .loading,
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: #8b949e;
+    font-size: 14px;
+  }
+
+  .empty {
+    .emptyIcon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .emptyText {
+      font-size: 16px;
+    }
+  }
+
+  .projectCard {
+    position: relative;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: #f0883e;
+      box-shadow: 0 0 0 1px #f0883e;
+    }
+
+    .projectCover,
+    .projectCoverPlaceholder {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .projectCoverPlaceholder {
+      background: linear-gradient(135deg, #f0883e 0%, #d73a49 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+    }
+
+    .featuredBadge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 6px 12px;
+      background: #f0883e;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .projectInfo {
+      padding: 20px;
+
+      .projectTitle {
+        font-size: 18px;
+        font-weight: 600;
+        color: #f0f6fc;
+        margin: 0 0 12px 0;
+        line-height: 1.4;
+      }
+
+      .projectDescription {
+        font-size: 14px;
+        color: #8b949e;
+        line-height: 1.6;
+        margin: 0 0 16px 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .projectMeta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 12px;
+
+        .metaItem {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          color: #8b949e;
+
+          .metaIcon {
+            font-size: 14px;
+          }
+        }
+      }
+
+      .projectTags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+
+        .tag {
+          padding: 4px 12px;
+          background: #f0883e;
+          border-radius: 12px;
+          font-size: 12px;
+          color: #ffffff;
+        }
+      }
+
+      .projectStats {
+        display: flex;
+        gap: 16px;
+        font-size: 13px;
+        color: #8b949e;
+      }
+    }
+
+    .projectActions {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      border-top: 1px solid #21262d;
+
+      .actionBtn {
+        flex: 1;
+        padding: 8px 16px;
+        background: #21262d;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        color: #c9d1d9;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background: #30363d;
+        }
+
+        &.recommend {
+          background: #f0883e;
+          border-color: #f0883e;
+          color: #ffffff;
+
+          &:hover {
+            background: #fb8532;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 推荐历史
+.historyList {
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: #8b949e;
+
+    .emptyIcon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .emptyText {
+      font-size: 16px;
+    }
+  }
+
+  .historyCard {
+    padding: 20px;
+    margin-bottom: 16px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+
+    .historyHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .historyTitle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+
+        .projectName {
+          font-weight: 600;
+          color: #f0f6fc;
+        }
+
+        .arrow {
+          color: #8b949e;
+        }
+
+        .companyName {
+          font-weight: 600;
+          color: #58a6ff;
+        }
+      }
+
+      .historyStatus {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+
+        &.pending {
+          background: rgba(187, 128, 9, 0.15);
+          color: #d29922;
+        }
+
+        &.viewed {
+          background: rgba(56, 139, 253, 0.15);
+          color: #58a6ff;
+        }
+
+        &.contacted {
+          background: rgba(46, 160, 67, 0.15);
+          color: #3fb950;
+        }
+      }
+    }
+
+    .historyText {
+      font-size: 14px;
+      color: #8b949e;
+      line-height: 1.6;
+      margin: 0 0 12px 0;
+    }
+
+    .historyTime {
+      font-size: 12px;
+      color: #6e7681;
+    }
+  }
+}
+
+// 弹窗
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 4, 9, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .modalContent {
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(1, 4, 9, 0.5);
+    display: flex;
+    flex-direction: column;
+
+    .modalHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid #21262d;
+
+      .modalTitle {
+        font-size: 20px;
+        font-weight: 600;
+        color: #f0f6fc;
+        margin: 0;
+      }
+
+      .modalClose {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        border-radius: 6px;
+        color: #8b949e;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background: #21262d;
+          color: #c9d1d9;
+        }
+      }
+    }
+
+    .modalBody {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+
+      .projectPreview {
+        padding: 16px;
+        background: #0d1117;
+        border: 1px solid #21262d;
+        border-radius: 6px;
+        margin-bottom: 20px;
+
+        h3 {
+          font-size: 16px;
+          font-weight: 600;
+          color: #f0f6fc;
+          margin: 0 0 8px 0;
+        }
+
+        p {
+          font-size: 14px;
+          color: #8b949e;
+          line-height: 1.6;
+          margin: 0;
+        }
+      }
+
+      .formGroup {
+        margin-bottom: 20px;
+
+        .formLabel {
+          display: block;
+          font-size: 14px;
+          font-weight: 600;
+          color: #c9d1d9;
+          margin-bottom: 8px;
+        }
+
+        .formTextarea {
+          width: 100%;
+          padding: 12px;
+          background: #0d1117;
+          border: 1px solid #30363d;
+          border-radius: 6px;
+          color: #c9d1d9;
+          font-size: 14px;
+          font-family: inherit;
+          line-height: 1.5;
+          resize: vertical;
+          transition: all 0.2s;
+
+          &:focus {
+            outline: none;
+            border-color: #f0883e;
+            box-shadow: 0 0 0 3px rgba(240, 136, 62, 0.1);
+          }
+        }
+
+        .companySearch {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 12px;
+
+          .searchInput {
+            flex: 1;
+            padding: 8px 12px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 14px;
+
+            &:focus {
+              outline: none;
+              border-color: #f0883e;
+            }
+          }
+
+          .searchBtn {
+            padding: 8px 16px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 14px;
+            cursor: pointer;
+
+            &:hover {
+              background: #30363d;
+            }
+          }
+        }
+
+        .companyList {
+          max-height: 300px;
+          overflow-y: auto;
+          padding: 8px;
+          background: #0d1117;
+          border: 1px solid #30363d;
+          border-radius: 6px;
+
+          .companyItem {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+              background: #21262d;
+            }
+
+            input[type="checkbox"] {
+              width: 18px;
+              height: 18px;
+              cursor: pointer;
+            }
+
+            .companyInfo {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+
+              .companyName {
+                font-size: 14px;
+                font-weight: 600;
+                color: #f0f6fc;
+              }
+
+              .companyIndustry {
+                font-size: 12px;
+                color: #8b949e;
+              }
+            }
+          }
+        }
+
+        .selectedCount {
+          margin-top: 8px;
+          font-size: 13px;
+          color: #8b949e;
+        }
+      }
+    }
+
+    .modalFooter {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 20px 24px;
+      border-top: 1px solid #21262d;
+
+      .modalBtnCancel,
+      .modalBtnSubmit {
+        padding: 8px 20px;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .modalBtnCancel {
+        background: transparent;
+        color: #c9d1d9;
+
+        &:hover:not(:disabled) {
+          background: #21262d;
+        }
+      }
+
+      .modalBtnSubmit {
+        background: #f0883e;
+        border-color: #f0883e;
+        color: #ffffff;
+
+        &:hover:not(:disabled) {
+          background: #fb8532;
+        }
+      }
+    }
+  }
+}

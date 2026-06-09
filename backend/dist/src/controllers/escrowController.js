@@ -1,334 +1,253 @@
 "use strict";
+/**
+ * 支付托管和提现控制器（新版）
+ *
+ * 基于063_escrow_withdrawal_system.sql的完整实现
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAccount = getAccount;
-exports.createQuote = createQuote;
-exports.acceptQuote = acceptQuote;
-exports.payAndEscrow = payAndEscrow;
-exports.completeTaskAndSettle = completeTaskAndSettle;
-exports.releaseSettlement = releaseSettlement;
-exports.getTransactionLogs = getTransactionLogs;
-exports.createWithdrawal = createWithdrawal;
-exports.getUserWithdrawals = getUserWithdrawals;
-exports.getWithdrawalStats = getWithdrawalStats;
-exports.reviewWithdrawal = reviewWithdrawal;
-exports.getPendingWithdrawals = getPendingWithdrawals;
-const escrowService_1 = require("../services/escrowService");
-const withdrawalService_1 = require("../services/withdrawalService");
-const errorHandler_1 = require("../middleware/errorHandler");
+exports.initAccount = initAccount;
+exports.depositFunds = depositFunds;
+exports.releaseFunds = releaseFunds;
+exports.requestWithdrawal = requestWithdrawal;
+exports.getWithdrawalHistory = getWithdrawalHistory;
+exports.getTransactions = getTransactions;
+const escrowServiceNew_1 = require("../services/escrowServiceNew");
 const logger_1 = __importDefault(require("../utils/logger"));
+// =====================================================
+// 账户管理
+// =====================================================
 /**
- * 获取用户托管账户信息
+ * 获取托管账户信息
+ * GET /api/v1/escrow/account
  */
-async function getAccount(req, res, next) {
+async function getAccount(req, res) {
     try {
-        const userId = req.user?.userId;
-        const userType = req.user?.role;
-        if (!userId || !userType) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
         }
-        const account = await escrowService_1.escrowService.getAccount(parseInt(userId), userType);
+        const account = await escrowServiceNew_1.escrowServiceNew.getAccount(userId);
         if (!account) {
-            return res.status(404).json({
-                success: false,
-                message: '账户不存在',
+            return res.status(404).json({ error: 'Account not found' });
+        }
+        return res.json({
+            success: true,
+            data: account,
+        });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to get escrow account', { error });
+        return res.status(500).json({
+            error: 'Failed to get escrow account',
+            message: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+}
+/**
+ * 获取或创建托管账户
+ * POST /api/v1/escrow/account/init
+ */
+async function initAccount(req, res) {
+    try {
+        const userId = req.user?.id;
+        const userRole = req.user?.role;
+        if (!userId || !userRole) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const userType = userRole === 'company' ? 'company' : 'student';
+        const account = await escrowServiceNew_1.escrowServiceNew.getOrCreateAccount(userId, userType);
+        return res.json({
+            success: true,
+            data: account,
+            message: 'Account initialized successfully',
+        });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to initialize escrow account', { error });
+        return res.status(500).json({
+            error: 'Failed to initialize escrow account',
+            message: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+}
+// =====================================================
+// 资金托管
+// =====================================================
+/**
+ * 托管资金（企业支付任务款项）
+ * POST /api/v1/escrow/deposit
+ */
+async function depositFunds(req, res) {
+    try {
+        const userId = req.user?.id;
+        const userRole = req.user?.role;
+        const { task_id, payee_id, amount } = req.body;
+        if (!userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+            return res.status(403).json({ error: 'Only companies can deposit funds' });
+        }
+        if (!task_id || !payee_id || !amount) {
+            return res.status(400).json({ error: 'Missing required fields: task_id, payee_id, amount' });
+        }
+        if (amount <= 0) {
+            return res.status(400).json({ error: 'Amount must be greater than 0' });
+        }
+        const transaction = await escrowServiceNew_1.escrowServiceNew.depositFunds(task_id, userId, payee_id, amount);
+        return res.json({
+            success: true,
+            data: transaction,
+            message: 'Funds deposited successfully',
+        });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to deposit funds', { error });
+        return res.status(500).json({
+            error: 'Failed to deposit funds',
+            message: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+}
+/**
+ * 释放资金（任务完成后支付给学生）
+ * POST /api/v1/escrow/release
+ */
+async function releaseFunds(req, res) {
+    try {
+        const userId = req.user?.id;
+        const userRole = req.user?.role;
+        const { task_id } = req.body;
+        if (!userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+            return res.status(403).json({ error: 'Only companies can release funds' });
+        }
+        if (!task_id) {
+            return res.status(400).json({ error: 'Missing required field: task_id' });
+        }
+        const result = await escrowServiceNew_1.escrowServiceNew.releaseFunds(task_id);
+        return res.json({
+            success: true,
+            data: result,
+            message: 'Funds released successfully',
+        });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to release funds', { error });
+        return res.status(500).json({
+            error: 'Failed to release funds',
+            message: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+}
+// =====================================================
+// 提现管理
+// =====================================================
+/**
+ * 申请提现
+ * POST /api/v1/escrow/withdrawal/request
+ */
+async function requestWithdrawal(req, res) {
+    try {
+        const userId = req.user?.id;
+        const { amount, withdrawal_method, withdrawal_account, account_name } = req.body;
+        if (!userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        if (!amount || !withdrawal_method || !withdrawal_account || !account_name) {
+            return res.status(400).json({
+                error: 'Missing required fields: amount, withdrawal_method, withdrawal_account, account_name',
             });
         }
-        res.json({
+        if (amount <= 0) {
+            return res.status(400).json({ error: 'Amount must be greater than 0' });
+        }
+        const validMethods = ['alipay', 'wechat', 'bank_transfer'];
+        if (!validMethods.includes(withdrawal_method)) {
+            return res.status(400).json({
+                error: 'Invalid withdrawal method. Must be: alipay, wechat, or bank_transfer',
+            });
+        }
+        const withdrawalRequest = await escrowServiceNew_1.escrowServiceNew.requestWithdrawal(userId, amount, withdrawal_method, withdrawal_account, account_name);
+        return res.json({
             success: true,
-            data: {
-                totalBalance: account.totalBalance / 100, // 转换为元
-                frozenBalance: account.frozenBalance / 100,
-                availableBalance: account.availableBalance / 100,
-                pendingSettlement: account.pendingSettlement / 100,
-                totalIncome: account.totalIncome / 100,
-                totalWithdrawal: account.totalWithdrawal / 100,
-            },
+            data: withdrawalRequest,
+            message: 'Withdrawal request submitted successfully',
         });
     }
     catch (error) {
-        logger_1.default.error('Get account error:', error);
-        next(error);
-    }
-}
-/**
- * 创建任务报价（企业）
- */
-async function createQuote(req, res, next) {
-    try {
-        const companyId = req.user?.userId;
-        const { taskId, studentId, quotedAmount } = req.body;
-        if (!companyId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
-        }
-        if (!taskId || !studentId || !quotedAmount) {
-            return next(new errorHandler_1.AppError(400, '缺少必要参数', 'INVALID_PARAMS'));
-        }
-        // 报价金额转换为分
-        const amountInCents = Math.floor(quotedAmount * 100);
-        const quote = await escrowService_1.escrowService.createQuote(taskId, studentId, parseInt(companyId), amountInCents);
-        res.json({
-            success: true,
-            message: '报价创建成功',
-            data: {
-                quoteId: quote.id,
-                quotedAmount: quote.quotedAmount / 100,
-                platformFee: quote.platformFee / 100,
-                studentNetIncome: quote.studentNetIncome / 100,
-            },
+        logger_1.default.error('Failed to request withdrawal', { error });
+        return res.status(500).json({
+            error: 'Failed to request withdrawal',
+            message: error instanceof Error ? error.message : 'Unknown error',
         });
     }
-    catch (error) {
-        logger_1.default.error('Create quote error:', error);
-        next(error);
-    }
 }
 /**
- * 学生接受报价
+ * 获取提现记录
+ * GET /api/v1/escrow/withdrawal/history
  */
-async function acceptQuote(req, res, next) {
+async function getWithdrawalHistory(req, res) {
     try {
-        const studentId = req.user?.userId;
-        const { quoteId } = req.body;
-        if (!studentId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
-        }
-        if (!quoteId) {
-            return next(new errorHandler_1.AppError(400, '缺少报价ID', 'INVALID_PARAMS'));
-        }
-        await escrowService_1.escrowService.acceptQuote(quoteId, parseInt(studentId));
-        res.json({
-            success: true,
-            message: '报价已接受，等待企业支付',
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Accept quote error:', error);
-        next(error);
-    }
-}
-/**
- * 企业支付并进入托管
- */
-async function payAndEscrow(req, res, next) {
-    try {
-        const companyId = req.user?.userId;
-        const { quoteId, paymentMethod } = req.body;
-        if (!companyId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
-        }
-        if (!quoteId || !paymentMethod) {
-            return next(new errorHandler_1.AppError(400, '缺少必要参数', 'INVALID_PARAMS'));
-        }
-        await escrowService_1.escrowService.payAndEscrow(quoteId, parseInt(companyId), paymentMethod);
-        res.json({
-            success: true,
-            message: '支付成功，资金已进入托管',
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Pay and escrow error:', error);
-        next(error);
-    }
-}
-/**
- * 任务完成，进入待结算
- */
-async function completeTaskAndSettle(req, res, next) {
-    try {
-        const { taskId, quoteId } = req.body;
-        if (!taskId || !quoteId) {
-            return next(new errorHandler_1.AppError(400, '缺少必要参数', 'INVALID_PARAMS'));
-        }
-        await escrowService_1.escrowService.completeTaskAndSettle(taskId, quoteId);
-        res.json({
-            success: true,
-            message: '任务已完成，资金进入待结算（7天后可提现）',
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Complete task and settle error:', error);
-        next(error);
-    }
-}
-/**
- * 释放待结算资金
- */
-async function releaseSettlement(req, res, next) {
-    try {
-        const { taskId, quoteId } = req.body;
-        if (!taskId || !quoteId) {
-            return next(new errorHandler_1.AppError(400, '缺少必要参数', 'INVALID_PARAMS'));
-        }
-        await escrowService_1.escrowService.releaseSettlement(taskId, quoteId);
-        res.json({
-            success: true,
-            message: '资金已释放，可提现',
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Release settlement error:', error);
-        next(error);
-    }
-}
-/**
- * 获取交易流水
- */
-async function getTransactionLogs(req, res, next) {
-    try {
-        const userId = req.user?.userId;
-        const userType = req.user?.role;
-        const { limit = 50, offset = 0 } = req.query;
-        if (!userId || !userType) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
-        }
-        const logs = await escrowService_1.escrowService.getTransactionLogs(parseInt(userId), userType, parseInt(limit), parseInt(offset));
-        // 转换金额为元
-        const formattedLogs = logs.map((log) => ({
-            ...log,
-            amount: log.amount / 100,
-            balance_before: log.balance_before / 100,
-            balance_after: log.balance_after / 100,
-        }));
-        res.json({
-            success: true,
-            data: formattedLogs,
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Get transaction logs error:', error);
-        next(error);
-    }
-}
-/**
- * 创建提现申请
- */
-async function createWithdrawal(req, res, next) {
-    try {
-        const userId = req.user?.userId;
-        const { amount, withdrawalMethod, accountName, accountNumber } = req.body;
+        const userId = req.user?.id;
+        const limit = parseInt(req.query.limit) || 20;
+        const offset = parseInt(req.query.offset) || 0;
         if (!userId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
+            return res.status(401).json({ error: 'Unauthorized' });
         }
-        if (!amount || !withdrawalMethod || !accountName || !accountNumber) {
-            return next(new errorHandler_1.AppError(400, '缺少必要参数', 'INVALID_PARAMS'));
-        }
-        // 转换为分
-        const amountInCents = Math.floor(amount * 100);
-        const withdrawal = await withdrawalService_1.withdrawalService.createWithdrawal(parseInt(userId), amountInCents, withdrawalMethod, accountName, accountNumber);
-        res.json({
+        const result = await escrowServiceNew_1.escrowServiceNew.getWithdrawals(userId, limit, offset);
+        return res.json({
             success: true,
-            message: '提现申请已提交，等待审核',
-            data: {
-                withdrawalId: withdrawal.id,
-                amount: withdrawal.amount / 100,
-                status: withdrawal.status,
-            },
+            data: result.withdrawals,
+            total: result.total,
+            limit,
+            offset,
         });
     }
     catch (error) {
-        logger_1.default.error('Create withdrawal error:', error);
-        next(error);
+        logger_1.default.error('Failed to get withdrawal history', { error });
+        return res.status(500).json({
+            error: 'Failed to get withdrawal history',
+            message: error instanceof Error ? error.message : 'Unknown error',
+        });
     }
 }
+// =====================================================
+// 交易记录
+// =====================================================
 /**
- * 获取用户提现记录
+ * 获取账户流水
+ * GET /api/v1/escrow/transactions
  */
-async function getUserWithdrawals(req, res, next) {
+async function getTransactions(req, res) {
     try {
-        const userId = req.user?.userId;
-        const { limit = 50, offset = 0 } = req.query;
+        const userId = req.user?.id;
+        const limit = parseInt(req.query.limit) || 20;
+        const offset = parseInt(req.query.offset) || 0;
         if (!userId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
+            return res.status(401).json({ error: 'Unauthorized' });
         }
-        const withdrawals = await withdrawalService_1.withdrawalService.getUserWithdrawals(parseInt(userId), parseInt(limit), parseInt(offset));
-        // 转换金额为元
-        const formattedWithdrawals = withdrawals.map((w) => ({
-            ...w,
-            amount: w.amount / 100,
-        }));
-        res.json({
+        const result = await escrowServiceNew_1.escrowServiceNew.getTransactions(userId, limit, offset);
+        return res.json({
             success: true,
-            data: formattedWithdrawals,
+            data: result.transactions,
+            total: result.total,
+            limit,
+            offset,
         });
     }
     catch (error) {
-        logger_1.default.error('Get user withdrawals error:', error);
-        next(error);
-    }
-}
-/**
- * 获取提现统计
- */
-async function getWithdrawalStats(req, res, next) {
-    try {
-        const userId = req.user?.userId;
-        if (!userId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
-        }
-        const stats = await withdrawalService_1.withdrawalService.getWithdrawalStats(parseInt(userId));
-        res.json({
-            success: true,
-            data: {
-                completedCount: parseInt(stats.completed_count),
-                pendingCount: parseInt(stats.pending_count),
-                rejectedCount: parseInt(stats.rejected_count),
-                totalWithdrawn: parseInt(stats.total_withdrawn) / 100,
-                pendingAmount: parseInt(stats.pending_amount) / 100,
-            },
+        logger_1.default.error('Failed to get transactions', { error });
+        return res.status(500).json({
+            error: 'Failed to get transactions',
+            message: error instanceof Error ? error.message : 'Unknown error',
         });
-    }
-    catch (error) {
-        logger_1.default.error('Get withdrawal stats error:', error);
-        next(error);
-    }
-}
-/**
- * 审核提现申请（管理员）
- */
-async function reviewWithdrawal(req, res, next) {
-    try {
-        const reviewerId = req.user?.userId;
-        const { withdrawalId, approved, rejectReason } = req.body;
-        if (!reviewerId) {
-            return next(new errorHandler_1.AppError(401, '用户未登录', 'UNAUTHORIZED'));
-        }
-        if (!withdrawalId || approved === undefined) {
-            return next(new errorHandler_1.AppError(400, '缺少必要参数', 'INVALID_PARAMS'));
-        }
-        await withdrawalService_1.withdrawalService.reviewWithdrawal(withdrawalId, parseInt(reviewerId), approved, rejectReason);
-        res.json({
-            success: true,
-            message: approved ? '提现申请已批准' : '提现申请已拒绝',
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Review withdrawal error:', error);
-        next(error);
-    }
-}
-/**
- * 获取待审核提现列表（管理员）
- */
-async function getPendingWithdrawals(req, res, next) {
-    try {
-        const { limit = 50, offset = 0 } = req.query;
-        const withdrawals = await withdrawalService_1.withdrawalService.getPendingWithdrawals(parseInt(limit), parseInt(offset));
-        // 转换金额为元
-        const formattedWithdrawals = withdrawals.map((w) => ({
-            ...w,
-            amount: w.amount / 100,
-        }));
-        res.json({
-            success: true,
-            data: formattedWithdrawals,
-        });
-    }
-    catch (error) {
-        logger_1.default.error('Get pending withdrawals error:', error);
-        next(error);
     }
 }
 //# sourceMappingURL=escrowController.js.map

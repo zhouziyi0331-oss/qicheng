@@ -48,9 +48,9 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
           sp.real_name, sp.gender, sp.birth_date, sp.university, sp.major,
           sp.grade, sp.student_id, sp.id_card, sp.bio,
           sb.balance, sb.frozen_balance, sb.total_earned
-        FROM student_profiles sp
-        LEFT JOIN student_balances sb ON sp.user_id = sb.user_id
-        WHERE sp.user_id = $1`,
+        FROM users u
+        LEFT JOIN student_balances sb ON u.id = sb.user_id
+        WHERE u.id = $1`,
         [userId]
       );
       profileData.studentProfile = studentProfile;
@@ -258,7 +258,7 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
       if (updates.length > 0) {
         values.push(userId);
         await query(
-          `UPDATE student_profiles SET ${updates.join(', ')} WHERE user_id = $${paramIndex}`,
+          `UPDATE student_capabilities SET ${updates.join(', ')} WHERE student_id = $${paramIndex}`,
           values
         );
       }
@@ -312,7 +312,7 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
       if (updates.length > 0) {
         values.push(userId);
         await query(
-          `UPDATE company_profiles SET ${updates.join(', ')} WHERE user_id = $${paramIndex}`,
+          `UPDATE company_profiles SET ${updates.join(', ')} WHERE student_id = $${paramIndex}`,
           values
         );
       }

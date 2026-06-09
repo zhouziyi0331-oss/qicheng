@@ -34,6 +34,18 @@
       font-weight: 600;
     }
   }
+
+  &.locked {
+    opacity: 0.5;
+
+    .tab-icon-text {
+      color: #999999;
+    }
+
+    .tab-text {
+      color: #999999;
+    }
+  }
 }
 
 // 图标容器
@@ -59,6 +71,12 @@
   color: #2D3436;
   font-weight: 500;
   transition: all 0.3s ease;
+
+  .lock-hint {
+    font-size: 20px;
+    color: #999999;
+    margin-left: 4px;
+  }
 }
 
 // 中央启程小猫按钮容器

@@ -38,6 +38,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * GET /ability/radar          — 六维雷达图 (基础版免费)
  * GET /ability/radar/detailed — 详细版 (付费 ¥69)
  * GET /ability/timeline       — 成长时间线
+ * GET /ability/emotion-state  — 获取情绪状态
+ * POST /ability/update-after-task — 任务完成后更新能力
  */
 const express_1 = require("express");
 const auth_1 = require("../../middleware/auth");
@@ -47,5 +49,7 @@ router.use(auth_1.authenticate, (0, auth_1.requireRole)('student'));
 router.get('/radar', controller.getRadar);
 router.get('/radar/detailed', controller.getDetailedRadar);
 router.get('/timeline', controller.getTimeline);
+router.get('/emotion-state', controller.getEmotionState);
+router.post('/update-after-task', controller.updateAfterTask);
 exports.default = router;
 //# sourceMappingURL=index.js.map

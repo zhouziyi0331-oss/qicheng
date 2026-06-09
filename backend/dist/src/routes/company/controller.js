@@ -103,7 +103,7 @@ async function getReport(req, res, next) {
         COALESCE(SUM(t.budget), 0) as total_amount
        FROM tasks t
        JOIN users u ON u.id = t.student_id
-       LEFT JOIN student_profiles sp ON sp.user_id = u.id
+       LEFT JOIN users u ON u.id = u.id
        WHERE t.company_id = $1 AND t.status = 'completed' ${dateFilter}
        GROUP BY u.id, u.nickname, sp.avatar_url
        ORDER BY tasks_count DESC, total_amount DESC
@@ -133,7 +133,7 @@ async function getStudentProfile(req, res, next) {
         sp.completed_tasks,
         COALESCE(sp.rating, 0) as rating
        FROM users u
-       JOIN student_profiles sp ON sp.user_id = u.id
+       JOIN users u ON u.id = u.id
        WHERE u.id = $1`, [studentId]);
         if (!student)
             throw new errorHandler_1.AppError(404, '学生不存在', 'NOT_FOUND');
@@ -270,7 +270,7 @@ async function getFavoriteStudents(req, res, next) {
         MAX(t.completed_at) as last_collaboration
        FROM favorite_students fs
        JOIN users u ON u.id = fs.student_id
-       LEFT JOIN student_profiles sp ON sp.user_id = u.id
+       LEFT JOIN users u ON u.id = u.id
        LEFT JOIN tasks t ON t.student_id = u.id AND t.company_id = $1 AND t.status = 'completed'
        WHERE fs.company_id = $1
        GROUP BY fs.id, fs.created_at, u.id, u.nickname, sp.avatar_url, sp.level, sp.completed_tasks, sp.rating

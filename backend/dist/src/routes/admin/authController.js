@@ -43,6 +43,7 @@ async function login(req, res) {
             adminRole: admin.role_code === 'super_admin' ? 'super' : admin.role_code,
             type: 'admin'
         }, config_1.config.jwt.accessSecret, { expiresIn: '8h' });
+        // 返回前端期望的格式
         res.json({
             token,
             admin: {

@@ -14,11 +14,11 @@ export async function getRadar(req: Request, res: Response, next: NextFunction):
       task_count: number;
       six_dim_scores: Record<string, number>;
       opc_label: string;
-      level_a: number;
-      level_b: number;
+      current_level: number;
+      current_level: number;
     }>(
-      `SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, sp.level_a, sp.level_b
-       FROM student_profiles sp WHERE sp.user_id = $1`,
+      `SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, u.current_level, u.current_level
+       FROM users u WHERE u.id = $1`,
       [userId]
     );
 
@@ -36,7 +36,7 @@ export async function getRadar(req: Request, res: Response, next: NextFunction):
         scores,
         dimensions: dimensionDescriptions,
         opcLabel: profile.opc_label,
-        level: { a: profile.level_a, b: profile.level_b },
+        level: { a: profile.current_level, b: profile.level_b },
         // 前端使用这些数据渲染深色背景+发光效果雷达图
         renderConfig: {
           backgroundColor: '#0d1117',
@@ -63,7 +63,7 @@ export async function getDetailedRadar(req: Request, res: Response, next: NextFu
 
     // 检查是否完成了3单 (解锁条件)
     const profile = await queryOne<{ task_count: number; six_dim_scores: Record<string, number> }>(
-      'SELECT task_count, six_dim_scores FROM student_profiles WHERE user_id = $1',
+      'SELECT task_count, six_dim_scores FROM student_capabilities WHERE student_id = $1',
       [userId]
     );
 
@@ -109,7 +109,7 @@ export async function getTimeline(req: Request, res: Response, next: NextFunctio
 
     const events = await query(
       `SELECT id, event_type, event_title, event_desc, event_data,
-              level_before, level_after, level_before_label, level_after_label,
+              level_before, current_levelfter, level_before_label, level_after_label,
               growth_comparison, is_milestone, share_card_generated, created_at
        FROM growth_timeline
        WHERE user_id = $1 AND deleted_at IS NULL
@@ -179,4 +179,157 @@ function getScoreDesc(score: number, levels: string[]): string {
   if (score < 40) return levels[0];
   if (score < 75) return levels[1];
   return levels[2];
+}
+
+// ============================================================
+// GET /ability/emotion-state
+// 获取学生当前情绪状态
+// ============================================================
+export async function getEmotionState(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+
+    // 查询最近的情绪信号
+    const emotionSignal = await queryOne<{
+      signal_type: string;
+      signal_value: number;
+      trigger_event: string;
+      detected_at: Date;
+    }>(
+      `SELECT signal_type, signal_value, trigger_event, detected_at
+       FROM emotion_signals
+       WHERE user_id = $1 AND resolved_at IS NULL
+       ORDER BY detected_at DESC
+       LIMIT 1`,
+      [userId]
+    );
+
+    if (!emotionSignal) {
+      // 没有未解决的情绪信号，返回平静状态
+      res.json({
+        success: true,
+        data: {
+          emotionType: 'calm',
+          value: 5,
+          description: '状态平稳',
+          detectedAt: new Date(),
+        },
+      });
+      return;
+    }
+
+    // 映射情绪类型到描述
+    const emotionDescriptions: Record<string, string> = {
+      excited: '兴奋状态，适合挑战新任务',
+      frustrated: '遇到困难，需要支持',
+      cooling: '活跃度下降，需要激励',
+      calm: '状态平稳',
+    };
+
+    res.json({
+      success: true,
+      data: {
+        emotionType: emotionSignal.signal_type,
+        value: emotionSignal.signal_value,
+        description: emotionDescriptions[emotionSignal.signal_type] || '未知状态',
+        triggerEvent: emotionSignal.trigger_event,
+        detectedAt: emotionSignal.detected_at,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// POST /ability/update-after-task
+// 任务完成后更新学生能力画像
+// ============================================================
+export async function updateAfterTask(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+    const { taskId, performance } = req.body;
+
+    if (!taskId) {
+      throw new AppError(400, '缺少任务ID', 'MISSING_TASK_ID');
+    }
+
+    // 获取任务信息
+    const task = await queryOne<{
+      id: string;
+      title: string;
+      difficulty_level: number;
+    }>(
+      'SELECT id, title, difficulty_level FROM tasks WHERE id = $1',
+      [taskId]
+    );
+
+    if (!task) {
+      throw new AppError(404, '任务不存在', 'TASK_NOT_FOUND');
+    }
+
+    // 获取当前能力画像
+    const profile = await queryOne<{
+      six_dim_scores: Record<string, number>;
+      current_level: number;
+      current_level: number;
+      task_count: number;
+    }>(
+      'SELECT six_dim_scores, current_level, level_b, task_count FROM student_capabilities WHERE student_id = $1',
+      [userId]
+    );
+
+    if (!profile) {
+      throw new AppError(404, '学生画像不存在', 'PROFILE_NOT_FOUND');
+    }
+
+    // 根据任务表现计算能力增长
+    const performanceScore = performance?.score || 80; // 默认80分
+    const growthFactor = performanceScore / 100;
+    const baseGrowth = 2; // 基础增长2分
+
+    // 更新六维能力（简化版：均匀增长）
+    const currentScores = profile.six_dim_scores || { d1: 50, d2: 50, d3: 50, d4: 50, d5: 50, d6: 50 };
+    const updatedScores: Record<string, number> = {};
+
+    Object.keys(currentScores).forEach((dim) => {
+      const currentValue = currentScores[dim];
+      updatedScores[dim] = Math.min(100, currentValue + baseGrowth * growthFactor);
+    });
+
+    // 更新数据库
+    await query(
+      `UPDATE student_capabilities
+       SET six_dim_scores = $1,
+           task_count = task_count + 1,
+           updated_at = NOW()
+       WHERE user_id = $2`,
+      [JSON.stringify(updatedScores), userId]
+    );
+
+    // 记录成长时间线事件
+    await query(
+      `INSERT INTO growth_timeline
+       (user_id, event_type, event_title, event_desc, level_before, level_after, created_at)
+       VALUES ($1, 'task_completed', $2, $3, $4, $5, NOW())`,
+      [
+        userId,
+        `完成任务：${task.title}`,
+        `任务难度 ${task.difficulty_level}，表现评分 ${performanceScore}`,
+        profile.current_level,
+        profile.current_level, // 简化版：暂不改变等级
+      ]
+    );
+
+    res.json({
+      success: true,
+      data: {
+        message: '能力画像已更新',
+        updatedScores,
+        taskCount: profile.task_count + 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 }

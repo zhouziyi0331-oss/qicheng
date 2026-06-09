@@ -4,6 +4,7 @@ export default defineAppConfig({
     'pages/role-select/index',     // 角色选择
     'pages/opc-test/index',        // OPC测评
     'pages/opc-test/result',       // OPC测评结果
+    'pages/track-selection/index', // 赛道选择
     'pages/login/index',           // 登录
     'pages/register/index',        // 注册
     'pages/bind-phone/index',      // 绑定手机号
@@ -12,10 +13,20 @@ export default defineAppConfig({
     'pages/tasks/detail',          // 任务详情
     'pages/tasks/working',         // 任务执行
     'pages/tasks/submit',          // 任务提交
+    'pages/tasks/recommended',     // 推荐任务（AI智能匹配）
     'pages/invitations/index',     // 任务邀请
     'pages/my-tasks/index',        // 我的任务
     'pages/mentor/index',          // AI导师（启程小猫）
     'pages/mentor-chat/index',     // AI导师聊天
+    'pages/deep-patterns/index',   // 深度模式识别
+    'pages/belief-shifts/index',   // 信念转变追踪
+    'pages/growth-challenges/index', // 成长挑战
+    'pages/growth-dashboard/index', // 成长仪表盘
+    'pages/mentor-reports/index',  // 导师报告
+    'pages/growth-timeline/index', // 成长时间线
+    'pages/my-growth/index',       // 我的成长
+    'pages/toolbox/index',         // 工具箱
+    'pages/mentor-care/index',     // 导师关心
     'pages/ability/index',         // 六维能力图
     'pages/timeline/index',        // 成长时间线
     'pages/story/index',           // 故事墙
@@ -42,7 +53,13 @@ export default defineAppConfig({
     'pages/opc-incubation/index',  // OPC孵化计划
     'pages/alliances/index',       // 团队协作
     'pages/notifications/index',   // 通知中心
-    'pages/workout-timer/index',    // 运动计时报数器
+    'pages/my-ratings/index',      // 我的评价
+    'pages/my-wallet/index',       // 我的钱包（托管提现）
+    'pages/create-rating/index',   // 创建评价
+    'pages/level-rewards/index',   // 等级奖励
+    'pages/community/index',       // 社区首页
+    'pages/community/detail',      // 帖子详情
+    'pages/community/create',      // 发帖页面
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -65,6 +82,10 @@ export default defineAppConfig({
       {
         pagePath: 'pages/tasks/index',
         text: '任务'
+      },
+      {
+        pagePath: 'pages/community/index',
+        text: '社区'
       },
       {
         pagePath: 'pages/story/index',

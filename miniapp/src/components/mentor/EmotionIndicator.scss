@@ -1,0 +1,64 @@
+.emotion-indicator {
+  margin: 24rpx 32rpx;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  border: 3rpx solid;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  animation: slideIn 0.3s ease-out;
+
+  .emotion-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16rpx;
+    margin-bottom: 16rpx;
+
+    .emotion-icon {
+      font-size: 48rpx;
+      line-height: 1;
+    }
+
+    .emotion-info {
+      flex: 1;
+
+      .emotion-name {
+        display: block;
+        font-size: 28rpx;
+        font-weight: 600;
+        color: #1F2937;
+        margin-bottom: 8rpx;
+      }
+
+      .emotion-tip {
+        display: block;
+        font-size: 24rpx;
+        color: #6B7280;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  .emotion-bar-container {
+    height: 8rpx;
+    background: #E5E7EB;
+    border-radius: 4rpx;
+    overflow: hidden;
+
+    .emotion-bar {
+      height: 100%;
+      border-radius: 4rpx;
+      transition: width 0.5s ease-out;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

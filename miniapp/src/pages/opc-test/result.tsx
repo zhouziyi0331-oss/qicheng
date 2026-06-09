@@ -1,8 +1,43 @@
-import { View, Text } from '@tarojs/components'
-import Taro, { useLoad } from '@tarojs/taro'
+import { View, Text, Canvas, Button } from '@tarojs/components'
+import Taro, { useLoad, useRouter } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { opcV2API } from '../../services/api'
 import './result.scss'
+
+interface AbilityScore {
+  dimension: string
+  score: number
+  description: string
+}
+
+interface PersonalityTag {
+  name: string
+  description: string
+  color: string
+}
+
+interface TrackRecommendation {
+  track: string
+  matchScore: number
+  reason: string
+  firstTaskSuggestion: string
+}
+
+interface SelfPerception {
+  userWords: string[]
+  aiAnalysis: string
+  gap: string
+}
+
+interface OPCResult {
+  assessmentId: string
+  userId: string
+  abilityScores: AbilityScore[]
+  personalityTags: PersonalityTag[]
+  selfPerception: SelfPerception
+  trackRecommendation: TrackRecommendation
+  createdAt: string
+}
 
 // 人格标签定义
 const PERSONALITY_TAGS = {
@@ -155,31 +190,54 @@ export default function OPCTestResult() {
   }
 
   const displayResult = (result: any) => {
-    // 显示后端返回的结果
-    setScores(result.dimensionScores)
+    // 兼容新旧两种API格式
+    if (result.scores) {
+      // 新版OPC v2.0 API格式（AI生成）
+      setScores(result.scores)
 
-    // 设置人格标签
-    const tagKey = result.personalityTag
-    const tagInfo = PERSONALITY_TAGS[tagKey] || PERSONALITY_TAGS.balanced
-    setPersonalityTag({ key: tagKey, ...tagInfo })
+      // 使用AI生成的第一个性格标签
+      const firstTag = result.personalityTags?.[0] || 'balanced'
+      const tagInfo = PERSONALITY_TAGS[firstTag] || PERSONALITY_TAGS.balanced
+      setPersonalityTag({
+        key: firstTag,
+        ...tagInfo,
+        aiInsights: result.aiInsights,
+        selfPerceptionAnalysis: result.selfPerceptionAnalysis,
+        trackRecommendations: result.trackRecommendations
+      })
 
-    // 设置维度解读
-    const interps: any = {}
-    Object.keys(result.dimensionScores).forEach(dimension => {
-      const score = result.dimensionScores[dimension]
-      const templates = DIMENSION_INTERPRETATIONS[dimension]
-
-      if (templates) {
-        if (score <= 40) {
-          interps[dimension] = templates.low
-        } else if (score <= 60) {
-          interps[dimension] = templates.mid
-        } else {
-          interps[dimension] = templates.high
-        }
+      // 使用AI生成的洞察作为解读
+      const interps: any = {}
+      if (result.aiInsights) {
+        // 将AI洞察作为总体解读
+        interps.overall = result.aiInsights
       }
-    })
-    setInterpretations(interps)
+      setInterpretations(interps)
+    } else {
+      // 旧版API格式（规则生成）
+      setScores(result.dimensionScores)
+
+      const tagKey = result.personalityTag
+      const tagInfo = PERSONALITY_TAGS[tagKey] || PERSONALITY_TAGS.balanced
+      setPersonalityTag({ key: tagKey, ...tagInfo })
+
+      const interps: any = {}
+      Object.keys(result.dimensionScores).forEach(dimension => {
+        const score = result.dimensionScores[dimension]
+        const templates = DIMENSION_INTERPRETATIONS[dimension]
+
+        if (templates) {
+          if (score <= 40) {
+            interps[dimension] = templates.low
+          } else if (score <= 60) {
+            interps[dimension] = templates.mid
+          } else {
+            interps[dimension] = templates.high
+          }
+        }
+      })
+      setInterpretations(interps)
+    }
   }
 
   const handleComplete = () => {
@@ -336,13 +394,46 @@ export default function OPCTestResult() {
         <View className="interpretations-section">
           <Text className="section-title">维度解读</Text>
 
-          {Object.keys(interpretations).map(dimension => (
+          {/* 如果有AI洞察，优先显示 */}
+          {interpretations.overall && (
+            <View className="interpretation-item ai-insights">
+              <Text className="interpretation-title">✨ AI导师的洞察</Text>
+              <Text className="interpretation-text">{interpretations.overall}</Text>
+            </View>
+          )}
+
+          {/* 如果有自我认知分析，显示 */}
+          {personalityTag.selfPerceptionAnalysis && (
+            <View className="interpretation-item self-perception">
+              <Text className="interpretation-title">🔍 自我认知对比</Text>
+              <Text className="interpretation-text">{personalityTag.selfPerceptionAnalysis}</Text>
+            </View>
+          )}
+
+          {/* 显示其他维度解读 */}
+          {Object.keys(interpretations).filter(k => k !== 'overall').map(dimension => (
             <View key={dimension} className="interpretation-item">
               <Text className="interpretation-title">{DIMENSION_NAMES[dimension]}</Text>
               <Text className="interpretation-text">{interpretations[dimension]}</Text>
             </View>
           ))}
         </View>
+
+        {/* AI赛道推荐（如果有） */}
+        {personalityTag.trackRecommendations && personalityTag.trackRecommendations.length > 0 && (
+          <View className="ai-track-recommendations">
+            <Text className="section-title">🎯 AI为你推荐的赛道</Text>
+            {personalityTag.trackRecommendations.map((track, index) => (
+              <View key={index} className="ai-track-item">
+                <View className="track-header">
+                  <Text className="track-name">{track.track}</Text>
+                  <Text className="track-score">{Math.round(track.matchScore * 100)}%匹配</Text>
+                </View>
+                <Text className="track-reason">{track.reason}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         {/* 推荐信息 */}
         <View className="recommendation-section">

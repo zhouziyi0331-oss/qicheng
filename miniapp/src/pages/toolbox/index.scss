@@ -1,0 +1,257 @@
+.toolbox-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-bottom: 40rpx;
+
+  .loading-container,
+  .empty-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    .loading-text,
+    .empty-text {
+      font-size: 28rpx;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  // 顶部标题
+  .page-header {
+    position: relative;
+    padding: 60rpx 32rpx 40rpx;
+    overflow: hidden;
+
+    .header-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+
+      .page-title {
+        font-size: 48rpx;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 12rpx;
+        display: block;
+      }
+
+      .page-subtitle {
+        font-size: 26rpx;
+        color: rgba(255, 255, 255, 0.8);
+        display: block;
+      }
+    }
+  }
+
+  // Tab切换
+  .tabs {
+    display: flex;
+    margin: 0 32rpx 24rpx;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    padding: 8rpx;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 16rpx;
+      border-radius: 16rpx;
+      font-size: 26rpx;
+      color: #6B7280;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .tab-badge {
+        position: absolute;
+        top: 8rpx;
+        right: 8rpx;
+        background: #EF4444;
+        color: #fff;
+        font-size: 18rpx;
+        padding: 2rpx 8rpx;
+        border-radius: 10rpx;
+        min-width: 32rpx;
+        text-align: center;
+      }
+    }
+  }
+
+  // 内容区域
+  .content-area {
+    height: calc(100vh - 400rpx);
+    padding: 0 32rpx;
+
+    .tools-section {
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 400rpx;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24rpx;
+        padding: 40rpx;
+
+        .empty-icon {
+          font-size: 80rpx;
+          margin-bottom: 20rpx;
+        }
+
+        .empty-text {
+          font-size: 28rpx;
+          color: #6B7280;
+          margin-bottom: 12rpx;
+        }
+
+        .empty-hint {
+          font-size: 24rpx;
+          color: #9CA3AF;
+          text-align: center;
+        }
+      }
+
+      .tools-list {
+        .tool-card {
+          background: rgba(255, 255, 255, 0.95);
+          border-radius: 24rpx;
+          padding: 28rpx;
+          margin-bottom: 20rpx;
+          box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+          transition: transform 0.2s ease;
+
+          &:active {
+            transform: scale(0.98);
+          }
+
+          .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16rpx;
+            position: relative;
+
+            .tool-icon {
+              width: 64rpx;
+              height: 64rpx;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              border-radius: 16rpx;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 36rpx;
+              margin-right: 16rpx;
+            }
+
+            .tool-info {
+              flex: 1;
+
+              .tool-name {
+                font-size: 30rpx;
+                font-weight: bold;
+                color: #1F2937;
+                display: block;
+                margin-bottom: 4rpx;
+              }
+
+              .tool-category {
+                font-size: 22rpx;
+                color: #9CA3AF;
+              }
+            }
+
+            .recommended-badge {
+              position: absolute;
+              top: -8rpx;
+              right: -8rpx;
+              background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+              color: #fff;
+              font-size: 20rpx;
+              padding: 6rpx 12rpx;
+              border-radius: 12rpx;
+              box-shadow: 0 2rpx 8rpx rgba(239, 68, 68, 0.3);
+            }
+          }
+
+          .tool-description {
+            font-size: 26rpx;
+            color: #4B5563;
+            line-height: 1.6;
+            margin-bottom: 16rpx;
+            display: block;
+          }
+
+          .recommendation-reason {
+            background: #FEF3C7;
+            border-left: 4rpx solid #F59E0B;
+            padding: 16rpx;
+            border-radius: 12rpx;
+            margin-bottom: 16rpx;
+
+            .reason-label {
+              font-size: 22rpx;
+              color: #92400E;
+              font-weight: 500;
+              display: block;
+              margin-bottom: 8rpx;
+            }
+
+            .reason-text {
+              font-size: 24rpx;
+              color: #78350F;
+              line-height: 1.5;
+            }
+          }
+
+          .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12rpx;
+            margin-bottom: 16rpx;
+
+            .tool-tag {
+              padding: 8rpx 16rpx;
+              background: #EDE9FE;
+              border-radius: 12rpx;
+              font-size: 22rpx;
+              color: #6B21A8;
+            }
+          }
+
+          .tool-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16rpx;
+            border-top: 1rpx solid #E5E7EB;
+
+            .usage-count {
+              font-size: 24rpx;
+              color: #667eea;
+              font-weight: 500;
+            }
+
+            .last-used {
+              font-size: 22rpx;
+              color: #9CA3AF;
+            }
+          }
+        }
+      }
+    }
+  }
+}

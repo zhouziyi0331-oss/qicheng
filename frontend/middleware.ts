@@ -17,12 +17,34 @@ interface JwtPayload {
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 开发环境跳过认证
+  // Admin路由特殊处理
+  if (pathname.startsWith('/admin')) {
+    // 登录页不需要认证
+    if (pathname === '/admin/login') {
+      // 如果已登录，重定向到dashboard
+      const adminToken = req.cookies.get("adminToken")?.value;
+      if (adminToken) {
+        return NextResponse.redirect(new URL('/admin', req.url));
+      }
+      return NextResponse.next();
+    }
+
+    // 其他admin页面需要认证
+    const adminToken = req.cookies.get("adminToken")?.value;
+    if (!adminToken) {
+      const loginUrl = new URL('/admin/login', req.url);
+      loginUrl.searchParams.set('from', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    return NextResponse.next();
+  }
+
+  // 开发环境跳过学生/企业认证
   if (process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }
 
-  // 临时：跳过所有认证（开发调试用）
+  // 临时：跳过所有学生/企业认证（开发调试用）
   return NextResponse.next();
 
   const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
@@ -38,7 +60,7 @@ export function middleware(req: NextRequest) {
   }
 
   try {
-    const payload = jwtDecode<JwtPayload>(token);
+    const payload = jwtDecode<JwtPayload>(token as string);
     // Token 过期（client-side refresh 处理，这里只做基础检查）
     if (payload.exp * 1000 < Date.now()) {
       const loginUrl = req.nextUrl.clone();
@@ -53,7 +75,7 @@ export function middleware(req: NextRequest) {
     if (payload.role === "student" && COMPANY_ONLY.some((p) => pathname.startsWith(p))) {
       return NextResponse.redirect(new URL("/tasks", req.url));
     }
-    // Admin 路由保护
+    // Admin 路由保护（已在上面处理）
     if (pathname.startsWith("/admin") && payload.role !== "admin") {
       return NextResponse.redirect(new URL("/tasks", req.url));
     }

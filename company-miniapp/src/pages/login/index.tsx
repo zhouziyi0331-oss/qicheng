@@ -233,6 +233,22 @@ export default function Login() {
           </View>
         </View>
       )}
+
+      {/* 平台特色说明 */}
+      <View className="platform-features">
+        <View className="feature-item">
+          <View className="feature-icon">🔒</View>
+          <Text className="feature-text">数据加密存储，企业信息安全保障</Text>
+        </View>
+        <View className="feature-item">
+          <View className="feature-icon">🤝</View>
+          <Text className="feature-text">与学生完成2单后可解锁联系方式</Text>
+        </View>
+        <View className="feature-item">
+          <View className="feature-icon">⭐</View>
+          <Text className="feature-text">AI智能匹配，快速找到合适人才</Text>
+        </View>
+      </View>
     </View>
   )
 }

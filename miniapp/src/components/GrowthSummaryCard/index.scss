@@ -1,0 +1,360 @@
+.growth-summary-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 40rpx;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.growth-summary-card {
+  width: 100%;
+  max-width: 640rpx;
+  max-height: 90vh;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
+  border-radius: 32rpx;
+  padding: 48rpx 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(60rpx) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.celebration-header {
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.celebration-emoji {
+  display: block;
+  font-size: 96rpx;
+  margin-bottom: 16rpx;
+  animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20rpx);
+  }
+}
+
+.celebration-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8rpx;
+}
+
+.celebration-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.task-info {
+  text-align: center;
+  padding: 24rpx;
+  background: #F3F4F6;
+  border-radius: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.task-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 8rpx;
+}
+
+.task-time {
+  display: block;
+  font-size: 24rpx;
+  color: #9CA3AF;
+}
+
+.earnings-section {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.earning-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx;
+  border-radius: 20rpx;
+
+  &.money {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  }
+
+  &.exp {
+    background: linear-gradient(135deg, #E9D5FF 0%, #D8B4FE 100%);
+  }
+}
+
+.earning-icon {
+  font-size: 48rpx;
+}
+
+.earning-info {
+  flex: 1;
+}
+
+.earning-label {
+  display: block;
+  font-size: 24rpx;
+  color: #6B7280;
+  margin-bottom: 4rpx;
+}
+
+.earning-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.level-up-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border-radius: 20rpx;
+  margin-bottom: 32rpx;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.level-up-icon {
+  font-size: 40rpx;
+}
+
+.level-up-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1E40AF;
+}
+
+.skills-section,
+.abilities-section,
+.achievements-section {
+  margin-bottom: 32rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 20rpx;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.skill-name {
+  width: 120rpx;
+  font-size: 26rpx;
+  color: #4B5563;
+  flex-shrink: 0;
+}
+
+.skill-progress {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 16rpx;
+  background: #E5E7EB;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 8rpx;
+  transition: width 0.6s ease;
+
+  &.before {
+    background: #9CA3AF;
+  }
+
+  &.after {
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+  }
+}
+
+.progress-arrow {
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.skill-change {
+  width: 80rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #10B981;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.abilities-grid,
+.achievements-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.ability-badge {
+  padding: 12rpx 20rpx;
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  border-radius: 20rpx;
+  border: 2rpx solid #10B981;
+}
+
+.ability-text {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #065F46;
+}
+
+.achievement-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 20rpx;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-radius: 20rpx;
+  border: 2rpx solid #F59E0B;
+}
+
+.achievement-icon {
+  font-size: 28rpx;
+}
+
+.achievement-text {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #92400E;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.share-btn {
+  width: 100%;
+  height: 88rpx;
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  border-radius: 44rpx;
+  border: none;
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 24rpx rgba(139, 92, 246, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &::after {
+    border: none;
+  }
+}
+
+.close-btn {
+  width: 100%;
+  height: 72rpx;
+  background: transparent;
+  border-radius: 36rpx;
+  border: none;
+  color: #6B7280;
+  font-size: 28rpx;
+  font-weight: 500;
+
+  &:active {
+    background: #F3F4F6;
+  }
+
+  &::after {
+    border: none;
+  }
+}
+
+.btn-text {
+  color: inherit;
+}
+
+.encouragement {
+  text-align: center;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+  border-radius: 16rpx;
+}
+
+.encouragement-text {
+  font-size: 24rpx;
+  color: #6B7280;
+  font-style: italic;
+  line-height: 1.6;
+}

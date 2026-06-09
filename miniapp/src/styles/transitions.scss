@@ -1,0 +1,256 @@
+/**
+ * 页面过渡动画系统
+ * 为所有页面跳转提供统一的过渡效果
+ */
+
+/* ==================== 页面过渡配置 ==================== */
+
+/* 前进动画 - 从右滑入 */
+.page-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.page-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-done {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* 后退动画 - 向右滑出 */
+.page-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.page-exit-active {
+  transform: translateX(-20%);
+  opacity: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 1, 1),
+              opacity 0.2s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.page-exit-done {
+  transform: translateX(-20%);
+  opacity: 0;
+}
+
+/* ==================== 弹窗过渡 ==================== */
+
+/* 从底部弹出 */
+.modal-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.modal-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.modal-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.modal-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1),
+              opacity 0.2s ease;
+}
+
+/* 弹窗背景遮罩 */
+.modal-backdrop-enter {
+  opacity: 0;
+}
+
+.modal-backdrop-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop-exit {
+  opacity: 1;
+}
+
+.modal-backdrop-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* ==================== 抽屉过渡 ==================== */
+
+/* 从底部抽屉 */
+.drawer-bottom-enter {
+  transform: translateY(100%);
+}
+
+.drawer-bottom-enter-active {
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-bottom-exit {
+  transform: translateY(0);
+}
+
+.drawer-bottom-exit-active {
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* 从右侧抽屉 */
+.drawer-right-enter {
+  transform: translateX(100%);
+}
+
+.drawer-right-enter-active {
+  transform: translateX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-right-exit {
+  transform: translateX(0);
+}
+
+.drawer-right-exit-active {
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ==================== 通知条过渡 ==================== */
+
+/* 从顶部滑入 */
+.notification-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.notification-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.notification-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification-exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1),
+              opacity 0.2s ease;
+}
+
+/* ==================== 卡片列表过渡 ==================== */
+
+/* 列表项入场 - 交错动画 */
+.list-item-enter {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.list-item-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+/* 列表项退场 */
+.list-item-exit {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.list-item-exit-active {
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 0.2s ease,
+              opacity 0.2s ease;
+}
+
+/* 交错延迟 - 通过JS动态设置 */
+.list-item-enter-active {
+  &:nth-child(1) { transition-delay: 0ms; }
+  &:nth-child(2) { transition-delay: 50ms; }
+  &:nth-child(3) { transition-delay: 100ms; }
+  &:nth-child(4) { transition-delay: 150ms; }
+  &:nth-child(5) { transition-delay: 200ms; }
+  &:nth-child(n+6) { transition-delay: 250ms; }
+}
+
+/* ==================== Toast提示过渡 ==================== */
+
+.toast-enter {
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.toast-enter-active {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+              opacity 0.2s ease;
+}
+
+.toast-exit {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.toast-exit-active {
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.15s ease,
+              opacity 0.15s ease;
+}
+
+/* ==================== 工具类 ==================== */
+
+/* 页面容器 */
+.page-container {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 过渡组 */
+.transition-group {
+  position: relative;
+}
+
+/* 防止过渡期间内容跳动 */
+.transition-wrapper {
+  will-change: transform, opacity;
+}
+
+/* 禁用动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-exit-active,
+  .modal-enter-active,
+  .modal-exit-active,
+  .drawer-bottom-enter-active,
+  .drawer-bottom-exit-active,
+  .notification-enter-active,
+  .notification-exit-active,
+  .list-item-enter-active,
+  .list-item-exit-active,
+  .toast-enter-active,
+  .toast-exit-active {
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -276,7 +276,7 @@ export default function AdminDemoPage() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="count"
@@ -316,7 +316,7 @@ export default function AdminDemoPage() {
                     borderRadius: "8px",
                     boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
                   }}
-                  formatter={(value: number) => `¥${value.toLocaleString()}`}
+                  formatter={(value) => `¥${(typeof value === 'number' ? value : 0).toLocaleString()}`}
                 />
                 <Bar dataKey="revenue" fill="#667eea" radius={[8, 8, 0, 0]} />
               </BarChart>

@@ -161,6 +161,12 @@ export default function Index() {
             </View>
             <Text className='entry-text'>数据报表</Text>
           </View>
+          <View className='quick-entry-item' onClick={() => handleNavigate('/pages/security-commitments/index')}>
+            <View className='entry-icon icon-security'>
+              <View className='icon-inner'>🔒</View>
+            </View>
+            <Text className='entry-text'>安全保障</Text>
+          </View>
         </View>
       </View>
 

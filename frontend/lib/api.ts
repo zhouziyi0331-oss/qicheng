@@ -13,6 +13,33 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Admin API 实例（使用独立的 adminToken）
+export const adminApiInstance = axios.create({ baseURL: BASE });
+
+adminApiInstance.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("adminToken");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+adminApiInstance.interceptors.response.use(
+  (r) => r,
+  async (err) => {
+    if (err.response?.status === 401) {
+      // Admin token过期，清除并跳转登录
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
+        document.cookie = "adminToken=; path=/; max-age=0";
+        window.location.href = "/admin/login";
+      }
+    }
+    return Promise.reject(err);
+  }
+);
+
 // 401 自动刷新 token
 api.interceptors.response.use(
   (r) => r,
@@ -72,6 +99,7 @@ export const studentApi = {
   updateProfile: (data: object) => api.post("/student/profile", data),
   getEmotionSignals: () => api.get("/student/emotion-signals"),
   getTimeline: () => api.get("/student/timeline"),
+  submitLevelChallenge: (answers: Record<string, string | string[]>) => api.post("/student/level-challenge", { answers }),
 };
 
 // ── 任务 ──────────────────────────────────────────────────
@@ -93,7 +121,10 @@ export const taskApi = {
     api.post(`/tasks/${taskId}/submit`, { fileUrls, submissionNote }),
   // 企业操作
   create: (data: object) => api.post("/tasks/company", data),
+  createTask: (data: object) => api.post("/tasks/company", data), // 别名，兼容不同调用方式
   companyTasks: () => api.get("/tasks/company"),
+  getStudentProfile: (studentId: string) => api.get(`/tasks/students/${studentId}/profile`),
+  getProgress: (taskId: string, assigneeId: string) => api.get(`/tasks/${taskId}/progress/${assigneeId}`),
   approve: (taskId: string, assigneeId: string) =>
     api.post(`/tasks/company/${taskId}/approve`, { assigneeId }),
   reject: (taskId: string, assigneeId: string, reason: string) =>
@@ -123,9 +154,16 @@ export const reportApi = {
 
 // ── 通知 ──────────────────────────────────────────────────
 export const notificationApi = {
-  list: (page = 1) => api.get("/notifications", { params: { page } }),
+  list: (params?: { page?: number; limit?: number; type?: string; is_read?: boolean }) =>
+    api.get("/notifications", { params }),
+  unreadCount: () => api.get("/notifications/unread-count"),
   markRead: (id: string) => api.patch(`/notifications/${id}/read`),
-  markAllRead: () => api.patch("/notifications/read-all"),
+  markMultipleRead: (ids: string[]) => api.post("/notifications/mark-read", { notification_ids: ids }),
+  markAllRead: () => api.post("/notifications/mark-all-read"),
+  delete: (id: string) => api.delete(`/notifications/${id}`),
+  getSettings: () => api.get("/notifications/settings"),
+  updateSettings: (settings: any) => api.put("/notifications/settings", settings),
+  test: (channel: string) => api.post("/notifications/test", { channel }),
 };
 
 // ── 支付 & 提现 ────────────────────────────────────────────
@@ -138,23 +176,27 @@ export const paymentApi = {
 
 // ── 后台管理 ───────────────────────────────────────────────
 export const adminApi = {
-  dashboard: () => api.get("/admin/dashboard"),
-  companyTasks: (page = 1) => api.get("/admin/company-tasks", { params: { page } }),
-  takedownTask: (id: string, reason: string) => api.post(`/admin/company-tasks/${id}/takedown`, { reason }),
-  blacklistCompany: (id: string, reason: string) => api.post(`/admin/companies/${id}/blacklist`, { reason }),
-  listStudents: (page = 1, search?: string) => api.get("/admin/students", { params: { page, search } }),
-  getStudentDetail: (userId: string) => api.get(`/admin/students/${userId}`),
-  getTaskMessages: (taskId: string) => api.get(`/admin/support/tasks/${taskId}/messages`),
-  interveneTask: (taskId: string, action: string, note: string) => api.post(`/admin/support/tasks/${taskId}/intervene`, { action, note }),
-  sendNotification: (userId: string, title: string, body: string) => api.post(`/admin/support/users/${userId}/notify`, { title, body }),
-  getFinancePayments: (page = 1) => api.get("/admin/finance/payments", { params: { page } }),
-  getWithdrawals: (page = 1) => api.get("/admin/finance/withdrawals", { params: { page } }),
-  approveWithdrawal: (id: string) => api.post(`/admin/finance/withdrawals/${id}/approve`),
-  getFirstTaskAdvances: () => api.get("/admin/finance/first-task-advances"),
-  broadcast: (title: string, body: string, roles: string[]) => api.post("/admin/notifications/broadcast", { title, body, roles }),
-  getLogs: (page = 1) => api.get("/admin/logs", { params: { page } }),
-  getConfig: () => api.get("/admin/config"),
-  updateConfig: (key: string, value: unknown) => api.put(`/admin/config/${key}`, { value }),
+  login: (username: string, password: string) =>
+    adminApiInstance.post("/admin/auth/login", { username, password }),
+  dashboard: () => adminApiInstance.get("/admin/dashboard/stats"),
+  companyTasks: (page = 1) => adminApiInstance.get("/admin/company-tasks", { params: { page } }),
+  takedownTask: (id: string, reason: string) => adminApiInstance.post(`/admin/company-tasks/${id}/takedown`, { reason }),
+  blacklistCompany: (id: string, reason: string) => adminApiInstance.post(`/admin/companies/${id}/blacklist`, { reason }),
+  listStudents: (page = 1, search?: string) => adminApiInstance.get("/admin/students", { params: { page, search } }),
+  getStudentDetail: (userId: string) => adminApiInstance.get(`/admin/students/${userId}`),
+  getTaskMessages: (taskId: string) => adminApiInstance.get(`/admin/support/tasks/${taskId}/messages`),
+  interveneTask: (taskId: string, action: string, note: string) => adminApiInstance.post(`/admin/support/tasks/${taskId}/intervene`, { action, note }),
+  sendNotification: (userId: string, title: string, body: string) => adminApiInstance.post(`/admin/support/users/${userId}/notify`, { title, body }),
+  getFinanceOverview: () => adminApiInstance.get("/admin/finance/overview"),
+  getFinancePayments: (page = 1) => adminApiInstance.get("/admin/finance/payments", { params: { page } }),
+  getWithdrawals: (page = 1) => adminApiInstance.get("/admin/finance/withdrawals", { params: { page } }),
+  approveWithdrawal: (id: string) => adminApiInstance.post(`/admin/finance/withdrawals/${id}/approve`),
+  rejectWithdrawal: (id: string, reason: string) => adminApiInstance.post(`/admin/finance/withdrawals/${id}/reject`, { reason }),
+  getFirstTaskAdvances: () => adminApiInstance.get("/admin/finance/first-task-advances"),
+  broadcast: (title: string, body: string, roles: string[]) => adminApiInstance.post("/admin/notifications/broadcast", { title, body, roles }),
+  getLogs: (page = 1) => adminApiInstance.get("/admin/logs", { params: { page } }),
+  getConfig: () => adminApiInstance.get("/admin/config"),
+  updateConfig: (key: string, value: unknown) => adminApiInstance.put(`/admin/config/${key}`, { value }),
 };
 
 // ── 聊天 ──────────────────────────────────────────────────
@@ -162,4 +204,28 @@ export const chatApi = {
   getMessages: (taskId: string) => api.get(`/chat/${taskId}/messages`),
   send: (taskId: string, content: string) =>
     api.post(`/chat/${taskId}/messages`, { content }),
+};
+
+// ── 统计API（消除固定文案）──────────────────────────────────
+export const statsApi = {
+  /**
+   * 获取人格标签统计
+   * 用于替代"全国有12,843个和你一样的XX"固定文案
+   */
+  getPersonalityStats: (tag: string) =>
+    api.get(`/stats/personality/${tag}`),
+
+  /**
+   * 获取赛道统计
+   * 用于替代固定的市场均价
+   */
+  getTrackStats: (track: string) =>
+    api.get(`/stats/track/${track}`),
+
+  /**
+   * 获取学生能力估值
+   * 用于替代固定的"月薪估值¥6,000"
+   */
+  getStudentValuation: () =>
+    api.get('/stats/student-valuation'),
 };

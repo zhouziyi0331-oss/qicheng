@@ -6,6 +6,8 @@ exports.getStudentAbility = getStudentAbility;
 exports.getStudentGrowth = getStudentGrowth;
 exports.updateStudentStatus = updateStudentStatus;
 const db_1 = require("../../utils/db");
+const dataMask_1 = require("../../utils/dataMask");
+const auditLog_1 = require("../../utils/auditLog");
 /**
  * 获取学生列表
  */
@@ -24,7 +26,7 @@ async function getStudentList(req, res) {
         }
         // 等级筛选
         if (level) {
-            conditions.push(`sp.level_a = $${paramIndex}`);
+            conditions.push(`u.current_level = $${paramIndex}`);
             params.push(level);
             paramIndex++;
         }
@@ -32,7 +34,7 @@ async function getStudentList(req, res) {
         // 获取总数
         const countResult = await (0, db_1.query)(`SELECT COUNT(*) as total
        FROM users u
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        ${whereClause}`, params);
         const total = parseInt(countResult[0].total);
         // 获取列表数据
@@ -43,18 +45,22 @@ async function getStudentList(req, res) {
         u.avatar_url,
         u.phone,
         u.created_at,
-        sp.level_a,
-        sp.level_b,
+        u.current_level,
+        u.current_level,
         sp.opc_label,
         sp.task_count,
         sp.total_earnings
        FROM users u
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        ${whereClause}
        ORDER BY ${sortBy} ${sortOrder}
        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`, params);
+        // 获取管理员角色
+        const adminRole = req.user?.adminRole || 'operator';
+        // 数据脱敏
+        const maskedStudents = (0, dataMask_1.maskArrayData)(students, adminRole, ['phone']);
         res.json({
-            list: students,
+            list: maskedStudents,
             pagination: {
                 page: Number(page),
                 pageSize: Number(pageSize),
@@ -81,8 +87,8 @@ async function getStudentDetail(req, res) {
         u.avatar_url,
         u.phone,
         u.created_at,
-        sp.level_a,
-        sp.level_b,
+        u.current_level,
+        u.current_level,
         sp.opc_label,
         sp.opc_label_secondary,
         sp.task_count,
@@ -90,10 +96,42 @@ async function getStudentDetail(req, res) {
         sp.graduated_at,
         sp.onboarding_completed_at
        FROM users u
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        WHERE u.id = $1`, [id]);
         if (studentInfo.length === 0) {
             return res.status(404).json({ error: '学生不存在' });
+        }
+        // 获取管理员角色并脱敏
+        const adminRole = req.user?.adminRole || 'operator';
+        const adminId = req.user?.id;
+        // 记录审计日志
+        await (0, auditLog_1.logAdminAction)({
+            adminId,
+            action: auditLog_1.AuditAction.VIEW_STUDENT_DETAIL,
+            resourceType: auditLog_1.ResourceType.STUDENT,
+            resourceId: id,
+            details: {
+                viewed_full_phone: adminRole === 'super_admin',
+                student_nickname: studentInfo[0].nickname
+            },
+            req
+        });
+        if (adminRole !== 'super_admin') {
+            studentInfo[0].phone = (0, dataMask_1.maskPhone)(studentInfo[0].phone);
+        }
+        else {
+            // super_admin查看完整手机号，额外记录
+            await (0, auditLog_1.logAdminAction)({
+                adminId,
+                action: auditLog_1.AuditAction.VIEW_PHONE,
+                resourceType: auditLog_1.ResourceType.STUDENT,
+                resourceId: id,
+                details: {
+                    phone: studentInfo[0].phone,
+                    student_nickname: studentInfo[0].nickname
+                },
+                req
+            });
         }
         // 订单统计
         const orderStatsResult = await (0, db_1.query)(`SELECT
@@ -157,7 +195,7 @@ async function getStudentAbility(req, res) {
     try {
         const { id } = req.params;
         // 检查学生是否存在
-        const student = await (0, db_1.query)(`SELECT user_id FROM student_profiles WHERE user_id = $1`, [id]);
+        const student = await (0, db_1.query)(`SELECT student_id FROM student_capabilities WHERE student_id = $1`, [id]);
         if (student.length === 0) {
             return res.status(404).json({ error: '学生不存在' });
         }
@@ -165,8 +203,8 @@ async function getStudentAbility(req, res) {
         const profileData = await (0, db_1.query)(`SELECT
         six_dim_d1, six_dim_d2, six_dim_d3,
         six_dim_d4, six_dim_d5, six_dim_d6
-       FROM student_profiles
-       WHERE user_id = $1`, [id]);
+       FROM student_capabilities
+       WHERE student_id = $1`, [id]);
         const sixDimScores = profileData.length > 0 ? {
             d1: profileData[0].six_dim_d1 || 0,
             d2: profileData[0].six_dim_d2 || 0,

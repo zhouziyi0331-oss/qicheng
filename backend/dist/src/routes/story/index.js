@@ -40,7 +40,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * GET  /story/feed           — 故事墙信息流 (按相似度+时间, 非点赞数)
  * POST /story/posts          — 发布故事
  * POST /story/posts/:id/like — 点赞 (仅存储, 不用于排序)
+ * POST /story/:id/comment    — 评论故事
  * GET  /story/peers          — 同类人信息流
+ * GET  /story-wall           — 故事墙列表（兼容路由）
+ * POST /story-wall/submit    — 提交故事（兼容路由）
  */
 const express_1 = require("express");
 const auth_1 = require("../../middleware/auth");
@@ -51,6 +54,10 @@ router.use(auth_1.authenticate, (0, auth_1.requireRole)('student'));
 router.get('/feed', controller.getFeed);
 router.post('/posts', controller.createPost);
 router.post('/posts/:id/like', controller.likePost);
+router.post('/:id/comment', controller.commentOnStory);
 router.get('/peers', controller.getPeersFeed);
+// 兼容前端路由
+router.get('/story-wall', controller.getStoryWall);
+router.post('/story-wall/submit', controller.submitStory);
 exports.default = router;
 //# sourceMappingURL=index.js.map

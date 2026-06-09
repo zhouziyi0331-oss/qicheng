@@ -1,0 +1,216 @@
+/**
+ * AI分析等待页样式
+ */
+
+.ai-waiting-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waiting-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--theme-bg);
+}
+
+.waiting-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+}
+
+/* ==================== 几何体动画 ==================== */
+
+.geometry-container {
+  margin-bottom: 48px;
+}
+
+.geometry {
+  width: 120px;
+  height: 120px;
+  position: relative;
+}
+
+.geometry-rotating {
+  animation: geometryRotate 3s ease-in-out infinite;
+}
+
+.geometry-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--theme-primary) 0%,
+    var(--theme-accent) 100%
+  );
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
+  animation: geometryMorph 4s ease-in-out infinite;
+}
+
+@keyframes geometryRotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes geometryMorph {
+  0%, 100% {
+    border-radius: 24px;
+  }
+  25% {
+    border-radius: 50%;
+  }
+  50% {
+    border-radius: 8px;
+  }
+  75% {
+    border-radius: 50%;
+  }
+}
+
+/* ==================== 标题 ==================== */
+
+.waiting-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+/* ==================== 呼吸点 ==================== */
+
+.breathing-dots {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--theme-primary);
+  animation: breathe 1.5s ease-in-out infinite;
+
+  &.dot-1 {
+    animation-delay: 0s;
+  }
+
+  &.dot-2 {
+    animation-delay: 0.2s;
+  }
+
+  &.dot-3 {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* ==================== 副标题轮播 ==================== */
+
+.subtitle-container {
+  position: relative;
+  height: 24px;
+  margin-bottom: 24px;
+}
+
+.subtitle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+
+  &.subtitle-active {
+    opacity: 1;
+  }
+}
+
+/* ==================== 进度条 ==================== */
+
+.progress-container {
+  width: 100%;
+  max-width: 280px;
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 107, 107, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--theme-primary) 0%,
+    var(--theme-accent) 100%
+  );
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* ==================== 提示文字 ==================== */
+
+.hint-text {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  animation: fadeIn 0.5s ease 1s backwards;
+}
+
+/* ==================== 动画关键帧 ==================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

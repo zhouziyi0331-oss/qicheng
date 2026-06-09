@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { query, queryOne, withTransaction } from '../../utils/db';
 import { AppError } from '../../middleware/errorHandler';
 import logger from '../../utils/logger';
+import { mentorTriggerService } from '../../services/mentorTriggerService';
+import mentorQueueService from '../../services/mentorQueueService';
 
 /**
  * 学生端接单流程API
@@ -181,13 +183,25 @@ export async function acceptTaskInvitation(req: Request, res: Response, next: Ne
 
       // 8. 更新学生统计
       await client.query(
-        `UPDATE student_profiles
+        `UPDATE student_capabilities
          SET active_tasks = active_tasks + 1
          WHERE user_id = $1`,
         [studentId]
       );
 
       logger.info('Student accepted task', { taskId, studentId });
+
+      // 使用队列服务异步触发AI导师需求理解阶段（3秒后触发）
+      mentorQueueService.scheduleJob(
+        {
+          taskId,
+          studentId,
+          stage: 'requirement_understanding',
+        },
+        3000 // 3秒后触发，给学生时间看到接单成功的消息
+      ).catch(error => {
+        logger.error('Failed to schedule mentor job', { taskId, studentId, error });
+      });
 
       res.json({
         success: true,
@@ -297,35 +311,69 @@ export async function submitDeliverables(req: Request, res: Response, next: Next
   try {
     const studentId = req.user!.userId;
     const { taskId } = req.params;
-    const { deliverables } = req.body; // 数组：[{fileType, fileUrl, fileName, fileSize, description}]
+    const { deliverables, forceSubmit } = req.body; // 数组：[{fileType, fileUrl, fileName, fileSize, description}]
 
     if (!deliverables || deliverables.length === 0) {
       throw new AppError(400, '请至少提交一个交付物', 'NO_DELIVERABLES');
     }
 
+    // 验证任务归属
+    const task = await queryOne<any>(
+      `SELECT * FROM tasks WHERE id = $1 AND accepted_student_id = $2`,
+      [taskId, studentId]
+    );
+
+    if (!task) {
+      throw new AppError(404, '任务不存在或您无权操作', 'TASK_NOT_FOUND');
+    }
+
+    if (task.status !== 'in_progress') {
+      throw new AppError(400, '任务状态不正确', 'INVALID_STATUS');
+    }
+
+    // 如果不是强制提交，先进行AI导师质量预审
+    if (!forceSubmit) {
+      try {
+        // 构建提交描述
+        const submissionDescription = deliverables
+          .map((d: any) => `${d.fileName}: ${d.description || '无描述'}`)
+          .join('\n');
+
+        // 触发质量预审
+        const preCheckResult = await mentorTriggerService.triggerQualityReview(
+          taskId,
+          studentId,
+          submissionDescription
+        );
+
+        // 如果预审不通过，返回预审结果，不提交
+        if (!preCheckResult.passed) {
+          res.json({
+            success: false,
+            requiresImprovement: true,
+            data: {
+              preCheckResult,
+              message: '您的提交未通过AI导师预审，请根据建议改进后再提交',
+            },
+          });
+          return;
+        }
+
+        logger.info('质量预审通过', { taskId, studentId, score: preCheckResult.score });
+      } catch (error) {
+        logger.error('质量预审失败，允许提交', { taskId, studentId, error });
+        // 预审失败不阻塞提交，记录错误后继续
+      }
+    }
+
     await withTransaction(async (client) => {
-      // 1. 验证任务归属
-      const task = await client.query(
-        `SELECT * FROM tasks WHERE id = $1 AND accepted_student_id = $2`,
-        [taskId, studentId]
-      );
-
-      if (task.rows.length === 0) {
-        throw new AppError(404, '任务不存在或您无权操作', 'TASK_NOT_FOUND');
-      }
-
-      const taskData = task.rows[0];
-
-      if (taskData.status !== 'in_progress') {
-        throw new AppError(400, '任务状态不正确', 'INVALID_STATUS');
-      }
-
       // 2. 保存交付物
       for (const item of deliverables) {
         await client.query(
           `INSERT INTO task_deliverables (
-            task_id, student_id, file_type, file_url, file_name, file_size, description
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            task_id, student_id, file_type, file_url, file_name, file_size, description,
+            mentor_pre_reviewed, pre_review_passed
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
           [
             taskId,
             studentId,
@@ -333,14 +381,16 @@ export async function submitDeliverables(req: Request, res: Response, next: Next
             item.fileUrl,
             item.fileName,
             item.fileSize,
-            item.description
+            item.description,
+            !forceSubmit, // 是否经过预审
+            !forceSubmit, // 预审是否通过（能到这里说明通过了）
           ]
         );
       }
 
       // 3. 更新任务状态为待AI审核
       await client.query(
-        `UPDATE tasks SET status = 'pending_ai_review' WHERE id = $1`,
+        `UPDATE tasks SET status = 'pending_ai_review', submitted_at = NOW() WHERE id = $1`,
         [taskId]
       );
 
@@ -349,14 +399,13 @@ export async function submitDeliverables(req: Request, res: Response, next: Next
         `INSERT INTO notifications (user_id, user_type, type, title, content, related_task_id)
          VALUES ($1, 'company', 'deliverables_submitted', '学生已提交交付物', $2, $3)`,
         [
-          taskData.company_id,
-          `学生已提交任务《${taskData.title}》的交付物，AI正在审核中...`,
+          task.company_id,
+          `学生已提交任务《${task.title}》的交付物，AI正在审核中...`,
           taskId
         ]
       );
 
       // 5. 触发AI审核（异步）
-      // TODO: 调用AI服务审核交付物
       setTimeout(() => {
         triggerAIReview(taskId).catch(err => {
           logger.error('AI review failed', { taskId, error: err });

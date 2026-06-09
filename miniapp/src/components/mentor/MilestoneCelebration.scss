@@ -1,0 +1,167 @@
+.milestone-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+.milestone-modal {
+  width: 600rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 48rpx 32rpx;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &.show {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+
+  .confetti {
+    position: absolute;
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 4rpx;
+    animation: confettiFall 3s ease-out infinite;
+
+    @for $i from 0 through 19 {
+      &:nth-child(#{$i + 1}) {
+        left: #{$i * 5}%;
+        animation-delay: #{$i * 0.1}s;
+      }
+    }
+
+    &.confetti-0 { background: #8B5CF6; }
+    &.confetti-1 { background: #EC4899; }
+    &.confetti-2 { background: #10B981; }
+    &.confetti-3 { background: #F59E0B; }
+    &.confetti-4 { background: #06B6D4; }
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    top: -20rpx;
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    transform: rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.milestone-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .milestone-icon {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64rpx;
+    margin-bottom: 32rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+    animation: bounce 0.6s ease-out;
+  }
+
+  .milestone-title {
+    font-size: 40rpx;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 16rpx;
+    text-align: center;
+  }
+
+  .milestone-description {
+    font-size: 28rpx;
+    color: #6B7280;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 32rpx;
+    padding: 0 16rpx;
+  }
+
+  .milestone-reward {
+    width: 100%;
+    padding: 24rpx;
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-radius: 20rpx;
+    margin-bottom: 32rpx;
+
+    .reward-label {
+      display: block;
+      font-size: 24rpx;
+      color: #92400E;
+      margin-bottom: 8rpx;
+      font-weight: 600;
+    }
+
+    .reward-text {
+      display: block;
+      font-size: 28rpx;
+      color: #78350F;
+      line-height: 1.5;
+    }
+  }
+
+  .milestone-btn {
+    width: 100%;
+    padding: 24rpx;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #FFFFFF;
+    font-size: 32rpx;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 20rpx;
+    box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.4);
+    transition: all 0.2s ease;
+
+    &:active {
+      transform: scale(0.98);
+      box-shadow: 0 2rpx 12rpx rgba(102, 126, 234, 0.4);
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20rpx);
+  }
+}

@@ -23,6 +23,12 @@ export declare const config: {
         reportTimeout: number;
         anthropicApiKey: string;
     };
+    embedding: {
+        apiUrl: string;
+        apiKey: string;
+        model: string;
+        dimension: number;
+    };
     oss: {
         endpoint: string;
         bucket: string;

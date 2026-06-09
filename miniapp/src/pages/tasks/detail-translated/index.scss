@@ -1,0 +1,337 @@
+.task-detail-translated-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+
+  .loading,
+  .error {
+    padding: 120px 32px;
+    text-align: center;
+    font-size: 28px;
+    color: #999;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 60px 32px 40px;
+    color: #fff;
+
+    .teacher-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+
+      .teacher-icon {
+        font-size: 32px;
+      }
+
+      .teacher-text {
+        font-size: 26px;
+        font-weight: 500;
+      }
+    }
+
+    .task-title {
+      font-size: 40px;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+  }
+
+  .content {
+    max-height: calc(100vh - 280px);
+    padding: 24px 32px;
+  }
+
+  .section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+
+    &.highlight {
+      background: linear-gradient(135deg, #fff7e6 0%, #ffe7ba 100%);
+      border: 2px solid #faad14;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .section-content {
+      .description-text,
+      .content-text {
+        font-size: 28px;
+        color: #666;
+        line-height: 1.8;
+      }
+    }
+  }
+
+  .modules-list {
+    .module-card {
+      background: #f8f9ff;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px;
+        cursor: pointer;
+
+        .module-info {
+          flex: 1;
+
+          .module-name {
+            font-size: 30px;
+            font-weight: bold;
+            color: #1a1a1a;
+            display: block;
+            margin-bottom: 12px;
+          }
+
+          .module-meta {
+            display: flex;
+            gap: 20px;
+
+            .module-hours,
+            .module-difficulty {
+              font-size: 24px;
+              color: #999;
+            }
+          }
+        }
+
+        .expand-icon {
+          font-size: 24px;
+          color: #999;
+          margin-left: 16px;
+        }
+      }
+
+      .module-body {
+        padding: 0 24px 24px;
+
+        .module-description {
+          font-size: 26px;
+          color: #666;
+          line-height: 1.6;
+          margin-bottom: 16px;
+        }
+
+        .module-skills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          align-items: center;
+
+          .skills-label {
+            font-size: 24px;
+            color: #999;
+          }
+
+          .skill-tag {
+            padding: 8px 16px;
+            background: #667eea;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 22px;
+          }
+        }
+      }
+    }
+  }
+
+  .skills-list {
+    .skill-item {
+      margin-bottom: 24px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .skill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .skill-name {
+          font-size: 28px;
+          font-weight: bold;
+          color: #1a1a1a;
+        }
+
+        .skill-proficiency {
+          font-size: 24px;
+          color: #999;
+        }
+      }
+
+      .skill-bar {
+        height: 16px;
+        background: #f0f0f0;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 12px;
+
+        .skill-fill {
+          height: 100%;
+          border-radius: 8px;
+          transition: width 0.3s;
+        }
+      }
+
+      .skill-why {
+        font-size: 24px;
+        color: #999;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  .difficulty-chart {
+    .difficulty-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+
+      .difficulty-label {
+        width: 140px;
+        font-size: 26px;
+        color: #666;
+      }
+
+      .difficulty-bar {
+        flex: 1;
+        height: 20px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+
+        .difficulty-fill {
+          height: 100%;
+          border-radius: 10px;
+          transition: width 0.3s;
+        }
+      }
+
+      .difficulty-value {
+        width: 100px;
+        text-align: right;
+        font-size: 26px;
+        font-weight: bold;
+      }
+    }
+
+    .overall-difficulty {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 2px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .overall-label {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1a1a1a;
+      }
+
+      .overall-value {
+        font-size: 48px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .value-cards {
+    display: flex;
+    gap: 24px;
+
+    .value-card {
+      flex: 1;
+      background: linear-gradient(135deg, #f8f9ff 0%, #e8f4ff 100%);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+
+      .value-icon {
+        font-size: 64px;
+        display: block;
+        margin-bottom: 16px;
+      }
+
+      .value-label {
+        font-size: 26px;
+        color: #999;
+        display: block;
+        margin-bottom: 12px;
+      }
+
+      .value-score {
+        font-size: 40px;
+        font-weight: bold;
+        color: #667eea;
+      }
+    }
+  }
+
+  .time-estimate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    background: #f8f9ff;
+    border-radius: 12px;
+
+    .time-icon {
+      font-size: 40px;
+    }
+
+    .time-text {
+      font-size: 28px;
+      color: #666;
+      font-weight: 500;
+    }
+  }
+
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 32px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    z-index: 100;
+
+    .accept-btn {
+      width: 100%;
+      height: 96px;
+      background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 32px;
+      font-weight: bold;
+      box-shadow: 0 8px 24px rgba(82, 196, 26, 0.3);
+    }
+  }
+}

@@ -41,8 +41,8 @@ exports.register = register;
 exports.login = login;
 exports.refreshToken = refreshToken;
 exports.logout = logout;
+exports.getCurrentUser = getCurrentUser;
 const express_validator_1 = require("express-validator");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const uuid_1 = require("uuid");
 const crypto_1 = __importDefault(require("crypto"));
@@ -98,34 +98,36 @@ async function register(req, res, next) {
             res.status(400).json({ success: false, errors: errors.array() });
             return;
         }
-        const { phone, code, role, password, deviceType, sourceChannel, userType } = req.body;
+        const { phone, code, deviceType, sourceChannel, userType } = req.body;
         // 1. 验证userType必填且有效
         if (!userType || !['student', 'company'].includes(userType)) {
             throw new errorHandler_1.AppError(400, '请选择用户身份（学生或企业）', 'INVALID_USER_TYPE');
         }
-        // 2. 验证码校验
+        // 2. 根据userType自动设置role
+        const role = userType;
+        // 3. 验证码校验
         const codeValid = await (0, redis_1.verifySmsCode)(phone, code);
         if (!codeValid) {
             throw new errorHandler_1.AppError(400, '验证码错误或已过期', 'INVALID_CODE');
         }
-        // 3. 检查手机号是否已注册
+        // 4. 检查手机号是否已注册
         const existing = await (0, db_1.queryOne)('SELECT id, role, user_type FROM users WHERE phone = $1 AND deleted_at IS NULL', [phone]);
         if (existing) {
             throw new errorHandler_1.AppError(409, '该手机号已注册', 'PHONE_EXISTS');
         }
-        // 4. userType和role必须匹配
-        if ((userType === 'student' && role !== 'student') || (userType === 'company' && role !== 'company')) {
-            throw new errorHandler_1.AppError(400, '用户身份与角色不匹配', 'TYPE_ROLE_MISMATCH');
-        }
-        const passwordHash = await bcryptjs_1.default.hash(password, 12);
         const userId = (0, uuid_1.v4)();
         await (0, db_1.withTransaction)(async (client) => {
-            // 5. 创建用户（包含user_type字段）
-            await client.query(`INSERT INTO users (id, role, user_type, phone, password_hash, device_type, source_channel)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`, [userId, role, userType, phone, passwordHash, deviceType || null, sourceChannel || 'direct']);
+            // 5. 创建用户（不再需要密码）
+            await client.query(`INSERT INTO users (id, role, user_type, phone, device_type, source_channel, profile_completed)
+         VALUES ($1, $2, $3, $4, $5, $6, FALSE)`, [userId, role, userType, phone, deviceType || null, sourceChannel || 'direct']);
             if (userType === 'student') {
-                // 6a. 创建学生档案
-                await client.query('INSERT INTO student_profiles (user_id) VALUES ($1)', [userId]);
+                // 6a. 创建学生档案（旧系统，保持兼容）
+                await client.query("INSERT INTO student_capabilities (student_id, skills, tasks_completed) VALUES ($1, '{}'::jsonb, 0)", [userId]);
+                // 6a-new. 初始化新等级系统字段
+                await client.query(`UPDATE users SET track = 'content', current_level = 0 WHERE id = $1`, [userId]);
+                // 6a-new2. 初始化学生能力画像
+                await client.query(`INSERT INTO student_capabilities (student_id, skills, tasks_completed)
+           VALUES ($1, '{}'::jsonb, 0)`, [userId]);
                 // 6b. 创建余额账户
                 await client.query('INSERT INTO student_balances (user_id) VALUES ($1)', [userId]);
                 // 6c. 初始化 Onboarding 状态
@@ -162,8 +164,9 @@ async function register(req, res, next) {
                 userType,
                 accessToken: tokens.accessToken,
                 refreshToken: tokens.refreshToken,
-                // 学生注册后进入 Onboarding，企业注册后等待审核
-                nextStep: userType === 'student' ? 'onboarding' : 'pending_review',
+                // 注册后需要完善资料
+                nextStep: 'complete_profile',
+                profileCompleted: false,
             },
         });
     }
@@ -181,29 +184,23 @@ async function login(req, res, next) {
             res.status(400).json({ success: false, errors: errors.array() });
             return;
         }
-        const { phone, password, code } = req.body;
-        const user = await (0, db_1.queryOne)(`SELECT u.id, u.role, u.user_type, u.password_hash, u.is_active
+        const { phone, code } = req.body;
+        const user = await (0, db_1.queryOne)(`SELECT u.id, u.role, u.user_type, u.is_active, u.profile_completed
        FROM users u
        WHERE u.phone = $1 AND u.deleted_at IS NULL`, [phone]);
         if (!user) {
-            throw new errorHandler_1.AppError(401, '手机号或密码错误', 'INVALID_CREDENTIALS');
+            throw new errorHandler_1.AppError(401, '手机号未注册', 'USER_NOT_FOUND');
         }
         if (!user.is_active) {
             throw new errorHandler_1.AppError(403, '账号已被禁用，请联系客服', 'ACCOUNT_DISABLED');
         }
-        // 支持密码或验证码登录
-        if (code) {
-            const codeValid = await (0, redis_1.verifySmsCode)(phone, code);
-            if (!codeValid)
-                throw new errorHandler_1.AppError(401, '验证码错误或已过期', 'INVALID_CODE');
+        // 仅支持验证码登录
+        if (!code) {
+            throw new errorHandler_1.AppError(400, '请提供验证码', 'MISSING_CODE');
         }
-        else if (password) {
-            const passwordValid = await bcryptjs_1.default.compare(password, user.password_hash);
-            if (!passwordValid)
-                throw new errorHandler_1.AppError(401, '手机号或密码错误', 'INVALID_CREDENTIALS');
-        }
-        else {
-            throw new errorHandler_1.AppError(400, '请提供密码或验证码', 'MISSING_AUTH');
+        const codeValid = await (0, redis_1.verifySmsCode)(phone, code);
+        if (!codeValid) {
+            throw new errorHandler_1.AppError(401, '验证码错误或已过期', 'INVALID_CODE');
         }
         // 更新最后登录时间 + 触发情绪信号检测
         await (0, db_1.query)('UPDATE users SET last_login_at = NOW() WHERE id = $1', [user.id]);
@@ -228,6 +225,8 @@ async function login(req, res, next) {
                 userType: user.user_type,
                 accessToken: tokens.accessToken,
                 refreshToken: tokens.refreshToken,
+                profileCompleted: user.profile_completed || false,
+                nextStep: user.profile_completed ? 'home' : 'complete_profile',
             },
         });
     }
@@ -315,6 +314,53 @@ async function checkAndUpdateEmotionOnLogin(userId) {
     }
     catch (err) {
         logger_1.default.error('Error checking emotion signal on login', { userId, error: err.message });
+    }
+}
+// ============================================================
+// GET /auth/me
+// ============================================================
+async function getCurrentUser(req, res, next) {
+    try {
+        const userId = req.user?.userId;
+        if (!userId) {
+            throw new errorHandler_1.AppError(401, '未授权', 'UNAUTHORIZED');
+        }
+        const user = await (0, db_1.queryOne)(`SELECT id, phone, role, user_type, created_at, last_login_at
+       FROM users
+       WHERE id = $1`, [userId]);
+        if (!user) {
+            throw new errorHandler_1.AppError(404, '用户不存在', 'USER_NOT_FOUND');
+        }
+        // 根据用户类型获取额外信息
+        let profile = null;
+        if (user.user_type === 'student') {
+            profile = await (0, db_1.queryOne)(`SELECT u.current_level as level_a, u.current_level as level_b, sc.opc_label, sc.life_question,
+                u.track, sc.total_earnings, sc.tasks_completed as task_count,
+                u.nickname, u.avatar_url
+         FROM users u
+         LEFT JOIN student_capabilities sc ON u.id = sc.student_id
+         WHERE u.id = $1`, [userId]);
+        }
+        else if (user.user_type === 'company') {
+            profile = await (0, db_1.queryOne)(`SELECT company_name, contact_name, contact_phone, industry
+         FROM company_profiles
+         WHERE user_id = $1`, [userId]);
+        }
+        res.json({
+            success: true,
+            data: {
+                id: user.id,
+                phone: user.phone,
+                role: user.role,
+                userType: user.user_type,
+                createdAt: user.created_at,
+                lastLoginAt: user.last_login_at,
+                profile,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
     }
 }
 //# sourceMappingURL=controller.js.map

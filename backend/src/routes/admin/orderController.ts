@@ -317,6 +317,7 @@ export async function forceCompleteOrder(req: Request, res: Response) {
     await query(
       `UPDATE tasks
        SET status = 'completed',
+           completed_at = NOW(),
            updated_at = NOW()
        WHERE id = $1`,
       [id]

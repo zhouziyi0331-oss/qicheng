@@ -130,7 +130,7 @@ export class StartupReportService {
       total_earnings: number;
     }>(
       `SELECT opc_label, six_dim_scores, task_count, total_earnings
-       FROM student_profiles
+       FROM student_capabilities
        WHERE user_id = $1`,
       [userId]
     );

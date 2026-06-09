@@ -3,6 +3,7 @@ import Taro, { useRouter } from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { taskAPI } from '../../services/api'
 import Loading from '../../components/Loading'
+import Timeline from '../../components/Timeline'
 import './working.scss'
 
 interface TaskStep {
@@ -23,6 +24,67 @@ export default function TaskWorking() {
   const [progressPercent, setProgressPercent] = useState(0)
   const [progressNote, setProgressNote] = useState('')
   const [showProgressModal, setShowProgressModal] = useState(false)
+
+  // 任务状态时间线
+  const getTimelineNodes = () => {
+    const status = task?.status || 'accepted'
+
+    return [
+      {
+        status: 'created',
+        label: '任务创建',
+        time: task?.createdAt ? new Date(task.createdAt).toLocaleString('zh-CN') : '',
+        icon: '📝',
+        completed: true,
+        current: false
+      },
+      {
+        status: 'accepted',
+        label: '已接取',
+        time: task?.acceptedAt ? new Date(task.acceptedAt).toLocaleString('zh-CN') : '',
+        description: '开始执行任务',
+        icon: '✅',
+        completed: status !== 'created',
+        current: status === 'accepted'
+      },
+      {
+        status: 'in_progress',
+        label: '进行中',
+        time: task?.startedAt ? new Date(task.startedAt).toLocaleString('zh-CN') : '',
+        description: '正在完成任务',
+        icon: '🚀',
+        completed: ['submitted', 'reviewing', 'completed'].includes(status),
+        current: status === 'in_progress'
+      },
+      {
+        status: 'submitted',
+        label: '已提交',
+        time: task?.submittedAt ? new Date(task.submittedAt).toLocaleString('zh-CN') : '',
+        description: '等待企业审核',
+        icon: '📤',
+        completed: ['reviewing', 'completed'].includes(status),
+        current: status === 'submitted'
+      },
+      {
+        status: 'reviewing',
+        label: '审核中',
+        time: task?.reviewingAt ? new Date(task.reviewingAt).toLocaleString('zh-CN') : '',
+        description: 'AI质量预审',
+        icon: '🔍',
+        completed: status === 'completed',
+        current: status === 'reviewing'
+      },
+      {
+        status: 'completed',
+        label: '已完成',
+        time: task?.completedAt ? new Date(task.completedAt).toLocaleString('zh-CN') : '',
+        description: '任务圆满完成',
+        icon: '🎉',
+        completed: status === 'completed',
+        current: status === 'completed'
+      }
+    ]
+  }
 
   useEffect(() => {
     loadTaskData()
@@ -175,30 +237,10 @@ export default function TaskWorking() {
         </View>
       </View>
 
-      {/* 进度卡片 */}
+      {/* 任务状态时间线 */}
       <View className="progress-card">
-        <Text className="card-title">任务进度</Text>
-        <View className="progress-steps">
-          <View className={`step-item ${currentStep >= 0 ? 'active' : ''}`}>
-            <View className="step-circle">1</View>
-            <Text className="step-text">已接取</Text>
-          </View>
-          <View className="step-line" />
-          <View className={`step-item ${currentStep >= 1 ? 'active' : ''}`}>
-            <View className="step-circle">2</View>
-            <Text className="step-text">执行中</Text>
-          </View>
-          <View className="step-line" />
-          <View className={`step-item ${currentStep >= 2 ? 'active' : ''}`}>
-            <View className="step-circle">3</View>
-            <Text className="step-text">待提交</Text>
-          </View>
-          <View className="step-line" />
-          <View className={`step-item ${currentStep >= 3 ? 'active' : ''}`}>
-            <View className="step-circle">4</View>
-            <Text className="step-text">已完成</Text>
-          </View>
-        </View>
+        <Text className="card-title">任务状态</Text>
+        <Timeline nodes={getTimelineNodes()} />
       </View>
 
       {/* AI生成的任务步骤 */}

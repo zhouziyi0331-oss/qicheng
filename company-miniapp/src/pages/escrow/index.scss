@@ -1,0 +1,343 @@
+@import '../../styles/theme.scss';
+
+.escrow-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: 32rpx;
+
+  .title {
+    font-size: $font-2xl;
+    font-weight: $font-bold;
+    color: $text-primary;
+    margin-bottom: 32rpx;
+  }
+
+  // 账户卡片
+  .account-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16rpx;
+    margin-bottom: 32rpx;
+
+    .account-card {
+      @include glass-card;
+      padding: 32rpx 24rpx;
+
+      .card-label {
+        font-size: $font-xs;
+        color: $text-secondary;
+        margin-bottom: 16rpx;
+      }
+
+      .card-amount {
+        font-size: $font-3xl;
+        font-weight: $font-bold;
+        color: $text-primary;
+        font-family: $font-mono;
+
+        &.frozen {
+          color: $warning-color;
+        }
+
+        &.available {
+          color: $success-color;
+        }
+      }
+
+      .btn-withdraw {
+        margin-top: 16rpx;
+        padding: 12rpx 24rpx;
+        background: $gradient-purple;
+        color: $text-white;
+        border-radius: $radius-md;
+        font-size: $font-xs;
+        text-align: center;
+      }
+    }
+  }
+
+  // 标签页
+  .tabs {
+    display: flex;
+    gap: 16rpx;
+    margin-bottom: 32rpx;
+
+    .tab-btn {
+      padding: 16rpx 32rpx;
+      background: $bg-card;
+      border: 1px solid $border-light;
+      border-radius: $radius-md;
+      color: $text-secondary;
+      font-size: $font-sm;
+      transition: all 0.3s;
+
+      &.active {
+        background: $accent-purple;
+        color: $text-white;
+        border-color: $accent-purple;
+      }
+    }
+  }
+
+  // 列表
+  .list-container {
+    height: calc(100vh - 600rpx);
+
+    .loading {
+      text-align: center;
+      padding: 80rpx 0;
+      color: $text-secondary;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 120rpx 0;
+
+      .empty-icon {
+        font-size: 120rpx;
+        display: block;
+        margin-bottom: 24rpx;
+      }
+
+      .empty-text {
+        color: $text-secondary;
+        font-size: $font-base;
+      }
+    }
+
+    // 交易记录
+    .transaction-item {
+      @include glass-card;
+      padding: 32rpx;
+      margin-bottom: 24rpx;
+
+      .item-header {
+        @include flex-between;
+        margin-bottom: 16rpx;
+
+        .item-type {
+          font-size: $font-base;
+          font-weight: $font-semibold;
+          color: $text-primary;
+        }
+
+        .item-amount {
+          font-size: $font-xl;
+          font-weight: $font-bold;
+          font-family: $font-mono;
+
+          &.positive {
+            color: $success-color;
+          }
+
+          &.negative {
+            color: $error-color;
+          }
+        }
+      }
+
+      .item-desc {
+        font-size: $font-sm;
+        color: $text-secondary;
+        margin-bottom: 8rpx;
+      }
+
+      .item-time {
+        font-size: $font-xs;
+        color: $text-muted;
+      }
+    }
+
+    // 提现记录
+    .withdrawal-item {
+      @include glass-card;
+      padding: 32rpx;
+      margin-bottom: 24rpx;
+
+      .item-header {
+        @include flex-between;
+        margin-bottom: 24rpx;
+
+        .item-title {
+          font-size: $font-base;
+          font-weight: $font-semibold;
+          color: $text-primary;
+        }
+
+        .status-tag {
+          padding: 8rpx 20rpx;
+          border-radius: $radius-full;
+          font-size: $font-xs;
+          font-weight: $font-medium;
+
+          &.pending {
+            background: rgba($warning-color, 0.1);
+            color: $warning-color;
+          }
+
+          &.processing {
+            background: rgba($info-color, 0.1);
+            color: $info-color;
+          }
+
+          &.completed {
+            background: rgba($success-color, 0.1);
+            color: $success-color;
+          }
+
+          &.rejected {
+            background: rgba($error-color, 0.1);
+            color: $error-color;
+          }
+        }
+      }
+
+      .amount-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16rpx;
+        margin-bottom: 16rpx;
+
+        .amount-item {
+          .amount-label {
+            font-size: $font-xs;
+            color: $text-secondary;
+            margin-bottom: 8rpx;
+          }
+
+          .amount-value {
+            font-size: $font-base;
+            font-weight: $font-semibold;
+            color: $text-primary;
+            font-family: $font-mono;
+
+            &.actual {
+              color: $success-color;
+            }
+          }
+        }
+      }
+
+      .item-time {
+        font-size: $font-xs;
+        color: $text-muted;
+        margin-bottom: 16rpx;
+      }
+
+      .reject-reason {
+        padding: 16rpx;
+        background: rgba($error-color, 0.1);
+        border-radius: $radius-sm;
+        font-size: $font-xs;
+        color: $error-color;
+        margin-bottom: 16rpx;
+      }
+
+      .btn-cancel {
+        padding: 16rpx;
+        background: $bg-section;
+        border: 1px solid $border-light;
+        border-radius: $radius-md;
+        color: $error-color;
+        font-size: $font-sm;
+        text-align: center;
+      }
+    }
+  }
+
+  // 提现弹窗
+  .withdraw-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .modal-content {
+      width: 600rpx;
+      @include glass-card-strong;
+      padding: 48rpx;
+
+      .modal-title {
+        font-size: $font-xl;
+        font-weight: $font-bold;
+        color: $text-primary;
+        margin-bottom: 32rpx;
+      }
+
+      .form-item {
+        margin-bottom: 32rpx;
+
+        .form-label {
+          font-size: $font-sm;
+          color: $text-secondary;
+          margin-bottom: 16rpx;
+        }
+
+        .form-input {
+          @include input;
+          width: 100%;
+        }
+
+        .form-picker {
+          @include input;
+          width: 100%;
+        }
+
+        .form-hint {
+          font-size: $font-xs;
+          color: $text-muted;
+          margin-top: 8rpx;
+        }
+      }
+
+      .fee-info {
+        padding: 24rpx;
+        background: $bg-section;
+        border-radius: $radius-md;
+        margin-bottom: 32rpx;
+
+        .fee-item {
+          font-size: $font-sm;
+          color: $text-secondary;
+          margin-bottom: 8rpx;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 16rpx;
+
+        .btn-cancel {
+          flex: 1;
+          padding: 24rpx;
+          background: $bg-section;
+          border: 1px solid $border-light;
+          border-radius: $radius-md;
+          color: $text-secondary;
+          font-size: $font-base;
+          text-align: center;
+        }
+
+        .btn-confirm {
+          flex: 1;
+          padding: 24rpx;
+          background: $gradient-purple;
+          color: $text-white;
+          border-radius: $radius-md;
+          font-size: $font-base;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

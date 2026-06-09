@@ -1,0 +1,127 @@
+.timeline-container {
+  padding: 32rpx 0;
+}
+
+.timeline-node {
+  display: flex;
+  gap: 24rpx;
+  position: relative;
+  padding-bottom: 48rpx;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.node-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.node-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E5E7EB;
+  border: 4rpx solid #E5E7EB;
+  transition: all 0.3s ease;
+  z-index: 2;
+
+  .icon-check {
+    font-size: 32rpx;
+    color: #FFFFFF;
+    font-weight: 700;
+  }
+
+  .icon-current {
+    font-size: 32rpx;
+  }
+
+  .icon-pending {
+    font-size: 28rpx;
+    opacity: 0.5;
+  }
+}
+
+.timeline-node.completed {
+  .node-icon {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    border-color: #10B981;
+    box-shadow: 0 4rpx 12rpx rgba(16, 185, 129, 0.3);
+  }
+
+  .node-label {
+    color: #1F2937;
+    font-weight: 600;
+  }
+}
+
+.timeline-node.current {
+  .node-icon {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+    border-color: #8B5CF6;
+    box-shadow: 0 4rpx 12rpx rgba(139, 92, 246, 0.4);
+    animation: pulse 2s infinite;
+  }
+
+  .node-label {
+    color: #8B5CF6;
+    font-weight: 700;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4rpx 12rpx rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6rpx 16rpx rgba(139, 92, 246, 0.6);
+  }
+}
+
+.node-line {
+  width: 4rpx;
+  flex: 1;
+  background: #E5E7EB;
+  margin-top: 8rpx;
+  transition: all 0.3s ease;
+
+  &.completed {
+    background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+  }
+}
+
+.node-content {
+  flex: 1;
+  padding-top: 8rpx;
+}
+
+.node-label {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #6B7280;
+  margin-bottom: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.node-time {
+  display: block;
+  font-size: 24rpx;
+  color: #9CA3AF;
+  margin-bottom: 8rpx;
+}
+
+.node-description {
+  display: block;
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.5;
+}

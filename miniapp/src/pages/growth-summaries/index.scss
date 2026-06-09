@@ -1,0 +1,254 @@
+@import '../../styles/theme.scss';
+
+.growth-summaries-page {
+  min-height: 100vh;
+  background: $gradient-bg;
+  padding: 20px;
+  padding-bottom: 100px;
+}
+
+/* 页面标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: $text-secondary;
+  display: block;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 16px;
+  color: $text-secondary;
+}
+
+/* 成长总结列表 */
+.summaries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.summary-card {
+  @include card-super-rounded;
+  padding: 24px;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &.unread {
+    border: 2px solid $primary-color;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.unread-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: $radius-full;
+  padding: 4px 12px;
+
+  .badge-text {
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+/* 订单信息 */
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $border-light;
+}
+
+.order-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-primary;
+  flex: 1;
+  margin-right: 12px;
+}
+
+.generated-date {
+  font-size: 12px;
+  color: $text-tertiary;
+  flex-shrink: 0;
+}
+
+/* 成长亮点 */
+.headline-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+  border-radius: $radius-lg;
+  margin-bottom: 16px;
+}
+
+.headline-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.headline-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-primary;
+  line-height: 1.5;
+}
+
+/* 各个内容区块 */
+.comparison-section,
+.breakthrough-section,
+.stuck-point-section,
+.recommendation-section {
+  margin-bottom: 16px;
+}
+
+.section-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 8px;
+}
+
+.section-content {
+  display: block;
+  font-size: 14px;
+  color: $text-secondary;
+  line-height: 1.8;
+}
+
+/* 技能标签 */
+.skills-section {
+  margin-bottom: 16px;
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.skill-tag {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.2) 0%, rgba(196, 181, 253, 0.2) 100%);
+  border-radius: $radius-full;
+}
+
+.skill-text {
+  font-size: 13px;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+/* 反馈区域 */
+.feedback-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid $border-light;
+}
+
+.feedback-label {
+  display: block;
+  font-size: 13px;
+  color: $text-secondary;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.feedback-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: $radius-lg;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  transition: all 0.3s ease;
+
+  &.helpful {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+
+    &:active {
+      background: rgba(34, 197, 94, 0.2);
+    }
+  }
+
+  &.neutral {
+    background: rgba(156, 163, 175, 0.1);
+    color: #6b7280;
+
+    &:active {
+      background: rgba(156, 163, 175, 0.2);
+    }
+  }
+
+  &.not-helpful {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+
+    &:active {
+      background: rgba(239, 68, 68, 0.2);
+    }
+  }
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-secondary;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.empty-hint {
+  font-size: 13px;
+  color: $text-tertiary;
+  display: block;
+}

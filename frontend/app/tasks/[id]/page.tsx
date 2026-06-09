@@ -8,6 +8,8 @@ import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/components/ui/Toast";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { MentorStageChat } from "@/components/mentor/MentorStageChat";
+import { PreCheckResult } from "@/components/mentor/PreCheckResult";
 
 interface Task {
   id: string;
@@ -50,6 +52,9 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
   const [loading, setLoading] = useState(true);
   const [accepting, setAccepting] = useState(false);
   const [sending, setSending] = useState(false);
+  const [mentorOpen, setMentorOpen] = useState(false);
+  const [preCheckResult, setPreCheckResult] = useState<any>(null);
+  const [showPreCheck, setShowPreCheck] = useState(false);
   const { role, userId } = useAuthStore();
   const { show } = useToast();
   const router = useRouter();
@@ -73,8 +78,14 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
     setAccepting(true);
     try {
       await taskApi.accept(id);
-      show("接单成功！AI正在为你拆解步骤 🎯", "success");
-      router.push("/my-tasks");
+      show("接单成功！AI导师已启动 🐱", "success");
+      // 刷新任务数据
+      const { data } = await taskApi.detail(id);
+      setTask(data.data);
+      // 3秒后自动打开导师对话
+      setTimeout(() => {
+        setMentorOpen(true);
+      }, 3000);
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
       show(msg || "接单失败", "error");
@@ -196,19 +207,30 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
         </div>
       )}
 
-      {/* AI导师悬浮按钮 */}
+      {/* AI导师对话组件 */}
       {alreadyAccepted && (
-        <button
-          onClick={() => router.push(`/mentor?taskId=${id}`)}
-          className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform z-40"
-          style={{
-            background: "#1f6feb",
-            border: "2px solid #58a6ff",
+        <MentorStageChat
+          taskId={id}
+          isOpen={mentorOpen}
+          onToggle={() => setMentorOpen(!mentorOpen)}
+        />
+      )}
+
+      {/* 预审结果弹窗 */}
+      {showPreCheck && preCheckResult && (
+        <PreCheckResult
+          result={preCheckResult}
+          onRecheck={() => {
+            setShowPreCheck(false);
+            show("请修改后重新提交", "info");
           }}
-          title="问AI导师"
-        >
-          <Image src="/cat-logo.png" alt="AI导师" width={40} height={40} />
-        </button>
+          onForceSubmit={() => {
+            setShowPreCheck(false);
+            // 这里调用实际的提交接口
+            show("已提交，等待企业审核", "success");
+          }}
+          onClose={() => setShowPreCheck(false)}
+        />
       )}
 
       {/* 详情 */}

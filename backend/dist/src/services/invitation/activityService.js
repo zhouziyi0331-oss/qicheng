@@ -30,7 +30,7 @@ class ActivityService {
         is_active = true,
         inactive_since = NULL,
         invitation_eligible = CASE
-          WHEN (SELECT level_a FROM student_profiles WHERE user_id = $1) >= 10
+          WHEN (SELECT current_level FROM users WHERE id = $1) >= 10
           THEN true
           ELSE false
         END,
@@ -64,9 +64,9 @@ class ActivityService {
       SELECT
         sal.invitation_eligible,
         sal.is_active,
-        sp.level_a
+        u.current_level
       FROM student_activity_logs sal
-      JOIN student_profiles sp ON sal.student_id = sp.user_id
+      JOIN users u ON sal.student_id = u.id
       WHERE sal.student_id = $1
     `;
         const result = await (0, db_1.query)(queryText, [studentId]);
@@ -121,7 +121,7 @@ class ActivityService {
         is_active = true,
         inactive_since = NULL,
         invitation_eligible = CASE
-          WHEN (SELECT level_a FROM student_profiles WHERE user_id = $1) >= 10
+          WHEN (SELECT current_level FROM users WHERE id = $1) >= 10
           THEN true
           ELSE false
         END,
@@ -137,12 +137,12 @@ class ActivityService {
         let queryText = `
       SELECT
         sal.student_id,
-        sp.level_a,
+        u.current_level,
         sp.d1, sp.d2, sp.d3, sp.d4, sp.d5, sp.d6,
         sp.tags,
         sal.last_login_at
       FROM student_activity_logs sal
-      JOIN student_profiles sp ON sal.student_id = sp.user_id
+      JOIN users u ON sal.student_id = u.id
       WHERE
         sal.invitation_eligible = true
         AND sal.is_active = true
@@ -150,7 +150,7 @@ class ActivityService {
         const params = [];
         let paramIndex = 1;
         if (filters?.minLevel) {
-            queryText += ` AND sp.level_a >= $${paramIndex}`;
+            queryText += ` AND u.current_level >= $${paramIndex}`;
             params.push(filters.minLevel);
             paramIndex++;
         }
@@ -166,11 +166,11 @@ class ActivityService {
             params.push(filters.tags);
             paramIndex++;
         }
-        queryText += ` ORDER BY sp.level_a DESC, sal.last_login_at DESC`;
+        queryText += ` ORDER BY u.current_level DESC, sal.last_login_at DESC`;
         const result = await (0, db_1.query)(queryText, params);
         return result.map(row => ({
             student_id: row.student_id,
-            level_a: row.level_a,
+            level_a: row.current_level,
             abilities: {
                 d1: row.d1,
                 d2: row.d2,

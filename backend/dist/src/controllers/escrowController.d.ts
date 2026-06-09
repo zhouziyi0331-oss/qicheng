@@ -1,50 +1,49 @@
-import { Request, Response, NextFunction } from 'express';
 /**
- * 获取用户托管账户信息
+ * 支付托管和提现控制器（新版）
+ *
+ * 基于063_escrow_withdrawal_system.sql的完整实现
  */
-export declare function getAccount(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+import { Request, Response } from 'express';
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        role: string;
+    };
+}
 /**
- * 创建任务报价（企业）
+ * 获取托管账户信息
+ * GET /api/v1/escrow/account
  */
-export declare function createQuote(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getAccount(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
- * 学生接受报价
+ * 获取或创建托管账户
+ * POST /api/v1/escrow/account/init
  */
-export declare function acceptQuote(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function initAccount(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
- * 企业支付并进入托管
+ * 托管资金（企业支付任务款项）
+ * POST /api/v1/escrow/deposit
  */
-export declare function payAndEscrow(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function depositFunds(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
- * 任务完成，进入待结算
+ * 释放资金（任务完成后支付给学生）
+ * POST /api/v1/escrow/release
  */
-export declare function completeTaskAndSettle(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function releaseFunds(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
- * 释放待结算资金
+ * 申请提现
+ * POST /api/v1/escrow/withdrawal/request
  */
-export declare function releaseSettlement(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function requestWithdrawal(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
- * 获取交易流水
+ * 获取提现记录
+ * GET /api/v1/escrow/withdrawal/history
  */
-export declare function getTransactionLogs(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getWithdrawalHistory(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
- * 创建提现申请
+ * 获取账户流水
+ * GET /api/v1/escrow/transactions
  */
-export declare function createWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void>;
-/**
- * 获取用户提现记录
- */
-export declare function getUserWithdrawals(req: Request, res: Response, next: NextFunction): Promise<void>;
-/**
- * 获取提现统计
- */
-export declare function getWithdrawalStats(req: Request, res: Response, next: NextFunction): Promise<void>;
-/**
- * 审核提现申请（管理员）
- */
-export declare function reviewWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void>;
-/**
- * 获取待审核提现列表（管理员）
- */
-export declare function getPendingWithdrawals(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function getTransactions(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export {};
 //# sourceMappingURL=escrowController.d.ts.map

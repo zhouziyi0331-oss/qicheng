@@ -49,17 +49,24 @@ const express_validator_1 = require("express-validator");
 const auth_1 = require("../../middleware/auth");
 const controller = __importStar(require("./controller"));
 const wechatController = __importStar(require("./wechatController"));
+const profileController = __importStar(require("./profileController"));
 const router = (0, express_1.Router)();
 // 发送验证码
 router.post('/send-code', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), controller.sendVerificationCode);
-// 注册
-router.post('/register', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), (0, express_validator_1.body)('code').isLength({ min: 4, max: 6 }).withMessage('验证码格式不正确'), (0, express_validator_1.body)('role').isIn(['student', 'company']).withMessage('角色必须是 student 或 company'), (0, express_validator_1.body)('password').isLength({ min: 8 }).withMessage('密码至少8位'), controller.register);
-// 登录
-router.post('/login', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), controller.login);
+// 注册（无需密码，仅验证码）
+router.post('/register', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), (0, express_validator_1.body)('code').isLength({ min: 4, max: 6 }).withMessage('验证码格式不正确'), (0, express_validator_1.body)('userType').isIn(['student', 'company']).withMessage('用户类型必须是 student 或 company'), controller.register);
+// 登录（仅验证码）
+router.post('/login', (0, express_validator_1.body)('phone').matches(/^1[3-9]\d{9}$/).withMessage('手机号格式不正确'), (0, express_validator_1.body)('code').isLength({ min: 4, max: 6 }).withMessage('验证码格式不正确'), controller.login);
 // 刷新令牌
 router.post('/refresh', (0, express_validator_1.body)('refreshToken').notEmpty(), controller.refreshToken);
 // 登出
 router.post('/logout', auth_1.authenticate, controller.logout);
+// 获取当前用户信息
+router.get('/me', auth_1.authenticate, controller.getCurrentUser);
+// 完善资料
+router.post('/complete-profile', auth_1.authenticate, profileController.completeProfile);
+// 获取资料完善状态
+router.get('/profile-status', auth_1.authenticate, profileController.getProfileStatus);
 // 微信登录
 router.post('/wechat/login', (0, express_validator_1.body)('code').notEmpty().withMessage('微信登录code不能为空'), (0, express_validator_1.body)('userType').isIn(['student', 'company']).withMessage('用户类型必须是 student 或 company'), wechatController.wechatLogin);
 // 微信登录后绑定手机号

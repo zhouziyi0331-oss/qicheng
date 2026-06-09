@@ -19,6 +19,17 @@
   padding: 40px 32px;
   box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
 
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .header-text {
+    flex: 1;
+  }
+
   .header-title {
     display: block;
     font-size: 48px;
@@ -31,7 +42,34 @@
     display: block;
     font-size: 26px;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 32px;
+  }
+
+  .history-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  .history-icon {
+    font-size: 32px;
+  }
+
+  .history-text {
+    font-size: 22px;
+    color: white;
+    font-weight: 500;
   }
 
   .header-stats {
@@ -174,4 +212,111 @@
     font-size: 28px;
     color: #999;
   }
+}
+
+/* 首单前锁定状态 */
+.locked-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.lock-icon {
+  font-size: 120rpx;
+  margin-bottom: 32rpx;
+  animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.lock-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 16rpx;
+}
+
+.lock-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #6B7280;
+  margin-bottom: 40rpx;
+}
+
+.lock-description {
+  padding: 32rpx;
+  background: #F3F4F6;
+  border-radius: 24rpx;
+  margin-bottom: 48rpx;
+}
+
+.description-text {
+  font-size: 28rpx;
+  color: #4B5563;
+  line-height: 1.8;
+}
+
+.unlock-benefits {
+  width: 100%;
+  padding: 32rpx;
+  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+  border-radius: 24rpx;
+  margin-bottom: 40rpx;
+}
+
+.benefits-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 24rpx;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #E5E7EB;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.benefit-icon {
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.benefit-text {
+  font-size: 28rpx;
+  color: #4B5563;
+}
+
+.action-hint {
+  padding: 24rpx 32rpx;
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border-radius: 20rpx;
+  border: 2rpx solid #3B82F6;
+}
+
+.hint-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #1E40AF;
 }

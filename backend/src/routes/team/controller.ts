@@ -184,10 +184,10 @@ export async function getTeamDetail(req: AuthRequest, res: Response, next: NextF
       `SELECT
          tm.id, tm.role, tm.contribution, tm.earnings_share, tm.joined_at,
          u.nickname, u.avatar_url,
-         sp.level_a, sp.level_b, sp.track
+         u.current_level, u.current_level, u.track
        FROM team_members tm
        JOIN users u ON tm.student_id = u.id
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        WHERE tm.team_task_id = $1 AND tm.deleted_at IS NULL
        ORDER BY tm.role DESC, tm.joined_at ASC`,
       [teamId]
@@ -327,7 +327,7 @@ export async function completeTeamTask(req: AuthRequest, res: Response, next: Ne
 
       // 更新任务状态
       await client.query(
-        `UPDATE tasks SET status = 'completed', updated_at = NOW() WHERE id = $1`,
+        `UPDATE tasks SET status = 'completed', completed_at = NOW(), updated_at = NOW() WHERE id = $1`,
         [(team as any).task_id]
       );
     });

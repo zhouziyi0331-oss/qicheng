@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, Button, Image } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro, { useRouter } from '@tarojs/taro';
+import CollaborationProgressHint from '../../components/CollaborationProgressHint';
 import './index.scss';
 
 interface Student {
@@ -15,6 +16,7 @@ interface Student {
   averageRating: number;
   skills: string[];
   recentWorks?: string[];
+  collaborationCount?: number; // 已合作次数
 }
 
 export default function SelectStudents() {
@@ -151,6 +153,17 @@ export default function SelectStudents() {
               <Text className="match-score">{student.matchScore}%</Text>
               <Text className="match-text">匹配</Text>
             </View>
+
+            {/* 合作进度提示 */}
+            {student.collaborationCount && student.collaborationCount > 0 && (
+              <View onClick={(e) => e.stopPropagation()}>
+                <CollaborationProgressHint
+                  studentId={student.studentId}
+                  mode="inline"
+                  showAction={false}
+                />
+              </View>
+            )}
 
             {/* 学生信息 */}
             <View className="student-info">

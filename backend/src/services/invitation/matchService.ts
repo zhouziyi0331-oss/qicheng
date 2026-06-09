@@ -19,7 +19,7 @@ interface MatchConfig {
 
 interface StudentProfile {
   student_id: string;
-  level_a: number;
+  current_level: number;
   abilities: Record<string, number>;
   tags: string[];
   completed_tasks: number;
@@ -122,20 +122,20 @@ export class InvitationMatchService {
   ): Promise<StudentProfile[]> {
     let queryText = `
       SELECT
-        sp.user_id as student_id,
-        sp.level_a,
+        u.id as student_id,
+        u.current_level,
         sp.d1, sp.d2, sp.d3, sp.d4, sp.d5, sp.d6,
         sp.tags,
         sp.completed_tasks,
         sp.avg_rating,
         sp.success_rate,
         sal.last_login_at
-      FROM student_profiles sp
-      JOIN student_activity_logs sal ON sp.user_id = sal.student_id
+      FROM users u
+      JOIN student_activity_logs sal ON u.id = sal.student_id
       WHERE
         sal.invitation_eligible = true
         AND sal.is_active = true
-        AND sp.level_a >= $1
+        AND u.current_level >= $1
     `;
 
     const params: any[] = [requirements.target_level_min];
@@ -143,7 +143,7 @@ export class InvitationMatchService {
 
     // 排除黑名单
     if (blacklist.length > 0) {
-      queryText += ` AND sp.user_id != ALL($${paramIndex}::uuid[])`;
+      queryText += ` AND u.id != ALL($${paramIndex}::uuid[])`;
       params.push(blacklist);
       paramIndex++;
     }
@@ -164,11 +164,11 @@ export class InvitationMatchService {
       paramIndex++;
     }
 
-    queryText += ` ORDER BY sp.level_a DESC, sp.avg_rating DESC LIMIT 50`;
+    queryText += ` ORDER BY u.current_level DESC, sp.avg_rating DESC LIMIT 50`;
 
     const result = await poolQuery<{
       student_id: string;
-      level_a: number;
+      current_level: number;
       d1: number;
       d2: number;
       d3: number;
@@ -184,7 +184,7 @@ export class InvitationMatchService {
 
     return result.map(row => ({
       student_id: row.student_id,
-      level_a: row.level_a,
+      level_a: row.current_level,
       abilities: {
         d1: row.d1,
         d2: row.d2,

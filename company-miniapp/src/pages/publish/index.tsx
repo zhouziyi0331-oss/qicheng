@@ -13,10 +13,13 @@ export default function Publish() {
     deadline: ''
   });
 
-  const [step, setStep] = useState(1); // 1: 填写信息, 2: AI价格建议, 3: 确认支付
+  const [step, setStep] = useState(1); // 1: 填写信息, 2: AI价格建议, 3: 确认支付, 4: 匹配学生
   const [aiPriceSuggestion, setAiPriceSuggestion] = useState<any>(null);
   const [companyPrice, setCompanyPrice] = useState('');
   const [loading, setLoading] = useState(false);
+  const [taskId, setTaskId] = useState('');
+  const [matchedStudents, setMatchedStudents] = useState<any[]>([]);
+  const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
   const taskTypes = ['软件开发', 'UI设计', '文案撰写', '视频剪辑', '数据分析', '其他'];
   const [taskTypeIndex, setTaskTypeIndex] = useState(0);
@@ -112,10 +115,37 @@ export default function Publish() {
             });
 
             if (res.data.success) {
-              Taro.showToast({ title: '发布成功！', icon: 'success' });
-              setTimeout(() => {
-                Taro.navigateTo({ url: `/pages/tasks/index?taskId=${res.data.data.taskId}` });
-              }, 1500);
+              const newTaskId = res.data.data.taskId;
+              setTaskId(newTaskId);
+
+              // 获取匹配的学生
+              try {
+                const matchRes = await Taro.request({
+                  url: `http://localhost:3000/api/v1/tasks/${newTaskId}/matched-students`,
+                  method: 'GET',
+                  header: {
+                    'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+                  }
+                });
+
+                if (matchRes.data.success) {
+                  setMatchedStudents(matchRes.data.data || []);
+                  setStep(4); // 进入匹配学生步骤
+                  Taro.showToast({ title: '发布成功！正在匹配学生...', icon: 'success' });
+                } else {
+                  // 如果获取匹配学生失败，仍然跳转到任务列表
+                  Taro.showToast({ title: '发布成功！', icon: 'success' });
+                  setTimeout(() => {
+                    Taro.navigateTo({ url: `/pages/tasks/index?taskId=${newTaskId}` });
+                  }, 1500);
+                }
+              } catch (matchErr) {
+                console.error('获取匹配学生失败:', matchErr);
+                Taro.showToast({ title: '发布成功！', icon: 'success' });
+                setTimeout(() => {
+                  Taro.navigateTo({ url: `/pages/tasks/index?taskId=${newTaskId}` });
+                }, 1500);
+              }
             } else {
               Taro.showToast({ title: res.data.message || '发布失败', icon: 'none' });
             }
@@ -137,6 +167,60 @@ export default function Publish() {
         resolve({ transactionId: `TX${Date.now()}` });
       }, 1000);
     });
+  };
+
+  // 切换学生选择
+  const toggleStudentSelection = (studentId: string) => {
+    if (selectedStudents.includes(studentId)) {
+      setSelectedStudents(selectedStudents.filter(id => id !== studentId));
+    } else {
+      if (selectedStudents.length >= 5) {
+        Taro.showToast({ title: '最多选择5个学生', icon: 'none' });
+        return;
+      }
+      setSelectedStudents([...selectedStudents, studentId]);
+    }
+  };
+
+  // 推送任务给选中的学生
+  const handlePushToStudents = async () => {
+    if (selectedStudents.length === 0) {
+      Taro.showToast({ title: '请至少选择1个学生', icon: 'none' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/tasks/${taskId}/push-to-students`,
+        method: 'POST',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        },
+        data: {
+          studentIds: selectedStudents
+        }
+      });
+
+      if (res.data.success) {
+        Taro.showToast({ title: '推送成功！', icon: 'success' });
+        setTimeout(() => {
+          Taro.navigateTo({ url: `/pages/task-detail/index?id=${taskId}` });
+        }, 1500);
+      } else {
+        Taro.showToast({ title: res.data.message || '推送失败', icon: 'none' });
+      }
+    } catch (err) {
+      console.error('推送任务失败:', err);
+      Taro.showToast({ title: '网络错误', icon: 'none' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 跳过推送，直接查看任务
+  const handleSkipPush = () => {
+    Taro.navigateTo({ url: `/pages/task-detail/index?id=${taskId}` });
   };
 
   return (
@@ -162,6 +246,17 @@ export default function Publish() {
       {/* 步骤1: 填写任务信息 */}
       {step === 1 && (
         <View className="form-container">
+          {/* 2单解锁规则提示 */}
+          <View className="unlock-rule-banner">
+            <View className="rule-icon">💡</View>
+            <View className="rule-content">
+              <Text className="rule-title">合作越多，沟通越便捷</Text>
+              <Text className="rule-text">
+                与同一学生完成2单后，双方同意即可解锁联系方式，建立直接联系
+              </Text>
+            </View>
+          </View>
+
           <View className="form-section">
             <Text className="section-title">基本信息</Text>
 
@@ -333,6 +428,125 @@ export default function Publish() {
               loading={loading}
             >
               支付定金并发布
+            </Button>
+          </View>
+        </View>
+      )}
+
+      {/* 步骤4: 匹配学生 */}
+      {step === 4 && (
+        <View className="matching-section">
+          <View className="matching-header">
+            <Text className="header-icon">🎯</Text>
+            <Text className="header-title">AI为您匹配了 {matchedStudents.length} 位学生</Text>
+            <Text className="header-subtitle">请选择最多5位学生推送任务</Text>
+          </View>
+
+          <View className="students-list">
+            {matchedStudents.map((student, index) => (
+              <View
+                key={student.id}
+                className={`student-card ${selectedStudents.includes(student.id) ? 'selected' : ''}`}
+                onClick={() => toggleStudentSelection(student.id)}
+              >
+                {/* 排名标签 */}
+                <View className="rank-badge">
+                  <Text className="rank-text">#{index + 1}</Text>
+                </View>
+
+                {/* 选择框 */}
+                <View className="checkbox">
+                  {selectedStudents.includes(student.id) && (
+                    <Text className="check-icon">✓</Text>
+                  )}
+                </View>
+
+                {/* 学生信息 */}
+                <View className="student-header">
+                  <View className="student-avatar">
+                    <Text className="avatar-text">
+                      {student.name?.charAt(0) || '学'}
+                    </Text>
+                  </View>
+                  <View className="student-info">
+                    <Text className="student-name">{student.name || '学生'}</Text>
+                    <View className="student-meta">
+                      <Text className="meta-item">
+                        Lv.{student.level || 0}
+                      </Text>
+                      <Text className="meta-divider">•</Text>
+                      <Text className="meta-item">
+                        {student.track === 'content' ? '内容赛道' : '开发赛道'}
+                      </Text>
+                    </View>
+                  </View>
+                  <View className="match-score">
+                    <Text className="score-value">{Math.round((student.matchScore || 0) * 100)}%</Text>
+                    <Text className="score-label">匹配度</Text>
+                  </View>
+                </View>
+
+                {/* 匹配原因 */}
+                {student.matchReason && (
+                  <View className="match-reason">
+                    <Text className="reason-text">💡 {student.matchReason}</Text>
+                  </View>
+                )}
+
+                {/* 技能标签 */}
+                {student.skills && student.skills.length > 0 && (
+                  <View className="student-skills">
+                    {student.skills.slice(0, 4).map((skill: string, idx: number) => (
+                      <View key={idx} className="skill-tag">
+                        <Text className="skill-text">{skill}</Text>
+                      </View>
+                    ))}
+                    {student.skills.length > 4 && (
+                      <Text className="more-skills">+{student.skills.length - 4}</Text>
+                    )}
+                  </View>
+                )}
+
+                {/* 学生统计 */}
+                <View className="student-stats">
+                  <View className="stat-item">
+                    <Text className="stat-value">{student.tasksCompleted || 0}</Text>
+                    <Text className="stat-label">完成任务</Text>
+                  </View>
+                  <View className="stat-divider"></View>
+                  <View className="stat-item">
+                    <Text className="stat-value">{student.avgQuality ? (student.avgQuality * 5).toFixed(1) : '0.0'}</Text>
+                    <Text className="stat-label">平均评分</Text>
+                  </View>
+                  <View className="stat-divider"></View>
+                  <View className="stat-item">
+                    <Text className="stat-value">{student.onTimeRate ? Math.round(student.onTimeRate * 100) : 0}%</Text>
+                    <Text className="stat-label">按时完成</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          {/* 选择提示 */}
+          <View className="selection-hint">
+            <Text className="hint-text">
+              已选择 {selectedStudents.length}/5 位学生
+            </Text>
+          </View>
+
+          {/* 操作按钮 */}
+          <View className="button-group">
+            <Button className="skip-btn" onClick={handleSkipPush}>
+              稍后推送
+            </Button>
+            <Button
+              className="push-btn"
+              onClick={handlePushToStudents}
+              loading={loading}
+              disabled={selectedStudents.length === 0}
+            >
+              推送给选中的学生
             </Button>
           </View>
         </View>

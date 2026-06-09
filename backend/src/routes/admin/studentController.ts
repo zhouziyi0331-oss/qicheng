@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { query } from '../../utils/db';
+import { maskPhone, maskArrayData } from '../../utils/dataMask';
+import { logAdminAction, AuditAction, ResourceType } from '../../utils/auditLog';
 
 /**
  * 获取学生列表
@@ -29,7 +31,7 @@ export async function getStudentList(req: Request, res: Response) {
 
     // 等级筛选
     if (level) {
-      conditions.push(`sp.level_a = $${paramIndex}`);
+      conditions.push(`u.current_level = $${paramIndex}`);
       params.push(level);
       paramIndex++;
     }
@@ -40,7 +42,7 @@ export async function getStudentList(req: Request, res: Response) {
     const countResult = await query<any>(
       `SELECT COUNT(*) as total
        FROM users u
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        ${whereClause}`,
       params
     );
@@ -56,21 +58,27 @@ export async function getStudentList(req: Request, res: Response) {
         u.avatar_url,
         u.phone,
         u.created_at,
-        sp.level_a,
-        sp.level_b,
+        u.current_level,
+        u.current_level,
         sp.opc_label,
         sp.task_count,
         sp.total_earnings
        FROM users u
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        ${whereClause}
        ORDER BY ${sortBy} ${sortOrder}
        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`,
       params
     );
 
+    // 获取管理员角色
+    const adminRole = (req as any).user?.adminRole || 'operator';
+
+    // 数据脱敏
+    const maskedStudents = maskArrayData(students, adminRole, ['phone']);
+
     res.json({
-      list: students,
+      list: maskedStudents,
       pagination: {
         page: Number(page),
         pageSize: Number(pageSize),
@@ -99,8 +107,8 @@ export async function getStudentDetail(req: Request, res: Response) {
         u.avatar_url,
         u.phone,
         u.created_at,
-        sp.level_a,
-        sp.level_b,
+        u.current_level,
+        u.current_level,
         sp.opc_label,
         sp.opc_label_secondary,
         sp.task_count,
@@ -108,13 +116,47 @@ export async function getStudentDetail(req: Request, res: Response) {
         sp.graduated_at,
         sp.onboarding_completed_at
        FROM users u
-       LEFT JOIN student_profiles sp ON u.id = sp.user_id
+       LEFT JOIN users u ON u.id = u.id
        WHERE u.id = $1`,
       [id]
     );
 
     if (studentInfo.length === 0) {
       return res.status(404).json({ error: '学生不存在' });
+    }
+
+    // 获取管理员角色并脱敏
+    const adminRole = (req as any).user?.adminRole || 'operator';
+    const adminId = (req as any).user?.id;
+
+    // 记录审计日志
+    await logAdminAction({
+      adminId,
+      action: AuditAction.VIEW_STUDENT_DETAIL,
+      resourceType: ResourceType.STUDENT,
+      resourceId: id,
+      details: {
+        viewed_full_phone: adminRole === 'super_admin',
+        student_nickname: studentInfo[0].nickname
+      },
+      req
+    });
+
+    if (adminRole !== 'super_admin') {
+      studentInfo[0].phone = maskPhone(studentInfo[0].phone);
+    } else {
+      // super_admin查看完整手机号，额外记录
+      await logAdminAction({
+        adminId,
+        action: AuditAction.VIEW_PHONE,
+        resourceType: ResourceType.STUDENT,
+        resourceId: id,
+        details: {
+          phone: studentInfo[0].phone,
+          student_nickname: studentInfo[0].nickname
+        },
+        req
+      });
     }
 
     // 订单统计
@@ -195,7 +237,7 @@ export async function getStudentAbility(req: Request, res: Response) {
 
     // 检查学生是否存在
     const student = await query<any>(
-      `SELECT user_id FROM student_profiles WHERE user_id = $1`,
+      `SELECT student_id FROM student_capabilities WHERE student_id = $1`,
       [id]
     );
 
@@ -208,8 +250,8 @@ export async function getStudentAbility(req: Request, res: Response) {
       `SELECT
         six_dim_d1, six_dim_d2, six_dim_d3,
         six_dim_d4, six_dim_d5, six_dim_d6
-       FROM student_profiles
-       WHERE user_id = $1`,
+       FROM student_capabilities
+       WHERE student_id = $1`,
       [id]
     );
 

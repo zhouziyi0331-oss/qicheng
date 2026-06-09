@@ -12,6 +12,8 @@ exports.addRequirementSupplement = addRequirementSupplement;
 const db_1 = require("../../utils/db");
 const errorHandler_1 = require("../../middleware/errorHandler");
 const logger_1 = __importDefault(require("../../utils/logger"));
+const contactExchangeService_1 = require("../../services/contactExchangeService");
+const mentorTriggerService_1 = require("../../services/mentorTriggerService");
 /**
  * 企业验收和支付流程API
  *
@@ -190,6 +192,16 @@ async function rejectDeliverable(req, res, next) {
                 `任务《${taskData.title}》验收未通过，企业反馈：${feedback}。请根据反馈修改后重新提交。`,
                 taskId
             ]);
+            // 5. 异步触发AI导师沟通桥梁（翻译企业反馈）
+            setTimeout(async () => {
+                try {
+                    await mentorTriggerService_1.mentorTriggerService.triggerCommunicationBridge(taskId, taskData.accepted_student_id, feedback);
+                    logger_1.default.info('AI导师沟通桥梁已触发', { taskId, studentId: taskData.accepted_student_id });
+                }
+                catch (error) {
+                    logger_1.default.error('触发AI导师沟通桥梁失败', { taskId, error });
+                }
+            }, 2000);
             logger_1.default.info('Task verification rejected', {
                 taskId,
                 companyId,
@@ -247,20 +259,33 @@ async function finalConfirmation(req, res, next) {
              auto_confirmed = false
          WHERE id = $1`, [taskId]);
             // 4. 更新学生统计
-            await client.query(`UPDATE student_profiles
+            await client.query(`UPDATE student_capabilities
          SET completed_tasks = completed_tasks + 1,
              active_tasks = active_tasks - 1,
              total_earnings = total_earnings + $1
          WHERE user_id = $2`, [taskData.student_price, taskData.accepted_student_id]);
-            // 5. 通知学生
+            // 5. 记录合作历史（用于2单解锁）
+            await client.query(`INSERT INTO collaboration_history (
+          student_id, company_id, task_id, status, completed_at
+        ) VALUES ($1, $2, $3, 'completed', NOW())
+        ON CONFLICT (student_id, company_id, task_id)
+        DO UPDATE SET status = 'completed', completed_at = NOW()`, [taskData.accepted_student_id, companyId, taskId]);
+            // 6. 通知学生
             await client.query(`INSERT INTO notifications (user_id, user_type, type, title, content, related_task_id)
          VALUES ($1, 'student', 'payment_received', '收到付款', $2, $3)`, [
                 taskData.accepted_student_id,
                 `恭喜！任务《${taskData.title}》已完成，您已收到付款¥${taskData.student_price}`,
                 taskId
             ]);
-            // 6. 检查合作次数，是否需要交换微信
-            await checkAndExchangeWechat(client, companyId, taskData.accepted_student_id, taskId);
+            // 6. 检查合作次数，触发联系方式交换（第3次合作）
+            // 使用新的联系方式交换服务
+            try {
+                await contactExchangeService_1.contactExchangeService.checkAndPromptExchange(taskData.accepted_student_id, companyId, taskId);
+            }
+            catch (error) {
+                logger_1.default.error('Failed to check contact exchange', { error, taskId });
+                // 不阻塞主流程
+            }
             logger_1.default.info('Task final confirmation completed', {
                 taskId,
                 companyId,
@@ -314,7 +339,7 @@ async function autoConfirmTasks() {
                auto_confirmed = true
            WHERE id = $1`, [task.id]);
                 // 3. 更新学生统计
-                await client.query(`UPDATE student_profiles
+                await client.query(`UPDATE student_capabilities
            SET completed_tasks = completed_tasks + 1,
                active_tasks = active_tasks - 1,
                total_earnings = total_earnings + $1
@@ -326,15 +351,27 @@ async function autoConfirmTasks() {
                     `任务《${task.title}》已超过7天验收期，系统已自动确认并付款给学生`,
                     task.id
                 ]);
-                // 5. 通知学生
+                // 5. 记录合作历史（用于2单解锁）
+                await client.query(`INSERT INTO collaboration_history (
+            student_id, company_id, task_id, status, completed_at
+          ) VALUES ($1, $2, $3, 'completed', NOW())
+          ON CONFLICT (student_id, company_id, task_id)
+          DO UPDATE SET status = 'completed', completed_at = NOW()`, [task.accepted_student_id, task.company_id, task.id]);
+                // 6. 通知学生
                 await client.query(`INSERT INTO notifications (user_id, user_type, type, title, content, related_task_id)
            VALUES ($1, 'student', 'payment_received', '收到付款', $2, $3)`, [
                     task.accepted_student_id,
                     `任务《${task.title}》已自动确认完成，您已收到付款¥${task.student_price}`,
                     task.id
                 ]);
-                // 6. 检查合作次数
-                await checkAndExchangeWechat(client, task.company_id, task.accepted_student_id, task.id);
+                // 7. 检查合作次数，触发联系方式交换（第3次合作）
+                try {
+                    await contactExchangeService_1.contactExchangeService.checkAndPromptExchange(task.accepted_student_id, task.company_id, task.id);
+                }
+                catch (error) {
+                    logger_1.default.error('Failed to check contact exchange', { error, taskId: task.id });
+                    // 不阻塞主流程
+                }
                 logger_1.default.info('Task auto-confirmed', {
                     taskId: task.id,
                     companyId: task.company_id,
@@ -347,73 +384,6 @@ async function autoConfirmTasks() {
     catch (err) {
         logger_1.default.error('Auto-confirm tasks failed', { error: err });
         throw err;
-    }
-}
-// ============================================
-// 5. 检查并交换微信（连续合作2次）
-// ============================================
-async function checkAndExchangeWechat(client, companyId, studentId, taskId) {
-    try {
-        // 1. 查询或创建合作关系记录
-        const collaboration = await client.query(`SELECT * FROM collaborations
-       WHERE company_id = $1 AND student_id = $2`, [companyId, studentId]);
-        let collaborationCount = 0;
-        let wechatExchanged = false;
-        if (collaboration.rows.length === 0) {
-            // 首次合作
-            await client.query(`INSERT INTO collaborations (
-          company_id, student_id, collaboration_count,
-          first_collaboration_at, last_collaboration_at
-        ) VALUES ($1, $2, 1, NOW(), NOW())`, [companyId, studentId]);
-            collaborationCount = 1;
-        }
-        else {
-            // 增加合作次数
-            const collab = collaboration.rows[0];
-            collaborationCount = collab.collaboration_count + 1;
-            wechatExchanged = collab.wechat_exchanged;
-            await client.query(`UPDATE collaborations
-         SET collaboration_count = $1,
-             last_collaboration_at = NOW()
-         WHERE company_id = $2 AND student_id = $3`, [collaborationCount, companyId, studentId]);
-        }
-        // 2. 如果达到2次合作且未交换微信，则交换
-        if (collaborationCount >= 2 && !wechatExchanged) {
-            // 获取双方微信号
-            const company = await client.query(`SELECT wechat_id FROM users WHERE id = $1`, [companyId]);
-            const student = await client.query(`SELECT wechat_id FROM users WHERE id = $1`, [studentId]);
-            const companyWechat = company.rows[0]?.wechat_id;
-            const studentWechat = student.rows[0]?.wechat_id;
-            // 更新合作关系，标记已交换
-            await client.query(`UPDATE collaborations
-         SET wechat_exchanged = true,
-             company_wechat = $1,
-             student_wechat = $2
-         WHERE company_id = $3 AND student_id = $4`, [companyWechat, studentWechat, companyId, studentId]);
-            // 通知企业
-            await client.query(`INSERT INTO notifications (user_id, user_type, type, title, content, related_task_id)
-         VALUES ($1, 'company', 'wechat_exchanged', '已交换微信', $2, $3)`, [
-                companyId,
-                `您已与该学生合作2次，系统已为您交换微信联系方式：${studentWechat || '未设置'}。后续可直接联系，平台不再参与交易。`,
-                taskId
-            ]);
-            // 通知学生
-            await client.query(`INSERT INTO notifications (user_id, user_type, type, title, content, related_task_id)
-         VALUES ($1, 'student', 'wechat_exchanged', '已交换微信', $2, $3)`, [
-                studentId,
-                `您已与该企业合作2次，系统已为您交换微信联系方式：${companyWechat || '未设置'}。后续可直接联系，平台不再参与交易。`,
-                taskId
-            ]);
-            logger_1.default.info('Wechat exchanged after 2 collaborations', {
-                companyId,
-                studentId,
-                collaborationCount
-            });
-        }
-    }
-    catch (err) {
-        logger_1.default.error('Check and exchange wechat failed', { error: err });
-        // 不抛出错误，避免影响主流程
     }
 }
 // ============================================

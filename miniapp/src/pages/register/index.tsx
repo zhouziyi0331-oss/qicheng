@@ -8,6 +8,8 @@ import './index.scss'
 export default function Register() {
   const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [role, setRole] = useState<'student' | 'company'>('student')
   const [countdown, setCountdown] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -38,20 +40,50 @@ export default function Register() {
   }
 
   const handleRegister = async () => {
-    if (!phone || !code) {
+    if (!phone || !code || !password) {
       Taro.showToast({ title: '请填写完整信息', icon: 'none' })
+      return
+    }
+
+    if (password.length < 8) {
+      Taro.showToast({ title: '密码至少8位', icon: 'none' })
+      return
+    }
+
+    if (password !== confirmPassword) {
+      Taro.showToast({ title: '两次密码不一致', icon: 'none' })
       return
     }
 
     setLoading(true)
     try {
-      const res = await authAPI.register({ phone, code, role })
-      saveUserInfo(res.user, res.token)
+      const res = await authAPI.register({ 
+        phone, 
+        code, 
+        password,
+        role,
+        userType: role
+      })
+      
+      // 保存token和用户信息
+      Taro.setStorageSync('accessToken', res.data.accessToken)
+      Taro.setStorageSync('refreshToken', res.data.refreshToken)
+      Taro.setStorageSync('userInfo', {
+        userId: res.data.userId,
+        role: res.data.role,
+        userType: res.data.userType
+      })
+      
       Taro.showToast({ title: '注册成功', icon: 'success' })
       setTimeout(() => {
-        Taro.redirectTo({ url: '/pages/onboarding/index' })
+        if (role === 'student') {
+          Taro.redirectTo({ url: '/pages/onboarding/index' })
+        } else {
+          Taro.redirectTo({ url: '/pages/index/index' })
+        }
       }, 1000)
-    } catch (error) {
+    } catch (error: any) {
+      Taro.showToast({ title: error.message || '注册失败', icon: 'none' })
       console.error('注册失败:', error)
     } finally {
       setLoading(false)
@@ -115,6 +147,28 @@ export default function Register() {
               {countdown > 0 ? `${countdown}s` : '获取验证码'}
             </Button>
           </View>
+        </View>
+
+        <View className="form-item">
+          <Text className="form-label">密码</Text>
+          <Input
+            className="form-input"
+            type="password"
+            placeholder="请输入密码（至少8位）"
+            value={password}
+            onInput={(e) => setPassword(e.detail.value)}
+          />
+        </View>
+
+        <View className="form-item">
+          <Text className="form-label">确认密码</Text>
+          <Input
+            className="form-input"
+            type="password"
+            placeholder="请再次输入密码"
+            value={confirmPassword}
+            onInput={(e) => setConfirmPassword(e.detail.value)}
+          />
         </View>
 
         <Button

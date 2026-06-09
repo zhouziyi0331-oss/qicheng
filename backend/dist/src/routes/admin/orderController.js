@@ -258,6 +258,7 @@ async function forceCompleteOrder(req, res) {
         const { reason } = req.body;
         await (0, db_1.query)(`UPDATE tasks
        SET status = 'completed',
+           completed_at = NOW(),
            updated_at = NOW()
        WHERE id = $1`, [id]);
         // 记录操作日志

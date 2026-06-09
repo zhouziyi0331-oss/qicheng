@@ -6,9 +6,10 @@ interface AdminLayoutProps {
   title: string;
   subtitle?: string;
   actions?: ReactNode;
+  backLink?: string;
 }
 
-export default function AdminLayout({ children, title, subtitle, actions }: AdminLayoutProps) {
+export default function AdminLayout({ children, title, subtitle, actions, backLink }: AdminLayoutProps) {
   return (
     <div style={{
       minHeight: "100vh",
@@ -19,7 +20,7 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
         {/* 顶部导航 */}
         <div style={{ marginBottom: "32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <Link href="/admin" style={{
+            <Link href={backLink || "/admin"} style={{
               color: "#8E96A5",
               textDecoration: "none",
               fontSize: "14px",
@@ -116,19 +117,77 @@ export function SearchInput({ value, onChange, placeholder = "搜索..." }: { va
   );
 }
 
+// 输入框组件
+export function Input({
+  value,
+  onChange,
+  placeholder = "",
+  label,
+  style = {}
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  label?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <div style={style}>
+      {label && (
+        <label style={{
+          display: "block",
+          fontSize: "12px",
+          color: "#8E96A5",
+          fontWeight: "600",
+          marginBottom: "8px"
+        }}>
+          {label}
+        </label>
+      )}
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        style={{
+          width: "100%",
+          padding: "12px 16px",
+          borderRadius: "12px",
+          background: "rgba(0,0,0,0.2)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: "#F1F5F9",
+          fontSize: "14px",
+          outline: "none",
+          transition: "all 0.2s ease"
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.borderColor = "rgba(59, 130, 246, 0.5)";
+          e.currentTarget.style.background = "rgba(0,0,0,0.3)";
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+          e.currentTarget.style.background = "rgba(0,0,0,0.2)";
+        }}
+      />
+    </div>
+  );
+}
+
 // 按钮组件
 export function Button({
   children,
   onClick,
   variant = "primary",
   disabled = false,
-  loading = false
+  loading = false,
+  style = {}
 }: {
   children: ReactNode;
   onClick?: () => void;
   variant?: "primary" | "secondary" | "danger";
   disabled?: boolean;
   loading?: boolean;
+  style?: React.CSSProperties;
 }) {
   const variants = {
     primary: {
@@ -161,7 +220,8 @@ export function Button({
         cursor: disabled || loading ? "not-allowed" : "pointer",
         transition: "all 0.2s ease",
         opacity: disabled || loading ? 0.6 : 1,
-        ...variants[variant]
+        ...variants[variant],
+        ...style
       }}
       onMouseEnter={(e) => {
         if (!disabled && !loading) {

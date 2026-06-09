@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBalance = getBalance;
 exports.getHistory = getHistory;
 exports.requestWithdrawal = requestWithdrawal;
+exports.getWithdrawalHistory = getWithdrawalHistory;
 exports.wechatNotify = wechatNotify;
 exports.alipayNotify = alipayNotify;
 const db_1 = require("../../utils/db");
@@ -109,6 +110,20 @@ async function requestWithdrawal(req, res, next) {
                 : '提现申请已提交，需财务审核，T+3工作日到账',
             data: { amount: withdrawAmount, autoProcessed: isAuto },
         });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+// GET /payments/withdraw/history — 获取提现历史
+async function getWithdrawalHistory(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const withdrawals = await (0, db_1.query)(`SELECT id, amount, method, status, auto_processed, created_at, processed_at
+       FROM withdrawals
+       WHERE user_id = $1 AND deleted_at IS NULL
+       ORDER BY created_at DESC LIMIT 50`, [userId]);
+        res.json({ success: true, data: withdrawals });
     }
     catch (err) {
         next(err);

@@ -19,6 +19,8 @@ const aiRoutes_1 = __importDefault(require("./aiRoutes"));
 const contentRoutes_1 = __importDefault(require("./contentRoutes"));
 const financeRoutes_1 = __importDefault(require("./financeRoutes"));
 const systemRoutes_1 = __importDefault(require("./systemRoutes"));
+const auditLogRoutes_1 = __importDefault(require("./auditLogRoutes"));
+const platformRoutes_1 = __importDefault(require("./platformRoutes"));
 const auth_1 = require("../../middleware/auth");
 const router = (0, express_1.Router)();
 // 认证相关（无需token）
@@ -34,5 +36,7 @@ router.use('/ai', auth_1.authenticate, aiRoutes_1.default);
 router.use('/content', auth_1.authenticate, contentRoutes_1.default);
 router.use('/finance', auth_1.authenticate, financeRoutes_1.default);
 router.use('/system', auth_1.authenticate, systemRoutes_1.default);
+router.use('/audit-logs', auth_1.authenticate, auditLogRoutes_1.default);
+router.use('/platform', auth_1.authenticate, platformRoutes_1.default); // 平台管理增强功能
 exports.default = router;
 //# sourceMappingURL=mainRoutes.js.map

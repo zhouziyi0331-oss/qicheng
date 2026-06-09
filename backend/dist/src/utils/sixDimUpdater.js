@@ -17,7 +17,7 @@ const client = new sdk_1.default({
 async function updateSixDimScores(userId, taskId, companyScore, taskType, taskDifficulty) {
     try {
         // 获取当前六维分数和任务历史
-        const profile = await (0, db_1.query)(`SELECT six_dim_scores, task_count FROM student_profiles WHERE user_id = $1`, [userId]);
+        const profile = await (0, db_1.query)(`SELECT six_dim_scores, tasks_completed FROM student_capabilities WHERE student_id = $1`, [userId]);
         if (!profile || profile.length === 0)
             return;
         const currentScores = profile[0].six_dim_scores || {
@@ -40,7 +40,7 @@ async function updateSixDimScores(userId, taskId, companyScore, taskType, taskDi
 
 ## 学生表现
 - 企业评分: ${companyScore}/100
-- 已完成任务数: ${profile[0].task_count}
+- 已完成任务数: ${profile[0].tasks_completed}
 
 ## 当前六维分数
 ${JSON.stringify(currentScores, null, 2)}
@@ -113,7 +113,7 @@ ${JSON.stringify(currentScores, null, 2)}
             d6: Math.max(0, Math.min(100, currentScores.d6 + (changes.d6_change || 0))),
         };
         // 更新数据库
-        await (0, db_1.query)(`UPDATE student_profiles SET six_dim_scores = $1, updated_at = NOW() WHERE user_id = $2`, [JSON.stringify(newScores), userId]);
+        await (0, db_1.query)(`UPDATE student_capabilities SET six_dim_scores = $1, updated_at = NOW() WHERE student_id = $2`, [JSON.stringify(newScores), userId]);
         logger_1.default.info('Six dim scores updated', {
             userId,
             taskId,

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 const studentNav = [
   { href: "/tasks", label: "任务市场" },
@@ -29,6 +30,11 @@ const adminNav = [
 
 export default function Navbar() {
   const pathname = usePathname();
+
+  // 隐藏Navbar的页面
+  if (pathname === "/admin/login" || pathname === "/login" || pathname === "/") {
+    return null;
+  }
 
   // 根据路径判断当前角色
   const isCompany = pathname.startsWith("/company");
@@ -65,6 +71,9 @@ export default function Navbar() {
             );
           })}
         </nav>
+
+        {/* Notification Bell */}
+        <NotificationBell />
       </div>
     </header>
   );

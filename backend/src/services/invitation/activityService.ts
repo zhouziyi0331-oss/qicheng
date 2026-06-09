@@ -41,7 +41,7 @@ export class ActivityService {
         is_active = true,
         inactive_since = NULL,
         invitation_eligible = CASE
-          WHEN (SELECT level_a FROM student_profiles WHERE user_id = $1) >= 10
+          WHEN (SELECT current_level FROM users WHERE id = $1) >= 10
           THEN true
           ELSE false
         END,
@@ -79,16 +79,16 @@ export class ActivityService {
       SELECT
         sal.invitation_eligible,
         sal.is_active,
-        sp.level_a
+        u.current_level
       FROM student_activity_logs sal
-      JOIN student_profiles sp ON sal.student_id = sp.user_id
+      JOIN users u ON sal.student_id = u.id
       WHERE sal.student_id = $1
     `;
 
     const result = await poolQuery<{
       invitation_eligible: boolean;
       is_active: boolean;
-      level_a: number;
+      current_level: number;
     }>(queryText, [studentId]);
 
     if (result.length === 0) {
@@ -149,7 +149,7 @@ export class ActivityService {
         is_active = true,
         inactive_since = NULL,
         invitation_eligible = CASE
-          WHEN (SELECT level_a FROM student_profiles WHERE user_id = $1) >= 10
+          WHEN (SELECT current_level FROM users WHERE id = $1) >= 10
           THEN true
           ELSE false
         END,
@@ -169,7 +169,7 @@ export class ActivityService {
     tags?: string[];
   }): Promise<Array<{
     student_id: string;
-    level_a: number;
+    current_level: number;
     abilities: Record<string, number>;
     tags: string[];
     last_login_at: Date;
@@ -177,12 +177,12 @@ export class ActivityService {
     let queryText = `
       SELECT
         sal.student_id,
-        sp.level_a,
+        u.current_level,
         sp.d1, sp.d2, sp.d3, sp.d4, sp.d5, sp.d6,
         sp.tags,
         sal.last_login_at
       FROM student_activity_logs sal
-      JOIN student_profiles sp ON sal.student_id = sp.user_id
+      JOIN users u ON sal.student_id = u.id
       WHERE
         sal.invitation_eligible = true
         AND sal.is_active = true
@@ -192,7 +192,7 @@ export class ActivityService {
     let paramIndex = 1;
 
     if (filters?.minLevel) {
-      queryText += ` AND sp.level_a >= $${paramIndex}`;
+      queryText += ` AND u.current_level >= $${paramIndex}`;
       params.push(filters.minLevel);
       paramIndex++;
     }
@@ -211,11 +211,11 @@ export class ActivityService {
       paramIndex++;
     }
 
-    queryText += ` ORDER BY sp.level_a DESC, sal.last_login_at DESC`;
+    queryText += ` ORDER BY u.current_level DESC, sal.last_login_at DESC`;
 
     const result = await poolQuery<{
       student_id: string;
-      level_a: number;
+      current_level: number;
       d1: number;
       d2: number;
       d3: number;
@@ -228,7 +228,7 @@ export class ActivityService {
 
     return result.map(row => ({
       student_id: row.student_id,
-      level_a: row.level_a,
+      level_a: row.current_level,
       abilities: {
         d1: row.d1,
         d2: row.d2,

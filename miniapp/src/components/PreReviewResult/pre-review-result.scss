@@ -1,0 +1,235 @@
+.pre-review-result {
+  padding: 32rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 头部 */
+.result-header {
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.header-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12rpx;
+}
+
+.header-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #636e72;
+}
+
+/* 通过概率卡片 */
+.pass-likelihood-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 24rpx;
+}
+
+.likelihood-label {
+  font-size: 28rpx;
+  color: #636e72;
+  margin-bottom: 16rpx;
+}
+
+.likelihood-value {
+  font-size: 72rpx;
+  font-weight: 700;
+  margin-bottom: 24rpx;
+}
+
+.likelihood-bar-container {
+  height: 16rpx;
+  background: #e5e7eb;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+
+.likelihood-bar {
+  height: 100%;
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+}
+
+.likelihood-desc {
+  font-size: 26rpx;
+  color: #636e72;
+}
+
+/* AI建议卡片 */
+.recommendation-card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  margin-bottom: 24rpx;
+  border-left: 4rpx solid;
+}
+
+.recommendation-icon {
+  font-size: 32rpx;
+}
+
+.recommendation-text {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+/* 反馈区域 */
+.feedback-section {
+  background: white;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 16rpx;
+}
+
+.feedback-text {
+  display: block;
+  font-size: 26rpx;
+  line-height: 1.7;
+  color: #636e72;
+}
+
+/* 问题区域 */
+.issues-section {
+  background: white;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  margin-bottom: 24rpx;
+
+  &.critical {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-left: 4rpx solid #ef4444;
+  }
+
+  &.warning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4rpx solid #f59e0b;
+  }
+
+  &.highlight {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 4rpx solid #10b981;
+  }
+}
+
+.issues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.issue-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+
+  &.critical {
+    .issue-icon {
+      color: #ef4444;
+    }
+    .issue-text {
+      color: #991b1b;
+    }
+  }
+
+  &.warning {
+    .issue-icon {
+      color: #f59e0b;
+    }
+    .issue-text {
+      color: #92400e;
+    }
+  }
+
+  &.highlight {
+    .issue-icon {
+      color: #10b981;
+    }
+    .issue-text {
+      color: #065f46;
+    }
+  }
+}
+
+.issue-icon {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+.issue-text {
+  flex: 1;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.revise-btn {
+  flex: 1;
+  height: 88rpx;
+  background: white;
+  color: #1890ff;
+  border: 2rpx solid #1890ff;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.submit-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+
+  &.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+
+  &.secondary {
+    background: #e5e7eb;
+    color: #6b7280;
+  }
+}
+
+/* 底部提示 */
+.bottom-tip {
+  text-align: center;
+  padding: 24rpx;
+}
+
+.tip-text {
+  font-size: 24rpx;
+  color: #9ca3af;
+  line-height: 1.6;
+}

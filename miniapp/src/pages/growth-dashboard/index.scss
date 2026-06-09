@@ -1,0 +1,435 @@
+.growth-dashboard-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 32rpx;
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    color: #fff;
+    font-size: 32rpx;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120rpx 64rpx;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 120rpx;
+      margin-bottom: 32rpx;
+    }
+
+    .empty-text {
+      font-size: 32rpx;
+      font-weight: bold;
+      color: #1F2937;
+    }
+  }
+
+  .period-selector {
+    display: flex;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    padding: 8rpx;
+    margin-bottom: 32rpx;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+
+    .period-item {
+      flex: 1;
+      padding: 20rpx;
+      text-align: center;
+      border-radius: 16rpx;
+      transition: all 0.3s ease;
+
+      .period-text {
+        font-size: 28rpx;
+        color: #6B7280;
+        font-weight: 500;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .period-text {
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .dashboard-scroll {
+    height: calc(100vh - 160rpx);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24rpx;
+    margin-bottom: 32rpx;
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24rpx;
+      padding: 32rpx;
+      box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .metric-icon {
+        font-size: 48rpx;
+        margin-bottom: 16rpx;
+      }
+
+      .metric-value {
+        font-size: 40rpx;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 8rpx;
+      }
+
+      .metric-label {
+        font-size: 24rpx;
+        color: #6B7280;
+        margin-bottom: 16rpx;
+      }
+
+      .metric-progress {
+        width: 100%;
+        height: 8rpx;
+        background: #E5E7EB;
+        border-radius: 4rpx;
+        overflow: hidden;
+
+        .metric-progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+          border-radius: 4rpx;
+          transition: width 0.3s ease;
+        }
+      }
+    }
+  }
+
+  .section-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24rpx;
+    padding: 32rpx;
+    margin-bottom: 32rpx;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32rpx;
+
+      .section-title {
+        font-size: 32rpx;
+        font-weight: bold;
+        color: #1F2937;
+      }
+
+      .section-subtitle {
+        font-size: 24rpx;
+        color: #6B7280;
+      }
+    }
+  }
+
+  .abilities-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+
+    .ability-item {
+      .ability-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12rpx;
+
+        .ability-icon {
+          font-size: 32rpx;
+          margin-right: 12rpx;
+        }
+
+        .ability-name {
+          font-size: 28rpx;
+          font-weight: 500;
+          color: #1F2937;
+          flex: 1;
+        }
+      }
+
+      .ability-bar {
+        height: 16rpx;
+        background: #E5E7EB;
+        border-radius: 8rpx;
+        overflow: hidden;
+        margin-bottom: 8rpx;
+
+        .ability-bar-fill {
+          height: 100%;
+          border-radius: 8rpx;
+          transition: width 0.3s ease;
+        }
+      }
+
+      .ability-score {
+        font-size: 24rpx;
+        color: #6B7280;
+        text-align: right;
+        display: block;
+      }
+    }
+  }
+
+  .insights-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
+
+    .insight-item {
+      display: flex;
+      align-items: center;
+      padding: 24rpx;
+      background: #F9FAFB;
+      border-radius: 16rpx;
+      transition: all 0.3s ease;
+
+      &:active {
+        transform: scale(0.98);
+        background: #F3F4F6;
+      }
+
+      .insight-icon-wrapper {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 16rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20rpx;
+
+        .insight-icon {
+          font-size: 40rpx;
+        }
+      }
+
+      .insight-content {
+        flex: 1;
+
+        .insight-title {
+          font-size: 28rpx;
+          font-weight: bold;
+          color: #1F2937;
+          margin-bottom: 8rpx;
+          display: block;
+        }
+
+        .insight-stats {
+          font-size: 24rpx;
+          color: #6B7280;
+          display: block;
+        }
+      }
+
+      .insight-arrow {
+        font-size: 48rpx;
+        color: #9CA3AF;
+        font-weight: 300;
+      }
+    }
+  }
+
+  .achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
+
+    .achievement-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 24rpx;
+      background: #F9FAFB;
+      border-radius: 16rpx;
+
+      .achievement-icon-wrapper {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 16rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20rpx;
+        flex-shrink: 0;
+
+        .achievement-icon {
+          font-size: 40rpx;
+        }
+      }
+
+      .achievement-content {
+        flex: 1;
+
+        .achievement-title {
+          font-size: 28rpx;
+          font-weight: bold;
+          color: #1F2937;
+          margin-bottom: 8rpx;
+          display: block;
+        }
+
+        .achievement-desc {
+          font-size: 26rpx;
+          color: #4B5563;
+          line-height: 1.5;
+          margin-bottom: 8rpx;
+          display: block;
+        }
+
+        .achievement-time {
+          font-size: 24rpx;
+          color: #9CA3AF;
+          display: block;
+        }
+      }
+    }
+  }
+
+  .empty-achievements {
+    padding: 60rpx 0;
+    text-align: center;
+
+    .empty-text {
+      font-size: 28rpx;
+      color: #9CA3AF;
+    }
+  }
+
+  .weekly-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 300rpx;
+    padding: 20rpx 0;
+    margin-bottom: 24rpx;
+
+    .week-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12rpx;
+
+      .week-bars {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 4rpx;
+        height: 240rpx;
+        width: 100%;
+
+        .week-bar {
+          flex: 1;
+          border-radius: 4rpx 4rpx 0 0;
+          min-height: 8rpx;
+          transition: height 0.3s ease;
+
+          &.tasks {
+            background: #3B82F6;
+          }
+
+          &.challenges {
+            background: #8B5CF6;
+          }
+
+          &.interactions {
+            background: #10B981;
+          }
+        }
+      }
+
+      .week-label {
+        font-size: 22rpx;
+        color: #6B7280;
+      }
+    }
+  }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 32rpx;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8rpx;
+
+      .legend-color {
+        width: 24rpx;
+        height: 24rpx;
+        border-radius: 4rpx;
+
+        &.tasks {
+          background: #3B82F6;
+        }
+
+        &.challenges {
+          background: #8B5CF6;
+        }
+
+        &.interactions {
+          background: #10B981;
+        }
+      }
+
+      .legend-text {
+        font-size: 24rpx;
+        color: #6B7280;
+      }
+    }
+  }
+
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20rpx;
+
+    .action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24rpx 12rpx;
+      background: #F9FAFB;
+      border-radius: 16rpx;
+      transition: all 0.3s ease;
+
+      &:active {
+        transform: scale(0.95);
+        background: #F3F4F6;
+      }
+
+      .action-icon {
+        font-size: 48rpx;
+        margin-bottom: 12rpx;
+      }
+
+      .action-text {
+        font-size: 24rpx;
+        color: #4B5563;
+        text-align: center;
+      }
+    }
+  }
+}

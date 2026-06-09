@@ -1,6 +1,9 @@
 import { View, Text, ScrollView, Button, Image } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro, { useRouter } from '@tarojs/taro';
+import CollaborationProgressHint from '../../components/CollaborationProgressHint';
+import UnlockContactModal from '../../components/UnlockContactModal';
+import MatchedStudentsList from '../../components/MatchedStudentsList';
 import './index.scss';
 
 interface Task {
@@ -50,10 +53,99 @@ export default function TaskDetail() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewAction, setReviewAction] = useState<'approve' | 'reject'>('approve');
   const [reviewFeedback, setReviewFeedback] = useState('');
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [unlockStatus, setUnlockStatus] = useState<any>(null);
+
+  // 匹配相关状态
+  const [matchedStudents, setMatchedStudents] = useState<any[]>([]);
+  const [isMatching, setIsMatching] = useState(false);
+  const [showMatchedList, setShowMatchedList] = useState(false);
 
   useEffect(() => {
     loadTaskDetail();
+    loadUnlockStatus();
   }, [id]);
+
+  // 触发AI匹配
+  const triggerMatching = async () => {
+    setIsMatching(true);
+    try {
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/tasks/${id}/trigger-matching`,
+        method: 'POST',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        }
+      });
+
+      if (res.data.success) {
+        Taro.showToast({
+          title: `成功匹配${res.data.matchedCount}个学生`,
+          icon: 'success'
+        });
+        loadMatchedStudents();
+      } else {
+        throw new Error(res.data.error || '匹配失败');
+      }
+    } catch (error: any) {
+      console.error('触发匹配失败:', error);
+      Taro.showToast({
+        title: error.message || '匹配失败',
+        icon: 'none'
+      });
+    } finally {
+      setIsMatching(false);
+    }
+  };
+
+  // 加载匹配的学生列表
+  const loadMatchedStudents = async () => {
+    try {
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/tasks/${id}/matched-students?limit=10`,
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        }
+      });
+
+      if (res.data.success) {
+        setMatchedStudents(res.data.students || []);
+        setShowMatchedList(true);
+      }
+    } catch (error) {
+      console.error('加载匹配学生失败:', error);
+    }
+  };
+
+  const handlePushComplete = () => {
+    Taro.showToast({
+      title: '推送成功',
+      icon: 'success'
+    });
+    loadTaskDetail();
+  };
+
+  const loadUnlockStatus = async () => {
+    if (!task?.studentId) return;
+
+    try {
+      const companyId = Taro.getStorageSync('userId');
+      const res = await Taro.request({
+        url: `http://localhost:3000/api/v1/security/unlock-status/${task.studentId}/${companyId}`,
+        method: 'GET',
+        header: {
+          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+        }
+      });
+
+      if (res.data.success) {
+        setUnlockStatus(res.data.data);
+      }
+    } catch (err) {
+      console.error('加载解锁状态失败:', err);
+    }
+  };
 
   const loadTaskDetail = async () => {
     setLoading(true);
@@ -359,6 +451,48 @@ export default function TaskDetail() {
           </View>
         </View>
 
+        {/* 合作进度提示 */}
+        {task.studentId && (
+          <View className="collaboration-section">
+            <CollaborationProgressHint
+              studentId={task.studentId}
+              mode="card"
+              showAction={true}
+              onUnlockRequest={() => setShowUnlockModal(true)}
+            />
+          </View>
+        )}
+
+        {/* AI匹配学生列表 - 仅在任务刚发布时显示 */}
+        {!task.studentId && (task.status === 'pending_match' || task.status === 'open') && (
+          <View className="matching-section">
+            {!showMatchedList ? (
+              <View className="matching-trigger">
+                <View className="trigger-card">
+                  <Text className="trigger-title">🤖 AI智能匹配</Text>
+                  <Text className="trigger-desc">
+                    让AI为您找到最合适的学生，基于技能、经验、可靠性等6个维度精准匹配
+                  </Text>
+                  <Button
+                    className="trigger-button"
+                    type="primary"
+                    loading={isMatching}
+                    onClick={triggerMatching}
+                  >
+                    {isMatching ? '匹配中...' : '开始AI匹配'}
+                  </Button>
+                </View>
+              </View>
+            ) : (
+              <MatchedStudentsList
+                taskId={id!}
+                students={matchedStudents}
+                onPushComplete={handlePushComplete}
+              />
+            )}
+          </View>
+        )}
+
         {/* 交付物信息 */}
         {deliverable && (
           <View className="info-card">
@@ -629,6 +763,24 @@ export default function TaskDetail() {
             </View>
           </View>
         </View>
+      )}
+
+      {/* 解锁联系方式弹窗 */}
+      {task?.studentId && unlockStatus && (
+        <UnlockContactModal
+          visible={showUnlockModal}
+          studentId={task.studentId}
+          companyId={Taro.getStorageSync('userId')}
+          studentName={task.studentName}
+          companyName="当前企业"
+          userType="company"
+          status={unlockStatus}
+          onClose={() => setShowUnlockModal(false)}
+          onSuccess={() => {
+            loadUnlockStatus();
+            Taro.showToast({ title: '操作成功', icon: 'success' });
+          }}
+        />
       )}
     </View>
   );

@@ -52,9 +52,9 @@ export async function getDashboardStats(req: Request, res: Response) {
     // 学生等级分布
     const levelDistribution = await query<any>(`
       SELECT
-        level_a as level,
+        current_level as level,
         COUNT(*) as count
-      FROM student_profiles
+      FROM student_capabilities
       WHERE level_a IS NOT NULL
       GROUP BY level_a
       ORDER BY level_a
@@ -80,9 +80,40 @@ export async function getDashboardStats(req: Request, res: Response) {
         (SELECT COUNT(*) FROM tasks WHERE status = 'in_progress' AND deadline < CURRENT_TIMESTAMP) as overdue_orders
     `);
 
+    // Transform to match frontend expected structure
+    const today = todayStats[0];
+    const total = totalStats[0];
+    const pending = pendingItems[0];
+
+    const totalStudents = parseInt(total.total_students) || 0;
+    const totalCompanies = parseInt(total.total_companies) || 0;
+    const totalTasks = parseInt(total.total_tasks) || 0;
+    const newStudentsToday = parseInt(today.new_students_today) || 0;
+    const newCompaniesToday = parseInt(today.new_companies_today) || 0;
+    const totalGmv = parseFloat(total.total_gmv) || 0;
+
     res.json({
-      today: todayStats[0],
-      total: totalStats[0],
+      users: {
+        total: totalStudents + totalCompanies,
+        students: totalStudents,
+        companies: totalCompanies,
+        today: newStudentsToday + newCompaniesToday
+      },
+      tasks: {
+        total: totalTasks,
+        active: totalTasks - (parseInt(pending.pending_task_reviews) || 0),
+        pending_review: parseInt(pending.pending_task_reviews) || 0,
+        completed: parseInt(total.total_orders) || 0
+      },
+      finance: {
+        total_gross: totalGmv,
+        total_net: totalGmv * 0.85, // Assuming 15% platform fee
+        pending_withdrawals: parseInt(pending.pending_withdrawals) || 0,
+        pending_advances: 0 // Not tracked yet
+      },
+      story: {
+        total_posts: 0 // Not implemented yet
+      },
       trends: {
         users: trendData,
         orders: orderTrend
@@ -91,7 +122,12 @@ export async function getDashboardStats(req: Request, res: Response) {
         levels: levelDistribution,
         taskTypes: taskTypeDistribution
       },
-      pending: pendingItems[0]
+      pending: {
+        companies: parseInt(pending.pending_company_reviews) || 0,
+        tasks: parseInt(pending.pending_task_reviews) || 0,
+        withdrawals: parseInt(pending.pending_withdrawals) || 0,
+        overdue_orders: parseInt(pending.overdue_orders) || 0
+      }
     });
   } catch (error) {
     console.error('获取数据看板失败:', error);

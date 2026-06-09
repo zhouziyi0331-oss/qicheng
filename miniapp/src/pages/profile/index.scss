@@ -105,7 +105,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* 等级进度 */
+/* 等级和赛道信息 */
 .level-section {
   position: relative;
   margin-bottom: 20px;
@@ -115,13 +115,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+}
+
+.level-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .level-text {
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: $card-white;
+}
+
+.track-badge {
+  font-size: 12px;
   font-weight: 600;
   color: $card-white;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 4px 12px;
+  border-radius: $radius-full;
+  backdrop-filter: blur(10px);
+}
+
+.level-name {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
 }
 
 .level-exp {

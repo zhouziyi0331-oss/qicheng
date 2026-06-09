@@ -1,0 +1,389 @@
+.pbl-project-showcase-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F5E6F0 0%, #E8F5E9 100%);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 160px;
+}
+
+// 头部封面
+.showcase-header {
+  background: white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+
+  .header-cover {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+
+    .cover-image {
+      width: 100%;
+      height: 100%;
+    }
+
+    .cover-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .placeholder-icon {
+        font-size: 120px;
+      }
+    }
+  }
+
+  .header-info {
+    padding: 30px;
+
+    .project-title {
+      display: block;
+      font-size: 36px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .project-domain {
+      display: inline-block;
+      padding: 12px 24px;
+      background: rgba(139, 92, 246, 0.1);
+      color: #8B5CF6;
+      border-radius: 16px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  }
+}
+
+// 内容区域
+.showcase-content {
+  flex: 1;
+  padding: 30px;
+}
+
+// 通用区块样式
+.public-section,
+.stats-section,
+.description-section,
+.goals-section,
+.tags-section,
+.deliverables-section,
+.reflection-section,
+.timeline-section {
+  margin-bottom: 30px;
+  padding: 30px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+// 区块标题
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .section-icon {
+    font-size: 36px;
+  }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .section-hint {
+    font-size: 22px;
+    color: #999;
+  }
+
+  .header-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+}
+
+// 公开设置
+.public-section {
+  .section-header {
+    margin-bottom: 0;
+  }
+}
+
+// 统计数据
+.stats-section {
+  .stats-grid {
+    display: flex;
+    justify-content: space-around;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+
+      .stat-icon {
+        font-size: 48px;
+      }
+
+      .stat-value {
+        font-size: 36px;
+        font-weight: bold;
+        color: #8B5CF6;
+      }
+
+      .stat-label {
+        font-size: 22px;
+        color: #999;
+      }
+    }
+  }
+}
+
+// 项目描述
+.description-section {
+  .description-text {
+    display: block;
+    font-size: 26px;
+    color: #666;
+    line-height: 1.8;
+  }
+}
+
+// 学习目标
+.goals-section {
+  .goal-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    .goal-bullet {
+      font-size: 28px;
+      color: #8B5CF6;
+      font-weight: bold;
+    }
+
+    .goal-text {
+      flex: 1;
+      font-size: 26px;
+      color: #666;
+      line-height: 1.6;
+    }
+  }
+}
+
+// 技术标签
+.tags-section {
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .tag-item {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+      border-radius: 16px;
+      font-size: 24px;
+      color: #8B5CF6;
+      font-weight: bold;
+    }
+  }
+}
+
+// 项目成果
+.deliverables-section {
+  .deliverable-card {
+    padding: 24px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 20px;
+    border: 2px solid rgba(139, 92, 246, 0.1);
+    transition: all 0.3s ease;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:active {
+      transform: scale(0.98);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .deliverable-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .deliverable-title {
+        flex: 1;
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .deliverable-arrow {
+        font-size: 40px;
+        color: #8B5CF6;
+      }
+    }
+
+    .deliverable-description {
+      display: block;
+      font-size: 24px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .deliverable-time {
+      display: block;
+      font-size: 20px;
+      color: #999;
+    }
+  }
+}
+
+// 反思总结
+.reflection-section {
+  background: linear-gradient(135deg, rgba(212, 242, 145, 0.2) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border-left: 6px solid #D4F291;
+
+  .reflection-text {
+    display: block;
+    font-size: 26px;
+    color: #666;
+    line-height: 1.8;
+    font-style: italic;
+  }
+}
+
+// 时间线
+.timeline-section {
+  .timeline-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px dashed rgba(139, 92, 246, 0.2);
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    .timeline-label {
+      font-size: 24px;
+      color: #999;
+    }
+
+    .timeline-value {
+      font-size: 26px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+}
+
+// 底部操作
+.showcase-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 20px;
+  padding: 30px;
+  background: white;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+
+  .action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+
+    .action-icon {
+      font-size: 32px;
+    }
+
+    .action-text {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    &.secondary {
+      background: rgba(139, 92, 246, 0.1);
+      color: #8B5CF6;
+
+      &:active {
+        transform: scale(0.98);
+        background: rgba(139, 92, 246, 0.2);
+      }
+    }
+
+    &.primary {
+      background: linear-gradient(135deg, #D4F291 0%, #8B5CF6 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+
+      .action-text {
+        color: white;
+      }
+
+      &:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 12px rgba(139, 92, 246, 0.3);
+      }
+    }
+  }
+}
+
+// 加载和错误状态
+.loading-container,
+.error-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 40px;
+
+  .loading-text {
+    font-size: 28px;
+    color: #999;
+  }
+
+  .error-icon {
+    font-size: 100px;
+    margin-bottom: 30px;
+  }
+
+  .error-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+  }
+}

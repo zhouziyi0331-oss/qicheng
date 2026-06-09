@@ -31,6 +31,12 @@ exports.config = {
         reportTimeout: 120000, // 2min for report generation
         anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
     },
+    embedding: {
+        apiUrl: process.env.EMBEDDING_API_URL || '',
+        apiKey: process.env.EMBEDDING_API_KEY || '',
+        model: 'bge-large-zh-v1.5',
+        dimension: 1024,
+    },
     oss: {
         endpoint: process.env.OSS_ENDPOINT || '',
         bucket: process.env.OSS_BUCKET || '',

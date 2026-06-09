@@ -1,0 +1,144 @@
+.notification-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &.size-small {
+    width: 60rpx;
+    height: 60rpx;
+
+    .bell-icon .icon-text {
+      font-size: 32rpx;
+    }
+
+    .unread-badge {
+      top: -8rpx;
+      right: -8rpx;
+      min-width: 32rpx;
+      height: 32rpx;
+      padding: 0 8rpx;
+
+      .badge-text {
+        font-size: 18rpx;
+      }
+    }
+  }
+
+  &.size-medium {
+    width: 80rpx;
+    height: 80rpx;
+
+    .bell-icon .icon-text {
+      font-size: 40rpx;
+    }
+
+    .unread-badge {
+      top: -10rpx;
+      right: -10rpx;
+      min-width: 36rpx;
+      height: 36rpx;
+      padding: 0 10rpx;
+
+      .badge-text {
+        font-size: 20rpx;
+      }
+    }
+  }
+
+  &.size-large {
+    width: 100rpx;
+    height: 100rpx;
+
+    .bell-icon .icon-text {
+      font-size: 48rpx;
+    }
+
+    .unread-badge {
+      top: -12rpx;
+      right: -12rpx;
+      min-width: 40rpx;
+      height: 40rpx;
+      padding: 0 12rpx;
+
+      .badge-text {
+        font-size: 22rpx;
+      }
+    }
+  }
+}
+
+.bell-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.icon-text {
+  display: block;
+}
+
+.unread-badge {
+  position: absolute;
+  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(255, 77, 79, 0.4);
+  animation: pulse 2s infinite;
+}
+
+.badge-text {
+  color: white;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.connection-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  border: 2rpx solid white;
+
+  &.online {
+    background: #52c41a;
+    animation: blink 2s infinite;
+  }
+
+  &.offline {
+    background: #d9d9d9;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

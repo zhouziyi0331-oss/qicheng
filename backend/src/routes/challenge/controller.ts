@@ -20,8 +20,8 @@ export async function startChallenge(req: AuthRequest, res: Response, next: Next
     const { targetLevel } = req.body;
 
     // 1. 获取学生当前等级
-    const profile = await queryOne<{ track: string; level_a: number; level_b: number }>(
-      'SELECT track, level_a, level_b FROM student_profiles WHERE user_id = $1',
+    const profile = await queryOne<{ track: string; current_level: number; current_level: number }>(
+      'SELECT track, current_level, level_b FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1',
       [userId]
     );
 
@@ -29,7 +29,7 @@ export async function startChallenge(req: AuthRequest, res: Response, next: Next
       throw new AppError(404, '学生档案不存在', 'PROFILE_NOT_FOUND');
     }
 
-    const currentLevel = profile.track === 'A' ? profile.level_a : profile.level_b;
+    const currentLevel = profile.track === 'A' ? profile.current_level : profile.level_b;
 
     // 2. 验证目标等级
     if (targetLevel <= currentLevel) {
@@ -43,7 +43,7 @@ export async function startChallenge(req: AuthRequest, res: Response, next: Next
     // 3. 检查是否有未完成的挑战
     const pendingChallenge = await queryOne(
       `SELECT id FROM level_challenge_tests
-       WHERE user_id = $1 AND is_passed IS NULL AND deleted_at IS NULL`,
+       WHERE student_id = $1 AND is_passed IS NULL AND deleted_at IS NULL`,
       [userId]
     );
 
@@ -54,7 +54,7 @@ export async function startChallenge(req: AuthRequest, res: Response, next: Next
     // 4. 检查是否在冷却期（失败后7天内不能重试）
     const recentFailed = await queryOne<{ retry_allowed_at: Date }>(
       `SELECT retry_allowed_at FROM level_challenge_tests
-       WHERE user_id = $1 AND is_passed = FALSE AND retry_allowed_at > NOW()
+       WHERE student_id = $1 AND is_passed = FALSE AND retry_allowed_at > NOW()
        ORDER BY created_at DESC LIMIT 1`,
       [userId]
     );
@@ -162,8 +162,8 @@ export async function submitChallenge(req: AuthRequest, res: Response, next: Nex
       if (isPassed) {
         const levelField = challenge.track === 'A' ? 'level_a' : 'level_b';
         await client.query(
-          `UPDATE student_profiles SET ${levelField} = $1, updated_at = NOW()
-           WHERE user_id = $2`,
+          `UPDATE student_capabilities SET ${levelField} = $1, updated_at = NOW()
+           WHERE student_id = $2`,
           [challenge.target_level, userId]
         );
 
@@ -182,7 +182,7 @@ export async function submitChallenge(req: AuthRequest, res: Response, next: Nex
 
         // 6. 记录六维能力变化（跳级会提升所有维度）
         const profile = await client.query(
-          'SELECT six_dim_scores FROM student_profiles WHERE user_id = $1',
+          'SELECT six_dim_scores FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1',
           [userId]
         );
         const oldScores = profile.rows[0].six_dim_scores;
@@ -214,7 +214,7 @@ export async function submitChallenge(req: AuthRequest, res: Response, next: Nex
         );
 
         await client.query(
-          'UPDATE student_profiles SET six_dim_scores = $1 WHERE user_id = $2',
+          'UPDATE student_capabilities SET six_dim_scores = $1 WHERE student_id = $2',
           [JSON.stringify(newScores), userId]
         );
       }
@@ -248,7 +248,7 @@ export async function getChallengeHistory(req: AuthRequest, res: Response, next:
       `SELECT id, current_level, target_level, track, ai_score, is_passed,
               created_at, completed_at, retry_allowed_at
        FROM level_challenge_tests
-       WHERE user_id = $1 AND deleted_at IS NULL
+       WHERE student_id = $1 AND deleted_at IS NULL
        ORDER BY created_at DESC`,
       [userId]
     );
