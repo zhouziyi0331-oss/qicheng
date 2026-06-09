@@ -1,6 +1,13 @@
+/**
+ * 成长报告页 - 果汁色改造版
+ * 从紫色渐变升级为果汁色主题
+ */
+
+@import '../../styles/theme.scss';
+
 .growth-dashboard-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--theme-bg);
   padding: 32rpx;
 
   .loading {
@@ -8,8 +15,18 @@
     justify-content: center;
     align-items: center;
     height: 80vh;
-    color: #fff;
+    color: var(--text-primary);
     font-size: 32rpx;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 
   .empty-state {
@@ -18,48 +35,61 @@
     align-items: center;
     justify-content: center;
     padding: 120rpx 64rpx;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 24rpx;
+    background: var(--theme-card);
+    border-radius: var(--radius-large);
     text-align: center;
+    box-shadow: var(--shadow-card);
 
     .empty-icon {
       font-size: 120rpx;
       margin-bottom: 32rpx;
+      opacity: 0.6;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-12rpx);
+      }
     }
 
     .empty-text {
       font-size: 32rpx;
       font-weight: bold;
-      color: #1F2937;
+      color: var(--text-primary);
     }
   }
 
   .period-selector {
     display: flex;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 24rpx;
+    background: var(--theme-card);
+    border-radius: var(--radius-large);
     padding: 8rpx;
     margin-bottom: 32rpx;
-    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-card);
 
     .period-item {
       flex: 1;
       padding: 20rpx;
       text-align: center;
-      border-radius: 16rpx;
-      transition: all 0.3s ease;
+      border-radius: var(--radius-medium);
+      transition: all var(--duration-normal) var(--ease-standard);
 
       .period-text {
         font-size: 28rpx;
-        color: #6B7280;
+        color: var(--text-secondary);
         font-weight: 500;
       }
 
       &.active {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+        box-shadow: var(--shadow-soft);
 
         .period-text {
-          color: #fff;
+          color: #FFFFFF;
           font-weight: bold;
         }
       }
@@ -77,13 +107,33 @@
     margin-bottom: 32rpx;
 
     .metric-card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 24rpx;
+      background: var(--theme-card);
+      border-radius: var(--radius-large);
       padding: 32rpx;
-      box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       align-items: center;
+      opacity: 0;
+      transform: translateY(20rpx);
+      animation: slideInUp 0.5s var(--ease-decelerate) forwards;
+
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
       .metric-icon {
         font-size: 48rpx;
@@ -93,39 +143,45 @@
       .metric-value {
         font-size: 40rpx;
         font-weight: bold;
-        color: #667eea;
+        color: var(--theme-primary);
         margin-bottom: 8rpx;
       }
 
       .metric-label {
         font-size: 24rpx;
-        color: #6B7280;
+        color: var(--text-secondary);
         margin-bottom: 16rpx;
       }
 
       .metric-progress {
         width: 100%;
         height: 8rpx;
-        background: #E5E7EB;
+        background: rgba(0, 0, 0, 0.05);
         border-radius: 4rpx;
         overflow: hidden;
 
         .metric-progress-fill {
           height: 100%;
-          background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(90deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
           border-radius: 4rpx;
-          transition: width 0.3s ease;
+          animation: fillBar 1s var(--ease-decelerate);
+        }
+
+        @keyframes fillBar {
+          from {
+            width: 0;
+          }
         }
       }
     }
   }
 
   .section-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 24rpx;
+    background: var(--theme-card);
+    border-radius: var(--radius-large);
     padding: 32rpx;
     margin-bottom: 32rpx;
-    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-card);
 
     .section-header {
       display: flex;
@@ -136,12 +192,12 @@
       .section-title {
         font-size: 32rpx;
         font-weight: bold;
-        color: #1F2937;
+        color: var(--text-primary);
       }
 
       .section-subtitle {
         font-size: 24rpx;
-        color: #6B7280;
+        color: var(--text-secondary);
       }
     }
   }
@@ -152,6 +208,27 @@
     gap: 24rpx;
 
     .ability-item {
+      opacity: 0;
+      transform: translateX(-20rpx);
+      animation: slideInLeft 0.5s var(--ease-decelerate) forwards;
+
+      @for $i from 1 through 6 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
       .ability-header {
         display: flex;
         align-items: center;
@@ -165,14 +242,14 @@
         .ability-name {
           font-size: 28rpx;
           font-weight: 500;
-          color: #1F2937;
+          color: var(--text-primary);
           flex: 1;
         }
       }
 
       .ability-bar {
         height: 16rpx;
-        background: #E5E7EB;
+        background: rgba(0, 0, 0, 0.05);
         border-radius: 8rpx;
         overflow: hidden;
         margin-bottom: 8rpx;
@@ -180,13 +257,19 @@
         .ability-bar-fill {
           height: 100%;
           border-radius: 8rpx;
-          transition: width 0.3s ease;
+          animation: fillBar 1.2s var(--ease-decelerate);
+        }
+
+        @keyframes fillBar {
+          from {
+            width: 0;
+          }
         }
       }
 
       .ability-score {
         font-size: 24rpx;
-        color: #6B7280;
+        color: var(--text-secondary);
         text-align: right;
         display: block;
       }
@@ -202,19 +285,39 @@
       display: flex;
       align-items: center;
       padding: 24rpx;
-      background: #F9FAFB;
-      border-radius: 16rpx;
-      transition: all 0.3s ease;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: var(--radius-medium);
+      transition: all var(--duration-normal) var(--ease-standard);
+      opacity: 0;
+      transform: translateY(20rpx);
+      animation: slideInUp 0.5s var(--ease-decelerate) forwards;
+
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
       &:active {
         transform: scale(0.98);
-        background: #F3F4F6;
+        background: rgba(0, 0, 0, 0.04);
       }
 
       .insight-icon-wrapper {
         width: 80rpx;
         height: 80rpx;
-        border-radius: 16rpx;
+        border-radius: var(--radius-medium);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -231,21 +334,21 @@
         .insight-title {
           font-size: 28rpx;
           font-weight: bold;
-          color: #1F2937;
+          color: var(--text-primary);
           margin-bottom: 8rpx;
           display: block;
         }
 
         .insight-stats {
           font-size: 24rpx;
-          color: #6B7280;
+          color: var(--text-secondary);
           display: block;
         }
       }
 
       .insight-arrow {
         font-size: 48rpx;
-        color: #9CA3AF;
+        color: var(--text-tertiary);
         font-weight: 300;
       }
     }
@@ -260,13 +363,33 @@
       display: flex;
       align-items: flex-start;
       padding: 24rpx;
-      background: #F9FAFB;
-      border-radius: 16rpx;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: var(--radius-medium);
+      opacity: 0;
+      transform: translateY(20rpx);
+      animation: slideInUp 0.5s var(--ease-decelerate) forwards;
+
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
       .achievement-icon-wrapper {
         width: 80rpx;
         height: 80rpx;
-        border-radius: 16rpx;
+        border-radius: var(--radius-medium);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -284,14 +407,14 @@
         .achievement-title {
           font-size: 28rpx;
           font-weight: bold;
-          color: #1F2937;
+          color: var(--text-primary);
           margin-bottom: 8rpx;
           display: block;
         }
 
         .achievement-desc {
           font-size: 26rpx;
-          color: #4B5563;
+          color: var(--text-secondary);
           line-height: 1.5;
           margin-bottom: 8rpx;
           display: block;
@@ -299,7 +422,7 @@
 
         .achievement-time {
           font-size: 24rpx;
-          color: #9CA3AF;
+          color: var(--text-tertiary);
           display: block;
         }
       }
@@ -312,7 +435,7 @@
 
     .empty-text {
       font-size: 28rpx;
-      color: #9CA3AF;
+      color: var(--text-tertiary);
     }
   }
 
@@ -343,25 +466,31 @@
           flex: 1;
           border-radius: 4rpx 4rpx 0 0;
           min-height: 8rpx;
-          transition: height 0.3s ease;
+          animation: growBar 1s var(--ease-decelerate);
+
+          @keyframes growBar {
+            from {
+              height: 0;
+            }
+          }
 
           &.tasks {
-            background: #3B82F6;
+            background: var(--blueberry-blue);
           }
 
           &.challenges {
-            background: #8B5CF6;
+            background: var(--strawberry-pink);
           }
 
           &.interactions {
-            background: #10B981;
+            background: var(--mango-yellow);
           }
         }
       }
 
       .week-label {
         font-size: 22rpx;
-        color: #6B7280;
+        color: var(--text-secondary);
       }
     }
   }
@@ -382,21 +511,21 @@
         border-radius: 4rpx;
 
         &.tasks {
-          background: #3B82F6;
+          background: var(--blueberry-blue);
         }
 
         &.challenges {
-          background: #8B5CF6;
+          background: var(--strawberry-pink);
         }
 
         &.interactions {
-          background: #10B981;
+          background: var(--mango-yellow);
         }
       }
 
       .legend-text {
         font-size: 24rpx;
-        color: #6B7280;
+        color: var(--text-secondary);
       }
     }
   }
@@ -411,13 +540,13 @@
       flex-direction: column;
       align-items: center;
       padding: 24rpx 12rpx;
-      background: #F9FAFB;
-      border-radius: 16rpx;
-      transition: all 0.3s ease;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: var(--radius-medium);
+      transition: all var(--duration-normal) var(--ease-standard);
 
       &:active {
         transform: scale(0.95);
-        background: #F3F4F6;
+        background: rgba(0, 0, 0, 0.04);
       }
 
       .action-icon {
@@ -427,7 +556,7 @@
 
       .action-text {
         font-size: 24rpx;
-        color: #4B5563;
+        color: var(--text-secondary);
         text-align: center;
       }
     }
