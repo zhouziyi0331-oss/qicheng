@@ -1,6 +1,9 @@
 import Taro from '@tarojs/taro';
 import { View, Text, Button } from '@tarojs/components';
 import { useState, useEffect } from 'react';
+import { useNumberAnimation, useAnimationSequence } from '../../hooks/useAnimation';
+import FirstOrderCelebration from '../../animations/FirstOrderCelebration';
+import AIWaitingScreen from '../../animations/AIWaitingScreen';
 import './index.scss';
 
 interface AccountInfo {
@@ -25,6 +28,26 @@ export default function Wallet() {
   const [transactions, setTransactions] = useState<TransactionLog[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // 动画状态
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationAmount, setCelebrationAmount] = useState(0);
+  const [isFirstIncome, setIsFirstIncome] = useState(false);
+
+  // 数字动画
+  const availableBalance = useNumberAnimation(account?.availableBalance || 0, 1000);
+  const totalIncome = useNumberAnimation(account?.totalIncome || 0, 1000);
+  const totalWithdrawal = useNumberAnimation(account?.totalWithdrawal || 0, 1000);
+  const pendingSettlement = useNumberAnimation(account?.pendingSettlement || 0, 1000);
+  const frozenBalance = useNumberAnimation(account?.frozenBalance || 0, 1000);
+
+  // 4步揭晓动画
+  const { currentStep, startSequence } = useAnimationSequence([
+    { duration: 500 },  // Step 1: 卡片弹出
+    { duration: 300 },  // Step 2: 金额翻滚
+    { duration: 400 },  // Step 3: 统计卡片入场
+    { duration: 300 },  // Step 4: 交易列表渐显
+  ]);
+
   useEffect(() => {
     loadAccountInfo();
     loadTransactions();
@@ -42,7 +65,20 @@ export default function Wallet() {
       });
 
       if (res.data.success) {
-        setAccount(res.data.data);
+        const accountData = res.data.data;
+        setAccount(accountData);
+
+        // 检查是否首单到账（累计收入 > 0 但之前没显示过庆祝）
+        const hasShownCelebration = Taro.getStorageSync('wallet_first_celebration_shown');
+        if (accountData.totalIncome > 0 && !hasShownCelebration) {
+          setIsFirstIncome(true);
+          setCelebrationAmount(accountData.totalIncome);
+          setShowCelebration(true);
+          Taro.setStorageSync('wallet_first_celebration_shown', true);
+        } else {
+          // 正常加载动画
+          startSequence();
+        }
       }
     } catch (error) {
       console.error('加载账户信息失败:', error);
@@ -88,6 +124,11 @@ export default function Wallet() {
     });
   };
 
+  const handleCelebrationComplete = () => {
+    setShowCelebration(false);
+    startSequence();
+  };
+
   const getTransactionTypeText = (type: string) => {
     const typeMap: Record<string, string> = {
       payment: '企业支付',
@@ -121,15 +162,30 @@ export default function Wallet() {
   if (loading) {
     return (
       <View className="wallet-page">
-        <View className="loading">加载中...</View>
+        <AIWaitingScreen
+          title="加载账户信息"
+          subtitle="正在获取您的钱包数据..."
+        />
+      </View>
+    );
+  }
+
+  // 首单庆祝动画
+  if (showCelebration && isFirstIncome) {
+    return (
+      <View className="wallet-page">
+        <FirstOrderCelebration
+          amount={celebrationAmount}
+          onComplete={handleCelebrationComplete}
+        />
       </View>
     );
   }
 
   return (
     <View className="wallet-page">
-      {/* 账户余额卡片 */}
-      <View className="balance-card">
+      {/* 账户余额卡片 - Step 1 弹出 */}
+      <View className={`balance-card ${currentStep >= 1 ? 'card-show' : ''}`}>
         <View className="balance-header">
           <Text className="balance-title">我的钱包</Text>
         </View>
@@ -137,21 +193,21 @@ export default function Wallet() {
         <View className="balance-main">
           <Text className="balance-label">可提现余额（元）</Text>
           <Text className="balance-amount">
-            {account?.availableBalance.toFixed(2) || '0.00'}
+            {availableBalance.toFixed(2)}
           </Text>
         </View>
 
-        <View className="balance-details">
+        <View className={`balance-details ${currentStep >= 2 ? 'details-show' : ''}`}>
           <View className="balance-item">
             <Text className="item-label">待结算</Text>
             <Text className="item-value">
-              ¥{account?.pendingSettlement.toFixed(2) || '0.00'}
+              ¥{pendingSettlement.toFixed(2)}
             </Text>
           </View>
           <View className="balance-item">
             <Text className="item-label">冻结中</Text>
             <Text className="item-value">
-              ¥{account?.frozenBalance.toFixed(2) || '0.00'}
+              ¥{frozenBalance.toFixed(2)}
             </Text>
           </View>
         </View>
@@ -161,37 +217,42 @@ export default function Wallet() {
         </Button>
       </View>
 
-      {/* 统计卡片 */}
-      <View className="stats-card">
+      {/* 统计卡片 - Step 3 入场 */}
+      <View className={`stats-card ${currentStep >= 3 ? 'stats-show' : ''}`}>
         <View className="stats-item">
           <Text className="stats-label">累计收入</Text>
           <Text className="stats-value">
-            ¥{account?.totalIncome.toFixed(2) || '0.00'}
+            ¥{totalIncome.toFixed(2)}
           </Text>
         </View>
         <View className="stats-divider" />
         <View className="stats-item">
           <Text className="stats-label">累计提现</Text>
           <Text className="stats-value">
-            ¥{account?.totalWithdrawal.toFixed(2) || '0.00'}
+            ¥{totalWithdrawal.toFixed(2)}
           </Text>
         </View>
       </View>
 
-      {/* 交易流水 */}
-      <View className="transactions-section">
+      {/* 交易流水 - Step 4 渐显 */}
+      <View className={`transactions-section ${currentStep >= 4 ? 'section-show' : ''}`}>
         <View className="section-header">
           <Text className="section-title">交易流水</Text>
         </View>
 
         {transactions.length === 0 ? (
           <View className="empty-state">
+            <Text className="empty-icon">💰</Text>
             <Text className="empty-text">暂无交易记录</Text>
           </View>
         ) : (
           <View className="transactions-list">
-            {transactions.map((transaction) => (
-              <View key={transaction.id} className="transaction-item">
+            {transactions.map((transaction, index) => (
+              <View
+                key={transaction.id}
+                className="transaction-item"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 <View className="transaction-left">
                   <Text className="transaction-type">
                     {getTransactionTypeText(transaction.transaction_type)}
@@ -224,7 +285,7 @@ export default function Wallet() {
       </View>
 
       {/* 提现说明 */}
-      <View className="tips-section">
+      <View className={`tips-section ${currentStep >= 4 ? 'section-show' : ''}`}>
         <Text className="tips-title">提现说明</Text>
         <Text className="tips-item">• 最低提现金额为10元</Text>
         <Text className="tips-item">• 任务完成后资金进入待结算，7天后自动转为可提现</Text>
