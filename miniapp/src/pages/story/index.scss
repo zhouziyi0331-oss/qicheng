@@ -1,18 +1,23 @@
+/**
+ * 故事墙页 - 果汁色改造版
+ * 从Morandi色升级为果汁色主题
+ */
+
 @import '../../styles/theme.scss';
 
 .story-page {
   min-height: 100vh;
-  background: $gradient-bg;
-  padding-bottom: 100px;
+  background: var(--theme-bg);
+  padding-bottom: 100rpx;
 }
 
 /* 头部 */
 .story-header {
   position: relative;
-  padding: 24px 20px;
-  background: $card-white;
-  border-radius: 0 0 $radius-2xl $radius-2xl;
-  box-shadow: $shadow-md;
+  padding: 48rpx 40rpx;
+  background: var(--theme-card);
+  border-radius: 0 0 var(--radius-large) var(--radius-large);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -32,22 +37,33 @@
   position: absolute;
   border-radius: 50%;
   opacity: 0.12;
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12rpx) scale(1.05);
+  }
 }
 
 .decoration-1 {
-  width: 100px;
-  height: 100px;
-  background: $accent-pink;
-  top: -30px;
-  right: -20px;
+  width: 200rpx;
+  height: 200rpx;
+  background: var(--strawberry-pink);
+  top: -60rpx;
+  right: -40rpx;
 }
 
 .decoration-2 {
-  width: 70px;
-  height: 70px;
-  background: $accent-blue;
-  bottom: -20px;
-  left: 20px;
+  width: 140rpx;
+  height: 140rpx;
+  background: var(--blueberry-blue);
+  bottom: -40rpx;
+  left: 40rpx;
+  animation-delay: 1s;
 }
 
 .header-content {
@@ -56,24 +72,33 @@
 }
 
 .story-title {
-  font-size: 28px;
+  font-size: 56rpx;
   font-weight: 700;
-  color: $text-primary;
-  margin-bottom: 4px;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+  display: block;
 }
 
 .story-subtitle {
-  font-size: 14px;
-  color: $text-secondary;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  display: block;
 }
 
 .post-button {
   position: relative;
-  @include btn-gradient;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  border-radius: var(--radius-round);
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 12px 20px;
+  gap: 12rpx;
+  padding: 24rpx 40rpx;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   &::after {
     border: none;
@@ -81,25 +106,47 @@
 }
 
 .post-icon {
-  font-size: 18px;
+  font-size: 36rpx;
 }
 
 .post-text {
-  font-size: 15px;
+  font-size: 30rpx;
   font-weight: 600;
-  color: $text-primary;
+  color: #FFFFFF;
 }
 
 /* 故事列表 */
 .story-list {
-  padding: 20px;
+  padding: 40rpx;
 }
 
 .story-card {
-  @include card-super-rounded;
-  padding: 20px;
-  margin-bottom: 16px;
-  transition: all 0.3s ease;
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 40rpx;
+  margin-bottom: 32rpx;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-normal) var(--ease-standard);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: fadeInUp 0.5s var(--ease-decelerate) forwards;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   &:active {
     transform: scale(0.98);
@@ -110,37 +157,38 @@
 .story-user {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 24rpx;
+  margin-bottom: 32rpx;
 }
 
 .user-avatar-circle {
-  width: 48px;
-  height: 48px;
+  width: 96rpx;
+  height: 96rpx;
   border-radius: 50%;
-  background: $accent-green;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: var(--shadow-soft);
 }
 
 .story-card:nth-child(2n) .user-avatar-circle {
-  background: $accent-pink;
+  background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
 }
 
 .story-card:nth-child(3n) .user-avatar-circle {
-  background: $accent-blue;
+  background: linear-gradient(135deg, var(--blueberry-blue) 0%, var(--theme-primary) 100%);
 }
 
 .story-card:nth-child(4n) .user-avatar-circle {
-  background: $accent-yellow;
+  background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
 }
 
 .avatar-letter {
-  font-size: 20px;
+  font-size: 40rpx;
   font-weight: 700;
-  color: $text-primary;
+  color: #FFFFFF;
 }
 
 .user-info {
@@ -148,56 +196,58 @@
 }
 
 .user-name {
-  font-size: 16px;
+  font-size: 32rpx;
   font-weight: 600;
-  color: $text-primary;
-  margin-bottom: 4px;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+  display: block;
 }
 
 .user-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16rpx;
 }
 
 .user-opc {
-  padding: 4px 12px;
-  background: linear-gradient(135deg, rgba(212, 242, 145, 0.3) 0%, rgba(249, 198, 217, 0.3) 100%);
-  border-radius: $radius-full;
+  padding: 8rpx 24rpx;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 230, 109, 0.15) 100%);
+  border-radius: var(--radius-round);
+  border: 1rpx solid var(--theme-primary);
 }
 
 .opc-text {
-  font-size: 11px;
+  font-size: 22rpx;
   font-weight: 600;
-  background: $gradient-primary;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--theme-primary);
 }
 
 .story-time {
-  font-size: 12px;
-  color: $text-light;
+  font-size: 24rpx;
+  color: var(--text-tertiary);
 }
 
 /* 故事内容 */
 .story-content {
-  font-size: 15px;
+  font-size: 30rpx;
   line-height: 1.7;
-  color: $text-primary;
-  margin-bottom: 16px;
+  color: var(--text-primary);
+  margin-bottom: 32rpx;
+  display: block;
 }
 
 /* 故事图片 */
 .story-images {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
 
   .story-image {
-    width: 200px;
-    height: 200px;
-    border-radius: 16px;
+    width: 400rpx;
+    height: 400rpx;
+    border-radius: var(--radius-medium);
+    background: rgba(0, 0, 0, 0.02);
   }
 }
 
@@ -205,19 +255,19 @@
 .story-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding-top: 16px;
-  border-top: 1px solid $divider-color;
+  gap: 32rpx;
+  padding-top: 32rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
 }
 
 .action-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 12rpx;
+  padding: 16rpx 32rpx;
   background: rgba(0, 0, 0, 0.02);
-  border-radius: $radius-full;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-round);
+  transition: all var(--duration-normal) var(--ease-standard);
 
   &:active {
     transform: scale(0.95);
@@ -225,51 +275,67 @@
   }
 
   &.liked {
-    background: linear-gradient(135deg, rgba(249, 198, 217, 0.3) 0%, rgba(249, 198, 217, 0.5) 100%);
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(255, 230, 109, 0.2) 100%);
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    14%, 28% {
+      transform: scale(1.1);
+    }
+    21%, 35% {
+      transform: scale(1);
+    }
   }
 }
 
 .action-icon {
-  font-size: 18px;
+  font-size: 36rpx;
 }
 
 .action-text {
-  font-size: 14px;
+  font-size: 28rpx;
   font-weight: 600;
-  color: $text-secondary;
+  color: var(--text-secondary);
 }
 
 .action-item.liked .action-text {
-  color: $text-primary;
+  color: var(--theme-primary);
+  font-weight: 700;
 }
 
 /* 评论输入框 */
 .comment-input-wrapper {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid $divider-color;
+  margin-top: 32rpx;
+  padding-top: 32rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
 
   .comment-input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 24rpx 32rpx;
     background: rgba(0, 0, 0, 0.02);
-    border-radius: 16px;
-    font-size: 14px;
-    margin-bottom: 12px;
+    border-radius: var(--radius-medium);
+    font-size: 28rpx;
+    margin-bottom: 24rpx;
+    color: var(--text-primary);
   }
 
   .comment-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 24rpx;
 
     .comment-cancel,
     .comment-submit {
-      padding: 8px 24px;
-      border-radius: 20px;
-      font-size: 14px;
+      padding: 16rpx 48rpx;
+      border-radius: var(--radius-round);
+      font-size: 28rpx;
       font-weight: 600;
       border: none;
+      transition: all var(--duration-fast) var(--ease-standard);
 
       &::after {
         border: none;
@@ -278,12 +344,21 @@
 
     .comment-cancel {
       background: rgba(0, 0, 0, 0.05);
-      color: $text-secondary;
+      color: var(--text-secondary);
+
+      &:active {
+        background: rgba(0, 0, 0, 0.08);
+      }
     }
 
     .comment-submit {
-      background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-soft);
+
+      &:active {
+        transform: scale(0.95);
+      }
     }
   }
 }
@@ -295,29 +370,47 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120px 32px;
+  padding: 240rpx 64rpx;
 
   .loading-text,
   .empty-text {
-    font-size: 28px;
-    color: #999;
-    margin-top: 24px;
+    font-size: 32rpx;
+    color: var(--text-tertiary);
+    margin-top: 48rpx;
+    display: block;
   }
 
   .empty-icon {
-    font-size: 120px;
+    font-size: 240rpx;
+    opacity: 0.6;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-24rpx);
+    }
   }
 
   .empty-btn {
-    margin-top: 48px;
-    width: 320px;
-    height: 88px;
-    background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-    border-radius: 44px;
-    font-size: 30px;
+    margin-top: 96rpx;
+    width: 320rpx;
+    padding: 32rpx;
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+    border-radius: var(--radius-round);
+    font-size: 30rpx;
     font-weight: 600;
-    color: white;
+    color: #FFFFFF;
     border: none;
+    box-shadow: var(--shadow-soft);
+    transition: all var(--duration-fast) var(--ease-standard);
+
+    &:active {
+      transform: scale(0.95);
+    }
 
     &::after {
       border: none;
@@ -327,18 +420,20 @@
 
 /* 底部提示 */
 .story-footer {
-  padding: 40px 20px;
+  padding: 80rpx 40rpx;
   text-align: center;
 }
 
 .footer-text {
-  font-size: 14px;
-  color: $text-light;
-  margin-bottom: 8px;
+  font-size: 28rpx;
+  color: var(--text-tertiary);
+  margin-bottom: 16rpx;
+  display: block;
 }
 
 .footer-hint {
-  font-size: 13px;
-  color: $text-light;
+  font-size: 26rpx;
+  color: var(--text-tertiary);
   opacity: 0.6;
+  display: block;
 }
