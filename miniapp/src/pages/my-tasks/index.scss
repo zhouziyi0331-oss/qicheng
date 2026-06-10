@@ -1,44 +1,66 @@
+/**
+ * 我的任务列表页 - 果汁色改造版
+ * 从Morandi色升级为果汁色主题，任务状态动画
+ */
+
 @import '../../styles/theme.scss';
 
 .my-tasks-page {
   min-height: 100vh;
-  background: #F5E6F0;
-  padding-bottom: 32px;
+  background: var(--theme-bg);
+  padding-bottom: 32rpx;
 }
 
+/* 页面头部 */
 .page-header {
-  background: white;
-  padding: 40px 32px;
-  margin-bottom: 24px;
+  background: var(--theme-card);
+  padding: 40rpx 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow-card);
+  animation: slideInDown 0.5s var(--ease-decelerate);
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   .page-title {
-    font-size: 48px;
+    font-size: 48rpx;
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--text-primary);
   }
 }
 
+/* 标签栏 */
 .tabs {
   display: flex;
-  background: white;
-  padding: 0 32px;
-  margin-bottom: 24px;
+  background: var(--theme-card);
+  padding: 0 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow-card);
 
   .tab-item {
     flex: 1;
-    padding: 24px 0;
+    padding: 24rpx 0;
     text-align: center;
     position: relative;
+    transition: all var(--duration-normal) var(--ease-standard);
 
     .tab-text {
-      font-size: 28px;
-      color: #999;
-      transition: all 0.3s;
+      font-size: 28rpx;
+      color: var(--text-secondary);
+      transition: all var(--duration-normal) var(--ease-standard);
     }
 
     &.active {
       .tab-text {
-        color: #A855F7;
+        color: var(--theme-primary);
         font-weight: 600;
       }
 
@@ -48,195 +70,277 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 60px;
-        height: 6px;
-        background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-        border-radius: 3px;
+        width: 60rpx;
+        height: 6rpx;
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+        border-radius: 3rpx;
+        animation: slideInUp 0.3s var(--ease-decelerate);
       }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(6rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+    }
+
+    &:active {
+      transform: scale(0.96);
     }
   }
 }
 
+/* 任务列表 */
 .tasks-list {
-  height: calc(100vh - 300px);
-  padding: 0 32px;
+  height: calc(100vh - 300rpx);
+  padding: 0 32rpx;
 }
 
 .tasks-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 24rpx;
 }
 
 .task-card {
-  background: white;
-  border-radius: 32px;
-  padding: 32px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUpCard 0.5s var(--ease-decelerate) forwards;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+
+  @keyframes slideInUpCard {
+    from {
+      opacity: 0;
+      transform: translateY(20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   .task-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 24px;
+    margin-bottom: 24rpx;
 
     .task-title {
       flex: 1;
-      font-size: 32px;
+      font-size: 32rpx;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--text-primary);
       line-height: 1.4;
-      margin-right: 16px;
+      margin-right: 16rpx;
     }
 
     .task-status {
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 24px;
+      padding: 8rpx 20rpx;
+      border-radius: var(--radius-round);
+      font-size: 24rpx;
       white-space: nowrap;
+      font-weight: 500;
 
       &.status-working {
-        background: rgba(168, 85, 247, 0.1);
-        color: #A855F7;
+        background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(255, 107, 157, 0.15) 100%);
+        color: var(--theme-primary);
+        border: 1rpx solid var(--theme-primary);
+        animation: breathe 3s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
       }
 
       &.status-submitted {
-        background: rgba(251, 146, 60, 0.1);
-        color: #FB923C;
+        background: rgba(255, 230, 109, 0.2);
+        color: var(--grapefruit-orange);
+        border: 1rpx solid var(--mango-yellow);
       }
 
       &.status-completed {
-        background: rgba(16, 185, 129, 0.1);
-        color: #10B981;
+        background: rgba(78, 205, 196, 0.2);
+        color: var(--blueberry-blue);
+        border: 1rpx solid var(--blueberry-blue);
       }
 
       &.status-rejected {
-        background: rgba(239, 68, 68, 0.1);
-        color: #EF4444;
+        background: rgba(255, 107, 107, 0.15);
+        color: var(--watermelon-red);
+        border: 1rpx solid var(--watermelon-red);
+        animation: shake 0.5s ease;
+      }
+
+      @keyframes shake {
+        0%, 100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-4rpx);
+        }
+        75% {
+          transform: translateX(4rpx);
+        }
       }
     }
   }
 
   .task-info {
     display: flex;
-    gap: 48px;
-    margin-bottom: 24px;
+    gap: 48rpx;
+    margin-bottom: 24rpx;
 
     .info-item {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 8rpx;
 
       .info-label {
-        font-size: 24px;
-        color: #999;
+        font-size: 24rpx;
+        color: var(--text-tertiary);
       }
 
       .info-value {
-        font-size: 28px;
-        color: #1a1a1a;
+        font-size: 28rpx;
+        color: var(--text-primary);
 
         &.budget {
-          font-size: 32px;
+          font-size: 32rpx;
           font-weight: 600;
-          color: #A855F7;
+          color: var(--watermelon-red);
+          animation: pulse-number 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-number {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
         }
       }
     }
   }
 
   .task-progress {
-    margin-bottom: 24px;
+    margin-bottom: 24rpx;
 
     .progress-bar {
-      height: 12px;
-      background: #F5E6F0;
-      border-radius: 6px;
+      height: 12rpx;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: var(--radius-small);
       overflow: hidden;
-      margin-bottom: 12px;
+      margin-bottom: 12rpx;
 
       .progress-fill {
         height: 100%;
-        background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-        border-radius: 6px;
-        transition: width 0.3s;
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+        border-radius: var(--radius-small);
+        transition: width var(--duration-normal) var(--ease-standard);
       }
     }
 
     .progress-text {
-      font-size: 24px;
-      color: #999;
+      font-size: 24rpx;
+      color: var(--text-tertiary);
     }
   }
 
   .task-time {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 16rpx;
 
     .time-label {
-      font-size: 24px;
-      color: #999;
+      font-size: 24rpx;
+      color: var(--text-tertiary);
     }
 
     .time-value {
-      font-size: 24px;
-      color: #666;
+      font-size: 24rpx;
+      color: var(--text-secondary);
     }
   }
 
   .rejection-info {
-    background: rgba(239, 68, 68, 0.05);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 16px;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
+    border-radius: var(--radius-medium);
+    padding: 24rpx;
+    margin-bottom: 16rpx;
+    border: 1rpx solid var(--watermelon-red);
 
     .rejection-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 12rpx;
 
       .rejection-label {
-        font-size: 24px;
-        color: #EF4444;
+        font-size: 24rpx;
+        color: var(--watermelon-red);
         font-weight: 600;
       }
 
       .rejection-time {
-        font-size: 22px;
-        color: #999;
+        font-size: 22rpx;
+        color: var(--text-tertiary);
       }
     }
 
     .rejection-reason {
-      font-size: 26px;
-      color: #666;
+      font-size: 26rpx;
+      color: var(--text-secondary);
       line-height: 1.6;
-      margin-bottom: 20px;
+      margin-bottom: 20rpx;
     }
 
     .rejection-actions {
       display: flex;
-      gap: 16px;
+      gap: 16rpx;
 
       .action-btn {
         flex: 1;
-        height: 72px;
-        border-radius: 36px;
-        font-size: 28px;
+        height: 72rpx;
+        border-radius: var(--radius-round);
+        font-size: 28rpx;
         font-weight: 600;
         border: none;
+        transition: all var(--duration-fast) var(--ease-standard);
+
+        &:active {
+          transform: scale(0.95);
+        }
 
         &.mentor-btn {
-          background: linear-gradient(135deg, #FB923C 0%, #FB923C 100%);
-          color: white;
+          background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
+          color: #FFFFFF;
+          box-shadow: var(--shadow-soft);
         }
 
         &.resubmit-btn {
-          background: white;
-          color: #A855F7;
-          border: 2px solid #A855F7;
+          background: var(--theme-card);
+          color: var(--theme-primary);
+          border: 2rpx solid var(--theme-primary);
         }
       }
     }
@@ -244,44 +348,97 @@
 
   .continue-btn {
     width: 100%;
-    height: 88px;
-    background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-    border-radius: 44px;
-    font-size: 30px;
+    height: 88rpx;
+    background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
+    border-radius: var(--radius-round);
+    font-size: 30rpx;
     font-weight: 600;
-    color: white;
+    color: #FFFFFF;
     border: none;
+    box-shadow: var(--shadow-soft);
+    transition: all var(--duration-fast) var(--ease-standard);
+    animation: heartbeat 2s ease-in-out infinite;
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      14%, 28% {
+        transform: scale(1.02);
+      }
+      21%, 35% {
+        transform: scale(1);
+      }
+    }
+
+    &:active {
+      transform: scale(0.95);
+      animation: none;
+    }
   }
 }
 
+/* 加载和空状态 */
 .loading-state,
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120px 32px;
+  padding: 120rpx 32rpx;
 
   .loading-text,
   .empty-text {
-    font-size: 28px;
-    color: #999;
-    margin-top: 24px;
+    font-size: 28rpx;
+    color: var(--text-secondary);
+    margin-top: 24rpx;
   }
 
   .empty-icon {
-    font-size: 120px;
+    font-size: 120rpx;
+    opacity: 0.6;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-24rpx);
+    }
   }
 
   .go-tasks-btn {
-    margin-top: 48px;
-    width: 320px;
-    height: 88px;
-    background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-    border-radius: 44px;
-    font-size: 30px;
+    margin-top: 48rpx;
+    width: 320rpx;
+    height: 88rpx;
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+    border-radius: var(--radius-round);
+    font-size: 30rpx;
     font-weight: 600;
-    color: white;
+    color: #FFFFFF;
     border: none;
+    box-shadow: var(--shadow-soft);
+    transition: all var(--duration-fast) var(--ease-standard);
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.loading-state {
+  .loading-text {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 }
