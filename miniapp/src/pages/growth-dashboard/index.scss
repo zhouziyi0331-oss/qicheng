@@ -20,14 +20,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
 
   .empty-state {
     display: flex;
@@ -47,14 +39,6 @@
       animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-12px);
-      }
-    }
 
     .empty-text {
       font-size: 32px;
@@ -124,16 +108,6 @@
         }
       }
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
       .metric-icon {
         font-size: 48px;
@@ -218,16 +192,6 @@
         }
       }
 
-      @keyframes slideInLeft {
-        from {
-          opacity: 0;
-          transform: translateX(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
 
       .ability-header {
         display: flex;
@@ -298,16 +262,6 @@
         }
       }
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
       &:active {
         transform: scale(0.98);
@@ -375,16 +329,6 @@
         }
       }
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
       .achievement-icon-wrapper {
         width: 80px;

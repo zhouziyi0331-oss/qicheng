@@ -24,16 +24,6 @@
       animation: slideInLeft 0.5s var(--ease-decelerate);
     }
 
-    @keyframes slideInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
 
     .page-subtitle {
       font-size: 24px;
@@ -57,14 +47,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
 
   /* 空状态 */
   .empty-state {
@@ -81,14 +63,6 @@
       animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-24px);
-      }
-    }
 
     .empty-text {
       font-size: 32px;
@@ -143,16 +117,6 @@
         }
       }
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
       /* 匹配度标签 */
       .match-badge {
@@ -171,14 +135,6 @@
         box-shadow: var(--shadow-soft);
         animation: breathe 3s ease-in-out infinite;
 
-        @keyframes breathe {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.1);
-          }
-        }
 
         .match-score {
           font-size: 32px;
@@ -361,17 +317,6 @@
           transition: all var(--duration-fast) var(--ease-standard);
           animation: heartbeat 2s ease-in-out infinite;
 
-          @keyframes heartbeat {
-            0%, 100% {
-              transform: scale(1);
-            }
-            14%, 28% {
-              transform: scale(1.02);
-            }
-            21%, 35% {
-              transform: scale(1);
-            }
-          }
 
           &:active {
             transform: scale(0.95);

@@ -19,14 +19,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
 
   /* 筛选区域 */
   .filter-section {
@@ -81,17 +73,6 @@
     }
   }
 
-  @keyframes bounce-in {
-    0% {
-      transform: scale(0.9);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
 
   .timeline-scroll {
     height: calc(100vh - 120px);
@@ -117,14 +98,6 @@
       animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-24px);
-      }
-    }
 
     .empty-text {
       font-size: 32px;
@@ -234,14 +207,6 @@
         }
       }
 
-      @keyframes breathe {
-        0%, 100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.1);
-        }
-      }
 
       .timeline-line {
         width: 4px;
@@ -357,14 +322,6 @@
     padding: 64px 32px;
     animation: fadeIn 0.3s ease;
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
 
     .detail-content {
       background: var(--theme-card);

@@ -229,7 +229,7 @@ page {
 /* 从下滑入 */
 @keyframes slideInUp {
   from {
-    transform: translateY(30px);
+    transform: translateY(20px);
     opacity: 0;
   }
   to {
@@ -241,7 +241,7 @@ page {
 /* 从上滑入 */
 @keyframes slideInDown {
   from {
-    transform: translateY(-30px);
+    transform: translateY(-20px);
     opacity: 0;
   }
   to {
@@ -253,7 +253,7 @@ page {
 /* 从左滑入 */
 @keyframes slideInLeft {
   from {
-    transform: translateX(-30px);
+    transform: translateX(-20px);
     opacity: 0;
   }
   to {

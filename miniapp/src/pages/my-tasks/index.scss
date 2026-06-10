@@ -19,16 +19,6 @@
   box-shadow: var(--shadow-card);
   animation: slideInDown 0.5s var(--ease-decelerate);
 
-  @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   .page-title {
     font-size: 48px;
@@ -77,16 +67,6 @@
         animation: slideInUp 0.3s var(--ease-decelerate);
       }
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateX(-50%) translateY(6px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-      }
     }
 
     &:active {
@@ -162,14 +142,6 @@
         animation: breathe 3s ease-in-out infinite;
       }
 
-      @keyframes breathe {
-        0%, 100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
 
       &.status-submitted {
         background: rgba(255, 230, 109, 0.2);
@@ -230,14 +202,6 @@
           animation: pulse-number 2s ease-in-out infinite;
         }
 
-        @keyframes pulse-number {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-        }
       }
     }
   }
@@ -359,17 +323,6 @@
     transition: all var(--duration-fast) var(--ease-standard);
     animation: heartbeat 2s ease-in-out infinite;
 
-    @keyframes heartbeat {
-      0%, 100% {
-        transform: scale(1);
-      }
-      14%, 28% {
-        transform: scale(1.02);
-      }
-      21%, 35% {
-        transform: scale(1);
-      }
-    }
 
     &:active {
       transform: scale(0.95);
@@ -400,14 +353,6 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-24px);
-    }
-  }
 
   .go-tasks-btn {
     margin-top: 48px;
@@ -433,12 +378,4 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
 }

@@ -38,14 +38,6 @@
   animation: float 4s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-24px) scale(1.05);
-  }
-}
 
 .mentor-avatar-circle {
   width: 112px;
@@ -61,14 +53,6 @@
   animation: breathe 3s ease-in-out infinite;
 }
 
-@keyframes breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
 
 .mentor-logo-img {
   width: 100%;
@@ -119,16 +103,6 @@
   animation: slideInLeft 0.5s var(--ease-decelerate);
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
 
 .message-item.user {
   flex-direction: row-reverse;
@@ -312,13 +286,3 @@
   }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: var(--shadow-soft);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: var(--shadow-hover);
-  }
-}

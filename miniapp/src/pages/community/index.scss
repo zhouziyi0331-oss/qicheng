@@ -54,16 +54,6 @@
       animation: slideInUp 0.3s var(--ease-decelerate);
     }
 
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(4px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-    }
   }
 }
 
@@ -191,14 +181,6 @@
   animation: breathe 3s ease-in-out infinite;
 }
 
-@keyframes breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
 
 .type-icon {
   font-size: 28px;
@@ -242,14 +224,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
 
   &.full {
     background: rgba(0, 0, 0, 0.03);
@@ -312,17 +286,6 @@
   z-index: 100;
   animation: heartbeat 2s ease-in-out infinite;
 
-  @keyframes heartbeat {
-    0%, 100% {
-      transform: scale(1);
-    }
-    14%, 28% {
-      transform: scale(1.05);
-    }
-    21%, 35% {
-      transform: scale(1);
-    }
-  }
 
   &:active {
     transform: scale(0.9);
@@ -368,14 +331,6 @@
   animation: float 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-24px);
-  }
-}
 
 .empty-text {
   font-size: 32px;

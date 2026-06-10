@@ -76,17 +76,6 @@
   animation: bounce-in 0.3s var(--ease-elastic);
 }
 
-@keyframes bounce-in {
-  0% {
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
 
 /* 等级过滤提示 */
 .level-filter-tip {
@@ -138,16 +127,6 @@
     }
   }
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   &:active {
     transform: scale(0.98);
@@ -180,14 +159,6 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
 
 /* 任务标签 */
 .task-badges {
@@ -341,14 +312,6 @@
   animation: pulse-number 2s ease-in-out infinite;
 }
 
-@keyframes pulse-number {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
 
 .task-meta {
   display: flex;

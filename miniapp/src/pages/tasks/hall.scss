@@ -125,16 +125,6 @@
   }
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .challenge-badge {
   position: absolute;
@@ -147,19 +137,6 @@
   animation: bounce-in 0.6s var(--ease-elastic);
 }
 
-@keyframes bounce-in {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
 
 .badge-text {
   font-size: 22px;
@@ -341,14 +318,6 @@
   animation: pulse-number 2s ease-in-out infinite;
 }
 
-@keyframes pulse-number {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
 
 .apply-btn {
   padding: 16px 32px;
@@ -367,17 +336,6 @@
   }
 }
 
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  14%, 28% {
-    transform: scale(1.05);
-  }
-  21%, 35% {
-    transform: scale(1);
-  }
-}
 
 .apply-text {
   font-size: 26px;
@@ -441,14 +399,6 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
 
 .empty-icon {
   font-size: 120px;
@@ -457,14 +407,6 @@
   animation: float 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-}
 
 .empty-text {
   font-size: 28px;

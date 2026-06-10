@@ -20,16 +20,6 @@
     transform: translateX(-20px);
     animation: slideInLeft 0.5s var(--ease-decelerate) forwards;
 
-    @keyframes slideInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
   }
 
   /* 统计卡片 */
@@ -43,16 +33,6 @@
     transform: translateY(-20px);
     animation: slideInDown 0.5s var(--ease-decelerate) 0.1s forwards;
 
-    @keyframes slideInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
     .stats-grid {
       display: grid;
@@ -95,14 +75,6 @@
           font-family: -apple-system-font, sans-serif;
           animation: pulse-number 2s ease-in-out infinite;
 
-          @keyframes pulse-number {
-            0%, 100% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.05);
-            }
-          }
 
           &.rating {
             color: var(--grapefruit-orange);
@@ -185,17 +157,6 @@
         animation: bounce-in 0.3s var(--ease-elastic);
       }
 
-      @keyframes bounce-in {
-        0% {
-          transform: scale(0.9);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
 
       &:active {
         transform: scale(0.95);
@@ -212,14 +173,6 @@
       font-size: 28px;
       animation: pulse 2s ease-in-out infinite;
 
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
     }
 
     .empty {
@@ -229,16 +182,6 @@
       transform: translateY(20px);
       animation: slideInUp 0.5s var(--ease-decelerate) forwards;
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
       .empty-icon {
         font-size: 120px;
@@ -248,14 +191,6 @@
         animation: float 3s ease-in-out infinite;
       }
 
-      @keyframes float {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-24px);
-        }
-      }
 
       .empty-text {
         color: var(--text-secondary);
@@ -339,16 +274,6 @@
             }
           }
 
-          @keyframes scaleIn {
-            from {
-              opacity: 0;
-              transform: scale(0.5);
-            }
-            to {
-              opacity: 1;
-              transform: scale(1);
-            }
-          }
 
           &.filled {
             color: var(--mango-yellow);

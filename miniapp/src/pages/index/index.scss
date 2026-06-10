@@ -36,14 +36,6 @@
     overflow: hidden;
     animation: breathe 3s ease-in-out infinite;
 
-    @keyframes breathe {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-    }
 
     .avatar-img {
       width: 100%;
@@ -172,23 +164,7 @@
   }
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-40px);
-  }
-}
 
-@keyframes breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
 
 // 登录区域
 .login-section {
@@ -323,17 +299,6 @@
       animation: heartbeat 2s ease-in-out infinite;
     }
 
-    @keyframes heartbeat {
-      0%, 100% {
-        transform: scale(1);
-      }
-      14%, 28% {
-        transform: scale(1.05);
-      }
-      21%, 35% {
-        transform: scale(1);
-      }
-    }
   }
 
   .test-card-desc {

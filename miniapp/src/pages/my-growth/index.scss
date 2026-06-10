@@ -24,14 +24,6 @@
       animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
   }
 
   /* 顶部统计卡片 */
@@ -64,16 +56,6 @@
         animation: slideInLeft 0.5s var(--ease-decelerate);
       }
 
-      @keyframes slideInLeft {
-        from {
-          opacity: 0;
-          transform: translateX(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
 
       .stats-cards {
         display: flex;
@@ -96,16 +78,6 @@
             }
           }
 
-          @keyframes slideInUp {
-            from {
-              opacity: 0;
-              transform: translateY(20px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
 
           .stat-number {
             display: block;
@@ -116,14 +88,6 @@
             animation: pulse-number 2s ease-in-out infinite;
           }
 
-          @keyframes pulse-number {
-            0%, 100% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.05);
-            }
-          }
 
           .stat-label {
             font-size: 22px;
@@ -184,16 +148,6 @@
             font-size: 22px;
             animation: scaleIn 0.3s var(--ease-elastic);
 
-            @keyframes scaleIn {
-              from {
-                opacity: 0;
-                transform: scale(0.8);
-              }
-              to {
-                opacity: 1;
-                transform: scale(1);
-              }
-            }
 
             &.tag-success {
               background: rgba(78, 205, 196, 0.2);
@@ -242,17 +196,6 @@
         animation: bounce-in 0.3s var(--ease-elastic);
       }
 
-      @keyframes bounce-in {
-        0% {
-          transform: scale(0.9);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
     }
   }
 
@@ -314,14 +257,6 @@
           animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
 
         .emotion-icon {
           font-size: 48px;
@@ -406,14 +341,6 @@
           animation: breathe 3s ease-in-out infinite;
         }
 
-        @keyframes breathe {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.1);
-          }
-        }
 
         .timeline-icon {
           font-size: 32px;

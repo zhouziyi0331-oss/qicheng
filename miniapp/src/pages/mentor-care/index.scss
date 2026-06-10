@@ -24,14 +24,6 @@
       animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
   }
 
   /* 顶部统计 */
@@ -64,16 +56,6 @@
         animation: slideInLeft 0.5s var(--ease-decelerate);
       }
 
-      @keyframes slideInLeft {
-        from {
-          opacity: 0;
-          transform: translateX(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
 
       .stats-row {
         display: flex;
@@ -84,16 +66,6 @@
         box-shadow: var(--shadow-soft);
         animation: slideInUp 0.5s var(--ease-decelerate) 0.1s backwards;
 
-        @keyframes slideInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
 
         .stat-item {
           flex: 1;
@@ -108,14 +80,6 @@
             animation: pulse-number 2s ease-in-out infinite;
           }
 
-          @keyframes pulse-number {
-            0%, 100% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.05);
-            }
-          }
 
           .stat-value {
             display: block;
@@ -171,17 +135,6 @@
         animation: bounce-in 0.3s var(--ease-elastic);
       }
 
-      @keyframes bounce-in {
-        0% {
-          transform: scale(0.9);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
 
       .tab-badge {
         position: absolute;
@@ -197,14 +150,6 @@
         animation: breathe 3s ease-in-out infinite;
       }
 
-      @keyframes breathe {
-        0%, 100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.1);
-        }
-      }
     }
   }
 
@@ -232,14 +177,6 @@
           animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-24px);
-          }
-        }
 
         .empty-text {
           font-size: 28px;

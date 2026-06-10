@@ -22,16 +22,6 @@
   animation: slideInUp 0.5s var(--ease-decelerate);
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .task-title {
   display: block;
@@ -70,14 +60,6 @@
   animation: pulse-number 2s ease-in-out infinite;
 }
 
-@keyframes pulse-number {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
 
 /* 进度卡片 */
 .progress-card {
@@ -133,14 +115,6 @@
   animation: breathe 3s ease-in-out infinite;
 }
 
-@keyframes breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
 
 .step-text {
   font-size: 22px;
@@ -345,17 +319,6 @@
   }
 }
 
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  14%, 28% {
-    transform: scale(1.02);
-  }
-  21%, 35% {
-    transform: scale(1);
-  }
-}
 
 .btn-text {
   font-size: 32px;
@@ -377,14 +340,6 @@
   z-index: 1000;
   animation: fadeIn 0.3s ease;
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
 
   .modal-content {
     width: 90%;

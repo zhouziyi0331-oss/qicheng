@@ -36,14 +36,6 @@
   animation: pulse-number 2s ease-in-out infinite;
 }
 
-@keyframes pulse-number {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
 
 /* 表单区域 */
 .form-section {
@@ -211,17 +203,6 @@
   }
 }
 
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  14%, 28% {
-    transform: scale(1.02);
-  }
-  21%, 35% {
-    transform: scale(1);
-  }
-}
 
 .submit-text {
   font-size: 64px;

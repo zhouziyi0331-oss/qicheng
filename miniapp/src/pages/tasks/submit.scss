@@ -19,16 +19,6 @@
   box-shadow: var(--shadow-card);
   animation: slideInDown 0.5s var(--ease-decelerate);
 
-  @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   .submit-title {
     display: block;
@@ -67,16 +57,6 @@
     }
   }
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   .section-header {
     display: flex;
@@ -96,14 +76,6 @@
       animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
 
     .section-tip {
       font-size: 24px;
@@ -155,16 +127,6 @@
     overflow: hidden;
     animation: scaleIn 0.3s var(--ease-elastic);
 
-    @keyframes scaleIn {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
 
     .image-preview {
       width: 100%;
@@ -274,17 +236,6 @@
     transition: all var(--duration-fast) var(--ease-standard);
     animation: heartbeat 2s ease-in-out infinite;
 
-    @keyframes heartbeat {
-      0%, 100% {
-        transform: scale(1);
-      }
-      14%, 28% {
-        transform: scale(1.02);
-      }
-      21%, 35% {
-        transform: scale(1);
-      }
-    }
 
     &:active {
       transform: scale(0.95);
@@ -326,14 +277,6 @@
     background: rgba(0, 0, 0, 0.5);
     animation: fadeIn 0.3s ease;
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
   }
 
   .modal-content {

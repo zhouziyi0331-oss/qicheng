@@ -30,14 +30,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
 }
 
 /* 帖子头部 */
@@ -50,16 +42,6 @@
   transform: translateY(-20px);
   animation: slideInDown 0.5s var(--ease-decelerate) forwards;
 
-  @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   .author-info {
     display: flex;
@@ -77,14 +59,6 @@
       box-shadow: var(--shadow-soft);
       animation: breathe 3s ease-in-out infinite;
 
-      @keyframes breathe {
-        0%, 100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
 
       .avatar-text {
         font-size: 32px;
@@ -130,16 +104,6 @@
   transform: translateX(-20px);
   animation: slideInLeft 0.5s var(--ease-decelerate) 0.1s forwards;
 
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
 }
 
 /* 帖子内容 */
@@ -154,16 +118,6 @@
   transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 /* 技能标签区 */
@@ -205,16 +159,6 @@
       gap: 8px;
       animation: scaleIn 0.3s var(--ease-elastic);
 
-      @keyframes scaleIn {
-        from {
-          opacity: 0;
-          transform: scale(0.8);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
 
       &.skill-tag-blue {
         background: rgba(78, 205, 196, 0.2);
@@ -356,17 +300,6 @@
     transition: all var(--duration-fast) var(--ease-standard);
     animation: heartbeat 2s ease-in-out infinite;
 
-    @keyframes heartbeat {
-      0%, 100% {
-        transform: scale(1);
-      }
-      14%, 28% {
-        transform: scale(1.05);
-      }
-      21%, 35% {
-        transform: scale(1);
-      }
-    }
 
     &:active {
       transform: scale(0.95);
@@ -419,14 +352,6 @@
       animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-4px);
-      }
-    }
 
     .interaction-text {
       font-size: 28px;

@@ -34,16 +34,6 @@
       transform: translateY(20px);
       animation: slideInUp 0.6s var(--ease-decelerate) 0.2s forwards;
 
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
       .slide-icon {
         font-size: 120px;
@@ -51,14 +41,6 @@
         animation: float 3s ease-in-out infinite;
       }
 
-      @keyframes float {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-20px);
-        }
-      }
 
       .slide-title {
         color: #FFFFFF;
@@ -131,14 +113,6 @@
             animation: breathe 3s ease-in-out infinite;
           }
 
-          @keyframes breathe {
-            0%, 100% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.1);
-            }
-          }
 
           .highlight-text {
             color: #FFFFFF;
@@ -175,14 +149,6 @@
         animation: pulse 2s ease-in-out infinite;
       }
 
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.8;
-        }
-      }
     }
   }
 
@@ -233,17 +199,6 @@
       animation: heartbeat 2s ease-in-out infinite;
     }
 
-    @keyframes heartbeat {
-      0%, 100% {
-        transform: scale(1);
-      }
-      14%, 28% {
-        transform: scale(1.05);
-      }
-      21%, 35% {
-        transform: scale(1);
-      }
-    }
 
     .start-btn {
       flex: 1;

@@ -365,37 +365,8 @@
   animation: fadeIn 0.5s var(--ease-standard);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
-@keyframes slideInUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  14%, 28% {
-    transform: scale(1.03);
-  }
-  21%, 35% {
-    transform: scale(1);
-  }
-}
 
 /* ==================== 响应式 ==================== */
 

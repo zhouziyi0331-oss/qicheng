@@ -279,17 +279,6 @@
     animation: heartbeat 1.5s ease-in-out infinite;
   }
 
-  @keyframes heartbeat {
-    0%, 100% {
-      transform: scale(1);
-    }
-    14%, 28% {
-      transform: scale(1.1);
-    }
-    21%, 35% {
-      transform: scale(1);
-    }
-  }
 }
 
 .action-icon {
@@ -386,14 +375,6 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-24px);
-    }
-  }
 
   .empty-btn {
     margin-top: 96px;

@@ -24,16 +24,6 @@
   transform: translateY(-20px);
   animation: slideInDown 0.5s var(--ease-decelerate) forwards;
 
-  @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 /* 背景装饰 */
@@ -54,14 +44,6 @@
   animation: float 6s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(10px, -10px);
-  }
-}
 
 .bg-decoration-1 {
   width: 120px;
@@ -102,14 +84,6 @@
   box-shadow: var(--shadow-soft);
   animation: breathe 3s ease-in-out infinite;
 
-  @keyframes breathe {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
 }
 
 .avatar-letter {
@@ -139,14 +113,6 @@
   box-shadow: var(--shadow-soft);
   animation: pulse 2s ease-in-out infinite;
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.9;
-    }
-  }
 }
 
 .user-opc-text {
@@ -182,14 +148,6 @@
   color: #FFFFFF;
   animation: pulse-number 2s ease-in-out infinite;
 
-  @keyframes pulse-number {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
 }
 
 .track-badge {
@@ -295,16 +253,6 @@
   transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.1s forwards;
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 .balance-icon-circle {
@@ -471,16 +419,6 @@
   transform: translateX(-20px);
   animation: slideInLeft 0.5s var(--ease-decelerate) 0.3s forwards;
 
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
 }
 
 .menu-list {

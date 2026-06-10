@@ -31,16 +31,6 @@
   transform: translateY(-20px);
   animation: slideInDown 0.5s var(--ease-decelerate) forwards;
 
-  @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 /* 类型卡片 */
@@ -62,16 +52,6 @@
     }
   }
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   &:active {
     transform: scale(0.98);
@@ -96,14 +76,6 @@
   margin-bottom: 16px;
   animation: float 3s ease-in-out infinite;
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
-  }
 }
 
 .type-name {
@@ -282,16 +254,6 @@
   border: 2px solid var(--blueberry-blue);
   animation: scaleIn 0.3s var(--ease-elastic);
 
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.8);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
 }
 
 .tag-text {
@@ -393,14 +355,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
 
   &.optional {
     background: linear-gradient(135deg, rgba(255, 230, 109, 0.2) 0%, rgba(255, 230, 109, 0.3) 100%);
@@ -447,17 +401,6 @@
   transition: all var(--duration-fast) var(--ease-standard);
   animation: heartbeat 2s ease-in-out infinite;
 
-  @keyframes heartbeat {
-    0%, 100% {
-      transform: scale(1);
-    }
-    14%, 28% {
-      transform: scale(1.05);
-    }
-    21%, 35% {
-      transform: scale(1);
-    }
-  }
 
   &:active {
     transform: scale(0.95);

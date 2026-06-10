@@ -19,16 +19,6 @@
   transform: translateY(-20px);
   animation: slideInDown 0.6s var(--ease-decelerate) forwards;
 
-  @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 .logo {
@@ -36,14 +26,6 @@
   margin-bottom: 24px;
   animation: float 3s ease-in-out infinite;
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-12px);
-    }
-  }
 }
 
 .title {
@@ -70,16 +52,6 @@
   transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 .form-item {
@@ -142,17 +114,6 @@
     animation: bounce-in 0.3s var(--ease-elastic);
   }
 
-  @keyframes bounce-in {
-    0% {
-      transform: scale(0.9);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
 }
 
 .role-text {
@@ -229,17 +190,6 @@
   transition: all var(--duration-fast) var(--ease-standard);
   animation: heartbeat 2s ease-in-out infinite;
 
-  @keyframes heartbeat {
-    0%, 100% {
-      transform: scale(1);
-    }
-    14%, 28% {
-      transform: scale(1.05);
-    }
-    21%, 35% {
-      transform: scale(1);
-    }
-  }
 
   &:active {
     transform: scale(0.95);
@@ -255,14 +205,6 @@
   opacity: 0;
   animation: fadeIn 0.5s var(--ease-decelerate) 0.8s forwards;
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
 }
 
 .tip-text {

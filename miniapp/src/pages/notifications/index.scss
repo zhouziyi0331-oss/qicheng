@@ -44,14 +44,6 @@
   box-shadow: var(--shadow-soft);
   animation: pulse 2s ease-in-out infinite;
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
 }
 
 .unread-text {
@@ -99,14 +91,6 @@
   opacity: 0.6;
   animation: float 3s ease-in-out infinite;
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-24px);
-    }
-  }
 }
 
 .empty-text {
@@ -136,16 +120,6 @@
     }
   }
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   &:active {
     transform: scale(0.98);
@@ -168,14 +142,6 @@
   box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
   animation: breathe 3s ease-in-out infinite;
 
-  @keyframes breathe {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-  }
 }
 
 /* 通知图标 */

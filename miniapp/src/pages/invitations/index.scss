@@ -38,14 +38,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
 
   .empty {
     display: flex;
@@ -88,16 +80,6 @@
       }
     }
 
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20rpx);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
     .match-badge {
       position: absolute;
@@ -112,17 +94,6 @@
       box-shadow: var(--shadow-soft);
       animation: heartbeat 2s ease-in-out infinite;
 
-      @keyframes heartbeat {
-        0%, 100% {
-          transform: scale(1);
-        }
-        14%, 28% {
-          transform: scale(1.05);
-        }
-        21%, 35% {
-          transform: scale(1);
-        }
-      }
 
       .match-score {
         font-size: 56rpx;
@@ -192,14 +163,6 @@
             animation: pulse-number 2s ease-in-out infinite;
           }
 
-          @keyframes pulse-number {
-            0%, 100% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.05);
-            }
-          }
         }
       }
     }
@@ -288,14 +251,6 @@
     z-index: 1000;
     animation: fadeIn 0.3s ease;
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
 
     .modal-content {
       width: 90%;
@@ -307,16 +262,6 @@
       overflow: hidden;
       animation: slideInUp 0.3s var(--ease-decelerate);
 
-      @keyframes slideInUp {
-        from {
-          transform: translateY(40rpx);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
 
       .modal-header {
         display: flex;
