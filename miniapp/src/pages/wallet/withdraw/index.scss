@@ -1,42 +1,61 @@
+/**
+ * 钱包提现页 - 果汁色改造版
+ * 从紫色渐变升级为果汁色主题
+ */
+
+@import '../../../styles/theme.scss';
+
 .withdraw-page {
   min-height: 100vh;
-  background: #f5f5f5;
-  padding: 32px;
+  background: var(--theme-bg);
+  padding: 64rpx;
 }
 
 /* 可用余额 */
 .balance-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 48px 40px;
-  margin-bottom: 32px;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  border-radius: var(--radius-large);
+  padding: 96rpx 80rpx;
+  margin-bottom: 64rpx;
   text-align: center;
+  box-shadow: var(--shadow-soft);
 }
 
 .balance-label {
   display: block;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 26px;
-  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 52rpx;
+  margin-bottom: 32rpx;
 }
 
 .balance-amount {
   display: block;
-  color: #fff;
-  font-size: 64px;
+  color: #FFFFFF;
+  font-size: 128rpx;
   font-weight: bold;
+  animation: pulse-number 2s ease-in-out infinite;
+}
+
+@keyframes pulse-number {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* 表单区域 */
 .form-section {
-  background: #fff;
-  border-radius: 24px;
-  padding: 40px;
-  margin-bottom: 32px;
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 80rpx;
+  margin-bottom: 64rpx;
+  box-shadow: var(--shadow-card);
 }
 
 .form-item {
-  margin-bottom: 40px;
+  margin-bottom: 80rpx;
 }
 
 .form-item:last-child {
@@ -45,113 +64,167 @@
 
 .form-label {
   display: block;
-  color: #333;
-  font-size: 28px;
+  color: var(--text-primary);
+  font-size: 56rpx;
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 40rpx;
 }
 
 /* 金额输入 */
 .amount-input-wrapper {
   display: flex;
   align-items: center;
-  border: 2px solid #e0e0e0;
-  border-radius: 16px;
-  padding: 0 24px;
-  height: 88px;
+  border: 4rpx solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-medium);
+  padding: 0 48rpx;
+  height: 176rpx;
+  transition: all var(--duration-normal) var(--ease-standard);
+
+  &:focus-within {
+    border-color: var(--theme-primary);
+    box-shadow: var(--shadow-soft);
+  }
 }
 
 .currency-symbol {
-  color: #333;
-  font-size: 36px;
+  color: var(--text-primary);
+  font-size: 72rpx;
   font-weight: 500;
-  margin-right: 8px;
+  margin-right: 16rpx;
 }
 
 .amount-input {
   flex: 1;
-  font-size: 36px;
+  font-size: 72rpx;
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .all-btn {
-  width: 120px;
-  height: 56px;
-  background: #667eea;
-  color: #fff;
-  border-radius: 12px;
-  font-size: 26px;
+  width: 240rpx;
+  height: 112rpx;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  color: #FFFFFF;
+  border-radius: var(--radius-medium);
+  font-size: 52rpx;
   border: none;
   padding: 0;
-  line-height: 56px;
+  line-height: 112rpx;
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 /* 单选框 */
 .radio-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 48px;
-  padding: 16px 0;
+  margin-right: 96rpx;
+  padding: 32rpx 0;
 }
 
 .radio-label {
-  margin-left: 16px;
-  color: #333;
-  font-size: 28px;
+  margin-left: 32rpx;
+  color: var(--text-primary);
+  font-size: 56rpx;
 }
 
 /* 普通输入框 */
 .form-input {
   width: 100%;
-  height: 88px;
-  border: 2px solid #e0e0e0;
-  border-radius: 16px;
-  padding: 0 24px;
-  font-size: 28px;
-  color: #333;
+  height: 176rpx;
+  border: 4rpx solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-medium);
+  padding: 0 48rpx;
+  font-size: 56rpx;
+  color: var(--text-primary);
+  transition: all var(--duration-normal) var(--ease-standard);
+
+  &:focus {
+    border-color: var(--theme-primary);
+    box-shadow: var(--shadow-soft);
+  }
 }
 
 /* 提现说明 */
 .tips-section {
-  background: #fff;
-  border-radius: 24px;
-  padding: 40px;
-  margin-bottom: 32px;
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 80rpx;
+  margin-bottom: 64rpx;
+  box-shadow: var(--shadow-card);
 }
 
 .tips-title {
   display: block;
-  color: #333;
-  font-size: 28px;
+  color: var(--text-primary);
+  font-size: 56rpx;
   font-weight: 500;
-  margin-bottom: 24px;
+  margin-bottom: 48rpx;
 }
 
 .tips-item {
   display: block;
-  color: #666;
-  font-size: 24px;
+  color: var(--text-secondary);
+  font-size: 48rpx;
   line-height: 1.8;
-  margin-bottom: 12px;
+  margin-bottom: 24rpx;
+  padding-left: 48rpx;
+  position: relative;
+
+  &::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--theme-primary);
+    font-weight: bold;
+  }
 }
 
 /* 提交按钮 */
 .submit-section {
-  padding: 0 0 40px;
+  padding: 0 0 80rpx;
 }
 
 .submit-btn {
   width: 100%;
-  height: 96px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  border-radius: 16px;
-  font-size: 32px;
-  font-weight: 500;
+  height: 192rpx;
+  background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
+  color: #FFFFFF;
+  border-radius: var(--radius-medium);
+  font-size: 64rpx;
+  font-weight: bold;
   border: none;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+  animation: heartbeat 2s ease-in-out infinite;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    animation: none;
+  }
 }
 
-.submit-btn[disabled] {
-  opacity: 0.6;
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14%, 28% {
+    transform: scale(1.02);
+  }
+  21%, 35% {
+    transform: scale(1);
+  }
+}
+
+.submit-text {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #FFFFFF;
 }
