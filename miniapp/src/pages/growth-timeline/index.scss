@@ -1,20 +1,38 @@
+/**
+ * 成长时间轴页 - 果汁色改造版
+ * 从紫色渐变升级为果汁色主题，时间轴节点动画
+ */
+
+@import '../../styles/theme.scss';
+
 .growth-timeline-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--theme-bg);
 
   .loading {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 80vh;
-    color: #fff;
+    color: var(--text-secondary);
     font-size: 32rpx;
+    animation: pulse 2s ease-in-out infinite;
   }
 
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* 筛选区域 */
   .filter-section {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--theme-card);
     padding: 24rpx 0;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-card);
 
     .filter-scroll {
       white-space: nowrap;
@@ -30,9 +48,9 @@
         align-items: center;
         gap: 8rpx;
         padding: 16rpx 24rpx;
-        background: #F3F4F6;
-        border-radius: 20rpx;
-        transition: all 0.3s ease;
+        background: rgba(0, 0, 0, 0.03);
+        border-radius: var(--radius-round);
+        transition: all var(--duration-normal) var(--ease-standard);
 
         .filter-icon {
           font-size: 28rpx;
@@ -40,20 +58,38 @@
 
         .filter-text {
           font-size: 26rpx;
-          color: #6B7280;
+          color: var(--text-secondary);
           font-weight: 500;
           white-space: nowrap;
         }
 
         &.active {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+          box-shadow: var(--shadow-soft);
+          animation: bounce-in 0.3s var(--ease-elastic);
 
           .filter-text {
-            color: #fff;
-            font-weight: bold;
+            color: #FFFFFF;
+            font-weight: 600;
           }
         }
+
+        &:active {
+          transform: scale(0.96);
+        }
       }
+    }
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0.9);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 
@@ -62,31 +98,44 @@
     padding: 32rpx;
   }
 
+  /* 空状态 */
   .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 120rpx 64rpx;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 24rpx;
+    background: var(--theme-card);
+    border-radius: var(--radius-large);
     text-align: center;
+    box-shadow: var(--shadow-card);
 
     .empty-icon {
       font-size: 120rpx;
       margin-bottom: 32rpx;
+      opacity: 0.6;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-24rpx);
+      }
     }
 
     .empty-text {
       font-size: 32rpx;
-      font-weight: bold;
-      color: #1F2937;
+      font-weight: 600;
+      color: var(--text-primary);
       margin-bottom: 16rpx;
     }
 
     .empty-hint {
       font-size: 28rpx;
-      color: #6B7280;
+      color: var(--text-secondary);
       line-height: 1.6;
     }
   }
@@ -95,6 +144,7 @@
     padding-bottom: 32rpx;
   }
 
+  /* 时间轴组 */
   .timeline-group {
     margin-bottom: 48rpx;
 
@@ -109,18 +159,19 @@
 
       .date-text {
         font-size: 28rpx;
-        font-weight: bold;
-        color: #fff;
-        background: rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+        color: var(--text-primary);
+        background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(255, 107, 157, 0.15) 100%);
         padding: 12rpx 24rpx;
-        border-radius: 20rpx;
+        border-radius: var(--radius-round);
         white-space: nowrap;
+        border: 1rpx solid var(--theme-primary);
       }
 
       .date-line {
         flex: 1;
         height: 2rpx;
-        background: rgba(255, 255, 255, 0.3);
+        background: linear-gradient(90deg, var(--theme-primary) 0%, transparent 100%);
         margin-left: 16rpx;
       }
     }
@@ -130,12 +181,33 @@
     }
   }
 
+  /* 时间轴项 - 从下到上的动画 */
   .timeline-item {
     display: flex;
     margin-bottom: 32rpx;
+    opacity: 0;
+    transform: translateY(40rpx);
+    animation: slideInUpTimeline 0.6s var(--ease-decelerate) forwards;
+
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.15}s;
+      }
+    }
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    @keyframes slideInUpTimeline {
+      from {
+        opacity: 0;
+        transform: translateY(40rpx);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .timeline-line-wrapper {
@@ -152,19 +224,29 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+        box-shadow: var(--shadow-soft);
         flex-shrink: 0;
         z-index: 2;
+        animation: breathe 3s ease-in-out infinite;
 
         .dot-icon {
           font-size: 32rpx;
         }
       }
 
+      @keyframes breathe {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
       .timeline-line {
         width: 4rpx;
         flex: 1;
-        background: rgba(255, 255, 255, 0.3);
+        background: linear-gradient(180deg, var(--theme-primary) 0%, rgba(78, 205, 196, 0.2) 100%);
         margin-top: 8rpx;
         min-height: 40rpx;
       }
@@ -172,14 +254,15 @@
 
     .event-card {
       flex: 1;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20rpx;
+      background: var(--theme-card);
+      border-radius: var(--radius-large);
       padding: 24rpx;
-      box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
+      transition: all var(--duration-normal) var(--ease-standard);
 
       &:active {
         transform: scale(0.98);
+        box-shadow: var(--shadow-hover);
       }
 
       .event-header {
@@ -195,39 +278,39 @@
 
           .event-type {
             font-size: 24rpx;
-            color: #667eea;
-            font-weight: bold;
+            color: var(--theme-primary);
+            font-weight: 600;
           }
 
           .importance-badge {
             padding: 4rpx 12rpx;
-            border-radius: 8rpx;
+            border-radius: var(--radius-small);
 
             .importance-text {
               font-size: 20rpx;
-              color: #fff;
-              font-weight: bold;
+              color: #FFFFFF;
+              font-weight: 600;
             }
           }
         }
 
         .event-time {
           font-size: 24rpx;
-          color: #9CA3AF;
+          color: var(--text-tertiary);
         }
       }
 
       .event-title {
         font-size: 28rpx;
-        font-weight: bold;
-        color: #1F2937;
+        font-weight: 600;
+        color: var(--text-primary);
         margin-bottom: 12rpx;
         display: block;
       }
 
       .event-desc {
         font-size: 26rpx;
-        color: #4B5563;
+        color: var(--text-secondary);
         line-height: 1.6;
         margin-bottom: 16rpx;
         display: block;
@@ -238,7 +321,7 @@
         flex-wrap: wrap;
         gap: 16rpx;
         padding-top: 16rpx;
-        border-top: 1rpx solid #E5E7EB;
+        border-top: 1rpx solid rgba(0, 0, 0, 0.05);
 
         .metadata-item {
           display: flex;
@@ -246,12 +329,12 @@
 
           .metadata-label {
             font-size: 24rpx;
-            color: #6B7280;
+            color: var(--text-tertiary);
           }
 
           .metadata-value {
             font-size: 24rpx;
-            color: #1F2937;
+            color: var(--text-primary);
             font-weight: 500;
           }
         }
@@ -259,6 +342,7 @@
     }
   }
 
+  /* 详情弹窗 */
   .detail-modal {
     position: fixed;
     top: 0;
@@ -271,29 +355,54 @@
     justify-content: center;
     z-index: 1000;
     padding: 64rpx 32rpx;
+    animation: fadeIn 0.3s ease;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
 
     .detail-content {
-      background: #fff;
-      border-radius: 32rpx;
+      background: var(--theme-card);
+      border-radius: var(--radius-large);
       width: 100%;
       max-height: 80vh;
       display: flex;
       flex-direction: column;
+      box-shadow: var(--shadow-hover);
+      animation: slideInUpModal 0.4s var(--ease-decelerate);
+
+      @keyframes slideInUpModal {
+        from {
+          opacity: 0;
+          transform: translateY(60rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
       .detail-header {
         display: flex;
         align-items: center;
         padding: 40rpx;
-        border-bottom: 1rpx solid #E5E7EB;
+        border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
 
         .detail-icon {
           width: 96rpx;
           height: 96rpx;
-          border-radius: 20rpx;
+          border-radius: var(--radius-medium);
           display: flex;
           align-items: center;
           justify-content: center;
           margin-right: 24rpx;
+          background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+          box-shadow: var(--shadow-soft);
 
           .icon-text {
             font-size: 48rpx;
@@ -305,15 +414,15 @@
 
           .detail-type {
             font-size: 28rpx;
-            font-weight: bold;
-            color: #667eea;
+            font-weight: 600;
+            color: var(--theme-primary);
             margin-bottom: 8rpx;
             display: block;
           }
 
           .detail-time {
             font-size: 24rpx;
-            color: #6B7280;
+            color: var(--text-tertiary);
             display: block;
           }
         }
@@ -326,7 +435,7 @@
 
       .detail-section {
         padding: 32rpx 40rpx;
-        border-bottom: 1rpx solid #F3F4F6;
+        border-bottom: 1rpx solid rgba(0, 0, 0, 0.03);
 
         &:last-of-type {
           border-bottom: none;
@@ -334,30 +443,30 @@
 
         .detail-title {
           font-size: 32rpx;
-          font-weight: bold;
-          color: #1F2937;
+          font-weight: 600;
+          color: var(--text-primary);
           margin-bottom: 16rpx;
           display: block;
         }
 
         .detail-description {
           font-size: 28rpx;
-          color: #4B5563;
+          color: var(--text-secondary);
           line-height: 1.8;
           display: block;
         }
 
         .section-label {
           font-size: 26rpx;
-          font-weight: bold;
-          color: #667eea;
+          font-weight: 600;
+          color: var(--theme-primary);
           margin-bottom: 16rpx;
           display: block;
         }
 
         .section-text {
           font-size: 28rpx;
-          color: #4B5563;
+          color: var(--text-secondary);
           line-height: 1.8;
           display: block;
         }
@@ -370,19 +479,19 @@
           .metadata-row {
             display: flex;
             padding: 16rpx;
-            background: #F9FAFB;
-            border-radius: 12rpx;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-medium);
 
             .metadata-key {
               font-size: 26rpx;
-              color: #6B7280;
+              color: var(--text-tertiary);
               min-width: 160rpx;
             }
 
             .metadata-val {
               flex: 1;
               font-size: 26rpx;
-              color: #1F2937;
+              color: var(--text-primary);
               font-weight: 500;
             }
           }
@@ -391,18 +500,23 @@
 
       .detail-footer {
         padding: 32rpx 40rpx;
-        border-top: 1rpx solid #E5E7EB;
+        border-top: 1rpx solid rgba(0, 0, 0, 0.05);
 
         .footer-button {
-          background: #F3F4F6;
-          border-radius: 16rpx;
+          background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(255, 107, 157, 0.15) 100%);
+          border-radius: var(--radius-medium);
           padding: 24rpx;
           text-align: center;
+          transition: all var(--duration-fast) var(--ease-standard);
+
+          &:active {
+            transform: scale(0.98);
+          }
 
           .button-text {
             font-size: 32rpx;
-            color: #4B5563;
-            font-weight: bold;
+            color: var(--text-primary);
+            font-weight: 600;
           }
         }
       }
