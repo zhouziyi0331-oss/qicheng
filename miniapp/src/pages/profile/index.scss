@@ -1,19 +1,39 @@
+/**
+ * 个人主页 - 果汁色改造版
+ * 从紫色渐变升级为果汁色主题，个人信息动画
+ */
+
 @import '../../styles/theme.scss';
 
 .profile-page {
   min-height: 100vh;
-  background: $gradient-bg;
-  padding-bottom: 100px;
+  background: var(--theme-bg);
+  padding-bottom: 100rpx;
 }
 
 /* 用户信息卡片 */
 .user-card {
   position: relative;
-  margin: 20px;
-  @include card-super-rounded;
-  padding: 32px 24px;
+  margin: 20rpx;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  border-radius: var(--radius-large);
+  padding: 32rpx 24rpx;
   overflow: hidden;
-  background: linear-gradient(135deg, $accent-pink 0%, $accent-blue 100%);
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(-20rpx);
+  animation: slideInDown 0.5s var(--ease-decelerate) forwards;
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 /* 背景装饰 */
@@ -24,26 +44,38 @@
   right: 0;
   bottom: 0;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .bg-decoration {
   position: absolute;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10rpx, -10rpx);
+  }
 }
 
 .bg-decoration-1 {
-  width: 120px;
-  height: 120px;
-  top: -40px;
-  right: -30px;
+  width: 120rpx;
+  height: 120rpx;
+  top: -40rpx;
+  right: -30rpx;
 }
 
 .bg-decoration-2 {
-  width: 90px;
-  height: 90px;
-  bottom: -30px;
-  left: -20px;
+  width: 90rpx;
+  height: 90rpx;
+  bottom: -30rpx;
+  left: -20rpx;
+  animation-delay: 1s;
 }
 
 /* 用户头像 */
@@ -51,8 +83,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
 }
 
 .user-avatar {
@@ -60,20 +92,30 @@
 }
 
 .avatar-circle {
-  width: 64px;
-  height: 64px;
+  width: 64rpx;
+  height: 64rpx;
   border-radius: 50%;
-  background: $accent-pink;
+  background: var(--strawberry-pink);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: $shadow-md;
+  box-shadow: var(--shadow-soft);
+  animation: breathe 3s ease-in-out infinite;
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
 }
 
 .avatar-letter {
-  font-size: 28px;
+  font-size: 28rpx;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--text-primary);
 }
 
 /* 用户信息 */
@@ -82,33 +124,44 @@
 }
 
 .user-name {
-  font-size: 22px;
+  font-size: 22rpx;
   font-weight: 700;
-  color: $card-white;
-  margin-bottom: 6px;
+  color: #FFFFFF;
+  margin-bottom: 6rpx;
   display: block;
 }
 
 .user-opc {
   display: inline-block;
-  padding: 6px 16px;
+  padding: 6rpx 16rpx;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: $radius-full;
-  box-shadow: $shadow-sm;
+  border-radius: var(--radius-round);
+  box-shadow: var(--shadow-soft);
+  animation: pulse 2s ease-in-out infinite;
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
 }
 
 .user-opc-text {
-  font-size: 12px;
+  font-size: 12rpx;
   font-weight: 600;
-  background: $gradient-primary;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* 等级和赛道信息 */
 .level-section {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 20rpx;
 }
 
 .level-header {
@@ -120,49 +173,60 @@
 .level-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 12rpx;
 }
 
 .level-text {
-  font-size: 18px;
+  font-size: 18rpx;
   font-weight: 700;
-  color: $card-white;
+  color: #FFFFFF;
+  animation: pulse-number 2s ease-in-out infinite;
+
+  @keyframes pulse-number {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
 }
 
 .track-badge {
-  font-size: 12px;
+  font-size: 12rpx;
   font-weight: 600;
-  color: $card-white;
+  color: #FFFFFF;
   background: rgba(255, 255, 255, 0.25);
-  padding: 4px 12px;
-  border-radius: $radius-full;
-  backdrop-filter: blur(10px);
+  padding: 4rpx 12rpx;
+  border-radius: var(--radius-round);
+  backdrop-filter: blur(10rpx);
 }
 
 .level-name {
-  font-size: 13px;
+  font-size: 13rpx;
   color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
 }
 
 .level-exp {
-  font-size: 13px;
+  font-size: 13rpx;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .level-bar {
-  height: 8px;
+  height: 8rpx;
   background: rgba(255, 255, 255, 0.25);
-  border-radius: $radius-full;
+  border-radius: var(--radius-round);
   overflow: hidden;
+  margin-top: 8rpx;
 }
 
 .level-progress {
   height: 100%;
-  background: $card-white;
-  border-radius: $radius-full;
-  transition: width 0.5s ease;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  background: #FFFFFF;
+  border-radius: var(--radius-round);
+  transition: width 0.5s var(--ease-decelerate);
+  box-shadow: 0 0 8rpx rgba(255, 255, 255, 0.5);
 }
 
 /* 数据统计 */
@@ -170,12 +234,32 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 16rpx;
 }
 
 .stat-item {
   text-align: center;
-  transition: transform 0.2s ease;
+  transition: transform var(--duration-fast) var(--ease-standard);
+  opacity: 0;
+  transform: translateY(10rpx);
+  animation: slideInUpStat 0.4s var(--ease-decelerate) forwards;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+
+  @keyframes slideInUpStat {
+    from {
+      opacity: 0;
+      transform: translateY(10rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   &:active {
     transform: scale(0.95);
@@ -184,46 +268,63 @@
 
 .stat-value {
   display: block;
-  font-size: 20px;
+  font-size: 20rpx;
   font-weight: 700;
-  color: $card-white;
-  margin-bottom: 4px;
+  color: #FFFFFF;
+  margin-bottom: 4rpx;
+  animation: pulse-number 2s ease-in-out infinite;
 }
 
 .stat-label {
   display: block;
-  font-size: 11px;
+  font-size: 11rpx;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* 余额卡片 */
 .balance-card {
-  margin: 20px;
-  @include card-super-rounded;
-  padding: 24px;
+  margin: 20rpx;
+  background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
+  border-radius: var(--radius-large);
+  padding: 24rpx;
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: linear-gradient(135deg, $accent-yellow 0%, $accent-orange 100%);
-  box-shadow: $shadow-lg;
+  gap: 16rpx;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.1s forwards;
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .balance-icon-circle {
-  width: 56px;
-  height: 56px;
+  width: 56rpx;
+  height: 56rpx;
   border-radius: 50%;
-  background: $accent-green;
+  background: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: var(--shadow-soft);
+  animation: breathe 3s ease-in-out infinite;
 }
 
 .icon-svg {
-  width: 28px;
-  height: 28px;
+  width: 28rpx;
+  height: 28rpx;
   fill: none;
-  stroke: $text-primary;
+  stroke: var(--text-primary);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -234,35 +335,42 @@
 }
 
 .balance-label {
-  font-size: 13px;
+  font-size: 13rpx;
   color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 4px;
+  margin-bottom: 4rpx;
   display: block;
 }
 
 .balance-amount {
-  font-size: 28px;
+  font-size: 28rpx;
   font-weight: 700;
-  color: $text-primary;
-  margin-bottom: 2px;
+  color: var(--text-primary);
+  margin-bottom: 2rpx;
   display: block;
+  animation: pulse-number 2s ease-in-out infinite;
 }
 
 .balance-hint {
-  font-size: 12px;
+  font-size: 12rpx;
   color: rgba(0, 0, 0, 0.5);
   display: block;
 }
 
+.balance-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
 .withdraw-button {
-  padding: 12px 24px;
-  background: $card-white;
-  border-radius: $radius-full;
-  font-size: 14px;
+  padding: 12rpx 24rpx;
+  background: #FFFFFF;
+  border-radius: var(--radius-round);
+  font-size: 14rpx;
   font-weight: 600;
-  color: $text-primary;
-  box-shadow: $shadow-sm;
-  transition: all 0.2s ease;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
 
   &:active {
     transform: scale(0.96);
@@ -275,12 +383,15 @@
 
 /* 能力雷达图卡片 */
 .radar-card {
-  margin: 20px;
-  @include card-super-rounded;
-  padding: 24px;
-  background: linear-gradient(135deg, $accent-pink 0%, $accent-blue 100%);
-  box-shadow: $shadow-lg;
-  transition: all 0.2s ease;
+  margin: 20rpx;
+  background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--blueberry-blue) 100%);
+  border-radius: var(--radius-large);
+  padding: 24rpx;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-normal) var(--ease-standard);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
 
   &:active {
     transform: scale(0.98);
@@ -291,171 +402,197 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 16rpx;
 }
 
 .card-title {
-  font-size: 18px;
+  font-size: 18rpx;
   font-weight: 700;
-  color: $card-white;
+  color: #FFFFFF;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 4rpx;
 }
 
 .card-subtitle {
-  font-size: 13px;
+  font-size: 13rpx;
   color: rgba(255, 255, 255, 0.8);
   display: block;
 }
 
 .card-arrow {
-  font-size: 24px;
-  color: $card-white;
+  font-size: 24rpx;
+  color: #FFFFFF;
   opacity: 0.8;
+  animation: bounce 2s ease-in-out infinite;
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(4rpx);
+    }
+  }
 }
 
 .radar-preview {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 12rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
 }
 
 .radar-level {
-  font-size: 24px;
+  font-size: 24rpx;
   font-weight: 700;
-  color: $card-white;
+  color: #FFFFFF;
+  animation: pulse-number 2s ease-in-out infinite;
 }
 
 .radar-hint {
-  font-size: 13px;
+  font-size: 13rpx;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* 功能菜单 */
 .menu-section {
-  padding: 0 40px;
-  margin-top: 48px;
+  padding: 0 40rpx;
+  margin-top: 48rpx;
 }
 
 .section-title {
-  font-size: 40px;
+  font-size: 40rpx;
   font-weight: 700;
-  color: #2D3436;
-  margin-bottom: 32px;
+  color: var(--text-primary);
+  margin-bottom: 32rpx;
   display: block;
+  opacity: 0;
+  transform: translateX(-20rpx);
+  animation: slideInLeft 0.5s var(--ease-decelerate) 0.3s forwards;
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 }
 
 .menu-list {
-  background: #FFFFFF;
-  border-radius: 32px;
-  padding: 24px 0;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 24rpx 0;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.4s forwards;
 }
 
 .menu-item-simple {
   display: flex;
   align-items: center;
-  padding: 24px 32px;
-  transition: all 0.2s ease;
+  padding: 24rpx 32rpx;
+  transition: all var(--duration-fast) var(--ease-standard);
 
   &:active {
     background: rgba(0, 0, 0, 0.03);
+    transform: scale(0.98);
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
   }
 }
 
 .menu-icon-circle {
-  width: 80px;
-  height: 80px;
+  width: 80rpx;
+  height: 80rpx;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-right: 24px;
+  margin-right: 24rpx;
+  box-shadow: var(--shadow-soft);
 
   .icon-text {
-    font-size: 40px;
-    color: #2D3436;
+    font-size: 40rpx;
+    color: var(--text-primary);
     font-weight: 600;
   }
 
   .icon-svg {
-    width: 24px;
-    height: 24px;
+    width: 24rpx;
+    height: 24rpx;
   }
 }
 
 .menu-icon-green {
-  background: #D4F291;
+  background: rgba(78, 205, 196, 0.3);
 }
 
 .menu-icon-pink {
-  background: #F9C6D9;
+  background: var(--strawberry-pink);
 }
 
 .menu-icon-blue {
-  background: #A8D8EA;
+  background: rgba(78, 205, 196, 0.2);
 }
 
 .menu-icon-purple {
-  background: linear-gradient(135deg, #C4B5FD 0%, #A78BFA 100%);
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
 }
 
 .menu-icon-yellow {
-  background: #FFE082;
+  background: rgba(255, 230, 109, 0.5);
 }
 
 .menu-icon-orange {
-  background: linear-gradient(135deg, #FED7AA 0%, #FB923C 100%);
+  background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
 }
 
 .menu-icon-cyan {
-  background: linear-gradient(135deg, #A5F3FC 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.3) 0%, var(--blueberry-blue) 100%);
 }
 
 .menu-icon-red {
-  background: linear-gradient(135deg, #FCA5A5 0%, #EF4444 100%);
-}
-
-.menu-icon-pink {
-  background: #F9C6D9;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, var(--grapefruit-orange) 100%);
 }
 
 .menu-label {
   flex: 1;
-  font-size: 32px;
+  font-size: 32rpx;
   font-weight: 500;
-  color: #2D3436;
+  color: var(--text-primary);
 }
 
 .menu-arrow {
-  font-size: 40px;
-  color: #B2BEC3;
+  font-size: 40rpx;
+  color: var(--text-tertiary);
   font-weight: 400;
 }
 
 /* 退出登录 */
 .logout-section {
-  padding: 48px 40px 40px;
+  padding: 48rpx 40rpx 40rpx;
 }
 
 .logout-btn {
   width: 100%;
-  height: 96px;
-  background: #FFFFFF;
-  border-radius: 48px;
+  height: 96rpx;
+  background: var(--theme-card);
+  border-radius: 48rpx;
   border: none;
-  font-size: 32px;
+  font-size: 32rpx;
   font-weight: 600;
-  color: #2D3436;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  transition: all 0.2s ease;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-fast) var(--ease-standard);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -468,23 +605,4 @@
   &::after {
     border: none;
   }
-}
-
-/* 生命资产卡片增强 */
-.balance-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-}
-
-.balance-hint {
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.card-subtitle {
-  font-size: 26rpx;
-  color: #636E72;
-  margin-bottom: 32rpx;
-  display: block;
 }
