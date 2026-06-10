@@ -1,149 +1,285 @@
+/**
+ * 登录页 - 果汁色改造版
+ * 从紫色渐变升级为果汁色主题，登录表单动画
+ */
+
+@import '../../styles/theme.scss';
+
 .login-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #06B6D4 100%);
-  padding: 80px 32px 40px;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 50%, var(--blueberry-blue) 100%);
+  padding: 80rpx 32rpx 40rpx;
 }
 
+/* 登录头部 */
 .login-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 60rpx;
+  opacity: 0;
+  transform: translateY(-20rpx);
+  animation: slideInDown 0.6s var(--ease-decelerate) forwards;
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .logo {
-  font-size: 64px;
-  margin-bottom: 24px;
+  font-size: 64rpx;
+  margin-bottom: 24rpx;
+  animation: float 3s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12rpx);
+    }
+  }
 }
 
 .title {
   display: block;
-  font-size: 32px;
+  font-size: 32rpx;
   font-weight: 700;
   color: #FFFFFF;
-  margin-bottom: 12px;
+  margin-bottom: 12rpx;
 }
 
 .subtitle {
   display: block;
-  font-size: 16px;
+  font-size: 16rpx;
   color: rgba(255, 255, 255, 0.9);
 }
 
 /* 开发模式登录 */
 .dev-login {
-  margin-bottom: 24px;
+  margin-bottom: 24rpx;
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .dev-button {
   width: 100%;
-  height: 48px;
-  background: #F59E0B;
-  color: #FFFFFF;
+  height: 48rpx;
+  background: var(--mango-yellow);
+  color: var(--text-primary);
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: var(--radius-medium);
+  font-size: 16rpx;
   font-weight: 600;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 /* 登录方式切换 */
 .login-type-tabs {
   display: flex;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 4px;
-  margin-bottom: 32px;
+  border-radius: var(--radius-large);
+  padding: 4rpx;
+  margin-bottom: 32rpx;
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.3s forwards;
 }
 
 .tab {
   flex: 1;
   text-align: center;
-  padding: 12px;
-  font-size: 16px;
+  padding: 12rpx;
+  font-size: 16rpx;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  transition: all 0.3s;
-}
+  border-radius: var(--radius-medium);
+  transition: all var(--duration-normal) var(--ease-standard);
 
-.tab.active {
-  background: #FFFFFF;
-  color: #8B5CF6;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.active {
+    background: #FFFFFF;
+    color: var(--theme-primary);
+    box-shadow: var(--shadow-card);
+    animation: bounce-in 0.3s var(--ease-elastic);
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0.9);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 }
 
 /* 微信登录 */
 .wechat-login {
-  background: #FFFFFF;
-  border-radius: 24px;
-  padding: 48px 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 48rpx 24rpx;
+  box-shadow: var(--shadow-card);
   text-align: center;
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.4s forwards;
 }
 
 .wechat-icon {
-  font-size: 80px;
-  margin-bottom: 24px;
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+  color: #07C160;
+  animation: breathe 3s ease-in-out infinite;
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .wechat-tip {
   display: block;
-  font-size: 20px;
+  font-size: 20rpx;
   font-weight: 600;
-  color: #1F2937;
-  margin-bottom: 8px;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
 }
 
 .wechat-desc {
   display: block;
-  font-size: 14px;
-  color: #6B7280;
-  margin-bottom: 32px;
+  font-size: 14rpx;
+  color: var(--text-secondary);
+  margin-bottom: 32rpx;
 }
 
 .wechat-button {
   width: 100%;
-  height: 52px;
+  height: 52rpx;
   background: #07C160;
   color: #FFFFFF;
   border: none;
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: var(--radius-medium);
+  font-size: 18rpx;
   font-weight: 600;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+  animation: heartbeat 2s ease-in-out infinite;
+
+  @keyframes heartbeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    14%, 28% {
+      transform: scale(1.05);
+    }
+    21%, 35% {
+      transform: scale(1);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+    animation: none;
+  }
 }
 
 /* 手机号登录 */
 .login-form {
-  background: #FFFFFF;
-  border-radius: 24px;
-  padding: 32px 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 32rpx 24rpx;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.4s forwards;
 }
 
 .form-item {
-  margin-bottom: 24px;
+  margin-bottom: 24rpx;
+  opacity: 0;
+  transform: translateY(10rpx);
+  animation: slideInUpItem 0.4s var(--ease-decelerate) forwards;
+
+  @for $i from 1 through 3 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{0.5 + $i * 0.1}s;
+    }
+  }
+
+  @keyframes slideInUpItem {
+    from {
+      opacity: 0;
+      transform: translateY(10rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .form-label {
   display: block;
-  font-size: 14px;
+  font-size: 14rpx;
   font-weight: 500;
-  color: #374151;
-  margin-bottom: 8px;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
 }
 
 .form-input {
   width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  font-size: 16px;
-  color: #1F2937;
+  height: 48rpx;
+  padding: 0 16rpx;
+  background: rgba(0, 0, 0, 0.02);
+  border: 2rpx solid transparent;
+  border-radius: var(--radius-medium);
+  font-size: 16rpx;
+  color: var(--text-primary);
+  transition: all var(--duration-normal) var(--ease-standard);
+
+  &:focus {
+    border-color: var(--theme-primary);
+    background: var(--theme-card);
+    box-shadow: 0 0 0 4rpx rgba(78, 205, 196, 0.1);
+  }
 }
 
 .code-input-wrapper {
   display: flex;
-  gap: 12px;
+  gap: 12rpx;
   align-items: center;
 }
 
@@ -153,46 +289,77 @@
 
 .code-button {
   flex-shrink: 0;
-  height: 48px;
-  padding: 0 20px;
-  background: #8B5CF6;
+  height: 48rpx;
+  padding: 0 20rpx;
+  background: var(--theme-primary);
   color: #FFFFFF;
   border: none;
-  border-radius: 12px;
-  font-size: 14px;
+  border-radius: var(--radius-medium);
+  font-size: 14rpx;
   font-weight: 500;
-}
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
 
-.code-button[disabled] {
-  background: #D1D5DB;
-  color: #9CA3AF;
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &[disabled] {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-tertiary);
+    box-shadow: none;
+  }
 }
 
 .login-button {
   width: 100%;
-  height: 52px;
-  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  height: 52rpx;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   color: #FFFFFF;
   border: none;
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: var(--radius-medium);
+  font-size: 18rpx;
   font-weight: 600;
-  margin-top: 32px;
+  margin-top: 32rpx;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-fast) var(--ease-standard);
+  animation: heartbeat 2s ease-in-out infinite;
+
+  &:active {
+    transform: scale(0.95);
+    animation: none;
+  }
 }
 
 .register-tip {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 24rpx;
+  opacity: 0;
+  animation: fadeIn 0.5s var(--ease-decelerate) 0.8s forwards;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 .tip-text {
-  font-size: 14px;
-  color: #6B7280;
+  font-size: 14rpx;
+  color: var(--text-secondary);
 }
 
 .tip-link {
-  font-size: 14px;
-  color: #8B5CF6;
+  font-size: 14rpx;
+  color: var(--theme-primary);
   font-weight: 500;
-  margin-left: 8px;
+  margin-left: 8rpx;
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    opacity: 0.7;
+  }
 }

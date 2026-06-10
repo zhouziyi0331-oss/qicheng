@@ -1,98 +1,188 @@
+/**
+ * 注册页 - 果汁色改造版
+ * 从Morandi色升级为果汁色主题，注册表单动画
+ */
+
+@import '../../styles/theme.scss';
+
 .register-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #F5E6F0 0%, #FFF5E6 100%);
-  padding: 80px 32px 40px;
+  background: linear-gradient(135deg, var(--strawberry-pink) 0%, rgba(255, 230, 109, 0.3) 100%);
+  padding: 80rpx 32rpx 40rpx;
 }
 
+/* 注册头部 */
 .register-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 60rpx;
+  opacity: 0;
+  transform: translateY(-20rpx);
+  animation: slideInDown 0.6s var(--ease-decelerate) forwards;
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .logo {
-  font-size: 64px;
-  margin-bottom: 24px;
+  font-size: 64rpx;
+  margin-bottom: 24rpx;
+  animation: float 3s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12rpx);
+    }
+  }
 }
 
 .title {
   display: block;
-  font-size: 32px;
+  font-size: 32rpx;
   font-weight: 700;
-  color: #2D3436;
-  margin-bottom: 12px;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
 }
 
 .subtitle {
   display: block;
-  font-size: 16px;
-  color: #636E72;
+  font-size: 16rpx;
+  color: var(--text-secondary);
 }
 
+/* 注册表单 */
 .register-form {
-  background: #FFFFFF;
-  border-radius: 32px;
-  padding: 32px 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 32rpx 24rpx;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .form-item {
-  margin-bottom: 24px;
+  margin-bottom: 24rpx;
+  opacity: 0;
+  transform: translateY(10rpx);
+  animation: slideInUpItem 0.4s var(--ease-decelerate) forwards;
+
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{0.3 + $i * 0.1}s;
+    }
+  }
+
+  @keyframes slideInUpItem {
+    from {
+      opacity: 0;
+      transform: translateY(10rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .form-label {
   display: block;
-  font-size: 14px;
+  font-size: 14rpx;
   font-weight: 600;
-  color: #2D3436;
-  margin-bottom: 12px;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
 }
 
+/* 角色选择 */
 .role-options {
   display: flex;
-  gap: 24px;
+  gap: 24rpx;
 }
 
 .role-option {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: #F9F7F5;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-}
+  gap: 8rpx;
+  padding: 12rpx 20rpx;
+  background: rgba(78, 205, 196, 0.1);
+  border: 2rpx solid transparent;
+  border-radius: var(--radius-medium);
+  transition: all var(--duration-normal) var(--ease-standard);
+  cursor: pointer;
 
-.role-option:active {
-  transform: scale(0.98);
-  background: #FFF5E6;
+  &:active {
+    transform: scale(0.98);
+    background: rgba(78, 205, 196, 0.2);
+  }
+
+  &.selected {
+    background: rgba(78, 205, 196, 0.2);
+    border-color: var(--blueberry-blue);
+    animation: bounce-in 0.3s var(--ease-elastic);
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0.9);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 }
 
 .role-text {
-  font-size: 16px;
-  color: #2D3436;
+  font-size: 16rpx;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
+/* 表单输入 */
 .form-input {
   width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  background: #F9F7F5;
-  border: 2px solid transparent;
-  border-radius: 16px;
-  font-size: 16px;
-  color: #2D3436;
-  transition: all 0.3s ease;
-}
+  height: 48rpx;
+  padding: 0 16rpx;
+  background: rgba(0, 0, 0, 0.02);
+  border: 2rpx solid transparent;
+  border-radius: var(--radius-medium);
+  font-size: 16rpx;
+  color: var(--text-primary);
+  transition: all var(--duration-normal) var(--ease-standard);
 
-.form-input:focus {
-  background: #FFFFFF;
-  border-color: #D4F291;
+  &:focus {
+    background: var(--theme-card);
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 4rpx rgba(78, 205, 196, 0.1);
+  }
 }
 
 .code-input-wrapper {
   display: flex;
-  gap: 12px;
+  gap: 12rpx;
   align-items: center;
 }
 
@@ -102,53 +192,92 @@
 
 .code-button {
   flex-shrink: 0;
-  height: 48px;
-  padding: 0 20px;
-  background: #D4F291;
-  color: #2D3436;
+  height: 48rpx;
+  padding: 0 20rpx;
+  background: var(--mango-yellow);
+  color: var(--text-primary);
   border: none;
-  border-radius: 16px;
-  font-size: 14px;
+  border-radius: var(--radius-medium);
+  font-size: 14rpx;
   font-weight: 600;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &[disabled] {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-tertiary);
+    box-shadow: none;
+  }
 }
 
-.code-button[disabled] {
-  background: #E8E8E8;
-  color: #B2BEC3;
-}
-
+/* 注册按钮 */
 .register-button {
   width: 100%;
-  height: 52px;
-  background: #D4F291;
-  color: #2D3436;
+  height: 52rpx;
+  background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
+  color: var(--text-primary);
   border: none;
-  border-radius: 26px;
-  font-size: 18px;
+  border-radius: 26rpx;
+  font-size: 18rpx;
   font-weight: 700;
-  margin-top: 32px;
-  box-shadow: 0 4px 12px rgba(212, 242, 145, 0.3);
-  transition: all 0.3s ease;
+  margin-top: 32rpx;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-fast) var(--ease-standard);
+  animation: heartbeat 2s ease-in-out infinite;
+
+  @keyframes heartbeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    14%, 28% {
+      transform: scale(1.05);
+    }
+    21%, 35% {
+      transform: scale(1);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+    animation: none;
+    box-shadow: var(--shadow-soft);
+  }
 }
 
-.register-button:active {
-  transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(212, 242, 145, 0.2);
-}
-
+/* 登录提示 */
 .login-tip {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 24rpx;
+  opacity: 0;
+  animation: fadeIn 0.5s var(--ease-decelerate) 0.8s forwards;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 .tip-text {
-  font-size: 14px;
-  color: #636E72;
+  font-size: 14rpx;
+  color: var(--text-secondary);
 }
 
 .tip-link {
-  font-size: 14px;
-  color: #2D3436;
+  font-size: 14rpx;
+  color: var(--text-primary);
   font-weight: 600;
-  margin-left: 8px;
+  margin-left: 8rpx;
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    opacity: 0.7;
+  }
 }
