@@ -8,26 +8,26 @@
 .profile-page {
   min-height: 100vh;
   background: var(--theme-bg);
-  padding-bottom: 100rpx;
+  padding-bottom: 100px;
 }
 
 /* 用户信息卡片 */
 .user-card {
   position: relative;
-  margin: 20rpx;
+  margin: 20px;
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   border-radius: var(--radius-large);
-  padding: 32rpx 24rpx;
+  padding: 32px 24px;
   overflow: hidden;
   box-shadow: var(--shadow-card);
   opacity: 0;
-  transform: translateY(-20rpx);
+  transform: translateY(-20px);
   animation: slideInDown 0.5s var(--ease-decelerate) forwards;
 
   @keyframes slideInDown {
     from {
       opacity: 0;
-      transform: translateY(-20rpx);
+      transform: translateY(-20px);
     }
     to {
       opacity: 1;
@@ -59,22 +59,22 @@
     transform: translate(0, 0);
   }
   50% {
-    transform: translate(10rpx, -10rpx);
+    transform: translate(10px, -10px);
   }
 }
 
 .bg-decoration-1 {
-  width: 120rpx;
-  height: 120rpx;
-  top: -40rpx;
-  right: -30rpx;
+  width: 120px;
+  height: 120px;
+  top: -40px;
+  right: -30px;
 }
 
 .bg-decoration-2 {
-  width: 90rpx;
-  height: 90rpx;
-  bottom: -30rpx;
-  left: -20rpx;
+  width: 90px;
+  height: 90px;
+  bottom: -30px;
+  left: -20px;
   animation-delay: 1s;
 }
 
@@ -83,8 +83,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 16rpx;
-  margin-bottom: 24rpx;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .user-avatar {
@@ -92,8 +92,8 @@
 }
 
 .avatar-circle {
-  width: 64rpx;
-  height: 64rpx;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: var(--strawberry-pink);
   display: flex;
@@ -113,7 +113,7 @@
 }
 
 .avatar-letter {
-  font-size: 28rpx;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -124,16 +124,16 @@
 }
 
 .user-name {
-  font-size: 22rpx;
+  font-size: 22px;
   font-weight: 700;
   color: #FFFFFF;
-  margin-bottom: 6rpx;
+  margin-bottom: 6px;
   display: block;
 }
 
 .user-opc {
   display: inline-block;
-  padding: 6rpx 16rpx;
+  padding: 6px 16px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-round);
   box-shadow: var(--shadow-soft);
@@ -150,7 +150,7 @@
 }
 
 .user-opc-text {
-  font-size: 12rpx;
+  font-size: 12px;
   font-weight: 600;
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   -webkit-background-clip: text;
@@ -161,7 +161,7 @@
 /* 等级和赛道信息 */
 .level-section {
   position: relative;
-  margin-bottom: 20rpx;
+  margin-bottom: 20px;
 }
 
 .level-header {
@@ -173,11 +173,11 @@
 .level-info {
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  gap: 12px;
 }
 
 .level-text {
-  font-size: 18rpx;
+  font-size: 18px;
   font-weight: 700;
   color: #FFFFFF;
   animation: pulse-number 2s ease-in-out infinite;
@@ -193,32 +193,32 @@
 }
 
 .track-badge {
-  font-size: 12rpx;
+  font-size: 12px;
   font-weight: 600;
   color: #FFFFFF;
   background: rgba(255, 255, 255, 0.25);
-  padding: 4rpx 12rpx;
+  padding: 4px 12px;
   border-radius: var(--radius-round);
-  backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(10px);
 }
 
 .level-name {
-  font-size: 13rpx;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
 }
 
 .level-exp {
-  font-size: 13rpx;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .level-bar {
-  height: 8rpx;
+  height: 8px;
   background: rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-round);
   overflow: hidden;
-  margin-top: 8rpx;
+  margin-top: 8px;
 }
 
 .level-progress {
@@ -226,7 +226,7 @@
   background: #FFFFFF;
   border-radius: var(--radius-round);
   transition: width 0.5s var(--ease-decelerate);
-  box-shadow: 0 0 8rpx rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
 /* 数据统计 */
@@ -234,14 +234,14 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16rpx;
+  gap: 16px;
 }
 
 .stat-item {
   text-align: center;
   transition: transform var(--duration-fast) var(--ease-standard);
   opacity: 0;
-  transform: translateY(10rpx);
+  transform: translateY(10px);
   animation: slideInUpStat 0.4s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 4 {
@@ -253,7 +253,7 @@
   @keyframes slideInUpStat {
     from {
       opacity: 0;
-      transform: translateY(10rpx);
+      transform: translateY(10px);
     }
     to {
       opacity: 1;
@@ -268,37 +268,37 @@
 
 .stat-value {
   display: block;
-  font-size: 20rpx;
+  font-size: 20px;
   font-weight: 700;
   color: #FFFFFF;
-  margin-bottom: 4rpx;
+  margin-bottom: 4px;
   animation: pulse-number 2s ease-in-out infinite;
 }
 
 .stat-label {
   display: block;
-  font-size: 11rpx;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* 余额卡片 */
 .balance-card {
-  margin: 20rpx;
+  margin: 20px;
   background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
   border-radius: var(--radius-large);
-  padding: 24rpx;
+  padding: 24px;
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 16px;
   box-shadow: var(--shadow-card);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.1s forwards;
 
   @keyframes slideInUp {
     from {
       opacity: 0;
-      transform: translateY(20rpx);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -308,8 +308,8 @@
 }
 
 .balance-icon-circle {
-  width: 56rpx;
-  height: 56rpx;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
   display: flex;
@@ -321,8 +321,8 @@
 }
 
 .icon-svg {
-  width: 28rpx;
-  height: 28rpx;
+  width: 28px;
+  height: 28px;
   fill: none;
   stroke: var(--text-primary);
   stroke-width: 2;
@@ -335,23 +335,23 @@
 }
 
 .balance-label {
-  font-size: 13rpx;
+  font-size: 13px;
   color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 4rpx;
+  margin-bottom: 4px;
   display: block;
 }
 
 .balance-amount {
-  font-size: 28rpx;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 2rpx;
+  margin-bottom: 2px;
   display: block;
   animation: pulse-number 2s ease-in-out infinite;
 }
 
 .balance-hint {
-  font-size: 12rpx;
+  font-size: 12px;
   color: rgba(0, 0, 0, 0.5);
   display: block;
 }
@@ -359,14 +359,14 @@
 .balance-breakdown {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  gap: 8px;
 }
 
 .withdraw-button {
-  padding: 12rpx 24rpx;
+  padding: 12px 24px;
   background: #FFFFFF;
   border-radius: var(--radius-round);
-  font-size: 14rpx;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   box-shadow: var(--shadow-soft);
@@ -383,14 +383,14 @@
 
 /* 能力雷达图卡片 */
 .radar-card {
-  margin: 20rpx;
+  margin: 20px;
   background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--blueberry-blue) 100%);
   border-radius: var(--radius-large);
-  padding: 24rpx;
+  padding: 24px;
   box-shadow: var(--shadow-card);
   transition: all var(--duration-normal) var(--ease-standard);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
 
   &:active {
@@ -402,25 +402,25 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16rpx;
+  margin-bottom: 16px;
 }
 
 .card-title {
-  font-size: 18rpx;
+  font-size: 18px;
   font-weight: 700;
   color: #FFFFFF;
   display: block;
-  margin-bottom: 4rpx;
+  margin-bottom: 4px;
 }
 
 .card-subtitle {
-  font-size: 13rpx;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.8);
   display: block;
 }
 
 .card-arrow {
-  font-size: 24rpx;
+  font-size: 24px;
   color: #FFFFFF;
   opacity: 0.8;
   animation: bounce 2s ease-in-out infinite;
@@ -430,7 +430,7 @@
       transform: translateX(0);
     }
     50% {
-      transform: translateX(4rpx);
+      transform: translateX(4px);
     }
   }
 }
@@ -438,43 +438,43 @@
 .radar-preview {
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  padding-top: 12rpx;
-  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .radar-level {
-  font-size: 24rpx;
+  font-size: 24px;
   font-weight: 700;
   color: #FFFFFF;
   animation: pulse-number 2s ease-in-out infinite;
 }
 
 .radar-hint {
-  font-size: 13rpx;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* 功能菜单 */
 .menu-section {
-  padding: 0 40rpx;
-  margin-top: 48rpx;
+  padding: 0 40px;
+  margin-top: 48px;
 }
 
 .section-title {
-  font-size: 40rpx;
+  font-size: 40px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 32rpx;
+  margin-bottom: 32px;
   display: block;
   opacity: 0;
-  transform: translateX(-20rpx);
+  transform: translateX(-20px);
   animation: slideInLeft 0.5s var(--ease-decelerate) 0.3s forwards;
 
   @keyframes slideInLeft {
     from {
       opacity: 0;
-      transform: translateX(-20rpx);
+      transform: translateX(-20px);
     }
     to {
       opacity: 1;
@@ -486,17 +486,17 @@
 .menu-list {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 24rpx 0;
+  padding: 24px 0;
   box-shadow: var(--shadow-card);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.4s forwards;
 }
 
 .menu-item-simple {
   display: flex;
   align-items: center;
-  padding: 24rpx 32rpx;
+  padding: 24px 32px;
   transition: all var(--duration-fast) var(--ease-standard);
 
   &:active {
@@ -505,30 +505,30 @@
   }
 
   &:not(:last-child) {
-    border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 }
 
 .menu-icon-circle {
-  width: 80rpx;
-  height: 80rpx;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-right: 24rpx;
+  margin-right: 24px;
   box-shadow: var(--shadow-soft);
 
   .icon-text {
-    font-size: 40rpx;
+    font-size: 40px;
     color: var(--text-primary);
     font-weight: 600;
   }
 
   .icon-svg {
-    width: 24rpx;
-    height: 24rpx;
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -566,29 +566,29 @@
 
 .menu-label {
   flex: 1;
-  font-size: 32rpx;
+  font-size: 32px;
   font-weight: 500;
   color: var(--text-primary);
 }
 
 .menu-arrow {
-  font-size: 40rpx;
+  font-size: 40px;
   color: var(--text-tertiary);
   font-weight: 400;
 }
 
 /* 退出登录 */
 .logout-section {
-  padding: 48rpx 40rpx 40rpx;
+  padding: 48px 40px 40px;
 }
 
 .logout-btn {
   width: 100%;
-  height: 96rpx;
+  height: 96px;
   background: var(--theme-card);
-  border-radius: 48rpx;
+  border-radius: 48px;
   border: none;
-  font-size: 32rpx;
+  font-size: 32px;
   font-weight: 600;
   color: var(--text-primary);
   box-shadow: var(--shadow-card);

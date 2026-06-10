@@ -8,21 +8,21 @@
 .register-page {
   min-height: 100vh;
   background: linear-gradient(135deg, var(--strawberry-pink) 0%, rgba(255, 230, 109, 0.3) 100%);
-  padding: 80rpx 32rpx 40rpx;
+  padding: 80px 32px 40px;
 }
 
 /* 注册头部 */
 .register-header {
   text-align: center;
-  margin-bottom: 60rpx;
+  margin-bottom: 60px;
   opacity: 0;
-  transform: translateY(-20rpx);
+  transform: translateY(-20px);
   animation: slideInDown 0.6s var(--ease-decelerate) forwards;
 
   @keyframes slideInDown {
     from {
       opacity: 0;
-      transform: translateY(-20rpx);
+      transform: translateY(-20px);
     }
     to {
       opacity: 1;
@@ -32,8 +32,8 @@
 }
 
 .logo {
-  font-size: 64rpx;
-  margin-bottom: 24rpx;
+  font-size: 64px;
+  margin-bottom: 24px;
   animation: float 3s ease-in-out infinite;
 
   @keyframes float {
@@ -41,22 +41,22 @@
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-12rpx);
+      transform: translateY(-12px);
     }
   }
 }
 
 .title {
   display: block;
-  font-size: 32rpx;
+  font-size: 32px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 12rpx;
+  margin-bottom: 12px;
 }
 
 .subtitle {
   display: block;
-  font-size: 16rpx;
+  font-size: 16px;
   color: var(--text-secondary);
 }
 
@@ -64,16 +64,16 @@
 .register-form {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 32rpx 24rpx;
+  padding: 32px 24px;
   box-shadow: var(--shadow-card);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) 0.2s forwards;
 
   @keyframes slideInUp {
     from {
       opacity: 0;
-      transform: translateY(20rpx);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -83,9 +83,9 @@
 }
 
 .form-item {
-  margin-bottom: 24rpx;
+  margin-bottom: 24px;
   opacity: 0;
-  transform: translateY(10rpx);
+  transform: translateY(10px);
   animation: slideInUpItem 0.4s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 5 {
@@ -97,7 +97,7 @@
   @keyframes slideInUpItem {
     from {
       opacity: 0;
-      transform: translateY(10rpx);
+      transform: translateY(10px);
     }
     to {
       opacity: 1;
@@ -108,25 +108,25 @@
 
 .form-label {
   display: block;
-  font-size: 14rpx;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 12rpx;
+  margin-bottom: 12px;
 }
 
 /* 角色选择 */
 .role-options {
   display: flex;
-  gap: 24rpx;
+  gap: 24px;
 }
 
 .role-option {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  padding: 12rpx 20rpx;
+  gap: 8px;
+  padding: 12px 20px;
   background: rgba(78, 205, 196, 0.1);
-  border: 2rpx solid transparent;
+  border: 2px solid transparent;
   border-radius: var(--radius-medium);
   transition: all var(--duration-normal) var(--ease-standard);
   cursor: pointer;
@@ -156,7 +156,7 @@
 }
 
 .role-text {
-  font-size: 16rpx;
+  font-size: 16px;
   color: var(--text-primary);
   font-weight: 500;
 }
@@ -164,25 +164,25 @@
 /* 表单输入 */
 .form-input {
   width: 100%;
-  height: 48rpx;
-  padding: 0 16rpx;
+  height: 48px;
+  padding: 0 16px;
   background: rgba(0, 0, 0, 0.02);
-  border: 2rpx solid transparent;
+  border: 2px solid transparent;
   border-radius: var(--radius-medium);
-  font-size: 16rpx;
+  font-size: 16px;
   color: var(--text-primary);
   transition: all var(--duration-normal) var(--ease-standard);
 
   &:focus {
     background: var(--theme-card);
     border-color: var(--theme-primary);
-    box-shadow: 0 0 0 4rpx rgba(78, 205, 196, 0.1);
+    box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.1);
   }
 }
 
 .code-input-wrapper {
   display: flex;
-  gap: 12rpx;
+  gap: 12px;
   align-items: center;
 }
 
@@ -192,13 +192,13 @@
 
 .code-button {
   flex-shrink: 0;
-  height: 48rpx;
-  padding: 0 20rpx;
+  height: 48px;
+  padding: 0 20px;
   background: var(--mango-yellow);
   color: var(--text-primary);
   border: none;
   border-radius: var(--radius-medium);
-  font-size: 14rpx;
+  font-size: 14px;
   font-weight: 600;
   box-shadow: var(--shadow-soft);
   transition: all var(--duration-fast) var(--ease-standard);
@@ -217,14 +217,14 @@
 /* 注册按钮 */
 .register-button {
   width: 100%;
-  height: 52rpx;
+  height: 52px;
   background: linear-gradient(135deg, var(--mango-yellow) 0%, var(--grapefruit-orange) 100%);
   color: var(--text-primary);
   border: none;
-  border-radius: 26rpx;
-  font-size: 18rpx;
+  border-radius: 26px;
+  font-size: 18px;
   font-weight: 700;
-  margin-top: 32rpx;
+  margin-top: 32px;
   box-shadow: var(--shadow-card);
   transition: all var(--duration-fast) var(--ease-standard);
   animation: heartbeat 2s ease-in-out infinite;
@@ -251,7 +251,7 @@
 /* 登录提示 */
 .login-tip {
   text-align: center;
-  margin-top: 24rpx;
+  margin-top: 24px;
   opacity: 0;
   animation: fadeIn 0.5s var(--ease-decelerate) 0.8s forwards;
 
@@ -266,15 +266,15 @@
 }
 
 .tip-text {
-  font-size: 14rpx;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
 .tip-link {
-  font-size: 14rpx;
+  font-size: 14px;
   color: var(--text-primary);
   font-weight: 600;
-  margin-left: 8rpx;
+  margin-left: 8px;
   transition: all var(--duration-fast) var(--ease-standard);
 
   &:active {

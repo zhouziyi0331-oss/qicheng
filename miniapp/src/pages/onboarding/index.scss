@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 80rpx 60rpx 200rpx;
+    padding: 80px 60px 200px;
 
     .slide-content {
       display: flex;
@@ -31,13 +31,13 @@
       align-items: center;
       text-align: center;
       opacity: 0;
-      transform: translateY(20rpx);
+      transform: translateY(20px);
       animation: slideInUp 0.6s var(--ease-decelerate) 0.2s forwards;
 
       @keyframes slideInUp {
         from {
           opacity: 0;
-          transform: translateY(20rpx);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
@@ -46,8 +46,8 @@
       }
 
       .slide-icon {
-        font-size: 120rpx;
-        margin-bottom: 60rpx;
+        font-size: 120px;
+        margin-bottom: 60px;
         animation: float 3s ease-in-out infinite;
       }
 
@@ -56,41 +56,41 @@
           transform: translateY(0);
         }
         50% {
-          transform: translateY(-20rpx);
+          transform: translateY(-20px);
         }
       }
 
       .slide-title {
         color: #FFFFFF;
-        font-size: 48rpx;
+        font-size: 48px;
         font-weight: 700;
-        margin-bottom: 32rpx;
+        margin-bottom: 32px;
         line-height: 1.3;
       }
 
       .slide-description {
         color: rgba(255, 255, 255, 0.9);
-        font-size: 28rpx;
+        font-size: 28px;
         line-height: 1.6;
-        max-width: 560rpx;
+        max-width: 560px;
       }
 
       .highlight-box {
-        margin-top: 60rpx;
+        margin-top: 60px;
         background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10rpx);
+        backdrop-filter: blur(10px);
         border-radius: var(--radius-large);
-        padding: 32rpx;
+        padding: 32px;
         width: 100%;
-        max-width: 560rpx;
+        max-width: 560px;
         box-shadow: var(--shadow-soft);
 
         .highlight-item {
           display: flex;
           align-items: center;
-          margin-bottom: 24rpx;
+          margin-bottom: 24px;
           opacity: 0;
-          transform: translateX(-10rpx);
+          transform: translateX(-10px);
           animation: slideInLeftItem 0.4s var(--ease-decelerate) forwards;
 
           @for $i from 1 through 4 {
@@ -102,7 +102,7 @@
           @keyframes slideInLeftItem {
             from {
               opacity: 0;
-              transform: translateX(-10rpx);
+              transform: translateX(-10px);
             }
             to {
               opacity: 1;
@@ -115,17 +115,17 @@
           }
 
           .highlight-icon {
-            width: 48rpx;
-            height: 48rpx;
+            width: 48px;
+            height: 48px;
             background: #FFFFFF;
             color: var(--theme-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28rpx;
+            font-size: 28px;
             font-weight: 700;
-            margin-right: 16rpx;
+            margin-right: 16px;
             flex-shrink: 0;
             box-shadow: var(--shadow-soft);
             animation: breathe 3s ease-in-out infinite;
@@ -142,7 +142,7 @@
 
           .highlight-text {
             color: #FFFFFF;
-            font-size: 26rpx;
+            font-size: 26px;
             font-weight: 500;
             line-height: 1.4;
           }
@@ -154,24 +154,24 @@
   /* 指示器 */
   .indicators {
     position: absolute;
-    bottom: 160rpx;
+    bottom: 160px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 16rpx;
+    gap: 16px;
     z-index: 10;
 
     .indicator {
-      width: 16rpx;
-      height: 16rpx;
-      border-radius: 8rpx;
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.4);
       transition: all var(--duration-normal) var(--ease-standard);
 
       &.active {
-        width: 48rpx;
+        width: 48px;
         background: #FFFFFF;
-        box-shadow: 0 0 12rpx rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
         animation: pulse 2s ease-in-out infinite;
       }
 
@@ -189,24 +189,24 @@
   /* 底部按钮 */
   .bottom-actions {
     position: absolute;
-    bottom: 60rpx;
+    bottom: 60px;
     left: 0;
     right: 0;
-    padding: 0 60rpx;
+    padding: 0 60px;
     display: flex;
-    gap: 24rpx;
+    gap: 24px;
     z-index: 10;
     opacity: 0;
-    transform: translateY(20rpx);
+    transform: translateY(20px);
     animation: slideInUp 0.5s var(--ease-decelerate) 0.6s forwards;
 
     .skip-btn,
     .next-btn,
     .start-btn {
       flex: 1;
-      height: 88rpx;
-      border-radius: 44rpx;
-      font-size: 32rpx;
+      height: 88px;
+      border-radius: 44px;
+      font-size: 32px;
       font-weight: 600;
       border: none;
       display: flex;
@@ -222,7 +222,7 @@
     .skip-btn {
       background: rgba(255, 255, 255, 0.2);
       color: #FFFFFF;
-      backdrop-filter: blur(10rpx);
+      backdrop-filter: blur(10px);
     }
 
     .next-btn,

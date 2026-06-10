@@ -2,6 +2,8 @@ import { View, Text, Canvas, Button } from '@tarojs/components'
 import Taro, { useLoad, useRouter } from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import { opcV2API } from '../../services/api'
+import AIWaitingScreen from '../../animations/AIWaitingScreen'
+import { useTypingEffect, useNumberAnimation, useAnimationSequence } from '../../hooks/useAnimation'
 import './result.scss'
 
 interface AbilityScore {
@@ -102,7 +104,7 @@ const DIMENSION_NAMES = {
   risk_attitude: '风险态度'
 }
 
-// 维度解读模板
+// 维度解读模板（保持原有的解读逻辑）
 const DIMENSION_INTERPRETATIONS = {
   information_processing: {
     low: '拆解型：你喜欢把大问题切成小块逐一解决。面对复杂任务，你习惯先分解再执行。这种风格让你在需要精细执行的项目中表现出色。',
@@ -143,6 +145,13 @@ export default function OPCTestResult() {
   const [loading, setLoading] = useState(true)
   const [assessmentId, setAssessmentId] = useState<string>('')
 
+  // 动画状态
+  const { currentStep, nextStep } = useAnimationSequence(4)
+  const { displayText: typingDescription } = useTypingEffect(
+    personalityTag?.description || '',
+    30
+  )
+
   useEffect(() => {
     // 从URL参数获取assessmentId
     const params = Taro.getCurrentInstance().router?.params
@@ -154,6 +163,31 @@ export default function OPCTestResult() {
       loadLatestResult()
     }
   }, [])
+
+  // 动画序列控制
+  useEffect(() => {
+    if (!loading && scores && personalityTag && currentStep === 0) {
+      runRevealSequence()
+    }
+  }, [loading, scores, personalityTag])
+
+  const runRevealSequence = async () => {
+    // Step 1: 标签卡片弹出 (0.5s)
+    await wait(500)
+    nextStep()
+
+    // Step 2: 描述打字机 (根据文字长度)
+    await wait(personalityTag.description.length * 30 + 500)
+    nextStep()
+
+    // Step 3: 雷达图绘制 (1s)
+    await wait(1000)
+    nextStep()
+
+    // Step 4: 其他内容渐显 (0.5s)
+    await wait(500)
+    nextStep()
+  }
 
   const loadLatestResult = async () => {
     try {
@@ -179,7 +213,7 @@ export default function OPCTestResult() {
       if (result.success && result.data) {
         displayResult(result.data)
       } else {
-        Taro.showToast({ title: '暂无测试结果', icon: 'none' })
+        Taro.showToast({ title: '加载失败', icon: 'none' })
       }
     } catch (error) {
       console.error('加载结果失败:', error)
@@ -190,68 +224,57 @@ export default function OPCTestResult() {
   }
 
   const displayResult = (result: any) => {
-    // 兼容新旧两种API格式
-    if (result.scores) {
-      // 新版OPC v2.0 API格式（AI生成）
-      setScores(result.scores)
-
-      // 使用AI生成的第一个性格标签
-      const firstTag = result.personalityTags?.[0] || 'balanced'
-      const tagInfo = PERSONALITY_TAGS[firstTag] || PERSONALITY_TAGS.balanced
-      setPersonalityTag({
-        key: firstTag,
-        ...tagInfo,
-        aiInsights: result.aiInsights,
-        selfPerceptionAnalysis: result.selfPerceptionAnalysis,
-        trackRecommendations: result.trackRecommendations
-      })
-
-      // 使用AI生成的洞察作为解读
-      const interps: any = {}
-      if (result.aiInsights) {
-        // 将AI洞察作为总体解读
-        interps.overall = result.aiInsights
-      }
-      setInterpretations(interps)
-    } else {
-      // 旧版API格式（规则生成）
-      setScores(result.dimensionScores)
-
-      const tagKey = result.personalityTag
-      const tagInfo = PERSONALITY_TAGS[tagKey] || PERSONALITY_TAGS.balanced
-      setPersonalityTag({ key: tagKey, ...tagInfo })
-
-      const interps: any = {}
-      Object.keys(result.dimensionScores).forEach(dimension => {
-        const score = result.dimensionScores[dimension]
-        const templates = DIMENSION_INTERPRETATIONS[dimension]
-
-        if (templates) {
-          if (score <= 40) {
-            interps[dimension] = templates.low
-          } else if (score <= 60) {
-            interps[dimension] = templates.mid
-          } else {
-            interps[dimension] = templates.high
-          }
-        }
-      })
-      setInterpretations(interps)
+    // 提取分数
+    const scoresData = {
+      information_processing: result.abilityScores?.information_processing || 50,
+      creation_drive: result.abilityScores?.creation_drive || 50,
+      tool_learning: result.abilityScores?.tool_learning || 50,
+      task_execution: result.abilityScores?.task_execution || 50,
+      collaboration: result.abilityScores?.collaboration || 50,
+      risk_attitude: result.abilityScores?.risk_attitude || 50
     }
+    setScores(scoresData)
+
+    // 提取人格标签
+    const tag = result.personalityTag || 'balanced'
+    const tagData = PERSONALITY_TAGS[tag] || PERSONALITY_TAGS.balanced
+    setPersonalityTag({
+      ...tagData,
+      tag,
+      trackRecommendations: result.trackRecommendations,
+      selfPerceptionAnalysis: result.selfPerceptionAnalysis
+    })
+
+    // 提取维度解读
+    const interps = {}
+    Object.keys(scoresData).forEach(dimension => {
+      const score = scoresData[dimension]
+      const level = score < 40 ? 'low' : score > 60 ? 'high' : 'mid'
+      interps[dimension] = DIMENSION_INTERPRETATIONS[dimension]?.[level] || ''
+    })
+
+    // 如果有AI整体洞察
+    if (result.overallInsight) {
+      interps['overall'] = result.overallInsight
+    }
+
+    setInterpretations(interps)
   }
 
   const handleComplete = () => {
-    Taro.switchTab({
-      url: '/pages/index/index'
-    })
+    // 跳转到任务大厅或首页
+    Taro.switchTab({ url: '/pages/index/index' })
   }
 
-  if (loading || !scores || !personalityTag) {
+  // AI等待页
+  if (loading) {
+    return <AIWaitingScreen stage="analyzing" visible={true} />
+  }
+
+  if (!scores || !personalityTag) {
     return (
       <View className="result-page">
-        <View className="loading">
-          <Text>正在分析你的测试结果...</Text>
-        </View>
+        <Text>加载中...</Text>
       </View>
     )
   }
@@ -259,207 +282,203 @@ export default function OPCTestResult() {
   return (
     <View className="result-page">
       <View className="result-container">
-        {/* 标题 */}
-        <View className="result-header">
-          <Text className="result-title">你被看见了</Text>
-          <Text className="result-subtitle">这不是考试，是一面镜子</Text>
+        {/* 标题区 */}
+        <View className="header-section">
+          <Text className="main-title">你的能力河流已生成</Text>
+          <Text className="subtitle">这不是标签，是你的起点</Text>
         </View>
 
-        {/* 人格标签 */}
-        <View className="personality-card">
-          <Text className="personality-tag">{personalityTag.name}</Text>
-          <Text className="personality-desc">{personalityTag.description}</Text>
-        </View>
+        {/* 人格标签卡片 - 带弹出动画 */}
+        <View className={`personality-card ${currentStep >= 1 ? 'personality-card-show' : ''}`}>
+          <View className="personality-badge">
+            <Text className="badge-icon">✨</Text>
+            <Text className="badge-text">{personalityTag.name}</Text>
+          </View>
 
-        {/* 你的能力方向 - 新增板块 */}
-        <View className="river-section">
-          <Text className="section-title">这是你的特点，不是别人的</Text>
-
-          <View className="river-card">
-            <Text className="river-card-title">你的兴趣点在哪里？</Text>
-            <Text className="river-card-content">
-              {personalityTag.key === 'visual_storyteller' && '你可能在用画面讲故事时感到兴奋，在色彩和构图中找到乐趣'}
-              {personalityTag.key === 'system_builder' && '你可能在设计规则和系统时感到兴奋，在理解底层逻辑中找到乐趣'}
-              {personalityTag.key === 'creative_executor' && '你可能在从0到1创作时感到兴奋，在快速出稿和打磨中找到乐趣'}
-              {personalityTag.key === 'logic_analyzer' && '你可能在拆解复杂问题时感到兴奋，在逻辑推理中找到乐趣'}
-              {personalityTag.key === 'stable_deliverer' && '你可能在稳定交付高质量作品时感到满足，在规划和执行中找到乐趣'}
-              {personalityTag.key === 'explorer_integrator' && '你可能在探索新工具时感到兴奋，在跨领域整合中找到乐趣'}
-              {personalityTag.key === 'balanced' && '你的兴趣可能还没有明确的方向，通过前3个项目，你会逐渐发现自己真正喜欢什么'}
+          {/* 描述 - 打字机效果 */}
+          {currentStep >= 2 && (
+            <Text className="personality-description">
+              {typingDescription}
+              {typingDescription.length < personalityTag.description.length && (
+                <Text className="cursor">|</Text>
+              )}
             </Text>
-          </View>
-
-          <View className="river-card">
-            <Text className="river-card-title">你的优势是什么？</Text>
-            <View className="asset-list">
-              <View className="asset-item">
-                <Text className="asset-icon">✦</Text>
-                <Text className="asset-text">
-                  {scores.information_processing >= 60 ? '你能看到全局，把各部分连接起来' : '你能把复杂问题拆解成可执行的步骤'}
-                </Text>
-              </View>
-              <View className="asset-item">
-                <Text className="asset-icon">✦</Text>
-                <Text className="asset-text">
-                  {scores.creation_drive <= 40 ? '你用视觉语言思考，能把抽象概念具象化' : '你用逻辑结构思考，能把混乱信息系统化'}
-                </Text>
-              </View>
-              <View className="asset-item">
-                <Text className="asset-icon">✦</Text>
-                <Text className="asset-text">
-                  {scores.risk_attitude >= 60 ? '你愿意探索未知，在不确定中找到可能性' : '你追求稳定质量，在确定性中建立信任'}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          <View className="river-card river-card-highlight">
-            <Text className="river-card-title">你可能在这些方向找到自己的路</Text>
-            <Text className="river-card-content">
-              不是技能清单，是可能性地图。这些方向不是限制，是起点。
-            </Text>
-            <View className="direction-tags">
-              <View className="direction-tag">{personalityTag.track}</View>
-              <View className="direction-tag">{personalityTag.firstTask}</View>
-            </View>
-          </View>
-        </View>
-
-        {/* 六维雷达图（简化版 - 使用进度条） */}
-        <View className="scores-section">
-          <Text className="section-title">你的能力雷达图</Text>
-          <Text className="section-subtitle">不是能力分数，是你的特点</Text>
-
-          <View className="score-item">
-            <View className="score-header">
-              <Text className="score-label">{DIMENSION_NAMES.information_processing}</Text>
-              <Text className="score-value">{scores.information_processing}</Text>
-            </View>
-            <View className="score-bar">
-              <View className="score-fill" style={{ width: `${scores.information_processing}%`, background: 'linear-gradient(90deg, #F9C6D9 0%, #F9A8D4 100%)' }} />
-            </View>
-          </View>
-
-          <View className="score-item">
-            <View className="score-header">
-              <Text className="score-label">{DIMENSION_NAMES.creation_drive}</Text>
-              <Text className="score-value">{scores.creation_drive}</Text>
-            </View>
-            <View className="score-bar">
-              <View className="score-fill" style={{ width: `${scores.creation_drive}%`, background: 'linear-gradient(90deg, #A8D8EA 0%, #7DD3FC 100%)' }} />
-            </View>
-          </View>
-
-          <View className="score-item">
-            <View className="score-header">
-              <Text className="score-label">{DIMENSION_NAMES.tool_learning}</Text>
-              <Text className="score-value">{scores.tool_learning}</Text>
-            </View>
-            <View className="score-bar">
-              <View className="score-fill" style={{ width: `${scores.tool_learning}%`, background: 'linear-gradient(90deg, #D4F291 0%, #BEF264 100%)' }} />
-            </View>
-          </View>
-
-          <View className="score-item">
-            <View className="score-header">
-              <Text className="score-label">{DIMENSION_NAMES.task_execution}</Text>
-              <Text className="score-value">{scores.task_execution}</Text>
-            </View>
-            <View className="score-bar">
-              <View className="score-fill" style={{ width: `${scores.task_execution}%`, background: 'linear-gradient(90deg, #FFE082 0%, #FCD34D 100%)' }} />
-            </View>
-          </View>
-
-          <View className="score-item">
-            <View className="score-header">
-              <Text className="score-label">{DIMENSION_NAMES.collaboration}</Text>
-              <Text className="score-value">{scores.collaboration}</Text>
-            </View>
-            <View className="score-bar">
-              <View className="score-fill" style={{ width: `${scores.collaboration}%`, background: 'linear-gradient(90deg, #B39DDB 0%, #A78BFA 100%)' }} />
-            </View>
-          </View>
-
-          <View className="score-item">
-            <View className="score-header">
-              <Text className="score-label">{DIMENSION_NAMES.risk_attitude}</Text>
-              <Text className="score-value">{scores.risk_attitude}</Text>
-            </View>
-            <View className="score-bar">
-              <View className="score-fill" style={{ width: `${scores.risk_attitude}%`, background: 'linear-gradient(90deg, #80CBC4 0%, #5EEAD4 100%)' }} />
-            </View>
-          </View>
-        </View>
-
-        {/* 维度解读 */}
-        <View className="interpretations-section">
-          <Text className="section-title">维度解读</Text>
-
-          {/* 如果有AI洞察，优先显示 */}
-          {interpretations.overall && (
-            <View className="interpretation-item ai-insights">
-              <Text className="interpretation-title">✨ AI导师的洞察</Text>
-              <Text className="interpretation-text">{interpretations.overall}</Text>
-            </View>
           )}
-
-          {/* 如果有自我认知分析，显示 */}
-          {personalityTag.selfPerceptionAnalysis && (
-            <View className="interpretation-item self-perception">
-              <Text className="interpretation-title">🔍 自我认知对比</Text>
-              <Text className="interpretation-text">{personalityTag.selfPerceptionAnalysis}</Text>
-            </View>
-          )}
-
-          {/* 显示其他维度解读 */}
-          {Object.keys(interpretations).filter(k => k !== 'overall').map(dimension => (
-            <View key={dimension} className="interpretation-item">
-              <Text className="interpretation-title">{DIMENSION_NAMES[dimension]}</Text>
-              <Text className="interpretation-text">{interpretations[dimension]}</Text>
-            </View>
-          ))}
         </View>
 
-        {/* AI赛道推荐（如果有） */}
-        {personalityTag.trackRecommendations && personalityTag.trackRecommendations.length > 0 && (
-          <View className="ai-track-recommendations">
-            <Text className="section-title">🎯 AI为你推荐的赛道</Text>
-            {personalityTag.trackRecommendations.map((track, index) => (
-              <View key={index} className="ai-track-item">
-                <View className="track-header">
-                  <Text className="track-name">{track.track}</Text>
-                  <Text className="track-score">{Math.round(track.matchScore * 100)}%匹配</Text>
-                </View>
-                <Text className="track-reason">{track.reason}</Text>
-              </View>
-            ))}
+        {/* 六维雷达图 - 进度条绘制动画 */}
+        {currentStep >= 3 && (
+          <View className="scores-section fade-in">
+            <Text className="section-title">你的能力雷达图</Text>
+            <Text className="section-subtitle">不是能力分数，是你的特点</Text>
+
+            <ScoreBar
+              label={DIMENSION_NAMES.information_processing}
+              value={scores.information_processing}
+              color="linear-gradient(90deg, #FF6B9D 0%, #FFB3D9 100%)"
+              delay={0}
+            />
+            <ScoreBar
+              label={DIMENSION_NAMES.creation_drive}
+              value={scores.creation_drive}
+              color="linear-gradient(90deg, #4ECDC4 0%, #7FE5DC 100%)"
+              delay={100}
+            />
+            <ScoreBar
+              label={DIMENSION_NAMES.tool_learning}
+              value={scores.tool_learning}
+              color="linear-gradient(90deg, #FFE66D 0%, #FFF1A8 100%)"
+              delay={200}
+            />
+            <ScoreBar
+              label={DIMENSION_NAMES.task_execution}
+              value={scores.task_execution}
+              color="linear-gradient(90deg, #FF6B6B 0%, #FFB8B8 100%)"
+              delay={300}
+            />
+            <ScoreBar
+              label={DIMENSION_NAMES.collaboration}
+              value={scores.collaboration}
+              color="linear-gradient(90deg, #C5A3FF 0%, #E0CFFF 100%)"
+              delay={400}
+            />
+            <ScoreBar
+              label={DIMENSION_NAMES.risk_attitude}
+              value={scores.risk_attitude}
+              color="linear-gradient(90deg, #A8E6CF 0%, #C1F0DA 100%)"
+              delay={500}
+            />
           </View>
         )}
 
-        {/* 推荐信息 */}
-        <View className="recommendation-section">
-          <Text className="section-title">为你推荐</Text>
+        {/* 其他内容 - 渐显 */}
+        {currentStep >= 4 && (
+          <View className="fade-in">
+            {/* 能力资产卡片 */}
+            <View className="river-section">
+              <View className="river-card">
+                <Text className="river-card-title">你的能力资产</Text>
+                <View className="assets-list">
+                  <View className="asset-item">
+                    <Text className="asset-icon">✦</Text>
+                    <Text className="asset-text">
+                      {scores.information_processing >= 60 ? '你能看到整体，把零散信息串成故事' : '你能拆解复杂，把大问题切成可执行步骤'}
+                    </Text>
+                  </View>
+                  <View className="asset-item">
+                    <Text className="asset-icon">✦</Text>
+                    <Text className="asset-text">
+                      {scores.creation_drive >= 60 ? '你用逻辑结构思考，能把混乱信息系统化' : '你用视觉画面思考，能把抽象概念具象化'}
+                    </Text>
+                  </View>
+                  <View className="asset-item">
+                    <Text className="asset-icon">✦</Text>
+                    <Text className="asset-text">
+                      {scores.risk_attitude >= 60 ? '你愿意探索未知，在不确定中找到可能性' : '你追求稳定质量，在确定性中建立信任'}
+                    </Text>
+                  </View>
+                </View>
+              </View>
 
-          <View className="recommendation-item">
-            <Text className="recommendation-label">推荐赛道</Text>
-            <Text className="recommendation-value">{personalityTag.track}</Text>
+              <View className="river-card river-card-highlight">
+                <Text className="river-card-title">你可能在这些方向找到自己的路</Text>
+                <Text className="river-card-content">
+                  不是技能清单，是可能性地图。这些方向不是限制，是起点。
+                </Text>
+                <View className="direction-tags">
+                  <View className="direction-tag">{personalityTag.track}</View>
+                  <View className="direction-tag">{personalityTag.firstTask}</View>
+                </View>
+              </View>
+            </View>
+
+            {/* 维度解读 */}
+            <View className="interpretations-section">
+              <Text className="section-title">维度解读</Text>
+
+              {/* AI洞察 */}
+              {interpretations.overall && (
+                <View className="interpretation-item ai-insights">
+                  <Text className="interpretation-title">✨ AI导师的洞察</Text>
+                  <Text className="interpretation-text">{interpretations.overall}</Text>
+                </View>
+              )}
+
+              {/* 自我认知对比 */}
+              {personalityTag.selfPerceptionAnalysis && (
+                <View className="interpretation-item self-perception">
+                  <Text className="interpretation-title">🔍 自我认知对比</Text>
+                  <Text className="interpretation-text">{personalityTag.selfPerceptionAnalysis}</Text>
+                </View>
+              )}
+
+              {/* 其他维度 */}
+              {Object.keys(interpretations).filter(k => k !== 'overall').map(dimension => (
+                <View key={dimension} className="interpretation-item">
+                  <Text className="interpretation-title">{DIMENSION_NAMES[dimension]}</Text>
+                  <Text className="interpretation-text">{interpretations[dimension]}</Text>
+                </View>
+              ))}
+            </View>
+
+            {/* AI赛道推荐 */}
+            {personalityTag.trackRecommendations && personalityTag.trackRecommendations.length > 0 && (
+              <View className="ai-track-recommendations">
+                <Text className="section-title">🎯 AI为你推荐的赛道</Text>
+                {personalityTag.trackRecommendations.map((track, index) => (
+                  <View key={index} className="ai-track-item">
+                    <View className="track-header">
+                      <Text className="track-name">{track.track}</Text>
+                      <Text className="track-score">{Math.round(track.matchScore * 100)}%匹配</Text>
+                    </View>
+                    <Text className="track-reason">{track.reason}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* 完成按钮 - 胶囊型 */}
+            <View className="complete-btn tap-effect" onClick={handleComplete}>
+              <Text className="btn-text">开始你的河</Text>
+            </View>
           </View>
-
-          <View className="recommendation-item">
-            <Text className="recommendation-label">推荐等级</Text>
-            <Text className="recommendation-value">{personalityTag.level}</Text>
-          </View>
-
-          <View className="recommendation-item">
-            <Text className="recommendation-label">推荐首单</Text>
-            <Text className="recommendation-value">{personalityTag.firstTask}</Text>
-          </View>
-        </View>
-
-        {/* 完成按钮 */}
-        <View className="complete-btn" onClick={handleComplete}>
-          <Text className="btn-text">开始你的河</Text>
-        </View>
+        )}
       </View>
     </View>
   )
+}
+
+// 进度条组件 - 带绘制动画
+function ScoreBar({ label, value, color, delay = 0 }) {
+  const { current } = useNumberAnimation(value, 800)
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShow(true), delay)
+    return () => clearTimeout(timer)
+  }, [delay])
+
+  return (
+    <View className={`score-item ${show ? 'score-item-show' : ''}`}>
+      <View className="score-header">
+        <Text className="score-label">{label}</Text>
+        <Text className="score-value">{Math.round(current)}</Text>
+      </View>
+      <View className="score-bar">
+        <View
+          className="score-fill"
+          style={{
+            width: `${current}%`,
+            background: color,
+            transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
+        />
+      </View>
+    </View>
+  )
+}
+
+// 辅助函数
+function wait(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }

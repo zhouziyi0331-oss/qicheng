@@ -8,7 +8,7 @@
 .mentor-care-page {
   min-height: 100vh;
   background: var(--theme-bg);
-  padding-bottom: 40rpx;
+  padding-bottom: 40px;
 
   .loading-container,
   .empty-container {
@@ -19,7 +19,7 @@
 
     .loading-text,
     .empty-text {
-      font-size: 28rpx;
+      font-size: 28px;
       color: var(--text-secondary);
       animation: pulse 2s ease-in-out infinite;
     }
@@ -37,7 +37,7 @@
   /* 顶部统计 */
   .care-header {
     position: relative;
-    padding: 60rpx 32rpx 40rpx;
+    padding: 60px 32px 40px;
     background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
     overflow: hidden;
     box-shadow: var(--shadow-card);
@@ -56,10 +56,10 @@
       z-index: 1;
 
       .page-title {
-        font-size: 48rpx;
+        font-size: 48px;
         font-weight: 700;
         color: #FFFFFF;
-        margin-bottom: 32rpx;
+        margin-bottom: 32px;
         display: block;
         animation: slideInLeft 0.5s var(--ease-decelerate);
       }
@@ -67,7 +67,7 @@
       @keyframes slideInLeft {
         from {
           opacity: 0;
-          transform: translateX(-20rpx);
+          transform: translateX(-20px);
         }
         to {
           opacity: 1;
@@ -80,14 +80,14 @@
         align-items: center;
         background: var(--theme-card);
         border-radius: var(--radius-large);
-        padding: 24rpx;
+        padding: 24px;
         box-shadow: var(--shadow-soft);
         animation: slideInUp 0.5s var(--ease-decelerate) 0.1s backwards;
 
         @keyframes slideInUp {
           from {
             opacity: 0;
-            transform: translateY(20rpx);
+            transform: translateY(20px);
           }
           to {
             opacity: 1;
@@ -101,10 +101,10 @@
 
           .stat-number {
             display: block;
-            font-size: 40rpx;
+            font-size: 40px;
             font-weight: 700;
             color: var(--theme-primary);
-            margin-bottom: 8rpx;
+            margin-bottom: 8px;
             animation: pulse-number 2s ease-in-out infinite;
           }
 
@@ -119,21 +119,21 @@
 
           .stat-value {
             display: block;
-            font-size: 28rpx;
+            font-size: 28px;
             font-weight: 500;
             color: var(--theme-primary);
-            margin-bottom: 8rpx;
+            margin-bottom: 8px;
           }
 
           .stat-label {
-            font-size: 22rpx;
+            font-size: 22px;
             color: var(--text-secondary);
           }
         }
 
         .stat-divider {
-          width: 1rpx;
-          height: 60rpx;
+          width: 1px;
+          height: 60px;
           background: rgba(0, 0, 0, 0.05);
         }
       }
@@ -143,18 +143,18 @@
   /* Tab切换 */
   .tabs {
     display: flex;
-    margin: 0 32rpx 24rpx;
+    margin: 0 32px 24px;
     background: var(--theme-card);
     border-radius: var(--radius-large);
-    padding: 8rpx;
+    padding: 8px;
     box-shadow: var(--shadow-card);
 
     .tab {
       flex: 1;
       text-align: center;
-      padding: 16rpx;
+      padding: 16px;
       border-radius: var(--radius-medium);
-      font-size: 26rpx;
+      font-size: 26px;
       color: var(--text-secondary);
       transition: all var(--duration-normal) var(--ease-standard);
       position: relative;
@@ -185,14 +185,14 @@
 
       .tab-badge {
         position: absolute;
-        top: 8rpx;
-        right: 8rpx;
+        top: 8px;
+        right: 8px;
         background: var(--watermelon-red);
         color: #FFFFFF;
-        font-size: 18rpx;
-        padding: 2rpx 8rpx;
+        font-size: 18px;
+        padding: 2px 8px;
         border-radius: var(--radius-round);
-        min-width: 32rpx;
+        min-width: 32px;
         text-align: center;
         animation: breathe 3s ease-in-out infinite;
       }
@@ -210,8 +210,8 @@
 
   /* 内容区域 */
   .content-area {
-    height: calc(100vh - 480rpx);
-    padding: 0 32rpx;
+    height: calc(100vh - 480px);
+    padding: 0 32px;
 
     .messages-section {
       .empty-state {
@@ -219,15 +219,15 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 400rpx;
+        height: 400px;
         background: var(--theme-card);
         border-radius: var(--radius-large);
-        padding: 40rpx;
+        padding: 40px;
         box-shadow: var(--shadow-card);
 
         .empty-icon {
-          font-size: 80rpx;
-          margin-bottom: 20rpx;
+          font-size: 80px;
+          margin-bottom: 20px;
           opacity: 0.6;
           animation: float 3s ease-in-out infinite;
         }
@@ -237,19 +237,19 @@
             transform: translateY(0);
           }
           50% {
-            transform: translateY(-24rpx);
+            transform: translateY(-24px);
           }
         }
 
         .empty-text {
-          font-size: 28rpx;
+          font-size: 28px;
           color: var(--text-primary);
-          margin-bottom: 12rpx;
+          margin-bottom: 12px;
           font-weight: 600;
         }
 
         .empty-hint {
-          font-size: 24rpx;
+          font-size: 24px;
           color: var(--text-secondary);
           text-align: center;
         }
@@ -259,12 +259,12 @@
         .message-card {
           background: var(--theme-card);
           border-radius: var(--radius-large);
-          padding: 28rpx;
-          margin-bottom: 20rpx;
+          padding: 28px;
+          margin-bottom: 20px;
           box-shadow: var(--shadow-card);
           transition: all var(--duration-normal) var(--ease-standard);
           opacity: 0;
-          transform: translateY(20rpx);
+          transform: translateY(20px);
           animation: slideInUpCard 0.5s var(--ease-decelerate) forwards;
 
           @for $i from 1 through 10 {
@@ -276,7 +276,7 @@
           @keyframes slideInUpCard {
             from {
               opacity: 0;
-              transform: translateY(20rpx);
+              transform: translateY(20px);
             }
             to {
               opacity: 1;
@@ -289,44 +289,44 @@
           }
 
           &.pending {
-            border-left: 6rpx solid var(--mango-yellow);
+            border-left: 6px solid var(--mango-yellow);
           }
 
           &.sent {
-            border-left: 6rpx solid var(--blueberry-blue);
+            border-left: 6px solid var(--blueberry-blue);
           }
 
           &.responded {
-            border-left: 6rpx solid var(--theme-primary);
+            border-left: 6px solid var(--theme-primary);
           }
 
           .message-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16rpx;
+            margin-bottom: 16px;
 
             .message-type {
               display: flex;
               align-items: center;
-              padding: 8rpx 16rpx;
+              padding: 8px 16px;
               border-radius: var(--radius-medium);
               color: #FFFFFF;
               background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
 
               .type-icon {
-                font-size: 24rpx;
-                margin-right: 8rpx;
+                font-size: 24px;
+                margin-right: 8px;
               }
 
               .type-label {
-                font-size: 22rpx;
+                font-size: 22px;
                 font-weight: 500;
               }
             }
 
             .priority-badge {
-              font-size: 22rpx;
+              font-size: 22px;
               font-weight: 500;
               color: var(--watermelon-red);
               animation: pulse 2s ease-in-out infinite;
@@ -334,35 +334,35 @@
           }
 
           .message-content {
-            font-size: 28rpx;
+            font-size: 28px;
             color: var(--text-primary);
             line-height: 1.6;
-            margin-bottom: 16rpx;
+            margin-bottom: 16px;
             display: block;
           }
 
           .message-context {
             background: rgba(0, 0, 0, 0.02);
             border-radius: var(--radius-medium);
-            padding: 16rpx;
-            margin-bottom: 16rpx;
+            padding: 16px;
+            margin-bottom: 16px;
 
             .context-item {
               display: flex;
-              margin-bottom: 8rpx;
+              margin-bottom: 8px;
 
               &:last-child {
                 margin-bottom: 0;
               }
 
               .context-label {
-                font-size: 22rpx;
+                font-size: 22px;
                 color: var(--text-tertiary);
-                margin-right: 8rpx;
+                margin-right: 8px;
               }
 
               .context-value {
-                font-size: 22rpx;
+                font-size: 22px;
                 color: var(--text-primary);
                 font-weight: 500;
               }
@@ -373,26 +373,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 16rpx;
-            border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+            padding-top: 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
 
             .scheduled-time {
-              font-size: 24rpx;
+              font-size: 24px;
               color: var(--grapefruit-orange);
               font-weight: 500;
             }
 
             .sent-time {
-              font-size: 24rpx;
+              font-size: 24px;
               color: var(--blueberry-blue);
               font-weight: 500;
             }
 
             .responded-badge {
-              padding: 6rpx 12rpx;
+              padding: 6px 12px;
               background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
               border-radius: var(--radius-medium);
-              font-size: 22rpx;
+              font-size: 22px;
               color: #FFFFFF;
               box-shadow: var(--shadow-soft);
             }

@@ -1,335 +1,408 @@
+/**
+ * OPC测评结果页 - 果汁色改造版
+ * 从莫兰迪升级为有活力的果汁色
+ */
+
+@import '../../styles/theme.scss';
+
 .result-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #F5E6F0 0%, #E8F5E9 100%);
-  padding: 40rpx;
+  background: var(--theme-bg);
+  padding: 32px 24px 80px;
 }
 
 .result-container {
-  display: flex;
-  flex-direction: column;
-  gap: 32rpx;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-size: 28rpx;
-  color: #636E72;
-}
+/* ==================== 标题区 ==================== */
 
-/* 标题区域 */
-.result-header {
+.header-section {
   text-align: center;
-  margin-bottom: 24rpx;
+  margin-bottom: 40px;
+  animation: slideInUp var(--duration-normal) var(--ease-decelerate);
 }
 
-.result-title {
+.main-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 12px;
   display: block;
-  font-size: 56rpx;
-  font-weight: 600;
-  color: #2D3436;
-  margin-bottom: 16rpx;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.result-subtitle {
+.subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
   display: block;
-  font-size: 28rpx;
-  color: #636E72;
 }
 
-/* 人格标签卡片 */
+/* ==================== 人格标签卡片 - 带弹出动画 ==================== */
+
 .personality-card {
-  background: white;
-  border-radius: 32rpx;
-  padding: 48rpx 40rpx;
+  background: var(--theme-card);
+  border-radius: var(--radius-large);
+  padding: 32px 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-card);
   text-align: center;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.5s var(--ease-elastic);
 }
 
-.personality-tag {
-  display: block;
-  font-size: 48rpx;
-  font-weight: 600;
-  color: #6C5CE7;
-  margin-bottom: 24rpx;
+.personality-card-show {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.personality-desc {
-  display: block;
-  font-size: 28rpx;
-  line-height: 1.6;
-  color: #636E72;
+.personality-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  border-radius: var(--radius-round);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
 }
 
-/* 河流板块 */
-.river-section {
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
+.badge-icon {
+  font-size: 20px;
+}
+
+.badge-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.personality-description {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--theme-primary);
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ==================== 雷达图区域 ==================== */
+
+.scores-section {
+  margin-bottom: 32px;
 }
 
 .section-title {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #2D3436;
-  margin-bottom: 8rpx;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  display: block;
 }
 
 .section-subtitle {
-  font-size: 24rpx;
-  color: #636E72;
-  margin-bottom: 16rpx;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  display: block;
 }
 
-.river-card {
-  background: white;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
-}
-
-.river-card-highlight {
-  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-  color: white;
-
-  .river-card-title,
-  .river-card-content {
-    color: white;
-  }
-}
-
-.river-card-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #2D3436;
-  margin-bottom: 16rpx;
-}
-
-.river-card-content {
-  font-size: 26rpx;
-  line-height: 1.6;
-  color: #636E72;
-}
-
-.asset-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-.asset-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12rpx;
-}
-
-.asset-icon {
-  font-size: 24rpx;
-  color: #6C5CE7;
-  margin-top: 4rpx;
-}
-
-.asset-text {
-  flex: 1;
-  font-size: 26rpx;
-  line-height: 1.6;
-  color: #636E72;
-}
-
-.direction-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-  margin-top: 16rpx;
-}
-
-.direction-tag {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16rpx;
-  padding: 12rpx 24rpx;
-  font-size: 24rpx;
-  color: white;
-}
-
-/* 分数板块 */
-.scores-section {
-  background: white;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
-}
-
+/* 进度条 - 带绘制动画 */
 .score-item {
-  margin-bottom: 24rpx;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.5s var(--ease-decelerate);
+}
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+.score-item-show {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .score-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12rpx;
+  margin-bottom: 8px;
 }
 
 .score-label {
-  font-size: 28rpx;
-  color: #2D3436;
+  font-size: 14px;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .score-value {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #6C5CE7;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--theme-primary);
 }
 
 .score-bar {
-  height: 16rpx;
-  background: #F0F0F0;
-  border-radius: 8rpx;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .score-fill {
   height: 100%;
-  border-radius: 8rpx;
-  transition: width 0.3s ease;
+  border-radius: 4px;
+  transition: width 0.8s var(--ease-decelerate);
 }
 
-/* 维度解读 */
-.interpretations-section {
+/* ==================== 能力资产卡片 ==================== */
+
+.river-section {
+  margin-bottom: 32px;
+}
+
+.river-card {
+  background: var(--theme-card);
+  border-radius: var(--radius-medium);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+}
+
+.river-card-highlight {
+  background: linear-gradient(135deg,
+    rgba(255, 107, 107, 0.1) 0%,
+    rgba(255, 230, 109, 0.1) 100%);
+  border: 2px solid var(--theme-primary);
+}
+
+.river-card-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.river-card-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.assets-list {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 12px;
+}
+
+.asset-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.asset-icon {
+  font-size: 16px;
+  color: var(--theme-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.asset-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.direction-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.direction-tag {
+  padding: 8px 16px;
+  background: var(--theme-primary);
+  color: white;
+  border-radius: var(--radius-round);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ==================== 维度解读 ==================== */
+
+.interpretations-section {
+  margin-bottom: 32px;
 }
 
 .interpretation-item {
-  background: white;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  background: var(--theme-card);
+  border-radius: var(--radius-medium);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
 
-  &.ai-insights {
-    background: linear-gradient(135deg, #FFF5E6 0%, #FFE8CC 100%);
-    border-left: 4rpx solid #FF9800;
-  }
+.ai-insights {
+  background: linear-gradient(135deg,
+    rgba(78, 205, 196, 0.1) 0%,
+    rgba(127, 229, 220, 0.1) 100%);
+  border-left: 4px solid var(--blueberry-blue);
+}
 
-  &.self-perception {
-    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-    border-left: 4rpx solid #2196F3;
-  }
+.self-perception {
+  background: linear-gradient(135deg,
+    rgba(255, 107, 157, 0.1) 0%,
+    rgba(255, 179, 217, 0.1) 100%);
+  border-left: 4px solid var(--watermelon-red);
 }
 
 .interpretation-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 12px;
   display: block;
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #2D3436;
-  margin-bottom: 16rpx;
 }
 
 .interpretation-text {
-  display: block;
-  font-size: 26rpx;
+  font-size: 14px;
   line-height: 1.7;
-  color: #636E72;
+  color: var(--text-secondary);
 }
 
-/* AI赛道推荐 */
+/* ==================== AI赛道推荐 ==================== */
+
 .ai-track-recommendations {
-  background: white;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  margin-bottom: 32px;
 }
 
 .ai-track-item {
-  padding: 24rpx;
-  background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
-  border-radius: 16rpx;
-  margin-bottom: 16rpx;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+  background: var(--theme-card);
+  border-radius: var(--radius-medium);
+  padding: 20px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--mango-yellow);
 }
 
 .track-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12rpx;
+  margin-bottom: 12px;
 }
 
 .track-name {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #6C5CE7;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text-primary);
 }
 
 .track-score {
-  font-size: 24rpx;
-  color: #9C27B0;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--theme-primary);
+  padding: 4px 12px;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: var(--radius-round);
 }
 
 .track-reason {
-  font-size: 26rpx;
+  font-size: 14px;
   line-height: 1.6;
-  color: #636E72;
+  color: var(--text-secondary);
 }
 
-/* 推荐信息 */
-.recommendation-section {
-  background: white;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
-}
+/* ==================== 完成按钮 - 胶囊型 ==================== */
 
-.recommendation-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #F0F0F0;
+.complete-btn {
+  padding: 16px 48px;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  color: white;
+  border-radius: var(--radius-round);
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+  animation: heartbeat 2s ease-in-out infinite;
 
-  &:last-child {
-    border-bottom: none;
+  &:active {
+    transform: scale(0.95);
   }
 }
 
-.recommendation-label {
-  font-size: 28rpx;
-  color: #636E72;
-}
-
-.recommendation-value {
-  font-size: 28rpx;
-  font-weight: 500;
-  color: #2D3436;
-  text-align: right;
-  max-width: 400rpx;
-}
-
-/* 完成按钮 */
-.complete-btn {
-  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  text-align: center;
-  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
-  margin-top: 16rpx;
-  margin-bottom: 40rpx;
-}
-
 .btn-text {
-  font-size: 32rpx;
+  font-size: 16px;
   font-weight: 600;
   color: white;
+}
+
+/* ==================== 通用动画 ==================== */
+
+.fade-in {
+  animation: fadeIn 0.5s var(--ease-standard);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14%, 28% {
+    transform: scale(1.03);
+  }
+  21%, 35% {
+    transform: scale(1);
+  }
+}
+
+/* ==================== 响应式 ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

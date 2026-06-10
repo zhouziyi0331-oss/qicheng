@@ -8,21 +8,21 @@
 .my-tasks-page {
   min-height: 100vh;
   background: var(--theme-bg);
-  padding-bottom: 32rpx;
+  padding-bottom: 32px;
 }
 
 /* 页面头部 */
 .page-header {
   background: var(--theme-card);
-  padding: 40rpx 32rpx;
-  margin-bottom: 24rpx;
+  padding: 40px 32px;
+  margin-bottom: 24px;
   box-shadow: var(--shadow-card);
   animation: slideInDown 0.5s var(--ease-decelerate);
 
   @keyframes slideInDown {
     from {
       opacity: 0;
-      transform: translateY(-20rpx);
+      transform: translateY(-20px);
     }
     to {
       opacity: 1;
@@ -31,7 +31,7 @@
   }
 
   .page-title {
-    font-size: 48rpx;
+    font-size: 48px;
     font-weight: 600;
     color: var(--text-primary);
   }
@@ -41,19 +41,19 @@
 .tabs {
   display: flex;
   background: var(--theme-card);
-  padding: 0 32rpx;
-  margin-bottom: 24rpx;
+  padding: 0 32px;
+  margin-bottom: 24px;
   box-shadow: var(--shadow-card);
 
   .tab-item {
     flex: 1;
-    padding: 24rpx 0;
+    padding: 24px 0;
     text-align: center;
     position: relative;
     transition: all var(--duration-normal) var(--ease-standard);
 
     .tab-text {
-      font-size: 28rpx;
+      font-size: 28px;
       color: var(--text-secondary);
       transition: all var(--duration-normal) var(--ease-standard);
     }
@@ -70,17 +70,17 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 60rpx;
-        height: 6rpx;
+        width: 60px;
+        height: 6px;
         background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
-        border-radius: 3rpx;
+        border-radius: 3px;
         animation: slideInUp 0.3s var(--ease-decelerate);
       }
 
       @keyframes slideInUp {
         from {
           opacity: 0;
-          transform: translateX(-50%) translateY(6rpx);
+          transform: translateX(-50%) translateY(6px);
         }
         to {
           opacity: 1;
@@ -97,23 +97,23 @@
 
 /* 任务列表 */
 .tasks-list {
-  height: calc(100vh - 300rpx);
-  padding: 0 32rpx;
+  height: calc(100vh - 300px);
+  padding: 0 32px;
 }
 
 .tasks-container {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 24px;
 }
 
 .task-card {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 32rpx;
+  padding: 32px;
   box-shadow: var(--shadow-card);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUpCard 0.5s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 10 {
@@ -125,7 +125,7 @@
   @keyframes slideInUpCard {
     from {
       opacity: 0;
-      transform: translateY(20rpx);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -137,28 +137,28 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 24rpx;
+    margin-bottom: 24px;
 
     .task-title {
       flex: 1;
-      font-size: 32rpx;
+      font-size: 32px;
       font-weight: 600;
       color: var(--text-primary);
       line-height: 1.4;
-      margin-right: 16rpx;
+      margin-right: 16px;
     }
 
     .task-status {
-      padding: 8rpx 20rpx;
+      padding: 8px 20px;
       border-radius: var(--radius-round);
-      font-size: 24rpx;
+      font-size: 24px;
       white-space: nowrap;
       font-weight: 500;
 
       &.status-working {
         background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(255, 107, 157, 0.15) 100%);
         color: var(--theme-primary);
-        border: 1rpx solid var(--theme-primary);
+        border: 1px solid var(--theme-primary);
         animation: breathe 3s ease-in-out infinite;
       }
 
@@ -174,19 +174,19 @@
       &.status-submitted {
         background: rgba(255, 230, 109, 0.2);
         color: var(--grapefruit-orange);
-        border: 1rpx solid var(--mango-yellow);
+        border: 1px solid var(--mango-yellow);
       }
 
       &.status-completed {
         background: rgba(78, 205, 196, 0.2);
         color: var(--blueberry-blue);
-        border: 1rpx solid var(--blueberry-blue);
+        border: 1px solid var(--blueberry-blue);
       }
 
       &.status-rejected {
         background: rgba(255, 107, 107, 0.15);
         color: var(--watermelon-red);
-        border: 1rpx solid var(--watermelon-red);
+        border: 1px solid var(--watermelon-red);
         animation: shake 0.5s ease;
       }
 
@@ -195,10 +195,10 @@
           transform: translateX(0);
         }
         25% {
-          transform: translateX(-4rpx);
+          transform: translateX(-4px);
         }
         75% {
-          transform: translateX(4rpx);
+          transform: translateX(4px);
         }
       }
     }
@@ -206,25 +206,25 @@
 
   .task-info {
     display: flex;
-    gap: 48rpx;
-    margin-bottom: 24rpx;
+    gap: 48px;
+    margin-bottom: 24px;
 
     .info-item {
       display: flex;
       flex-direction: column;
-      gap: 8rpx;
+      gap: 8px;
 
       .info-label {
-        font-size: 24rpx;
+        font-size: 24px;
         color: var(--text-tertiary);
       }
 
       .info-value {
-        font-size: 28rpx;
+        font-size: 28px;
         color: var(--text-primary);
 
         &.budget {
-          font-size: 32rpx;
+          font-size: 32px;
           font-weight: 600;
           color: var(--watermelon-red);
           animation: pulse-number 2s ease-in-out infinite;
@@ -243,14 +243,14 @@
   }
 
   .task-progress {
-    margin-bottom: 24rpx;
+    margin-bottom: 24px;
 
     .progress-bar {
-      height: 12rpx;
+      height: 12px;
       background: rgba(0, 0, 0, 0.05);
       border-radius: var(--radius-small);
       overflow: hidden;
-      margin-bottom: 12rpx;
+      margin-bottom: 12px;
 
       .progress-fill {
         height: 100%;
@@ -261,7 +261,7 @@
     }
 
     .progress-text {
-      font-size: 24rpx;
+      font-size: 24px;
       color: var(--text-tertiary);
     }
   }
@@ -269,15 +269,15 @@
   .task-time {
     display: flex;
     align-items: center;
-    margin-bottom: 16rpx;
+    margin-bottom: 16px;
 
     .time-label {
-      font-size: 24rpx;
+      font-size: 24px;
       color: var(--text-tertiary);
     }
 
     .time-value {
-      font-size: 24rpx;
+      font-size: 24px;
       color: var(--text-secondary);
     }
   }
@@ -285,44 +285,44 @@
   .rejection-info {
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
     border-radius: var(--radius-medium);
-    padding: 24rpx;
-    margin-bottom: 16rpx;
-    border: 1rpx solid var(--watermelon-red);
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid var(--watermelon-red);
 
     .rejection-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12rpx;
+      margin-bottom: 12px;
 
       .rejection-label {
-        font-size: 24rpx;
+        font-size: 24px;
         color: var(--watermelon-red);
         font-weight: 600;
       }
 
       .rejection-time {
-        font-size: 22rpx;
+        font-size: 22px;
         color: var(--text-tertiary);
       }
     }
 
     .rejection-reason {
-      font-size: 26rpx;
+      font-size: 26px;
       color: var(--text-secondary);
       line-height: 1.6;
-      margin-bottom: 20rpx;
+      margin-bottom: 20px;
     }
 
     .rejection-actions {
       display: flex;
-      gap: 16rpx;
+      gap: 16px;
 
       .action-btn {
         flex: 1;
-        height: 72rpx;
+        height: 72px;
         border-radius: var(--radius-round);
-        font-size: 28rpx;
+        font-size: 28px;
         font-weight: 600;
         border: none;
         transition: all var(--duration-fast) var(--ease-standard);
@@ -340,7 +340,7 @@
         &.resubmit-btn {
           background: var(--theme-card);
           color: var(--theme-primary);
-          border: 2rpx solid var(--theme-primary);
+          border: 2px solid var(--theme-primary);
         }
       }
     }
@@ -348,10 +348,10 @@
 
   .continue-btn {
     width: 100%;
-    height: 88rpx;
+    height: 88px;
     background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
     border-radius: var(--radius-round);
-    font-size: 30rpx;
+    font-size: 30px;
     font-weight: 600;
     color: #FFFFFF;
     border: none;
@@ -385,17 +385,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120rpx 32rpx;
+  padding: 120px 32px;
 
   .loading-text,
   .empty-text {
-    font-size: 28rpx;
+    font-size: 28px;
     color: var(--text-secondary);
-    margin-top: 24rpx;
+    margin-top: 24px;
   }
 
   .empty-icon {
-    font-size: 120rpx;
+    font-size: 120px;
     opacity: 0.6;
     animation: float 3s ease-in-out infinite;
   }
@@ -405,17 +405,17 @@
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-24rpx);
+      transform: translateY(-24px);
     }
   }
 
   .go-tasks-btn {
-    margin-top: 48rpx;
-    width: 320rpx;
-    height: 88rpx;
+    margin-top: 48px;
+    width: 320px;
+    height: 88px;
     background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
     border-radius: var(--radius-round);
-    font-size: 30rpx;
+    font-size: 30px;
     font-weight: 600;
     color: #FFFFFF;
     border: none;

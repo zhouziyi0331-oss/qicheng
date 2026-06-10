@@ -8,15 +8,15 @@
 .withdraw-page {
   min-height: 100vh;
   background: var(--theme-bg);
-  padding: 64rpx;
+  padding: 64px;
 }
 
 /* 可用余额 */
 .balance-section {
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   border-radius: var(--radius-large);
-  padding: 96rpx 80rpx;
-  margin-bottom: 64rpx;
+  padding: 96px 80px;
+  margin-bottom: 64px;
   text-align: center;
   box-shadow: var(--shadow-soft);
 }
@@ -24,14 +24,14 @@
 .balance-label {
   display: block;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 52rpx;
-  margin-bottom: 32rpx;
+  font-size: 52px;
+  margin-bottom: 32px;
 }
 
 .balance-amount {
   display: block;
   color: #FFFFFF;
-  font-size: 128rpx;
+  font-size: 128px;
   font-weight: bold;
   animation: pulse-number 2s ease-in-out infinite;
 }
@@ -49,13 +49,13 @@
 .form-section {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 80rpx;
-  margin-bottom: 64rpx;
+  padding: 80px;
+  margin-bottom: 64px;
   box-shadow: var(--shadow-card);
 }
 
 .form-item {
-  margin-bottom: 80rpx;
+  margin-bottom: 80px;
 }
 
 .form-item:last-child {
@@ -65,19 +65,19 @@
 .form-label {
   display: block;
   color: var(--text-primary);
-  font-size: 56rpx;
+  font-size: 56px;
   font-weight: 500;
-  margin-bottom: 40rpx;
+  margin-bottom: 40px;
 }
 
 /* 金额输入 */
 .amount-input-wrapper {
   display: flex;
   align-items: center;
-  border: 4rpx solid rgba(0, 0, 0, 0.1);
+  border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--radius-medium);
-  padding: 0 48rpx;
-  height: 176rpx;
+  padding: 0 48px;
+  height: 176px;
   transition: all var(--duration-normal) var(--ease-standard);
 
   &:focus-within {
@@ -88,28 +88,28 @@
 
 .currency-symbol {
   color: var(--text-primary);
-  font-size: 72rpx;
+  font-size: 72px;
   font-weight: 500;
-  margin-right: 16rpx;
+  margin-right: 16px;
 }
 
 .amount-input {
   flex: 1;
-  font-size: 72rpx;
+  font-size: 72px;
   font-weight: 500;
   color: var(--text-primary);
 }
 
 .all-btn {
-  width: 240rpx;
-  height: 112rpx;
+  width: 240px;
+  height: 112px;
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   color: #FFFFFF;
   border-radius: var(--radius-medium);
-  font-size: 52rpx;
+  font-size: 52px;
   border: none;
   padding: 0;
-  line-height: 112rpx;
+  line-height: 112px;
   transition: all var(--duration-fast) var(--ease-standard);
 
   &:active {
@@ -121,24 +121,24 @@
 .radio-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 96rpx;
-  padding: 32rpx 0;
+  margin-right: 96px;
+  padding: 32px 0;
 }
 
 .radio-label {
-  margin-left: 32rpx;
+  margin-left: 32px;
   color: var(--text-primary);
-  font-size: 56rpx;
+  font-size: 56px;
 }
 
 /* 普通输入框 */
 .form-input {
   width: 100%;
-  height: 176rpx;
-  border: 4rpx solid rgba(0, 0, 0, 0.1);
+  height: 176px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--radius-medium);
-  padding: 0 48rpx;
-  font-size: 56rpx;
+  padding: 0 48px;
+  font-size: 56px;
   color: var(--text-primary);
   transition: all var(--duration-normal) var(--ease-standard);
 
@@ -152,26 +152,26 @@
 .tips-section {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 80rpx;
-  margin-bottom: 64rpx;
+  padding: 80px;
+  margin-bottom: 64px;
   box-shadow: var(--shadow-card);
 }
 
 .tips-title {
   display: block;
   color: var(--text-primary);
-  font-size: 56rpx;
+  font-size: 56px;
   font-weight: 500;
-  margin-bottom: 48rpx;
+  margin-bottom: 48px;
 }
 
 .tips-item {
   display: block;
   color: var(--text-secondary);
-  font-size: 48rpx;
+  font-size: 48px;
   line-height: 1.8;
-  margin-bottom: 24rpx;
-  padding-left: 48rpx;
+  margin-bottom: 24px;
+  padding-left: 48px;
   position: relative;
 
   &::before {
@@ -185,16 +185,16 @@
 
 /* 提交按钮 */
 .submit-section {
-  padding: 0 0 80rpx;
+  padding: 0 0 80px;
 }
 
 .submit-btn {
   width: 100%;
-  height: 192rpx;
+  height: 192px;
   background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
   color: #FFFFFF;
   border-radius: var(--radius-medium);
-  font-size: 64rpx;
+  font-size: 64px;
   font-weight: bold;
   border: none;
   box-shadow: var(--shadow-soft);
@@ -224,7 +224,7 @@
 }
 
 .submit-text {
-  font-size: 64rpx;
+  font-size: 64px;
   font-weight: bold;
   color: #FFFFFF;
 }

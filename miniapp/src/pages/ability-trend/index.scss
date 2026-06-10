@@ -8,26 +8,26 @@
 .ability-trend-page {
   min-height: 100vh;
   background: var(--theme-bg);
-  padding: 40rpx;
-  padding-bottom: 200rpx;
+  padding: 40px;
+  padding-bottom: 200px;
 }
 
 /* 页面标题 */
 .page-header {
   text-align: center;
-  margin-bottom: 48rpx;
+  margin-bottom: 48px;
 }
 
 .page-title {
-  font-size: 56rpx;
+  font-size: 56px;
   font-weight: 700;
   color: var(--text-primary);
   display: block;
-  margin-bottom: 16rpx;
+  margin-bottom: 16px;
 }
 
 .page-subtitle {
-  font-size: 28rpx;
+  font-size: 28px;
   color: var(--text-secondary);
   display: block;
 }
@@ -36,12 +36,12 @@
 .loading,
 .empty-state {
   text-align: center;
-  padding: 240rpx 40rpx;
+  padding: 240px 40px;
 }
 
 .loading {
   color: var(--text-secondary);
-  font-size: 32rpx;
+  font-size: 32px;
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -55,9 +55,9 @@
 }
 
 .empty-icon {
-  font-size: 240rpx;
+  font-size: 240px;
   display: block;
-  margin-bottom: 48rpx;
+  margin-bottom: 48px;
   opacity: 0.6;
   animation: float 3s ease-in-out infinite;
 }
@@ -67,20 +67,20 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-24rpx);
+    transform: translateY(-24px);
   }
 }
 
 .empty-text {
-  font-size: 32rpx;
+  font-size: 32px;
   font-weight: 600;
   color: var(--text-secondary);
   display: block;
-  margin-bottom: 16rpx;
+  margin-bottom: 16px;
 }
 
 .empty-hint {
-  font-size: 26rpx;
+  font-size: 26px;
   color: var(--text-tertiary);
   display: block;
 }
@@ -89,8 +89,8 @@
 .version-overview {
   background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(255, 107, 157, 0.15) 100%);
   border-radius: var(--radius-large);
-  padding: 40rpx;
-  margin-bottom: 40rpx;
+  padding: 40px;
+  margin-bottom: 40px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -100,7 +100,7 @@
 .overview-item {
   text-align: center;
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 3 {
@@ -113,7 +113,7 @@
 @keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(20rpx);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -123,21 +123,21 @@
 
 .overview-label {
   display: block;
-  font-size: 24rpx;
+  font-size: 24px;
   color: var(--text-tertiary);
-  margin-bottom: 8rpx;
+  margin-bottom: 8px;
 }
 
 .overview-value {
   display: block;
-  font-size: 36rpx;
+  font-size: 36px;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .overview-divider {
-  width: 2rpx;
-  height: 80rpx;
+  width: 2px;
+  height: 80px;
   background: rgba(0, 0, 0, 0.1);
 }
 
@@ -145,38 +145,38 @@
 .comparison-card {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 48rpx;
-  margin-bottom: 40rpx;
+  padding: 48px;
+  margin-bottom: 40px;
   box-shadow: var(--shadow-card);
 }
 
 .card-title {
   display: block;
-  font-size: 36rpx;
+  font-size: 36px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 8rpx;
+  margin-bottom: 8px;
 }
 
 .card-subtitle {
   display: block;
-  font-size: 26rpx;
+  font-size: 26px;
   color: var(--text-secondary);
-  margin-bottom: 40rpx;
+  margin-bottom: 40px;
 }
 
 /* 维度列表 */
 .dimensions-list {
   display: flex;
   flex-direction: column;
-  gap: 40rpx;
+  gap: 40px;
 }
 
 .dimension-item {
-  padding-bottom: 40rpx;
-  border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   opacity: 0;
-  transform: translateX(-20rpx);
+  transform: translateX(-20px);
   animation: slideInLeft 0.5s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 6 {
@@ -194,7 +194,7 @@
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-20rpx);
+    transform: translateX(-20px);
   }
   to {
     opacity: 1;
@@ -206,11 +206,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24rpx;
+  margin-bottom: 24px;
 }
 
 .dimension-name {
-  font-size: 30rpx;
+  font-size: 30px;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -218,15 +218,15 @@
 .dimension-change {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 8px;
 }
 
 .change-icon {
-  font-size: 28rpx;
+  font-size: 28px;
 }
 
 .change-value {
-  font-size: 28rpx;
+  font-size: 28px;
   font-weight: 600;
 }
 
@@ -240,17 +240,17 @@
 
 /* 趋势图容器 */
 .trend-chart {
-  height: 360rpx;
+  height: 360px;
   position: relative;
-  margin-bottom: 24rpx;
+  margin-bottom: 24px;
 }
 
 /* 分数对比 */
 .score-comparison {
   display: flex;
   justify-content: space-around;
-  padding-top: 24rpx;
-  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+  padding-top: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .score-item {
@@ -259,14 +259,14 @@
 
 .score-label {
   display: block;
-  font-size: 22rpx;
+  font-size: 22px;
   color: var(--text-tertiary);
-  margin-bottom: 8rpx;
+  margin-bottom: 8px;
 }
 
 .score-value {
   display: block;
-  font-size: 32rpx;
+  font-size: 32px;
   font-weight: 700;
 }
 
@@ -281,18 +281,18 @@
 /* 时间选择器 */
 .time-selector {
   display: flex;
-  gap: 16rpx;
-  margin-bottom: 40rpx;
-  padding: 0 40rpx;
+  gap: 16px;
+  margin-bottom: 40px;
+  padding: 0 40px;
 }
 
 .time-option {
   flex: 1;
-  padding: 20rpx;
+  padding: 20px;
   text-align: center;
   background: var(--theme-card);
   border-radius: var(--radius-medium);
-  font-size: 28rpx;
+  font-size: 28px;
   color: var(--text-secondary);
   font-weight: 500;
   transition: all var(--duration-normal) var(--ease-standard);
@@ -314,23 +314,23 @@
 .chart-legend {
   display: flex;
   justify-content: center;
-  gap: 32rpx;
-  margin-top: 24rpx;
+  gap: 32px;
+  margin-top: 24px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  gap: 12px;
 }
 
 .legend-dot {
-  width: 24rpx;
-  height: 24rpx;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
 }
 
 .legend-text {
-  font-size: 24rpx;
+  font-size: 24px;
   color: var(--text-secondary);
 }

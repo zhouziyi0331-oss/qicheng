@@ -13,22 +13,22 @@
 /* 头部 */
 .header {
   background: var(--theme-card);
-  padding: 32rpx;
+  padding: 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
   box-shadow: var(--shadow-card);
 }
 
 .header-content {
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 16px;
 }
 
 .header-title {
-  font-size: 36rpx;
+  font-size: 36px;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -36,8 +36,8 @@
 .unread-badge {
   background: linear-gradient(135deg, var(--watermelon-red) 0%, var(--grapefruit-orange) 100%);
   border-radius: var(--radius-round);
-  padding: 4rpx 16rpx;
-  min-width: 48rpx;
+  padding: 4px 16px;
+  min-width: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,12 +56,12 @@
 
 .unread-text {
   color: #FFFFFF;
-  font-size: 24rpx;
+  font-size: 24px;
   font-weight: 700;
 }
 
 .mark-all-btn {
-  font-size: 28rpx;
+  font-size: 28px;
   color: var(--theme-primary);
   font-weight: 600;
   transition: all var(--duration-fast) var(--ease-standard);
@@ -73,8 +73,8 @@
 
 /* 通知列表 */
 .notifications-list {
-  height: calc(100vh - 120rpx);
-  padding: 24rpx;
+  height: calc(100vh - 120px);
+  padding: 24px;
 }
 
 /* 加载和空状态 */
@@ -84,18 +84,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 160rpx 0;
+  padding: 160px 0;
 }
 
 .loading-text {
-  font-size: 28rpx;
+  font-size: 28px;
   color: var(--text-secondary);
   animation: pulse 2s ease-in-out infinite;
 }
 
 .empty-icon {
-  font-size: 120rpx;
-  margin-bottom: 32rpx;
+  font-size: 120px;
+  margin-bottom: 32px;
   opacity: 0.6;
   animation: float 3s ease-in-out infinite;
 
@@ -104,13 +104,13 @@
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-24rpx);
+      transform: translateY(-24px);
     }
   }
 }
 
 .empty-text {
-  font-size: 28rpx;
+  font-size: 28px;
   color: var(--text-tertiary);
 }
 
@@ -118,16 +118,16 @@
 .notification-item {
   background: var(--theme-card);
   border-radius: var(--radius-large);
-  padding: 32rpx;
-  margin-bottom: 24rpx;
+  padding: 32px;
+  margin-bottom: 24px;
   display: flex;
   align-items: flex-start;
-  gap: 24rpx;
+  gap: 24px;
   position: relative;
   box-shadow: var(--shadow-card);
   transition: all var(--duration-normal) var(--ease-standard);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: slideInUp 0.5s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 10 {
@@ -139,7 +139,7 @@
   @keyframes slideInUp {
     from {
       opacity: 0;
-      transform: translateY(20rpx);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -153,19 +153,19 @@
   }
 
   &.unread {
-    border-left: 8rpx solid var(--watermelon-red);
+    border-left: 8px solid var(--watermelon-red);
   }
 }
 
 .unread-dot {
   position: absolute;
-  top: 32rpx;
-  right: 32rpx;
-  width: 16rpx;
-  height: 16rpx;
+  top: 32px;
+  right: 32px;
+  width: 16px;
+  height: 16px;
   background: var(--watermelon-red);
   border-radius: 50%;
-  box-shadow: 0 0 0 4rpx rgba(255, 107, 107, 0.2);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
   animation: breathe 3s ease-in-out infinite;
 
   @keyframes breathe {
@@ -180,8 +180,8 @@
 
 /* 通知图标 */
 .notification-icon {
-  width: 96rpx;
-  height: 96rpx;
+  width: 96px;
+  height: 96px;
   border-radius: var(--radius-medium);
   display: flex;
   align-items: center;
@@ -192,7 +192,7 @@
 }
 
 .icon-emoji {
-  font-size: 48rpx;
+  font-size: 48px;
   animation: float 3s ease-in-out infinite;
 }
 
@@ -205,33 +205,33 @@
 .notification-header {
   display: flex;
   align-items: center;
-  gap: 16rpx;
-  margin-bottom: 12rpx;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .notification-title {
-  font-size: 30rpx;
+  font-size: 30px;
   font-weight: 600;
   color: var(--text-primary);
   flex: 1;
 }
 
 .notification-type {
-  font-size: 24rpx;
+  font-size: 24px;
   font-weight: 500;
   color: var(--theme-primary);
 }
 
 .notification-text {
-  font-size: 26rpx;
+  font-size: 26px;
   color: var(--text-secondary);
   line-height: 1.6;
   display: block;
-  margin-bottom: 12rpx;
+  margin-bottom: 12px;
 }
 
 .notification-time {
-  font-size: 24rpx;
+  font-size: 24px;
   color: var(--text-tertiary);
   display: block;
 }
@@ -241,12 +241,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48rpx;
-  height: 48rpx;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
 }
 
 .arrow-icon {
-  font-size: 48rpx;
+  font-size: 48px;
   color: var(--text-tertiary);
 }

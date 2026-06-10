@@ -8,7 +8,7 @@
 .index-page {
   min-height: 100vh;
   background: var(--theme-bg);
-  padding: 0 0 240rpx 0;
+  padding: 0 0 240px 0;
 }
 
 // 顶部用户栏
@@ -16,17 +16,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 64rpx 80rpx 32rpx;
+  padding: 64px 80px 32px;
 
   .user-info-bar {
     display: flex;
     align-items: center;
-    gap: 48rpx;
+    gap: 48px;
   }
 
   .user-avatar-small {
-    width: 160rpx;
-    height: 160rpx;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
     display: flex;
@@ -51,7 +51,7 @@
     }
 
     .avatar-letter {
-      font-size: 72rpx;
+      font-size: 72px;
       font-weight: 700;
       color: #FFFFFF;
     }
@@ -60,23 +60,23 @@
   .user-level-badge {
     display: flex;
     flex-direction: column;
-    gap: 8rpx;
+    gap: 8px;
 
     .level-text {
-      font-size: 64rpx;
+      font-size: 64px;
       font-weight: 700;
       color: var(--theme-primary);
     }
 
     .level-name {
-      font-size: 48rpx;
+      font-size: 48px;
       color: var(--text-secondary);
     }
   }
 
   .notification-icon {
-    width: 160rpx;
-    height: 160rpx;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     background: var(--theme-card);
     display: flex;
@@ -90,24 +90,24 @@
     }
 
     .icon-bell {
-      font-size: 72rpx;
+      font-size: 72px;
     }
   }
 }
 
 // Hero插画区域
 .hero-illustration {
-  padding: 80rpx 80rpx 120rpx;
+  padding: 80px 80px 120px;
   text-align: center;
   position: relative;
 
   .illustration-container {
-    width: 1120rpx;
-    height: 1120rpx;
-    margin: 0 auto 96rpx;
+    width: 1120px;
+    height: 1120px;
+    margin: 0 auto 96px;
     position: relative;
     background: linear-gradient(135deg, rgba(255, 230, 109, 0.15) 0%, rgba(255, 107, 157, 0.15) 50%, rgba(78, 205, 196, 0.15) 100%);
-    border-radius: 560rpx;
+    border-radius: 560px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -121,36 +121,36 @@
     }
 
     .deco-1 {
-      width: 180rpx;
-      height: 180rpx;
+      width: 180px;
+      height: 180px;
       background: var(--mango-yellow);
-      top: 120rpx;
-      left: 80rpx;
+      top: 120px;
+      left: 80px;
       animation: float 3s ease-in-out infinite;
     }
 
     .deco-2 {
-      width: 120rpx;
-      height: 120rpx;
+      width: 120px;
+      height: 120px;
       background: var(--strawberry-pink);
-      top: 200rpx;
-      right: 120rpx;
+      top: 200px;
+      right: 120px;
       animation: float 4s ease-in-out infinite 0.5s;
     }
 
     .deco-3 {
-      width: 150rpx;
-      height: 150rpx;
+      width: 150px;
+      height: 150px;
       background: var(--blueberry-blue);
-      bottom: 160rpx;
-      left: 160rpx;
+      bottom: 160px;
+      left: 160px;
       animation: float 3.5s ease-in-out infinite 1s;
     }
 
     // 中心Logo
     .character {
-      width: 720rpx;
-      height: 720rpx;
+      width: 720px;
+      height: 720px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -165,7 +165,7 @@
   }
 
   .hero-title {
-    font-size: 96rpx;
+    font-size: 96px;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.4;
@@ -177,7 +177,7 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-40rpx);
+    transform: translateY(-40px);
   }
 }
 
@@ -192,16 +192,16 @@
 
 // 登录区域
 .login-section {
-  padding: 0 80rpx;
+  padding: 0 80px;
 
   .primary-btn {
     width: 100%;
-    height: 192rpx;
+    height: 192px;
     background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
     color: #FFFFFF;
-    font-size: 64rpx;
+    font-size: 64px;
     font-weight: 600;
-    border-radius: 96rpx;
+    border-radius: 96px;
     border: none;
     box-shadow: var(--shadow-soft);
     transition: all var(--duration-fast) var(--ease-standard);
@@ -214,58 +214,58 @@
 
 // 内容区域
 .content-section {
-  padding: 0 80rpx;
+  padding: 0 80px;
 }
 
 // 等级进度卡片
 .level-progress-card {
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   border-radius: var(--radius-large);
-  padding: 64rpx;
-  margin-bottom: 64rpx;
+  padding: 64px;
+  margin-bottom: 64px;
   box-shadow: var(--shadow-soft);
 
   .level-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 48rpx;
+    margin-bottom: 48px;
 
     .level-info {
       display: flex;
       align-items: center;
-      gap: 32rpx;
+      gap: 32px;
 
       .current-level {
-        font-size: 64rpx;
+        font-size: 64px;
         font-weight: 700;
         color: #FFFFFF;
       }
 
       .next-level {
-        font-size: 56rpx;
+        font-size: 56px;
         color: rgba(255, 255, 255, 0.8);
       }
     }
 
     .view-rewards {
-      font-size: 56rpx;
+      font-size: 56px;
       color: #FFFFFF;
       opacity: 0.9;
     }
   }
 
   .progress-bar {
-    height: 32rpx;
+    height: 32px;
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 16rpx;
+    border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 32rpx;
+    margin-bottom: 32px;
 
     .progress-fill {
       height: 100%;
       background: #FFFFFF;
-      border-radius: 16rpx;
+      border-radius: 16px;
       animation: fillBar 1s var(--ease-decelerate);
     }
 
@@ -277,7 +277,7 @@
   }
 
   .progress-text {
-    font-size: 48rpx;
+    font-size: 48px;
     color: rgba(255, 255, 255, 0.9);
   }
 }
@@ -285,10 +285,10 @@
 // OPC测评卡片
 .opc-test-card {
   background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, var(--theme-card) 100%);
-  border: 6rpx solid var(--strawberry-pink);
+  border: 6px solid var(--strawberry-pink);
   border-radius: var(--radius-large);
-  padding: 64rpx;
-  margin-bottom: 96rpx;
+  padding: 64px;
+  margin-bottom: 96px;
   box-shadow: var(--shadow-card);
   animation: pulse-border 2s ease-in-out infinite;
 
@@ -305,10 +305,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32rpx;
+    margin-bottom: 32px;
 
     .test-card-title {
-      font-size: 72rpx;
+      font-size: 72px;
       font-weight: 700;
       color: var(--text-primary);
     }
@@ -316,10 +316,10 @@
     .test-card-badge {
       background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
       color: #FFFFFF;
-      font-size: 48rpx;
+      font-size: 48px;
       font-weight: 600;
-      padding: 16rpx 40rpx;
-      border-radius: 40rpx;
+      padding: 16px 40px;
+      border-radius: 40px;
       animation: heartbeat 2s ease-in-out infinite;
     }
 
@@ -337,30 +337,30 @@
   }
 
   .test-card-desc {
-    font-size: 56rpx;
+    font-size: 56px;
     color: var(--text-secondary);
     line-height: 1.6;
-    margin-bottom: 48rpx;
+    margin-bottom: 48px;
   }
 
   .test-card-features {
     display: flex;
     flex-direction: column;
-    gap: 32rpx;
-    margin-bottom: 48rpx;
+    gap: 32px;
+    margin-bottom: 48px;
 
     .feature-item {
       display: flex;
       align-items: center;
-      gap: 24rpx;
+      gap: 24px;
 
       .feature-icon {
-        font-size: 48rpx;
+        font-size: 48px;
         color: var(--strawberry-pink);
       }
 
       .feature-text {
-        font-size: 52rpx;
+        font-size: 52px;
         color: var(--text-primary);
       }
     }
@@ -368,8 +368,8 @@
 
   .test-card-btn {
     background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
-    border-radius: 96rpx;
-    padding: 48rpx;
+    border-radius: 96px;
+    padding: 48px;
     text-align: center;
     box-shadow: var(--shadow-soft);
     transition: all var(--duration-fast) var(--ease-standard);
@@ -379,7 +379,7 @@
     }
 
     .btn-text {
-      font-size: 64rpx;
+      font-size: 64px;
       font-weight: 600;
       color: #FFFFFF;
     }
@@ -391,16 +391,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 64rpx;
+  margin-bottom: 64px;
 
   .section-title {
-    font-size: 72rpx;
+    font-size: 72px;
     font-weight: 700;
     color: var(--text-primary);
   }
 
   .section-link {
-    font-size: 56rpx;
+    font-size: 56px;
     color: var(--theme-primary);
   }
 }
@@ -409,22 +409,22 @@
 .features-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 48rpx;
-  margin-bottom: 96rpx;
+  gap: 48px;
+  margin-bottom: 96px;
 }
 
 // 功能卡片
 .feature-card {
   position: relative;
   border-radius: var(--radius-large);
-  padding: 64rpx 48rpx;
-  min-height: 480rpx;
+  padding: 64px 48px;
+  min-height: 480px;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-card);
   transition: all var(--duration-normal) var(--ease-standard);
   opacity: 0;
-  transform: translateY(20rpx);
+  transform: translateY(20px);
   animation: fadeInUp 0.5s var(--ease-decelerate) forwards;
 
   @for $i from 1 through 4 {
@@ -436,7 +436,7 @@
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(20rpx);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -465,45 +465,45 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16rpx;
+    gap: 16px;
     z-index: 2;
 
     .lock-icon {
-      font-size: 96rpx;
+      font-size: 96px;
     }
 
     .lock-text {
-      font-size: 48rpx;
+      font-size: 48px;
       font-weight: 600;
       color: #FFFFFF;
     }
   }
 
   .card-icon-small {
-    width: 144rpx;
-    height: 144rpx;
+    width: 144px;
+    height: 144px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 32rpx;
+    margin-bottom: 32px;
     box-shadow: var(--shadow-soft);
 
     .icon-symbol {
-      font-size: 72rpx;
+      font-size: 72px;
     }
   }
 
   .card-title-small {
-    font-size: 64rpx;
+    font-size: 64px;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 16rpx;
+    margin-bottom: 16px;
   }
 
   .card-desc-small {
-    font-size: 48rpx;
+    font-size: 48px;
     color: var(--text-secondary);
     line-height: 1.4;
   }
@@ -528,33 +528,33 @@
 // 热门卡片
 .popular-card {
   border-radius: var(--radius-large);
-  padding: 80rpx 64rpx;
+  padding: 80px 64px;
   box-shadow: var(--shadow-card);
-  margin-bottom: 64rpx;
+  margin-bottom: 64px;
 
   .popular-title {
-    font-size: 80rpx;
+    font-size: 80px;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 32rpx;
+    margin-bottom: 32px;
   }
 
   .popular-desc {
-    font-size: 56rpx;
+    font-size: 56px;
     color: var(--text-secondary);
     line-height: 1.6;
-    margin-bottom: 48rpx;
+    margin-bottom: 48px;
   }
 
   .popular-tags {
     display: flex;
-    gap: 32rpx;
+    gap: 32px;
     flex-wrap: wrap;
 
     .tag {
-      padding: 24rpx 48rpx;
-      border-radius: 40rpx;
-      font-size: 48rpx;
+      padding: 24px 48px;
+      border-radius: 40px;
+      font-size: 48px;
       font-weight: 500;
       transition: all var(--duration-fast) var(--ease-standard);
 
