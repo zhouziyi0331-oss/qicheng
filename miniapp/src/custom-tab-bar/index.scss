@@ -1,17 +1,23 @@
-// 自定义 TabBar 样式 - 参考图片设计
+/**
+ * 自定义TabBar - 果汁色改造版
+ * 从Morandi色升级为果汁色主题
+ */
+
+@import '../styles/theme.scss';
+
 .custom-tab-bar {
   position: fixed;
-  bottom: 20px;
+  bottom: 40rpx;
   left: 50%;
   transform: translateX(-50%);
-  width: 680px;
+  width: 1360rpx;
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
-  padding: 20px 32px 32px;
-  background: #F5E6F0;
-  border-radius: 48px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 40rpx 64rpx 64rpx;
+  background: var(--theme-card);
+  border-radius: 96rpx;
+  box-shadow: var(--shadow-hover);
   z-index: 1000;
 }
 
@@ -20,17 +26,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16rpx;
   flex: 1;
+  transition: all var(--duration-normal) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.9);
+  }
 
   &.active {
     .tab-icon-text {
-      color: #2D3436;
+      color: var(--theme-primary);
       font-weight: 600;
+      animation: bounce-in 0.4s var(--ease-elastic);
+    }
+
+    @keyframes bounce-in {
+      0% {
+        transform: scale(0.8);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
     .tab-text {
-      color: #2D3436;
+      color: var(--theme-primary);
       font-weight: 600;
     }
   }
@@ -39,19 +63,19 @@
     opacity: 0.5;
 
     .tab-icon-text {
-      color: #999999;
+      color: var(--text-tertiary);
     }
 
     .tab-text {
-      color: #999999;
+      color: var(--text-tertiary);
     }
   }
 }
 
 // 图标容器
 .tab-icon-wrapper {
-  width: 56px;
-  height: 56px;
+  width: 112rpx;
+  height: 112rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,61 +83,84 @@
 
 // Unicode字符图标样式
 .tab-icon-text {
-  font-size: 48px;
-  color: #2D3436;
+  font-size: 96rpx;
+  color: var(--text-secondary);
   line-height: 1;
   font-weight: 400;
+  transition: all var(--duration-normal) var(--ease-standard);
 }
 
 // 文字标签
 .tab-text {
-  font-size: 24px;
-  color: #2D3436;
+  font-size: 48rpx;
+  color: var(--text-secondary);
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all var(--duration-normal) var(--ease-standard);
 
   .lock-hint {
-    font-size: 20px;
-    color: #999999;
-    margin-left: 4px;
+    font-size: 40rpx;
+    color: var(--text-tertiary);
+    margin-left: 8rpx;
   }
 }
 
 // 中央启程小猫按钮容器
 .tab-center {
   flex: 0 0 auto;
-  margin: 0 16px;
+  margin: 0 32rpx;
   position: relative;
-  top: -32px; // 向上突出更多
+  top: -64rpx; // 向上突出更多
 }
 
-// 中央圆形按钮（浅色背景，logo填满）
+// 中央圆形按钮（果汁色背景，logo填满）
 .center-mentor-btn {
-  width: 140px;
-  height: 140px;
-  border-radius: 70px;
-  background: #E8D5E3;
-  box-shadow: 0 8px 24px rgba(232, 213, 227, 0.6);
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 140rpx;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  box-shadow: var(--shadow-soft);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all var(--duration-normal) var(--ease-elastic);
   overflow: hidden;
+  animation: float 3s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8rpx);
+    }
+  }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.9);
+    animation: none;
   }
 
   .mentor-logo {
-    width: 140px;
-    height: 140px;
+    width: 280rpx;
+    height: 280rpx;
     object-fit: cover;
+    animation: breathe 3s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
   }
 }
 
 // 中央文字
 .center-text {
-  margin-top: 8px;
-  color: #2D3436;
+  margin-top: 16rpx;
+  color: var(--text-primary);
   font-weight: 600;
+  font-size: 48rpx;
 }
