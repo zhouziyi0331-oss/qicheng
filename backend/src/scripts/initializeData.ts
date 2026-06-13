@@ -21,12 +21,12 @@ async function initializeStudentCapabilities() {
       `SELECT id, username FROM users WHERE role = 'student' AND status = 'active'`
     );
 
-    logger.info(`Found ${students.rows.length} students to initialize`);
+    logger.info(`Found ${students.length} students to initialize`);
 
     let successCount = 0;
     let errorCount = 0;
 
-    for (const student of students.rows) {
+    for (const student of students) {
       try {
         // 检查是否已有能力画像
         const existing = await queryOne(
@@ -63,7 +63,7 @@ async function initializeStudentCapabilities() {
         } : undefined);
 
         successCount++;
-        logger.info(`✓ Initialized capability for student ${student.username} (${successCount}/${students.rows.length})`);
+        logger.info(`✓ Initialized capability for student ${student.username} (${successCount}/${students.length})`);
 
         // 避免API限流
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -94,12 +94,12 @@ async function initializeTaskVectors() {
       `SELECT id, title, status FROM tasks WHERE status IN ('open', 'in_progress')`
     );
 
-    logger.info(`Found ${tasks.rows.length} tasks to initialize`);
+    logger.info(`Found ${tasks.length} tasks to initialize`);
 
     let successCount = 0;
     let errorCount = 0;
 
-    for (const task of tasks.rows) {
+    for (const task of tasks) {
       try {
         // 检查是否已有向量
         const existing = await queryOne(
@@ -127,7 +127,7 @@ async function initializeTaskVectors() {
         }
 
         successCount++;
-        logger.info(`✓ Initialized task ${task.title} (${successCount}/${tasks.rows.length})`);
+        logger.info(`✓ Initialized task ${task.title} (${successCount}/${tasks.length})`);
 
         // 避免API限流
         await new Promise(resolve => setTimeout(resolve, 2000));
