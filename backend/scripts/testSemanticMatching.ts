@@ -108,13 +108,13 @@ async function testSemanticMatching() {
       );
 
       console.log('✅ 匹配计算成功:');
-      console.log(`   综合得分: ${(matchScore.overallScore * 100).toFixed(1)}%`);
-      console.log(`   技能匹配: ${(matchScore.skillMatch.score * 100).toFixed(1)}%`);
-      console.log(`   难度匹配: ${(matchScore.difficultyMatch.score * 100).toFixed(1)}%`);
-      console.log(`   领域匹配: ${(matchScore.domainMatch.score * 100).toFixed(1)}%`);
-      console.log(`   成长潜力: ${(matchScore.growthPotential.score * 100).toFixed(1)}%`);
-      console.log(`   可靠性: ${(matchScore.reliability.score * 100).toFixed(1)}%`);
-      console.log(`   偏好对齐: ${(matchScore.preferenceAlignment.score * 100).toFixed(1)}%`);
+      console.log(`   综合得分: ${(match_score.overallScore * 100).toFixed(1)}%`);
+      console.log(`   技能匹配: ${(match_score.skillMatch.score * 100).toFixed(1)}%`);
+      console.log(`   难度匹配: ${(match_score.difficultyMatch.score * 100).toFixed(1)}%`);
+      console.log(`   领域匹配: ${(match_score.domainMatch.score * 100).toFixed(1)}%`);
+      console.log(`   成长潜力: ${(match_score.growthPotential.score * 100).toFixed(1)}%`);
+      console.log(`   可靠性: ${(match_score.reliability.score * 100).toFixed(1)}%`);
+      console.log(`   偏好对齐: ${(match_score.preferenceAlignment.score * 100).toFixed(1)}%`);
     } catch (error: any) {
       console.log('⚠️  匹配计算失败:', error.message);
     }

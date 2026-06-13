@@ -184,7 +184,7 @@ class MatchingScheduler {
           const match_score = await semanticMatchingEngine.matchTaskWithStudent(task.id, studentId);
 
           // 只保存匹配度 > 0.5 的结果
-          if (matchScore.overallScore > 0.5) {
+          if (match_score.overallScore > 0.5) {
             // 获取当前任务的匹配学生数量
             const currentMatches = await queryOne<{ count: number }>(
               `SELECT COUNT(*) as count FROM task_student_matches WHERE task_id = $1`,
@@ -214,14 +214,14 @@ class MatchingScheduler {
               [
                 task.id,
                 studentId,
-                matchScore.overallScore,
-                matchScore.skillMatch.score,
-                matchScore.difficultyMatch.score,
-                matchScore.domainMatch.score,
-                matchScore.growthPotential.score,
-                matchScore.reliability.score,
-                matchScore.preferenceAlignment.score,
-                JSON.stringify(matchScore.breakdown),
+                match_score.overallScore,
+                match_score.skillMatch.score,
+                match_score.difficultyMatch.score,
+                match_score.domainMatch.score,
+                match_score.growthPotential.score,
+                match_score.reliability.score,
+                match_score.preferenceAlignment.score,
+                JSON.stringify(match_score.breakdown),
                 rank,
               ]
             );
@@ -229,7 +229,7 @@ class MatchingScheduler {
             matchedCount++;
 
             // 如果匹配度很高（Top 10），通知企业
-            if (matchScore.overallScore > 0.8 && rank <= 10) {
+            if (match_score.overallScore > 0.8 && rank <= 10) {
               websocketService.notifyMatchComplete(task.company_id, task.id, 1);
             }
           }

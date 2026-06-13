@@ -19,7 +19,7 @@ class InvitationMatchService {
         const matches = [];
         for (const candidate of candidates) {
             const match_score = await this.calculateMatchScore(candidate, taskRequirements, config);
-            if (matchScore.match_score >= config.min_match_score) {
+            if (match_score.match_score >= config.min_match_score) {
                 matches.push(matchScore);
             }
         }
