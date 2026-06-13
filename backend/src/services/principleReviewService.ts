@@ -114,7 +114,7 @@ ${context.hasRealCaseData ? '是' : '否'}
 
       return result;
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI-07 principle review failed:', error);
 
       // 审核失败时，保守策略：允许通过但记录错误

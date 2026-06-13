@@ -69,7 +69,7 @@ export async function getTaskInvitations(req: Request, res: Response, next: Next
           estimatedHours: inv.estimated_minutes ? Math.round(inv.estimated_minutes / 60) : null,
           levelRequired: inv.level_required,
           acceptanceCriteria: inv.acceptance_criteria,
-          matchScore: inv.match_score,
+          match_score: inv.match_score,
           matchReason: inv.match_reason,
           companyName: inv.company_full_name || inv.company_name,
           industry: inv.industry,
@@ -78,7 +78,7 @@ export async function getTaskInvitations(req: Request, res: Response, next: Next
         }))
       }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -214,7 +214,7 @@ export async function acceptTaskInvitation(req: Request, res: Response, next: Ne
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -247,7 +247,7 @@ export async function rejectTaskInvitation(req: Request, res: Response, next: Ne
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -299,7 +299,7 @@ export async function updateTaskProgress(req: Request, res: Response, next: Next
         message: '进度更新成功'
       }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -360,7 +360,7 @@ export async function submitDeliverables(req: Request, res: Response, next: Next
         }
 
         logger.info('质量预审通过', { taskId, studentId, score: preCheckResult.score });
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('质量预审失败，允许提交', { taskId, studentId, error });
         // 预审失败不阻塞提交，记录错误后继续
       }
@@ -424,7 +424,7 @@ export async function submitDeliverables(req: Request, res: Response, next: Next
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -488,7 +488,7 @@ async function triggerAIReview(taskId: string): Promise<void> {
 
       logger.info('AI review completed', { taskId, passed: aiReviewPassed });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('AI review error', { taskId, error: err });
     throw err;
   }

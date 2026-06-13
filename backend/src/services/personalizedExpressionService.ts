@@ -60,7 +60,7 @@ class PersonalizedExpressionService {
         response,
         tone: this.inferTone(thinking)
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to generate personalized response:', error);
       throw error;
     }
@@ -127,7 +127,7 @@ ${context.situation}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to express:', error);
       // 返回基于洞察的简单回复
       return `${thinking.insight.understanding}\n\n${thinking.insight.actionable}`;
@@ -175,7 +175,7 @@ ${context.situation}
           response
         ]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save to short term memory:', error);
     }
   }
@@ -230,7 +230,7 @@ ${context.situation}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to generate quick response:', error);
       return '收到，继续加油！';
     }

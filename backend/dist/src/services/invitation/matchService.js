@@ -18,7 +18,7 @@ class InvitationMatchService {
         // 3. 计算每个学生的匹配分数
         const matches = [];
         for (const candidate of candidates) {
-            const matchScore = await this.calculateMatchScore(candidate, taskRequirements, config);
+            const match_score = await this.calculateMatchScore(candidate, taskRequirements, config);
             if (matchScore.match_score >= config.min_match_score) {
                 matches.push(matchScore);
             }

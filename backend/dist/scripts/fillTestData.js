@@ -179,7 +179,7 @@ async function matchTask(task) {
         }
         console.log(`✅ 找到 ${matches.length} 个匹配学生:`);
         matches.slice(0, 5).forEach((match, i) => {
-            const ms = match.matchScore;
+            const ms = match.match_score;
             console.log(`   ${i + 1}. 综合${Math.round(ms.overallScore * 100)}% (技能${Math.round(ms.skillMatch.score * 100)}% 难度${Math.round(ms.difficultyMatch.score * 100)}%)`);
         });
     }

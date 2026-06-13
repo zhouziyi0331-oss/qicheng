@@ -96,7 +96,7 @@ class PlatformAdminService {
       await client.query('COMMIT');
       logger.info('Withdrawal approved', { withdrawalId, reviewerId });
       return reviewResult.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -146,7 +146,7 @@ class PlatformAdminService {
       await client.query('COMMIT');
       logger.info('Withdrawal rejected', { withdrawalId, reviewerId, reason });
       return reviewResult.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -229,7 +229,7 @@ class PlatformAdminService {
       await client.query('COMMIT');
       logger.info('User verification approved', { verificationId, reviewerId });
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -333,7 +333,7 @@ class PlatformAdminService {
       await client.query('COMMIT');
       logger.info('Task reviewed', { taskId, reviewerId, status });
       return reviewResult.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -365,7 +365,7 @@ class PlatformAdminService {
       await client.query('COMMIT');
       logger.info('Rating hidden', { ratingId, reviewerId });
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {

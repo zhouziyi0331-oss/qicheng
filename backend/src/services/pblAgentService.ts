@@ -57,7 +57,7 @@ export class PBLAgentService {
         project,
         opening_questions: openingQuestions
       };
-    } catch (err) {
+    } catch (err: unknown) {
       await client.query('ROLLBACK');
       throw err;
     } finally {

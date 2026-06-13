@@ -20,5 +20,5 @@ export async function getTimeline(req: Request, res: Response, next: NextFunctio
     );
 
     res.json({ success: true, data: timeline });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }

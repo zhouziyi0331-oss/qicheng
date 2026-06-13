@@ -97,7 +97,7 @@ async function triggerTaskMatching(taskId) {
         let matchedCount = 0;
         for (const student of studentsResult.rows) {
             // 计算匹配分数（简化版，实际应该调用完整的匹配引擎）
-            const matchScore = calculateMatchScore(task, student);
+            const match_score = calculateMatchScore(task, student);
             if (matchScore.overall_score > 0.5) {
                 // 插入或更新匹配记录
                 await db_1.pool.query(`INSERT INTO task_student_matches (

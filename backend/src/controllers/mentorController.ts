@@ -48,7 +48,7 @@ export const mentorChat = async (req: Request, res: Response) => {
       detectedStuckPoint: result.detectedSignals.stuckPoint,
       suggestions: result.suggestions,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('AI导师对话失败:', error);
     return res.status(500).json({
       success: false,
@@ -76,7 +76,7 @@ export const getConversationHistory = async (req: Request, res: Response) => {
       success: true,
       messages,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取对话历史失败:', error);
     return res.status(500).json({
       success: false,
@@ -106,7 +106,7 @@ export const getStudentSessions = async (req: Request, res: Response) => {
       success: true,
       sessions,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取学生会话失败:', error);
     return res.status(500).json({
       success: false,
@@ -129,7 +129,7 @@ export const getSessionStats = async (req: Request, res: Response) => {
       success: true,
       stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取会话统计失败:', error);
     return res.status(500).json({
       success: false,
@@ -152,7 +152,7 @@ export const getStudentStats = async (req: Request, res: Response) => {
       success: true,
       stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取学生统计失败:', error);
     return res.status(500).json({
       success: false,
@@ -185,7 +185,7 @@ export const getWelcomeMessage = async (req: Request, res: Response) => {
       success: true,
       message: welcomeMessage,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取欢迎消息失败:', error);
     return res.status(500).json({
       success: false,
@@ -203,7 +203,7 @@ export const getHistory = async (req: Request, res: Response) => {
     const { taskId } = req.params;
     // 返回空数组，让前端使用默认欢迎消息
     res.json({ messages: [] });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取对话历史失败:', error);
     res.status(500).json({ error: '获取对话历史失败' });
   }
@@ -217,7 +217,7 @@ export const getFirstStep = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
     res.json({ message: null });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取第一步引导失败:', error);
     res.status(500).json({ error: '获取第一步引导失败' });
   }
@@ -229,7 +229,7 @@ export const getFirstStep = async (req: Request, res: Response) => {
 export const recordObservation = async (req: Request, res: Response) => {
   try {
     res.json({ success: true, message: '观察已记录' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('记录观察失败:', error);
     res.status(500).json({ success: false, error: '记录观察失败' });
   }
@@ -241,7 +241,7 @@ export const recordObservation = async (req: Request, res: Response) => {
 export const detectStuckPoints = async (req: Request, res: Response) => {
   try {
     res.json({ success: true, stuckStudents: [] });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('检测卡点失败:', error);
     res.status(500).json({ success: false, error: '检测卡点失败' });
   }
@@ -258,7 +258,7 @@ export const generateWelcomeMessage = async (req: Request, res: Response) => {
       : `嗨！我是启程小猫 🐱 有什么我可以帮你的吗？`;
 
     res.json({ success: true, message });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('生成欢迎消息失败:', error);
     res.status(500).json({ success: false, error: '生成欢迎消息失败' });
   }
@@ -270,7 +270,7 @@ export const generateWelcomeMessage = async (req: Request, res: Response) => {
 export const generateMilestoneMessage = async (req: Request, res: Response) => {
   try {
     res.json({ success: true, message: '恭喜你完成了这个里程碑！🎉' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('生成里程碑消息失败:', error);
     res.status(500).json({ success: false, error: '生成里程碑消息失败' });
   }
@@ -282,7 +282,7 @@ export const generateMilestoneMessage = async (req: Request, res: Response) => {
 export const generateRejectionMessage = async (req: Request, res: Response) => {
   try {
     res.json({ success: true, message: '这次的提交还有改进空间，我们一起看看怎么优化吧~' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('生成拒绝消息失败:', error);
     res.status(500).json({ success: false, error: '生成拒绝消息失败' });
   }
@@ -294,7 +294,7 @@ export const generateRejectionMessage = async (req: Request, res: Response) => {
 export const detectHabits = async (req: Request, res: Response) => {
   try {
     res.json({ success: true, habits: [] });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('检测习惯失败:', error);
     res.status(500).json({ success: false, error: '检测习惯失败' });
   }

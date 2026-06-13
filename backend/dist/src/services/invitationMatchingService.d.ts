@@ -48,7 +48,7 @@ declare class InvitationMatchingService {
         taskId: string;
         matches: {
             studentId: string;
-            matchScore: number;
+            match_score: number;
             scoreBreakdown: {
                 opcMatch: number;
                 capabilityComplement: number;
@@ -67,7 +67,7 @@ declare class InvitationMatchingService {
         studentId: string;
         matches: {
             taskId: string;
-            matchScore: number;
+            match_score: number;
             scoreBreakdown: {
                 capabilityMatch: number;
                 growthPotential: number;
@@ -86,7 +86,7 @@ declare class InvitationMatchingService {
     /**
      * 发送任务邀请
      */
-    sendInvitation(taskId: string, studentId: string, companyId: string, matchScore: number, customMessage?: string): Promise<any>;
+    sendInvitation(taskId: string, studentId: string, companyId: string, match_score: number, customMessage?: string): Promise<any>;
     /**
      * 获取学生收到的邀请列表
      */

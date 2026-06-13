@@ -68,7 +68,7 @@ export async function createRating(req: AuthRequest, res: Response) {
       success: true,
       data: newRating,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create rating', { error });
     return res.status(500).json({
       error: 'Failed to create rating',
@@ -103,7 +103,7 @@ export async function updateRating(req: AuthRequest, res: Response) {
       success: true,
       data: updatedRating,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to update rating', { error });
     return res.status(500).json({
       error: 'Failed to update rating',
@@ -136,7 +136,7 @@ export async function respondToRating(req: AuthRequest, res: Response) {
       success: true,
       message: 'Response added successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to respond to rating', { error });
     return res.status(500).json({
       error: 'Failed to respond to rating',
@@ -164,7 +164,7 @@ export async function getTaskRatings(req: AuthRequest, res: Response) {
       success: true,
       data: ratings,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get task ratings', { error });
     return res.status(500).json({
       error: 'Failed to get task ratings',
@@ -197,7 +197,7 @@ export async function getUserRatings(req: AuthRequest, res: Response) {
       limit,
       offset,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get user ratings', { error });
     return res.status(500).json({
       error: 'Failed to get user ratings',
@@ -231,7 +231,7 @@ export async function getUserRatingStats(req: AuthRequest, res: Response) {
       success: true,
       data: stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get user rating stats', { error });
     return res.status(500).json({
       error: 'Failed to get user rating stats',
@@ -254,7 +254,7 @@ export async function getAvailableTags(req: AuthRequest, res: Response) {
       success: true,
       data: tags,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get available tags', { error });
     return res.status(500).json({
       error: 'Failed to get available tags',
@@ -291,7 +291,7 @@ export async function markHelpful(req: AuthRequest, res: Response) {
       success: true,
       message: 'Helpfulness marked successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to mark helpfulness', { error });
     return res.status(500).json({
       error: 'Failed to mark helpfulness',
@@ -329,7 +329,7 @@ export async function reportRating(req: AuthRequest, res: Response) {
       success: true,
       message: 'Rating reported successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to report rating', { error });
     return res.status(500).json({
       error: 'Failed to report rating',
@@ -372,7 +372,7 @@ export async function deleteRating(req: AuthRequest, res: Response) {
       success: true,
       message: 'Rating deleted successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to delete rating', { error });
     return res.status(500).json({
       error: 'Failed to delete rating',

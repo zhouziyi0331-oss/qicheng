@@ -15,7 +15,7 @@ export async function getPatterns(req: Request, res: Response, next: NextFunctio
       [userId]
     );
     res.json({ success: true, data: patterns });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /exploration/pattern/apply — 应用某个模式
@@ -56,7 +56,7 @@ export async function applyPattern(req: Request, res: Response, next: NextFuncti
     });
 
     res.json({ success: true, message: `已应用模式: ${pattern.pattern_name}` });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /exploration/pattern/mark-life — 标记为人生模式
@@ -82,7 +82,7 @@ export async function markAsLifePattern(req: Request, res: Response, next: NextF
     }
 
     res.json({ success: true, message: `已标记为人生模式: ${result[0].pattern_name}` });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /exploration/reflection — 提交反思记录
@@ -104,7 +104,7 @@ export async function submitReflection(req: Request, res: Response, next: NextFu
     );
 
     res.json({ success: true, data: { reflectionId: result[0].id } });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /exploration/reflections/:userId — 获取反思记录
@@ -122,7 +122,7 @@ export async function getReflections(req: Request, res: Response, next: NextFunc
       [userId]
     );
     res.json({ success: true, data: reflections });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /exploration/suggestions — 获取探索建议
@@ -144,7 +144,7 @@ export async function getSuggestions(req: Request, res: Response, next: NextFunc
     const suggestions = generateExplorationSuggestions(profile.opc_label, profile.task_count);
 
     res.json({ success: true, data: suggestions });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /exploration/tag — 为探索记录添加标签
@@ -177,7 +177,7 @@ export async function addTag(req: Request, res: Response, next: NextFunction): P
     }
 
     res.json({ success: true, message: '标签已添加' });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /exploration/tags/:userId — 获取用户的所有标签
@@ -200,7 +200,7 @@ export async function getTags(req: Request, res: Response, next: NextFunction): 
     });
 
     res.json({ success: true, data: Array.from(allTags) });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================

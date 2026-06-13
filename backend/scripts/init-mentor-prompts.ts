@@ -254,7 +254,7 @@ async function initializePromptTemplates() {
     }
 
     logger.info('✅ Prompt模板初始化完成！');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('初始化Prompt模板失败', { error });
     throw error;
   }

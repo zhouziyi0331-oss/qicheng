@@ -419,7 +419,7 @@ async function main() {
 
     printReport();
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ 测试执行失败:', error);
     process.exit(1);
   }

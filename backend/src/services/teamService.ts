@@ -89,7 +89,7 @@ class TeamService {
       logger.info(`Team created: ${team.id} by ${params.creatorId}`);
 
       return team.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create team:', error);
       throw error;
     }
@@ -168,7 +168,7 @@ class TeamService {
         // 这里可以发送WebSocket通知或创建通知记录
         logger.info(`New team application: ${applicantId} -> team ${teamId}`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to apply to join team:', error);
       throw error;
     }
@@ -215,7 +215,7 @@ class TeamService {
 
         logger.info(`Team application rejected: ${applicantId} for team ${teamId}`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to review team application:', error);
       throw error;
     }
@@ -252,7 +252,7 @@ class TeamService {
       );
 
       logger.info(`Module assigned: ${moduleName} to ${memberId} in team ${teamId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to assign module:', error);
       throw error;
     }
@@ -313,7 +313,7 @@ class TeamService {
           revenueSharePercent: m.revenue_share_percent,
         })),
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get team info:', error);
       return null;
     }
@@ -356,7 +356,7 @@ class TeamService {
       }
 
       logger.info(`Team revenue distributed: order ${orderId}, team ${teamId}, total ${totalRevenue}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to distribute team revenue:', error);
       throw error;
     }
@@ -399,7 +399,7 @@ class TeamService {
         inviteCode,
         inviteUrl,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to generate invite link:', error);
       throw error;
     }
@@ -483,7 +483,7 @@ class TeamService {
       logger.info(`User ${userId} joined team ${invitation.team_id} via invite code ${inviteCode}`);
 
       return invitation.team_id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to join team by invite code:', error);
       throw error;
     }
@@ -519,7 +519,7 @@ class TeamService {
       );
 
       logger.info(`User ${userId} left team ${teamId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to leave team:', error);
       throw error;
     }
@@ -560,7 +560,7 @@ class TeamService {
       );
 
       logger.info(`Team ${teamId} disbanded by ${leaderId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to disband team:', error);
       throw error;
     }

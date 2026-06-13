@@ -169,7 +169,7 @@ async function main() {
     logger.info('4. 监控连接池状态，避免连接泄漏');
     logger.info('5. 定期运行 VACUUM ANALYZE 优化表统计信息');
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('性能分析失败:', error);
     process.exit(1);
   } finally {

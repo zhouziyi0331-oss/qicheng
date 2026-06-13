@@ -88,7 +88,7 @@ ${student?.profile_summary || '这是一位新学生'}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to translate task to first steps:', error);
       throw error;
     }
@@ -150,7 +150,7 @@ ${task?.description || ''}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to reframe student difficulty:', error);
       throw error;
     }
@@ -212,7 +212,7 @@ ${task?.description || ''}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to translate rejection feedback:', error);
       throw error;
     }
@@ -283,7 +283,7 @@ ${task?.description || ''}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to translate student growth to value:', error);
       throw error;
     }
@@ -337,7 +337,7 @@ ${task?.description || ''}
       }
 
       return content.text.trim();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to translate personality to business value:', error);
       throw error;
     }

@@ -50,7 +50,7 @@ export async function createDraft(req: AuthRequest, res: Response) {
       success: true,
       data: draft,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create draft', { error });
     return res.status(500).json({
       error: 'Failed to create draft',
@@ -88,7 +88,7 @@ export async function getDrafts(req: AuthRequest, res: Response) {
       limit,
       offset,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get drafts', { error });
     return res.status(500).json({
       error: 'Failed to get drafts',
@@ -120,7 +120,7 @@ export async function getDraft(req: AuthRequest, res: Response) {
       success: true,
       data: draft,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get draft', { error });
     return res.status(500).json({
       error: 'Failed to get draft',
@@ -148,7 +148,7 @@ export async function updateDraft(req: AuthRequest, res: Response) {
       success: true,
       data: draft,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to update draft', { error });
     return res.status(500).json({
       error: 'Failed to update draft',
@@ -176,7 +176,7 @@ export async function deleteDraft(req: AuthRequest, res: Response) {
       success: true,
       message: 'Draft deleted successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to delete draft', { error });
     return res.status(500).json({
       error: 'Failed to delete draft',
@@ -204,7 +204,7 @@ export async function duplicateDraft(req: AuthRequest, res: Response) {
       success: true,
       data: newDraft,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to duplicate draft', { error });
     return res.status(500).json({
       error: 'Failed to duplicate draft',
@@ -236,7 +236,7 @@ export async function reviewDraft(req: AuthRequest, res: Response) {
       success: true,
       data: suggestions,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to review draft', { error });
     return res.status(500).json({
       error: 'Failed to review draft',
@@ -264,7 +264,7 @@ export async function getPricingSuggestion(req: AuthRequest, res: Response) {
       success: true,
       data: suggestion,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get pricing suggestion', { error });
     return res.status(500).json({
       error: 'Failed to get pricing suggestion',
@@ -299,7 +299,7 @@ export async function publishDraft(req: AuthRequest, res: Response) {
       },
       message: 'Draft published successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to publish draft', { error });
     return res.status(500).json({
       error: 'Failed to publish draft',
@@ -328,7 +328,7 @@ export async function getDraftHistory(req: AuthRequest, res: Response) {
       success: true,
       data: history,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get draft history', { error });
     return res.status(500).json({
       error: 'Failed to get draft history',
@@ -357,7 +357,7 @@ export async function restoreDraftVersion(req: AuthRequest, res: Response) {
       data: draft,
       message: 'Draft restored successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to restore draft version', { error });
     return res.status(500).json({
       error: 'Failed to restore draft version',

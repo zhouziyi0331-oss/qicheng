@@ -41,7 +41,7 @@ router.post(
         success: true,
         data: result,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -92,7 +92,7 @@ router.post(
           results: results.map(r => dynamicProfileService.formatProfileUpdateForFrontend(r)),
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -131,7 +131,7 @@ router.get(
           total: history.length,
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

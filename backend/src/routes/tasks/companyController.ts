@@ -84,7 +84,7 @@ export async function createTask(req: Request, res: Response, next: NextFunction
         logger.error(`Failed to match new task ${task.id} to students:`, err);
       });
       logger.info(`Triggered matching for new task ${task.id}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to trigger matching for new task:', error);
       // 不抛出错误，匹配失败不应该影响任务创建
     }
@@ -102,7 +102,7 @@ export async function createTask(req: Request, res: Response, next: NextFunction
         message: '任务已提交，平台审核后将开始匹配学生',
       },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /company — 企业获取任务列表
@@ -123,7 +123,7 @@ export async function getCompanyTasks(req: Request, res: Response, next: NextFun
       [companyId]
     );
     res.json({ success: true, data: tasks });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /company/:id/approve — 企业验收通过
@@ -275,7 +275,7 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
     try {
       const behaviorLearningService = require('../../services/behaviorLearningService').default;
       await behaviorLearningService.logTaskComplete(submission.student_id, taskId);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to log task complete behavior:', error);
     }
 
@@ -287,7 +287,7 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
         completedAt: new Date(),
       });
       logger.info(`Updated student capability after task completion: ${submission.student_id}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to update student capability after task completion:', error);
     }
 
@@ -308,7 +308,7 @@ export async function approveTask(req: Request, res: Response, next: NextFunctio
         }
       } : undefined
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /company/:id/reject — 企业验收打回
@@ -345,7 +345,7 @@ export async function rejectTask(req: Request, res: Response, next: NextFunction
     }
 
     res.json({ success: true, message: '已打回，学生将收到修改建议' });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================

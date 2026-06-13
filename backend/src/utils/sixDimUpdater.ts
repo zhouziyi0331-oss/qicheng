@@ -118,7 +118,7 @@ ${JSON.stringify(currentScores, null, 2)}
           d5_change: result.d5_change || 0,
           d6_change: result.d6_change || 0,
         };
-      } catch (err) {
+      } catch (err: unknown) {
         logger.error('AI score update failed, using rule-based', { error: (err as Error).message });
         changes = calculateScoreChangesRuleBased(companyScore, task.track_type as string, taskDifficulty);
       }
@@ -146,7 +146,7 @@ ${JSON.stringify(currentScores, null, 2)}
       changes,
       newScores
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Update six dim scores error', { error: (err as Error).message });
   }
 }

@@ -203,7 +203,7 @@ export async function wechatLogin(req: Request, res: Response, next: NextFunctio
         nextStep: isNewUser && userType === 'student' ? 'onboarding' : 'home',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -250,7 +250,7 @@ export async function bindPhone(req: Request, res: Response, next: NextFunction)
       success: true,
       message: '手机号绑定成功',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -319,7 +319,7 @@ export async function decryptWechatPhone(req: Request, res: Response, next: Next
       message: '手机号绑定成功',
       data: { phone },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

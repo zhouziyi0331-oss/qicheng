@@ -256,7 +256,7 @@ export class VerifyService {
           );
         }
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[VerifyService] 第一轮判断处理失败:', error);
       // 更新状态为失败
       await query(
@@ -358,7 +358,7 @@ export class VerifyService {
           );
         }
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[VerifyService] 第二轮判断处理失败:', error);
       await query(
         `UPDATE verify_sessions

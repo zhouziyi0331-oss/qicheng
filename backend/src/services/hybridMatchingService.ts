@@ -70,7 +70,7 @@ export class HybridMatchingService {
                 studentEmbedding
               );
               aiScore = similarity * 100; // 转换为0-100分
-            } catch (error) {
+            } catch (error: unknown) {
               logger.warn('Failed to calculate vector similarity', { error });
             }
           }
@@ -106,7 +106,7 @@ export class HybridMatchingService {
       await this.saveMatchLogs(taskId, matches.slice(0, topN));
 
       return matches.slice(0, topN);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error in hybrid matching for task', { taskId, error });
       throw error;
     }
@@ -174,7 +174,7 @@ export class HybridMatchingService {
                 taskEmbedding
               );
               aiScore = similarity * 100;
-            } catch (error) {
+            } catch (error: unknown) {
               logger.warn('Failed to calculate vector similarity', { error });
             }
           }
@@ -203,7 +203,7 @@ export class HybridMatchingService {
       matches.sort((a, b) => b.finalScore - a.finalScore);
 
       return matches.slice(0, topN);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error in hybrid matching for student', { userId, error });
       throw error;
     }
@@ -320,7 +320,7 @@ export class HybridMatchingService {
 
       await client.query('COMMIT');
       logger.info('Match logs saved successfully', { taskId, matchCount: matches.length });
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Error saving match logs', { error });
       throw error;
@@ -364,7 +364,7 @@ export class HybridMatchingService {
       );
 
       logger.info('Task embedding generated', { taskId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating task embedding', { taskId, error });
       throw error;
     }
@@ -460,7 +460,7 @@ ${student.creativity >= 7 ? '富有创造力，善于提出创新想法' : stude
       );
 
       logger.info('Student embedding generated', { userId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating student embedding', { userId, error });
       throw error;
     }

@@ -29,7 +29,7 @@ router.post(
         success: true,
         data: result,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -51,7 +51,7 @@ router.get(
         success: true,
         data: { breakdownId, message: 'Not yet implemented' },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

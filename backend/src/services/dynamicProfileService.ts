@@ -257,7 +257,7 @@ class DynamicProfileService {
         },
         createdAt: record.created_at,
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get profile history:', error);
       throw new AppError(500, 'Failed to get profile history');
     }

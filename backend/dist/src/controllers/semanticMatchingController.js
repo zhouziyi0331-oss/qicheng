@@ -129,7 +129,7 @@ const getRecommendedTasks = async (req, res) => {
                 level: task.task_level,
                 budget: task.task_budget,
                 duration: task.task_duration,
-                matchScore: Math.round(task.overallScore * 100),
+                match_score: Math.round(task.overallScore * 100),
                 matchReason: task.match_reason,
                 studentFriendlyTitle: task.student_friendly_title,
                 whatYouWillDo: task.what_you_will_do,

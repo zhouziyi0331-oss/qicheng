@@ -100,7 +100,7 @@ class EmotionAnalysisService {
       await this.updateConversationContext(sessionId, finalResult);
 
       return finalResult;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('情绪分析失败', { error, studentId, content });
       // 返回中性情绪
       return {
@@ -225,7 +225,7 @@ ${context ? `上下文：\n${context}` : ''}
         })),
         confidence: 0.9
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI情绪检测失败', { error });
       return {
         emotion: 'neutral',
@@ -347,7 +347,7 @@ ${context ? `上下文：\n${context}` : ''}
         examplePhrases: row.example_phrases,
         guidanceAdjustments: row.guidance_adjustments
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取情绪响应策略失败', { error, emotion });
       return null;
     }
@@ -379,7 +379,7 @@ ${context ? `上下文：\n${context}` : ''}
         intensity: row.emotion_intensity,
         createdAt: row.created_at
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取情绪历史失败', { error, studentId });
       return [];
     }
@@ -398,7 +398,7 @@ ${context ? `上下文：\n${context}` : ''}
 
       const result = await pool.query(query, [sessionId]);
       return result.rows[0] || null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取对话上下文失败', { error, sessionId });
       return null;
     }

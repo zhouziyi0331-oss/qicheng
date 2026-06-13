@@ -112,7 +112,7 @@ export class StartupReportService {
 
       logger.info('创业报告生成成功', { userId, reportId });
       return report;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('创业报告生成失败', { userId, reportId, error: (error as Error).message });
       throw error;
     }
@@ -216,7 +216,7 @@ export class StartupReportService {
       const analysis = JSON.parse(jsonText);
 
       return analysis;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Claude API 调用失败', { error: (error as Error).message });
 
       // 降级方案：使用规则引擎生成基础分析

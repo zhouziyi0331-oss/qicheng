@@ -88,7 +88,7 @@ class GrowthTrackingService {
       });
 
       return milestone;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('检测里程碑失败', { error, studentId, sessionId });
       return null;
     }
@@ -257,7 +257,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
       );
 
       return JSON.parse(response.content);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI里程碑分析失败', { error });
       return { shouldCreateMilestone: false };
     }
@@ -338,7 +338,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
          WHERE id = $2`,
         [response.content, milestoneId]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('生成庆祝消息失败', { error, milestoneId });
     }
   }
@@ -473,7 +473,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
         confidenceTrend: profileResult.rows[0]?.confidence_trend || [],
         recentGrowth: recentMilestones
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取成长统计失败', { error, studentId });
       return {
         totalMilestones: 0,

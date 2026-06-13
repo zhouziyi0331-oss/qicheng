@@ -15,7 +15,7 @@ export class PBLAgentController {
         success: true,
         data: result
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('初始化项目失败:', err);
       res.status(500).json({
         success: false,
@@ -39,7 +39,7 @@ export class PBLAgentController {
         success: true,
         data: response
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('对话失败:', err);
       res.status(500).json({
         success: false,
@@ -62,7 +62,7 @@ export class PBLAgentController {
         success: true,
         data: result
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('任务拆解引导失败:', err);
       res.status(500).json({
         success: false,
@@ -85,7 +85,7 @@ export class PBLAgentController {
         success: true,
         data: evaluation
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('评估拆解失败:', err);
       res.status(500).json({
         success: false,
@@ -105,7 +105,7 @@ export class PBLAgentController {
         success: true,
         data: mvp
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('生成MVP方案失败:', err);
       res.status(500).json({
         success: false,
@@ -130,7 +130,7 @@ export class PBLAgentController {
         success: true,
         data: result
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('代码执行失败:', err);
       res.status(500).json({
         success: false,
@@ -153,7 +153,7 @@ export class PBLAgentController {
         success: true,
         data: { questions }
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('生成反思问题失败:', err);
       res.status(500).json({
         success: false,
@@ -177,7 +177,7 @@ export class PBLAgentController {
         success: true,
         data: log
       });
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('保存反思日志失败:', err);
       res.status(500).json({
         success: false,

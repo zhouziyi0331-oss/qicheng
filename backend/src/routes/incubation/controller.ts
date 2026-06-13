@@ -15,7 +15,7 @@ export async function getProjects(req: Request, res: Response, next: NextFunctio
       [userId]
     );
     res.json({ success: true, data: projects });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /incubation/project/create — 创建孵化项目
@@ -48,7 +48,7 @@ export async function createProject(req: Request, res: Response, next: NextFunct
     );
 
     res.json({ success: true, data: { projectId: result[0].id } });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /incubation/project/update — 更新项目进度
@@ -98,7 +98,7 @@ export async function updateProject(req: Request, res: Response, next: NextFunct
     }
 
     res.json({ success: true, message: '项目已更新' });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /incubation/milestones/:projectId — 获取项目里程碑
@@ -114,7 +114,7 @@ export async function getMilestones(req: Request, res: Response, next: NextFunct
       [projectId]
     );
     res.json({ success: true, data: milestones });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /incubation/milestone/create — 创建里程碑
@@ -147,7 +147,7 @@ export async function createMilestone(req: Request, res: Response, next: NextFun
     );
 
     res.json({ success: true, data: { milestoneId: result[0].id } });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /incubation/milestone/complete — 完成里程碑
@@ -181,7 +181,7 @@ export async function completeMilestone(req: Request, res: Response, next: NextF
     );
 
     res.json({ success: true, message: '里程碑已完成' });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /incubation/resources — 获取孵化资源
@@ -195,5 +195,5 @@ export async function getResources(req: Request, res: Response, next: NextFuncti
        LIMIT 50`
     );
     res.json({ success: true, data: resources });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }

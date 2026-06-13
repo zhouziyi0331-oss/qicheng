@@ -106,7 +106,7 @@ export async function getTestResult(req: Request, res: Response, next: NextFunct
         answers: result.answers,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -243,7 +243,7 @@ export async function getOpcReport(req: Request, res: Response, next: NextFuncti
       success: true,
       data: report,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -282,7 +282,7 @@ export async function getTestQuestions(req: Request, res: Response, next: NextFu
         })),
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -417,7 +417,7 @@ export async function submitTest(req: Request, res: Response, next: NextFunction
         recommendations,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

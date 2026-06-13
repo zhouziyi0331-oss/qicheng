@@ -72,7 +72,7 @@ router.post('/pre-check', authenticate, async (req, res) => {
         formattedMessage: submissionPreCheckService.formatPreCheckResult(result),
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Pre-check endpoint error', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,

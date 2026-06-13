@@ -88,7 +88,7 @@ class AIMentorService {
         message: aiResponse.message,
         quickReplies: aiResponse.quickReplies
       }
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK')
       throw error
     } finally {
@@ -537,7 +537,7 @@ ${similarCases.length > 0
         message: content.text,
         quickReplies: []
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI调用失败:', error)
       throw new Error('导师服务暂时不可用，请稍后重试')
     }

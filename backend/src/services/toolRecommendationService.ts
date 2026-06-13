@@ -74,7 +74,7 @@ class ToolRecommendationService {
         websiteUrl: row.website_url,
         isFree: row.is_free
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('推荐工具失败', { error, taskId, studentId });
       return [];
     }
@@ -99,7 +99,7 @@ class ToolRecommendationService {
       );
 
       return result.rows[0].id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('记录工具推荐失败', { error });
       return 0;
     }
@@ -187,7 +187,7 @@ class ToolRecommendationService {
         success: false,
         message: '未找到推荐记录'
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('记录工具使用失败', { error, trackingId });
       return {
         success: false,
@@ -218,7 +218,7 @@ class ToolRecommendationService {
 
       const result = await pool.query(query, [toolId]);
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取工具统计失败', { error, toolId });
       return null;
     }
@@ -271,7 +271,7 @@ class ToolRecommendationService {
         websiteUrl: row.website_url,
         isFree: row.is_free
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取热门工具失败', { error });
       return [];
     }
@@ -317,7 +317,7 @@ class ToolRecommendationService {
       );
 
       return result.rows[0].id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('添加工具失败', { error });
       return 0;
     }
@@ -354,7 +354,7 @@ class ToolRecommendationService {
       }
 
       return 'general';
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('分析任务类型失败', { error, taskId });
       return 'general';
     }
@@ -388,7 +388,7 @@ class ToolRecommendationService {
       } else {
         return 'advanced';
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取学生技能水平失败', { error, studentId });
       return 'beginner';
     }
@@ -406,7 +406,7 @@ class ToolRecommendationService {
          WHERE id = $1`,
         [toolId]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('更新推荐次数失败', { error, toolId });
     }
   }
@@ -427,7 +427,7 @@ class ToolRecommendationService {
           [successRate, toolId]
         );
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('更新工具成功率失败', { error, toolId });
     }
   }

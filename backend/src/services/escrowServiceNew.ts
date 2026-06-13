@@ -84,7 +84,7 @@ class EscrowServiceNew {
       await client.query('COMMIT');
       logger.info('Funds deposited', { taskId, amount });
       return transactionResult.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -115,7 +115,7 @@ class EscrowServiceNew {
 
       logger.info('Funds released', { taskId });
       return { success: true };
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -149,7 +149,7 @@ class EscrowServiceNew {
 
       logger.info('Withdrawal requested', { userId, amount });
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {

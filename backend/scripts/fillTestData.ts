@@ -210,7 +210,7 @@ async function matchTask(task: any) {
 
     console.log(`✅ 找到 ${matches.length} 个匹配学生:`);
     matches.slice(0, 5).forEach((match: any, i: number) => {
-      const ms = match.matchScore;
+      const ms = match.match_score;
       console.log(`   ${i + 1}. 综合${Math.round(ms.overallScore * 100)}% (技能${Math.round(ms.skillMatch.score * 100)}% 难度${Math.round(ms.difficultyMatch.score * 100)}%)`);
     });
   } catch (error: any) {
@@ -279,7 +279,7 @@ async function main() {
     console.log('   2. 调用 /api/v1/students/recommended-tasks 获取真实推荐');
     console.log('   3. 显示真实的匹配分数和人格标签\n');
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ 执行失败:', error);
   } finally {
     await pool.end();

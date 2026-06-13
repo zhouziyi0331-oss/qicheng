@@ -67,7 +67,7 @@ export async function getRecommendedTasksForStudent(
 
     return tasksResult.rows;
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Get recommended tasks failed', { error, studentId });
     throw error;
   }
@@ -119,7 +119,7 @@ export async function triggerTaskMatching(taskId: string): Promise<number> {
 
     for (const student of studentsResult.rows) {
       // 计算匹配分数（简化版，实际应该调用完整的匹配引擎）
-      const matchScore = calculateMatchScore(task, student);
+      const match_score = calculateMatchScore(task, student);
 
       if (matchScore.overall_score > 0.5) {
         // 插入或更新匹配记录
@@ -162,7 +162,7 @@ export async function triggerTaskMatching(taskId: string): Promise<number> {
     logger.info('Task matching completed', { taskId, matchedCount });
     return matchedCount;
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Trigger task matching failed', { error, taskId });
     throw error;
   }

@@ -87,12 +87,12 @@ export const matchTasksForStudent = async (req: Request, res: Response) => {
 
     // 4. 计算匹配分数并生成匹配理由
     const tasks = tasksResult.map((task: any) => {
-      const matchScore = calculateMatchScore(student, task, opcScores);
+      const match_score = calculateMatchScore(student, task, opcScores);
       const matchReason = generateMatchReason(student, task, opcScores);
 
       return {
         ...task,
-        match_score: matchScore,
+        match_score: match_score,
         match_reason: matchReason,
         is_stretch_project: task.is_stretch
       };
@@ -120,7 +120,7 @@ export const matchTasksForStudent = async (req: Request, res: Response) => {
         regular: regularTasks.slice(0, tasks.length - targetStretchCount).length
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('项目匹配失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }
@@ -298,7 +298,7 @@ export const getTaskDetailWithMatch = async (req: Request, res: Response) => {
     } : null;
 
     // 4. 计算匹配分数和理由
-    const matchScore = calculateMatchScore(student, task, opcScores);
+    const match_score = calculateMatchScore(student, task, opcScores);
     const matchReason = generateMatchReason(student, task, opcScores);
 
     // 5. 判断是否为冒险项目
@@ -308,12 +308,12 @@ export const getTaskDetailWithMatch = async (req: Request, res: Response) => {
       success: true,
       task: {
         ...task,
-        match_score: matchScore,
+        match_score: match_score,
         match_reason: matchReason,
         is_stretch_project: isStretch
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取任务详情失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }

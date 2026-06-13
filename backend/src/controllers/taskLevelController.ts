@@ -105,7 +105,7 @@ export const publishTask = async (req: Request, res: Response) => {
         },
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error publishing task', { error });
     res.status(500).json({
       success: false,
@@ -170,7 +170,7 @@ export const confirmPublishTask = async (req: Request, res: Response) => {
       message: '任务已发布，正在匹配合适的学生',
       data: result,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error confirming task publication', { error });
     const errorMessage = error instanceof Error ? error.message : '发布任务失败';
     const statusCode = errorMessage === '任务不存在或无权限' ? 404 : 500;
@@ -214,7 +214,7 @@ export const getMatchedStudents = async (req: Request, res: Response) => {
         students: matchedStudents,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting matched students', { error });
     res.status(500).json({
       success: false,
@@ -265,7 +265,7 @@ export const getRecommendedTasks = async (req: Request, res: Response) => {
         tasks: recommendedTasks,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting recommended tasks', { error });
     res.status(500).json({
       success: false,
@@ -337,7 +337,7 @@ export const acceptTask = async (req: Request, res: Response) => {
       message: '任务接取成功',
       data: result,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error accepting task', { error });
     const errorMessage = error instanceof Error ? error.message : '接取任务失败';
     const statusCode = errorMessage === '任务不可接取' || errorMessage === '学生能力画像不存在' || errorMessage === '任务等级与您的等级差距过大' ? 400 : 500;
@@ -389,7 +389,7 @@ export const getTaskDetail = async (req: Request, res: Response) => {
       if (matchResult.length > 0) {
         const match = matchResult[0];
         matchInfo = {
-          matchScore: match.match_score,
+          match_score: match.match_score,
           difficultyLevel: match.difficulty_level,
           matchReasons: match.match_reasons,
           estimatedGrowth: {
@@ -412,7 +412,7 @@ export const getTaskDetail = async (req: Request, res: Response) => {
         matchInfo,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting task detail', { error });
     res.status(500).json({
       success: false,
@@ -464,7 +464,7 @@ export const getCompanyTasks = async (req: Request, res: Response) => {
         })),
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting company tasks', { error });
     res.status(500).json({
       success: false,

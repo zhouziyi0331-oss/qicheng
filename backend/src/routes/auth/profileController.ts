@@ -93,7 +93,7 @@ export async function completeProfile(req: Request, res: Response, next: NextFun
       throw new AppError(400, '无效的用户类型', 'INVALID_USER_TYPE');
     }
 
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -144,7 +144,7 @@ export async function getProfileStatus(req: Request, res: Response, next: NextFu
       }
     });
 
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

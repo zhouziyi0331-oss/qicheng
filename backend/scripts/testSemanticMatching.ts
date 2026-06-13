@@ -102,7 +102,7 @@ async function testSemanticMatching() {
     // 7. 测试匹配算法
     console.log('\n7. 测试语义匹配引擎...');
     try {
-      const matchScore = await semanticMatchingEngine.matchTaskWithStudent(
+      const match_score = await semanticMatchingEngine.matchTaskWithStudent(
         testTask.id,
         testStudent.id
       );
@@ -126,7 +126,7 @@ async function testSemanticMatching() {
 
       console.log(`✅ 找到 ${topMatches.length} 个匹配学生:`);
       topMatches.forEach((match, index) => {
-        console.log(`   ${index + 1}. 学生ID: ${match.studentId.substring(0, 8)}... - 匹配度: ${(match.matchScore.overallScore * 100).toFixed(1)}%`);
+        console.log(`   ${index + 1}. 学生ID: ${match.studentId.substring(0, 8)}... - 匹配度: ${(match.match_score.overallScore * 100).toFixed(1)}%`);
       });
     } catch (error: any) {
       console.log('⚠️  批量匹配失败:', error.message);

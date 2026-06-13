@@ -35,7 +35,7 @@ router.get('/deliverable-templates', authenticate, async (req: Request, res: Res
         total: templates.length,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting templates:', error);
     res.status(500).json({
       success: false,
@@ -56,7 +56,7 @@ router.get('/deliverable-templates/categories', authenticate, async (req: Reques
       success: true,
       data: categories,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting categories:', error);
     res.status(500).json({
       success: false,
@@ -79,7 +79,7 @@ router.get('/deliverable-templates/task-types', authenticate, async (req: Reques
       success: true,
       data: taskTypes,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting task types:', error);
     res.status(500).json({
       success: false,
@@ -112,7 +112,7 @@ router.post('/deliverable-templates/recommend', authenticate, async (req: Reques
         total: templates.length,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error recommending templates:', error);
     res.status(500).json({
       success: false,
@@ -142,7 +142,7 @@ router.get('/deliverable-templates/:templateId', authenticate, async (req: Reque
       success: true,
       data: template,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting template:', error);
     res.status(500).json({
       success: false,
@@ -187,7 +187,7 @@ router.post('/deliverable-templates', authenticate, async (req: Request, res: Re
         templateId,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error creating template:', error);
     res.status(500).json({
       success: false,
@@ -213,7 +213,7 @@ router.put('/deliverable-templates/:templateId', authenticate, async (req: Reque
       success: true,
       message: 'Template updated',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error updating template:', error);
     res.status(500).json({
       success: false,
@@ -249,7 +249,7 @@ router.post('/:taskId/apply-template', authenticate, requireRole('company'), asy
       success: true,
       message: 'Template applied to task',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error applying template:', error);
     res.status(500).json({
       success: false,
@@ -279,7 +279,7 @@ router.get('/:taskId/deliverable-standards', authenticate, async (req: Request, 
       success: true,
       data: standards,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting deliverable standards:', error);
     res.status(500).json({
       success: false,

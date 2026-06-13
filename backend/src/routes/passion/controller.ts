@@ -15,7 +15,7 @@ export async function getSparks(req: Request, res: Response, next: NextFunction)
       [userId]
     );
     res.json({ success: true, data: sparks });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /passion/spark/record — 记录热情火花
@@ -42,7 +42,7 @@ export async function recordSpark(req: Request, res: Response, next: NextFunctio
     );
 
     res.json({ success: true, data: { sparkId: result[0].id } });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /passion/analysis/:userId — 获取热情分析
@@ -99,7 +99,7 @@ export async function getAnalysis(req: Request, res: Response, next: NextFunctio
         trends
       }
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /passion/recommendations/:userId — 获取热情探索建议
@@ -172,5 +172,5 @@ export async function getRecommendations(req: Request, res: Response, next: Next
     ];
 
     res.json({ success: true, data: { recommendations } });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }

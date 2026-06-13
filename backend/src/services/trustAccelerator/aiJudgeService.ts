@@ -232,7 +232,7 @@ ${params.studentAnswer}
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [sessionId, round, modelUsed, promptTokens, completionTokens, result, reason, latencyMs]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[AIJudgeService] 记录日志失败:', error);
       // 不抛出错误，避免影响主流程
     }

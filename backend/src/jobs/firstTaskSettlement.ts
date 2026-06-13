@@ -74,7 +74,7 @@ cron.schedule('*/5 * * * *', async () => {
         });
 
         logger.info('First task settled', { paymentId: payment.payment_id, studentId: payment.student_id });
-      } catch (err) {
+      } catch (err: unknown) {
         logger.error('First task settlement error', { paymentId: payment.id, error: (err as Error).message });
       }
     }
@@ -82,7 +82,7 @@ cron.schedule('*/5 * * * *', async () => {
     if (pendingSettlements.length > 0) {
       logger.info(`First task settlement batch done: ${pendingSettlements.length} processed`);
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('First task settlement cron failed', { error: (err as Error).message });
   }
 });

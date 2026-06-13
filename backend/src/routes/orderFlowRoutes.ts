@@ -43,7 +43,7 @@ router.post('/:orderId/accept', authenticate, async (req: Request, res: Response
       message: '接单成功，启程老师将为你提供引导'
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to accept order:', error);
     res.status(500).json({ error: '接单失败' });
   }
@@ -94,7 +94,7 @@ router.post('/:orderId/submit', authenticate, async (req: Request, res: Response
       message: '提交成功，正在进行预审核'
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to submit order:', error);
     res.status(500).json({ error: '提交失败' });
   }
@@ -155,7 +155,7 @@ router.post('/:orderId/request-revision', authenticate, async (req: Request, res
       message: '已发送修改建议，启程老师将帮助学生理解'
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to request revision:', error);
     res.status(500).json({ error: '操作失败' });
   }
@@ -211,7 +211,7 @@ router.post('/:orderId/complete', authenticate, async (req: Request, res: Respon
       message: '订单已完成，学生的成长报告正在生成'
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to complete order:', error);
     res.status(500).json({ error: '操作失败' });
   }
@@ -247,7 +247,7 @@ router.post('/:orderId/activity', authenticate, async (req: Request, res: Respon
       success: true
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to record activity:', error);
     res.status(500).json({ error: '记录失败' });
   }

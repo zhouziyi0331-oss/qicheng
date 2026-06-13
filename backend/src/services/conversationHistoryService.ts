@@ -52,7 +52,7 @@ class ConversationHistoryService {
         .join('\n\n');
 
       return history;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Failed to get conversation history for order ${orderId}:`, error);
       return '无法获取对话历史';
     }
@@ -90,7 +90,7 @@ class ConversationHistoryService {
       messages.reverse();
 
       return messages;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Failed to get full conversation history for order ${orderId}:`, error);
       return [];
     }
@@ -150,7 +150,7 @@ class ConversationHistoryService {
 
 最近对话：
 ${recentContext}`;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Failed to get conversation summary for order ${orderId}:`, error);
       return '无法生成对话摘要';
     }

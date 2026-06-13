@@ -76,7 +76,7 @@ class DataAccessLogService {
       logger.info(
         `Logged access: ${params.action} on ${params.resourceType}:${params.resourceId} by ${params.userId}`
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to log access:', error);
       // 不抛出错误，避免影响主流程
     }

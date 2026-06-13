@@ -157,7 +157,7 @@ class QichengTeacherService {
       };
 
       return translation;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error analyzing and translating task:', error);
       // 返回降级版本
       return this.createFallbackTranslation(task);
@@ -244,7 +244,7 @@ class QichengTeacherService {
       }
 
       return [];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error breaking down functional modules:', error);
       return [];
     }
@@ -278,7 +278,7 @@ class QichengTeacherService {
       }
 
       return task.description;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating student friendly description:', error);
       return task.description;
     }
@@ -327,7 +327,7 @@ class QichengTeacherService {
       }
 
       throw new Error('Failed to parse difficulty JSON');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error assessing task difficulty:', error);
       return {
         technical: 5,
@@ -375,7 +375,7 @@ class QichengTeacherService {
       }
 
       return [];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error extracting skill requirements:', error);
       return [];
     }
@@ -432,7 +432,7 @@ class QichengTeacherService {
       );
 
       logger.info(`Saved translation for task: ${translation.task_id}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error saving translation:', error);
       throw error;
     } finally {

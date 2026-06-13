@@ -60,7 +60,7 @@ export async function getFeed(req: Request, res: Response, next: NextFunction): 
       // 明确告知前端: 此接口永不提供按点赞排序的选项
       sortingNote: 'Sorted by OPC similarity and time. NO LEADERBOARD.',
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -119,7 +119,7 @@ export async function createPost(req: Request, res: Response, next: NextFunction
       success: true,
       data: { postId: post.id, status: 'pending', message: '故事已提交，审核通过后将展示在故事墙' },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -135,7 +135,7 @@ export async function likePost(req: Request, res: Response, next: NextFunction):
       [id]
     );
     res.json({ success: true, message: '已点赞' });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -184,7 +184,7 @@ export async function getPeersFeed(req: Request, res: Response, next: NextFuncti
       data: peers,
       message: `和你差不多的人最近在做什么`,
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -263,7 +263,7 @@ export async function commentOnStory(req: Request, res: Response, next: NextFunc
         message: '评论成功',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

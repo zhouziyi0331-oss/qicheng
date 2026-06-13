@@ -117,7 +117,7 @@ class MentorExampleService {
         key_learnings: this.extractKeyLearnings(topCase.retrospective_content),
         similarity_score: parseFloat(topCase.similarity_score)
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorExample] 检索相似案例失败:', error);
       return null;
     }
@@ -255,7 +255,7 @@ ${learnings ? `**${learnings}**` : ''}
       ]);
 
       logger.info(`[MentorExample] 记录范例展示: student=${studentId}, example=${exampleOrderId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorExample] 记录范例展示失败:', error);
     }
   }
@@ -276,7 +276,7 @@ ${learnings ? `**${learnings}**` : ''}
       `);
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorExample] 获取统计失败:', error);
       return {
         total_shown: 0,

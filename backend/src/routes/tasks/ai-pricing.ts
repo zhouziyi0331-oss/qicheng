@@ -47,7 +47,7 @@ router.post('/ai-pricing', authenticate, requireRole('company'), async (req: Req
       success: true,
       data: pricingResult,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error calculating AI pricing:', error);
     res.status(500).json({
       success: false,
@@ -87,7 +87,7 @@ router.post('/:taskId/ai-pricing', authenticate, requireRole('company'), async (
       success: true,
       data: pricingResult,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error calculating task pricing:', error);
     res.status(500).json({
       success: false,

@@ -87,7 +87,7 @@ export async function getStudentList(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取学生列表失败:', error);
     res.status(500).json({ error: '获取学生列表失败' });
   }
@@ -223,7 +223,7 @@ export async function getStudentDetail(req: Request, res: Response) {
       recentOrders,
       ratingStats
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取学生详情失败:', error);
     res.status(500).json({ error: '获取学生详情失败' });
   }
@@ -304,7 +304,7 @@ export async function getStudentAbility(req: Request, res: Response) {
         count: parseInt(p.count)
       }))
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取学生能力画像失败:', error);
     res.status(500).json({ error: '获取学生能力画像失败' });
   }
@@ -374,7 +374,7 @@ export async function getStudentGrowth(req: Request, res: Response) {
         avgRating: item.avg_rating ? parseFloat(item.avg_rating).toFixed(1) : '0.0'
       }))
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取学生成长轨迹失败:', error);
     res.status(500).json({ error: '获取学生成长轨迹失败' });
   }
@@ -397,7 +397,7 @@ export async function updateStudentStatus(req: Request, res: Response) {
     );
 
     res.json({ message: '状态更新成功' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('更新学生状态失败:', error);
     res.status(500).json({ error: '更新学生状态失败' });
   }

@@ -35,7 +35,7 @@ router.get('/commitments', async (req: Request, res: Response) => {
       success: true,
       data: result.rows,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get security commitments:', error);
     res.status(500).json({
       success: false,
@@ -85,7 +85,7 @@ router.get(
           status,
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get collaboration progress:', error);
       res.status(500).json({
         success: false,
@@ -127,7 +127,7 @@ router.get('/my-collaborations', authenticate, async (req: Request, res: Respons
       success: true,
       data: enrichedCollaborations,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get collaborations:', error);
     res.status(500).json({
       success: false,
@@ -164,7 +164,7 @@ router.get(
         success: true,
         data: logs,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get access logs:', error);
       res.status(500).json({
         success: false,
@@ -189,7 +189,7 @@ router.get('/my-access-logs', authenticate, async (req: Request, res: Response) 
       success: true,
       data: logs,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get user access logs:', error);
     res.status(500).json({
       success: false,
@@ -222,7 +222,7 @@ router.post('/generate-key', authenticate, async (req: Request, res: Response) =
         message: '请将此密钥保存到环境变量 ENCRYPTION_KEY_DEFAULT 中',
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to generate key:', error);
     res.status(500).json({
       success: false,
@@ -459,7 +459,7 @@ router.get('/my-unlock-requests', authenticate, async (req: Request, res: Respon
       success: true,
       data: requests,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get unlock requests:', error);
     res.status(500).json({
       success: false,

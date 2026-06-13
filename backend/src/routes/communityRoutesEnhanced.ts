@@ -27,7 +27,7 @@ function requireLevel(minLevel: number) {
       }
 
       next();
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   };
@@ -61,7 +61,7 @@ router.post(
         data: { postId },
         message: '帖子发布成功',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -92,7 +92,7 @@ router.get(
         success: true,
         data: result,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -124,7 +124,7 @@ router.get(
         success: true,
         data: post,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -148,7 +148,7 @@ router.delete(
         success: true,
         message: '帖子已删除',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -191,7 +191,7 @@ router.post(
         data: { commentId },
         message: '评论发布成功',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -220,7 +220,7 @@ router.get(
         success: true,
         data: comments,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -244,7 +244,7 @@ router.delete(
         success: true,
         message: '评论已删除',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -281,7 +281,7 @@ router.post(
         data: result,
         message: result.liked ? '点赞成功' : '取消点赞',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -323,7 +323,7 @@ router.post(
         success: true,
         message: '举报已提交',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -350,7 +350,7 @@ router.get(
         success: true,
         data: { skills },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -373,7 +373,7 @@ router.get(
         success: true,
         data: skillLibrary,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -406,7 +406,7 @@ router.post(
         success: true,
         message: '申请已提交',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

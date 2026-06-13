@@ -137,7 +137,7 @@ ${student?.tasks_completed === 0 ? '这是你的第一单，不用紧张，我�
     }, 30000);
 
     logger.info(`[Mentor] Task start guidance sent to student ${studentId} for task ${taskId}`);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Mentor] Error sending task start guidance:', error);
   }
 }
@@ -260,7 +260,7 @@ ${needDetailedGuidance
         responseTime,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -372,7 +372,7 @@ ${rejectionReason}
     );
 
     return mentorResponse;
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Mentor] Error generating rejection feedback:', error);
     return '';
   }
@@ -460,7 +460,7 @@ export async function checkIdleStudents(): Promise<void> {
 
       logger.info(`[Mentor] Nudge sent to student ${student.student_id} for task ${student.task_id}`);
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Mentor] Error checking idle students:', error);
   }
 }
@@ -571,7 +571,7 @@ ${milestoneHistory.map((m: { milestone_type: string; mentor_message: string }) =
     );
 
     logger.info(`[Mentor] Milestone celebrated for student ${studentId}: ${milestoneType}`);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Mentor] Error celebrating milestone:', error);
   }
 }
@@ -600,7 +600,7 @@ export async function getConversations(req: Request, res: Response, next: NextFu
     );
 
     res.json({ success: true, data: conversations });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }

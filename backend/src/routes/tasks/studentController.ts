@@ -41,7 +41,7 @@ export async function getMatchedTasks(req: Request, res: Response, next: NextFun
         allowedDifficulties: filteredResult.allowedDifficulties,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -110,7 +110,7 @@ export async function getRecommendedTasks(req: Request, res: Response, next: Nex
     }
 
     res.json({ success: true, data: recommended });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -221,7 +221,7 @@ export async function acceptTask(req: Request, res: Response, next: NextFunction
     try {
       const behaviorLearningService = require('../../services/behaviorLearningService').default;
       await behaviorLearningService.logTaskAccept(userId, taskId);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to log task accept behavior:', error);
     }
 
@@ -229,7 +229,7 @@ export async function acceptTask(req: Request, res: Response, next: NextFunction
     setImmediate(async () => {
       try {
         await sendFirstStepNotification(userId, taskId, steps[0]);
-      } catch (e) {
+      } catch (e: unknown) {
         logger.error('Failed to send first step notification', { userId, taskId, error: (e as Error).message });
       }
     });
@@ -248,7 +248,7 @@ export async function acceptTask(req: Request, res: Response, next: NextFunction
         allSteps: steps.map((s, i) => ({ stepNum: i + 1, ...s })),
       },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -283,7 +283,7 @@ export async function getTaskSteps(req: Request, res: Response, next: NextFuncti
         },
       },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -322,7 +322,7 @@ export async function completeStep(req: Request, res: Response, next: NextFuncti
         isAllDone: !nextStep,
       },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -364,7 +364,7 @@ export async function updateProgress(req: Request, res: Response, next: NextFunc
       message: '进度更新成功',
       data: { progress }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -492,7 +492,7 @@ export async function submitTask(req: Request, res: Response, next: NextFunction
       message: '提交成功！等待企业验收',
       data: { submissionId, score: aiReview!.score },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -539,7 +539,7 @@ export async function getMarketTasks(req: Request, res: Response, next: NextFunc
     );
 
     res.json({ success: true, data: tasks });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -578,7 +578,7 @@ export async function getMyTasks(req: Request, res: Response, next: NextFunction
     );
 
     res.json({ success: true, data: tasks });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -601,7 +601,7 @@ export async function getTaskDetail(req: Request, res: Response, next: NextFunct
     if (!task) throw new AppError(404, '任务不存在', 'NOT_FOUND');
 
     res.json({ success: true, data: task });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -633,7 +633,7 @@ export async function getTaskSupplements(req: Request, res: Response, next: Next
     );
 
     res.json({ success: true, data: supplements });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -739,7 +739,7 @@ export async function respondToSupplement(req: Request, res: Response, next: Nex
       success: true,
       message: accept ? '已接受追加需求，截止日期已更新' : '已拒绝追加需求',
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 async function sendFirstStepNotification(

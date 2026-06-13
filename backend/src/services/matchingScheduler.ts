@@ -61,14 +61,14 @@ class MatchingScheduler {
 
           // 避免过载
           await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch (error) {
+        } catch (error: unknown) {
           errorCount++;
           logger.error(`Failed to rematch task ${task.id}:`, error);
         }
       }
 
       logger.info(`Daily matching completed: ${successCount} success, ${errorCount} errors`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to rematch all open tasks:', error);
     }
   }
@@ -118,14 +118,14 @@ class MatchingScheduler {
           [
             taskId,
             match.studentId,
-            match.matchScore.overallScore,
-            match.matchScore.skillMatch.score,
-            match.matchScore.difficultyMatch.score,
-            match.matchScore.domainMatch.score,
-            match.matchScore.growthPotential.score,
-            match.matchScore.reliability.score,
-            match.matchScore.preferenceAlignment.score,
-            JSON.stringify(match.matchScore.breakdown),
+            match.match_score.overallScore,
+            match.match_score.skillMatch.score,
+            match.match_score.difficultyMatch.score,
+            match.match_score.domainMatch.score,
+            match.match_score.growthPotential.score,
+            match.match_score.reliability.score,
+            match.match_score.preferenceAlignment.score,
+            JSON.stringify(match.match_score.breakdown),
             match.rank,
           ]
         );
@@ -138,17 +138,17 @@ class MatchingScheduler {
           top_match_score = $2,
           matching_completed_at = NOW()
          WHERE id = $3`,
-        [matches.length, matches[0].matchScore.overallScore, taskId]
+        [matches.length, matches[0].match_score.overallScore, taskId]
       );
 
       // 5. 通知企业（如果有新的高分匹配）
-      const topScore = matches[0].matchScore.overallScore;
+      const topScore = matches[0].match_score.overallScore;
       if (topScore > 0.8) {
         websocketService.notifyMatchComplete(companyId, taskId, matches.length);
       }
 
       logger.info(`Task ${taskId} rematched: ${matches.length} students, top score: ${topScore}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Failed to rematch task ${taskId}:`, error);
       throw error;
     }
@@ -181,7 +181,7 @@ class MatchingScheduler {
       for (const task of tasks.rows) {
         try {
           // 计算这个学生与任务的匹配度
-          const matchScore = await semanticMatchingEngine.matchTaskWithStudent(task.id, studentId);
+          const match_score = await semanticMatchingEngine.matchTaskWithStudent(task.id, studentId);
 
           // 只保存匹配度 > 0.5 的结果
           if (matchScore.overallScore > 0.5) {
@@ -236,13 +236,13 @@ class MatchingScheduler {
 
           // 避免过载
           await new Promise(resolve => setTimeout(resolve, 500));
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`Failed to match student ${studentId} with task ${task.id}:`, error);
         }
       }
 
       logger.info(`New student ${studentId} matched to ${matchedCount} tasks`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Failed to match new student ${studentId}:`, error);
     }
   }
@@ -303,14 +303,14 @@ class MatchingScheduler {
           [
             taskId,
             match.studentId,
-            match.matchScore.overallScore,
-            match.matchScore.skillMatch.score,
-            match.matchScore.difficultyMatch.score,
-            match.matchScore.domainMatch.score,
-            match.matchScore.growthPotential.score,
-            match.matchScore.reliability.score,
-            match.matchScore.preferenceAlignment.score,
-            JSON.stringify(match.matchScore.breakdown),
+            match.match_score.overallScore,
+            match.match_score.skillMatch.score,
+            match.match_score.difficultyMatch.score,
+            match.match_score.domainMatch.score,
+            match.match_score.growthPotential.score,
+            match.match_score.reliability.score,
+            match.match_score.preferenceAlignment.score,
+            JSON.stringify(match.match_score.breakdown),
             match.rank,
           ]
         );
@@ -323,11 +323,11 @@ class MatchingScheduler {
           top_match_score = $2,
           matching_completed_at = NOW()
          WHERE id = $3`,
-        [matches.length, matches[0].matchScore.overallScore, taskId]
+        [matches.length, matches[0].match_score.overallScore, taskId]
       );
 
       // 通知企业匹配完成
-      const topScore = matches[0].matchScore.overallScore;
+      const topScore = matches[0].match_score.overallScore;
       websocketService.notifyMatchComplete(task.company_id, taskId, matches.length);
 
       // 通知Top 5学生有新的推荐任务
@@ -336,12 +336,12 @@ class MatchingScheduler {
         websocketService.notifyTaskRecommendation(match.studentId, {
           taskId: task.id,
           taskTitle: task.title,
-          message: `有一个新任务很适合你（匹配度${(match.matchScore.overallScore * 100).toFixed(0)}%）`,
+          message: `有一个新任务很适合你（匹配度${(match.match_score.overallScore * 100).toFixed(0)}%）`,
         });
       }
 
       logger.info(`New task ${taskId} matched to ${matches.length} students, top score: ${topScore}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Failed to match new task ${taskId} to students:`, error);
       throw error;
     }

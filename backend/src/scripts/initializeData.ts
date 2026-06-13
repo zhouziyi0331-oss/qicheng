@@ -68,7 +68,7 @@ async function initializeStudentCapabilities() {
         // 避免API限流
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-      } catch (error) {
+      } catch (error: unknown) {
         errorCount++;
         logger.error(`✗ Failed to initialize student ${student.username}:`, error);
       }
@@ -76,7 +76,7 @@ async function initializeStudentCapabilities() {
 
     logger.info(`Student capabilities initialization completed: ${successCount} success, ${errorCount} errors`);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to initialize student capabilities:', error);
     throw error;
   }
@@ -132,7 +132,7 @@ async function initializeTaskVectors() {
         // 避免API限流
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-      } catch (error) {
+      } catch (error: unknown) {
         errorCount++;
         logger.error(`✗ Failed to initialize task ${task.title}:`, error);
       }
@@ -140,7 +140,7 @@ async function initializeTaskVectors() {
 
     logger.info(`Task vectors initialization completed: ${successCount} success, ${errorCount} errors`);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to initialize task vectors:', error);
     throw error;
   }
@@ -162,7 +162,7 @@ async function main() {
     logger.info('=== Data Initialization Completed ===');
     process.exit(0);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Data initialization failed:', error);
     process.exit(1);
   }

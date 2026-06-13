@@ -156,7 +156,7 @@ async function testMentorFlow() {
     logger.info('  3. 实现前端组件');
     logger.info('  4. 端到端测试完整流程');
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('❌ 测试失败', { error });
     throw error;
   }

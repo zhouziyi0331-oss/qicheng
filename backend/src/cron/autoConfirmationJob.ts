@@ -60,7 +60,7 @@ export class AutoConfirmationJob {
         try {
           await this.confirmTask(client, task);
           logger.info(`任务 ${task.task_id} 自动确认成功`);
-        } catch (err) {
+        } catch (err: unknown) {
           logger.error(`任务 ${task.task_id} 自动确认失败:`, err);
           // 继续处理其他任务
         }
@@ -71,7 +71,7 @@ export class AutoConfirmationJob {
 
       logger.info(`7天自动确认任务执行完成，成功确认${tasksToConfirm.length}个任务`);
 
-    } catch (err) {
+    } catch (err: unknown) {
       await client.query('ROLLBACK');
       logger.error('7天自动确认任务执行失败:', err);
       throw err;

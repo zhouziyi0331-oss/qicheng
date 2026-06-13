@@ -42,7 +42,7 @@ class OPCIntegrationService {
       await this.triggerIncrementalMatching(studentId);
 
       logger.info(`[OPC集成] 完成学生 ${studentId} 的OPC集成处理`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[OPC集成] 处理失败:`, error);
       throw error;
     }
@@ -227,7 +227,7 @@ class OPCIntegrationService {
       await opcAnalysisService.saveWorkConditionProfile(workConditionProfile);
 
       logger.info(`[OPC集成] 工作条件画像生成完成`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[OPC集成] 生成工作条件画像失败:`, error);
       // 不抛出错误，允许流程继续
     }
@@ -242,7 +242,7 @@ class OPCIntegrationService {
     try {
       await vectorGenerationService.updateStudentEmbedding(studentId);
       logger.info(`[OPC集成] 向量生成完成`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[OPC集成] 向量生成失败:`, error);
       // 不抛出错误，允许流程继续
     }
@@ -267,7 +267,7 @@ class OPCIntegrationService {
       } else {
         logger.warn(`[OPC集成] matchingScheduler不存在，跳过增量匹配`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[OPC集成] 触发增量匹配失败:`, error);
       // 不抛出错误，允许流程继续
     }
@@ -299,7 +299,7 @@ class OPCIntegrationService {
 
           // 避免API限流
           await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`[OPC集成] 同步学生 ${row.student_id} 失败:`, error);
           // 继续处理下一个
         }

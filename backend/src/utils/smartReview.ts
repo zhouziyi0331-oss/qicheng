@@ -86,7 +86,7 @@ ${fileUrls.length > 0 ? '附件列表:\n' + fileUrls.map((url, i) => `${i + 1}. 
       issues: result.issues || [],
       highlights: result.highlights || [],
     };
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('AI review failed, using rule-based', { error: (err as Error).message });
     return reviewSubmissionRuleBased(
       taskDescription,

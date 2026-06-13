@@ -56,7 +56,7 @@ class TestDataGenerator {
       logger.info(`\n现在可以运行验收测试：`);
       logger.info(`npx ts-node --transpile-only src/scripts/validateGrowthSystem.ts`);
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('❌ 生成测试数据失败:', error);
       throw error;
     } finally {

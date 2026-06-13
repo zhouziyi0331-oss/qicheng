@@ -28,7 +28,7 @@ async function regenerateStudentEmbeddings() {
     logger.info('\n=====================================');
     logger.info('所有学生embedding生成完成！');
     process.exit(0);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('错误:', error);
     process.exit(1);
   }

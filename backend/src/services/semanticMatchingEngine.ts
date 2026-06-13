@@ -110,7 +110,7 @@ class SemanticMatchingEngine {
           missingSkills: requiredSkillList.filter(s => !matchedSkills.includes(s)),
         },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating skill match:', error);
       return { score: 0.5, reason: '技能匹配评估失败' };
     }
@@ -158,7 +158,7 @@ class SemanticMatchingEngine {
         reason,
         details: { taskLevel, studentLevel, levelDiff, experienceBonus },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating difficulty match:', error);
       return { score: 0.5, reason: '难度匹配评估失败' };
     }
@@ -194,7 +194,7 @@ class SemanticMatchingEngine {
         reason,
         details: { taskTrack, preferredTypes },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating domain match:', error);
       return { score: 0.5, reason: '领域匹配评估失败' };
     }
@@ -237,7 +237,7 @@ class SemanticMatchingEngine {
         reason: reason || '具备一定成长潜力',
         details: { qualityTrend, growthRate, avgQuality },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating growth potential:', error);
       return { score: 0.5, reason: '成长潜力评估失败' };
     }
@@ -279,7 +279,7 @@ class SemanticMatchingEngine {
         reason,
         details: { onTimeRate, avgSatisfaction, tasksCompleted },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating reliability:', error);
       return { score: 0.5, reason: '可靠性评估失败' };
     }
@@ -323,7 +323,7 @@ class SemanticMatchingEngine {
         reason: reason || '工作偏好基本匹配',
         details: { taskBudget, taskDuration, maxHoursPerWeek },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating preference alignment:', error);
       return { score: 0.5, reason: '偏好匹配评估失败' };
     }
@@ -452,15 +452,15 @@ class SemanticMatchingEngine {
 
       for (const student of students) {
         try {
-          const matchScore = await this.matchTaskWithStudent(taskId, student.student_id);
+          const match_score = await this.matchTaskWithStudent(taskId, student.student_id);
 
           matchResults.push({
             student_id: student.student_id,
             student_name: student.name,
-            match_score: matchScore,
+            match_score: match_score,
             rank: 0, // 稍后排序后设置
           });
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`Error matching student ${student.student_id}:`, error);
         }
       }
@@ -503,15 +503,15 @@ class SemanticMatchingEngine {
 
       for (const task of tasks) {
         try {
-          const matchScore = await this.matchTaskWithStudent(task.id, studentId);
+          const match_score = await this.matchTaskWithStudent(task.id, studentId);
 
           matchResults.push({
             task_id: task.id,
             task_title: task.title,
-            match_score: matchScore,
+            match_score: match_score,
             rank: 0,
           });
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`Error matching task ${task.id}:`, error);
         }
       }
@@ -585,7 +585,7 @@ class SemanticMatchingEngine {
       await client.query('COMMIT');
 
       logger.info(`Saved ${matchResults.length} match results for task ${taskId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Error saving match results:', error);
       throw error;

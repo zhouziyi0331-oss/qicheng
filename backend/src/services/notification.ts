@@ -69,7 +69,7 @@ export async function sendNotification(payload: NotificationPayload): Promise<vo
             await sendWechatTemplateMessage(userId, type, data);
             break;
         }
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error(`Failed to send ${channel} notification:`, error);
         // 不阻塞其他渠道发送
       }
@@ -276,7 +276,7 @@ async function sendWechatTemplateMessage(
        VALUES ($1, 'wechat', $2, $3, 'sent', NOW())`,
       [userId, openid, JSON.stringify({ type, data })]
     );
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to send wechat template message:', error);
     throw error;
   }

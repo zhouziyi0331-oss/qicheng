@@ -108,7 +108,7 @@ class TaskBreakdownService {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error breaking down task:', error);
       // 返回降级结果
       return this.createFallbackBreakdown(rawDescription);
@@ -284,7 +284,7 @@ ${additionalContext ? `补充信息：\n${JSON.stringify(additionalContext, null
       logger.info('Saved breakdown result', { taskId, historyId: historyResult.rows[0].id });
 
       return historyResult.rows[0].id;
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Error saving breakdown result:', error);
       throw error;

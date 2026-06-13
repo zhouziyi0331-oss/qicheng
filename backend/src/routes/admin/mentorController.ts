@@ -66,7 +66,7 @@ export async function getMentorList(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取导师列表失败:', error);
     res.status(500).json({ message: '获取导师列表失败' });
   }
@@ -123,7 +123,7 @@ export async function getMentorDetail(req: Request, res: Response) {
       ...mentor[0],
       recentSessions: sessions
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取导师详情失败:', error);
     res.status(500).json({ message: '获取导师详情失败' });
   }
@@ -146,7 +146,7 @@ export async function updateMentorStatus(req: Request, res: Response) {
     );
 
     res.json({ message: '导师状态更新成功' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('更新导师状态失败:', error);
     res.status(500).json({ message: '更新导师状态失败' });
   }
@@ -222,7 +222,7 @@ export async function getMentorSessions(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取咨询会话列表失败:', error);
     res.status(500).json({ message: '获取咨询会话列表失败' });
   }

@@ -52,7 +52,7 @@ class WebSocketService {
         };
 
         next();
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('WebSocket authentication failed:', error);
         next(new Error('Authentication failed'));
       }

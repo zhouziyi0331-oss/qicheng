@@ -25,7 +25,7 @@ class BehaviorLearningService {
                 log.taskLevel,
                 log.taskBudget,
                 log.taskTags,
-                log.matchScore,
+                log.match_score,
                 log.rankInRecommendation,
             ]);
             logger_1.default.info(`Logged behavior: ${log.actionType} for student ${log.studentId} on task ${log.taskId}`);
@@ -220,7 +220,7 @@ class BehaviorLearningService {
             taskTrack: task.track,
             taskLevel: task.level_required,
             taskBudget: task.budget_gross,
-            matchScore,
+            match_score,
             rankInRecommendation: rank,
         });
     }

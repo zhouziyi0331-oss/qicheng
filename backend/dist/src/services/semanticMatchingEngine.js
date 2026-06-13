@@ -383,11 +383,11 @@ class SemanticMatchingEngine {
             const matchResults = [];
             for (const student of students) {
                 try {
-                    const matchScore = await this.matchTaskWithStudent(taskId, student.student_id);
+                    const match_score = await this.matchTaskWithStudent(taskId, student.student_id);
                     matchResults.push({
                         student_id: student.student_id,
                         student_name: student.name,
-                        match_score: matchScore,
+                        match_score: match_score,
                         rank: 0, // 稍后排序后设置
                     });
                 }
@@ -426,11 +426,11 @@ class SemanticMatchingEngine {
             const matchResults = [];
             for (const task of tasks) {
                 try {
-                    const matchScore = await this.matchTaskWithStudent(task.id, studentId);
+                    const match_score = await this.matchTaskWithStudent(task.id, studentId);
                     matchResults.push({
                         task_id: task.id,
                         task_title: task.title,
-                        match_score: matchScore,
+                        match_score: match_score,
                         rank: 0,
                     });
                 }

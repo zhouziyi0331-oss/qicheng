@@ -65,7 +65,7 @@ export class InvitationMatchService {
     const matches: MatchResult[] = [];
 
     for (const candidate of candidates) {
-      const matchScore = await this.calculateMatchScore(
+      const match_score = await this.calculateMatchScore(
         candidate,
         taskRequirements,
         config

@@ -82,7 +82,7 @@ export async function getTaskDeliverables(req: Request, res: Response, next: Nex
         }))
       }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -174,7 +174,7 @@ export async function approveAndPayFinal(req: Request, res: Response, next: Next
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -250,7 +250,7 @@ export async function rejectDeliverable(req: Request, res: Response, next: NextF
             feedback
           );
           logger.info('AI导师沟通桥梁已触发', { taskId, studentId: taskData.accepted_student_id });
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error('触发AI导师沟通桥梁失败', { taskId, error });
         }
       }, 2000);
@@ -270,7 +270,7 @@ export async function rejectDeliverable(req: Request, res: Response, next: NextF
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -367,7 +367,7 @@ export async function finalConfirmation(req: Request, res: Response, next: NextF
           companyId,
           taskId
         );
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('Failed to check contact exchange', { error, taskId });
         // 不阻塞主流程
       }
@@ -389,7 +389,7 @@ export async function finalConfirmation(req: Request, res: Response, next: NextF
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -486,7 +486,7 @@ export async function autoConfirmTasks(): Promise<void> {
             task.company_id,
             task.id
           );
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error('Failed to check contact exchange', { error, taskId: task.id });
           // 不阻塞主流程
         }
@@ -500,7 +500,7 @@ export async function autoConfirmTasks(): Promise<void> {
     }
 
     logger.info('Auto-confirm tasks completed', { count: tasks.length });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Auto-confirm tasks failed', { error: err });
     throw err;
   }
@@ -584,7 +584,7 @@ export async function addRequirementSupplement(req: Request, res: Response, next
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

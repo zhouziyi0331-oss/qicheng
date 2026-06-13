@@ -73,7 +73,7 @@ class QAService {
         VALUES ($1, $2, $3, $4, $5, NOW())
       `;
       await pool.query(query, [conversationId, studentId, taskId, question, answer]);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save conversation:', error);
       // 不抛出错误，避免影响主流程
     }
@@ -163,7 +163,7 @@ class QAService {
         createdAt: result.rows[0].created_at,
         updatedAt: result.rows[result.rows.length - 1].created_at,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get conversation:', error);
       throw new AppError(500, 'Failed to get conversation');
     }

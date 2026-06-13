@@ -38,7 +38,7 @@ export async function sendNotification(req: Request, res: Response) {
       message: '通知发送成功',
       data: notification,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to send notification', { error });
     res.status(500).json({
       success: false,
@@ -69,7 +69,7 @@ export async function sendBulkNotifications(req: Request, res: Response) {
       message: `成功发送 ${results.length} 条通知`,
       data: results,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to send bulk notifications', { error });
     res.status(500).json({
       success: false,
@@ -110,7 +110,7 @@ export async function getUserNotifications(req: Request, res: Response) {
         offset: parseInt(offset as string),
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get user notifications', { error });
     res.status(500).json({
       success: false,
@@ -139,7 +139,7 @@ export async function getUnreadCount(req: Request, res: Response) {
       success: true,
       data: stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get unread count', { error });
     res.status(500).json({
       success: false,
@@ -176,7 +176,7 @@ export async function markAsRead(req: Request, res: Response) {
       success: true,
       message: '标记已读成功',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to mark notification as read', { error });
     res.status(500).json({
       success: false,
@@ -206,7 +206,7 @@ export async function markAllAsRead(req: Request, res: Response) {
       message: `成功标记 ${count} 条通知为已读`,
       data: { count },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to mark all as read', { error });
     res.status(500).json({
       success: false,
@@ -243,7 +243,7 @@ export async function deleteNotification(req: Request, res: Response) {
       success: true,
       message: '删除通知成功',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to delete notification', { error });
     res.status(500).json({
       success: false,
@@ -276,7 +276,7 @@ export async function getUserSettings(req: Request, res: Response) {
       success: true,
       data: settings,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get user settings', { error });
     res.status(500).json({
       success: false,
@@ -306,7 +306,7 @@ export async function updateUserSettings(req: Request, res: Response) {
       message: '更新通知设置成功',
       data: settings,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to update user settings', { error });
     res.status(500).json({
       success: false,
@@ -347,7 +347,7 @@ export async function getTemplate(req: Request, res: Response) {
       success: true,
       data: template,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get template', { error });
     res.status(500).json({
       success: false,
@@ -370,7 +370,7 @@ export async function getAllTemplates(req: Request, res: Response) {
       success: true,
       data: templates,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get all templates', { error });
     res.status(500).json({
       success: false,

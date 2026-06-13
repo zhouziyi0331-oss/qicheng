@@ -51,7 +51,7 @@ class MatchingService {
                 }, task);
             });
             // 4. 按匹配度排序，返回Top N
-            matches.sort((a, b) => b.matchScore - a.matchScore);
+            matches.sort((a, b) => b.match_score - a.match_score);
             return matches.slice(0, topN);
         }
         catch (error) {
@@ -102,7 +102,7 @@ class MatchingService {
                 });
             });
             // 4. 按匹配度排序，返回Top N
-            matches.sort((a, b) => b.matchScore - a.matchScore);
+            matches.sort((a, b) => b.match_score - a.match_score);
             return matches.slice(0, topN);
         }
         catch (error) {
@@ -201,7 +201,7 @@ class MatchingService {
         return {
             studentId: student.userId,
             taskId: task.taskId,
-            matchScore: Math.round(Math.max(0, Math.min(100, totalScore))),
+            match_score: Math.round(Math.max(0, Math.min(100, totalScore))),
             difficultyLevel,
             matchReasons,
             estimatedGrowth,
@@ -254,7 +254,7 @@ class MatchingService {
              updated_at = CURRENT_TIMESTAMP`, [
                     match.taskId,
                     match.studentId,
-                    match.matchScore,
+                    match.match_score,
                     match.matchReasons.join('; '),
                     match.difficultyLevel,
                     match.estimatedGrowth.openness,
@@ -303,7 +303,7 @@ class MatchingService {
             studentId: row.student_id,
             username: row.username,
             avatar: row.avatar,
-            matchScore: row.match_score,
+            match_score: row.match_score,
             difficultyLevel: row.difficulty_level,
             matchReasons: row.match_reasons,
             estimatedGrowth: {
@@ -360,7 +360,7 @@ class MatchingService {
             studentPrice: row.student_price,
             isStretchProject: row.is_stretch_project,
             companyName: row.company_name,
-            matchScore: row.match_score,
+            match_score: row.match_score,
             difficultyLevel: row.difficulty_level,
             matchReasons: row.match_reasons,
             estimatedGrowth: {

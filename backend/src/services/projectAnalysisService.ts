@@ -363,7 +363,7 @@ class ProjectAnalysisService {
       );
 
       logger.info(`Saved requirement profile for task ${profile.taskId}${requirementVector ? ' with vector' : ''}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save requirement profile:', error);
       throw error;
     }

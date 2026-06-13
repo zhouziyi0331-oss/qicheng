@@ -57,7 +57,7 @@ export async function withTransaction<T>(
     const result = await fn(client);
     await client.query('COMMIT');
     return result;
-  } catch (err) {
+  } catch (err: unknown) {
     await client.query('ROLLBACK');
     throw err;
   } finally {

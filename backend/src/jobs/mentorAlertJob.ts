@@ -28,7 +28,7 @@ class MentorAlertJob {
 
         const duration = Date.now() - startTime;
         logger.info(`[MentorAlertJob] 预警扫描完成，耗时 ${duration}ms`);
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('[MentorAlertJob] 预警扫描失败:', error);
       }
     });
@@ -54,7 +54,7 @@ class MentorAlertJob {
       logger.info('[MentorAlertJob] 手动触发预警扫描');
       await mentorAlertService.scanAndTriggerAlerts();
       logger.info('[MentorAlertJob] 手动扫描完成');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorAlertJob] 手动扫描失败:', error);
       throw error;
     }

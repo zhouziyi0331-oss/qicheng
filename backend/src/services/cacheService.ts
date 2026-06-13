@@ -28,7 +28,7 @@ class CacheService {
         logger.error('Redis连接错误:', error);
         this.enabled = false;
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Redis初始化失败:', error);
       this.enabled = false;
       // 创建一个空的Redis实例，避免后续调用报错
@@ -63,7 +63,7 @@ class CacheService {
       }
 
       return null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取匹配缓存失败:', error);
       return null;
     }
@@ -82,7 +82,7 @@ class CacheService {
       await this.redis.setex(key, ttl, JSON.stringify(matches));
 
       logger.info('匹配结果已缓存', { studentId, ttl });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('设置匹配缓存失败:', error);
     }
   }
@@ -98,7 +98,7 @@ class CacheService {
       await this.redis.del(key);
 
       logger.info('匹配结果缓存已删除', { studentId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('删除匹配缓存失败:', error);
     }
   }
@@ -123,7 +123,7 @@ class CacheService {
       }
 
       return null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取画像缓存失败:', error);
       return null;
     }
@@ -142,7 +142,7 @@ class CacheService {
       await this.redis.setex(key, ttl, JSON.stringify(profile));
 
       logger.info('学生画像已缓存', { studentId, ttl });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('设置画像缓存失败:', error);
     }
   }
@@ -158,7 +158,7 @@ class CacheService {
       await this.redis.del(key);
 
       logger.info('学生画像缓存已删除', { studentId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('删除画像缓存失败:', error);
     }
   }
@@ -177,7 +177,7 @@ class CacheService {
       await this.deleteStudentMatches(studentId);
 
       logger.info('学生相关缓存已全部清除', { studentId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('清除学生缓存失败:', error);
     }
   }
@@ -202,7 +202,7 @@ class CacheService {
       }
 
       return null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取项目缓存失败:', error);
       return null;
     }
@@ -221,7 +221,7 @@ class CacheService {
       await this.redis.setex(key, ttl, JSON.stringify(task));
 
       logger.info('项目详情已缓存', { taskId, ttl });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('设置项目缓存失败:', error);
     }
   }
@@ -237,7 +237,7 @@ class CacheService {
       await this.redis.del(key);
 
       logger.info('项目详情缓存已删除', { taskId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('删除项目缓存失败:', error);
     }
   }
@@ -255,7 +255,7 @@ class CacheService {
     try {
       const cached = await this.redis.get(key);
       return cached ? JSON.parse(cached) : null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取缓存失败:', { key, error });
       return null;
     }
@@ -269,7 +269,7 @@ class CacheService {
 
     try {
       await this.redis.setex(key, ttl, JSON.stringify(value));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('设置缓存失败:', { key, error });
     }
   }
@@ -282,7 +282,7 @@ class CacheService {
 
     try {
       await this.redis.del(key);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('删除缓存失败:', { key, error });
     }
   }
@@ -299,7 +299,7 @@ class CacheService {
         await this.redis.del(...keys);
         logger.info('批量删除缓存成功', { pattern, count: keys.length });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('批量删除缓存失败:', { pattern, error });
     }
   }
@@ -331,7 +331,7 @@ class CacheService {
         keyCount: dbSize,
         memoryUsed,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取缓存统计失败:', error);
       return {
         enabled: false,
@@ -350,7 +350,7 @@ class CacheService {
     try {
       await this.redis.flushdb();
       logger.warn('所有缓存已清空');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('清空缓存失败:', error);
     }
   }

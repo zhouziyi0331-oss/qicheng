@@ -62,19 +62,19 @@ async function triggerMatching(req, res) {
           rank_in_task = EXCLUDED.rank_in_task`, [
                 taskId,
                 match.studentId,
-                match.matchScore.overallScore,
-                match.matchScore.skillMatch.score,
-                match.matchScore.difficultyMatch.score,
-                match.matchScore.domainMatch.score,
-                match.matchScore.growthPotential.score,
-                match.matchScore.reliability.score,
-                match.matchScore.preferenceAlignment.score,
-                JSON.stringify(match.matchScore.breakdown),
+                match.match_score.overallScore,
+                match.match_score.skillMatch.score,
+                match.match_score.difficultyMatch.score,
+                match.match_score.domainMatch.score,
+                match.match_score.growthPotential.score,
+                match.match_score.reliability.score,
+                match.match_score.preferenceAlignment.score,
+                JSON.stringify(match.match_score.breakdown),
                 match.rank
             ]);
         }
         // 5. 更新任务的匹配状态
-        const topScore = matches.length > 0 ? matches[0].matchScore.overallScore : 0;
+        const topScore = matches.length > 0 ? matches[0].match_score.overallScore : 0;
         await (0, db_1.query)(`UPDATE tasks SET
         matched_students_count = $1,
         top_match_score = $2,
@@ -144,7 +144,7 @@ async function getMatchedStudents(req, res) {
                 tasksCompleted: m.tasks_completed || 0,
                 avgQuality: m.avg_task_quality || 0,
                 avgSatisfaction: m.avg_client_satisfaction || 0,
-                matchScore: {
+                match_score: {
                     overall: m.overall_score,
                     skill: m.skill_match_score,
                     difficulty: m.difficulty_match_score,
@@ -258,7 +258,7 @@ async function getRecommendedTasks(req, res) {
                 trackType: t.track_type,
                 levelRequired: t.level_required,
                 companyName: t.company_name,
-                matchScore: t.overall_score,
+                match_score: t.overall_score,
                 matchReason: t.match_breakdown,
                 whatYouWillLearn: t.what_you_will_learn,
                 estimatedHours: t.estimated_hours,

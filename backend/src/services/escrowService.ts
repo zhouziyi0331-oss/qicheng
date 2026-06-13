@@ -139,7 +139,7 @@ class EscrowService {
 
       await client.query('COMMIT');
       logger.info(`Quote ${quoteId} accepted by student ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -217,7 +217,7 @@ class EscrowService {
 
       await client.query('COMMIT');
       logger.info(`Payment completed for quote ${quoteId}, amount: ${quote.quoted_amount}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -295,7 +295,7 @@ class EscrowService {
 
       await client.query('COMMIT');
       logger.info(`Task ${taskId} completed, entering settlement period`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -383,7 +383,7 @@ class EscrowService {
 
       await client.query('COMMIT');
       logger.info(`Settlement released for task ${taskId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {

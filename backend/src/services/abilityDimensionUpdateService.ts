@@ -390,7 +390,7 @@ class AbilityDimensionUpdateService {
 
       await client.query('COMMIT');
       return nextVersion;
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {

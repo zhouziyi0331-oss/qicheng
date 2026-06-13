@@ -57,7 +57,7 @@ export async function sendSMS(phone: string, code: string): Promise<boolean> {
       logger.error('SMS send failed', { code: response.data.Code, message: response.data.Message });
       return false;
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('SMS service error', { error: (err as Error).message });
     return false;
   }

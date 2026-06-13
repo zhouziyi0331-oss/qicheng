@@ -72,7 +72,7 @@ export async function uploadFile(req: Request, res: Response, next: NextFunction
         mimetype: req.file.mimetype,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -105,7 +105,7 @@ export async function uploadMultiple(req: Request, res: Response, next: NextFunc
     );
 
     res.json({ success: true, data: fileData });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

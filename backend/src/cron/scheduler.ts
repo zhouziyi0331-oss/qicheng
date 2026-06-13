@@ -86,7 +86,7 @@ export class CronScheduler {
         logger.info('开始执行7天自动确认任务');
         await job.execute();
         logger.info('7天自动确认任务执行完成');
-      } catch (err) {
+      } catch (err: unknown) {
         logger.error('7天自动确认任务执行失败:', err);
       }
     }, {

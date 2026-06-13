@@ -175,7 +175,7 @@ class TaskAmendmentService {
       });
 
       return amendment;
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to create amendment', { error, params });
       throw error;
@@ -280,7 +280,7 @@ class TaskAmendmentService {
       });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to respond to amendment', { error, params });
       throw error;
@@ -382,7 +382,7 @@ class TaskAmendmentService {
       });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to make final decision', { error, params });
       throw error;
@@ -540,7 +540,7 @@ fairness_score: 0-100分，80分以上表示非常合理，60-80合理，40-60�
       });
 
       return analysis;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to analyze amendment fairness', { error, amendmentId });
       throw error;
     } finally {
@@ -579,7 +579,7 @@ fairness_score: 0-100分，80分以上表示非常合理，60-80合理，40-60�
       );
 
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get task amendments', { error, taskId });
       throw error;
     } finally {
@@ -601,7 +601,7 @@ fairness_score: 0-100分，80分以上表示非常合理，60-80合理，40-60�
       );
 
       return result.rows[0] || null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get amendment', { error, amendmentId });
       throw error;
     } finally {
@@ -645,7 +645,7 @@ fairness_score: 0-100分，80分以上表示非常合理，60-80合理，40-60�
       );
 
       logger.info('Amendment cancelled', { amendmentId, companyId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to cancel amendment', { error, amendmentId });
       throw error;
     } finally {

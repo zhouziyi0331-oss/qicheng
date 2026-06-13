@@ -73,7 +73,7 @@ export class SubmissionPreCheckService {
         overallFeedback: result.overall_feedback,
         shouldSubmit,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Pre-check service error', {
         taskId,
         studentId,

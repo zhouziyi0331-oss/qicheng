@@ -64,7 +64,7 @@ export async function getTrackRecommendation(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Get track recommendation failed', { error, userId });
     res.status(500).json({
       success: false,
@@ -138,7 +138,7 @@ export async function selectTrack(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     await client.query('ROLLBACK');
     logger.error('Select track failed', { error, userId, track });
     res.status(500).json({
@@ -303,7 +303,7 @@ export async function getTrackPaths(req: Request, res: Response) {
       data: paths
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Get track paths failed', { error });
     res.status(500).json({
       success: false,
@@ -358,7 +358,7 @@ export async function getMyTrack(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Get my track failed', { error, userId });
     res.status(500).json({
       success: false,

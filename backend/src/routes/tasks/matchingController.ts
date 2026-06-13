@@ -64,21 +64,21 @@ export async function triggerMatching(req: Request, res: Response) {
         [
           taskId,
           match.studentId,
-          match.matchScore.overallScore,
-          match.matchScore.skillMatch.score,
-          match.matchScore.difficultyMatch.score,
-          match.matchScore.domainMatch.score,
-          match.matchScore.growthPotential.score,
-          match.matchScore.reliability.score,
-          match.matchScore.preferenceAlignment.score,
-          JSON.stringify(match.matchScore.breakdown),
+          match.match_score.overallScore,
+          match.match_score.skillMatch.score,
+          match.match_score.difficultyMatch.score,
+          match.match_score.domainMatch.score,
+          match.match_score.growthPotential.score,
+          match.match_score.reliability.score,
+          match.match_score.preferenceAlignment.score,
+          JSON.stringify(match.match_score.breakdown),
           match.rank
         ]
       );
     }
 
     // 5. 更新任务的匹配状态
-    const topScore = matches.length > 0 ? matches[0].matchScore.overallScore : 0;
+    const topScore = matches.length > 0 ? matches[0].match_score.overallScore : 0;
     await query(
       `UPDATE tasks SET
         matched_students_count = $1,
@@ -96,7 +96,7 @@ export async function triggerMatching(req: Request, res: Response) {
       topScore,
       message: `成功匹配${matches.length}个学生`
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to trigger matching:', error);
     res.status(500).json({ error: '匹配失败，请稍后重试' });
   }
@@ -181,7 +181,7 @@ export async function getMatchedStudents(req: Request, res: Response) {
         tasksCompleted: m.tasks_completed || 0,
         avgQuality: m.avg_task_quality || 0,
         avgSatisfaction: m.avg_client_satisfaction || 0,
-        matchScore: {
+        match_score: {
           overall: m.overall_score,
           skill: m.skill_match_score,
           difficulty: m.difficulty_match_score,
@@ -194,7 +194,7 @@ export async function getMatchedStudents(req: Request, res: Response) {
         rank: m.rank_in_task
       }))
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get matched students:', error);
     res.status(500).json({ error: '获取匹配学生失败' });
   }
@@ -251,7 +251,7 @@ export async function pushToStudents(req: Request, res: Response) {
       pushedCount: studentIds.length,
       message: `已推送给${studentIds.length}个学生`
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to push to students:', error);
     res.status(500).json({ error: '推送失败' });
   }
@@ -337,7 +337,7 @@ export async function getRecommendedTasks(req: Request, res: Response) {
         trackType: t.track_type,
         levelRequired: t.level_required,
         companyName: t.company_name,
-        matchScore: t.overall_score,
+        match_score: t.overall_score,
         matchReason: t.match_breakdown,
         whatYouWillLearn: t.what_you_will_learn,
         estimatedHours: t.estimated_hours,
@@ -346,7 +346,7 @@ export async function getRecommendedTasks(req: Request, res: Response) {
         viewed: t.student_viewed
       }))
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get recommended tasks:', error);
     res.status(500).json({ error: '获取推荐任务失败' });
   }
@@ -383,7 +383,7 @@ export async function getTaskTranslation(req: Request, res: Response) {
         careerImpact: translation.careerImpact
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get task translation:', error);
     res.status(500).json({ error: '获取任务翻译失败' });
   }
@@ -424,7 +424,7 @@ export async function acceptRecommendation(req: Request, res: Response) {
       success: true,
       message: '已接受任务推荐'
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to accept recommendation:', error);
     res.status(500).json({ error: '接受任务失败' });
   }
@@ -485,7 +485,7 @@ export async function getMatchingStats(req: Request, res: Response) {
         topScore: stats?.top_score || 0
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get matching stats:', error);
     res.status(500).json({ error: '获取统计数据失败' });
   }
@@ -522,7 +522,7 @@ export async function rematchTask(req: Request, res: Response) {
       success: true,
       message: '重新匹配完成'
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to rematch task:', error);
     res.status(500).json({ error: '重新匹配失败' });
   }

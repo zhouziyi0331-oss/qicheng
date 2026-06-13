@@ -268,7 +268,7 @@ async function processMentorGuidance(data: Omit<MentorGuidanceJob, 'type'>) {
       content: mentorMessage
     };
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(`Failed to generate mentor guidance for scenario ${scenario}:`, error);
     throw error;
   }
@@ -343,7 +343,7 @@ ${studentProfile || '暂无画像'}
     }
 
     throw new Error('Unexpected response type from Claude');
-  } catch (error) {
+  } catch (error: unknown) {
     const duration = Date.now() - startTime;
 
     // 记录失败日志
@@ -389,7 +389,7 @@ async function generateT02SocraticGuidance(context: any): Promise<string> {
     try {
       const conversationHistoryService = require('./conversationHistoryService').default;
       conversationHistory = await conversationHistoryService.getConversationHistory(orderId, 30);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get conversation history:', error);
     }
   }
@@ -466,7 +466,7 @@ ${conversationHistory}
     }
 
     throw new Error('Unexpected response type from Claude');
-  } catch (error) {
+  } catch (error: unknown) {
     const duration = Date.now() - startTime;
 
     // 记录失败日志
@@ -554,7 +554,7 @@ ${submissionContent || '暂无详情'}
     }
 
     throw new Error('Unexpected response type from Claude');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to generate T03 guidance:', error);
     // 降级：返回基础翻译
     return `📝 关于"${taskTitle}"的修改建议
@@ -629,7 +629,7 @@ ${currentProgress || '刚接单，还没开始'}
     }
 
     throw new Error('Unexpected response type from Claude');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to generate T04 guidance:', error);
     // 降级：返回基础轻推
     return `👋 嗨，好久不见！
@@ -653,7 +653,7 @@ async function generateT05Milestone(context: any): Promise<string> {
     try {
       const conversationHistoryService = require('./conversationHistoryService').default;
       conversationHistory = await conversationHistoryService.getConversationHistory(orderId, 30);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get conversation history:', error);
     }
   }
@@ -732,7 +732,7 @@ ${conversationHistory}
     }
 
     throw new Error('Unexpected response type from Claude');
-  } catch (error) {
+  } catch (error: unknown) {
     const duration = Date.now() - startTime;
 
     // 记录失败日志
@@ -851,7 +851,7 @@ aiTaskQueue.on('completed', (job, result) => {
         );
         break;
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to push WebSocket notification:', error);
   }
 });

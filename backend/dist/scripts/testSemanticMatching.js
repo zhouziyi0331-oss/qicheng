@@ -93,7 +93,7 @@ async function testSemanticMatching() {
         // 7. 测试匹配算法
         console.log('\n7. 测试语义匹配引擎...');
         try {
-            const matchScore = await semanticMatchingEngine_1.default.matchTaskWithStudent(testTask.id, testStudent.id);
+            const match_score = await semanticMatchingEngine_1.default.matchTaskWithStudent(testTask.id, testStudent.id);
             console.log('✅ 匹配计算成功:');
             console.log(`   综合得分: ${(matchScore.overallScore * 100).toFixed(1)}%`);
             console.log(`   技能匹配: ${(matchScore.skillMatch.score * 100).toFixed(1)}%`);
@@ -112,7 +112,7 @@ async function testSemanticMatching() {
             const topMatches = await semanticMatchingEngine_1.default.findBestStudentsForTask(testTask.id, 5);
             console.log(`✅ 找到 ${topMatches.length} 个匹配学生:`);
             topMatches.forEach((match, index) => {
-                console.log(`   ${index + 1}. 学生ID: ${match.studentId.substring(0, 8)}... - 匹配度: ${(match.matchScore.overallScore * 100).toFixed(1)}%`);
+                console.log(`   ${index + 1}. 学生ID: ${match.studentId.substring(0, 8)}... - 匹配度: ${(match.match_score.overallScore * 100).toFixed(1)}%`);
             });
         }
         catch (error) {

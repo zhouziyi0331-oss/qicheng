@@ -69,7 +69,7 @@ export async function createTeam(req: AuthRequest, res: Response, next: NextFunc
       message: '团队创建成功',
       data: { teamId: team.teamId },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -150,7 +150,7 @@ export async function inviteMember(req: AuthRequest, res: Response, next: NextFu
       success: true,
       message: '成员邀请成功',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -200,7 +200,7 @@ export async function getTeamDetail(req: AuthRequest, res: Response, next: NextF
         members,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -242,7 +242,7 @@ export async function startTeamTask(req: AuthRequest, res: Response, next: NextF
       success: true,
       message: '团队任务已开始',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -338,7 +338,7 @@ export async function completeTeamTask(req: AuthRequest, res: Response, next: Ne
       success: true,
       message: '团队任务已完成，收益已分配',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -370,7 +370,7 @@ export async function getMyTeams(req: AuthRequest, res: Response, next: NextFunc
       success: true,
       data: teams,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

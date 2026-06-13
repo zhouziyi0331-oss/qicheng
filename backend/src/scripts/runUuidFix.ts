@@ -27,7 +27,7 @@ async function runMigration() {
     logger.info('  - ai_matches.task_id: INTEGER → UUID');
     logger.info('  - ai_matches.student_id: INTEGER → UUID');
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('❌ 迁移失败:', error);
     process.exit(1);
   } finally {

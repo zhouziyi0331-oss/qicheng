@@ -92,7 +92,7 @@ class CommunityService {
       logger.info(`Community post created: ${post.id} by ${params.authorId}, type: ${params.type}`);
 
       return post.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create community post:', error);
       throw error;
     }
@@ -193,7 +193,7 @@ class CommunityService {
         posts: formattedPosts,
         totalCount: countResult?.count || 0,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get community posts:', error);
       throw error;
     }
@@ -282,7 +282,7 @@ class CommunityService {
         },
         teamMembers, // 添加团队成员信息
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get post detail:', error);
       return null;
     }
@@ -348,7 +348,7 @@ class CommunityService {
       );
 
       logger.info(`User ${applicantId} applied to post ${postId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to apply to post:', error);
       throw error;
     }
@@ -408,7 +408,7 @@ class CommunityService {
 
         logger.info(`Application rejected: ${applicantId} for post ${postId}`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to review application:', error);
       throw error;
     }
@@ -451,7 +451,7 @@ class CommunityService {
       );
 
       return applications.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get post applications:', error);
       throw error;
     }
@@ -485,7 +485,7 @@ class CommunityService {
       );
 
       logger.info(`Post ${postId} closed by ${authorId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to close post:', error);
       throw error;
     }
@@ -519,7 +519,7 @@ class CommunityService {
       );
 
       logger.info(`Post ${postId} deleted by ${authorId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to delete post:', error);
       throw error;
     }
@@ -580,7 +580,7 @@ class CommunityService {
         posts: formattedPosts,
         totalCount: countResult?.count || 0,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get user posts:', error);
       throw error;
     }
@@ -606,7 +606,7 @@ class CommunityService {
       );
 
       return applications.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get user applications:', error);
       throw error;
     }

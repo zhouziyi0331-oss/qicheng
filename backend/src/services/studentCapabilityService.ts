@@ -81,7 +81,7 @@ class StudentCapabilityService {
       await vectorGenerationService.updateStudentEmbedding(studentId);
 
       logger.info(`Initialized capability for student: ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error initializing capability:', error);
       throw error;
     } finally {
@@ -198,7 +198,7 @@ class StudentCapabilityService {
       await client.query('COMMIT');
 
       logger.info(`Updated capability for student: ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Error updating capability:', error);
       throw error;
@@ -309,7 +309,7 @@ class StudentCapabilityService {
         recent_quality_avg: recent5Avg,
         quality_change: qualityChange,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating growth trend:', error);
       return {
         trend: 'unknown',
@@ -330,7 +330,7 @@ class StudentCapabilityService {
     try {
       await vectorGenerationService.updateStudentEmbedding(studentId);
       logger.info(`Updated vectors for student: ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error updating student vectors:', error);
       throw error;
     }
@@ -385,7 +385,7 @@ class StudentCapabilityService {
 
           await this.initializeCapability(student.id, opcResults);
           initialized++;
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`Failed to initialize student ${student.id}:`, error);
         }
       }

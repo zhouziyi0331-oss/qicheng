@@ -173,7 +173,7 @@ export class EnhancedMentorService {
         responseTime
       };
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Enhanced mentor chat error:', error);
       throw error;
     }
@@ -270,7 +270,7 @@ export class EnhancedMentorService {
         const result = JSON.parse(content.text);
         return result;
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI analysis error:', error);
     }
 
@@ -575,7 +575,7 @@ export class EnhancedMentorService {
       if (content.type === 'text') {
         return JSON.parse(content.text);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('MVP generation error:', error);
     }
 

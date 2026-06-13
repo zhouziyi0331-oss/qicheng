@@ -183,7 +183,7 @@ class MessageRelayService {
         optimized: optimizationResult.isOptimized,
         warning,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to send message:', error);
       throw error;
     }
@@ -313,7 +313,7 @@ class MessageRelayService {
         tokensUsed: response.usage?.total_tokens,
         cost: this.calculateCost(response.usage?.total_tokens || 0, 'claude-haiku-4-5'),
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to optimize tone:', error);
       // 如果AI调用失败，返回原消息
       return {

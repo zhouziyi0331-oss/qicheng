@@ -406,7 +406,7 @@ class MatchingEnhancementService {
           return JSON.parse(jsonMatch[0]);
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI分析拒绝原因失败:', error);
     }
 

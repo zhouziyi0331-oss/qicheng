@@ -35,7 +35,7 @@ ${content}`
 
     logger.info('Content moderation result', { safe: result.safe, reason: result.reason });
     return result;
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Content moderation error', { error: (err as Error).message });
     // 审核失败时默认通过，避免误伤
     return { safe: true };

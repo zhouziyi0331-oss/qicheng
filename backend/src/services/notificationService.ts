@@ -122,7 +122,7 @@ class NotificationService {
 
       logger.info('Notification sent', { notificationId, userId: params.userId, templateKey: params.templateKey });
       return notification.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -142,7 +142,7 @@ class NotificationService {
         if (notification) {
           results.push(notification);
         }
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('Failed to send notification in bulk', { error, params });
       }
     }
@@ -388,7 +388,7 @@ class NotificationService {
     for (const channel of channels) {
       try {
         await this.pushToChannel(channel, notification);
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('Failed to push to channel', { error, channel, notificationId: notification.id });
       }
     }
@@ -429,7 +429,7 @@ class NotificationService {
          WHERE notification_id = $1 AND channel = $2`,
         [notification.id, channel]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       // 记录失败
       await client.query(
         `UPDATE notification_push_logs

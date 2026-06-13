@@ -173,7 +173,7 @@ async function initializeStudentCapabilities() {
 
         // 避免过载
         await new Promise(resolve => setTimeout(resolve, 100));
-      } catch (error) {
+      } catch (error: unknown) {
         errorCount++;
         logger.error(`Failed to initialize student ${student.username}:`, error);
       }
@@ -187,7 +187,7 @@ async function initializeStudentCapabilities() {
     logger.info('='.repeat(60));
 
     process.exit(0);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to initialize student capabilities:', error);
     process.exit(1);
   }

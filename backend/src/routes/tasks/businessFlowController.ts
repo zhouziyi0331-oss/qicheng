@@ -66,7 +66,7 @@ export async function getAIPriceSuggestion(req: Request, res: Response, next: Ne
         ]
       }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -188,7 +188,7 @@ export async function publishTaskWithDeposit(req: Request, res: Response, next: 
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -224,14 +224,14 @@ export async function triggerAIMatching(taskId: string): Promise<void> {
 
     // 创建匹配记录
     for (const student of students) {
-      const matchScore = Math.floor(Math.random() * 20) + 80; // 80-100分
+      const match_score = Math.floor(Math.random() * 20) + 80; // 80-100分
       const matchReason = `该学生等级${student.level}，综合评分${student.total_score}，与任务需求高度匹配`;
 
       await query(
         `INSERT INTO ai_matches (
           task_id, student_id, match_score, match_reason, is_selected_by_company
         ) VALUES ($1,$2,$3,$4,false)`,
-        [taskId, student.id, matchScore, matchReason]
+        [taskId, student.id, match_score, matchReason]
       );
     }
 
@@ -253,7 +253,7 @@ export async function triggerAIMatching(taskId: string): Promise<void> {
     );
 
     logger.info('AI matching completed', { taskId, matchedCount: students.length });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('AI matching failed', { taskId, error: err });
     throw err;
   }
@@ -314,13 +314,13 @@ export async function getMatchedStudents(req: Request, res: Response, next: Next
           totalScore: m.total_score,
           completedTasks: m.completed_tasks,
           averageRating: m.average_rating,
-          matchScore: m.match_score,
+          match_score: m.match_score,
           matchReason: m.match_reason,
           isSelected: m.is_selected_by_company
         }))
       }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -398,7 +398,7 @@ export async function selectStudentsForInvitation(req: Request, res: Response, n
         }
       });
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

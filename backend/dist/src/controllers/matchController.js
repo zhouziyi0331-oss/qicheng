@@ -61,11 +61,11 @@ const matchTasksForStudent = async (req, res) => {
       LIMIT $4`, [studentLevel, userId, opcTag, limit]);
         // 4. 计算匹配分数并生成匹配理由
         const tasks = tasksResult.map((task) => {
-            const matchScore = calculateMatchScore(student, task, opcScores);
+            const match_score = calculateMatchScore(student, task, opcScores);
             const matchReason = generateMatchReason(student, task, opcScores);
             return {
                 ...task,
-                match_score: matchScore,
+                match_score: match_score,
                 match_reason: matchReason,
                 is_stretch_project: task.is_stretch
             };
@@ -219,7 +219,7 @@ const getTaskDetailWithMatch = async (req, res) => {
             risk_attitude: opcResult[0].risk_attitude_normalized
         } : null;
         // 4. 计算匹配分数和理由
-        const matchScore = calculateMatchScore(student, task, opcScores);
+        const match_score = calculateMatchScore(student, task, opcScores);
         const matchReason = generateMatchReason(student, task, opcScores);
         // 5. 判断是否为冒险项目
         const isStretch = task.required_level > student.level;
@@ -227,7 +227,7 @@ const getTaskDetailWithMatch = async (req, res) => {
             success: true,
             task: {
                 ...task,
-                match_score: matchScore,
+                match_score: match_score,
                 match_reason: matchReason,
                 is_stretch_project: isStretch
             }

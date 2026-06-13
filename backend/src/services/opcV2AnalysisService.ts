@@ -36,7 +36,7 @@ interface SelfPerception {
 
 interface TrackRecommendation {
   track: string
-  matchScore: number
+  match_score: number
   reason: string
   firstTaskSuggestion: string
 }
@@ -398,7 +398,7 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
           result.selfPerception.aiAnalysis,
           result.selfPerception.gap,
           result.trackRecommendation.track,
-          result.trackRecommendation.matchScore,
+          result.trackRecommendation.match_score,
           result.trackRecommendation.reason,
           result.trackRecommendation.firstTaskSuggestion,
           JSON.stringify(result)
@@ -455,7 +455,7 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
         },
         trackRecommendation: {
           track: row.recommended_track,
-          matchScore: row.track_match_score,
+          match_score: row.track_match_score,
           reason: row.track_reason,
           firstTaskSuggestion: row.first_task_suggestion
         }
@@ -503,7 +503,7 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
         },
         trackRecommendation: {
           track: row.recommended_track,
-          matchScore: row.track_match_score,
+          match_score: row.track_match_score,
           reason: row.track_reason,
           firstTaskSuggestion: row.first_task_suggestion
         }

@@ -46,7 +46,7 @@ class GrowthDataTrigger {
       }
 
       logger.info(`[成长数据触发器] 订单 ${orderId} 的成长数据更新已触发`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[成长数据触发器] 处理订单 ${orderId} 失败:`, error);
     }
   }
@@ -81,7 +81,7 @@ class GrowthDataTrigger {
       await instantGrowthSummaryService.generateInstantSummary(orderId);
       const duration = Date.now() - startTime;
       logger.info(`[成长数据触发器] 即时总结生成完成，耗时: ${duration}ms`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[成长数据触发器] 即时总结生成失败:`, error);
       throw error;
     }
@@ -98,7 +98,7 @@ class GrowthDataTrigger {
       await abilityDimensionUpdateService.updateAbilityAfterOrder(orderId);
       const duration = Date.now() - startTime;
       logger.info(`[成长数据触发器] 六维能力更新完成，耗时: ${duration}ms`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[成长数据触发器] 六维能力更新失败:`, error);
       throw error;
     }
@@ -125,7 +125,7 @@ class GrowthDataTrigger {
 
       // 发送通知给学生（这里可以集成通知服务）
       await this.notifyStudentAboutGraduationReport(studentId, reportId);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[成长数据触发器] 毕业报告生成失败:`, error);
       throw error;
     }
@@ -187,7 +187,7 @@ class GrowthDataTrigger {
           await this.onOrderCompleted(order.id);
           // 添加延迟，避免API限流
           await this.sleep(2000);
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`[成长数据触发器] 处理订单 ${order.id} 失败:`, error);
         }
       }

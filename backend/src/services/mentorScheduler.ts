@@ -59,7 +59,7 @@ class MentorScheduler {
           sent: result.sent,
           failed: result.failed
         });
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('主动跟进任务失败', { error });
       }
     });
@@ -80,7 +80,7 @@ class MentorScheduler {
         const count = await mentorMemoryService.cleanupExpiredMemories();
 
         logger.info('过期记忆清理完成', { deletedCount: count });
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('清理过期记忆失败', { error });
       }
     });
@@ -102,7 +102,7 @@ class MentorScheduler {
         // 例如：分析所有活跃学生的学习模式，更新档案
 
         logger.info('学习模式分析完成');
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('学习模式分析失败', { error });
       }
     });
@@ -120,7 +120,7 @@ class MentorScheduler {
       const result = await proactiveFollowUpService.executeFollowUps();
       logger.info('手动触发完成', result);
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('手动触发失败', { error });
       throw error;
     }

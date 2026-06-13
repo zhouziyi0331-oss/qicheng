@@ -388,7 +388,7 @@ async function main(): Promise<void> {
     // 打印报告
     printTestReport();
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ 测试执行失败:', error);
     process.exit(1);
   }

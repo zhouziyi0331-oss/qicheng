@@ -68,7 +68,7 @@ router.post(
         success: true,
         message: '申请已提交，等待管理员审核',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -136,7 +136,7 @@ router.get(
           pendingRequests,
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -221,7 +221,7 @@ router.put(
         success: true,
         message: '设置已更新',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -278,7 +278,7 @@ router.get(
         success: true,
         data: masters,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -342,7 +342,7 @@ router.post(
         success: true,
         message: '邀请已发送',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -456,7 +456,7 @@ router.post(
             ? '已拒绝邀请'
             : '协商请求已发送',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -520,7 +520,7 @@ router.post(
         success: true,
         message: '指导消息已发送',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

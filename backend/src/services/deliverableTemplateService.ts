@@ -67,7 +67,7 @@ class DeliverableTemplateService {
 
       logger.info('Created deliverable template', { id: result.rows[0].id });
       return result.rows[0].id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error creating template:', error);
       throw error;
     } finally {
@@ -193,7 +193,7 @@ class DeliverableTemplateService {
       await client.query(query, values);
 
       logger.info('Updated template', { templateId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error updating template:', error);
       throw error;
     } finally {
@@ -213,7 +213,7 @@ class DeliverableTemplateService {
       );
 
       logger.info('Deleted template', { templateId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error deleting template:', error);
       throw error;
     } finally {
@@ -274,7 +274,7 @@ class DeliverableTemplateService {
       await client.query('COMMIT');
 
       logger.info('Applied template to task', { taskId, templateId });
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Error applying template:', error);
       throw error;
@@ -439,7 +439,7 @@ class DeliverableTemplateService {
       );
 
       logger.info('Updated template success rate', { templateId, newRate });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error updating template success rate:', error);
       throw error;
     } finally {

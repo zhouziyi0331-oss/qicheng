@@ -69,7 +69,7 @@ export async function login(req: Request, res: Response) {
         }
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('管理员登录失败:', error);
     res.status(500).json({ error: '登录失败' });
   }
@@ -110,7 +110,7 @@ export async function getCurrentAdmin(req: Request, res: Response) {
       lastLoginAt: admin.last_login_at,
       createdAt: admin.created_at
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取管理员信息失败:', error);
     res.status(500).json({ error: '获取信息失败' });
   }
@@ -147,7 +147,7 @@ export async function changePassword(req: Request, res: Response) {
     );
 
     res.json({ message: '密码修改成功' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('修改密码失败:', error);
     res.status(500).json({ error: '修改密码失败' });
   }

@@ -18,7 +18,7 @@ export async function checkJumpEligibility(req: Request, res: Response, next: Ne
       success: true,
       data: eligibility,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -46,7 +46,7 @@ export async function applyForJumpTest(req: Request, res: Response, next: NextFu
         testTask: result.testTask,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -84,7 +84,7 @@ export async function submitJumpTest(req: Request, res: Response, next: NextFunc
       message: reviewResult.passed ? '恭喜！跳级测试通过' : '跳级测试未通过',
       data: reviewResult,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -111,7 +111,7 @@ export async function getJumpHistory(req: Request, res: Response, next: NextFunc
       success: true,
       data: history.rows,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

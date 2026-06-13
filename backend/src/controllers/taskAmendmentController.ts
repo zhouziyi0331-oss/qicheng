@@ -78,7 +78,7 @@ export async function createAmendment(req: AuthRequest, res: Response) {
       success: true,
       data: amendment,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create amendment', { error });
     return res.status(500).json({
       error: 'Failed to create amendment',
@@ -128,7 +128,7 @@ export async function studentRespond(req: AuthRequest, res: Response) {
       success: true,
       data: amendment,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to respond to amendment', { error });
     return res.status(500).json({
       error: 'Failed to respond to amendment',
@@ -177,7 +177,7 @@ export async function companyDecide(req: AuthRequest, res: Response) {
       success: true,
       data: amendment,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to make final decision', { error });
     return res.status(500).json({
       error: 'Failed to make final decision',
@@ -213,7 +213,7 @@ export async function cancelAmendment(req: AuthRequest, res: Response) {
       success: true,
       message: 'Amendment cancelled successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to cancel amendment', { error });
     return res.status(500).json({
       error: 'Failed to cancel amendment',
@@ -245,7 +245,7 @@ export async function getTaskAmendments(req: AuthRequest, res: Response) {
       success: true,
       data: amendments,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get task amendments', { error });
     return res.status(500).json({
       error: 'Failed to get task amendments',
@@ -277,7 +277,7 @@ export async function getAmendment(req: AuthRequest, res: Response) {
       success: true,
       data: amendment,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get amendment', { error });
     return res.status(500).json({
       error: 'Failed to get amendment',
@@ -315,7 +315,7 @@ export async function analyzeAmendment(req: AuthRequest, res: Response) {
       success: true,
       data: analysis,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to analyze amendment', { error });
     return res.status(500).json({
       error: 'Failed to analyze amendment',

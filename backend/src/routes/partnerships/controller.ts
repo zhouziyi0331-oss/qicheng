@@ -55,7 +55,7 @@ export async function getPartnership(req: Request, res: Response, next: NextFunc
         interactionCount: interactionCount?.count || 0,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -113,7 +113,7 @@ export async function updateCollaborationCount(req: Request, res: Response, next
         relationshipLevel: newLevel,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -176,7 +176,7 @@ export async function invitePartner(req: Request, res: Response, next: NextFunct
         message: '合伙邀请已发送',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -234,7 +234,7 @@ export async function respondToInvitation(req: Request, res: Response, next: Nex
         },
       });
     }
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -271,7 +271,7 @@ export async function getStudentPartnerships(req: Request, res: Response, next: 
         totalCount: partnerships.length,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -318,7 +318,7 @@ export async function getCompanyPartnerships(req: Request, res: Response, next: 
         totalCount: partnerships.length,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -362,7 +362,7 @@ export async function recordInteraction(req: Request, res: Response, next: NextF
         message: '互动记录已保存',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

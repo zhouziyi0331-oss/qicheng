@@ -54,7 +54,7 @@ export async function listReports(req: Request, res: Response, next: NextFunctio
     });
 
     res.json({ success: true, data: reportList });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /reports/order — 购买报告
@@ -126,7 +126,7 @@ export async function orderReport(req: Request, res: Response, next: NextFunctio
         message: `报告购买成功后24小时内生成（毕业生R5报告12小时内）`,
       },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /reports/:id — 获取报告内容
@@ -156,7 +156,7 @@ export async function getReport(req: Request, res: Response, next: NextFunction)
     }
 
     res.json({ success: true, data: report });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -267,7 +267,7 @@ export async function triggerReportGeneration(reportId: string, userId: string):
        VALUES ($1, 'report_ready', '你的报告已生成', '你的OPC成长报告已准备好，点击查看', $2)`,
       [userId, `/reports/${reportId}`]
     );
-  } catch (err) {
+  } catch (err: unknown) {
     await query(
       `UPDATE opc_reports SET status = 'failed' WHERE id = $1`,
       [reportId]
@@ -329,7 +329,7 @@ export async function downloadReportPDF(req: Request, res: Response, next: NextF
 
     // 发送PDF
     res.send(pdfBuffer);
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Error downloading report PDF:', err);
     next(err);
   }

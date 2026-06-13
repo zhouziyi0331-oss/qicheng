@@ -105,7 +105,7 @@ class TaskLevelMatchingService {
       logger.info('Task level calculated', { taskId, level });
 
       return level;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to calculate task level', { error, taskId });
       throw error;
     } finally {
@@ -125,7 +125,7 @@ class TaskLevelMatchingService {
       );
 
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get task levels', { error });
       throw error;
     } finally {
@@ -152,7 +152,7 @@ class TaskLevelMatchingService {
       }
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get student level', { error, studentId });
       throw error;
     } finally {
@@ -170,7 +170,7 @@ class TaskLevelMatchingService {
       await client.query(`SELECT update_student_level($1)`, [studentId]);
 
       logger.info('Student level updated', { studentId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to update student level', { error, studentId });
       throw error;
     } finally {
@@ -258,7 +258,7 @@ class TaskLevelMatchingService {
       });
 
       return matchScores.slice(0, limit);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to match task with students', { error, taskId });
       throw error;
     } finally {
@@ -359,7 +359,7 @@ class TaskLevelMatchingService {
         mismatch_reasons: mismatchReasons,
         recommendation_level: recommendationLevel,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to calculate match score', { error });
       throw error;
     } finally {
@@ -558,7 +558,7 @@ class TaskLevelMatchingService {
           score.recommendation_level,
         ]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save match score', { error });
       throw error;
     } finally {
@@ -582,7 +582,7 @@ class TaskLevelMatchingService {
       );
 
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get task matches', { error, taskId });
       throw error;
     } finally {
@@ -606,7 +606,7 @@ class TaskLevelMatchingService {
       );
 
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get student recommended tasks', { error, studentId });
       throw error;
     } finally {
@@ -647,7 +647,7 @@ class TaskLevelMatchingService {
       }
 
       logger.info('Matched students notified', { taskId, count: matches.length });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to notify matched students', { error, taskId });
       throw error;
     } finally {

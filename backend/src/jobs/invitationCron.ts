@@ -19,7 +19,7 @@ cron.schedule('0 * * * *', async () => {
     logger.info('开始检测过期邀请...');
     const count = await invitationTaskService.expireInvitations();
     logger.info(`过期邀请检测完成，已过期${count}个邀请`);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('过期邀请检测失败:', error);
   }
 });
@@ -32,7 +32,7 @@ cron.schedule('0 2 * * *', async () => {
     logger.info('开始检测不活跃学生...');
     const count = await activityService.detectInactiveStudents();
     logger.info(`不活跃学生检测完成，已标记${count}个学生为不活跃`);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('不活跃学生检测失败:', error);
   }
 });
@@ -45,7 +45,7 @@ cron.schedule('0 3 * * 1', async () => {
     logger.info('开始重置周统计...');
     await activityService.resetWeeklyStats();
     logger.info('周统计重置完成');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('周统计重置失败:', error);
   }
 });
@@ -58,7 +58,7 @@ cron.schedule('0 4 1 * *', async () => {
     logger.info('开始重置月统计...');
     await activityService.resetMonthlyStats();
     logger.info('月统计重置完成');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('月统计重置失败:', error);
   }
 });

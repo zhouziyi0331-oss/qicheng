@@ -41,7 +41,7 @@ router.post(
         success: true,
         data: result,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -64,7 +64,7 @@ router.get(
         success: true,
         data: conversation,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -95,7 +95,7 @@ router.get(
         success: true,
         data: conversation,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

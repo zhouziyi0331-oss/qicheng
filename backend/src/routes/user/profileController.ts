@@ -70,7 +70,7 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
       success: true,
       data: profileData,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -111,7 +111,7 @@ export async function updateNickname(req: Request, res: Response, next: NextFunc
       message: '昵称更新成功',
       data: { nickname: nickname.trim() },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -142,7 +142,7 @@ export async function updateAvatar(req: Request, res: Response, next: NextFuncti
       message: '头像更新成功',
       data: { avatar },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -324,7 +324,7 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
       success: true,
       message: '资料更新成功',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -353,7 +353,7 @@ export async function getAvatarUploadUrl(req: Request, res: Response, next: Next
         cdnUrl, // 上传成功后使用这个URL更新头像
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -405,7 +405,7 @@ export async function bindPhone(req: Request, res: Response, next: NextFunction)
       message: '手机号绑定成功',
       data: { phone },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

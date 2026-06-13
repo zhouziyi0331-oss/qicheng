@@ -41,7 +41,7 @@ router.post('/ai-breakdown', authenticate, requireRole('company'), async (req: R
       success: true,
       data: result,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error in AI breakdown:', error);
     res.status(500).json({
       success: false,
@@ -87,7 +87,7 @@ router.post('/:taskId/breakdown', authenticate, requireRole('company'), async (r
         historyId,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error creating task breakdown:', error);
     res.status(500).json({
       success: false,
@@ -117,7 +117,7 @@ router.get('/:taskId/breakdown', authenticate, async (req: Request, res: Respons
       success: true,
       data: result,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting breakdown:', error);
     res.status(500).json({
       success: false,
@@ -144,7 +144,7 @@ router.get('/:taskId/breakdown/history', authenticate, requireRole('company'), a
         total: history.length,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting breakdown history:', error);
     res.status(500).json({
       success: false,
@@ -168,7 +168,7 @@ router.post('/breakdown/:historyId/accept', authenticate, requireRole('company')
       success: true,
       message: 'Breakdown accepted',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error accepting breakdown:', error);
     res.status(500).json({
       success: false,
@@ -199,7 +199,7 @@ router.put('/breakdown/:historyId', authenticate, requireRole('company'), async 
       success: true,
       message: 'Breakdown modified',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error modifying breakdown:', error);
     res.status(500).json({
       success: false,
@@ -222,7 +222,7 @@ router.get('/breakdown/stats', authenticate, requireRole('admin'), async (req: R
       success: true,
       data: stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting breakdown stats:', error);
     res.status(500).json({
       success: false,

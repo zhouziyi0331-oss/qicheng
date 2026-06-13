@@ -47,7 +47,7 @@ export async function getCurrentSession(req: Request, res: Response) {
       success: true,
       data: session,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取会话失败', { error });
     throw error;
   }
@@ -89,7 +89,7 @@ export async function getSessionMessages(req: Request, res: Response) {
         total: session.totalMessages,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取消息历史失败', { error });
     throw error;
   }
@@ -166,7 +166,7 @@ export async function sendMessage(req: Request, res: Response) {
         },
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('发送消息失败', { error });
     throw error;
   }
@@ -200,7 +200,7 @@ export async function requestQualityReview(req: Request, res: Response) {
       success: true,
       data: result,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('质量预审失败', { error });
     throw error;
   }
@@ -234,7 +234,7 @@ export async function getSessionStats(req: Request, res: Response) {
       success: true,
       data: stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取会话统计失败', { error });
     throw error;
   }
@@ -277,7 +277,7 @@ export async function confirmRequirementUnderstanding(req: Request, res: Respons
       success: true,
       message: '需求理解确认成功，进入执行引导阶段',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('确认需求理解失败', { error });
     throw error;
   }
@@ -382,7 +382,7 @@ export async function getStudentGrowthDashboard(req: Request, res: Response) {
       success: true,
       data: dashboard,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取成长仪表板失败', { error });
     throw error;
   }
@@ -409,7 +409,7 @@ export async function getRecentEmotions(req: Request, res: Response) {
       success: true,
       data: emotions,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取最近情绪失败', { error });
     throw error;
   }
@@ -436,7 +436,7 @@ export async function getGrowthMilestones(req: Request, res: Response) {
       success: true,
       data: milestones,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取成长里程碑失败', { error });
     throw error;
   }
@@ -459,7 +459,7 @@ export async function getUncelebratedMilestones(req: Request, res: Response) {
       success: true,
       data: milestones,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取未庆祝里程碑失败', { error });
     throw error;
   }
@@ -483,7 +483,7 @@ export async function celebrateMilestone(req: Request, res: Response) {
       success: true,
       message: '里程碑已庆祝',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('庆祝里程碑失败', { error });
     throw error;
   }
@@ -515,7 +515,7 @@ export async function getMentorMemories(req: Request, res: Response) {
       success: true,
       data: memories,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取导师记忆失败', { error });
     throw error;
   }
@@ -538,7 +538,7 @@ export async function getMemoryStats(req: Request, res: Response) {
       success: true,
       data: stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取记忆统计失败', { error });
     throw error;
   }
@@ -561,7 +561,7 @@ export async function getGrowthStats(req: Request, res: Response) {
       success: true,
       data: stats,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取成长统计失败', { error });
     throw error;
   }
@@ -595,7 +595,7 @@ export async function getGuidanceRecommendations(req: Request, res: Response) {
       success: true,
       data: recommendations,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取引导建议失败', { error });
     throw error;
   }
@@ -624,7 +624,7 @@ export async function getToolRecommendations(req: Request, res: Response) {
       success: true,
       data: tools,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取工具推荐失败', { error });
     throw error;
   }
@@ -659,7 +659,7 @@ export async function feedbackToolUsage(req: Request, res: Response) {
       success: result.success,
       message: result.message,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('反馈工具使用失败', { error });
     throw error;
   }
@@ -681,7 +681,7 @@ export async function getPopularTools(req: Request, res: Response) {
       success: true,
       data: tools,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取热门工具失败', { error });
     throw error;
   }
@@ -705,7 +705,7 @@ export async function triggerFollowUps(req: Request, res: Response) {
       success: true,
       data: result,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('触发主动跟进失败', { error });
     throw error;
   }
@@ -722,7 +722,7 @@ export async function getSchedulerStatus(req: Request, res: Response) {
       success: true,
       data: status,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取调度器状态失败', { error });
     throw error;
   }

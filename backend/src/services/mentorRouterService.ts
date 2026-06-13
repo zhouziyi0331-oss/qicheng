@@ -63,7 +63,7 @@ export class MentorRouterService {
         const analysis = JSON.parse(content.text);
         return analysis;
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('AI分析失败:', err);
       // 降级到关键词匹配
       return this.fallbackAnalysis(message);

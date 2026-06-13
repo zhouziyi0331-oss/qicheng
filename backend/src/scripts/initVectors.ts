@@ -42,7 +42,7 @@ async function initVectors() {
     logger.info('POST /api/v1/tasks/:taskId/trigger-matching\n');
 
     process.exit(0);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('\n❌ 向量初始化失败:', error);
     logger.error('Vector initialization failed:', error);
     process.exit(1);

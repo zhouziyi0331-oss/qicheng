@@ -174,7 +174,7 @@ class RatingService {
       });
 
       return rating;
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to create rating', { error, params });
       throw error;
@@ -265,7 +265,7 @@ class RatingService {
       logger.info('Rating updated', { ratingId });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to update rating', { error, ratingId });
       throw error;
@@ -302,7 +302,7 @@ class RatingService {
       );
 
       logger.info('Rating response added', { ratingId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to respond to rating', { error, ratingId });
       throw error;
     } finally {
@@ -344,7 +344,7 @@ class RatingService {
       await client.query('COMMIT');
 
       logger.info('Rating helpfulness marked', { ratingId, isHelpful });
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to mark helpfulness', { error, ratingId });
       throw error;
@@ -385,7 +385,7 @@ class RatingService {
       await client.query('COMMIT');
 
       logger.info('Rating reported', { ratingId, reason });
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to report rating', { error, ratingId });
       throw error;
@@ -414,7 +414,7 @@ class RatingService {
         }
         return rating;
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get task ratings', { error, taskId });
       throw error;
     } finally {
@@ -468,7 +468,7 @@ class RatingService {
         ratings: result.rows,
         total: parseInt(countResult.rows[0].count),
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get user ratings', { error, userId });
       throw error;
     } finally {
@@ -489,7 +489,7 @@ class RatingService {
       );
 
       return result.rows[0] || null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get user rating stats', { error, userId });
       throw error;
     } finally {
@@ -516,7 +516,7 @@ class RatingService {
 
       const result = await client.query(query, params);
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get available tags', { error });
       throw error;
     } finally {
@@ -563,7 +563,7 @@ class RatingService {
       await client.query('COMMIT');
 
       logger.info('Rating deleted by admin', { ratingId, adminId, reason });
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to delete rating', { error, ratingId });
       throw error;

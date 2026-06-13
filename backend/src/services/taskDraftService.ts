@@ -139,7 +139,7 @@ class TaskDraftService {
       logger.info('Draft created', { draftId: result.rows[0].id, companyId: params.company_id });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create draft', { error, params });
       throw error;
     } finally {
@@ -196,7 +196,7 @@ class TaskDraftService {
       logger.info('Draft updated', { draftId, companyId });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to update draft', { error, draftId, params });
       throw error;
     } finally {
@@ -217,7 +217,7 @@ class TaskDraftService {
       );
 
       return result.rows[0] || null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get draft', { error, draftId });
       throw error;
     } finally {
@@ -271,7 +271,7 @@ class TaskDraftService {
         drafts: result.rows,
         total: parseInt(countResult.rows[0].count),
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get drafts', { error, companyId });
       throw error;
     } finally {
@@ -296,7 +296,7 @@ class TaskDraftService {
       }
 
       logger.info('Draft deleted', { draftId, companyId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to delete draft', { error, draftId });
       throw error;
     } finally {
@@ -336,7 +336,7 @@ class TaskDraftService {
       logger.info('Draft duplicated', { originalId: draftId, newId: result.rows[0].id });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to duplicate draft', { error, draftId });
       throw error;
     } finally {
@@ -414,7 +414,7 @@ readiness可选值：not_ready（完成度<60%）、needs_improvement（60-80%�
       logger.info('Draft reviewed by AI', { draftId, score: aiSuggestion.overall_score });
 
       return aiSuggestion;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to review draft with AI', { error, draftId });
       throw error;
     } finally {
@@ -485,7 +485,7 @@ readiness可选值：not_ready（完成度<60%）、needs_improvement（60-80%�
       logger.info('Pricing suggestion generated', { draftId, suggestedRange: `${pricingSuggestion.suggested_min}-${pricingSuggestion.suggested_max}` });
 
       return pricingSuggestion;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get pricing suggestion', { error, draftId });
       throw error;
     } finally {
@@ -521,7 +521,7 @@ readiness可选值：not_ready（完成度<60%）、needs_improvement（60-80%�
       logger.info('Draft published', { draftId, taskId, companyId });
 
       return taskId;
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to publish draft', { error, draftId });
       throw error;
@@ -553,7 +553,7 @@ readiness可选值：not_ready（完成度<60%）、needs_improvement（60-80%�
       );
 
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get draft history', { error, draftId });
       throw error;
     } finally {
@@ -632,7 +632,7 @@ readiness可选值：not_ready（完成度<60%）、needs_improvement（60-80%�
       logger.info('Draft restored to version', { draftId, historyId });
 
       return result.rows[0];
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Failed to restore draft version', { error, draftId, historyId });
       throw error;

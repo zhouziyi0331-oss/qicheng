@@ -50,7 +50,7 @@ export class CodeExecutionService {
   private async ensureTempDir(): Promise<void> {
     try {
       await fs.mkdir(this.tempDir, { recursive: true });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create temp directory:', error);
     }
   }
@@ -209,7 +209,7 @@ export class CodeExecutionService {
   private async cleanupTempFile(filePath: string): Promise<void> {
     try {
       await fs.unlink(filePath);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to cleanup temp file:', error);
     }
   }
@@ -238,7 +238,7 @@ export class CodeExecutionService {
           result.executionTime
         ]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save execution record:', error);
     }
   }
@@ -272,7 +272,7 @@ export class CodeExecutionService {
         timeout: 60000
       });
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to install Python package:', error);
       return false;
     }
@@ -288,7 +288,7 @@ export class CodeExecutionService {
         cwd: this.tempDir
       });
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to install Node package:', error);
       return false;
     }

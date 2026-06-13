@@ -131,7 +131,7 @@ class CommunityServiceEnhanced {
       logger.info(`Community post created: ${post.id} by ${authorId}, type: ${type}`);
 
       return post.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create community post:', error);
       throw error;
     }
@@ -220,7 +220,7 @@ class CommunityServiceEnhanced {
       logger.info(`Comment created: ${comment.id} on post ${postId} by ${userId}`);
 
       return comment.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create comment:', error);
       throw error;
     }
@@ -249,7 +249,7 @@ class CommunityServiceEnhanced {
       );
 
       return comments.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get comments:', error);
       throw error;
     }
@@ -299,7 +299,7 @@ class CommunityServiceEnhanced {
         logger.info(`Like added: ${targetType} ${targetId} by ${userId}`);
         return { liked: true };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to toggle like:', error);
       throw error;
     }
@@ -357,7 +357,7 @@ class CommunityServiceEnhanced {
       }
 
       logger.info(`Content reported: ${targetType} ${targetId} by ${reporterId}, reason: ${reason}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to report content:', error);
       throw error;
     }
@@ -399,7 +399,7 @@ class CommunityServiceEnhanced {
       );
 
       logger.info(`Comment deleted: ${commentId} by ${userId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to delete comment:', error);
       throw error;
     }
@@ -429,7 +429,7 @@ class CommunityServiceEnhanced {
       await query(`DELETE FROM community_posts WHERE id = $1`, [postId]);
 
       logger.info(`Post deleted: ${postId} by ${userId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to delete post:', error);
       throw error;
     }
@@ -496,7 +496,7 @@ class CommunityServiceEnhanced {
         comments,
         teamMembers,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get post details:', error);
       throw error;
     }

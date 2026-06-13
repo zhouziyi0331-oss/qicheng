@@ -43,7 +43,7 @@ class ProactiveFollowUpService {
       tasks.push(...uncelebratedMilestones);
 
       return tasks;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('检查跟进任务失败', { error });
       return [];
     }
@@ -127,7 +127,7 @@ class ProactiveFollowUpService {
         tone,
         shouldSend: message.length > 0
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('生成跟进消息失败', { error, sessionId });
       return {
         content: '',
@@ -164,7 +164,7 @@ class ProactiveFollowUpService {
       );
 
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('发送跟进消息失败', { error, sessionId });
       return false;
     }
@@ -200,7 +200,7 @@ class ProactiveFollowUpService {
         scheduledAt: new Date(),
         priority: 'medium'
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('查找不活跃会话失败', { error });
       return [];
     }
@@ -235,7 +235,7 @@ class ProactiveFollowUpService {
         scheduledAt: new Date(),
         priority: 'high'
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('查找困难学生失败', { error });
       return [];
     }
@@ -270,7 +270,7 @@ class ProactiveFollowUpService {
         scheduledAt: new Date(),
         priority: 'low'
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('查找工具跟进失败', { error });
       return [];
     }
@@ -305,7 +305,7 @@ class ProactiveFollowUpService {
         scheduledAt: new Date(),
         priority: 'medium'
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('查找未庆祝里程碑失败', { error });
       return [];
     }
@@ -446,7 +446,7 @@ class ProactiveFollowUpService {
         [sessionId]
       );
       return result.rows[0] || null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取人性化上下文失败', { error, sessionId });
       return null;
     }
@@ -491,7 +491,7 @@ class ProactiveFollowUpService {
         sent,
         failed
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('执行跟进任务失败', { error });
       return {
         total: 0,

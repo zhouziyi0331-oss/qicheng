@@ -38,7 +38,7 @@ export async function createPost(req: Request, res: Response, next: NextFunction
       message: '帖子发布成功',
       data: { postId },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -60,7 +60,7 @@ export async function getPosts(req: Request, res: Response, next: NextFunction):
       success: true,
       data: result,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -80,7 +80,7 @@ export async function getPostDetail(req: Request, res: Response, next: NextFunct
       success: true,
       data: post,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -98,7 +98,7 @@ export async function applyToPost(req: Request, res: Response, next: NextFunctio
       success: true,
       message: '申请已提交，等待作者审核',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -120,7 +120,7 @@ export async function reviewApplication(req: Request, res: Response, next: NextF
       success: true,
       message: approved ? '申请已通过' : '申请已拒绝',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -137,7 +137,7 @@ export async function getPostApplications(req: Request, res: Response, next: Nex
       success: true,
       data: applications,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -154,7 +154,7 @@ export async function closePost(req: Request, res: Response, next: NextFunction)
       success: true,
       message: '帖子已关闭',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -171,7 +171,7 @@ export async function deletePost(req: Request, res: Response, next: NextFunction
       success: true,
       message: '帖子已删除',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -192,7 +192,7 @@ export async function getMyPosts(req: Request, res: Response, next: NextFunction
       success: true,
       data: result,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -208,7 +208,7 @@ export async function getMyApplications(req: Request, res: Response, next: NextF
       success: true,
       data: applications,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

@@ -85,7 +85,7 @@ export class MentorPromptBuilder {
         createdAt: result.created_at,
         updatedAt: result.updated_at,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取Prompt模板失败', { error, stage, templateName });
       throw error;
     }
@@ -124,7 +124,7 @@ export class MentorPromptBuilder {
         maxTokens: template.maxTokens,
         temperature: template.temperature,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('构建Prompt失败', { error, stage, templateName });
       throw error;
     }
@@ -407,7 +407,7 @@ export class MentorPromptBuilder {
       });
 
       return result.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('保存Prompt模板失败', { error, template });
       throw error;
     }

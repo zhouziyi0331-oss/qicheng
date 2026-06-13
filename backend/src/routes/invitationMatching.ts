@@ -30,7 +30,7 @@ router.post(
         success: true,
         data: invitationMatchingService.formatStudentMatchesForFrontend(result),
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -62,7 +62,7 @@ router.post(
         success: true,
         data: invitationMatchingService.formatTaskMatchesForFrontend(result),
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -133,7 +133,7 @@ router.post(
           errors: errors.length > 0 ? errors : undefined,
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -177,7 +177,7 @@ router.get(
           total: invitations.length,
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -228,7 +228,7 @@ router.put(
         data: updatedInvitation,
         message: `Invitation ${status} successfully`,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

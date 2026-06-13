@@ -164,7 +164,7 @@ class VectorEmbeddingService {
       // 尝试生成一个简单的向量
       const testEmbedding = await this.generateEmbedding('测试');
       return testEmbedding !== null && testEmbedding.length > 0;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Embedding API health check failed:', error);
       return false;
     }

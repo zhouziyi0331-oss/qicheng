@@ -107,7 +107,7 @@ export class PDFGeneratorService {
         this.addPageNumbers(doc);
 
         doc.end();
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('PDF生成失败', { error: (error as Error).message });
         reject(error);
       }

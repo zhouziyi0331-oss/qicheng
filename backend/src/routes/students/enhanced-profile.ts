@@ -24,7 +24,7 @@ router.get('/:studentId/enhanced-profile', authenticate, async (req: Request, re
       success: true,
       data: profile,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting enhanced profile:', error);
     res.status(500).json({
       success: false,
@@ -67,7 +67,7 @@ router.post('/batch-enhanced-profiles', authenticate, requireRole('company'), as
         total: profilesArray.length,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting batch enhanced profiles:', error);
     res.status(500).json({
       success: false,

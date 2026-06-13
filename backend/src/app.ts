@@ -281,7 +281,7 @@ if (require.main === module) {
       const websocketService = require('./services/websocketService').default;
       websocketService.initialize(server);
       logger.info('✅ WebSocket service initialized');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to initialize WebSocket service:', error);
     }
 
@@ -290,7 +290,7 @@ if (require.main === module) {
       const mentorQueueService = require('./services/mentorQueueService').default;
       mentorQueueService.start();
       logger.info('✅ Mentor queue processor started');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to start mentor queue processor:', error);
     }
   });
@@ -303,7 +303,7 @@ if (require.main === module) {
       const mentorQueueService = require('./services/mentorQueueService').default;
       mentorQueueService.stop();
       logger.info('✅ Mentor queue processor stopped');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to stop mentor queue processor:', error);
     }
 

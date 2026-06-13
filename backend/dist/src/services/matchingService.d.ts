@@ -41,7 +41,7 @@ export interface TaskRequirement {
 export interface MatchResult {
     studentId: number;
     taskId: number;
-    matchScore: number;
+    match_score: number;
     difficultyLevel: DifficultyLevel;
     matchReasons: string[];
     estimatedGrowth: {
@@ -83,7 +83,7 @@ export declare class MatchingService {
         studentId: any;
         username: any;
         avatar: any;
-        matchScore: any;
+        match_score: any;
         difficultyLevel: any;
         matchReasons: any;
         estimatedGrowth: {
@@ -113,7 +113,7 @@ export declare class MatchingService {
         studentPrice: any;
         isStretchProject: any;
         companyName: any;
-        matchScore: any;
+        match_score: any;
         difficultyLevel: any;
         matchReasons: any;
         estimatedGrowth: {

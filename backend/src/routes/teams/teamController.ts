@@ -32,7 +32,7 @@ export async function createTeam(req: Request, res: Response, next: NextFunction
       message: '队伍创建成功',
       data: { teamId },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -52,7 +52,7 @@ export async function getTeamInfo(req: Request, res: Response, next: NextFunctio
       success: true,
       data: teamInfo,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -70,7 +70,7 @@ export async function applyToJoinTeam(req: Request, res: Response, next: NextFun
       success: true,
       message: '申请已提交，等待队长审核',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -92,7 +92,7 @@ export async function reviewApplication(req: Request, res: Response, next: NextF
       success: true,
       message: approved ? '申请已通过' : '申请已拒绝',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -121,7 +121,7 @@ export async function assignModule(req: Request, res: Response, next: NextFuncti
       success: true,
       message: '任务模块分配成功',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -143,7 +143,7 @@ export async function generateInviteLink(req: Request, res: Response, next: Next
       success: true,
       data: invite,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -165,7 +165,7 @@ export async function joinByInviteCode(req: Request, res: Response, next: NextFu
       message: '成功加入队伍',
       data: { teamId },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -182,7 +182,7 @@ export async function leaveTeam(req: Request, res: Response, next: NextFunction)
       success: true,
       message: '已离开队伍',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -199,7 +199,7 @@ export async function disbandTeam(req: Request, res: Response, next: NextFunctio
       success: true,
       message: '队伍已解散',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -227,7 +227,7 @@ export async function getMyTeams(req: Request, res: Response, next: NextFunction
       success: true,
       data: teams.rows,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

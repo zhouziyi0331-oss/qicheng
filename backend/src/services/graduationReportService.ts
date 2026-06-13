@@ -751,7 +751,7 @@ class GraduationReportService {
 
       await client.query('COMMIT');
       logger.info(`[毕业报告] 付费成功，报告ID: ${reportId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {

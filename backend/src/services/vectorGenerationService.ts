@@ -104,7 +104,7 @@ class VectorGenerationService {
       this.cache.set(cacheKey, normalizedVector);
 
       return normalizedVector;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating embedding:', error);
       // 降级：返回基于文本hash的确定性向量
       return this.generateDeterministicVector(text);
@@ -174,7 +174,7 @@ class VectorGenerationService {
         description_embedding: descriptionEmbedding,
         combined_embedding: combinedEmbedding,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Error generating task vectors for ${task.id}:`, error);
       throw error;
     }
@@ -217,7 +217,7 @@ class VectorGenerationService {
         preference_vector: preferenceVector.slice(0, 512),
         combined_vector: combinedVector,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Error generating student vectors for ${studentId}:`, error);
       throw error;
     }
@@ -257,7 +257,7 @@ class VectorGenerationService {
       );
 
       logger.info(`Updated task embedding: ${taskId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Error updating task embedding for ${taskId}:`, error);
       throw error;
     } finally {
@@ -320,7 +320,7 @@ class VectorGenerationService {
       );
 
       logger.info(`Updated student embedding: ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`Error updating student embedding for ${studentId}:`, error);
       throw error;
     } finally {

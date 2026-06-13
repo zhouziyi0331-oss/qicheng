@@ -45,7 +45,7 @@ export async function sendVerificationCode(req: Request, res: Response, next: Ne
       return;
     }
     res.json({ success: true, message: '验证码已发送，60秒内有效' });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -172,7 +172,7 @@ export async function register(req: Request, res: Response, next: NextFunction):
         profileCompleted: false,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -253,7 +253,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
         nextStep: user.profile_completed ? 'home' : 'complete_profile',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -296,7 +296,7 @@ export async function refreshToken(req: Request, res: Response, next: NextFuncti
       success: true,
       data: { accessToken: newTokens.accessToken, refreshToken: newTokens.refreshToken },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -312,7 +312,7 @@ export async function logout(req: Request, res: Response, next: NextFunction): P
       await query('UPDATE refresh_tokens SET revoked_at = NOW() WHERE token_hash = $1', [tokenHash]);
     }
     res.json({ success: true, message: '已成功登出' });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -355,7 +355,7 @@ async function checkAndUpdateEmotionOnLogin(userId: string): Promise<void> {
         );
       }
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Error checking emotion signal on login', { userId, error: (err as Error).message });
   }
 }
@@ -421,7 +421,7 @@ export async function getCurrentUser(req: Request, res: Response, next: NextFunc
         profile,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

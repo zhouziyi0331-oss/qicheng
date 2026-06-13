@@ -54,7 +54,7 @@ export class FileProcessingService {
   private async ensureUploadDir(): Promise<void> {
     try {
       await fs.mkdir(this.uploadDir, { recursive: true });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to create upload directory:', error);
     }
   }
@@ -120,7 +120,7 @@ export class FileProcessingService {
         aiAnalysis
       };
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('File upload error:', error);
       throw error;
     }
@@ -194,7 +194,7 @@ export class FileProcessingService {
         extractedText: truncatedContent.substring(0, 500)
       };
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('File analysis error:', error);
       return {
         fileType,
@@ -267,7 +267,7 @@ ${content}
           suggestions: analysis.suggestions
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Code analysis error:', error);
     }
 
@@ -312,7 +312,7 @@ ${content}
           extractedText: content.substring(0, 1000)
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Document analysis error:', error);
     }
 
@@ -364,7 +364,7 @@ ${content.substring(0, 2000)}
           suggestions: analysis.suggestions
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Data analysis error:', error);
     }
 
@@ -452,7 +452,7 @@ ${content.substring(0, 2000)}
 
       try {
         await fs.unlink(filePath);
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('Failed to delete physical file:', error);
       }
 
@@ -464,7 +464,7 @@ ${content.substring(0, 2000)}
 
       return true;
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('File deletion error:', error);
       return false;
     }
@@ -490,7 +490,7 @@ ${content.substring(0, 2000)}
       const content = await fs.readFile(filePath, 'utf-8');
       return content;
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to read file content:', error);
       return null;
     }

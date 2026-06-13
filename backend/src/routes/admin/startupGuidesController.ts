@@ -12,7 +12,7 @@ export async function listStartupGuides(req: Request, res: Response, next: NextF
       []
     );
     res.json({ success: true, data: guides });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -32,7 +32,7 @@ export async function getStartupGuide(req: Request, res: Response, next: NextFun
     }
 
     res.json({ success: true, data: guide });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -54,7 +54,7 @@ export async function createStartupGuide(req: Request, res: Response, next: Next
     );
 
     res.json({ success: true, data: result, message: '创业指南创建成功' });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -84,7 +84,7 @@ export async function updateStartupGuide(req: Request, res: Response, next: Next
     );
 
     res.json({ success: true, data: result, message: '创业指南更新成功' });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -102,7 +102,7 @@ export async function deleteStartupGuide(req: Request, res: Response, next: Next
     await query('DELETE FROM startup_guides WHERE id = $1', [id]);
 
     res.json({ success: true, message: '创业指南删除成功' });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

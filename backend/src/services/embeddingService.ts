@@ -59,7 +59,7 @@ export class EmbeddingService {
       }
 
       return this.normalizeVector(embedding);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating embedding with Claude', { error, text: text.substring(0, 100) });
       return this.generateSimpleEmbedding(text);
     }

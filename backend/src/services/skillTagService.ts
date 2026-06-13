@@ -32,7 +32,7 @@ class SkillTagService {
       // 去重并返回前10个
       const uniqueSkills = Array.from(new Set(allSkills));
       return uniqueSkills.slice(0, 10);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get user skills:', error);
       return [];
     }
@@ -115,7 +115,7 @@ class SkillTagService {
         .map(([skill]) => skill);
 
       return profile;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to build user skill profile:', error);
       return profile;
     }
@@ -227,7 +227,7 @@ class SkillTagService {
       });
 
       return recommendations.slice(0, 5);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to recommend required skills:', error);
       return [];
     }

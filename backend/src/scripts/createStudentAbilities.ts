@@ -70,7 +70,7 @@ async function createStudentAbilities() {
     }
 
     logger.info('\n✅ All student abilities created successfully!');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('❌ Error:', error);
     process.exit(1);
   }

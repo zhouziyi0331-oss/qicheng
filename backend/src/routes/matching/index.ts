@@ -45,7 +45,7 @@ router.post('/tasks/:taskId/trigger', authenticate, requireRole('company'), asyn
         completedAt: new Date().toISOString(),
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error triggering matching:', error);
     res.status(500).json({
       success: false,
@@ -103,7 +103,7 @@ router.get('/tasks/:taskId/students', authenticate, requireRole('company'), asyn
     } finally {
       client.release();
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting matched students:', error);
     res.status(500).json({
       success: false,
@@ -169,13 +169,13 @@ router.post('/tasks/:taskId/push', authenticate, requireRole('company'), async (
           pushedAt: new Date().toISOString(),
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
       client.release();
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error pushing task to students:', error);
     res.status(500).json({
       success: false,
@@ -243,7 +243,7 @@ router.get('/students/recommended-tasks', authenticate, requireRole('student'), 
     } finally {
       client.release();
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting recommended tasks:', error);
     res.status(500).json({
       success: false,
@@ -275,7 +275,7 @@ router.get('/tasks/:taskId/translation', authenticate, async (req: Request, res:
       success: true,
       data: translation,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting task translation:', error);
     res.status(500).json({
       success: false,
@@ -307,7 +307,7 @@ router.post('/students/:studentId/initialize', authenticate, async (req: Request
       success: true,
       message: 'Student capability initialized',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error initializing student capability:', error);
     res.status(500).json({
       success: false,
@@ -337,7 +337,7 @@ router.get('/students/:studentId/capability', authenticate, async (req: Request,
       success: true,
       data: capability,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting student capability:', error);
     res.status(500).json({
       success: false,

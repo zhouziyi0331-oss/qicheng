@@ -78,7 +78,7 @@ export const getOrCreateSession = async (req: Request, res: Response) => {
       success: true,
       data: session[0]
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取或创建会话失败:', error);
     res.status(500).json({
       success: false,
@@ -133,7 +133,7 @@ export const getChatSessions = async (req: Request, res: Response) => {
       success: true,
       data: sessions
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取会话列表失败:', error);
     res.status(500).json({
       success: false,
@@ -200,7 +200,7 @@ export const getChatMessages = async (req: Request, res: Response) => {
         limit: Number(limit)
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取聊天记录失败:', error);
     res.status(500).json({
       success: false,
@@ -272,7 +272,7 @@ export const sendMessage = async (req: Request, res: Response) => {
       success: true,
       data: result
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('发送消息失败:', error);
     res.status(500).json({
       success: false,
@@ -354,7 +354,7 @@ export const markMessagesAsRead = async (req: Request, res: Response) => {
         markedCount: unreadMessages.length
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('标记已读失败:', error);
     res.status(500).json({
       success: false,
@@ -382,7 +382,7 @@ export const getUnreadCount = async (req: Request, res: Response) => {
         totalUnread: parseInt(result[0].total_unread || '0')
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取未读数失败:', error);
     res.status(500).json({
       success: false,
@@ -420,7 +420,7 @@ export const archiveSession = async (req: Request, res: Response) => {
       success: true,
       message: '会话已归档'
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('归档会话失败:', error);
     res.status(500).json({
       success: false,

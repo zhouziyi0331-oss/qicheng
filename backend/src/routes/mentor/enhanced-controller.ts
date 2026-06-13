@@ -98,7 +98,7 @@ ${companyRequirement ? `详细需求：${companyRequirement.original_description
         stage: 'requirement_confirmation'
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -204,7 +204,7 @@ ${conversationHistory.map((c: any) => `导师：${c.mentor_response}\n学生：$
         misunderstandings: analysis.misunderstandings
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -318,7 +318,7 @@ ${recentConversations.map((c: any) => `学生：${c.student_message}\n导师：$
         encouragement: true
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -402,7 +402,7 @@ ${achievement}
         message: encouragement
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -542,7 +542,7 @@ ${requirement ? `详细要求：${requirement.original_description}` : ''}
         nextSteps: review.nextSteps
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -625,7 +625,7 @@ ${JSON.stringify(revisionRequests)}
         originalFeedback: companyFeedback
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }
@@ -692,7 +692,7 @@ ${studentQuestion}
         sent: true
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 }

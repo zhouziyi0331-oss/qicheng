@@ -132,7 +132,7 @@ class StudentProfileEnhancer {
       };
 
       return enhancedProfile;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating enhanced profile:', error);
       throw error;
     }
@@ -205,7 +205,7 @@ class StudentProfileEnhancer {
       );
 
       return result.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       return [];
     } finally {
       client.release();
@@ -274,7 +274,7 @@ ${taskHistory.map(t => `- ${t.title} (质量${Math.round((t.quality_score || 0) 
       }
 
       throw new Error('Failed to parse AI response');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error generating growth story:', error);
       // 返回降级内容
       return {
@@ -377,7 +377,7 @@ ${taskHistory.map(t => `- ${t.title} (质量${Math.round((t.quality_score || 0) 
       try {
         const profile = await this.generateEnhancedProfile(studentId);
         profiles.set(studentId, profile);
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error(`Failed to generate profile for ${studentId}:`, error);
       }
     }

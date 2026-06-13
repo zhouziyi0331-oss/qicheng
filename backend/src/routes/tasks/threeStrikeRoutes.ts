@@ -23,7 +23,7 @@ router.get(
         success: true,
         data: status,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -50,7 +50,7 @@ router.get(
         success: true,
         data: candidates,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -94,7 +94,7 @@ router.post(
         success: true,
         message: '转单成功，你将获得20%的转单费用',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -117,7 +117,7 @@ router.get(
         success: true,
         data: masters,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -161,7 +161,7 @@ router.post(
         success: true,
         message: '大师已召唤，大师费用已冻结',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

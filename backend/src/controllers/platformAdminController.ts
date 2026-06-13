@@ -37,7 +37,7 @@ export async function getPendingWithdrawals(req: AuthRequest, res: Response) {
       limit,
       offset,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get pending withdrawals', { error });
     return res.status(500).json({
       error: 'Failed to get pending withdrawals',
@@ -67,7 +67,7 @@ export async function approveWithdrawal(req: AuthRequest, res: Response) {
       data: result,
       message: 'Withdrawal approved successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to approve withdrawal', { error });
     return res.status(500).json({
       error: 'Failed to approve withdrawal',
@@ -101,7 +101,7 @@ export async function rejectWithdrawal(req: AuthRequest, res: Response) {
       data: result,
       message: 'Withdrawal rejected successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to reject withdrawal', { error });
     return res.status(500).json({
       error: 'Failed to reject withdrawal',
@@ -132,7 +132,7 @@ export async function getPendingVerifications(req: AuthRequest, res: Response) {
       limit,
       offset,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get pending verifications', { error });
     return res.status(500).json({
       error: 'Failed to get pending verifications',
@@ -162,7 +162,7 @@ export async function approveVerification(req: AuthRequest, res: Response) {
       data: result,
       message: 'User verification approved successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to approve verification', { error });
     return res.status(500).json({
       error: 'Failed to approve verification',
@@ -196,7 +196,7 @@ export async function rejectVerification(req: AuthRequest, res: Response) {
       data: result,
       message: 'User verification rejected successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to reject verification', { error });
     return res.status(500).json({
       error: 'Failed to reject verification',
@@ -241,7 +241,7 @@ export async function reviewTask(req: AuthRequest, res: Response) {
       data: result,
       message: `Task ${status} successfully`,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to review task', { error });
     return res.status(500).json({
       error: 'Failed to review task',
@@ -279,7 +279,7 @@ export async function hideRating(req: AuthRequest, res: Response) {
       data: result,
       message: 'Rating hidden successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to hide rating', { error });
     return res.status(500).json({
       error: 'Failed to hide rating',
@@ -318,7 +318,7 @@ export async function createRiskAlert(req: AuthRequest, res: Response) {
       data: result,
       message: 'Risk alert created successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create risk alert', { error });
     return res.status(500).json({
       error: 'Failed to create risk alert',
@@ -347,7 +347,7 @@ export async function getRiskAlerts(req: AuthRequest, res: Response) {
       limit,
       offset,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get risk alerts', { error });
     return res.status(500).json({
       error: 'Failed to get risk alerts',
@@ -379,7 +379,7 @@ export async function getPlatformMetrics(req: AuthRequest, res: Response) {
       success: true,
       data: metrics,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get platform metrics', { error });
     return res.status(500).json({
       error: 'Failed to get platform metrics',
@@ -411,7 +411,7 @@ export async function calculateDailyMetrics(req: AuthRequest, res: Response) {
       success: true,
       message: 'Daily metrics calculated successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to calculate daily metrics', { error });
     return res.status(500).json({
       error: 'Failed to calculate daily metrics',
@@ -442,7 +442,7 @@ export async function getSystemConfig(req: AuthRequest, res: Response) {
       success: true,
       data: config,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get system config', { error });
     return res.status(500).json({
       error: 'Failed to get system config',
@@ -476,7 +476,7 @@ export async function updateSystemConfig(req: AuthRequest, res: Response) {
       data: result,
       message: 'System config updated successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to update system config', { error });
     return res.status(500).json({
       error: 'Failed to update system config',
@@ -502,7 +502,7 @@ export async function getPendingReviews(req: AuthRequest, res: Response) {
       data: reviews,
       total: reviews.length,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get pending reviews', { error });
     return res.status(500).json({
       error: 'Failed to get pending reviews',

@@ -18,7 +18,7 @@ cron.schedule('0 * * * *', async () => {
       detectCoolingSignals(),
       detectHighFrustratedSignals(),
     ]);
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Emotion signal detection cron failed', { error: (err as Error).message });
   }
 });

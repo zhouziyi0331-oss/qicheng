@@ -17,7 +17,7 @@ export function startMentorNudgeCron() {
     try {
       await checkIdleStudents();
       logger.info('[Mentor Cron] Idle check completed');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[Mentor Cron] Error:', error);
     }
   });

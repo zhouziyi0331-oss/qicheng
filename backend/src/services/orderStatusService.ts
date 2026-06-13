@@ -78,7 +78,7 @@ class OrderStatusService {
         metadata
       });
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to update order status:', error);
       throw error;
     }
@@ -132,7 +132,7 @@ class OrderStatusService {
         this.getStatusMessage(newStatus)
       );
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to handle status change:', error);
     }
   }

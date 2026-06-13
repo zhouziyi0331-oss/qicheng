@@ -307,7 +307,7 @@ const getTaskDetail = async (req, res) => {
             if (matchResult.length > 0) {
                 const match = matchResult[0];
                 matchInfo = {
-                    matchScore: match.match_score,
+                    match_score: match.match_score,
                     difficultyLevel: match.difficulty_level,
                     matchReasons: match.match_reasons,
                     estimatedGrowth: {

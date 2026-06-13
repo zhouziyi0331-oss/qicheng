@@ -25,7 +25,7 @@ router.get('/queue-stats', authenticate, async (req, res) => {
       success: true,
       stats
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get queue stats:', error);
     res.status(500).json({ error: '获取队列统计失败' });
   }
@@ -52,7 +52,7 @@ router.get('/websocket-stats', authenticate, async (req, res) => {
       success: true,
       stats
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to get WebSocket stats:', error);
     res.status(500).json({ error: '获取WebSocket统计失败' });
   }
@@ -82,7 +82,7 @@ router.post('/test-websocket', authenticate, async (req, res) => {
       success: true,
       message: `已推送消息给用户 ${userId}`
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to test WebSocket:', error);
     res.status(500).json({ error: '测试WebSocket失败' });
   }

@@ -87,7 +87,7 @@ export async function registerStudent(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Student registration failed', { error, phone });
     res.status(500).json({
       success: false,
@@ -182,7 +182,7 @@ export async function registerEnterprise(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Enterprise registration failed', { error, phone });
     res.status(500).json({
       success: false,
@@ -268,7 +268,7 @@ export async function loginStudent(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Student login failed', { error, phone });
     res.status(500).json({
       success: false,
@@ -353,7 +353,7 @@ export async function loginEnterprise(req: Request, res: Response) {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Enterprise login failed', { error, phone });
     res.status(500).json({
       success: false,

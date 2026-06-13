@@ -95,7 +95,7 @@ class AIPricingService {
       const finalPricing = this.calculateFinalPricing(basePrice, marketData, aiAnalysis);
 
       return finalPricing;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error calculating AI pricing:', error);
       // 返回降级定价
       return this.getFallbackPricing(taskFeatures);
@@ -194,7 +194,7 @@ class AIPricingService {
         similar_tasks_avg: Number(similarTasksAvg) || 3000,
         sample_size: sampleSize,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error getting market data:', error);
       return {
         platform_average: 3000,
@@ -273,7 +273,7 @@ class AIPricingService {
       }
 
       throw new Error('Failed to parse AI response');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error getting AI pricing analysis:', error);
       return {
         adjustment_factor: 1.0,

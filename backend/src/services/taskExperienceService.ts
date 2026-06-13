@@ -352,7 +352,7 @@ class TaskExperienceService {
       if (content.type === 'text') {
         return content.text;
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI生成预算理由失败:', error);
     }
 

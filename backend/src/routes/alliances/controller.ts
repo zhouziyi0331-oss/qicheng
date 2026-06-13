@@ -47,7 +47,7 @@ export async function createAlliance(req: Request, res: Response, next: NextFunc
         message: '联合体创建成功',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -134,7 +134,7 @@ export async function inviteMember(req: Request, res: Response, next: NextFuncti
         message: '邀请已发送',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -224,7 +224,7 @@ export async function respondToInvitation(req: Request, res: Response, next: Nex
         },
       });
     }
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -264,7 +264,7 @@ export async function getStudentAlliances(req: Request, res: Response, next: Nex
         totalCount: alliances.length,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -346,7 +346,7 @@ export async function getAllianceDetail(req: Request, res: Response, next: NextF
         projectCount: projects.length,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -390,7 +390,7 @@ export async function createProject(req: Request, res: Response, next: NextFunct
         message: '项目创建成功',
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -428,7 +428,7 @@ export async function getInvitations(req: Request, res: Response, next: NextFunc
         pendingCount: invitations.filter((inv: any) => inv.status === 'pending').length,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

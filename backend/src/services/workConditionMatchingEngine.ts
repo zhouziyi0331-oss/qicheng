@@ -115,7 +115,7 @@ class WorkConditionMatchingEngine {
       logger.info(`Vector search found ${result.rows.length} candidates`);
       return result.rows;
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Vector similarity search failed, falling back to all profiles:', error);
       return this.getAllStudentProfiles();
     }
@@ -142,7 +142,7 @@ class WorkConditionMatchingEngine {
           : studentProfile.profile_vector;
 
         vectorSimilarity = vectorEmbeddingService.calculateCosineSimilarity(projectVec, studentVec);
-      } catch (error) {
+      } catch (error: unknown) {
         logger.warn('Failed to calculate vector similarity:', error);
       }
     }
@@ -547,7 +547,7 @@ class WorkConditionMatchingEngine {
           match.vectorSimilarity || null
         ]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save match record:', error);
     }
   }

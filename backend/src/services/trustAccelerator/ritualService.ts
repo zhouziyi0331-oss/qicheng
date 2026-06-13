@@ -59,7 +59,7 @@ export class RitualService {
       logger.info(`[RitualService] 生成证书: ${certificateUrl}`);
 
       return certificateUrl;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[RitualService] 生成证书失败:', error);
       throw error;
     }

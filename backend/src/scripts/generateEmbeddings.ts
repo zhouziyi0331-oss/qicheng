@@ -33,7 +33,7 @@ async function generateTaskEmbeddings() {
       );
 
       logger.info(`✓ 任务 ${task.id} embedding已生成`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`✗ 任务 ${task.id} 失败:`, error);
     }
   }
@@ -91,7 +91,7 @@ async function generateStudentEmbeddings() {
       );
 
       logger.info(`✓ 学生 ${student.id} embedding已生成`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`✗ 学生 ${student.id} 失败:`, error);
     }
   }
@@ -124,7 +124,7 @@ async function main() {
     logger.info(`任务: ${taskStats.rows[0].with_embedding}/${taskStats.rows[0].total} 已生成embedding`);
     logger.info(`学生: ${studentStats.rows[0].with_embedding}/${studentStats.rows[0].total} 已生成embedding`);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('生成embedding失败:', error);
     process.exit(1);
   } finally {

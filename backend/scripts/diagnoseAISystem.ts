@@ -318,7 +318,7 @@ async function main() {
     await checkAPIEndpoints();
     checkFrontendCode();
     await generateReport();
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('诊断失败:', error);
   } finally {
     await pool.end();

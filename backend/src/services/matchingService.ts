@@ -49,7 +49,7 @@ export interface TaskRequirement {
 export interface MatchResult {
   studentId: number;
   taskId: number;
-  matchScore: number; // 0-100
+  match_score: number; // 0-100
   difficultyLevel: DifficultyLevel;
   matchReasons: string[];
   estimatedGrowth: {
@@ -117,9 +117,9 @@ export class MatchingService {
       });
 
       // 4. 按匹配度排序，返回Top N
-      matches.sort((a, b) => b.matchScore - a.matchScore);
+      matches.sort((a, b) => b.match_score - a.match_score);
       return matches.slice(0, topN);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error matching students for task', { taskId, error });
       throw error;
     }
@@ -179,9 +179,9 @@ export class MatchingService {
       });
 
       // 4. 按匹配度排序，返回Top N
-      matches.sort((a, b) => b.matchScore - a.matchScore);
+      matches.sort((a, b) => b.match_score - a.match_score);
       return matches.slice(0, topN);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Error matching tasks for student', { userId, error });
       throw error;
     }
@@ -280,7 +280,7 @@ export class MatchingService {
     return {
       studentId: student.userId,
       taskId: task.taskId,
-      matchScore: Math.round(Math.max(0, Math.min(100, totalScore))),
+      match_score: Math.round(Math.max(0, Math.min(100, totalScore))),
       difficultyLevel,
       matchReasons,
       estimatedGrowth,
@@ -335,7 +335,7 @@ export class MatchingService {
           [
             match.taskId,
             match.studentId,
-            match.matchScore,
+            match.match_score,
             match.matchReasons.join('; '),
             match.difficultyLevel,
             match.estimatedGrowth.openness,
@@ -347,7 +347,7 @@ export class MatchingService {
       }
 
       await client.query('COMMIT');
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       logger.error('Error saving match results', { error });
       throw error;
@@ -389,7 +389,7 @@ export class MatchingService {
       studentId: row.student_id,
       username: row.username,
       avatar: row.avatar,
-      matchScore: row.match_score,
+      match_score: row.match_score,
       difficultyLevel: row.difficulty_level,
       matchReasons: row.match_reasons,
       estimatedGrowth: {
@@ -451,7 +451,7 @@ export class MatchingService {
       studentPrice: row.student_price,
       isStretchProject: row.is_stretch_project,
       companyName: row.company_name,
-      matchScore: row.match_score,
+      match_score: row.match_score,
       difficultyLevel: row.difficulty_level,
       matchReasons: row.match_reasons,
       estimatedGrowth: {

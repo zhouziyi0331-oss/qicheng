@@ -118,7 +118,7 @@ class AdaptiveGuidanceService {
       });
 
       return guidance;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('生成自适应引导失败', { error, context });
       // 返回基础回复
       return {
@@ -383,7 +383,7 @@ ${milestone.milestone_description}
       const query = `SELECT * FROM student_learning_profiles WHERE student_id = $1`;
       const result = await pool.query(query, [studentId]);
       return result.rows[0] || null;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取学生档案失败', { error, studentId });
       return null;
     }
@@ -404,7 +404,7 @@ ${milestone.milestone_description}
         context.conversationHistory,
         currentEmotion
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('提取并保存记忆失败', { error });
     }
   }
@@ -469,7 +469,7 @@ ${milestone.milestone_description}
       `;
 
       await pool.query(query, values);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('更新学习档案失败', { error, studentId, updates });
     }
   }
@@ -519,7 +519,7 @@ ${milestone.milestone_description}
           studentId
         ]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('分析学习模式失败', { error, studentId });
     }
   }
@@ -590,7 +590,7 @@ ${milestone.milestone_description}
         shouldEncourage,
         reasoning
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取引导建议失败', { error, studentId });
       return {
         recommendedApproach: 'socratic',

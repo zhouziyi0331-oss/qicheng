@@ -96,7 +96,7 @@ class MatchService {
             return 0;
         // 匹配分数 = 通过率 * 0.6 + 速度分 * 0.4
         const speedScore = Math.max(0, 1 - (avg_hours / 48)); // 48小时内完成得满分
-        const matchScore = (approval_rate || 0) * 0.6 + speedScore * 0.4;
+        const match_score = (approval_rate || 0) * 0.6 + speedScore * 0.4;
         return Math.min(1, Math.max(0, matchScore));
     }
     /**

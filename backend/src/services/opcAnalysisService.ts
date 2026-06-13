@@ -422,11 +422,11 @@ class OPCAnalysisService {
           logger.error(`Failed to match new student ${profile.studentId} to open tasks:`, err);
         });
         logger.info(`Triggered matching for new student ${profile.studentId}`);
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('Failed to trigger matching:', error);
         // 不抛出错误，匹配失败不应该影响画像保存
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save work condition profile:', error);
       throw error;
     }

@@ -193,7 +193,7 @@ async function checkDataIntegrity() {
     }
     console.log('========================================\n');
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ 检查失败:', error);
   } finally {
     await pool.end();

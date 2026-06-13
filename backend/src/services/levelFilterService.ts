@@ -65,7 +65,7 @@ class LevelFilterService {
         platformFeeRate: levelConfig.platform_fee_rate,
         unlockedFeatures: levelConfig.unlocked_features || [],
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get student level info:', error);
       return null;
     }
@@ -161,7 +161,7 @@ class LevelFilterService {
         studentLevel: levelInfo.currentLevel,
         allowedDifficulties: difficultyParams,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to filter tasks by level:', error);
       throw error;
     }
@@ -237,7 +237,7 @@ class LevelFilterService {
       return {
         canAccept: true,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to check if student can accept task:', error);
       return {
         canAccept: false,
@@ -331,7 +331,7 @@ class LevelFilterService {
         canUpgrade,
         nextLevelFeatures: nextLevelConfig.unlocked_features || [],
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get upgrade progress:', error);
       return null;
     }
@@ -395,7 +395,7 @@ ${(levelConfig.unlocked_features || []).map((f: string) => `- ${f}`).join('\n')}
         newLevel: progress.nextLevel,
         oldLevel: progress.currentLevel,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to auto-upgrade student:', error);
       return { upgraded: false };
     }
@@ -412,7 +412,7 @@ ${(levelConfig.unlocked_features || []).map((f: string) => `- ${f}`).join('\n')}
       );
 
       return configs.rows;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get all level configs:', error);
       return [];
     }

@@ -183,11 +183,11 @@ async function triggerAIMatching(taskId) {
        LIMIT 10`, [task.level_required || 0]);
         // 创建匹配记录
         for (const student of students) {
-            const matchScore = Math.floor(Math.random() * 20) + 80; // 80-100分
+            const match_score = Math.floor(Math.random() * 20) + 80; // 80-100分
             const matchReason = `该学生等级${student.level}，综合评分${student.total_score}，与任务需求高度匹配`;
             await (0, db_1.query)(`INSERT INTO ai_matches (
           task_id, student_id, match_score, match_reason, is_selected_by_company
-        ) VALUES ($1,$2,$3,$4,false)`, [taskId, student.id, matchScore, matchReason]);
+        ) VALUES ($1,$2,$3,$4,false)`, [taskId, student.id, match_score, matchReason]);
         }
         // 更新任务状态
         await (0, db_1.query)(`UPDATE tasks SET status = 'matching' WHERE id = $1`, [taskId]);
@@ -250,7 +250,7 @@ async function getMatchedStudents(req, res, next) {
                     totalScore: m.total_score,
                     completedTasks: m.completed_tasks,
                     averageRating: m.average_rating,
-                    matchScore: m.match_score,
+                    match_score: m.match_score,
                     matchReason: m.match_reason,
                     isSelected: m.is_selected_by_company
                 }))

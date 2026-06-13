@@ -17,7 +17,7 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
     );
     if (!profile) throw new AppError(404, '企业档案不存在', 'NOT_FOUND');
     res.json(profile);
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -39,7 +39,7 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
       [companyName, industry, scale, contactPerson, contactPhone, address, description, logoUrl, userId]
     );
     res.json({ success: true, message: '信息已更新' });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function getReport(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -126,7 +126,7 @@ export async function getReport(req: Request, res: Response, next: NextFunction)
         top_students: topStudents
       }
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function getStudentProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -207,7 +207,7 @@ export async function getStudentProfile(req: Request, res: Response, next: NextF
         }))
       }
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function getTaskProgress(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -302,7 +302,7 @@ export async function getTaskProgress(req: Request, res: Response, next: NextFun
         steps
       }
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function getFavoriteStudents(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -335,7 +335,7 @@ export async function getFavoriteStudents(req: Request, res: Response, next: Nex
       success: true,
       data: favorites
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function addFavoriteStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -366,7 +366,7 @@ export async function addFavoriteStudent(req: Request, res: Response, next: Next
       success: true,
       message: '收藏成功'
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function removeFavoriteStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -387,7 +387,7 @@ export async function removeFavoriteStudent(req: Request, res: Response, next: N
       success: true,
       message: '取消收藏成功'
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 export async function getRequirementSupplements(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -423,5 +423,5 @@ export async function getRequirementSupplements(req: Request, res: Response, nex
       success: true,
       data: supplements
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }

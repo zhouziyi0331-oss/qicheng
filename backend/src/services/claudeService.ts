@@ -59,7 +59,7 @@ class ClaudeService {
           output_tokens: response.usage.output_tokens,
         },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Claude API调用失败:', error);
       throw error;
     }

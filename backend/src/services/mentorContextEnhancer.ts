@@ -91,7 +91,7 @@ class MentorContextEnhancer {
         context: realCase.context
       };
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get real stuck case:', error);
       return null;
     }
@@ -138,7 +138,7 @@ class MentorContextEnhancer {
         created_at: lastMessage.created_at
       };
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get last student message:', error);
       return null;
     }
@@ -280,7 +280,7 @@ class MentorContextEnhancer {
 
       return result;
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get growth comparison:', error);
       // 返回空对象，不抛出异常
       return {

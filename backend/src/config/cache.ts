@@ -83,7 +83,7 @@ export async function getCache<T>(key: string): Promise<T | null> {
     const value = await redis.get(key);
     if (!value) return null;
     return JSON.parse(value) as T;
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(`Cache get error for key ${key}:`, error);
     return null;
   }
@@ -100,7 +100,7 @@ export async function setCache(key: string, value: any, ttl?: number): Promise<v
     } else {
       await redis.set(key, serialized);
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(`Cache set error for key ${key}:`, error);
   }
 }
@@ -117,7 +117,7 @@ export async function deleteCache(key: string | string[]): Promise<void> {
     } else {
       await redis.del(key);
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(`Cache delete error:`, error);
   }
 }
@@ -131,7 +131,7 @@ export async function deleteCacheByPattern(pattern: string): Promise<number> {
     if (keys.length === 0) return 0;
     await redis.del(...keys);
     return keys.length;
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(`Cache delete by pattern error for ${pattern}:`, error);
     return 0;
   }
@@ -144,7 +144,7 @@ export async function cacheExists(key: string): Promise<boolean> {
   try {
     const result = await redis.exists(key);
     return result === 1;
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(`Cache exists check error for key ${key}:`, error);
     return false;
   }

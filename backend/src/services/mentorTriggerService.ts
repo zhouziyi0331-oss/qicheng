@@ -83,7 +83,7 @@ export class MentorTriggerService {
       );
 
       logger.info('需求理解阶段触发成功', { taskId, studentId, sessionId });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('触发需求理解阶段失败', { error, taskId, studentId });
       throw error;
     }
@@ -162,7 +162,7 @@ export class MentorTriggerService {
       await mentorStageService.incrementStats(session.id, 'guidanceCount');
 
       logger.info('执行引导阶段触发成功', { taskId, studentId, sessionId: session.id });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('触发执行引导阶段失败', { error, taskId, studentId });
       throw error;
     }
@@ -255,7 +255,7 @@ export class MentorTriggerService {
         score,
         feedback: response.content,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('触发质量预审阶段失败', { error, taskId, studentId });
       throw error;
     }
@@ -338,7 +338,7 @@ export class MentorTriggerService {
       await mentorStageService.incrementStats(session.id, 'translationCount');
 
       logger.info('沟通桥梁阶段触发成功', { taskId, studentId, sessionId: session.id });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('触发沟通桥梁阶段失败', { error, taskId, studentId });
       throw error;
     }
@@ -359,7 +359,7 @@ export class MentorTriggerService {
          VALUES ($1, $2, $3, NOW())`,
         [sessionId, triggerType, JSON.stringify(metadata)]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('记录触发事件失败', { error, sessionId, triggerType });
       // 不抛出错误，避免影响主流程
     }
@@ -405,7 +405,7 @@ export class MentorTriggerService {
         companyIndustry: task.industry || undefined,
         stageSpecificData,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('构建上下文失败', { error, taskId, studentId });
       throw error;
     }

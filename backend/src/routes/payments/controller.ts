@@ -14,7 +14,7 @@ export async function getBalance(req: Request, res: Response, next: NextFunction
       [userId]
     );
     res.json({ success: true, data: balance });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /payments/history
@@ -31,7 +31,7 @@ export async function getHistory(req: Request, res: Response, next: NextFunction
       [userId]
     );
     res.json({ success: true, data: payments });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /payments/withdraw — 申请提现
@@ -86,7 +86,7 @@ export async function requestWithdrawal(req: Request, res: Response, next: NextF
         : '提现申请已提交，需财务审核，T+3工作日到账',
       data: { amount: withdrawAmount, autoProcessed: isAuto },
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /payments/withdraw/history — 获取提现历史
@@ -101,7 +101,7 @@ export async function getWithdrawalHistory(req: Request, res: Response, next: Ne
       [userId]
     );
     res.json({ success: true, data: withdrawals });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // ============================================================
@@ -131,7 +131,7 @@ export async function wechatNotify(req: Request, res: Response, _next: NextFunct
 
     await processPaymentSuccess(paymentId);
     res.send('<xml><return_code>SUCCESS</return_code></xml>');
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('WeChat notify error', { error: (err as Error).message });
     res.status(500).send('<xml><return_code>FAIL</return_code></xml>');
   }
@@ -156,7 +156,7 @@ export async function alipayNotify(req: Request, res: Response, _next: NextFunct
 
     await processPaymentSuccess(paymentId);
     res.send('success');
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Alipay notify error', { error: (err as Error).message });
     res.send('fail');
   }

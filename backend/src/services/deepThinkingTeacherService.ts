@@ -33,7 +33,7 @@ class DeepThinkingTeacherService {
       });
 
       return response.response;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed in onTaskStart:', error);
       return '欢迎开始新任务！让我们一起来看看这个任务需要做什么。';
     }
@@ -76,7 +76,7 @@ class DeepThinkingTeacherService {
       });
 
       return response.response;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed in onStudentStuck:', error);
       return '我看到你遇到困难了。能具体说说你卡在哪一步吗？';
     }
@@ -129,7 +129,7 @@ class DeepThinkingTeacherService {
       });
 
       return response.response;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed in onWorkRejected:', error);
       return '我看到这次又被打回了。让我们一起分析一下企业的反馈。';
     }
@@ -174,7 +174,7 @@ class DeepThinkingTeacherService {
       );
 
       return response;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed in onMilestoneComplete:', error);
       return '恭喜你完成了这个里程碑！继续加油！';
     }
@@ -204,7 +204,7 @@ class DeepThinkingTeacherService {
 
       // 简单转化：优势 + 工作风格
       return `擅长${strengths[0]}，${workingStyle}。已完成${memory.observation_count || 0}次观察，理解信心${Math.floor((memory.confidence_level || 0) * 100)}%。`;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed in getStudentValueDescription:', error);
       return '能力画像生成中...';
     }
@@ -240,7 +240,7 @@ class DeepThinkingTeacherService {
       }
 
       return null;  // 没有发现异常
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed in proactiveInsight:', error);
       return null;
     }
@@ -262,7 +262,7 @@ class DeepThinkingTeacherService {
         observationCount: memory?.observation_count || 0,
         confidenceLevel: memory?.confidence_level || 0
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get student understanding:', error);
       return null;
     }

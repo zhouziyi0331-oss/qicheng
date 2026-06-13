@@ -80,7 +80,7 @@ export const createDispute = async (req: AuthRequest, res: Response) => {
       data: result[0]
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('创建申诉失败:', error);
     res.status(500).json({ success: false, message: '创建申诉失败' });
   }
@@ -115,7 +115,7 @@ export const getMyDisputes = async (req: AuthRequest, res: Response) => {
       data: result.length > 0 ? result : []
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取申诉列表失败:', error);
     res.status(500).json({ success: false, message: '获取申诉列表失败' });
   }
@@ -159,7 +159,7 @@ export const getDisputeDetail = async (req: AuthRequest, res: Response) => {
       data: dispute
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取申诉详情失败:', error);
     res.status(500).json({ success: false, message: '获取申诉详情失败' });
   }
@@ -229,7 +229,7 @@ export const handleDispute = async (req: AuthRequest, res: Response) => {
       data: result[0]
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('处理申诉失败:', error);
     res.status(500).json({ success: false, message: '处理申诉失败' });
   }
@@ -295,7 +295,7 @@ export const getAllDisputes = async (req: AuthRequest, res: Response) => {
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取申诉列表失败:', error);
     res.status(500).json({ success: false, message: '获取申诉列表失败' });
   }

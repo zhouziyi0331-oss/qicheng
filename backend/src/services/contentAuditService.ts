@@ -64,7 +64,7 @@ class ContentAuditService {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Content audit failed', { error });
       // 审核失败时默认通过，避免阻塞用户
       return {
@@ -148,7 +148,7 @@ ${contentText}
         flags: result.flags ?? [],
         reason: result.reason ?? '',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to parse audit response', { error });
       // 解析失败时默认通过
       return {
@@ -212,7 +212,7 @@ ${contentText}
       }
 
       return { restricted: false };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to check user restriction', { error, userId });
       return { restricted: false };
     }
@@ -243,7 +243,7 @@ ${contentText}
         restrictionType,
         durationHours,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to add user restriction', { error, userId });
       throw error;
     }

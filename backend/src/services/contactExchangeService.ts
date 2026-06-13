@@ -93,7 +93,7 @@ class ContactExchangeService {
         shouldPrompt: false,
         reason: `Collaboration count is ${count}, need 3`,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to check exchange eligibility:', error);
       throw error;
     }
@@ -322,7 +322,7 @@ ${ratingsText}
           message: '已记录你的同意，等待对方回复...',
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to agree to exchange:', error);
       throw error;
     }
@@ -351,7 +351,7 @@ ${ratingsText}
       await query(sql, [studentId, companyId]);
 
       logger.info(`Successfully exchanged contacts between ${studentId} and ${companyId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to execute exchange:', error);
       throw error;
     }

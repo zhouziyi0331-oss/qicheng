@@ -34,7 +34,7 @@ router.get('/summaries', authenticate, async (req, res) => {
       success: true,
       data: summaries,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取成长总结失败:', error);
     res.status(500).json({
       success: false,
@@ -61,7 +61,7 @@ router.get('/summaries/:orderId', authenticate, async (req, res) => {
       success: true,
       data: summary,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取订单成长总结失败:', error);
     res.status(500).json({
       success: false,
@@ -85,7 +85,7 @@ router.post('/summaries/:summaryId/view', authenticate, async (req, res) => {
       success: true,
       message: '已标记为已查看',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('标记已查看失败:', error);
     res.status(500).json({
       success: false,
@@ -117,7 +117,7 @@ router.post('/summaries/:summaryId/feedback', authenticate, async (req, res) => 
       success: true,
       message: '反馈提交成功',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('提交反馈失败:', error);
     res.status(500).json({
       success: false,
@@ -145,7 +145,7 @@ router.get('/ability-history', authenticate, async (req, res) => {
       success: true,
       data: history,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取能力历史失败:', error);
     res.status(500).json({
       success: false,
@@ -169,7 +169,7 @@ router.get('/profile-versions', authenticate, async (req, res) => {
       success: true,
       data: versions,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取画像版本失败:', error);
     res.status(500).json({
       success: false,
@@ -196,7 +196,7 @@ router.post('/ability-update/:orderId', authenticate, async (req, res) => {
       data: result,
       message: '能力更新成功',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('能力更新失败:', error);
     res.status(500).json({
       success: false,
@@ -227,7 +227,7 @@ router.post('/graduation-report/generate', authenticate, async (req, res) => {
       },
       message: '毕业报告生成成功',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('生成毕业报告失败:', error);
     res.status(500).json({
       success: false,
@@ -258,7 +258,7 @@ router.get('/graduation-report/preview', authenticate, async (req, res) => {
       success: true,
       data: preview,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取报告预览失败:', error);
     res.status(500).json({
       success: false,
@@ -289,7 +289,7 @@ router.get('/graduation-report/:reportId', authenticate, async (req, res) => {
       success: true,
       data: report,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     if (error.message === '报告尚未付费解锁') {
       return res.status(403).json({
         success: false,
@@ -335,7 +335,7 @@ router.post('/graduation-report/:reportId/pay', authenticate, async (req, res) =
       success: true,
       message: '付费成功，报告已解锁',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('处理付费失败:', error);
     res.status(500).json({
       success: false,
@@ -361,7 +361,7 @@ router.get('/graduation-report/check-update', authenticate, async (req, res) => 
         needUpdate,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('检查更新失败:', error);
     res.status(500).json({
       success: false,
@@ -386,7 +386,7 @@ router.post('/graduation-report/:reportId/update', authenticate, async (req, res
       success: true,
       message: '报告更新成功',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('更新报告失败:', error);
     res.status(500).json({
       success: false,
@@ -444,7 +444,7 @@ router.get('/overview', authenticate, async (req, res) => {
             },
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取成长概览失败:', error);
     res.status(500).json({
       success: false,

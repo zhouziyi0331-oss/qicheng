@@ -15,7 +15,7 @@ interface SelfPerception {
 }
 interface TrackRecommendation {
     track: string;
-    matchScore: number;
+    match_score: number;
     reason: string;
     firstTaskSuggestion: string;
 }

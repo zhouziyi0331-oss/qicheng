@@ -186,7 +186,7 @@ ${taskContext ? `**任务背景**
         ...result,
         detection_method: 'ai',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI监测失败:', error);
       return null;
     }
@@ -352,7 +352,7 @@ ${taskContext ? `**任务背景**
       }
       const jsonText = jsonMatch[1] || jsonMatch[0];
       return JSON.parse(jsonText);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('解析AI响应失败:', error);
       return { has_issue: false };
     }

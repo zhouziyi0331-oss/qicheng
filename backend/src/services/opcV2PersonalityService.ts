@@ -115,7 +115,7 @@ class OPCAnalysisService {
           trackRecommendationLabel: TRACK_LABELS[analysisResult.trackRecommendation as keyof typeof TRACK_LABELS]
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK')
       throw error
     } finally {
@@ -204,7 +204,7 @@ ${JSON.stringify(answersByDimension, null, 2)}
       this.validateAnalysisResult(result)
 
       return result
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('AI分析失败:', error)
       throw new Error('AI分析服务暂时不可用，请稍后重试')
     }

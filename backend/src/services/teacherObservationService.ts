@@ -57,7 +57,7 @@ class TeacherObservationService {
       this.analyzeAndUpdatePatterns(observation.studentId).catch(err => {
         logger.error('Failed to analyze patterns:', err);
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to record student behavior:', error);
       throw error;
     }
@@ -84,7 +84,7 @@ class TeacherObservationService {
       );
 
       logger.info(`Recorded company feedback: ${observation.feedbackType} for student ${observation.studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to record company feedback:', error);
       throw error;
     }
@@ -104,7 +104,7 @@ class TeacherObservationService {
       );
 
       return behaviors;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get recent behaviors:', error);
       return [];
     }
@@ -124,7 +124,7 @@ class TeacherObservationService {
       );
 
       return behaviors;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get task behaviors:', error);
       return [];
     }
@@ -167,7 +167,7 @@ class TeacherObservationService {
       await this.identifyKeyMoments(studentId, behaviors);
 
       logger.info(`Analyzed patterns for student ${studentId}: workTime=${workTimeOfDay}, frustration=${frustration.toFixed(2)}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to analyze patterns:', error);
     }
   }
@@ -239,7 +239,7 @@ class TeacherObservationService {
           logger.info(`Identified key moment: consistent_delivery for student ${studentId}`);
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to identify key moments:', error);
     }
   }
@@ -258,7 +258,7 @@ class TeacherObservationService {
       );
 
       return moments;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get key moments:', error);
       return [];
     }

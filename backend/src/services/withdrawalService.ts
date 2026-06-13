@@ -97,7 +97,7 @@ class WithdrawalService {
         status: row.status,
         createdAt: row.created_at,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -167,7 +167,7 @@ class WithdrawalService {
       }
 
       await client.query('COMMIT');
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -217,7 +217,7 @@ class WithdrawalService {
 
       await client.query('COMMIT');
       logger.info(`Withdrawal ${withdrawalId} completed, payment order: ${paymentOrderId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {
@@ -265,7 +265,7 @@ class WithdrawalService {
 
       await client.query('COMMIT');
       logger.info(`Withdrawal ${withdrawalId} failed: ${reason}`);
-    } catch (error) {
+    } catch (error: unknown) {
       await client.query('ROLLBACK');
       throw error;
     } finally {

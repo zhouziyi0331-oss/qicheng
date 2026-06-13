@@ -101,7 +101,7 @@ class TeacherMemoryService {
       );
 
       logger.info(`Completed memory consolidation for student ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to consolidate memory:', error);
       throw error;
     }
@@ -185,7 +185,7 @@ ${keyMoments.map((k: any) =>
       }
 
       return JSON.parse(jsonMatch[0]);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to analyze and update understanding:', error);
       return this.getDefaultUnderstanding(longTermMemory);
     }
@@ -217,7 +217,7 @@ ${keyMoments.map((k: any) =>
       );
 
       return memory;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get long term memory:', error);
       return null;
     }
@@ -244,13 +244,13 @@ ${keyMoments.map((k: any) =>
           await this.consolidateMemory(student.student_id as string);
           // 避免API限流
           await new Promise(resolve => setTimeout(resolve, 2000));
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`Failed to consolidate memory for student ${student.student_id as string}:`, error);
         }
       }
 
       logger.info('Completed batch memory consolidation');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to consolidate all memories:', error);
     }
   }
@@ -268,7 +268,7 @@ ${keyMoments.map((k: any) =>
       );
 
       logger.info(`Cleaned up ${result.length} old short-term memories`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to cleanup old memories:', error);
     }
   }

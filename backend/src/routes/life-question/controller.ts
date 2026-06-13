@@ -27,7 +27,7 @@ export async function getQuestions(req: Request, res: Response, next: NextFuncti
 
     const questions = await query(sql, params);
     res.json({ success: true, data: questions });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // POST /life-question/answer — 提交问题答案
@@ -60,7 +60,7 @@ export async function submitAnswer(req: Request, res: Response, next: NextFuncti
     );
 
     res.json({ success: true, data: { answerId: result[0].id } });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /life-question/reflections/:userId — 获取用户的反思记录
@@ -98,7 +98,7 @@ export async function getReflections(req: Request, res: Response, next: NextFunc
 
     const reflections = await query(sql, params);
     res.json({ success: true, data: reflections });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }
 
 // GET /life-question/insights/:userId — 获取反思洞察分析
@@ -165,5 +165,5 @@ export async function getInsights(req: Request, res: Response, next: NextFunctio
         recentInsights
       }
     });
-  } catch (err) { next(err); }
+  } catch (err: unknown) { next(err); }
 }

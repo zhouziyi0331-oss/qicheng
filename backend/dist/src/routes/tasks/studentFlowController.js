@@ -71,7 +71,7 @@ async function getTaskInvitations(req, res, next) {
                     estimatedHours: inv.estimated_minutes ? Math.round(inv.estimated_minutes / 60) : null,
                     levelRequired: inv.level_required,
                     acceptanceCriteria: inv.acceptance_criteria,
-                    matchScore: inv.match_score,
+                    match_score: inv.match_score,
                     matchReason: inv.match_reason,
                     companyName: inv.company_full_name || inv.company_name,
                     industry: inv.industry,

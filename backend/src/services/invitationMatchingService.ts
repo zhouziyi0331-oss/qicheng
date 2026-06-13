@@ -100,7 +100,7 @@ class InvitationMatchingService {
       taskId: response.task_id,
       matches: response.matches.map(match => ({
         studentId: match.student_id,
-        matchScore: match.match_score,
+        match_score: match.match_score,
         scoreBreakdown: {
           opcMatch: match.score_breakdown.opc_match,
           capabilityComplement: match.score_breakdown.capability_complement,
@@ -122,7 +122,7 @@ class InvitationMatchingService {
       studentId: response.student_id,
       matches: response.matches.map(match => ({
         taskId: match.task_id,
-        matchScore: match.match_score,
+        match_score: match.match_score,
         scoreBreakdown: {
           capabilityMatch: match.score_breakdown.capability_match,
           growthPotential: match.score_breakdown.growth_potential,
@@ -153,7 +153,7 @@ class InvitationMatchingService {
     taskId: string,
     studentId: string,
     companyId: string,
-    matchScore: number,
+    match_score: number,
     customMessage?: string
   ): Promise<any> {
     try {
@@ -177,7 +177,7 @@ class InvitationMatchingService {
         `INSERT INTO invitations (id, task_id, student_id, company_id, status, custom_message, match_score, expires_at, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
          RETURNING *`,
-        [invitationId, taskId, studentId, companyId, 'pending', customMessage, matchScore, expiresAt]
+        [invitationId, taskId, studentId, companyId, 'pending', customMessage, match_score, expiresAt]
       );
 
       const invitation = result.rows[0];
@@ -192,7 +192,7 @@ class InvitationMatchingService {
         companyId: invitation.company_id,
         status: invitation.status,
         customMessage: invitation.custom_message,
-        matchScore: invitation.match_score,
+        match_score: invitation.match_score,
         createdAt: invitation.created_at,
         expiresAt: invitation.expires_at,
       };
@@ -229,12 +229,12 @@ class InvitationMatchingService {
         companyId: inv.company_id,
         status: inv.status,
         customMessage: inv.custom_message,
-        matchScore: inv.match_score,
+        match_score: inv.match_score,
         createdAt: inv.created_at,
         expiresAt: inv.expires_at,
         respondedAt: inv.responded_at,
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get student invitations:', error);
       throw new AppError(500, 'Failed to get student invitations');
     }

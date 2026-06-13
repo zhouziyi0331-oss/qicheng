@@ -90,7 +90,7 @@ export async function getOrderList(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取订单列表失败:', error);
     res.status(500).json({ error: '获取订单列表失败' });
   }
@@ -191,7 +191,7 @@ export async function getOrderDetail(req: Request, res: Response) {
       reviews,
       disputes
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取订单详情失败:', error);
     res.status(500).json({ error: '获取订单详情失败' });
   }
@@ -261,7 +261,7 @@ export async function getOrderStats(req: Request, res: Response) {
       },
       pendingOrders: parseInt(pendingOrders[0].count)
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取订单统计失败:', error);
     res.status(500).json({ error: '获取订单统计失败' });
   }
@@ -301,7 +301,7 @@ export async function handleDispute(req: Request, res: Response) {
     );
 
     res.json({ message: '纠纷处理成功' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('处理订单纠纷失败:', error);
     res.status(500).json({ error: '处理订单纠纷失败' });
   }
@@ -333,7 +333,7 @@ export async function forceCompleteOrder(req: Request, res: Response) {
     );
 
     res.json({ message: '订单已强制完成' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('强制完成订单失败:', error);
     res.status(500).json({ error: '强制完成订单失败' });
   }
@@ -369,7 +369,7 @@ export async function cancelOrder(req: Request, res: Response) {
     );
 
     res.json({ message: '订单已取消' });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('取消订单失败:', error);
     res.status(500).json({ error: '取消订单失败' });
   }
@@ -421,7 +421,7 @@ export async function getOverdueOrders(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取逾期订单列表失败:', error);
     res.status(500).json({ error: '获取逾期订单列表失败' });
   }
@@ -470,7 +470,7 @@ export async function getPendingDeliverables(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取待审核交付物列表失败:', error);
     res.status(500).json({ error: '获取待审核交付物列表失败' });
   }
@@ -527,7 +527,7 @@ export async function getAbnormalOrders(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取异常订单列表失败:', error);
     res.status(500).json({ error: '获取异常订单列表失败' });
   }
@@ -593,7 +593,7 @@ export async function getDisputeList(req: Request, res: Response) {
         totalPages: Math.ceil(total / Number(pageSize))
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('获取纠纷列表失败:', error);
     res.status(500).json({ error: '获取纠纷列表失败' });
   }

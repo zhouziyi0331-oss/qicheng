@@ -100,7 +100,7 @@ class MentorMemoryService {
       });
 
       logger.info(`[MentorMemory] 学生画像更新完成: ${studentId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorMemory] 更新学生画像失败:', error);
       throw error;
     }
@@ -374,7 +374,7 @@ ${recentBreakthroughs.map((bt, i) => `${i + 1}. ${bt.description}`).join('\n')}
 
       // 确保不超过200字
       return summary.length > 200 ? summary.substring(0, 200) + '...' : summary;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorMemory] AI生成摘要失败，使用模板:', error);
 
       // 降级：使用模板生成
@@ -549,14 +549,14 @@ ${styleSection}
           await this.updateStudentProfile(student.id, orderId);
 
           logger.info(`[MentorMemory] 学生 ${student.id} 画像初始化完成`);
-        } catch (error) {
+        } catch (error: unknown) {
           logger.error(`[MentorMemory] 学生 ${student.id} 画像初始化失败:`, error);
           // 继续处理下一个学生
         }
       }
 
       logger.info(`[MentorMemory] 批量初始化完成`);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('[MentorMemory] 批量初始化失败:', error);
       throw error;
     }

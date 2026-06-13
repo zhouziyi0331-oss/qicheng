@@ -57,7 +57,7 @@ export async function uploadToOSS(
     }
 
     return result.url;
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('OSS upload error', { error: (err as Error).message });
     // 失败时降级到本地存储
     return `/uploads/${file.filename}`;
@@ -87,7 +87,7 @@ export async function deleteFromOSS(ossPath: string): Promise<boolean> {
     await client.delete(ossPath);
     logger.info('File deleted from OSS', { ossPath });
     return true;
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('OSS delete error', { error: (err as Error).message });
     return false;
   }
@@ -120,7 +120,7 @@ export async function getSignedUrl(
     });
 
     return url;
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('OSS signed URL error', { error: (err as Error).message });
     return ossPath;
   }

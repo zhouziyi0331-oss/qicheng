@@ -79,7 +79,7 @@ class ReasoningEngine {
       logger.info(`Completed deep thinking for student ${context.studentId}`);
 
       return thinkingProcess;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to complete thinking process:', error);
       throw error;
     }
@@ -134,7 +134,7 @@ class ReasoningEngine {
         taskBehaviors,
         relevantPatterns: this.extractPatterns(recentBehaviors, longTermMemory)
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to recall information:', error);
       return {
         studentHistory: [],
@@ -237,7 +237,7 @@ ${recall.keyMoments?.map((m: any) => `- ${m.event_description}: ${m.teacher_insi
 
       const hypotheses = JSON.parse(jsonMatch[0]);
       return hypotheses;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to generate hypotheses:', error);
       return this.getFallbackHypotheses(context);
     }
@@ -314,7 +314,7 @@ ${recall.keyMoments?.map((m: any) => `- ${m.event_description}: ${m.teacher_insi
 
       return hypotheses.slice(0, 3);
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Enhanced fallback failed, using simple fallback:', error);
       // 如果增强版也失败，返回最简单的fallback
       return [
@@ -570,7 +570,7 @@ ${recall.relevantPatterns.join('\n')}
       }
 
       return JSON.parse(jsonMatch[0]);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to reason:', error);
 
       // 增强版fallback：基于假设和学生画像进行推理
@@ -580,7 +580,7 @@ ${recall.relevantPatterns.join('\n')}
       let profile: any = null;
       try {
         profile = await this.analyzeStudentProfile(recall.studentHistory[0]?.student_id);
-      } catch (e) {
+      } catch (e: unknown) {
         logger.warn('Failed to get profile for reasoning fallback');
       }
 
@@ -665,7 +665,7 @@ ${recall.longTermMemory?.deep_understanding || '新学生'}
       }
 
       return JSON.parse(jsonMatch[0]);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to form insight:', error);
 
       // 增强版fallback：基于推理结果和学生画像形成洞察
@@ -742,7 +742,7 @@ ${recall.longTermMemory?.deep_understanding || '新学生'}
           JSON.stringify(thinking.insight)
         ]
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to save thinking record:', error);
     }
   }

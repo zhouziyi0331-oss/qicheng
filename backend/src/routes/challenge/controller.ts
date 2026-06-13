@@ -87,7 +87,7 @@ export async function startChallenge(req: AuthRequest, res: Response, next: Next
         timeLimit: 30, // 30分钟
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -232,7 +232,7 @@ export async function submitChallenge(req: AuthRequest, res: Response, next: Nex
         retryAllowedAt: isPassed ? null : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -257,7 +257,7 @@ export async function getChallengeHistory(req: AuthRequest, res: Response, next:
       success: true,
       data: challenges,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }

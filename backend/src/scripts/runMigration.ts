@@ -35,7 +35,7 @@ async function runMigration() {
     logger.info('  - ai_match_logs表（记录混合匹配日志）');
     logger.info('  - 向量索引（加速相似度搜索）');
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('❌ 迁移失败:', error);
     process.exit(1);
   } finally {

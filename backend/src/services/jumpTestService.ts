@@ -130,7 +130,7 @@ class JumpTestService {
         reasons,
         missingConditions,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to check jump eligibility:', error);
       throw error;
     }
@@ -187,7 +187,7 @@ class JumpTestService {
         jumpRecordId: jumpRecord.id,
         testTask: template,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to apply for jump test:', error);
       throw error;
     }
@@ -227,7 +227,7 @@ class JumpTestService {
       // 如果没有模板，使用AI生成
       logger.info(`No template found for ${track} Lv.${targetLevel}, generating with AI`);
       return await this.generateJumpTestTaskWithAI(track, targetLevel);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to get jump test template:', error);
       throw error;
     }
@@ -299,7 +299,7 @@ class JumpTestService {
       }
 
       throw new Error('Failed to parse AI response');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to generate jump test task with AI:', error);
 
       // 降级：返回通用模板
@@ -384,7 +384,7 @@ ${testTask.acceptanceCriteria}
       logger.info(`Jump test task pushed: order ${order.id}, student ${studentId}`);
 
       return order.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to push jump test task:', error);
       throw error;
     }
@@ -502,7 +502,7 @@ ${aiReview.feedback}
         score: aiReview.score,
         feedback: aiReview.feedback,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to review jump test:', error);
       throw error;
     }
@@ -587,7 +587,7 @@ ${fileUrls.length > 0 ? `**附件：** ${fileUrls.join(', ')}` : ''}
       }
 
       throw new Error('Failed to parse AI review response');
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Failed to AI review jump test:', error);
 
       // 降级：返回保守评分

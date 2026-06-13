@@ -107,7 +107,7 @@ export class MentorStageService {
 
       logger.info('创建导师会话', { taskId, studentId, sessionId: result.id });
       return result.id;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('创建导师会话失败', { error, taskId, studentId });
       throw error;
     }
@@ -159,7 +159,7 @@ export class MentorStageService {
         createdAt: result.created_at,
         updatedAt: result.updated_at,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取导师会话失败', { error, sessionId });
       throw error;
     }
@@ -178,7 +178,7 @@ export class MentorStageService {
       if (!result) return null;
 
       return this.getSession(result.id);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('根据任务ID获取会话失败', { error, taskId });
       throw error;
     }
@@ -197,7 +197,7 @@ export class MentorStageService {
       );
 
       logger.info('导师阶段转换', { sessionId, newStage });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('导师阶段转换失败', { error, sessionId, newStage });
       throw error;
     }
@@ -275,7 +275,7 @@ export class MentorStageService {
       await query(sql, values);
 
       logger.info('更新导师会话', { sessionId, updates });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('更新导师会话失败', { error, sessionId, updates });
       throw error;
     }
@@ -357,7 +357,7 @@ export class MentorStageService {
 
       logger.info('保存导师消息', { sessionId, role, messageId });
       return messageId;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('保存导师消息失败', { error, sessionId, role });
       throw error;
     }
@@ -426,7 +426,7 @@ export class MentorStageService {
           parseInt(sessionId)
         );
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('处理学生消息失败', { error, studentId, messageId });
     }
   }
@@ -494,7 +494,7 @@ export class MentorStageService {
           followUpTopics: humanizedResponse.followUpTopics
         }
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('生成人性化回复失败', { error, sessionId });
       throw error;
     }
@@ -530,7 +530,7 @@ export class MentorStageService {
         metadata: row.metadata,
         createdAt: row.created_at,
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取导师消息历史失败', { error, sessionId });
       throw error;
     }
@@ -561,7 +561,7 @@ export class MentorStageService {
       );
 
       logger.info('更新导师统计', { sessionId, field, increment });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('更新导师统计失败', { error, sessionId, field });
       throw error;
     }
@@ -581,7 +581,7 @@ export class MentorStageService {
       );
 
       logger.info('添加推荐工具', { sessionId, tool });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('添加推荐工具失败', { error, sessionId, tool });
       throw error;
     }
@@ -672,7 +672,7 @@ export class MentorStageService {
           }))
         }
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取会话统计失败', { error, sessionId });
       throw error;
     }
@@ -689,7 +689,7 @@ export class MentorStageService {
       );
 
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取成长仪表板失败', { error, studentId });
       return null;
     }
@@ -701,7 +701,7 @@ export class MentorStageService {
   async getUncelebratedMilestones(studentId: string): Promise<any[]> {
     try {
       return await growthTrackingService.getUncelebratedMilestones(parseInt(studentId));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取未庆祝里程碑失败', { error, studentId });
       return [];
     }
@@ -713,7 +713,7 @@ export class MentorStageService {
   async celebrateMilestone(milestoneId: number): Promise<void> {
     try {
       await growthTrackingService.markAsCelebrated(milestoneId);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('标记里程碑已庆祝失败', { error, milestoneId });
     }
   }
@@ -732,7 +732,7 @@ export class MentorStageService {
         parseInt(session.studentId),
         parseInt(sessionId)
       );
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('获取引导建议失败', { error, sessionId });
       return null;
     }

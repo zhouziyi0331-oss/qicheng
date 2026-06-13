@@ -117,7 +117,7 @@ export async function createSubcontract(req: AuthRequest, res: Response, next: N
         priceDifference: priceDiff,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -149,7 +149,7 @@ export async function getMySubcontracts(req: AuthRequest, res: Response, next: N
       success: true,
       data: subcontracts,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
@@ -231,7 +231,7 @@ export async function completeSubcontract(req: AuthRequest, res: Response, next:
         priceDifference: subcontract.price_difference,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     next(err);
   }
 }
