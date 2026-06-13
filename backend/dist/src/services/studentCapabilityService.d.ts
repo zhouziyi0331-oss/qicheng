@@ -1,41 +1,42 @@
+/**
+ * 学生能力更新服务
+ * 动态更新学生能力画 像
+ * 基于任务完成情况更新技能、质量、成长趋势
+ */
 interface OPCResults {
     openness: number;
     persistence: number;
     creativity: number;
-    personalityStyle: string;
+    personality_style: string;
 }
 interface TaskPerformance {
-    taskId: string;
-    quality: number;
-    clientSatisfaction: number;
-    onTime: boolean;
-    responseTimeHours: number;
-    skillsUsed: string[];
-    completionDate: Date;
+    task_id: string;
+    quality_score: number;
+    client_satisfaction: number;
+    delivered_on_time: boolean;
+    response_time_hours: number;
+    skills_used: string[];
 }
 interface GrowthTrend {
-    qualityTrend: 'improving' | 'stable' | 'declining';
-    growthRate: number;
-    skillAcquisitionRate: number;
-    recentPerformance: number[];
+    trend: 'improving' | 'stable' | 'declining' | 'unknown';
+    growth_rate: number;
+    skill_acquisition_rate: number;
+    recent_quality_avg: number;
+    quality_change: number;
 }
-/**
- * 学生能力更新服务
- * 基于任务完成情况动态更新学生能力画像
- */
 declare class StudentCapabilityService {
     /**
      * 初始化学生能力画像
      */
-    initializeCapability(studentId: string, opcResults?: OPCResults): Promise<void>;
+    initializeCapability(studentId: string, opcResults: OPCResults): Promise<void>;
     /**
-     * 任务完成后更新学生能力
+     * 任务完成后更新能力
      */
     updateAfterTaskCompletion(studentId: string, taskId: string, performance: TaskPerformance): Promise<void>;
     /**
      * 更新技能熟练度
      */
-    private updateSkillProficiency;
+    private updateSkills;
     /**
      * 计算学生成长趋势
      */
@@ -47,19 +48,11 @@ declare class StudentCapabilityService {
     /**
      * 获取学生能力画像
      */
-    getStudentCapability(studentId: string): Promise<any>;
+    getCapability(studentId: string): Promise<any>;
     /**
-     * 批量初始化所有学生的能力画像
+     * 批量初始化学生能力（用于迁移）
      */
-    initializeAllStudents(): Promise<void>;
-    /**
-     * 更新学生的工作偏好
-     */
-    updateWorkPreferences(studentId: string, preferences: {
-        preferredTaskTypes?: string[];
-        maxHoursPerWeek?: number;
-        workStyle?: any;
-    }): Promise<void>;
+    batchInitializeCapabilities(limit?: number): Promise<number>;
 }
 declare const _default: StudentCapabilityService;
 export default _default;

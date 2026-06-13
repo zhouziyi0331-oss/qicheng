@@ -9,6 +9,8 @@ const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
 const mentorMemoryService_1 = __importDefault(require("./mentorMemoryService"));
 const mentorExampleService_1 = __importDefault(require("./mentorExampleService"));
+const mentorContextEnhancer_1 = __importDefault(require("./mentorContextEnhancer"));
+const principleReviewService_1 = __importDefault(require("./principleReviewService"));
 class MentorCoreService {
     constructor() {
         this.defaultModel = 'claude-haiku-4-5'; // 改用Haiku，更快（2-4秒 vs 5-8秒）
@@ -35,17 +37,46 @@ class MentorCoreService {
             // 3. 保存学生消息
             await this.saveMessage(session.id, 'student', message);
             // 4. 构建AI Prompt（智能上下文管理）
-            const prompt = await this.buildPrompt(context, message);
-            // 5. 调用Claude API
-            const aiResponse = await this.callClaudeAPI(prompt);
-            // 6. 检测信号
+            const prompt = await this.buildPrompt(context, message, taskId);
+            // 5. 调用Claude API（带重试机制）
+            let aiResponse = await this.callClaudeAPI(prompt);
+            // 6. 【AI-07审核】检查回复是否符合初心原则
+            const reviewResult = await principleReviewService_1.default.reviewMentorResponse(aiResponse, {
+                studentLevel: context.student.level,
+                conversationHistory: context.conversationHistory.map(m => m.content).join('\n'),
+                hasRealCaseData: this.detectSignals(message, '').stuckPoint
+            });
+            // 如果审核不通过，重新生成（最多1次）
+            if (!reviewResult.pass) {
+                logger_1.default.warn('AI-07 review failed, regenerating response', {
+                    reason: reviewResult.reason,
+                    originalLength: aiResponse.length
+                });
+                // 修改prompt，明确指出问题
+                const retryPrompt = `${prompt}
+
+---
+**重要提醒**：上一次生成的回复被初心审核引擎拒绝，原因是：${reviewResult.reason}
+
+请重新生成一条回复，确保：
+- 不直接给答案，只给线索
+- 不使用控制性语言（"你应该""必须"）
+- 不编造案例（除非上面提供了真实案例）
+- 引导学生自己思考`;
+                aiResponse = await this.callClaudeAPI(retryPrompt);
+                // 记录重新生成
+                logger_1.default.info('AI-07 triggered regeneration', {
+                    newLength: aiResponse.length
+                });
+            }
+            // 7. 检测信号
             const signals = this.detectSignals(message, aiResponse);
-            // 7. 保存AI回复
+            // 8. 保存AI回复
             await this.saveMessage(session.id, 'mentor', aiResponse, {
                 tokensUsed: Math.ceil(aiResponse.length / 4), // 粗略估算，向上取整
                 signals,
             });
-            // 8. 更新会话统计
+            // 9. 更新会话统计
             await this.updateSessionStats(session.id);
             const responseTime = Date.now() - startTime;
             return {
@@ -66,12 +97,23 @@ class MentorCoreService {
     /**
      * 构建AI Prompt - 确保400字回复（集成长期记忆和风格自适应）
      */
-    async buildPrompt(context, studentMessage) {
+    async buildPrompt(context, studentMessage, taskId) {
         const { student, task, conversationHistory } = context;
         // 智能上下文管理：根据对话长度决定策略
         const historyText = await this.buildContextHistory(conversationHistory);
         // 【新增】获取学生长期画像
         const profile = await mentorMemoryService_1.default.getStudentProfile(student.id);
+        // 【T-02新增】检测stuck信号，获取真实卡点案例
+        const isStuck = this.detectSignals(studentMessage, '').stuckPoint;
+        let realStuckCase = null;
+        if (isStuck && taskId) {
+            realStuckCase = await mentorContextEnhancer_1.default.getRealStuckCase(student.id, taskId);
+            logger_1.default.info('T-02: Stuck signal detected', {
+                studentId: student.id,
+                taskId,
+                hasRealCase: !!realStuckCase
+            });
+        }
         // 基础Prompt
         let basePrompt = `你是启程平台的AI导师"启程小猫"，一只顶着书本的可爱小猫。
 
@@ -126,6 +168,17 @@ ${historyText}
 ## 【引导风格指令】
 ${profile.guidance_style.system_prompt_injection}`;
         }
+        // 【T-02新增】如果检测到stuck且有真实案例，注入到prompt
+        if (realStuckCase) {
+            basePrompt += `
+
+## 【真实卡点案例】（T-02）
+有其他学生在类似任务中也遇到过困难：
+
+${realStuckCase.observation_content}
+
+**重要提示：** 这是真实案例，你可以简单提及"之前有同学也卡在这里"，但不要直接告诉学生答案。引导学生思考这个案例给他的启发。`;
+        }
         // 【P1新增】检测是否应该展示范例
         if (task && mentorExampleService_1.default.shouldShowExample(conversationHistory)) {
             const similarCase = await mentorExampleService_1.default.findSimilarCase(task.id, student.level);
@@ -152,6 +205,16 @@ ${formattedCase.full_text}
 - **最少350字，最多500字**
 - 如果回复少于350字，会被系统拒绝
 - 用字数计数器确认：中文字符数 >= 350
+
+### 初心原则（AI-07审核标准）
+- ✅ 只给线索和方向，让学生自己完成最后一步
+- ✅ 引用的案例来自真实数据（如果提供了【真实卡点案例】）
+- ✅ 夸奖要具体到某个行为或细节
+- ✅ 用"你可以试试""要不要看看"等开放性建议
+- ❌ 不要直接给完整答案
+- ❌ 不要用"你应该""你需要""必须"等控制性语言
+- ❌ 不要编造不存在的"其他学生"案例（除非上面提供了真实案例）
+- ❌ 不要用"加油""你真棒"等空洞鼓励
 
 ### 结构要求
 你的回复必须包含3个部分：
@@ -618,7 +681,7 @@ ${conversationText}
             // 3. 保存学生消息
             await this.saveMessage(session.id, 'student', message);
             // 4. 构建AI Prompt（智能上下文管理）
-            const prompt = await this.buildPrompt(context, message);
+            const prompt = await this.buildPrompt(context, message, taskId);
             // 5. 调用Claude API（流式）
             logger_1.default.info('开始调用Claude API（流式）', {
                 model: this.defaultModel,
@@ -693,7 +756,7 @@ ${conversationText}
     async verifyOrderOwnership(orderId, studentId) {
         try {
             const result = await (0, db_1.query)('SELECT id FROM orders WHERE id = $1 AND student_id = $2', [orderId, studentId]);
-            return result.rows.length > 0;
+            return result.length > 0;
         }
         catch (error) {
             logger_1.default.error('验证订单归属失败:', error);
@@ -711,7 +774,7 @@ ${conversationText}
         FROM mentor_sessions
         WHERE order_id = $1
         ORDER BY created_at ASC`, [orderId]);
-            return result.rows;
+            return result;
         }
         catch (error) {
             logger_1.default.error('获取会话历史失败:', error);

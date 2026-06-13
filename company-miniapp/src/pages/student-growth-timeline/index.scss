@@ -1,0 +1,387 @@
+@import '../../styles/theme.scss';
+
+.growth-timeline-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding-bottom: 40rpx;
+
+  .loading,
+  .empty {
+    text-align: center;
+    padding: 200rpx 0;
+    color: $text-tertiary;
+    font-size: $font-md;
+  }
+
+  // 成长概览
+  .growth-summary {
+    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+    padding: $spacing-xl $spacing-lg;
+    color: $text-white;
+
+    .summary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-md;
+
+      .summary-title {
+        font-size: $font-xl;
+        font-weight: 600;
+      }
+
+      .trend-badge {
+        padding: 8rpx 16rpx;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: $radius-full;
+        font-size: $font-xs;
+        font-weight: 500;
+      }
+    }
+
+    .summary-stats {
+      display: flex;
+      gap: $spacing-md;
+
+      .stat-item {
+        flex: 1;
+        text-align: center;
+        padding: $spacing-md;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: $radius-md;
+        backdrop-filter: blur(10px);
+
+        .stat-value {
+          display: block;
+          font-size: $font-xxl;
+          font-weight: 700;
+          margin-bottom: 8rpx;
+        }
+
+        .stat-label {
+          font-size: $font-xs;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
+  // 标签切换
+  .tabs {
+    display: flex;
+    background: $bg-card;
+    padding: $spacing-md $spacing-lg;
+    gap: $spacing-sm;
+    border-bottom: 1px solid $divider-color;
+
+    .tab-item {
+      flex: 1;
+      text-align: center;
+      padding: $spacing-sm;
+      border-radius: $radius-md;
+      font-size: $font-sm;
+      color: $text-secondary;
+      background: $bg-section;
+      transition: all 0.3s;
+
+      &.active {
+        color: $text-white;
+        background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+        font-weight: 600;
+      }
+    }
+  }
+
+  // 内容区域
+  .content-area {
+    height: calc(100vh - 400rpx);
+    padding: $spacing-lg;
+  }
+
+  // 成长事件时间轴
+  .events-list {
+    .empty-state {
+      text-align: center;
+      padding: 100rpx 0;
+      color: $text-tertiary;
+      font-size: $font-sm;
+    }
+
+    .timeline {
+      position: relative;
+
+      .timeline-item {
+        display: flex;
+        margin-bottom: $spacing-lg;
+
+        .timeline-marker {
+          position: relative;
+          width: 60rpx;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .marker-dot {
+            width: 24rpx;
+            height: 24rpx;
+            border-radius: 50%;
+            border: 4rpx solid $bg-card;
+            z-index: 2;
+          }
+
+          .marker-line {
+            flex: 1;
+            width: 2rpx;
+            background: $divider-color;
+            margin-top: 8rpx;
+          }
+        }
+
+        .event-card {
+          flex: 1;
+          background: $bg-card;
+          border-radius: $radius-lg;
+          padding: $spacing-md;
+          box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+
+          .event-header {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+            margin-bottom: $spacing-sm;
+
+            .event-icon {
+              font-size: 40rpx;
+            }
+
+            .event-info {
+              flex: 1;
+
+              .event-title {
+                display: block;
+                font-size: $font-md;
+                color: $text-primary;
+                font-weight: 600;
+                margin-bottom: 4rpx;
+              }
+
+              .event-date {
+                font-size: $font-xs;
+                color: $text-tertiary;
+              }
+            }
+
+            .impact-badge {
+              width: 60rpx;
+              height: 60rpx;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              .impact-text {
+                font-size: $font-xs;
+                color: $text-white;
+                font-weight: 600;
+              }
+            }
+          }
+
+          .event-description {
+            display: block;
+            font-size: $font-sm;
+            color: $text-secondary;
+            line-height: 1.5;
+            margin-bottom: $spacing-sm;
+          }
+
+          .event-tag {
+            display: inline-block;
+            padding: 6rpx 12rpx;
+            background: rgba(139, 92, 246, 0.08);
+            border-radius: $radius-sm;
+
+            .tag-text {
+              font-size: $font-xs;
+              color: #8B5CF6;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 里程碑列表
+  .milestones-list {
+    .empty-state {
+      text-align: center;
+      padding: 100rpx 0;
+      color: $text-tertiary;
+      font-size: $font-sm;
+    }
+
+    .milestone-card {
+      display: flex;
+      align-items: flex-start;
+      gap: $spacing-md;
+      background: $bg-card;
+      border-radius: $radius-lg;
+      padding: $spacing-md;
+      margin-bottom: $spacing-md;
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+      position: relative;
+
+      .milestone-icon {
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: $radius-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        .icon-text {
+          font-size: 48rpx;
+        }
+      }
+
+      .milestone-content {
+        flex: 1;
+
+        .milestone-title {
+          display: block;
+          font-size: $font-lg;
+          color: $text-primary;
+          font-weight: 600;
+          margin-bottom: 8rpx;
+        }
+
+        .milestone-description {
+          display: block;
+          font-size: $font-sm;
+          color: $text-secondary;
+          line-height: 1.5;
+          margin-bottom: 8rpx;
+        }
+
+        .milestone-date {
+          font-size: $font-xs;
+          color: $text-tertiary;
+        }
+      }
+
+      .featured-badge {
+        position: absolute;
+        top: $spacing-sm;
+        right: $spacing-sm;
+        padding: 4rpx 12rpx;
+        background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+        border-radius: $radius-full;
+
+        .featured-text {
+          font-size: $font-xs;
+          color: $text-white;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  // 技能进化列表
+  .skills-list {
+    .empty-state {
+      text-align: center;
+      padding: 100rpx 0;
+      color: $text-tertiary;
+      font-size: $font-sm;
+    }
+
+    .skill-card {
+      background: $bg-card;
+      border-radius: $radius-lg;
+      padding: $spacing-md;
+      margin-bottom: $spacing-md;
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+
+      .skill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-md;
+
+        .skill-name {
+          font-size: $font-lg;
+          color: $text-primary;
+          font-weight: 600;
+        }
+
+        .skill-level {
+          padding: 8rpx 16rpx;
+          background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+          border-radius: $radius-full;
+
+          .level-text {
+            font-size: $font-xs;
+            color: $text-white;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .skill-progress {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-md;
+
+        .progress-bar {
+          flex: 1;
+          height: 16rpx;
+          background: $bg-section;
+          border-radius: $radius-full;
+          overflow: hidden;
+
+          .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8B5CF6 0%, #3B82F6 100%);
+            border-radius: $radius-full;
+            transition: width 0.3s;
+          }
+        }
+
+        .progress-text {
+          font-size: $font-sm;
+          color: $text-secondary;
+          font-weight: 600;
+          min-width: 60rpx;
+          text-align: right;
+        }
+      }
+
+      .skill-stats {
+        display: flex;
+        gap: $spacing-md;
+        padding-top: $spacing-md;
+        border-top: 1px solid $divider-color;
+
+        .stat {
+          flex: 1;
+          text-align: center;
+
+          .stat-label {
+            display: block;
+            font-size: $font-xs;
+            color: $text-tertiary;
+            margin-bottom: 4rpx;
+          }
+
+          .stat-value {
+            font-size: $font-sm;
+            color: $text-primary;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}

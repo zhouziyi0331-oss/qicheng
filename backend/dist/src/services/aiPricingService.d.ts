@@ -1,103 +1,71 @@
 /**
- * AI智能定价服务
- *
- * 基于任务特征、市场数据和AI分析提供智能定价建议
+ * AI定价服务 - E-04功能
+ * 基于任务特征、市场数据、历史价格提供智能定价建议
+ * 增强E-01的定价能力
  */
-export interface PricingSuggestion {
-    suggested_min: number;
-    suggested_max: number;
-    reasoning: string;
-    confidence_score: number;
-    market_comparison: string;
-    complexity_score: number;
-    factors: PricingFactor[];
-    warnings?: string[];
-    recommendations?: string[];
-}
-export interface PricingFactor {
-    name: string;
-    value: number;
-    weight: number;
-    impact: number;
-    description: string;
-}
-export interface MarketBenchmark {
-    avg_price: number;
-    median_price: number;
-    min_price: number;
-    max_price: number;
-    sample_count: number;
-}
-export interface TaskPricingInput {
+interface TaskFeatures {
     title: string;
     description: string;
-    requirements?: string;
-    deliverables?: string;
-    category?: string;
-    difficulty_level?: string;
+    required_skills?: string[];
+    difficulty?: number;
     estimated_hours?: number;
-    required_abilities?: any[];
-    deadline?: Date;
-    company_id: string;
+    task_type?: string;
+    urgency?: 'normal' | 'urgent' | 'very_urgent';
+}
+interface PricingResult {
+    suggested_price: number;
+    min_price: number;
+    max_price: number;
+    confidence_level: number;
+    pricing_breakdown: {
+        base_price: number;
+        skill_premium: number;
+        difficulty_premium: number;
+        urgency_premium: number;
+        market_adjustment: number;
+    };
+    market_comparison: {
+        platform_average: number;
+        similar_tasks_avg: number;
+        percentile_rank: number;
+    };
+    reasoning: string;
+    recommendations: string[];
 }
 declare class AIPricingService {
+    private anthropic;
+    private readonly BASE_RATES;
+    private readonly SKILL_PREMIUMS;
+    constructor();
     /**
-     * 获取智能定价建议
+     * 计算智能定价
      */
-    getPricingSuggestion(input: TaskPricingInput): Promise<PricingSuggestion>;
+    calculatePrice(taskFeatures: TaskFeatures): Promise<PricingResult>;
     /**
-     * 计算任务复杂度
+     * 计算基础价格
      */
-    private calculateComplexity;
+    private calculateBasePrice;
     /**
-     * 获取市场基准价格
+     * 获取市场数据
      */
-    private getMarketBenchmark;
+    private getMarketData;
     /**
-     * 计算各个定价因子
+     * 使用AI进行定价分析
      */
-    private calculatePricingFactors;
+    private getAIPricingAnalysis;
     /**
-     * 获取技能等级分数
+     * 计算最终定价
      */
-    private getSkillLevelScore;
+    private calculateFinalPricing;
     /**
-     * 获取紧急程度分数
+     * 降级定价（AI失败时）
      */
-    private getUrgencyScore;
+    private getFallbackPricing;
     /**
-     * 获取市场需求分数
+     * 保存定价记录
      */
-    private getMarketDemandScore;
-    /**
-     * 获取企业信誉分数
-     */
-    private getCompanyReputationScore;
-    /**
-     * 使用AI进行综合分析
-     */
-    private getAIAnalysis;
-    /**
-     * 计算最终建议价格
-     */
-    private calculateFinalPrice;
-    /**
-     * 保存定价历史
-     */
-    savePricingHistory(taskId: string, companyId: string, suggestion: PricingSuggestion, actualMin: number, actualMax: number): Promise<string>;
-    /**
-     * 记录定价调整
-     */
-    recordPricingAdjustment(taskId: string, companyId: string, originalMin: number, originalMax: number, adjustedMin: number, adjustedMax: number, reason: string, note?: string): Promise<void>;
-    /**
-     * 更新市场基准价格（定期任务）
-     */
-    updateMarketBenchmarks(): Promise<void>;
-    /**
-     * 获取定价准确度分析
-     */
-    getPricingAccuracy(category?: string, difficulty?: string): Promise<any[]>;
+    savePricingRecord(taskId: string, taskFeatures: TaskFeatures, result: PricingResult): Promise<void>;
 }
-export declare const aiPricingService: AIPricingService;
-export {};
+declare const _default: AIPricingService;
+export default _default;
 //# sourceMappingURL=aiPricingService.d.ts.map

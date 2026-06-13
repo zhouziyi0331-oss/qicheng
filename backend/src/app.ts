@@ -77,6 +77,13 @@ import adminMonitorRoutes from './routes/adminMonitorRoutes';
 import orderFlowRoutes from './routes/orderFlowRoutes';
 import authIsolationRoutes from './routes/authIsolationRoutes';
 
+// 新增：体验优化功能路由
+import taskExperienceRoutes from './routes/taskExperience';
+import matchingEnhancementRoutes from './routes/matchingEnhancement';
+import taskTrackingRoutes from './routes/taskTracking';
+import acceptanceRoutes from './routes/acceptance';
+import cultivationRoutes from './routes/cultivation';
+
 // 新增：等级、跳级、组队、社区系统路由
 import jumpTestRoutes from './routes/students/jumpTestRoutes';
 import teamsRoutes from './routes/teams';
@@ -236,6 +243,13 @@ app.use('/api/v1/teams-new', teamRoutesNew); // 组队系统（新版）
 app.use('/api/v1/community-new', communityRoutesNew); // 社区板块（新版）
 app.use('/api/v1/master', masterRoutes); // 大师系统
 app.use('/api/v1/masters', masterRoutes); // 大师系统（别名）
+
+// 体验优化功能路由
+app.use('/api/v1/task-experience', taskExperienceRoutes); // E-01a/b/d: 模板、预算、草稿
+app.use('/api/v1/matching-enhancement', matchingEnhancementRoutes); // E-05a/b/c/d: 试稿、对比、搜索、反馈
+app.use('/api/v1/task-tracking', taskTrackingRoutes); // E-23-28: 进度、里程碑、通知、归档、预警、介入
+app.use('/api/v1/acceptance', acceptanceRoutes); // E-29-34: 清单、模板、评分、合作意愿、知识产权、退款
+app.use('/api/v1/cultivation', cultivationRoutes); // E-12: 定向培养计划
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));

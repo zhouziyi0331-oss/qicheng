@@ -1,0 +1,230 @@
+.budget-suggestion {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 30px;
+  margin: 20px 0;
+
+  .suggestion-header {
+    margin-bottom: 24px;
+
+    .title {
+      display: block;
+      font-size: 32px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      display: block;
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .quality-selector {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    .label {
+      display: block;
+      font-size: 26px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .quality-options {
+      display: flex;
+      gap: 12px;
+
+      .quality-option {
+        flex: 1;
+        height: 64px;
+        line-height: 64px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 26px;
+        transition: all 0.3s;
+
+        &.active {
+          background: #fff;
+          color: #667eea;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .get-suggestion-btn {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    background: #fff;
+    color: #667eea;
+    border-radius: 12px;
+    font-size: 28px;
+    font-weight: 600;
+    border: none;
+
+    &::after {
+      border: none;
+    }
+  }
+
+  .suggestion-result {
+    .budget-range {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+
+      .budget-item {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s;
+
+        &:active {
+          transform: scale(0.95);
+        }
+
+        &.recommended {
+          background: #fff;
+
+          .budget-label,
+          .budget-desc {
+            color: #667eea;
+          }
+
+          .budget-value {
+            color: #667eea;
+          }
+
+          .recommended-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 20px;
+          }
+        }
+
+        .budget-label {
+          display: block;
+          font-size: 22px;
+          color: rgba(255, 255, 255, 0.8);
+          margin-bottom: 8px;
+        }
+
+        .budget-value {
+          display: block;
+          font-size: 36px;
+          font-weight: 600;
+          color: #fff;
+          margin-bottom: 8px;
+        }
+
+        .budget-desc {
+          display: block;
+          font-size: 20px;
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+    }
+
+    .reasoning {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+
+      .reasoning-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .reasoning-icon {
+          font-size: 28px;
+          margin-right: 8px;
+        }
+
+        .reasoning-title {
+          font-size: 26px;
+          font-weight: 600;
+          color: #fff;
+        }
+      }
+
+      .reasoning-content {
+        font-size: 26px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .market-data {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+
+      .data-title {
+        display: block;
+        font-size: 26px;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 16px;
+      }
+
+      .data-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .data-label {
+          font-size: 24px;
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .data-value {
+          font-size: 24px;
+          font-weight: 600;
+          color: #fff;
+        }
+      }
+    }
+
+    .refresh-btn {
+      width: 100%;
+      height: 72px;
+      line-height: 72px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 12px;
+      font-size: 26px;
+      border: none;
+
+      &::after {
+        border: none;
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+}

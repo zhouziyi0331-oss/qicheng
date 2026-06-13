@@ -27,6 +27,9 @@ const chat_1 = __importDefault(require("./routes/chat"));
 const notificationRoutes_1 = __importDefault(require("./routes/notificationRoutes"));
 const upload_1 = __importDefault(require("./routes/upload"));
 const mentor_1 = __importDefault(require("./routes/mentor"));
+const opcV2PersonalityRoutes_1 = __importDefault(require("./routes/opcV2PersonalityRoutes"));
+const aiMentorRoutesV2_1 = __importDefault(require("./routes/aiMentorRoutesV2"));
+const assetVisualizationRoutes_1 = __importDefault(require("./routes/assetVisualizationRoutes"));
 const enhanced_routes_1 = __importDefault(require("./routes/mentor/enhanced-routes"));
 const mentorStageRoutes_1 = __importDefault(require("./routes/mentorStageRoutes"));
 const dashboard_1 = __importDefault(require("./routes/admin/dashboard"));
@@ -44,7 +47,10 @@ const agreement_1 = __importDefault(require("./routes/agreement"));
 const aiEngine_1 = __importDefault(require("./routes/aiEngine"));
 const opcGrowth_1 = __importDefault(require("./routes/opcGrowth"));
 const communityPortfolio_1 = __importDefault(require("./routes/communityPortfolio"));
-const opcV2Assessment_1 = __importDefault(require("./routes/opcV2Assessment"));
+const opcV2Routes_1 = __importDefault(require("./routes/opcV2Routes")); // OPC v2.0 AI画像分析系统（新版）
+const mentorAutoTriggerRoutes_1 = __importDefault(require("./routes/mentorAutoTriggerRoutes")); // AI导师自动触发系统
+const semanticMatching_1 = __importDefault(require("./routes/semanticMatching")); // 语义匹配引擎路由
+const stats_1 = __importDefault(require("./routes/stats")); // 统计API（消除固定文案）
 const opcRoutes_1 = __importDefault(require("./routes/opcRoutes"));
 const opc_1 = __importDefault(require("./routes/opc"));
 const submissionPreCheck_1 = __importDefault(require("./routes/submissionPreCheck"));
@@ -71,6 +77,12 @@ const workConditionMatchingRoutes_1 = __importDefault(require("./routes/workCond
 const adminMonitorRoutes_1 = __importDefault(require("./routes/adminMonitorRoutes"));
 const orderFlowRoutes_1 = __importDefault(require("./routes/orderFlowRoutes"));
 const authIsolationRoutes_1 = __importDefault(require("./routes/authIsolationRoutes"));
+// 新增：体验优化功能路由
+const taskExperience_1 = __importDefault(require("./routes/taskExperience"));
+const matchingEnhancement_1 = __importDefault(require("./routes/matchingEnhancement"));
+const taskTracking_1 = __importDefault(require("./routes/taskTracking"));
+const acceptance_1 = __importDefault(require("./routes/acceptance"));
+const cultivation_1 = __importDefault(require("./routes/cultivation"));
 // 新增：等级、跳级、组队、社区系统路由
 const jumpTestRoutes_1 = __importDefault(require("./routes/students/jumpTestRoutes"));
 const teams_1 = __importDefault(require("./routes/teams"));
@@ -94,14 +106,19 @@ if (process.env.NODE_ENV !== 'test') {
     // 启动匹配调度器（每天自动重新匹配）
     const matchingScheduler = require('./services/matchingScheduler').default;
     matchingScheduler.start();
+    // 启动AI导师自动触发定时任务（每30秒检查一次）
+    const { mentorTriggerCronService } = require('./services/mentorTriggerCronService');
+    mentorTriggerCronService.start();
     // 优雅关闭时停止定时任务
     process.on('SIGTERM', () => {
         cronScheduler.stop();
         matchingScheduler.stop();
+        mentorTriggerCronService.stop();
     });
     process.on('SIGINT', () => {
         cronScheduler.stop();
         matchingScheduler.stop();
+        mentorTriggerCronService.stop();
     });
 }
 const app = (0, express_1.default)();
@@ -169,7 +186,13 @@ app.use('/api/v1/agreement', agreement_1.default); // 注册协议与数据授�
 app.use('/api/v1/ai-engine', aiEngine_1.default); // AI引擎系统
 app.use('/api/v1/opc-growth', opcGrowth_1.default); // OPC测评和成长报告系统
 app.use('/api/v1/community-portfolio', communityPortfolio_1.default); // 社群和作品展示系统
-app.use('/api/v1/opc-v2', opcV2Assessment_1.default); // OPC v2.0 能力画像测试系统
+app.use('/api/v1/opc-v2', opcV2Routes_1.default); // OPC v2.0 AI画像分析系统（新版）
+app.use('/api/v1/opc-personality', opcV2PersonalityRoutes_1.default); // OPC v2.0 人格测试与分析系统
+app.use('/api/v1/ai-mentor', aiMentorRoutesV2_1.default); // AI导师陪伴系统 v2.0
+app.use('/api/v1/asset', assetVisualizationRoutes_1.default); // 资产可视化系统
+app.use('/api/v1/mentor-trigger', mentorAutoTriggerRoutes_1.default); // AI导师自动触发系统
+app.use('/api/v1', semanticMatching_1.default); // 语义匹配引擎（任务推荐、学生匹配）
+app.use('/api/v1/stats', stats_1.default); // 统计API（真实数据，消除固定文案）
 app.use('/api/v1', opcRoutes_1.default); // OPC测试、匹配、导师、等级系统
 app.use('/api/v1', opc_1.default); // OPC能力画像测试系统
 app.use('/api/v1/submissions', submissionPreCheck_1.default); // 交付物预检系统
@@ -205,6 +228,12 @@ app.use('/api/v1/teams-new', teamRoutes_1.default); // 组队系统（新版）
 app.use('/api/v1/community-new', communityRoutes_1.default); // 社区板块（新版）
 app.use('/api/v1/master', masterRoutes_1.default); // 大师系统
 app.use('/api/v1/masters', masterRoutes_1.default); // 大师系统（别名）
+// 体验优化功能路由
+app.use('/api/v1/task-experience', taskExperience_1.default); // E-01a/b/d: 模板、预算、草稿
+app.use('/api/v1/matching-enhancement', matchingEnhancement_1.default); // E-05a/b/c/d: 试稿、对比、搜索、反馈
+app.use('/api/v1/task-tracking', taskTracking_1.default); // E-23-28: 进度、里程碑、通知、归档、预警、介入
+app.use('/api/v1/acceptance', acceptance_1.default); // E-29-34: 清单、模板、评分、合作意愿、知识产权、退款
+app.use('/api/v1/cultivation', cultivation_1.default); // E-12: 定向培养计划
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

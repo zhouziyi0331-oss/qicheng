@@ -16,7 +16,24 @@ interface Student {
   averageRating: number;
   skills: string[];
   recentWorks?: string[];
-  collaborationCount?: number; // 已合作次数
+  collaborationCount?: number;
+}
+
+// E-05: 增强档案数据
+interface EnhancedProfile {
+  headline: string;
+  growth_story: string;
+  key_strengths: string[];
+  milestones: any[];
+  metrics: {
+    tasks_completed: number;
+    success_rate: number;
+    on_time_rate: number;
+    avg_rating: number;
+    growth_rate: number;
+  };
+  tags: string[];
+  investment_highlights: string[];
 }
 
 export default function SelectStudents() {
@@ -26,6 +43,10 @@ export default function SelectStudents() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  // E-05: 增强档案数据
+  const [enhancedProfiles, setEnhancedProfiles] = useState<Map<string, EnhancedProfile>>(new Map())
+  const [showEnhanced, setShowEnhanced] = useState(true)
 
   useEffect(() => {
     loadMatchedStudents();
@@ -43,7 +64,13 @@ export default function SelectStudents() {
       });
 
       if (res.data.success) {
-        setStudents(res.data.data.students || []);
+        const studentList = res.data.data.students || [];
+        setStudents(studentList);
+
+        // E-05: 加载增强档案
+        if (studentList.length > 0) {
+          loadEnhancedProfiles(studentList.map((s: Student) => s.studentId));
+        }
       } else {
         Taro.showToast({ title: res.data.message || '加载失败', icon: 'none' });
       }
@@ -54,6 +81,36 @@ export default function SelectStudents() {
       setLoading(false);
     }
   };
+
+  // E-05: 加载增强档案
+  const loadEnhancedProfiles = async (studentIds: string[]) => {
+    try {
+      const token = Taro.getStorageSync('token')
+      const res = await Taro.request({
+        url: '/api/students/batch-enhanced-profiles',
+        method: 'POST',
+        header: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          studentIds
+        }
+      })
+
+      if (res.data.success) {
+        const profiles = res.data.data.profiles || []
+        const profileMap = new Map<string, EnhancedProfile>()
+        profiles.forEach((profile: any) => {
+          profileMap.set(profile.student_id, profile)
+        })
+        setEnhancedProfiles(profileMap)
+      }
+    } catch (error) {
+      console.error('加载增强档案失败:', error)
+      // 静默失败，不影响基础功能
+    }
+  }
 
   const handleToggleSelect = (studentId: string) => {
     if (selectedIds.includes(studentId)) {
@@ -181,38 +238,123 @@ export default function SelectStudents() {
                 </View>
               </View>
 
-              {/* 统计数据 */}
-              <View className="student-stats">
-                <View className="stat-item">
-                  <Text className="stat-value">{student.completedTasks}</Text>
-                  <Text className="stat-label">完成任务</Text>
-                </View>
-                <View className="stat-item">
-                  <Text className="stat-value">{student.successRate}%</Text>
-                  <Text className="stat-label">成功率</Text>
-                </View>
-                <View className="stat-item">
-                  <Text className="stat-value">{student.averageRating.toFixed(1)}</Text>
-                  <Text className="stat-label">平均评分</Text>
-                </View>
-              </View>
+              {/* E-05: 投资简报式展示 */}
+              {showEnhanced && enhancedProfiles.has(student.studentId) && (() => {
+                const profile = enhancedProfiles.get(student.studentId)!;
+                return (
+                  <View className="investment-brief">
+                    {/* 一句话描述 */}
+                    {profile.headline && (
+                      <View className="headline">
+                        <Text className="headline-text">{profile.headline}</Text>
+                      </View>
+                    )}
 
-              {/* 技能标签 */}
-              {student.skills && student.skills.length > 0 && (
-                <View className="student-skills">
-                  {student.skills.map((skill, index) => (
-                    <View key={index} className="skill-tag">
-                      {skill}
+                    {/* 成长故事 */}
+                    {profile.growth_story && (
+                      <View className="growth-story">
+                        <Text className="story-text">{profile.growth_story}</Text>
+                      </View>
+                    )}
+
+                    {/* 关键指标 */}
+                    <View className="key-metrics">
+                      <View className="metric-item">
+                        <Text className="metric-value">{profile.metrics.tasks_completed}</Text>
+                        <Text className="metric-label">完成任务</Text>
+                      </View>
+                      <View className="metric-item">
+                        <Text className="metric-value">{(profile.metrics.success_rate * 100).toFixed(0)}%</Text>
+                        <Text className="metric-label">成功率</Text>
+                      </View>
+                      <View className="metric-item">
+                        <Text className="metric-value">{(profile.metrics.on_time_rate * 100).toFixed(0)}%</Text>
+                        <Text className="metric-label">按时交付</Text>
+                      </View>
+                      <View className="metric-item">
+                        <Text className="metric-value">{profile.metrics.avg_rating.toFixed(1)}</Text>
+                        <Text className="metric-label">平均评分</Text>
+                      </View>
                     </View>
-                  ))}
+
+                    {/* 投资亮点 */}
+                    {profile.investment_highlights && profile.investment_highlights.length > 0 && (
+                      <View className="investment-highlights">
+                        <Text className="section-title">投资亮点</Text>
+                        {profile.investment_highlights.map((highlight, idx) => (
+                          <View key={idx} className="highlight-item">
+                            <Text className="highlight-icon">💡</Text>
+                            <Text className="highlight-text">{highlight}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    )}
+
+                    {/* 核心优势 */}
+                    {profile.key_strengths && profile.key_strengths.length > 0 && (
+                      <View className="key-strengths">
+                        <Text className="section-title">核心优势</Text>
+                        <View className="strengths-list">
+                          {profile.key_strengths.map((strength, idx) => (
+                            <View key={idx} className="strength-tag">
+                              {strength}
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    )}
+
+                    {/* 技能标签 */}
+                    {profile.tags && profile.tags.length > 0 && (
+                      <View className="profile-tags">
+                        {profile.tags.map((tag, idx) => (
+                          <View key={idx} className="profile-tag">
+                            {tag}
+                          </View>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                );
+              })()}
+
+              {/* 降级显示：如果没有增强档案，显示基础信息 */}
+              {(!showEnhanced || !enhancedProfiles.has(student.studentId)) && (
+                <View className="basic-info">
+                  {/* 统计数据 */}
+                  <View className="student-stats">
+                    <View className="stat-item">
+                      <Text className="stat-value">{student.completedTasks}</Text>
+                      <Text className="stat-label">完成任务</Text>
+                    </View>
+                    <View className="stat-item">
+                      <Text className="stat-value">{student.successRate}%</Text>
+                      <Text className="stat-label">成功率</Text>
+                    </View>
+                    <View className="stat-item">
+                      <Text className="stat-value">{student.averageRating.toFixed(1)}</Text>
+                      <Text className="stat-label">平均评分</Text>
+                    </View>
+                  </View>
+
+                  {/* 技能标签 */}
+                  {student.skills && student.skills.length > 0 && (
+                    <View className="student-skills">
+                      {student.skills.map((skill, index) => (
+                        <View key={index} className="skill-tag">
+                          {skill}
+                        </View>
+                      ))}
+                    </View>
+                  )}
+
+                  {/* 匹配理由 */}
+                  <View className="match-reason">
+                    <Text className="reason-label">推荐理由：</Text>
+                    <Text className="reason-text">{student.matchReason}</Text>
+                  </View>
                 </View>
               )}
-
-              {/* 匹配理由 */}
-              <View className="match-reason">
-                <Text className="reason-label">推荐理由：</Text>
-                <Text className="reason-text">{student.matchReason}</Text>
-              </View>
 
               {/* 近期作品 */}
               {student.recentWorks && student.recentWorks.length > 0 && (

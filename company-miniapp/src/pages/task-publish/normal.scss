@@ -273,3 +273,737 @@
   color: #1E40AF;
   line-height: 1.6;
 }
+
+// ==================== E-01: AI需求拆解样式 ====================
+
+.ai-breakdown-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
+  border-radius: 16rpx;
+  border: 2rpx solid #A855F7;
+}
+
+.hint-text {
+  font-size: 26rpx;
+  color: #7C3AED;
+  font-weight: 500;
+}
+
+.ai-breakdown-btn {
+  height: 60rpx;
+  padding: 0 24rpx;
+  background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+  border-radius: 30rpx;
+  border: none;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(139, 92, 246, 0.3);
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+  }
+}
+
+.breakdown-result {
+  margin-top: 32rpx;
+  padding: 32rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  border: 3rpx solid #8B5CF6;
+  box-shadow: 0 8rpx 24rpx rgba(139, 92, 246, 0.15);
+}
+
+.breakdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #E5E7EB;
+}
+
+.breakdown-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #8B5CF6;
+}
+
+.apply-btn {
+  height: 56rpx;
+  padding: 0 24rpx;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border-radius: 28rpx;
+  border: none;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+
+  &::after {
+    border: none;
+  }
+}
+
+.breakdown-summary {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 32rpx;
+}
+
+.summary-item {
+  flex: 1;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.summary-label {
+  display: block;
+  font-size: 24rpx;
+  color: #6B7280;
+  margin-bottom: 8rpx;
+}
+
+.summary-value {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 4rpx;
+
+  &.primary {
+    color: #8B5CF6;
+  }
+}
+
+.summary-recommend {
+  display: block;
+  font-size: 22rpx;
+  color: #10B981;
+  font-weight: 500;
+}
+
+.breakdown-section {
+  margin-bottom: 24rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.section-label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 16rpx;
+
+  &.warning {
+    color: #F59E0B;
+  }
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.skill-tag {
+  padding: 12rpx 20rpx;
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border: 2rpx solid #3B82F6;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #1E40AF;
+  font-weight: 500;
+}
+
+.subtask-card {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  background: #F9FAFB;
+  border-radius: 16rpx;
+  border: 2rpx solid #E5E7EB;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.subtask-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.subtask-number {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+  border-radius: 50%;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.subtask-title {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.priority-badge {
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+
+  &.priority-high {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  &.priority-medium {
+    background: #FEF3C7;
+    color: #D97706;
+  }
+
+  &.priority-low {
+    background: #E5E7EB;
+    color: #6B7280;
+  }
+}
+
+.subtask-description {
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+}
+
+.subtask-meta {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.meta-label {
+  font-size: 22rpx;
+  color: #9CA3AF;
+}
+
+.meta-value {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.subtask-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.skill-badge {
+  padding: 8rpx 16rpx;
+  background: #DBEAFE;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  color: #1E40AF;
+}
+
+.warning-item {
+  padding: 20rpx;
+  background: #FEF3C7;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #F59E0B;
+  margin-bottom: 12rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.warning-text {
+  font-size: 26rpx;
+  color: #92400E;
+  line-height: 1.5;
+}
+
+.recommendation-item {
+  padding: 20rpx;
+  background: #D1FAE5;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #10B981;
+  margin-bottom: 12rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.recommendation-text {
+  font-size: 26rpx;
+  color: #065F46;
+  line-height: 1.5;
+}
+
+// ==================== E-02: 交付标准模板样式 ====================
+
+.template-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border-radius: 16rpx;
+  border: 2rpx solid #3B82F6;
+}
+
+.template-btn {
+  height: 60rpx;
+  padding: 0 24rpx;
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  border-radius: 30rpx;
+  border: none;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(59, 130, 246, 0.3);
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+  }
+}
+
+.selected-template {
+  margin-top: 16rpx;
+}
+
+.template-tag {
+  display: inline-block;
+  padding: 12rpx 20rpx;
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  border: 2rpx solid #10B981;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #065F46;
+  font-weight: 500;
+}
+
+.template-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+}
+
+.template-modal {
+  width: 100%;
+  max-height: 80vh;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx;
+  border-bottom: 2rpx solid #E5E7EB;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.close-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F3F4F6;
+  border-radius: 50%;
+  font-size: 36rpx;
+  color: #6B7280;
+
+  &:active {
+    background: #E5E7EB;
+  }
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24rpx 32rpx;
+}
+
+.empty-state {
+  padding: 80rpx 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #9CA3AF;
+}
+
+.template-item {
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background: #F9FAFB;
+  border-radius: 16rpx;
+  border: 2rpx solid #E5E7EB;
+  transition: all 0.2s;
+
+  &:active {
+    background: #F3F4F6;
+    border-color: #3B82F6;
+    transform: scale(0.98);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.template-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.template-name {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.official-badge {
+  padding: 6rpx 16rpx;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border: 2rpx solid #F59E0B;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+  color: #92400E;
+}
+
+.template-description {
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.5;
+  margin-bottom: 12rpx;
+}
+
+.template-meta {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.meta-text {
+  font-size: 22rpx;
+  color: #9CA3AF;
+}
+
+.template-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.preview-label {
+  font-size: 24rpx;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+.preview-item {
+  padding: 8rpx 16rpx;
+  background: #DBEAFE;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  color: #1E40AF;
+}
+
+// ==================== E-04: AI智能定价样式 ====================
+
+.ai-pricing-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-radius: 16rpx;
+  border: 2rpx solid #F59E0B;
+}
+
+.trigger-text {
+  font-size: 26rpx;
+  color: #92400E;
+  font-weight: 500;
+}
+
+.pricing-btn {
+  height: 60rpx;
+  padding: 0 24rpx;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  border-radius: 30rpx;
+  border: none;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(245, 158, 11, 0.3);
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+  }
+}
+
+.ai-pricing-result {
+  margin-bottom: 32rpx;
+  padding: 32rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  border: 3rpx solid #F59E0B;
+  box-shadow: 0 8rpx 24rpx rgba(245, 158, 11, 0.15);
+}
+
+.pricing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #E5E7EB;
+}
+
+.pricing-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #F59E0B;
+}
+
+.confidence-badge {
+  padding: 8rpx 16rpx;
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  border: 2rpx solid #10B981;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  color: #065F46;
+  font-weight: 600;
+}
+
+.pricing-summary {
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.price-main {
+  margin-bottom: 12rpx;
+}
+
+.price-label {
+  display: block;
+  font-size: 24rpx;
+  color: #92400E;
+  margin-bottom: 8rpx;
+}
+
+.price-value {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #D97706;
+}
+
+.price-range-info {
+  margin-top: 8rpx;
+}
+
+.range-text {
+  font-size: 24rpx;
+  color: #92400E;
+}
+
+.pricing-breakdown {
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background: #F9FAFB;
+  border-radius: 16rpx;
+}
+
+.breakdown-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 16rpx;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.item-label {
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.item-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+
+  &.positive {
+    color: #10B981;
+  }
+
+  &.negative {
+    color: #EF4444;
+  }
+}
+
+.market-comparison {
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background: #F9FAFB;
+  border-radius: 16rpx;
+}
+
+.comparison-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 16rpx;
+}
+
+.comparison-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.comparison-label {
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.comparison-value {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.pricing-reasoning {
+  margin-bottom: 24rpx;
+  padding: 20rpx;
+  background: #DBEAFE;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #3B82F6;
+}
+
+.reasoning-text {
+  font-size: 26rpx;
+  color: #1E40AF;
+  line-height: 1.5;
+}
+
+.pricing-recommendations {
+  padding: 20rpx;
+  background: #D1FAE5;
+  border-radius: 12rpx;
+}
+
+.rec-item {
+  margin-bottom: 8rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.rec-text {
+  font-size: 26rpx;
+  color: #065F46;
+  line-height: 1.5;
+}
+
+
+

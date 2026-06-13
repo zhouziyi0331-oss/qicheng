@@ -1,9 +1,21 @@
+/**
+ * 启程老师翻译服务
+ * 将企业任务翻译为学生易懂的语言
+ * 拆解功能模块，评估难度，提取技能要求
+ */
+interface Task {
+    id: string;
+    title: string;
+    description: string;
+    required_skills?: any;
+    budget?: number;
+    duration?: number;
+}
 interface FunctionalModule {
     module: string;
     description: string;
     skills: string[];
     difficulty: number;
-    estimatedHours: number;
 }
 interface SkillRequirement {
     skill: string;
@@ -19,35 +31,33 @@ interface DifficultyAssessment {
     overall: number;
 }
 interface TaskTranslation {
-    taskId: string;
-    functionalModules: FunctionalModule[];
-    studentFriendlyTitle: string;
-    studentFriendlyDescription: string;
-    whatYouWillDo: string;
-    whatYouWillLearn: string;
-    estimatedHours: number;
-    requiredSkills: SkillRequirement[];
+    task_id: string;
+    functional_modules: FunctionalModule[];
+    student_friendly_title: string;
+    student_friendly_description: string;
+    what_you_will_do: string;
+    what_you_will_learn: string;
+    estimated_hours: number;
+    required_skills: SkillRequirement[];
     difficulty: DifficultyAssessment;
-    learningValue: number;
-    careerImpact: number;
+    learning_value: number;
+    career_impact: number;
 }
-/**
- * 启程老师翻译服务
- * AI理解企业任务，翻译成学生能懂的语言
- */
 declare class QichengTeacherService {
+    private anthropic;
+    constructor();
     /**
-     * 需求翻译：理解企业的真实需求
-     *
-     * 企业说"我们要一个酷炫的H5"
-     * 真实需求："我们下周要见投资人，需要一个能在手机上展示、
-     *           让人眼前一亮的东西，证明我们团队有技术实力"
+     * 分析任务并生成完整翻译
      */
-    translateRequirement(taskId: string): Promise<string>;
+    analyzeAndTranslateTask(task: Task): Promise<TaskTranslation>;
     /**
-     * 分析并翻译任务（完整版）
+     * 计算综合难度
      */
-    analyzeAndTranslateTask(taskId: string): Promise<TaskTranslation>;
+    private calculateOverallDifficulty;
+    /**
+     * 创建降级翻译（当AI失败时）
+     */
+    private createFallbackTranslation;
     /**
      * 拆解功能模块
      */
@@ -55,38 +65,27 @@ declare class QichengTeacherService {
     /**
      * 生成学生友好描述
      */
-    generateStudentFriendlyDescription(taskTitle: string, taskDescription: string): Promise<string>;
+    generateStudentFriendlyDescription(task: Task): Promise<string>;
     /**
      * 评估任务难度
      */
-    assessTaskDifficulty(task: {
-        title: string;
-        description: string;
-        required_skills: string[];
-        level_required: string;
-    }): Promise<DifficultyAssessment>;
+    assessTaskDifficulty(task: Task): Promise<DifficultyAssessment>;
     /**
      * 提取技能要求
      */
-    extractSkillRequirements(task: {
-        title: string;
-        description: string;
-        required_skills: string[];
-    }): Promise<SkillRequirement[]>;
+    extractSkillRequirements(task: Task): Promise<SkillRequirement[]>;
     /**
-     * 保存翻译结果到数据库
+     * 保存翻译到数据库
      */
-    private saveTranslation;
+    saveTranslation(translation: TaskTranslation): Promise<void>;
     /**
      * 获取任务翻译
      */
-    getTaskTranslation(taskId: string): Promise<TaskTranslation | null>;
+    getTranslation(taskId: string): Promise<TaskTranslation | null>;
     /**
-     * 生成项目需求摘要（与学生画像摘要结构对应）
-     *
-     * 核心原则：这段摘要将被转成1024维向量，必须和学生画像摘要在同一个语义层次上对话
+     * 为任务创建并保存翻译
      */
-    generateProjectRequirementSummary(taskId: string): Promise<string>;
+    translateTask(taskId: string): Promise<TaskTranslation>;
 }
 declare const _default: QichengTeacherService;
 export default _default;

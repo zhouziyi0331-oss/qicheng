@@ -145,6 +145,142 @@
           padding: 6rpx 16rpx;
         }
       }
+
+      // E-05: 投资简报式样式
+      .investment-brief {
+        margin-top: $spacing-md;
+
+        .headline {
+          padding: $spacing-md;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+          border-radius: $radius-md;
+          border-left: 4px solid #8B5CF6;
+          margin-bottom: $spacing-md;
+
+          .headline-text {
+            font-size: $font-md;
+            color: $text-primary;
+            font-weight: 600;
+            line-height: 1.5;
+          }
+        }
+
+        .growth-story {
+          padding: $spacing-md;
+          background: $bg-section;
+          border-radius: $radius-md;
+          margin-bottom: $spacing-md;
+
+          .story-text {
+            font-size: $font-sm;
+            color: $text-secondary;
+            line-height: 1.6;
+          }
+        }
+
+        .key-metrics {
+          display: flex;
+          gap: $spacing-md;
+          margin-bottom: $spacing-md;
+
+          .metric-item {
+            flex: 1;
+            text-align: center;
+            padding: $spacing-sm;
+            background: $bg-section;
+            border-radius: $radius-md;
+
+            .metric-value {
+              display: block;
+              font-size: $font-lg;
+              color: #8B5CF6;
+              font-weight: 600;
+              margin-bottom: 4rpx;
+            }
+
+            .metric-label {
+              font-size: $font-xs;
+              color: $text-tertiary;
+            }
+          }
+        }
+
+        .investment-highlights {
+          margin-bottom: $spacing-md;
+
+          .section-title {
+            font-size: $font-sm;
+            color: $text-primary;
+            font-weight: 600;
+            margin-bottom: $spacing-sm;
+          }
+
+          .highlight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: $spacing-sm;
+            padding: $spacing-sm 0;
+
+            .highlight-icon {
+              font-size: $font-md;
+              line-height: 1.5;
+            }
+
+            .highlight-text {
+              flex: 1;
+              font-size: $font-sm;
+              color: $text-secondary;
+              line-height: 1.5;
+            }
+          }
+        }
+
+        .key-strengths {
+          margin-bottom: $spacing-md;
+
+          .section-title {
+            font-size: $font-sm;
+            color: $text-primary;
+            font-weight: 600;
+            margin-bottom: $spacing-sm;
+          }
+
+          .strengths-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $spacing-sm;
+
+            .strength-tag {
+              padding: 8rpx 16rpx;
+              background: rgba(59, 130, 246, 0.08);
+              color: #3B82F6;
+              font-size: $font-xs;
+              border-radius: $radius-sm;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .profile-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: $spacing-xs;
+
+          .profile-tag {
+            padding: 6rpx 12rpx;
+            background: rgba(139, 92, 246, 0.06);
+            color: #8B5CF6;
+            font-size: $font-xs;
+            border-radius: $radius-sm;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+          }
+        }
+      }
+
+      // 降级显示的基础信息
+      .basic-info {
+        margin-top: $spacing-md;
+      }
     }
 
     .empty-state {

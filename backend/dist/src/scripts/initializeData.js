@@ -9,11 +9,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeStudentCapabilities = initializeStudentCapabilities;
 exports.initializeTaskVectors = initializeTaskVectors;
-const db_1 = require("./utils/db");
-const logger_1 = __importDefault(require("./utils/logger"));
-const vectorEmbeddingService_1 = __importDefault(require("./services/vectorEmbeddingService"));
-const qichengTeacherService_1 = __importDefault(require("./services/qichengTeacherService"));
-const studentCapabilityService_1 = __importDefault(require("./services/studentCapabilityService"));
+const db_1 = require("../utils/db");
+const logger_1 = __importDefault(require("../utils/logger"));
+const vectorEmbeddingService_1 = __importDefault(require("../services/vectorEmbeddingService"));
+const qichengTeacherService_1 = __importDefault(require("../services/qichengTeacherService"));
+const studentCapabilityService_1 = __importDefault(require("../services/studentCapabilityService"));
 /**
  * 初始化所有学生的能力画像
  */

@@ -1,120 +1,70 @@
-import { View, Text } from '@tarojs/components'
-import { useEffect, useState } from 'react'
-import Taro, { useRouter } from '@tarojs/taro'
+import { View, Text, ScrollView, Button } from '@tarojs/components'
+import { useState, useEffect } from 'react'
+import Taro from '@tarojs/taro'
 import './index.scss'
 
-interface ProgressStep {
-  id: string
-  title: string
-  description: string
-  status: 'completed' | 'current' | 'pending'
-  timestamp?: string
-  operator?: string
-}
-
-interface TaskProgress {
-  taskId: string
-  taskTitle: string
-  currentStatus: string
-  steps: ProgressStep[]
-}
-
 export default function TaskProgress() {
-  const router = useRouter()
-  const { taskId } = router.params
-  const [progress, setProgress] = useState<TaskProgress | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [taskId, setTaskId] = useState('')
+  const [dashboard, setDashboard] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    loadProgress()
+    const params = Taro.getCurrentInstance().router?.params
+    if (params?.taskId) {
+      setTaskId(params.taskId)
+      loadDashboard(params.taskId)
+    }
   }, [])
 
-  const loadProgress = async () => {
+  const loadDashboard = async (id: string) => {
+    setLoading(true)
     try {
       const token = Taro.getStorageSync('token')
       const res = await Taro.request({
-        url: `http://localhost:3000/api/v1/company/tasks/${taskId}/progress`,
+        url: `/api/v1/task-tracking/tasks/${id}/progress-dashboard`,
         method: 'GET',
-        header: {
-          'Authorization': `Bearer ${token}`
-        }
+        header: { Authorization: `Bearer ${token}` }
       })
-
-      if (res.statusCode === 200 && res.data.success) {
-        setProgress(res.data.data)
-      } else {
-        throw new Error(res.data.message || '加载失败')
+      if (res.data.success) {
+        setDashboard(res.data.data)
       }
     } catch (error) {
-      console.error('加载任务进度失败:', error)
       Taro.showToast({ title: '加载失败', icon: 'none' })
     } finally {
       setLoading(false)
     }
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return '✓'
-      case 'current':
-        return '●'
-      case 'pending':
-        return '○'
-      default:
-        return '○'
-    }
-  }
+  if (loading) return <View className='task-progress'><View className='loading'>加载中...</View></View>
+  if (!dashboard) return <View className='task-progress'><View className='empty'>暂无数据</View></View>
 
-  if (loading) {
-    return <View className="task-progress loading">加载中...</View>
-  }
-
-  if (!progress) {
-    return <View className="task-progress empty">任务不存在</View>
-  }
+  const { task, snapshot, milestones, warnings } = dashboard
 
   return (
-    <View className="task-progress">
-      {/* 任务信息 */}
-      <View className="task-header">
-        <Text className="task-title">{progress.taskTitle}</Text>
-        <View className="current-status">
-          <Text className="status-label">当前状态</Text>
-          <Text className="status-value">{progress.currentStatus}</Text>
+    <View className='task-progress'>
+      <ScrollView className='dashboard-content' scrollY>
+        <View className='task-overview'>
+          <Text className='task-title'>{task.title}</Text>
         </View>
-      </View>
-
-      {/* 进度时间轴 */}
-      <View className="timeline">
-        {progress.steps.map((step, index) => (
-          <View key={step.id} className={`timeline-item ${step.status}`}>
-            <View className="timeline-dot">
-              <Text className="dot-icon">{getStatusIcon(step.status)}</Text>
-            </View>
-
-            {index < progress.steps.length - 1 && (
-              <View className={`timeline-line ${step.status === 'completed' ? 'completed' : ''}`} />
-            )}
-
-            <View className="timeline-content">
-              <Text className="step-title">{step.title}</Text>
-              <Text className="step-description">{step.description}</Text>
-              {step.timestamp && (
-                <View className="step-meta">
-                  <Text className="meta-time">{step.timestamp}</Text>
-                  {step.operator && (
-                    <>
-                      <Text className="meta-divider">·</Text>
-                      <Text className="meta-operator">{step.operator}</Text>
-                    </>
-                  )}
-                </View>
-              )}
+        {snapshot && (
+          <View className='progress-card'>
+            <Text className='card-title'>进度：{snapshot.completion_percentage}%</Text>
+            <View className='progress-bar'>
+              <View className='progress-fill' style={{ width: `${snapshot.completion_percentage}%` }} />
             </View>
           </View>
-        ))}
-      </View>
+        )}
+        {milestones && milestones.length > 0 && (
+          <View className='milestones-card'>
+            {milestones.map((m: any) => (
+              <View key={m.id} className='milestone-item'>
+                <Text>{m.milestone_name}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+        <Button className='btn' onClick={() => loadDashboard(taskId)}>刷新</Button>
+      </ScrollView>
     </View>
   )
 }

@@ -1,0 +1,224 @@
+.dimensional-score {
+  min-height: 100vh;
+  background: #f5f5f5;
+
+  .score-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .title {
+      font-size: 36px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .existing-badge {
+      padding: 6px 16px;
+      background: #e8f4ff;
+      color: #1890ff;
+      border-radius: 8px;
+      font-size: 22px;
+    }
+  }
+
+  .score-content {
+    height: calc(100vh - 96px);
+    padding: 20px;
+
+    .overall-preview {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 20px;
+
+      .overall-circle {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        .overall-value {
+          font-size: 56px;
+          font-weight: 600;
+          color: #fff;
+          line-height: 1;
+        }
+
+        .overall-max {
+          font-size: 24px;
+          color: rgba(255, 255, 255, 0.8);
+          margin-top: 4px;
+        }
+      }
+
+      .overall-info {
+        flex: 1;
+
+        .overall-level {
+          display: block;
+          font-size: 36px;
+          font-weight: 600;
+          color: #fff;
+          margin-bottom: 8px;
+        }
+
+        .overall-hint {
+          display: block;
+          font-size: 24px;
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+
+    .dimension-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 20px;
+
+      .dimension-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .dimension-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .dimension-icon {
+            font-size: 32px;
+          }
+
+          .dimension-label {
+            font-size: 30px;
+            font-weight: 600;
+            color: #333;
+          }
+
+          .dimension-weight {
+            padding: 4px 12px;
+            background: #f5f5f5;
+            color: #999;
+            border-radius: 8px;
+            font-size: 20px;
+          }
+        }
+
+        .dimension-score {
+          font-size: 40px;
+          font-weight: 600;
+          color: #1890ff;
+        }
+      }
+
+      .dimension-desc {
+        font-size: 24px;
+        color: #999;
+        margin-bottom: 24px;
+      }
+
+      .score-slider {
+        margin-bottom: 20px;
+
+        .score-labels {
+          display: flex;
+          justify-content: space-between;
+          padding: 0 10px;
+          margin-bottom: 8px;
+
+          .score-label {
+            font-size: 24px;
+            color: #999;
+          }
+        }
+      }
+
+      .dimension-comment {
+        width: 100%;
+        min-height: 120px;
+        padding: 16px;
+        background: #f9f9f9;
+        border-radius: 12px;
+        font-size: 26px;
+        line-height: 1.6;
+        color: #333;
+      }
+    }
+
+    .overall-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 20px;
+
+      .section-title {
+        display: block;
+        font-size: 30px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .overall-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 12px;
+        font-size: 26px;
+        line-height: 1.8;
+        color: #333;
+        margin-bottom: 12px;
+      }
+
+      .char-count {
+        display: block;
+        text-align: right;
+        font-size: 22px;
+        color: #999;
+      }
+    }
+
+    .submit-section {
+      padding: 20px 0 40px;
+
+      .submit-btn {
+        width: 100%;
+        height: 88px;
+        line-height: 88px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 12px;
+        font-size: 30px;
+        font-weight: 600;
+        border: none;
+        margin-bottom: 16px;
+
+        &::after { border: none; }
+
+        &:active { opacity: 0.9; }
+      }
+
+      .submit-hint {
+        display: block;
+        text-align: center;
+        font-size: 24px;
+        color: #999;
+      }
+    }
+  }
+}

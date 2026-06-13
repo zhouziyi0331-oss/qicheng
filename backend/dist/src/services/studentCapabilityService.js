@@ -1,4 +1,9 @@
 "use strict";
+/**
+ * 学生能力更新服务
+ * 动态更新学生能力画 像
+ * 基于任务完成情况更新技能、质量、成长趋势
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,92 +11,102 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
 const vectorGenerationService_1 = __importDefault(require("./vectorGenerationService"));
-/**
- * 学生能力更新服务
- * 基于任务完成情况动态更新学生能力画像
- */
 class StudentCapabilityService {
     /**
      * 初始化学生能力画像
      */
     async initializeCapability(studentId, opcResults) {
+        const client = await db_1.pool.connect();
         try {
+            logger_1.default.info(`Initializing capability for student: ${studentId}`);
             // 检查是否已存在
-            const existing = await (0, db_1.queryOne)(`SELECT id FROM student_capabilities WHERE student_id = $1`, [studentId]);
-            if (existing) {
-                logger_1.default.info(`Student capability already exists for ${studentId}`);
+            const existingResult = await client.query('SELECT id FROM student_capabilities WHERE student_id = $1', [studentId]);
+            if (existingResult.rows.length > 0) {
+                logger_1.default.info(`Capability already exists for student: ${studentId}`);
                 return;
             }
-            // 获取学生基本信息
-            const student = await (0, db_1.queryOne)(`SELECT username, bio FROM users WHERE id = $1`, [studentId]);
-            if (!student) {
-                throw new Error(`Student ${studentId} not found`);
-            }
-            // 创建初始能力记录
-            await (0, db_1.query)(`INSERT INTO student_capabilities (
+            // 创建初始能力画像
+            await client.query(`INSERT INTO student_capabilities (
           student_id, skills, tasks_completed, avg_task_quality,
           avg_client_satisfaction, on_time_delivery_rate,
-          avg_response_time_hours, quality_trend, growth_rate,
-          skill_acquisition_rate, opc_openness, opc_persistence,
-          opc_creativity, personality_style
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-        ON CONFLICT (student_id) DO NOTHING`, [
+          opc_openness, opc_persistence, opc_creativity, personality_style,
+          quality_trend, growth_rate, skill_acquisition_rate
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`, [
                 studentId,
                 JSON.stringify({}),
                 0,
-                0,
-                0,
-                0,
-                24,
-                'stable',
-                0,
-                0,
-                opcResults?.openness || null,
-                opcResults?.persistence || null,
-                opcResults?.creativity || null,
-                opcResults?.personalityStyle || null
+                0.5,
+                0.5,
+                1.0,
+                opcResults.openness,
+                opcResults.persistence,
+                opcResults.creativity,
+                opcResults.personality_style,
+                'unknown',
+                0.5,
+                0.5,
             ]);
             // 生成初始向量
             await vectorGenerationService_1.default.updateStudentEmbedding(studentId);
-            logger_1.default.info(`Initialized capability for student ${studentId}`);
+            logger_1.default.info(`Initialized capability for student: ${studentId}`);
         }
         catch (error) {
-            logger_1.default.error(`Failed to initialize capability for student ${studentId}:`, error);
+            logger_1.default.error('Error initializing capability:', error);
             throw error;
+        }
+        finally {
+            client.release();
         }
     }
     /**
-     * 任务完成后更新学生能力
+     * 任务完成后更新能力
      */
     async updateAfterTaskCompletion(studentId, taskId, performance) {
+        const client = await db_1.pool.connect();
         try {
-            // 获取当前能力数据
-            const capability = await (0, db_1.queryOne)(`SELECT skills, tasks_completed, avg_task_quality, avg_client_satisfaction,
-                on_time_delivery_rate, avg_response_time_hours
-         FROM student_capabilities WHERE student_id = $1`, [studentId]);
-            if (!capability) {
-                // 如果不存在，先初始化
-                await this.initializeCapability(studentId);
-                return this.updateAfterTaskCompletion(studentId, taskId, performance);
+            await client.query('BEGIN');
+            logger_1.default.info(`Updating capability for student ${studentId} after task ${taskId}`);
+            // 获取当前能力画像
+            const capabilityResult = await client.query('SELECT * FROM student_capabilities WHERE student_id = $1', [studentId]);
+            if (capabilityResult.rows.length === 0) {
+                logger_1.default.warn(`No capability found for student ${studentId}, initializing...`);
+                await this.initializeCapability(studentId, {
+                    openness: 50,
+                    persistence: 50,
+                    creativity: 50,
+                    personality_style: 'unknown',
+                });
+                // 重新获取
+                const newResult = await client.query('SELECT * FROM student_capabilities WHERE student_id = $1', [studentId]);
+                if (newResult.rows.length === 0) {
+                    throw new Error('Failed to initialize capability');
+                }
             }
-            const tasksCompleted = capability.tasks_completed || 0;
-            const newTasksCompleted = tasksCompleted + 1;
-            // 更新技能熟练度
-            const updatedSkills = this.updateSkillProficiency(capability.skills || {}, performance.skillsUsed, performance.quality);
-            // 计算新的平均值（加权平均）
-            const weight = Math.min(tasksCompleted / (tasksCompleted + 1), 0.9);
-            const newAvgQuality = capability.avg_task_quality * weight + performance.quality * (1 - weight);
-            const newAvgSatisfaction = capability.avg_client_satisfaction * weight + performance.clientSatisfaction * (1 - weight);
-            // 更新准时交付率
-            const onTimeCount = Math.round(capability.on_time_delivery_rate * tasksCompleted);
-            const newOnTimeCount = onTimeCount + (performance.onTime ? 1 : 0);
+            const capability = capabilityResult.rows[0] || (await client.query('SELECT * FROM student_capabilities WHERE student_id = $1', [studentId])).rows[0];
+            // 更新技能
+            const updatedSkills = this.updateSkills(capability.skills || {}, performance.skills_used);
+            // 更新任务数
+            const newTasksCompleted = (capability.tasks_completed || 0) + 1;
+            // 更新平均质量（移动平均）
+            const oldAvgQuality = capability.avg_task_quality || 0.5;
+            const newAvgQuality = (oldAvgQuality * capability.tasks_completed + performance.quality_score) /
+                newTasksCompleted;
+            // 更新平均满意度
+            const oldAvgSatisfaction = capability.avg_client_satisfaction || 0.5;
+            const newAvgSatisfaction = (oldAvgSatisfaction * capability.tasks_completed + performance.client_satisfaction) /
+                newTasksCompleted;
+            // 更新按时交付率
+            const oldOnTimeCount = Math.round((capability.on_time_delivery_rate || 1.0) * capability.tasks_completed);
+            const newOnTimeCount = oldOnTimeCount + (performance.delivered_on_time ? 1 : 0);
             const newOnTimeRate = newOnTimeCount / newTasksCompleted;
             // 更新平均响应时间
-            const newAvgResponseTime = capability.avg_response_time_hours * weight + performance.responseTimeHours * (1 - weight);
+            const oldAvgResponseTime = capability.avg_response_time_hours || 24;
+            const newAvgResponseTime = (oldAvgResponseTime * capability.tasks_completed + performance.response_time_hours) /
+                newTasksCompleted;
             // 计算成长趋势
             const growthTrend = await this.calculateGrowthTrend(studentId);
             // 更新数据库
-            await (0, db_1.query)(`UPDATE student_capabilities SET
+            await client.query(`UPDATE student_capabilities SET
           skills = $1,
           tasks_completed = $2,
           avg_task_quality = $3,
@@ -102,137 +117,130 @@ class StudentCapabilityService {
           growth_rate = $8,
           skill_acquisition_rate = $9,
           updated_at = NOW()
-         WHERE student_id = $10`, [
+        WHERE student_id = $10`, [
                 JSON.stringify(updatedSkills),
                 newTasksCompleted,
                 newAvgQuality,
                 newAvgSatisfaction,
                 newOnTimeRate,
                 newAvgResponseTime,
-                growthTrend.qualityTrend,
-                growthTrend.growthRate,
-                growthTrend.skillAcquisitionRate,
-                studentId
+                growthTrend.trend,
+                growthTrend.growth_rate,
+                growthTrend.skill_acquisition_rate,
+                studentId,
             ]);
             // 更新向量
             await vectorGenerationService_1.default.updateStudentEmbedding(studentId);
-            logger_1.default.info(`Updated capability for student ${studentId} after task ${taskId}`);
+            await client.query('COMMIT');
+            logger_1.default.info(`Updated capability for student: ${studentId}`);
         }
         catch (error) {
-            logger_1.default.error(`Failed to update capability for student ${studentId}:`, error);
+            await client.query('ROLLBACK');
+            logger_1.default.error('Error updating capability:', error);
             throw error;
+        }
+        finally {
+            client.release();
         }
     }
     /**
      * 更新技能熟练度
      */
-    updateSkillProficiency(currentSkills, skillsUsed, taskQuality) {
-        const updatedSkills = { ...currentSkills };
-        for (const skill of skillsUsed) {
-            if (!updatedSkills[skill]) {
-                // 新技能
-                updatedSkills[skill] = {
-                    proficiency: taskQuality * 0.5, // 初始熟练度基于任务质量
-                    confidence: 0.3, // 初始信心较低
+    updateSkills(currentSkills, usedSkills) {
+        const skills = { ...currentSkills };
+        for (const skill of usedSkills) {
+            if (!skills[skill]) {
+                skills[skill] = {
+                    proficiency: 0.5,
+                    confidence: 0.5,
                     lastPracticed: new Date().toISOString(),
-                    practiceCount: 1
+                    practiceCount: 1,
                 };
             }
             else {
-                // 已有技能，提升熟练度
-                const current = updatedSkills[skill];
-                const practiceCount = (current.practiceCount || 0) + 1;
-                // 熟练度增长：基于当前水平和任务质量
-                const growthFactor = (1 - current.proficiency) * 0.1 * taskQuality;
-                const newProficiency = Math.min(current.proficiency + growthFactor, 1);
-                // 信心度增长：随着练习次数增加
-                const newConfidence = Math.min(0.3 + practiceCount * 0.05, 1);
-                updatedSkills[skill] = {
-                    proficiency: newProficiency,
-                    confidence: newConfidence,
-                    lastPracticed: new Date().toISOString(),
-                    practiceCount
-                };
+                // 增加熟练度（每次练习+0.05，最大1.0）
+                skills[skill].proficiency = Math.min(skills[skill].proficiency + 0.05, 1.0);
+                skills[skill].confidence = Math.min(skills[skill].confidence + 0.03, 1.0);
+                skills[skill].lastPracticed = new Date().toISOString();
+                skills[skill].practiceCount = (skills[skill].practiceCount || 0) + 1;
             }
         }
-        return updatedSkills;
+        return skills;
     }
     /**
      * 计算学生成长趋势
      */
     async calculateGrowthTrend(studentId) {
+        const client = await db_1.pool.connect();
         try {
-            // 获取最近10个任务的表现
-            const recentTasks = await (0, db_1.query)(`SELECT
-           COALESCE(tr.quality_score, 0.7) as quality,
-           t.created_at
-         FROM task_applications ta
-         JOIN tasks t ON ta.task_id = t.id
-         LEFT JOIN task_reviews tr ON tr.task_id = t.id AND tr.reviewer_id = t.company_id
-         WHERE ta.student_id = $1 AND ta.status = 'completed'
-         ORDER BY t.created_at DESC
+            // 获取最近10个任务的质量评分
+            const recentTasksResult = await client.query(`SELECT quality_score, created_at
+         FROM task_submissions
+         WHERE student_id = $1 AND quality_score IS NOT NULL
+         ORDER BY created_at DESC
          LIMIT 10`, [studentId]);
-            if (recentTasks.length < 2) {
+            const recentTasks = recentTasksResult.rows;
+            if (recentTasks.length < 3) {
                 return {
-                    qualityTrend: 'stable',
-                    growthRate: 0,
-                    skillAcquisitionRate: 0,
-                    recentPerformance: []
+                    trend: 'unknown',
+                    growth_rate: 0.5,
+                    skill_acquisition_rate: 0.5,
+                    recent_quality_avg: 0.5,
+                    quality_change: 0,
                 };
             }
-            const recentPerformance = recentTasks.map(t => t.quality);
-            // 计算质量趋势（线性回归）
-            const n = recentPerformance.length;
-            const xMean = (n - 1) / 2;
-            const yMean = recentPerformance.reduce((sum, val) => sum + val, 0) / n;
-            let numerator = 0;
-            let denominator = 0;
-            for (let i = 0; i < n; i++) {
-                numerator += (i - xMean) * (recentPerformance[i] - yMean);
-                denominator += (i - xMean) * (i - xMean);
+            // 计算最近5个任务的平均质量
+            const recent5 = recentTasks.slice(0, 5);
+            const recent5Avg = recent5.reduce((sum, t) => sum + t.quality_score, 0) / recent5.length;
+            // 计算之前5个任务的平均质量
+            const previous5 = recentTasks.slice(5, 10);
+            const previous5Avg = previous5.length > 0
+                ? previous5.reduce((sum, t) => sum + t.quality_score, 0) / previous5.length
+                : recent5Avg;
+            // 计算质量变化
+            const qualityChange = recent5Avg - previous5Avg;
+            // 确定趋势
+            let trend = 'stable';
+            if (qualityChange > 0.1) {
+                trend = 'improving';
             }
-            const slope = denominator !== 0 ? numerator / denominator : 0;
-            // 判断趋势
-            let qualityTrend;
-            if (slope > 0.02) {
-                qualityTrend = 'improving';
+            else if (qualityChange < -0.1) {
+                trend = 'declining';
             }
-            else if (slope < -0.02) {
-                qualityTrend = 'declining';
+            // 计算成长率（基于质量变化和任务完成速度）
+            const growthRate = Math.min(Math.max(0.5 + qualityChange, 0), 1);
+            // 计算技能获取速度（基于最近获得的新技能数量）
+            const capabilityResult = await client.query('SELECT skills FROM student_capabilities WHERE student_id = $1', [studentId]);
+            let skillAcquisitionRate = 0.5;
+            if (capabilityResult.rows.length > 0) {
+                const skills = capabilityResult.rows[0].skills || {};
+                const recentSkills = Object.values(skills).filter((skill) => {
+                    const lastPracticed = new Date(skill.lastPracticed);
+                    const daysSince = (Date.now() - lastPracticed.getTime()) / (1000 * 60 * 60 * 24);
+                    return daysSince < 30;
+                });
+                skillAcquisitionRate = Math.min(recentSkills.length / 10, 1);
             }
-            else {
-                qualityTrend = 'stable';
-            }
-            // 计算成长率（最近5个任务 vs 之前5个任务）
-            let growthRate = 0;
-            if (recentPerformance.length >= 6) {
-                const recent5 = recentPerformance.slice(0, 5);
-                const previous5 = recentPerformance.slice(5, 10);
-                const recentAvg = recent5.reduce((sum, val) => sum + val, 0) / recent5.length;
-                const previousAvg = previous5.reduce((sum, val) => sum + val, 0) / previous5.length;
-                growthRate = previousAvg > 0 ? (recentAvg - previousAvg) / previousAvg : 0;
-            }
-            // 计算技能获取率
-            const capability = await (0, db_1.queryOne)(`SELECT skills FROM student_capabilities WHERE student_id = $1`, [studentId]);
-            const skills = capability?.skills || {};
-            const totalSkills = Object.keys(skills).length;
-            const tasksCompleted = recentTasks.length;
-            const skillAcquisitionRate = tasksCompleted > 0 ? totalSkills / tasksCompleted : 0;
             return {
-                qualityTrend,
-                growthRate: Math.max(-1, Math.min(1, growthRate)),
-                skillAcquisitionRate: Math.min(1, skillAcquisitionRate),
-                recentPerformance
+                trend,
+                growth_rate: growthRate,
+                skill_acquisition_rate: skillAcquisitionRate,
+                recent_quality_avg: recent5Avg,
+                quality_change: qualityChange,
             };
         }
         catch (error) {
-            logger_1.default.error(`Failed to calculate growth trend for student ${studentId}:`, error);
+            logger_1.default.error('Error calculating growth trend:', error);
             return {
-                qualityTrend: 'stable',
-                growthRate: 0,
-                skillAcquisitionRate: 0,
-                recentPerformance: []
+                trend: 'unknown',
+                growth_rate: 0.5,
+                skill_acquisition_rate: 0.5,
+                recent_quality_avg: 0.5,
+                quality_change: 0,
             };
+        }
+        finally {
+            client.release();
         }
     }
     /**
@@ -241,81 +249,61 @@ class StudentCapabilityService {
     async updateStudentVectors(studentId) {
         try {
             await vectorGenerationService_1.default.updateStudentEmbedding(studentId);
-            logger_1.default.info(`Updated vectors for student ${studentId}`);
+            logger_1.default.info(`Updated vectors for student: ${studentId}`);
         }
         catch (error) {
-            logger_1.default.error(`Failed to update vectors for student ${studentId}:`, error);
+            logger_1.default.error('Error updating student vectors:', error);
             throw error;
         }
     }
     /**
      * 获取学生能力画像
      */
-    async getStudentCapability(studentId) {
+    async getCapability(studentId) {
+        const client = await db_1.pool.connect();
         try {
-            const capability = await (0, db_1.queryOne)(`SELECT * FROM student_capabilities WHERE student_id = $1`, [studentId]);
-            return capability;
+            const result = await client.query('SELECT * FROM student_capabilities WHERE student_id = $1', [studentId]);
+            return result.rows[0] || null;
         }
-        catch (error) {
-            logger_1.default.error(`Failed to get student capability for ${studentId}:`, error);
-            return null;
+        finally {
+            client.release();
         }
     }
     /**
-     * 批量初始化所有学生的能力画像
+     * 批量初始化学生能力（用于迁移）
      */
-    async initializeAllStudents() {
+    async batchInitializeCapabilities(limit = 100) {
+        const client = await db_1.pool.connect();
         try {
-            const students = await (0, db_1.query)(`SELECT id FROM users WHERE role = 'student' AND status = 'active'`);
-            logger_1.default.info(`Initializing capabilities for ${students.length} students`);
+            // 获取没有能力画像的学生
+            const studentsResult = await client.query(`SELECT u.id, o.openness, o.persistence, o.creativity, o.personality_style
+         FROM users u
+         LEFT JOIN student_capabilities sc ON u.id = sc.student_id
+         LEFT JOIN opc_assessments o ON u.id = o.student_id
+         WHERE u.role = 'student' AND sc.id IS NULL
+         LIMIT $1`, [limit]);
+            const students = studentsResult.rows;
+            logger_1.default.info(`Found ${students.length} students without capability`);
+            let initialized = 0;
             for (const student of students) {
                 try {
-                    await this.initializeCapability(student.id);
-                    // 避免API限流
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                    const opcResults = {
+                        openness: student.openness || 50,
+                        persistence: student.persistence || 50,
+                        creativity: student.creativity || 50,
+                        personality_style: student.personality_style || 'unknown',
+                    };
+                    await this.initializeCapability(student.id, opcResults);
+                    initialized++;
                 }
                 catch (error) {
                     logger_1.default.error(`Failed to initialize student ${student.id}:`, error);
                 }
             }
-            logger_1.default.info(`Completed initializing ${students.length} students`);
+            return initialized;
         }
-        catch (error) {
-            logger_1.default.error('Failed to initialize all students:', error);
-            throw error;
-        }
-    }
-    /**
-     * 更新学生的工作偏好
-     */
-    async updateWorkPreferences(studentId, preferences) {
-        try {
-            const updates = [];
-            const values = [];
-            let paramIndex = 1;
-            if (preferences.preferredTaskTypes) {
-                updates.push(`preferred_task_types = $${paramIndex++}`);
-                values.push(preferences.preferredTaskTypes);
-            }
-            if (preferences.maxHoursPerWeek) {
-                updates.push(`max_hours_per_week = $${paramIndex++}`);
-                values.push(preferences.maxHoursPerWeek);
-            }
-            if (preferences.workStyle) {
-                updates.push(`work_style = $${paramIndex++}`);
-                values.push(JSON.stringify(preferences.workStyle));
-            }
-            if (updates.length === 0) {
-                return;
-            }
-            updates.push(`updated_at = NOW()`);
-            values.push(studentId);
-            await (0, db_1.query)(`UPDATE student_capabilities SET ${updates.join(', ')} WHERE student_id = $${paramIndex}`, values);
-            logger_1.default.info(`Updated work preferences for student ${studentId}`);
-        }
-        catch (error) {
-            logger_1.default.error(`Failed to update work preferences for student ${studentId}:`, error);
-            throw error;
+        finally {
+            client.release();
         }
     }
 }
