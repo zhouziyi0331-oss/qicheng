@@ -76,7 +76,7 @@ class AILogService {
          WHERE created_at >= $1 AND created_at <= $2
          GROUP BY engine_name
          ORDER BY total_cost DESC`, [startDate || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), endDate || new Date()]);
-            return result.rows;
+            return result;
         }
         catch (error) {
             logger_1.default.error('Failed to get AI call stats:', error);
@@ -91,7 +91,7 @@ class AILogService {
             const result = await (0, db_1.query)(`SELECT SUM(cost_yuan) as total_cost
          FROM ai_call_logs
          WHERE created_at >= CURRENT_DATE`, []);
-            return parseFloat(result.rows[0]?.total_cost || 0);
+            return parseFloat(result[0]?.total_cost || 0);
         }
         catch (error) {
             logger_1.default.error('Failed to get today cost:', error);
@@ -108,7 +108,7 @@ class AILogService {
          WHERE status = 'failed'
          ORDER BY created_at DESC
          LIMIT $1`, [limit]);
-            return result.rows;
+            return result;
         }
         catch (error) {
             logger_1.default.error('Failed to get failed calls:', error);
