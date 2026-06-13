@@ -1,6 +1,9 @@
 import cron from 'node-cron';
 import { Pool } from 'pg';
 import { AutoConfirmationJob } from './autoConfirmationJob';
+import { AutoAcceptanceJob } from './autoAcceptanceJob';
+import { TaskExpirationJob } from './taskExpirationJob';
+import { ApplicationTimeoutJob } from './applicationTimeoutJob';
 import logger from '../utils/logger';
 
 /**
@@ -24,6 +27,15 @@ export class CronScheduler {
     // 启动7天自动确认任务
     this.startAutoConfirmationJob();
 
+    // 启动48小时自动确认任务
+    this.startAutoAcceptanceJob();
+
+    // 启动任务过期处理任务
+    this.startTaskExpirationJob();
+
+    // 启动申请超时取消任务
+    this.startApplicationTimeoutJob();
+
     logger.info(`已启动${this.tasks.length}个定时任务`);
   }
 
@@ -39,6 +51,25 @@ export class CronScheduler {
 
     this.tasks = [];
     logger.info('所有定时任务已停止');
+  }
+
+  /**
+   * 启动48小时自动确认任务
+   */
+  private startAutoAcceptanceJob(): void {
+    const job = new AutoAcceptanceJob(this.pool);
+    const schedule = AutoAcceptanceJob.getCronSchedule();
+
+    const task = cron.schedule(schedule, async () => {
+      try {
+        await job.execute();
+      } catch (error: any) {
+        logger.error('48小时自动确认任务执行失败:', error);
+      }
+    });
+
+    this.tasks.push(task);
+    logger.info(`已启动48小时自动确认任务，调度时间: ${schedule}`);
   }
 
   /**
@@ -71,6 +102,44 @@ export class CronScheduler {
         logger.error('测试执行失败:', err);
       });
     }
+  }
+
+  /**
+   * 启动任务过期处理任务
+   */
+  private startTaskExpirationJob(): void {
+    const job = new TaskExpirationJob(this.pool);
+    const schedule = TaskExpirationJob.getCronSchedule();
+
+    const task = cron.schedule(schedule, async () => {
+      try {
+        await job.execute();
+      } catch (error: any) {
+        logger.error('任务过期处理执行失败:', error);
+      }
+    });
+
+    this.tasks.push(task);
+    logger.info(`已启动任务过期处理任务，调度时间: ${schedule}`);
+  }
+
+  /**
+   * 启动申请超时取消任务
+   */
+  private startApplicationTimeoutJob(): void {
+    const job = new ApplicationTimeoutJob(this.pool);
+    const schedule = ApplicationTimeoutJob.getCronSchedule();
+
+    const task = cron.schedule(schedule, async () => {
+      try {
+        await job.execute();
+      } catch (error: any) {
+        logger.error('申请超时取消任务执行失败:', error);
+      }
+    });
+
+    this.tasks.push(task);
+    logger.info(`已启动申请超时取消任务，调度时间: ${schedule}`);
   }
 
   /**

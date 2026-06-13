@@ -116,6 +116,11 @@ if (process.env.NODE_ENV !== 'test') {
   const { mentorTriggerCronService } = require('./services/mentorTriggerCronService');
   mentorTriggerCronService.start();
 
+  // 启动匹配Worker（处理学生升级和需求变更的异步任务）
+  const { startMatchingWorker } = require('./workers/matchingWorker');
+  startMatchingWorker();
+  logger.info('匹配Worker已启动');
+
   // 优雅关闭时停止定时任务
   process.on('SIGTERM', () => {
     cronScheduler.stop();
