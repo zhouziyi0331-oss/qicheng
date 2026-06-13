@@ -8,6 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../config/database"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const anthropic = new sdk_1.default({
     apiKey: process.env.ANTHROPIC_API_KEY,
@@ -489,7 +490,7 @@ class CrossPlatformService {
             return message.content[0].type === 'text' ? message.content[0].text : '需求已更新';
         }
         catch (error) {
-            logger.error('AI摘要生成失败:', error);
+            logger_1.default.error('AI摘要生成失败:', error);
             return '需求已更新';
         }
     }
@@ -615,7 +616,7 @@ class CrossPlatformService {
             return '任务需求有更新';
         }
         catch (error) {
-            logger.error('变更原因生成失败:', error);
+            logger_1.default.error('变更原因生成失败:', error);
             return '任务需求已更新';
         }
     }

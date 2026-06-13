@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express'
+import logger from '../../utils/logger';
 import assetVisualizationService from '../services/assetVisualizationService'
 import { authenticate } from '../middleware/auth'
 

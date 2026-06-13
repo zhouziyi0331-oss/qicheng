@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOrderList = getOrderList;
 exports.getOrderDetail = getOrderDetail;
@@ -11,6 +14,7 @@ exports.getPendingDeliverables = getPendingDeliverables;
 exports.getAbnormalOrders = getAbnormalOrders;
 exports.getDisputeList = getDisputeList;
 exports.resolveDispute = resolveDispute;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 获取订单列表
@@ -81,7 +85,7 @@ async function getOrderList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取订单列表失败:', error);
+        logger_1.default.error('获取订单列表失败:', error);
         res.status(500).json({ error: '获取订单列表失败' });
     }
 }
@@ -160,7 +164,7 @@ async function getOrderDetail(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取订单详情失败:', error);
+        logger_1.default.error('获取订单详情失败:', error);
         res.status(500).json({ error: '获取订单详情失败' });
     }
 }
@@ -215,7 +219,7 @@ async function getOrderStats(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取订单统计失败:', error);
+        logger_1.default.error('获取订单统计失败:', error);
         res.status(500).json({ error: '获取订单统计失败' });
     }
 }
@@ -245,7 +249,7 @@ async function handleDispute(req, res) {
         res.json({ message: '纠纷处理成功' });
     }
     catch (error) {
-        logger.error('处理订单纠纷失败:', error);
+        logger_1.default.error('处理订单纠纷失败:', error);
         res.status(500).json({ error: '处理订单纠纷失败' });
     }
 }
@@ -268,7 +272,7 @@ async function forceCompleteOrder(req, res) {
         res.json({ message: '订单已强制完成' });
     }
     catch (error) {
-        logger.error('强制完成订单失败:', error);
+        logger_1.default.error('强制完成订单失败:', error);
         res.status(500).json({ error: '强制完成订单失败' });
     }
 }
@@ -294,7 +298,7 @@ async function cancelOrder(req, res) {
         res.json({ message: '订单已取消' });
     }
     catch (error) {
-        logger.error('取消订单失败:', error);
+        logger_1.default.error('取消订单失败:', error);
         res.status(500).json({ error: '取消订单失败' });
     }
 }
@@ -338,7 +342,7 @@ async function getOverdueOrders(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取逾期订单列表失败:', error);
+        logger_1.default.error('获取逾期订单列表失败:', error);
         res.status(500).json({ error: '获取逾期订单列表失败' });
     }
 }
@@ -379,7 +383,7 @@ async function getPendingDeliverables(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取待审核交付物列表失败:', error);
+        logger_1.default.error('获取待审核交付物列表失败:', error);
         res.status(500).json({ error: '获取待审核交付物列表失败' });
     }
 }
@@ -428,7 +432,7 @@ async function getAbnormalOrders(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取异常订单列表失败:', error);
+        logger_1.default.error('获取异常订单列表失败:', error);
         res.status(500).json({ error: '获取异常订单列表失败' });
     }
 }
@@ -483,7 +487,7 @@ async function getDisputeList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取纠纷列表失败:', error);
+        logger_1.default.error('获取纠纷列表失败:', error);
         res.status(500).json({ error: '获取纠纷列表失败' });
     }
 }

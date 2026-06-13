@@ -2,6 +2,7 @@
 // 实现5大触发场景的完整逻辑
 
 import { Request, Response, NextFunction } from 'express';
+import logger from '../../utils/logger';
 import { query, queryOne } from '../../utils/db';
 import { AppError } from '../../middleware/errorHandler';
 import Anthropic from '@anthropic-ai/sdk';

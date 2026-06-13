@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const opcV2PersonalityService_1 = __importDefault(require("../services/opcV2PersonalityService"));
 const auth_1 = require("../middleware/auth");
 const express_validator_1 = require("express-validator");
@@ -24,7 +25,7 @@ router.get('/questions', async (req, res, next) => {
         });
     }
     catch (error) {
-        logger.error('获取OPC题目失败:', error);
+        logger_1.default.error('获取OPC题目失败:', error);
         next(error);
     }
 });
@@ -59,7 +60,7 @@ router.post('/submit-answers', auth_1.authenticate, [
         });
     }
     catch (error) {
-        logger.error('OPC分析失败:', error);
+        logger_1.default.error('OPC分析失败:', error);
         next(error);
     }
 });
@@ -107,7 +108,7 @@ router.get('/profile', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        logger.error('获取OPC结果失败:', error);
+        logger_1.default.error('获取OPC结果失败:', error);
         next(error);
     }
 });
@@ -140,7 +141,7 @@ router.post('/generate-card', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        logger.error('生成身份卡片失败:', error);
+        logger_1.default.error('生成身份卡片失败:', error);
         next(error);
     }
 });

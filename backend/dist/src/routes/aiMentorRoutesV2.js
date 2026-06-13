@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const aiMentorServiceV2_1 = __importDefault(require("../services/aiMentorServiceV2"));
 const auth_1 = require("../middleware/auth");
 const express_validator_1 = require("express-validator");
@@ -46,7 +47,7 @@ router.post('/message', auth_1.authenticate, [
         });
     }
     catch (error) {
-        logger.error('AI导师消息处理失败:', error);
+        logger_1.default.error('AI导师消息处理失败:', error);
         next(error);
     }
 });
@@ -76,7 +77,7 @@ router.post('/trigger/onboarding', auth_1.authenticate, [
         });
     }
     catch (error) {
-        logger.error('T-01触发失败:', error);
+        logger_1.default.error('T-01触发失败:', error);
         next(error);
     }
 });
@@ -105,7 +106,7 @@ router.post('/trigger/rejected', auth_1.authenticate, [
         });
     }
     catch (error) {
-        logger.error('T-03触发失败:', error);
+        logger_1.default.error('T-03触发失败:', error);
         next(error);
     }
 });
@@ -134,7 +135,7 @@ router.post('/trigger/milestone', auth_1.authenticate, [
         });
     }
     catch (error) {
-        logger.error('T-05触发失败:', error);
+        logger_1.default.error('T-05触发失败:', error);
         next(error);
     }
 });
@@ -174,7 +175,7 @@ router.get('/history', auth_1.authenticate, async (req, res, next) => {
         }
     }
     catch (error) {
-        logger.error('获取对话历史失败:', error);
+        logger_1.default.error('获取对话历史失败:', error);
         next(error);
     }
 });

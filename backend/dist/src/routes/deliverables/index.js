@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const deliverableArchiveService_1 = __importDefault(require("../../services/deliverableArchiveService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -47,7 +48,7 @@ router.post('/create', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建档案失败:', error);
+        logger_1.default.error('创建档案失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建档案失败',
@@ -88,7 +89,7 @@ router.get('/list', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取档案列表失败:', error);
+        logger_1.default.error('获取档案列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取档案列表失败',
@@ -110,7 +111,7 @@ router.get('/:id', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取档案详情失败:', error);
+        logger_1.default.error('获取档案详情失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取档案详情失败',
@@ -133,7 +134,7 @@ router.put('/:id', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('更新档案失败:', error);
+        logger_1.default.error('更新档案失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '更新档案失败',
@@ -155,7 +156,7 @@ router.delete('/:id', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('删除档案失败:', error);
+        logger_1.default.error('删除档案失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '删除档案失败',
@@ -178,7 +179,7 @@ router.post('/:id/download', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('记录下载失败:', error);
+        logger_1.default.error('记录下载失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '记录下载失败',
@@ -208,7 +209,7 @@ router.post('/:id/versions', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('添加版本失败:', error);
+        logger_1.default.error('添加版本失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '添加版本失败',
@@ -244,7 +245,7 @@ router.post('/categories/create', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建分类失败:', error);
+        logger_1.default.error('创建分类失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建分类失败',
@@ -275,7 +276,7 @@ router.get('/categories/list', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取分类列表失败:', error);
+        logger_1.default.error('获取分类列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取分类列表失败',
@@ -298,7 +299,7 @@ router.put('/categories/:id', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('更新分类失败:', error);
+        logger_1.default.error('更新分类失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '更新分类失败',
@@ -320,7 +321,7 @@ router.delete('/categories/:id', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('删除分类失败:', error);
+        logger_1.default.error('删除分类失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '删除分类失败',
@@ -348,7 +349,7 @@ router.post('/:id/share', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建分享链接失败:', error);
+        logger_1.default.error('创建分享链接失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建分享链接失败',
@@ -370,7 +371,7 @@ router.get('/share/:code', async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取分享内容失败:', error);
+        logger_1.default.error('获取分享内容失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取分享内容失败',
@@ -393,7 +394,7 @@ router.post('/share/:code/download', async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('分享下载失败:', error);
+        logger_1.default.error('分享下载失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '分享下载失败',
@@ -421,7 +422,7 @@ router.get('/stats/overview', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取档案统计失败:', error);
+        logger_1.default.error('获取档案统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取档案统计失败',
@@ -455,7 +456,7 @@ router.post('/batch-update', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('批量更新失败:', error);
+        logger_1.default.error('批量更新失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '批量更新失败',

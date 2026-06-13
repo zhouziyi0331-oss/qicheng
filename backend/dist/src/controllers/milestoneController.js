@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.submitStory = exports.getStoryWall = exports.handleSecondTaskComplete = void 0;
+const logger_1 = __importDefault(require("../utils/logger"));
 const db_1 = require("../utils/db");
 /**
  * 第2单完成触发器
@@ -32,7 +36,7 @@ const handleSecondTaskComplete = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('处理第2单完成失败:', error);
+        logger_1.default.error('处理第2单完成失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -79,7 +83,7 @@ const getStoryWall = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取故事墙失败:', error);
+        logger_1.default.error('获取故事墙失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -114,7 +118,7 @@ const submitStory = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('提交故事失败:', error);
+        logger_1.default.error('提交故事失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };

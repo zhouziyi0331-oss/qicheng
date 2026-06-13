@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mentorRouterService = exports.MentorRouterService = void 0;
 const database_1 = require("../config/database");
+const logger_1 = __importDefault(require("../utils/logger"));
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const anthropic = new sdk_1.default({
     apiKey: process.env.ANTHROPIC_API_KEY,
@@ -65,7 +66,7 @@ class MentorRouterService {
             }
         }
         catch (err) {
-            logger.error('AI分析失败:', err);
+            logger_1.default.error('AI分析失败:', err);
             // 降级到关键词匹配
             return this.fallbackAnalysis(message);
         }

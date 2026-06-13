@@ -6,9 +6,13 @@
  * 1. 生成启程证书图片
  * 2. 上传到OSS
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RitualService = void 0;
 const db_1 = require("../../utils/db");
+const logger_1 = __importDefault(require("../../utils/logger"));
 class RitualService {
     /**
      * 生成启程证书
@@ -43,11 +47,11 @@ class RitualService {
             await (0, db_1.query)(`UPDATE unlock_records
          SET certificate_url = $2
          WHERE id = $1`, [unlockRecordId, certificateUrl]);
-            logger.info(`[RitualService] 生成证书: ${certificateUrl}`);
+            logger_1.default.info(`[RitualService] 生成证书: ${certificateUrl}`);
             return certificateUrl;
         }
         catch (error) {
-            logger.error('[RitualService] 生成证书失败:', error);
+            logger_1.default.error('[RitualService] 生成证书失败:', error);
             throw error;
         }
     }

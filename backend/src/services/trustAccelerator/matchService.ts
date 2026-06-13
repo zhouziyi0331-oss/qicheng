@@ -8,6 +8,7 @@
  */
 
 import { query, withTransaction } from '../../utils/db';
+import logger from '../../utils/logger';
 
 interface MatchRecord {
   id: string;

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../utils/db"));
+const logger_1 = __importDefault(require("../utils/logger"));
 async function createStudentAbilities() {
     try {
         const students = [
@@ -67,12 +68,12 @@ async function createStudentAbilities() {
                 student.primary_track,
                 student.current_level
             ]);
-            logger.info(`✅ Created/updated abilities for student ${student.id}`);
+            logger_1.default.info(`✅ Created/updated abilities for student ${student.id}`);
         }
-        logger.info('\n✅ All student abilities created successfully!');
+        logger_1.default.info('\n✅ All student abilities created successfully!');
     }
     catch (error) {
-        logger.error('❌ Error:', error);
+        logger_1.default.error('❌ Error:', error);
         process.exit(1);
     }
 }

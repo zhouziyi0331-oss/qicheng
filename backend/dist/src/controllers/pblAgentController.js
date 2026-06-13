@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pblAgentController = exports.PBLAgentController = void 0;
+const logger_1 = __importDefault(require("../utils/logger"));
 const pblAgentService_1 = require("../services/pblAgentService");
 class PBLAgentController {
     // 初始化项目
@@ -15,7 +19,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('初始化项目失败:', err);
+            logger_1.default.error('初始化项目失败:', err);
             res.status(500).json({
                 success: false,
                 error: '初始化项目失败'
@@ -33,7 +37,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('对话失败:', err);
+            logger_1.default.error('对话失败:', err);
             res.status(500).json({
                 success: false,
                 error: '对话失败'
@@ -51,7 +55,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('任务拆解引导失败:', err);
+            logger_1.default.error('任务拆解引导失败:', err);
             res.status(500).json({
                 success: false,
                 error: '任务拆解引导失败'
@@ -69,7 +73,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('评估拆解失败:', err);
+            logger_1.default.error('评估拆解失败:', err);
             res.status(500).json({
                 success: false,
                 error: '评估拆解失败'
@@ -87,7 +91,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('生成MVP方案失败:', err);
+            logger_1.default.error('生成MVP方案失败:', err);
             res.status(500).json({
                 success: false,
                 error: '生成MVP方案失败'
@@ -105,7 +109,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('代码执行失败:', err);
+            logger_1.default.error('代码执行失败:', err);
             res.status(500).json({
                 success: false,
                 error: '代码执行失败'
@@ -123,7 +127,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('生成反思问题失败:', err);
+            logger_1.default.error('生成反思问题失败:', err);
             res.status(500).json({
                 success: false,
                 error: '生成反思问题失败'
@@ -141,7 +145,7 @@ class PBLAgentController {
             });
         }
         catch (err) {
-            logger.error('保存反思日志失败:', err);
+            logger_1.default.error('保存反思日志失败:', err);
             res.status(500).json({
                 success: false,
                 error: '保存反思日志失败'

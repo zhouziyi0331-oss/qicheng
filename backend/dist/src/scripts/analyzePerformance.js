@@ -1,15 +1,19 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../utils/db");
+const logger_1 = __importDefault(require("../utils/logger"));
 async function analyzeSlowQueries() {
-    logger.info('=== 分析数据库慢查询 ===\n');
+    logger_1.default.info('=== 分析数据库慢查询 ===\n');
     // 检查是否启用了pg_stat_statements扩展
     const extensionCheck = await db_1.pool.query(`
     SELECT * FROM pg_extension WHERE extname = 'pg_stat_statements'
   `);
     if (extensionCheck.rows.length === 0) {
-        logger.info('⚠️  pg_stat_statements扩展未启用，无法分析慢查询');
-        logger.info('建议运行: CREATE EXTENSION pg_stat_statements;\n');
+        logger_1.default.info('⚠️  pg_stat_statements扩展未启用，无法分析慢查询');
+        logger_1.default.info('建议运行: CREATE EXTENSION pg_stat_statements;\n');
     }
     else {
         // 查询最慢的10个查询
@@ -24,18 +28,18 @@ async function analyzeSlowQueries() {
       ORDER BY mean_exec_time DESC
       LIMIT 10
     `);
-        logger.info('📊 最慢的10个查询:');
+        logger_1.default.info('📊 最慢的10个查询:');
         slowQueries.rows.forEach((row, i) => {
-            logger.info(`\n${i + 1}. ${row.query_preview}...`);
-            logger.info(`   调用次数: ${row.calls}`);
-            logger.info(`   平均耗时: ${row.avg_time_ms}ms`);
-            logger.info(`   最大耗时: ${row.max_time_ms}ms`);
-            logger.info(`   总耗时: ${row.total_time_ms}ms`);
+            logger_1.default.info(`\n${i + 1}. ${row.query_preview}...`);
+            logger_1.default.info(`   调用次数: ${row.calls}`);
+            logger_1.default.info(`   平均耗时: ${row.avg_time_ms}ms`);
+            logger_1.default.info(`   最大耗时: ${row.max_time_ms}ms`);
+            logger_1.default.info(`   总耗时: ${row.total_time_ms}ms`);
         });
     }
 }
 async function analyzeTableSizes() {
-    logger.info('\n\n=== 数据库表大小分析 ===\n');
+    logger_1.default.info('\n\n=== 数据库表大小分析 ===\n');
     const tableSizes = await db_1.pool.query(`
     SELECT
       schemaname,
@@ -47,13 +51,13 @@ async function analyzeTableSizes() {
     ORDER BY size_bytes DESC
     LIMIT 20
   `);
-    logger.info('📦 前20个最大的表:');
+    logger_1.default.info('📦 前20个最大的表:');
     tableSizes.rows.forEach((row, i) => {
-        logger.info(`${i + 1}. ${row.tablename}: ${row.size}`);
+        logger_1.default.info(`${i + 1}. ${row.tablename}: ${row.size}`);
     });
 }
 async function analyzeIndexUsage() {
-    logger.info('\n\n=== 索引使用情况分析 ===\n');
+    logger_1.default.info('\n\n=== 索引使用情况分析 ===\n');
     // 查找未使用的索引
     const unusedIndexes = await db_1.pool.query(`
     SELECT
@@ -68,13 +72,13 @@ async function analyzeIndexUsage() {
     LIMIT 10
   `);
     if (unusedIndexes.rows.length > 0) {
-        logger.info('⚠️  未使用的索引（可能需要删除）:');
+        logger_1.default.info('⚠️  未使用的索引（可能需要删除）:');
         unusedIndexes.rows.forEach((row, i) => {
-            logger.info(`${i + 1}. ${row.tablename}.${row.indexname} (${row.index_size})`);
+            logger_1.default.info(`${i + 1}. ${row.tablename}.${row.indexname} (${row.index_size})`);
         });
     }
     else {
-        logger.info('✅ 所有索引都在使用中');
+        logger_1.default.info('✅ 所有索引都在使用中');
     }
     // 查找缺失索引的表（频繁全表扫描）
     const missingIndexes = await db_1.pool.query(`
@@ -90,16 +94,16 @@ async function analyzeIndexUsage() {
     ORDER BY seq_tup_read DESC
     LIMIT 10
   `);
-    logger.info('\n📈 频繁全表扫描的表（可能需要添加索引）:');
+    logger_1.default.info('\n📈 频繁全表扫描的表（可能需要添加索引）:');
     missingIndexes.rows.forEach((row, i) => {
-        logger.info(`${i + 1}. ${row.tablename}:`);
-        logger.info(`   全表扫描次数: ${row.seq_scan}`);
-        logger.info(`   索引扫描次数: ${row.idx_scan || 0}`);
-        logger.info(`   平均扫描行数: ${Math.round(row.avg_seq_tup_read)}`);
+        logger_1.default.info(`${i + 1}. ${row.tablename}:`);
+        logger_1.default.info(`   全表扫描次数: ${row.seq_scan}`);
+        logger_1.default.info(`   索引扫描次数: ${row.idx_scan || 0}`);
+        logger_1.default.info(`   平均扫描行数: ${Math.round(row.avg_seq_tup_read)}`);
     });
 }
 async function analyzeConnectionPool() {
-    logger.info('\n\n=== 数据库连接池状态 ===\n');
+    logger_1.default.info('\n\n=== 数据库连接池状态 ===\n');
     const connections = await db_1.pool.query(`
     SELECT
       count(*) as total_connections,
@@ -110,16 +114,16 @@ async function analyzeConnectionPool() {
     WHERE datname = current_database()
   `);
     const conn = connections.rows[0];
-    logger.info(`总连接数: ${conn.total_connections}`);
-    logger.info(`活跃连接: ${conn.active}`);
-    logger.info(`空闲连接: ${conn.idle}`);
-    logger.info(`事务中空闲: ${conn.idle_in_transaction}`);
+    logger_1.default.info(`总连接数: ${conn.total_connections}`);
+    logger_1.default.info(`活跃连接: ${conn.active}`);
+    logger_1.default.info(`空闲连接: ${conn.idle}`);
+    logger_1.default.info(`事务中空闲: ${conn.idle_in_transaction}`);
     if (parseInt(conn.idle_in_transaction) > 0) {
-        logger.info('\n⚠️  警告: 存在事务中空闲的连接，可能导致锁等待');
+        logger_1.default.info('\n⚠️  警告: 存在事务中空闲的连接，可能导致锁等待');
     }
 }
 async function analyzeDataStats() {
-    logger.info('\n\n=== 数据统计 ===\n');
+    logger_1.default.info('\n\n=== 数据统计 ===\n');
     const stats = await db_1.pool.query(`
     SELECT
       (SELECT COUNT(*) FROM tasks) as total_tasks,
@@ -130,12 +134,12 @@ async function analyzeDataStats() {
       (SELECT COUNT(*) FROM users WHERE role = 'student' AND skills_embedding IS NOT NULL) as students_with_embedding
   `);
     const data = stats.rows[0];
-    logger.info(`任务总数: ${data.total_tasks}`);
-    logger.info(`活跃任务: ${data.active_tasks}`);
-    logger.info(`学生总数: ${data.total_students}`);
-    logger.info(`企业总数: ${data.total_companies}`);
-    logger.info(`已生成embedding的任务: ${data.tasks_with_embedding}/${data.total_tasks} (${Math.round(data.tasks_with_embedding / data.total_tasks * 100)}%)`);
-    logger.info(`已生成embedding的学生: ${data.students_with_embedding}/${data.total_students} (${Math.round(data.students_with_embedding / data.total_students * 100)}%)`);
+    logger_1.default.info(`任务总数: ${data.total_tasks}`);
+    logger_1.default.info(`活跃任务: ${data.active_tasks}`);
+    logger_1.default.info(`学生总数: ${data.total_students}`);
+    logger_1.default.info(`企业总数: ${data.total_companies}`);
+    logger_1.default.info(`已生成embedding的任务: ${data.tasks_with_embedding}/${data.total_tasks} (${Math.round(data.tasks_with_embedding / data.total_tasks * 100)}%)`);
+    logger_1.default.info(`已生成embedding的学生: ${data.students_with_embedding}/${data.total_students} (${Math.round(data.students_with_embedding / data.total_students * 100)}%)`);
 }
 async function main() {
     try {
@@ -144,15 +148,15 @@ async function main() {
         await analyzeConnectionPool();
         await analyzeIndexUsage();
         await analyzeSlowQueries();
-        logger.info('\n\n=== 性能优化建议 ===\n');
-        logger.info('1. 如果发现慢查询，考虑添加索引或优化查询逻辑');
-        logger.info('2. 删除未使用的索引以减少写入开销');
-        logger.info('3. 对于频繁全表扫描的表，添加合适的索引');
-        logger.info('4. 监控连接池状态，避免连接泄漏');
-        logger.info('5. 定期运行 VACUUM ANALYZE 优化表统计信息');
+        logger_1.default.info('\n\n=== 性能优化建议 ===\n');
+        logger_1.default.info('1. 如果发现慢查询，考虑添加索引或优化查询逻辑');
+        logger_1.default.info('2. 删除未使用的索引以减少写入开销');
+        logger_1.default.info('3. 对于频繁全表扫描的表，添加合适的索引');
+        logger_1.default.info('4. 监控连接池状态，避免连接泄漏');
+        logger_1.default.info('5. 定期运行 VACUUM ANALYZE 优化表统计信息');
     }
     catch (error) {
-        logger.error('性能分析失败:', error);
+        logger_1.default.error('性能分析失败:', error);
         process.exit(1);
     }
     finally {

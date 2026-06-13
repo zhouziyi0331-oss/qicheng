@@ -3,8 +3,12 @@
  * 邀请系统API路由
  * 处理邀请任务的创建、查询、响应等请求
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const auth_1 = require("../../middleware/auth");
 const invitationService_1 = require("../../services/invitation/invitationService");
 const matchService_1 = require("../../services/invitation/matchService");
@@ -46,7 +50,7 @@ router.post('/tasks', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建邀请任务失败:', error);
+        logger_1.default.error('创建邀请任务失败:', error);
         res.status(500).json({ error: error.message || '创建邀请任务失败' });
     }
 });
@@ -65,7 +69,7 @@ router.get('/tasks/:taskId/invitations', auth_1.authenticate, async (req, res) =
         });
     }
     catch (error) {
-        logger.error('获取邀请记录失败:', error);
+        logger_1.default.error('获取邀请记录失败:', error);
         res.status(500).json({ error: error.message || '获取邀请记录失败' });
     }
 });
@@ -84,7 +88,7 @@ router.delete('/invitations/:invitationId', auth_1.authenticate, async (req, res
         });
     }
     catch (error) {
-        logger.error('撤回邀请失败:', error);
+        logger_1.default.error('撤回邀请失败:', error);
         res.status(500).json({ error: error.message || '撤回邀请失败' });
     }
 });
@@ -102,7 +106,7 @@ router.get('/stats', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取邀请统计失败:', error);
+        logger_1.default.error('获取邀请统计失败:', error);
         res.status(500).json({ error: error.message || '获取邀请统计失败' });
     }
 });
@@ -121,7 +125,7 @@ router.put('/match-config', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('更新匹配配置失败:', error);
+        logger_1.default.error('更新匹配配置失败:', error);
         res.status(500).json({ error: error.message || '更新匹配配置失败' });
     }
 });
@@ -143,7 +147,7 @@ router.get('/my-invitations', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取邀请列表失败:', error);
+        logger_1.default.error('获取邀请列表失败:', error);
         res.status(500).json({ error: error.message || '获取邀请列表失败' });
     }
 });
@@ -169,7 +173,7 @@ router.post('/invitations/:invitationId/accept', auth_1.authenticate, async (req
         });
     }
     catch (error) {
-        logger.error('接受邀请失败:', error);
+        logger_1.default.error('接受邀请失败:', error);
         res.status(500).json({ error: error.message || '接受邀请失败' });
     }
 });
@@ -189,7 +193,7 @@ router.post('/invitations/:invitationId/reject', auth_1.authenticate, async (req
         });
     }
     catch (error) {
-        logger.error('拒绝邀请失败:', error);
+        logger_1.default.error('拒绝邀请失败:', error);
         res.status(500).json({ error: error.message || '拒绝邀请失败' });
     }
 });
@@ -207,7 +211,7 @@ router.post('/invitations/:invitationId/view', auth_1.authenticate, async (req, 
         });
     }
     catch (error) {
-        logger.error('标记已查看失败:', error);
+        logger_1.default.error('标记已查看失败:', error);
         res.status(500).json({ error: error.message || '标记已查看失败' });
     }
 });
@@ -227,7 +231,7 @@ router.get('/eligibility', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('检查邀请资格失败:', error);
+        logger_1.default.error('检查邀请资格失败:', error);
         res.status(500).json({ error: error.message || '检查邀请资格失败' });
     }
 });
@@ -246,7 +250,7 @@ router.post('/cron/expire-invitations', async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('过期邀请失败:', error);
+        logger_1.default.error('过期邀请失败:', error);
         res.status(500).json({ error: error.message || '过期邀请失败' });
     }
 });
@@ -264,7 +268,7 @@ router.post('/cron/detect-inactive', async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('检测不活跃学生失败:', error);
+        logger_1.default.error('检测不活跃学生失败:', error);
         res.status(500).json({ error: error.message || '检测不活跃学生失败' });
     }
 });

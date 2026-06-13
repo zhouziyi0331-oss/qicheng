@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAuditLogList = getAuditLogList;
 exports.getAuditLogStats = getAuditLogStats;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const auditLog_1 = require("../../utils/auditLog");
 /**
  * 获取审计日志列表
@@ -26,7 +30,7 @@ async function getAuditLogList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取审计日志失败：', error);
+        logger_1.default.error('获取审计日志失败：', error);
         res.status(500).json({
             success: false,
             message: '获取审计日志失败'
@@ -49,7 +53,7 @@ async function getAuditLogStats(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取审计日志统计失败：', error);
+        logger_1.default.error('获取审计日志统计失败：', error);
         res.status(500).json({
             success: false,
             message: '获取审计日志统计失败'

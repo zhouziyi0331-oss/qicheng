@@ -1,7 +1,11 @@
 "use strict";
 // AI导师系统 - 路由
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const auth_1 = require("../../middleware/auth");
 const controller_1 = require("./controller");
 const mentorController_1 = require("../../controllers/mentorController");
@@ -48,7 +52,7 @@ router.post('/:taskId/stuck', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('处理stuck消息失败:', error);
+        logger_1.default.error('处理stuck消息失败:', error);
         res.status(500).json({ success: false, error: '处理失败' });
     }
 });
@@ -77,7 +81,7 @@ router.post('/:taskId/rejection-guidance', auth_1.authenticate, async (req, res)
         });
     }
     catch (error) {
-        logger.error('处理rejection消息失败:', error);
+        logger_1.default.error('处理rejection消息失败:', error);
         res.status(500).json({ success: false, error: '处理失败' });
     }
 });
@@ -106,7 +110,7 @@ router.post('/:taskId/milestone', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('处理milestone消息失败:', error);
+        logger_1.default.error('处理milestone消息失败:', error);
         res.status(500).json({ success: false, error: '处理失败' });
     }
 });

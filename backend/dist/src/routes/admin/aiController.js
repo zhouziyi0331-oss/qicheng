@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAICallLogs = getAICallLogs;
 exports.getAICallStats = getAICallStats;
@@ -6,6 +9,7 @@ exports.getPromptTemplates = getPromptTemplates;
 exports.createPromptTemplate = createPromptTemplate;
 exports.updatePromptTemplate = updatePromptTemplate;
 exports.deletePromptTemplate = deletePromptTemplate;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 获取AI调用日志列表
@@ -75,7 +79,7 @@ async function getAICallLogs(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取AI调用日志失败:', error);
+        logger_1.default.error('获取AI调用日志失败:', error);
         res.status(500).json({ message: '获取AI调用日志失败' });
     }
 }
@@ -135,7 +139,7 @@ async function getAICallStats(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取AI调用统计失败:', error);
+        logger_1.default.error('获取AI调用统计失败:', error);
         res.status(500).json({ message: '获取AI调用统计失败' });
     }
 }
@@ -190,7 +194,7 @@ async function getPromptTemplates(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取Prompt模板列表失败:', error);
+        logger_1.default.error('获取Prompt模板列表失败:', error);
         res.status(500).json({ message: '获取Prompt模板列表失败' });
     }
 }
@@ -206,7 +210,7 @@ async function createPromptTemplate(req, res) {
         res.json({ id: result[0].id, message: 'Prompt模板创建成功' });
     }
     catch (error) {
-        logger.error('创建Prompt模板失败:', error);
+        logger_1.default.error('创建Prompt模板失败:', error);
         res.status(500).json({ message: '创建Prompt模板失败' });
     }
 }
@@ -229,7 +233,7 @@ async function updatePromptTemplate(req, res) {
         res.json({ message: 'Prompt模板更新成功' });
     }
     catch (error) {
-        logger.error('更新Prompt模板失败:', error);
+        logger_1.default.error('更新Prompt模板失败:', error);
         res.status(500).json({ message: '更新Prompt模板失败' });
     }
 }
@@ -243,7 +247,7 @@ async function deletePromptTemplate(req, res) {
         res.json({ message: 'Prompt模板删除成功' });
     }
     catch (error) {
-        logger.error('删除Prompt模板失败:', error);
+        logger_1.default.error('删除Prompt模板失败:', error);
         res.status(500).json({ message: '删除Prompt模板失败' });
     }
 }

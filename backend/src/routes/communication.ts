@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import logger from '../../utils/logger';
 import { CommunicationService } from '../services/communicationService';
 import { authenticate } from '../middleware/auth';
 import { requireRole } from '../middleware/roleCheck';

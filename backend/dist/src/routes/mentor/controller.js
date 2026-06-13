@@ -11,6 +11,7 @@ exports.generateRejectionFeedback = generateRejectionFeedback;
 exports.checkIdleStudents = checkIdleStudents;
 exports.celebrateMilestone = celebrateMilestone;
 exports.getConversations = getConversations;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const anthropic = new sdk_1.default({
@@ -111,10 +112,10 @@ ${student?.tasks_completed === 0 ? '这是你的第一单，不用紧张，我�
                 JSON.stringify({ taskId, fullMessage: mentorResponse }),
             ]);
         }, 30000);
-        logger.info(`[Mentor] Task start guidance sent to student ${studentId} for task ${taskId}`);
+        logger_1.default.info(`[Mentor] Task start guidance sent to student ${studentId} for task ${taskId}`);
     }
     catch (error) {
-        logger.error('[Mentor] Error sending task start guidance:', error);
+        logger_1.default.error('[Mentor] Error sending task start guidance:', error);
     }
 }
 // ══════════════════════════════════════════════════════════════
@@ -286,7 +287,7 @@ ${rejectionReason}
         return mentorResponse;
     }
     catch (error) {
-        logger.error('[Mentor] Error generating rejection feedback:', error);
+        logger_1.default.error('[Mentor] Error generating rejection feedback:', error);
         return '';
     }
 }
@@ -344,11 +345,11 @@ async function checkIdleStudents() {
             // 推送通知
             await (0, db_1.query)(`INSERT INTO notifications (user_id, type, title, body)
          VALUES ($1, $2, $3, $4)`, [student.student_id, 'mentor_nudge', '🐱 AI导师', message]);
-            logger.info(`[Mentor] Nudge sent to student ${student.student_id} for task ${student.task_id}`);
+            logger_1.default.info(`[Mentor] Nudge sent to student ${student.student_id} for task ${student.task_id}`);
         }
     }
     catch (error) {
-        logger.error('[Mentor] Error checking idle students:', error);
+        logger_1.default.error('[Mentor] Error checking idle students:', error);
     }
 }
 // ══════════════════════════════════════════════════════════════
@@ -428,10 +429,10 @@ ${milestoneHistory.map((m) => `- ${m.milestone_type}: ${m.mentor_message}`).join
         // 推送通知
         await (0, db_1.query)(`INSERT INTO notifications (user_id, type, title, body)
        VALUES ($1, $2, $3, $4)`, [studentId, 'milestone', '🎉 成长里程碑', mentorResponse]);
-        logger.info(`[Mentor] Milestone celebrated for student ${studentId}: ${milestoneType}`);
+        logger_1.default.info(`[Mentor] Milestone celebrated for student ${studentId}: ${milestoneType}`);
     }
     catch (error) {
-        logger.error('[Mentor] Error celebrating milestone:', error);
+        logger_1.default.error('[Mentor] Error celebrating milestone:', error);
     }
 }
 // ══════════════════════════════════════════════════════════════

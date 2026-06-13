@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
+const logger_1 = __importDefault(require("../utils/logger"));
 const uuid_1 = require("uuid");
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const config_1 = require("../../config");
@@ -306,7 +307,7 @@ class MatchingEnhancementService {
             }
         }
         catch (error) {
-            logger.error('AI分析拒绝原因失败:', error);
+            logger_1.default.error('AI分析拒绝原因失败:', error);
         }
         // 降级方案
         return {

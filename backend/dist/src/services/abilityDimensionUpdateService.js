@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
 class AbilityDimensionUpdateService {
     constructor() {
@@ -25,7 +26,7 @@ class AbilityDimensionUpdateService {
      * 订单完成后更新六维能力
      */
     async updateAbilityAfterOrder(orderId) {
-        logger.info(`[六维能力更新] 开始更新订单 ${orderId} 的能力数据`);
+        logger_1.default.info(`[六维能力更新] 开始更新订单 ${orderId} 的能力数据`);
         // 1. 获取任务表现数据
         const performance = await this.getTaskPerformance(orderId);
         // 2. 计算本次任务的六维表现分
@@ -46,7 +47,7 @@ class AbilityDimensionUpdateService {
         const aiInterpretation = await this.generateAIInterpretation(performance.studentId, currentScores, newScores, orderId);
         // 8. 更新维度描述
         await this.updateDimensionDescriptions(performance.studentId, newVersion, aiInterpretation);
-        logger.info(`[六维能力更新] 更新完成，新版本: ${newVersion}`);
+        logger_1.default.info(`[六维能力更新] 更新完成，新版本: ${newVersion}`);
         return aiInterpretation;
     }
     /**
@@ -378,13 +379,13 @@ class AbilityDimensionUpdateService {
             const wordCount = dim.description.length;
             totalWordCount += wordCount;
             if (wordCount < 100) {
-                logger.warn(`[六维能力更新] ${dim.dimension}解读字数不足: ${wordCount}字`);
+                logger_1.default.warn(`[六维能力更新] ${dim.dimension}解读字数不足: ${wordCount}字`);
             }
         });
-        logger.info(`[六维能力更新] 总字数: ${totalWordCount}`);
+        logger_1.default.info(`[六维能力更新] 总字数: ${totalWordCount}`);
         // 如果总字数不足600字，记录警告
         if (totalWordCount < 600) {
-            logger.error(`[六维能力更新] 总字数不足: ${totalWordCount}字，要求≥600字`);
+            logger_1.default.error(`[六维能力更新] 总字数不足: ${totalWordCount}字，要求≥600字`);
         }
         return result;
     }

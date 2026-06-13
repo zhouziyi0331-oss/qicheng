@@ -1,4 +1,5 @@
 import { pool } from '../utils/db';
+import logger from '../utils/logger';
 
 async function analyzeSlowQueries() {
   logger.info('=== 分析数据库慢查询 ===\n');

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cleanExpiredPricingSuggestions = exports.getPricingSuggestion = void 0;
+const logger_1 = __importDefault(require("../utils/logger"));
 const db_1 = require("../utils/db");
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const anthropic = new sdk_1.default({
@@ -111,7 +112,7 @@ const getPricingSuggestion = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取定价建议失败:', error);
+        logger_1.default.error('获取定价建议失败:', error);
         // 降级方案：返回基础定价建议
         const { level, track } = req.body;
         const fallbackPricing = getRuleBasedPricing(level, track, { avg_budget: 0 });
@@ -159,10 +160,10 @@ function getRuleBasedPricing(level, track, marketData) {
 const cleanExpiredPricingSuggestions = async () => {
     try {
         const result = await (0, db_1.query)('DELETE FROM pricing_suggestions WHERE expires_at < NOW()');
-        logger.info(`清理了${result.length}条过期的定价建议`);
+        logger_1.default.info(`清理了${result.length}条过期的定价建议`);
     }
     catch (error) {
-        logger.error('清理定价建议缓存失败:', error);
+        logger_1.default.error('清理定价建议缓存失败:', error);
     }
 };
 exports.cleanExpiredPricingSuggestions = cleanExpiredPricingSuggestions;

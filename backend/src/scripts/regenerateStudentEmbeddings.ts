@@ -1,4 +1,5 @@
 import { hybridMatchingService } from '../services/hybridMatchingService';
+import logger from '../utils/logger';
 import pool from '../utils/db';
 
 async function regenerateStudentEmbeddings() {

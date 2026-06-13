@@ -7,9 +7,13 @@
  * 2. 检测是否达到解锁资格（完成2次任务）
  * 3. 触发解锁流程
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MatchService = void 0;
 const db_1 = require("../../utils/db");
+const logger_1 = __importDefault(require("../../utils/logger"));
 class MatchService {
     /**
      * 任务完成后调用：更新匹配记录
@@ -45,7 +49,7 @@ class MatchService {
                 completedTasks = result.rows[0].completed_tasks;
             }
             const unlockEligible = completedTasks >= 2;
-            logger.info(`[MatchService] 学生 ${studentId} 完成商家 ${companyId} 第 ${completedTasks} 个任务，解锁资格: ${unlockEligible}`);
+            logger_1.default.info(`[MatchService] 学生 ${studentId} 完成商家 ${companyId} 第 ${completedTasks} 个任务，解锁资格: ${unlockEligible}`);
             return { unlockEligible, matchId };
         });
     }

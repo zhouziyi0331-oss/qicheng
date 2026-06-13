@@ -2,6 +2,9 @@
 /**
  * 通知控制器
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNotifications = getNotifications;
 exports.getUnreadCountHandler = getUnreadCountHandler;
@@ -10,6 +13,7 @@ exports.markAllNotificationsAsRead = markAllNotificationsAsRead;
 exports.deleteNotification = deleteNotification;
 exports.updateNotificationPreferences = updateNotificationPreferences;
 exports.getNotificationPreferences = getNotificationPreferences;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 const notification_1 = require("../../services/notification");
 /**
@@ -68,7 +72,7 @@ async function getNotifications(req, res) {
         });
     }
     catch (error) {
-        logger.error('Get notifications error:', error);
+        logger_1.default.error('Get notifications error:', error);
         res.status(500).json({ success: false, message: '获取通知列表失败' });
     }
 }
@@ -82,7 +86,7 @@ async function getUnreadCountHandler(req, res) {
         res.json({ success: true, data: { unreadCount: count } });
     }
     catch (error) {
-        logger.error('Get unread count error:', error);
+        logger_1.default.error('Get unread count error:', error);
         res.status(500).json({ success: false, message: '获取未读数量失败' });
     }
 }
@@ -97,7 +101,7 @@ async function markNotificationAsRead(req, res) {
         res.json({ success: true, message: '已标记为已读' });
     }
     catch (error) {
-        logger.error('Mark as read error:', error);
+        logger_1.default.error('Mark as read error:', error);
         res.status(500).json({ success: false, message: '标记失败' });
     }
 }
@@ -111,7 +115,7 @@ async function markAllNotificationsAsRead(req, res) {
         res.json({ success: true, message: '已全部标记为已读' });
     }
     catch (error) {
-        logger.error('Mark all as read error:', error);
+        logger_1.default.error('Mark all as read error:', error);
         res.status(500).json({ success: false, message: '标记失败' });
     }
 }
@@ -126,7 +130,7 @@ async function deleteNotification(req, res) {
         res.json({ success: true, message: '删除成功' });
     }
     catch (error) {
-        logger.error('Delete notification error:', error);
+        logger_1.default.error('Delete notification error:', error);
         res.status(500).json({ success: false, message: '删除失败' });
     }
 }
@@ -144,7 +148,7 @@ async function updateNotificationPreferences(req, res) {
         res.json({ success: true, message: '偏好设置已更新' });
     }
     catch (error) {
-        logger.error('Update preferences error:', error);
+        logger_1.default.error('Update preferences error:', error);
         res.status(500).json({ success: false, message: '更新失败' });
     }
 }
@@ -167,7 +171,7 @@ async function getNotificationPreferences(req, res) {
         res.json({ success: true, data: { preferences } });
     }
     catch (error) {
-        logger.error('Get preferences error:', error);
+        logger_1.default.error('Get preferences error:', error);
         res.status(500).json({ success: false, message: '获取偏好设置失败' });
     }
 }

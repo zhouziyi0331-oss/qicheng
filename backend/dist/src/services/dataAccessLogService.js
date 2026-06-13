@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../utils/db"));
+const logger_1 = __importDefault(require("../utils/logger"));
 class DataAccessLogService {
     /**
      * 记录数据访问
@@ -37,10 +38,10 @@ class DataAccessLogService {
                 params.userAgent || null,
                 params.accessDurationMs || null,
             ]);
-            logger.info(`Logged access: ${params.action} on ${params.resourceType}:${params.resourceId} by ${params.userId}`);
+            logger_1.default.info(`Logged access: ${params.action} on ${params.resourceType}:${params.resourceId} by ${params.userId}`);
         }
         catch (error) {
-            logger.error('Failed to log access:', error);
+            logger_1.default.error('Failed to log access:', error);
             // 不抛出错误，避免影响主流程
         }
     }

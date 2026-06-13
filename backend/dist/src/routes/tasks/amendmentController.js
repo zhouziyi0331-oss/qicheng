@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMyPendingAmendments = exports.getTaskAmendments = exports.respondToAmendment = exports.createAmendment = void 0;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 任务追加需求控制器
@@ -70,7 +74,7 @@ const createAmendment = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建追加需求失败:', error);
+        logger_1.default.error('创建追加需求失败:', error);
         res.status(500).json({ success: false, message: '创建追加需求失败' });
     }
 };
@@ -126,7 +130,7 @@ const respondToAmendment = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('响应追加需求失败:', error);
+        logger_1.default.error('响应追加需求失败:', error);
         res.status(500).json({ success: false, message: '响应追加需求失败' });
     }
 };
@@ -158,7 +162,7 @@ const getTaskAmendments = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取追加需求列表失败:', error);
+        logger_1.default.error('获取追加需求列表失败:', error);
         res.status(500).json({ success: false, message: '获取追加需求列表失败' });
     }
 };
@@ -180,7 +184,7 @@ const getMyPendingAmendments = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取待处理追加需求失败:', error);
+        logger_1.default.error('获取待处理追加需求失败:', error);
         res.status(500).json({ success: false, message: '获取待处理追加需求失败' });
     }
 };

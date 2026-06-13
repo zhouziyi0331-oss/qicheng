@@ -1,4 +1,5 @@
 import { pool } from '../config/database';
+import logger from '../utils/logger';
 import Anthropic from '@anthropic-ai/sdk';
 import { pblAgentService } from './pblAgentService';
 

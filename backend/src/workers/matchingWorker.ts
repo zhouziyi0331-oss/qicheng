@@ -4,6 +4,7 @@
  */
 
 import { matchingQueue } from '../config/queue';
+import logger from '../utils/logger';
 import crossPlatformService from '../services/crossPlatformService';
 import { notificationQueue } from '../config/queue';
 

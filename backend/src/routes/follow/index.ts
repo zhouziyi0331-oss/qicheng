@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import followService from '../../services/followService';
 import { authenticate } from '../../middleware/auth';
 

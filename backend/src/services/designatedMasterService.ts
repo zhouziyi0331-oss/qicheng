@@ -9,6 +9,7 @@
  */
 
 import { pool } from '../config/database';
+import logger from '../utils/logger';
 
 interface MasterFilter {
   track?: 'A' | 'B' | 'AB';

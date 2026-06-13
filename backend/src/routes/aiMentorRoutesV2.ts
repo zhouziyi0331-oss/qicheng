@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express'
+import logger from '../../utils/logger';
 import aiMentorServiceV2 from '../services/aiMentorServiceV2'
 import { authenticate } from '../middleware/auth'
 import { body, validationResult } from 'express-validator'

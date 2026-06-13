@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
+const logger_1 = __importDefault(require("../utils/logger"));
 const uuid_1 = require("uuid");
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const config_1 = require("../../config");
@@ -248,7 +249,7 @@ class TaskExperienceService {
             }
         }
         catch (error) {
-            logger.error('AI生成预算理由失败:', error);
+            logger_1.default.error('AI生成预算理由失败:', error);
         }
         // 降级方案
         return `基于${sampleSize}个同类任务的成交数据，建议预算¥${optimalBudget}可以匹配到${quality === 'premium' ? '高级' : quality === 'basic' ? '入门' : '中级'}水平的学生，预期交付质量良好。`;

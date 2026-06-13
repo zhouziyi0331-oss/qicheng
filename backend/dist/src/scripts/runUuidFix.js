@@ -32,8 +32,12 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const pg_1 = require("pg");
+const logger_1 = __importDefault(require("../utils/logger"));
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const dotenv = __importStar(require("dotenv"));
@@ -43,19 +47,19 @@ async function runMigration() {
         connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/qicheng',
     });
     try {
-        logger.info('连接数据库...');
+        logger_1.default.info('连接数据库...');
         const migrationPath = path.join(__dirname, '../../scripts/db/016_fix_ai_matches_uuid.sql');
         const sql = fs.readFileSync(migrationPath, 'utf-8');
-        logger.info('执行迁移: 016_fix_ai_matches_uuid.sql');
-        logger.info('修复 ai_matches 表的 UUID 类型问题...');
+        logger_1.default.info('执行迁移: 016_fix_ai_matches_uuid.sql');
+        logger_1.default.info('修复 ai_matches 表的 UUID 类型问题...');
         await pool.query(sql);
-        logger.info('✅ 迁移成功完成！');
-        logger.info('已修复：');
-        logger.info('  - ai_matches.task_id: INTEGER → UUID');
-        logger.info('  - ai_matches.student_id: INTEGER → UUID');
+        logger_1.default.info('✅ 迁移成功完成！');
+        logger_1.default.info('已修复：');
+        logger_1.default.info('  - ai_matches.task_id: INTEGER → UUID');
+        logger_1.default.info('  - ai_matches.student_id: INTEGER → UUID');
     }
     catch (error) {
-        logger.error('❌ 迁移失败:', error);
+        logger_1.default.error('❌ 迁移失败:', error);
         process.exit(1);
     }
     finally {

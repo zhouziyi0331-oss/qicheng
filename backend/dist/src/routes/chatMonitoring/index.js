@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const chatScopeMonitoringService_1 = __importDefault(require("../../services/chatScopeMonitoringService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -38,7 +39,7 @@ router.post('/monitor', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('监测消息失败:', error);
+        logger_1.default.error('监测消息失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '监测消息失败',
@@ -83,7 +84,7 @@ router.get('/tasks/:taskId/alerts', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取警报失败:', error);
+        logger_1.default.error('获取警报失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取警报失败',
@@ -131,7 +132,7 @@ router.post('/alerts/:alertId/acknowledge', auth_1.authenticate, async (req, res
         });
     }
     catch (error) {
-        logger.error('确认警报失败:', error);
+        logger_1.default.error('确认警报失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '确认警报失败',
@@ -172,7 +173,7 @@ router.get('/tasks/:taskId/stats', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取监测统计失败:', error);
+        logger_1.default.error('获取监测统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取统计失败',
@@ -195,7 +196,7 @@ router.get('/rules', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取监测规则失败:', error);
+        logger_1.default.error('获取监测规则失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取规则失败',

@@ -1,9 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMentorList = getMentorList;
 exports.getMentorDetail = getMentorDetail;
 exports.updateMentorStatus = updateMentorStatus;
 exports.getMentorSessions = getMentorSessions;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 获取导师列表
@@ -59,7 +63,7 @@ async function getMentorList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取导师列表失败:', error);
+        logger_1.default.error('获取导师列表失败:', error);
         res.status(500).json({ message: '获取导师列表失败' });
     }
 }
@@ -106,7 +110,7 @@ async function getMentorDetail(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取导师详情失败:', error);
+        logger_1.default.error('获取导师详情失败:', error);
         res.status(500).json({ message: '获取导师详情失败' });
     }
 }
@@ -124,7 +128,7 @@ async function updateMentorStatus(req, res) {
         res.json({ message: '导师状态更新成功' });
     }
     catch (error) {
-        logger.error('更新导师状态失败:', error);
+        logger_1.default.error('更新导师状态失败:', error);
         res.status(500).json({ message: '更新导师状态失败' });
     }
 }
@@ -187,7 +191,7 @@ async function getMentorSessions(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取咨询会话列表失败:', error);
+        logger_1.default.error('获取咨询会话列表失败:', error);
         res.status(500).json({ message: '获取咨询会话列表失败' });
     }
 }

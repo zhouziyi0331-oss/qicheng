@@ -10,6 +10,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
+import logger from '../utils/logger';
 import { pool } from '../config/database';
 
 interface DimensionScores {

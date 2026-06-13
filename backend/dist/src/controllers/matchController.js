@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTaskDetailWithMatch = exports.matchTasksForStudent = void 0;
+const logger_1 = __importDefault(require("../utils/logger"));
 const db_1 = require("../utils/db");
 /**
  * 智能项目匹配（升级版）
@@ -87,7 +91,7 @@ const matchTasksForStudent = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('项目匹配失败:', error);
+        logger_1.default.error('项目匹配失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -230,7 +234,7 @@ const getTaskDetailWithMatch = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取任务详情失败:', error);
+        logger_1.default.error('获取任务详情失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };

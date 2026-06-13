@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnlockService = void 0;
 const crypto_1 = __importDefault(require("crypto"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 class UnlockService {
     /**
@@ -44,7 +45,7 @@ class UnlockService {
          (student_id, session_id, amount_fen, wx_out_trade_no, status)
          VALUES ($1, $2, $3, $4, 'pending')
          RETURNING id`, [studentId, sessionId, this.UNLOCK_PRICE_FEN, outTradeNo]);
-            logger.info(`[UnlockService] 创建解锁支付订单: ${paymentResult.rows[0].id}`);
+            logger_1.default.info(`[UnlockService] 创建解锁支付订单: ${paymentResult.rows[0].id}`);
             return {
                 paymentId: paymentResult.rows[0].id,
                 outTradeNo,
@@ -66,7 +67,7 @@ class UnlockService {
             const payment = paymentResult.rows[0];
             // 幂等检查
             if (payment.status === 'paid') {
-                logger.info(`[UnlockService] 支付已处理，跳过: ${payment.id}`);
+                logger_1.default.info(`[UnlockService] 支付已处理，跳过: ${payment.id}`);
                 const existingUnlock = await client.query(`SELECT id FROM unlock_records WHERE payment_id = $1`, [payment.id]);
                 return {
                     unlockRecordId: existingUnlock.rows[0].id,
@@ -127,7 +128,7 @@ class UnlockService {
             await client.query(`UPDATE student_company_matches
          SET status = 'unlocked', updated_at = NOW()
          WHERE id = $1`, [session.match_id]);
-            logger.info(`[UnlockService] 解锁成功: ${unlockResult.rows[0].id}`);
+            logger_1.default.info(`[UnlockService] 解锁成功: ${unlockResult.rows[0].id}`);
             return {
                 unlockRecordId: unlockResult.rows[0].id,
                 contact

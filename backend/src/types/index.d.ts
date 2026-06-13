@@ -6,6 +6,8 @@ declare module 'jsonwebtoken' {
     role: 'student' | 'company' | 'admin';
     phone?: string;
     email?: string;
+    iat?: number;
+    exp?: number;
   }
 }
 

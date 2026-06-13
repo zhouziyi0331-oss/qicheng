@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto_1 = __importDefault(require("crypto"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const db_1 = __importDefault(require("../utils/db"));
 class EncryptionService {
     constructor() {
@@ -52,7 +53,7 @@ class EncryptionService {
             };
         }
         catch (error) {
-            logger.error('Encryption failed:', error);
+            logger_1.default.error('Encryption failed:', error);
             throw new Error('Failed to encrypt data');
         }
     }
@@ -71,7 +72,7 @@ class EncryptionService {
             return decrypted;
         }
         catch (error) {
-            logger.error('Decryption failed:', error);
+            logger_1.default.error('Decryption failed:', error);
             throw new Error('Failed to decrypt data');
         }
     }
@@ -111,7 +112,7 @@ class EncryptionService {
             JSON.stringify(encryptedFieldsMetadata),
             userId,
         ]);
-        logger.info(`Encrypted deliverable ${deliverableId} with ${Object.keys(fields).length} fields`);
+        logger_1.default.info(`Encrypted deliverable ${deliverableId} with ${Object.keys(fields).length} fields`);
         return encryptedFields;
     }
     /**
@@ -156,7 +157,7 @@ class EncryptionService {
         }
         catch (error) {
             // 忽略错误，不影响主流程
-            logger.error('Failed to update key usage:', error);
+            logger_1.default.error('Failed to update key usage:', error);
         }
     }
     /**

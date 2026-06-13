@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AIJudgeService = void 0;
 const axios_1 = __importDefault(require("axios"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 class AIJudgeService {
     /**
@@ -105,11 +106,11 @@ ${params.studentAnswer}
             const result = JSON.parse(content);
             // 记录日志
             await this.logJudge(sessionId, round, modelUsed, response.data.usage?.prompt_tokens || 0, response.data.usage?.completion_tokens || 0, result.result, result.reason, latencyMs);
-            logger.info(`[AIJudgeService] ${round} 判断完成: ${result.result}, 耗时: ${latencyMs}ms`);
+            logger_1.default.info(`[AIJudgeService] ${round} 判断完成: ${result.result}, 耗时: ${latencyMs}ms`);
             return result;
         }
         catch (error) {
-            logger.error(`[AIJudgeService] DeepSeek调用失败，尝试GPT备用:`, error.message);
+            logger_1.default.error(`[AIJudgeService] DeepSeek调用失败，尝试GPT备用:`, error.message);
             // 降级到GPT-4o-mini
             try {
                 apiUrl = this.GPT_API_URL;
@@ -132,11 +133,11 @@ ${params.studentAnswer}
                 const content = response.data.choices[0].message.content;
                 const result = JSON.parse(content);
                 await this.logJudge(sessionId, round, modelUsed, response.data.usage?.prompt_tokens || 0, response.data.usage?.completion_tokens || 0, result.result, result.reason, latencyMs);
-                logger.info(`[AIJudgeService] GPT备用成功: ${result.result}, 耗时: ${latencyMs}ms`);
+                logger_1.default.info(`[AIJudgeService] GPT备用成功: ${result.result}, 耗时: ${latencyMs}ms`);
                 return result;
             }
             catch (gptError) {
-                logger.error(`[AIJudgeService] GPT备用也失败:`, gptError.message);
+                logger_1.default.error(`[AIJudgeService] GPT备用也失败:`, gptError.message);
                 throw new Error('AI判断服务暂时不可用，请稍后重试');
             }
         }
@@ -151,7 +152,7 @@ ${params.studentAnswer}
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [sessionId, round, modelUsed, promptTokens, completionTokens, result, reason, latencyMs]);
         }
         catch (error) {
-            logger.error('[AIJudgeService] 记录日志失败:', error);
+            logger_1.default.error('[AIJudgeService] 记录日志失败:', error);
             // 不抛出错误，避免影响主流程
         }
     }

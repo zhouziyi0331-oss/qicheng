@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const escrowTransparencyService_1 = __importDefault(require("../../services/escrowTransparencyService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -41,7 +42,7 @@ router.get('/:taskId/flow', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取托管流程失败:', error);
+        logger_1.default.error('获取托管流程失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取托管流程失败',
@@ -94,7 +95,7 @@ router.post('/:taskId/deposit', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('托管充值失败:', error);
+        logger_1.default.error('托管充值失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '充值失败',
@@ -136,7 +137,7 @@ router.post('/:taskId/release', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('释放资金失败:', error);
+        logger_1.default.error('释放资金失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '释放资金失败',
@@ -171,7 +172,7 @@ router.post('/:taskId/refund', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('退款失败:', error);
+        logger_1.default.error('退款失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '退款失败',
@@ -202,7 +203,7 @@ router.put('/nodes/:nodeId/status', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('更新节点状态失败:', error);
+        logger_1.default.error('更新节点状态失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '更新失败',
@@ -230,7 +231,7 @@ router.post('/transactions/:transactionId/complete', auth_1.authenticate, async 
         });
     }
     catch (error) {
-        logger.error('完成交易失败:', error);
+        logger_1.default.error('完成交易失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '完成交易失败',
@@ -265,7 +266,7 @@ router.post('/transactions/:transactionId/fail', auth_1.authenticate, async (req
         });
     }
     catch (error) {
-        logger.error('标记交易失败:', error);
+        logger_1.default.error('标记交易失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '操作失败',

@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const communicationService_1 = require("../services/communicationService");
 const auth_1 = require("../middleware/auth");
 const roleCheck_1 = require("../middleware/roleCheck");
@@ -20,7 +24,7 @@ router.post('/clarifications', auth_1.authenticate, (0, roleCheck_1.requireRole)
         res.json({ success: true, data: clarification });
     }
     catch (error) {
-        logger.error('添加补充说明失败:', error);
+        logger_1.default.error('添加补充说明失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -35,7 +39,7 @@ router.get('/clarifications/:taskId', auth_1.authenticate, async (req, res) => {
         res.json({ success: true, data: clarifications });
     }
     catch (error) {
-        logger.error('获取补充说明失败:', error);
+        logger_1.default.error('获取补充说明失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -54,7 +58,7 @@ router.post('/questions', auth_1.authenticate, (0, roleCheck_1.requireRole)('stu
         res.json({ success: true, data: result });
     }
     catch (error) {
-        logger.error('提问失败:', error);
+        logger_1.default.error('提问失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -70,7 +74,7 @@ router.post('/questions/:questionId/forward', auth_1.authenticate, (0, roleCheck
         res.json(result);
     }
     catch (error) {
-        logger.error('转发问题失败:', error);
+        logger_1.default.error('转发问题失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -90,7 +94,7 @@ router.post('/questions/:questionId/answer', auth_1.authenticate, (0, roleCheck_
         res.json({ success: true, data: result });
     }
     catch (error) {
-        logger.error('回答问题失败:', error);
+        logger_1.default.error('回答问题失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -107,7 +111,7 @@ router.get('/questions/:taskId', auth_1.authenticate, async (req, res) => {
         res.json({ success: true, data: questions });
     }
     catch (error) {
-        logger.error('获取问答列表失败:', error);
+        logger_1.default.error('获取问答列表失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -123,7 +127,7 @@ router.post('/questions/:questionId/helpful', auth_1.authenticate, async (req, r
         res.json(result);
     }
     catch (error) {
-        logger.error('标记失败:', error);
+        logger_1.default.error('标记失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -142,7 +146,7 @@ router.post('/messages', auth_1.authenticate, async (req, res) => {
         res.json({ success: true, data: result });
     }
     catch (error) {
-        logger.error('发送消息失败:', error);
+        logger_1.default.error('发送消息失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -158,7 +162,7 @@ router.get('/messages/:taskId', auth_1.authenticate, async (req, res) => {
         res.json({ success: true, data: messages });
     }
     catch (error) {
-        logger.error('获取消息列表失败:', error);
+        logger_1.default.error('获取消息列表失败:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -173,7 +177,7 @@ router.get('/unread-count', auth_1.authenticate, async (req, res) => {
         res.json({ success: true, data: { count } });
     }
     catch (error) {
-        logger.error('获取未读数失败:', error);
+        logger_1.default.error('获取未读数失败:', error);
         res.status(500).json({ error: error.message });
     }
 });

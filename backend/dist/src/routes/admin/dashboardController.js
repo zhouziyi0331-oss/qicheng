@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDashboardStats = getDashboardStats;
 exports.getAlerts = getAlerts;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 获取数据看板统计
@@ -124,7 +128,7 @@ async function getDashboardStats(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取数据看板失败:', error);
+        logger_1.default.error('获取数据看板失败:', error);
         res.status(500).json({ error: '获取数据失败' });
     }
 }
@@ -204,7 +208,7 @@ async function getAlerts(req, res) {
         res.json({ alerts });
     }
     catch (error) {
-        logger.error('获取预警列表失败:', error);
+        logger_1.default.error('获取预警列表失败:', error);
         res.status(500).json({ error: '获取预警失败' });
     }
 }

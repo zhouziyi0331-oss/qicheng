@@ -1,4 +1,5 @@
 import { pool } from '../utils/db';
+import logger from '../utils/logger';
 
 /**
  * OPC能力画像测试服务 v2.0

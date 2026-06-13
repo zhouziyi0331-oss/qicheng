@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = login;
 exports.getCurrentAdmin = getCurrentAdmin;
 exports.changePassword = changePassword;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../../utils/db");
@@ -59,7 +60,7 @@ async function login(req, res) {
         });
     }
     catch (error) {
-        logger.error('管理员登录失败:', error);
+        logger_1.default.error('管理员登录失败:', error);
         res.status(500).json({ error: '登录失败' });
     }
 }
@@ -93,7 +94,7 @@ async function getCurrentAdmin(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取管理员信息失败:', error);
+        logger_1.default.error('获取管理员信息失败:', error);
         res.status(500).json({ error: '获取信息失败' });
     }
 }
@@ -119,7 +120,7 @@ async function changePassword(req, res) {
         res.json({ message: '密码修改成功' });
     }
     catch (error) {
-        logger.error('修改密码失败:', error);
+        logger_1.default.error('修改密码失败:', error);
         res.status(500).json({ error: '修改密码失败' });
     }
 }

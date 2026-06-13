@@ -1,4 +1,5 @@
 import { aiServiceClient } from './aiServiceClient';
+import logger from '../utils/logger';
 import { AppError } from '../middleware/errorHandler';
 import { pool } from '../utils/db';
 

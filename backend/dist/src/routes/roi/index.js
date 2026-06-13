@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const roiAnalyticsService_1 = __importDefault(require("../../services/roiAnalyticsService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -29,7 +30,7 @@ router.get('/dashboard', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取ROI看板失败:', error);
+        logger_1.default.error('获取ROI看板失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取ROI看板失败',
@@ -61,7 +62,7 @@ router.get('/financial-stats', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取财务统计失败:', error);
+        logger_1.default.error('获取财务统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取财务统计失败',
@@ -93,7 +94,7 @@ router.get('/historical-stats', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取历史统计失败:', error);
+        logger_1.default.error('获取历史统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取历史统计失败',
@@ -129,7 +130,7 @@ router.post('/cost-comparison', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建成本对比失败:', error);
+        logger_1.default.error('创建成本对比失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建成本对比失败',
@@ -152,7 +153,7 @@ router.get('/market-benchmarks', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取市场基准失败:', error);
+        logger_1.default.error('获取市场基准失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取市场基准失败',
@@ -187,7 +188,7 @@ router.post('/refresh-stats', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('刷新统计失败:', error);
+        logger_1.default.error('刷新统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '刷新统计失败',

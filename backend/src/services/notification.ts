@@ -4,6 +4,7 @@
  */
 
 import { query } from '../utils/db';
+import logger from '../utils/logger';
 import axios from 'axios';
 
 // 通知类型

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
 const config_1 = require("../../config");
 const uuid_1 = require("uuid");
@@ -291,7 +292,7 @@ class AssetVisualizationService {
             return '你的成长速度挺稳的——从第1单到现在，进步看得见。';
         }
         catch (error) {
-            logger.error('AI生成对比文案失败:', error);
+            logger_1.default.error('AI生成对比文案失败:', error);
             return `第1单你花了${data.firstTask.durationDays}天，卡了${data.firstTask.stuckCount}次。这一单你花了${data.currentTask.durationDays}天，${data.currentTask.stuckCount}次卡住。`;
         }
     }
@@ -331,7 +332,7 @@ class AssetVisualizationService {
             return `你升到Lv.${data.toLevel}了。从记录看，你的进步很稳。继续这个节奏，下一级不远了。`;
         }
         catch (error) {
-            logger.error('AI生成导师留言失败:', error);
+            logger_1.default.error('AI生成导师留言失败:', error);
             return `你升到Lv.${data.toLevel}了。第1单你花了${data.firstTaskDays}天，最近平均${data.recentAvgDays}天就能完成一单。按这个速度，Lv.${data.toLevel + 1}大概${Math.ceil((data.toLevel + 1 - data.toLevel) * 15)}天就能到。`;
         }
     }

@@ -1,4 +1,5 @@
 import { pool } from '../utils/db';
+import logger from '../utils/logger';
 import { embeddingService } from '../services/embeddingService';
 
 async function generateTaskEmbeddings() {

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
 const config_1 = require("../../config");
 const uuid_1 = require("uuid");
@@ -419,7 +420,7 @@ ${similarCases.length > 0
             };
         }
         catch (error) {
-            logger.error('AI调用失败:', error);
+            logger_1.default.error('AI调用失败:', error);
             throw new Error('导师服务暂时不可用，请稍后重试');
         }
     }

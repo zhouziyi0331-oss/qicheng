@@ -7,8 +7,12 @@
  * 2. 计算指定大师模式的兜底价
  * 3. 基于历史数据优化推荐算法
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
+const logger_1 = __importDefault(require("../utils/logger"));
 class PriceRecommendationService {
     constructor() {
         /**
@@ -45,7 +49,7 @@ class PriceRecommendationService {
      * 计算价格推荐
      */
     async calculatePriceRecommendation(input) {
-        logger.info('[价格推荐] 开始计算', input);
+        logger_1.default.info('[价格推荐] 开始计算', input);
         // 1. 计算基准价格
         const basePrice = this.calculateBasePrice(input);
         // 2. 获取历史数据参考
@@ -57,13 +61,13 @@ class PriceRecommendationService {
             // 有足够历史数据，基于历史均价计算
             priceMin = Math.round(historicalData.avgPrice * 0.8);
             priceMax = Math.round(historicalData.avgPrice * 1.5);
-            logger.info(`[价格推荐] 基于历史数据：均价=${historicalData.avgPrice}, 样本数=${historicalData.count}`);
+            logger_1.default.info(`[价格推荐] 基于历史数据：均价=${historicalData.avgPrice}, 样本数=${historicalData.count}`);
         }
         else {
             // 历史数据不足，基于基准价计算
             priceMin = Math.round(basePrice * 0.85);
             priceMax = Math.round(basePrice * 1.3);
-            logger.info(`[价格推荐] 基于基准价：basePrice=${basePrice}`);
+            logger_1.default.info(`[价格推荐] 基于基准价：basePrice=${basePrice}`);
         }
         // 4. 计算指定大师兜底价（推荐上限 × 1.5）
         const floorPrice = Math.round(priceMax * 1.5);
@@ -75,7 +79,7 @@ class PriceRecommendationService {
             historicalAvgPrice: historicalData.avgPrice,
             similarTasksCount: historicalData.count
         };
-        logger.info('[价格推荐] 计算完成', recommendation);
+        logger_1.default.info('[价格推荐] 计算完成', recommendation);
         return recommendation;
     }
     /**
@@ -142,7 +146,7 @@ class PriceRecommendationService {
                 recommendation.historicalAvgPrice || null,
                 recommendation.similarTasksCount || 0
             ]);
-            logger.info(`[价格推荐] 已保存计算历史: taskId=${taskId}`);
+            logger_1.default.info(`[价格推荐] 已保存计算历史: taskId=${taskId}`);
         }
         finally {
             client.release();

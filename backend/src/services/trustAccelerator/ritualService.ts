@@ -7,6 +7,7 @@
  */
 
 import { query, withTransaction } from '../../utils/db';
+import logger from '../../utils/logger';
 import { PoolClient } from 'pg';
 
 export class RitualService {

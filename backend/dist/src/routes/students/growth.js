@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const studentGrowthService_1 = __importDefault(require("../../services/studentGrowthService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -46,7 +47,7 @@ router.get('/:id/growth-timeline', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取成长时间轴失败:', error);
+        logger_1.default.error('获取成长时间轴失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取成长时间轴失败',
@@ -81,7 +82,7 @@ router.get('/:id/milestones', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取里程碑失败:', error);
+        logger_1.default.error('获取里程碑失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取里程碑失败',
@@ -119,7 +120,7 @@ router.get('/:id/skill-evolution', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取技能进化失败:', error);
+        logger_1.default.error('获取技能进化失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取技能进化失败',
@@ -166,7 +167,7 @@ router.post('/:id/growth-events', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('记录成长事件失败:', error);
+        logger_1.default.error('记录成长事件失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '记录成长事件失败',
@@ -207,7 +208,7 @@ router.get('/:id/growth-summary', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取成长概览失败:', error);
+        logger_1.default.error('获取成长概览失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取成长概览失败',

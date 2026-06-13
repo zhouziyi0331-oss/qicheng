@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllDisputes = exports.handleDispute = exports.getDisputeDetail = exports.getMyDisputes = exports.createDispute = void 0;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 申诉/纠纷处理控制器
@@ -58,7 +62,7 @@ const createDispute = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建申诉失败:', error);
+        logger_1.default.error('创建申诉失败:', error);
         res.status(500).json({ success: false, message: '创建申诉失败' });
     }
 };
@@ -88,7 +92,7 @@ const getMyDisputes = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取申诉列表失败:', error);
+        logger_1.default.error('获取申诉列表失败:', error);
         res.status(500).json({ success: false, message: '获取申诉列表失败' });
     }
 };
@@ -124,7 +128,7 @@ const getDisputeDetail = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取申诉详情失败:', error);
+        logger_1.default.error('获取申诉详情失败:', error);
         res.status(500).json({ success: false, message: '获取申诉详情失败' });
     }
 };
@@ -177,7 +181,7 @@ const handleDispute = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('处理申诉失败:', error);
+        logger_1.default.error('处理申诉失败:', error);
         res.status(500).json({ success: false, message: '处理申诉失败' });
     }
 };
@@ -233,7 +237,7 @@ const getAllDisputes = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取申诉列表失败:', error);
+        logger_1.default.error('获取申诉列表失败:', error);
         res.status(500).json({ success: false, message: '获取申诉列表失败' });
     }
 };

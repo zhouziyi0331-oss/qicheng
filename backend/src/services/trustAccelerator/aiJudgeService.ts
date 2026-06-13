@@ -8,6 +8,7 @@
  */
 
 import axios from 'axios';
+import logger from '../../utils/logger';
 import { query, withTransaction } from '../../utils/db';
 import { PoolClient } from 'pg';
 

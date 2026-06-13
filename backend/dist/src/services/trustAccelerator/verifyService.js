@@ -8,9 +8,13 @@
  * 3. 状态机转换
  * 4. 调用AI判断服务
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VerifyService = void 0;
 const db_1 = require("../../utils/db");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const aiJudgeService_1 = require("./aiJudgeService");
 class VerifyService {
     /**
@@ -50,7 +54,7 @@ class VerifyService {
             await client.query(`UPDATE student_company_matches
          SET status = 'verifying', updated_at = NOW()
          WHERE id = $1`, [matchId]);
-            logger.info(`[VerifyService] 创建验证会话: ${sessionId}`);
+            logger_1.default.info(`[VerifyService] 创建验证会话: ${sessionId}`);
             return {
                 sessionId,
                 round1Question: {
@@ -91,7 +95,7 @@ class VerifyService {
          WHERE id = $1`, [sessionId, answer]);
             // 异步调用AI判断（不阻塞）
             this.processRound1Judge(sessionId, session, answer).catch(err => {
-                logger.error('[VerifyService] AI判断异步处理失败:', err);
+                logger_1.default.error('[VerifyService] AI判断异步处理失败:', err);
             });
             return { status: 'round1_judging' };
         });
@@ -167,7 +171,7 @@ class VerifyService {
             });
         }
         catch (error) {
-            logger.error('[VerifyService] 第一轮判断处理失败:', error);
+            logger_1.default.error('[VerifyService] 第一轮判断处理失败:', error);
             // 更新状态为失败
             await (0, db_1.query)(`UPDATE verify_sessions
          SET status = 'failed', updated_at = NOW()
@@ -199,7 +203,7 @@ class VerifyService {
          WHERE id = $1`, [sessionId, answer]);
             // 异步调用AI判断
             this.processRound2Judge(sessionId, session, answer).catch(err => {
-                logger.error('[VerifyService] 第二轮AI判断失败:', err);
+                logger_1.default.error('[VerifyService] 第二轮AI判断失败:', err);
             });
             return { status: 'round2_judging' };
         });
@@ -240,7 +244,7 @@ class VerifyService {
             });
         }
         catch (error) {
-            logger.error('[VerifyService] 第二轮判断处理失败:', error);
+            logger_1.default.error('[VerifyService] 第二轮判断处理失败:', error);
             await (0, db_1.query)(`UPDATE verify_sessions
          SET status = 'failed', updated_at = NOW()
          WHERE id = $1`, [sessionId]);

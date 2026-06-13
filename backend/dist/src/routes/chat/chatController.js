@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.archiveSession = exports.getUnreadCount = exports.markMessagesAsRead = exports.sendMessage = exports.getChatMessages = exports.getChatSessions = exports.getOrCreateSession = void 0;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 聊天系统控制器
@@ -54,7 +58,7 @@ const getOrCreateSession = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取或创建会话失败:', error);
+        logger_1.default.error('获取或创建会话失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -97,7 +101,7 @@ const getChatSessions = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取会话列表失败:', error);
+        logger_1.default.error('获取会话列表失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -144,7 +148,7 @@ const getChatMessages = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取聊天记录失败:', error);
+        logger_1.default.error('获取聊天记录失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -195,7 +199,7 @@ const sendMessage = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('发送消息失败:', error);
+        logger_1.default.error('发送消息失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -252,7 +256,7 @@ const markMessagesAsRead = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('标记已读失败:', error);
+        logger_1.default.error('标记已读失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -276,7 +280,7 @@ const getUnreadCount = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取未读数失败:', error);
+        logger_1.default.error('获取未读数失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -305,7 +309,7 @@ const archiveSession = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('归档会话失败:', error);
+        logger_1.default.error('归档会话失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'

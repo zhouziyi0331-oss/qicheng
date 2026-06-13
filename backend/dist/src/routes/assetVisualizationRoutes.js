@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const assetVisualizationService_1 = __importDefault(require("../services/assetVisualizationService"));
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
@@ -21,7 +22,7 @@ router.get('/dashboard', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        logger.error('获取资产仪表盘失败:', error);
+        logger_1.default.error('获取资产仪表盘失败:', error);
         next(error);
     }
 });
@@ -46,7 +47,7 @@ router.post('/growth-comparison', auth_1.authenticate, async (req, res, next) =>
         });
     }
     catch (error) {
-        logger.error('生成成长对比卡片失败:', error);
+        logger_1.default.error('生成成长对比卡片失败:', error);
         next(error);
     }
 });
@@ -71,7 +72,7 @@ router.post('/level-up', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        logger.error('生成升级仪式失败:', error);
+        logger_1.default.error('生成升级仪式失败:', error);
         next(error);
     }
 });
@@ -111,7 +112,7 @@ router.get('/growth-history', auth_1.authenticate, async (req, res, next) => {
         }
     }
     catch (error) {
-        logger.error('获取成长历史失败:', error);
+        logger_1.default.error('获取成长历史失败:', error);
         next(error);
     }
 });
@@ -149,7 +150,7 @@ router.get('/level-history', auth_1.authenticate, async (req, res, next) => {
         }
     }
     catch (error) {
-        logger.error('获取升级历史失败:', error);
+        logger_1.default.error('获取升级历史失败:', error);
         next(error);
     }
 });

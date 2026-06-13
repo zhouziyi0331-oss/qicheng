@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.qaService = void 0;
 const aiServiceClient_1 = require("./aiServiceClient");
+const logger_1 = __importDefault(require("../utils/logger"));
 const errorHandler_1 = require("../middleware/errorHandler");
 const uuid_1 = require("uuid");
 const db_1 = require("../utils/db");
@@ -23,7 +27,7 @@ class QAService {
             return result;
         }
         catch (error) {
-            logger.error('QA service failed:', error);
+            logger_1.default.error('QA service failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to answer question');
         }
     }
@@ -40,7 +44,7 @@ class QAService {
             await db_1.pool.query(query, [conversationId, studentId, taskId, question, answer]);
         }
         catch (error) {
-            logger.error('Failed to save conversation:', error);
+            logger_1.default.error('Failed to save conversation:', error);
             // 不抛出错误，避免影响主流程
         }
     }
@@ -81,7 +85,7 @@ class QAService {
         catch (error) {
             if (error instanceof errorHandler_1.AppError)
                 throw error;
-            logger.error('Failed to get conversation history:', error);
+            logger_1.default.error('Failed to get conversation history:', error);
             throw new errorHandler_1.AppError(500, 'Failed to get conversation history');
         }
     }
@@ -126,7 +130,7 @@ class QAService {
             };
         }
         catch (error) {
-            logger.error('Failed to get conversation:', error);
+            logger_1.default.error('Failed to get conversation:', error);
             throw new errorHandler_1.AppError(500, 'Failed to get conversation');
         }
     }

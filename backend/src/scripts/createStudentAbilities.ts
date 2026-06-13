@@ -1,4 +1,5 @@
 import pool from '../utils/db';
+import logger from '../utils/logger';
 
 async function createStudentAbilities() {
   try {

@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFinanceOverview = getFinanceOverview;
 exports.getTransactionList = getTransactionList;
@@ -7,6 +10,7 @@ exports.approveWithdrawal = approveWithdrawal;
 exports.getRevenueStats = getRevenueStats;
 exports.getCommissionConfig = getCommissionConfig;
 exports.updateCommissionConfig = updateCommissionConfig;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 获取财务概览
@@ -39,7 +43,7 @@ async function getFinanceOverview(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取财务概览失败:', error);
+        logger_1.default.error('获取财务概览失败:', error);
         res.status(500).json({ message: '获取财务概览失败' });
     }
 }
@@ -108,7 +112,7 @@ async function getTransactionList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取交易流水失败:', error);
+        logger_1.default.error('获取交易流水失败:', error);
         res.status(500).json({ message: '获取交易流水失败' });
     }
 }
@@ -161,7 +165,7 @@ async function getWithdrawalList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取提现申请列表失败:', error);
+        logger_1.default.error('获取提现申请列表失败:', error);
         res.status(500).json({ message: '获取提现申请列表失败' });
     }
 }
@@ -228,7 +232,7 @@ async function approveWithdrawal(req, res) {
         }
     }
     catch (error) {
-        logger.error('审核提现申请失败:', error);
+        logger_1.default.error('审核提现申请失败:', error);
         res.status(500).json({ message: '审核提现申请失败' });
     }
 }
@@ -274,7 +278,7 @@ async function getRevenueStats(req, res) {
         res.json(stats);
     }
     catch (error) {
-        logger.error('获取收入统计失败:', error);
+        logger_1.default.error('获取收入统计失败:', error);
         res.status(500).json({ message: '获取收入统计失败' });
     }
 }
@@ -289,7 +293,7 @@ async function getCommissionConfig(req, res) {
         res.json(config);
     }
     catch (error) {
-        logger.error('获取平台抽成配置失败:', error);
+        logger_1.default.error('获取平台抽成配置失败:', error);
         res.status(500).json({ message: '获取平台抽成配置失败' });
     }
 }
@@ -306,7 +310,7 @@ async function updateCommissionConfig(req, res) {
         res.json({ message: '平台抽成配置更新成功' });
     }
     catch (error) {
-        logger.error('更新平台抽成配置失败:', error);
+        logger_1.default.error('更新平台抽成配置失败:', error);
         res.status(500).json({ message: '更新平台抽成配置失败' });
     }
 }

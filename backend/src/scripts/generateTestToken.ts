@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import logger from '../utils/logger';
 import { config } from '../../config';
 
 // 生成测试用的JWT令牌

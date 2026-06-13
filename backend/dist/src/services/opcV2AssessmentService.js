@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OPCV2AssessmentService = void 0;
 const db_1 = require("../utils/db");
+const logger_1 = __importDefault(require("../utils/logger"));
 class OPCV2AssessmentService {
     /**
      * 开始新测试
@@ -214,10 +218,10 @@ class OPCV2AssessmentService {
                 answers,
                 scores: result
             });
-            logger.info(`[OPC] Enqueued work condition profile generation for student ${studentId}`);
+            logger_1.default.info(`[OPC] Enqueued work condition profile generation for student ${studentId}`);
         }
         catch (error) {
-            logger.error('[OPC] Failed to enqueue work condition profile generation:', error);
+            logger_1.default.error('[OPC] Failed to enqueue work condition profile generation:', error);
             // 不影响测试完成流程，只记录错误
         }
         return savedResult.rows[0];

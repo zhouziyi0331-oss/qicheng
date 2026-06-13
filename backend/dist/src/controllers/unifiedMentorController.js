@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unifiedMentorController = exports.UnifiedMentorController = void 0;
+const logger_1 = __importDefault(require("../utils/logger"));
 const unifiedMentorService_1 = require("../services/unifiedMentorService");
 class UnifiedMentorController {
     // 统一对话接口
@@ -17,7 +21,7 @@ class UnifiedMentorController {
             });
         }
         catch (err) {
-            logger.error('对话失败:', err);
+            logger_1.default.error('对话失败:', err);
             res.status(500).json({
                 success: false,
                 error: '对话失败'
@@ -42,7 +46,7 @@ class UnifiedMentorController {
             });
         }
         catch (err) {
-            logger.error('切换模式失败:', err);
+            logger_1.default.error('切换模式失败:', err);
             res.status(500).json({
                 success: false,
                 error: '切换模式失败'
@@ -62,7 +66,7 @@ class UnifiedMentorController {
             });
         }
         catch (err) {
-            logger.error('获取历史失败:', err);
+            logger_1.default.error('获取历史失败:', err);
             res.status(500).json({
                 success: false,
                 error: '获取历史失败'
@@ -81,7 +85,7 @@ class UnifiedMentorController {
             });
         }
         catch (err) {
-            logger.error('创建关联失败:', err);
+            logger_1.default.error('创建关联失败:', err);
             res.status(500).json({
                 success: false,
                 error: '创建关联失败'
@@ -99,7 +103,7 @@ class UnifiedMentorController {
             });
         }
         catch (err) {
-            logger.error('获取成长旅程失败:', err);
+            logger_1.default.error('获取成长旅程失败:', err);
             res.status(500).json({
                 success: false,
                 error: '获取成长旅程失败'

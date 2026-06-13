@@ -1,10 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStudentList = getStudentList;
 exports.getStudentDetail = getStudentDetail;
 exports.getStudentAbility = getStudentAbility;
 exports.getStudentGrowth = getStudentGrowth;
 exports.updateStudentStatus = updateStudentStatus;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 const dataMask_1 = require("../../utils/dataMask");
 const auditLog_1 = require("../../utils/auditLog");
@@ -70,7 +74,7 @@ async function getStudentList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取学生列表失败:', error);
+        logger_1.default.error('获取学生列表失败:', error);
         res.status(500).json({ error: '获取学生列表失败' });
     }
 }
@@ -184,7 +188,7 @@ async function getStudentDetail(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取学生详情失败:', error);
+        logger_1.default.error('获取学生详情失败:', error);
         res.status(500).json({ error: '获取学生详情失败' });
     }
 }
@@ -246,7 +250,7 @@ async function getStudentAbility(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取学生能力画像失败:', error);
+        logger_1.default.error('获取学生能力画像失败:', error);
         res.status(500).json({ error: '获取学生能力画像失败' });
     }
 }
@@ -307,7 +311,7 @@ async function getStudentGrowth(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取学生成长轨迹失败:', error);
+        logger_1.default.error('获取学生成长轨迹失败:', error);
         res.status(500).json({ error: '获取学生成长轨迹失败' });
     }
 }
@@ -325,7 +329,7 @@ async function updateStudentStatus(req, res) {
         res.json({ message: '状态更新成功' });
     }
     catch (error) {
-        logger.error('更新学生状态失败:', error);
+        logger_1.default.error('更新学生状态失败:', error);
         res.status(500).json({ error: '更新学生状态失败' });
     }
 }

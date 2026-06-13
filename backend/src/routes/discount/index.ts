@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import tieredDiscountService from '../../services/tieredDiscountService';
 import { authenticate } from '../../middleware/auth';
 

@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCompanyList = getCompanyList;
 exports.getCompanyDetail = getCompanyDetail;
@@ -6,6 +9,7 @@ exports.verifyCompany = verifyCompany;
 exports.toggleBlacklist = toggleBlacklist;
 exports.getPendingVerifications = getPendingVerifications;
 exports.getCompanyTasks = getCompanyTasks;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 获取企业列表
@@ -70,7 +74,7 @@ async function getCompanyList(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取企业列表失败:', error);
+        logger_1.default.error('获取企业列表失败:', error);
         res.status(500).json({ message: '获取企业列表失败' });
     }
 }
@@ -121,7 +125,7 @@ async function getCompanyDetail(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取企业详情失败:', error);
+        logger_1.default.error('获取企业详情失败:', error);
         res.status(500).json({ message: '获取企业详情失败' });
     }
 }
@@ -163,7 +167,7 @@ async function verifyCompany(req, res) {
         res.json({ message: approved ? '认证通过' : '认证拒绝' });
     }
     catch (error) {
-        logger.error('审核企业认证失败:', error);
+        logger_1.default.error('审核企业认证失败:', error);
         res.status(500).json({ message: '审核企业认证失败' });
     }
 }
@@ -182,7 +186,7 @@ async function toggleBlacklist(req, res) {
         res.json({ message: isBlacklisted ? '已加入黑名单' : '已移出黑名单' });
     }
     catch (error) {
-        logger.error('操作黑名单失败:', error);
+        logger_1.default.error('操作黑名单失败:', error);
         res.status(500).json({ message: '操作黑名单失败' });
     }
 }
@@ -223,7 +227,7 @@ async function getPendingVerifications(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取待审核企业列表失败:', error);
+        logger_1.default.error('获取待审核企业列表失败:', error);
         res.status(500).json({ message: '获取待审核企业列表失败' });
     }
 }
@@ -262,7 +266,7 @@ async function getCompanyTasks(req, res) {
         });
     }
     catch (error) {
-        logger.error('获取企业任务列表失败:', error);
+        logger_1.default.error('获取企业任务列表失败:', error);
         res.status(500).json({ message: '获取企业任务列表失败' });
     }
 }

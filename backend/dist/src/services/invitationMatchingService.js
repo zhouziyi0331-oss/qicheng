@@ -32,9 +32,13 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.invitationMatchingService = void 0;
 const aiServiceClient_1 = require("./aiServiceClient");
+const logger_1 = __importDefault(require("../utils/logger"));
 const errorHandler_1 = require("../middleware/errorHandler");
 const uuid_1 = require("uuid");
 class InvitationMatchingService {
@@ -50,7 +54,7 @@ class InvitationMatchingService {
             return result;
         }
         catch (error) {
-            logger.error('Student matching failed:', error);
+            logger_1.default.error('Student matching failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to match students');
         }
     }
@@ -66,7 +70,7 @@ class InvitationMatchingService {
             return result;
         }
         catch (error) {
-            logger.error('Task matching failed:', error);
+            logger_1.default.error('Task matching failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to match tasks');
         }
     }
@@ -159,7 +163,7 @@ class InvitationMatchingService {
         catch (error) {
             if (error instanceof errorHandler_1.AppError)
                 throw error;
-            logger.error('Failed to send invitation:', error);
+            logger_1.default.error('Failed to send invitation:', error);
             throw new errorHandler_1.AppError(500, 'Failed to send invitation');
         }
     }
@@ -191,7 +195,7 @@ class InvitationMatchingService {
             }));
         }
         catch (error) {
-            logger.error('Failed to get student invitations:', error);
+            logger_1.default.error('Failed to get student invitations:', error);
             throw new errorHandler_1.AppError(500, 'Failed to get student invitations');
         }
     }
@@ -235,7 +239,7 @@ class InvitationMatchingService {
         catch (error) {
             if (error instanceof errorHandler_1.AppError)
                 throw error;
-            logger.error('Failed to update invitation status:', error);
+            logger_1.default.error('Failed to update invitation status:', error);
             throw new errorHandler_1.AppError(500, 'Failed to update invitation status');
         }
     }

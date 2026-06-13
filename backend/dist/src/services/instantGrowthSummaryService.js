@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
 class InstantGrowthSummaryService {
     constructor() {
@@ -25,13 +26,13 @@ class InstantGrowthSummaryService {
      * 生成即时成长总结（订单完成后触发）
      */
     async generateInstantSummary(orderId) {
-        logger.info(`[即时成长总结] 开始生成订单 ${orderId} 的成长总结`);
+        logger_1.default.info(`[即时成长总结] 开始生成订单 ${orderId} 的成长总结`);
         // 1. 收集数据
         const data = await this.collectData(orderId);
         // 2. 检查缓存
         const cached = await this.checkCache(orderId);
         if (cached) {
-            logger.info(`[即时成长总结] 使用缓存的总结`);
+            logger_1.default.info(`[即时成长总结] 使用缓存的总结`);
             return cached;
         }
         // 3. 调用AI生成总结
@@ -40,7 +41,7 @@ class InstantGrowthSummaryService {
         await this.saveToCache(orderId, data.order.student_id, summary);
         // 5. 更新 mentor_growth_observations 表
         await this.updateGrowthObservation(orderId, summary);
-        logger.info(`[即时成长总结] 生成完成`);
+        logger_1.default.info(`[即时成长总结] 生成完成`);
         return summary;
     }
     /**
@@ -171,7 +172,7 @@ class InstantGrowthSummaryService {
             ],
         });
         const generationTime = Date.now() - startTime;
-        logger.info(`[即时成长总结] AI生成耗时: ${generationTime}ms`);
+        logger_1.default.info(`[即时成长总结] AI生成耗时: ${generationTime}ms`);
         // 解析响应
         const content = response.content[0];
         if (content.type !== 'text') {
@@ -186,15 +187,15 @@ class InstantGrowthSummaryService {
         // 【关键】字数验证
         const totalText = result.paragraph_1 + result.paragraph_2 + result.paragraph_3;
         const actualWordCount = totalText.length;
-        logger.info(`[即时成长总结] 实际字数: ${actualWordCount}`);
+        logger_1.default.info(`[即时成长总结] 实际字数: ${actualWordCount}`);
         // 如果字数不足300字，重试一次
         if (actualWordCount < 300 && retryCount === 0) {
-            logger.warn(`[即时成长总结] 字数不足(${actualWordCount}字)，重试生成...`);
+            logger_1.default.warn(`[即时成长总结] 字数不足(${actualWordCount}字)，重试生成...`);
             return this.callAI(data, 1); // 重试一次
         }
         // 重试后仍不足，记录错误但仍返回
         if (actualWordCount < 300) {
-            logger.error(`[即时成长总结] 重试后字数仍不足: ${actualWordCount}字`);
+            logger_1.default.error(`[即时成长总结] 重试后字数仍不足: ${actualWordCount}字`);
         }
         // 转换为原格式
         const summary = {

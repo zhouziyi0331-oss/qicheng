@@ -32,8 +32,12 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const pg_1 = require("pg");
+const logger_1 = __importDefault(require("../utils/logger"));
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const dotenv = __importStar(require("dotenv"));
@@ -47,23 +51,23 @@ async function runMigration() {
         connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/qicheng',
     });
     try {
-        logger.info('连接数据库...');
+        logger_1.default.info('连接数据库...');
         // 读取迁移文件
         const migrationPath = path.join(__dirname, '../../scripts/db/015_hybrid_matching_embeddings.sql');
         const sql = fs.readFileSync(migrationPath, 'utf-8');
-        logger.info('执行迁移: 015_hybrid_matching_embeddings.sql');
+        logger_1.default.info('执行迁移: 015_hybrid_matching_embeddings.sql');
         // 执行迁移
         await pool.query(sql);
-        logger.info('✅ 迁移成功完成！');
-        logger.info('已添加：');
-        logger.info('  - pgvector扩展');
-        logger.info('  - tasks表的embedding字段（title_embedding, description_embedding, combined_embedding）');
-        logger.info('  - users表的embedding字段（skills_embedding, interests_embedding, profile_embedding）');
-        logger.info('  - ai_match_logs表（记录混合匹配日志）');
-        logger.info('  - 向量索引（加速相似度搜索）');
+        logger_1.default.info('✅ 迁移成功完成！');
+        logger_1.default.info('已添加：');
+        logger_1.default.info('  - pgvector扩展');
+        logger_1.default.info('  - tasks表的embedding字段（title_embedding, description_embedding, combined_embedding）');
+        logger_1.default.info('  - users表的embedding字段（skills_embedding, interests_embedding, profile_embedding）');
+        logger_1.default.info('  - ai_match_logs表（记录混合匹配日志）');
+        logger_1.default.info('  - 向量索引（加速相似度搜索）');
     }
     catch (error) {
-        logger.error('❌ 迁移失败:', error);
+        logger_1.default.error('❌ 迁移失败:', error);
         process.exit(1);
     }
     finally {

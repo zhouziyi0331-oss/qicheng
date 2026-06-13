@@ -4,6 +4,7 @@
  */
 
 import { Router } from 'express';
+import logger from '../../utils/logger';
 import { MatchService } from '../../services/trustAccelerator/matchService';
 import { VerifyService } from '../../services/trustAccelerator/verifyService';
 import { UnlockService } from '../../services/trustAccelerator/unlockService';

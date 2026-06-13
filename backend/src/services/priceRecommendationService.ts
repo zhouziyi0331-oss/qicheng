@@ -8,6 +8,7 @@
  */
 
 import { pool } from '../config/database';
+import logger from '../utils/logger';
 
 interface PriceRecommendationInput {
   track: 'A' | 'B' | 'AB';  // 赛道类型

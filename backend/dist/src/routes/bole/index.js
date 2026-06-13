@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const boleService_1 = __importDefault(require("../../services/boleService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -42,7 +43,7 @@ router.post('/discover', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('创建推荐失败:', error);
+        logger_1.default.error('创建推荐失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建推荐失败',
@@ -79,7 +80,7 @@ router.get('/discoveries', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取推荐列表失败:', error);
+        logger_1.default.error('获取推荐列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取推荐列表失败',
@@ -100,7 +101,7 @@ router.get('/discoveries/:id', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取推荐详情失败:', error);
+        logger_1.default.error('获取推荐详情失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取推荐详情失败',
@@ -131,7 +132,7 @@ router.get('/badges', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取标签失败:', error);
+        logger_1.default.error('获取标签失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取标签失败',
@@ -169,7 +170,7 @@ router.post('/check-badge', auth_1.authenticate, async (req, res) => {
         }
     }
     catch (error) {
-        logger.error('检查标签失败:', error);
+        logger_1.default.error('检查标签失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '检查标签失败',
@@ -193,7 +194,7 @@ router.get('/leaderboard', async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取排行榜失败:', error);
+        logger_1.default.error('获取排行榜失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取排行榜失败',
@@ -221,7 +222,7 @@ router.get('/stats', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取伯乐统计失败:', error);
+        logger_1.default.error('获取伯乐统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取伯乐统计失败',
@@ -241,7 +242,7 @@ router.get('/reward-config', async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取奖励配置失败:', error);
+        logger_1.default.error('获取奖励配置失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取奖励配置失败',
@@ -271,7 +272,7 @@ router.post('/discoveries/:id/validate', auth_1.authenticate, async (req, res) =
         });
     }
     catch (error) {
-        logger.error('验证推荐失败:', error);
+        logger_1.default.error('验证推荐失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '验证推荐失败',
@@ -296,7 +297,7 @@ router.get('/student/:studentId/growth', auth_1.authenticate, async (req, res) =
         });
     }
     catch (error) {
-        logger.error('获取成长轨迹失败:', error);
+        logger_1.default.error('获取成长轨迹失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取成长轨迹失败',
@@ -328,7 +329,7 @@ router.get('/recommended-students', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取推荐学生失败:', error);
+        logger_1.default.error('获取推荐学生失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取推荐学生失败',

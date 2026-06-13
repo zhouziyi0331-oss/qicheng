@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import escrowTransparencyService from '../../services/escrowTransparencyService';
 import { authenticate } from '../../middleware/auth';
 

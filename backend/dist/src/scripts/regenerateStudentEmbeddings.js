@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const hybridMatchingService_1 = require("../services/hybridMatchingService");
+const logger_1 = __importDefault(require("../utils/logger"));
 const db_1 = __importDefault(require("../utils/db"));
 async function regenerateStudentEmbeddings() {
     try {
@@ -14,24 +15,24 @@ async function regenerateStudentEmbeddings() {
       WHERE u.role = 'student'
       ORDER BY u.created_at
     `);
-        logger.info(`找到 ${result.length} 个学生，开始重新生成embedding...`);
-        logger.info('=====================================');
+        logger_1.default.info(`找到 ${result.length} 个学生，开始重新生成embedding...`);
+        logger_1.default.info('=====================================');
         for (const student of result) {
-            logger.info(`\n正在处理学生: ${student.nickname || student.id}`);
+            logger_1.default.info(`\n正在处理学生: ${student.nickname || student.id}`);
             try {
                 await hybridMatchingService_1.hybridMatchingService.generateStudentEmbedding(student.id);
-                logger.info(`✅ 成功生成embedding`);
+                logger_1.default.info(`✅ 成功生成embedding`);
             }
             catch (error) {
-                logger.error(`❌ 失败: ${error.message}`);
+                logger_1.default.error(`❌ 失败: ${error.message}`);
             }
         }
-        logger.info('\n=====================================');
-        logger.info('所有学生embedding生成完成！');
+        logger_1.default.info('\n=====================================');
+        logger_1.default.info('所有学生embedding生成完成！');
         process.exit(0);
     }
     catch (error) {
-        logger.error('错误:', error);
+        logger_1.default.error('错误:', error);
         process.exit(1);
     }
 }

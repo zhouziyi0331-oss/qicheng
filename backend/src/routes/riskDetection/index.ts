@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import riskDetectionService from '../../services/riskDetectionService';
 import { authenticate } from '../../middleware/auth';
 

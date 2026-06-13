@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import deliverableArchiveService from '../../services/deliverableArchiveService';
 import { authenticate } from '../../middleware/auth';
 

@@ -8,6 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const instantGrowthSummaryService_1 = __importDefault(require("../services/instantGrowthSummaryService"));
 const abilityDimensionUpdateService_1 = __importDefault(require("../services/abilityDimensionUpdateService"));
 const graduationReportService_1 = __importDefault(require("../services/graduationReportService"));
@@ -31,7 +32,7 @@ router.get('/summaries', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取成长总结失败:', error);
+        logger_1.default.error('获取成长总结失败:', error);
         res.status(500).json({
             success: false,
             message: '获取成长总结失败',
@@ -54,7 +55,7 @@ router.get('/summaries/:orderId', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取订单成长总结失败:', error);
+        logger_1.default.error('获取订单成长总结失败:', error);
         res.status(500).json({
             success: false,
             message: '获取订单成长总结失败',
@@ -76,7 +77,7 @@ router.post('/summaries/:summaryId/view', auth_1.authenticate, async (req, res) 
         });
     }
     catch (error) {
-        logger.error('标记已查看失败:', error);
+        logger_1.default.error('标记已查看失败:', error);
         res.status(500).json({
             success: false,
             message: '标记已查看失败',
@@ -105,7 +106,7 @@ router.post('/summaries/:summaryId/feedback', auth_1.authenticate, async (req, r
         });
     }
     catch (error) {
-        logger.error('提交反馈失败:', error);
+        logger_1.default.error('提交反馈失败:', error);
         res.status(500).json({
             success: false,
             message: '提交反馈失败',
@@ -130,7 +131,7 @@ router.get('/ability-history', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取能力历史失败:', error);
+        logger_1.default.error('获取能力历史失败:', error);
         res.status(500).json({
             success: false,
             message: '获取能力历史失败',
@@ -152,7 +153,7 @@ router.get('/profile-versions', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取画像版本失败:', error);
+        logger_1.default.error('获取画像版本失败:', error);
         res.status(500).json({
             success: false,
             message: '获取画像版本失败',
@@ -175,7 +176,7 @@ router.post('/ability-update/:orderId', auth_1.authenticate, async (req, res) =>
         });
     }
     catch (error) {
-        logger.error('能力更新失败:', error);
+        logger_1.default.error('能力更新失败:', error);
         res.status(500).json({
             success: false,
             message: '能力更新失败',
@@ -203,7 +204,7 @@ router.post('/graduation-report/generate', auth_1.authenticate, async (req, res)
         });
     }
     catch (error) {
-        logger.error('生成毕业报告失败:', error);
+        logger_1.default.error('生成毕业报告失败:', error);
         res.status(500).json({
             success: false,
             message: '生成毕业报告失败',
@@ -231,7 +232,7 @@ router.get('/graduation-report/preview', auth_1.authenticate, async (req, res) =
         });
     }
     catch (error) {
-        logger.error('获取报告预览失败:', error);
+        logger_1.default.error('获取报告预览失败:', error);
         res.status(500).json({
             success: false,
             message: '获取报告预览失败',
@@ -265,7 +266,7 @@ router.get('/graduation-report/:reportId', auth_1.authenticate, async (req, res)
                 message: '报告尚未付费解锁',
             });
         }
-        logger.error('获取完整报告失败:', error);
+        logger_1.default.error('获取完整报告失败:', error);
         res.status(500).json({
             success: false,
             message: '获取完整报告失败',
@@ -295,7 +296,7 @@ router.post('/graduation-report/:reportId/pay', auth_1.authenticate, async (req,
         });
     }
     catch (error) {
-        logger.error('处理付费失败:', error);
+        logger_1.default.error('处理付费失败:', error);
         res.status(500).json({
             success: false,
             message: '处理付费失败',
@@ -319,7 +320,7 @@ router.get('/graduation-report/check-update', auth_1.authenticate, async (req, r
         });
     }
     catch (error) {
-        logger.error('检查更新失败:', error);
+        logger_1.default.error('检查更新失败:', error);
         res.status(500).json({
             success: false,
             message: '检查更新失败',
@@ -342,7 +343,7 @@ router.post('/graduation-report/:reportId/update', auth_1.authenticate, async (r
         });
     }
     catch (error) {
-        logger.error('更新报告失败:', error);
+        logger_1.default.error('更新报告失败:', error);
         res.status(500).json({
             success: false,
             message: '更新报告失败',
@@ -393,7 +394,7 @@ router.get('/overview', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取成长概览失败:', error);
+        logger_1.default.error('获取成长概览失败:', error);
         res.status(500).json({
             success: false,
             message: '获取成长概览失败',

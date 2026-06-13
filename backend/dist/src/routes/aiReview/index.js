@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 const aiReviewService_1 = __importDefault(require("../../services/aiReviewService"));
 const auth_1 = require("../../middleware/auth");
 const router = express_1.default.Router();
@@ -37,7 +38,7 @@ router.post('/tasks/:taskId/review', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('AI审核失败:', error);
+        logger_1.default.error('AI审核失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || 'AI审核失败',
@@ -81,7 +82,7 @@ router.get('/tasks/:taskId/reports', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取审核历史失败:', error);
+        logger_1.default.error('获取审核历史失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取审核历史失败',
@@ -138,7 +139,7 @@ router.post('/tasks/:taskId/revision-guide', auth_1.authenticate, async (req, re
         });
     }
     catch (error) {
-        logger.error('生成改进指引失败:', error);
+        logger_1.default.error('生成改进指引失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '生成改进指引失败',
@@ -182,7 +183,7 @@ router.get('/tasks/:taskId/revision-guides', auth_1.authenticate, async (req, re
         });
     }
     catch (error) {
-        logger.error('获取改进指引失败:', error);
+        logger_1.default.error('获取改进指引失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取改进指引失败',
@@ -211,7 +212,7 @@ router.put('/revision-guides/:guideId/viewed', auth_1.authenticate, async (req, 
         });
     }
     catch (error) {
-        logger.error('标记查看失败:', error);
+        logger_1.default.error('标记查看失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '标记查看失败',
@@ -246,7 +247,7 @@ router.post('/revision-guides/:guideId/rate', auth_1.authenticate, async (req, r
         });
     }
     catch (error) {
-        logger.error('评分失败:', error);
+        logger_1.default.error('评分失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '评分失败',

@@ -5,46 +5,50 @@
  * 执行方法：
  * npx ts-node --transpile-only src/scripts/generateTestData.ts
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
+const logger_1 = __importDefault(require("../utils/logger"));
 class TestDataGenerator {
     /**
      * 生成完整的测试数据
      */
     async generateAll() {
-        logger.info('🚀 开始生成测试数据\n');
+        logger_1.default.info('🚀 开始生成测试数据\n');
         try {
             // 1. 创建测试学生
             const studentId = await this.createTestStudent();
-            logger.info(`✅ 创建测试学生: ${studentId}\n`);
+            logger_1.default.info(`✅ 创建测试学生: ${studentId}\n`);
             // 2. 创建初始能力画像
             await this.createInitialProfile(studentId);
-            logger.info(`✅ 创建初始能力画像\n`);
+            logger_1.default.info(`✅ 创建初始能力画像\n`);
             // 3. 创建测试公司
             const companyId = await this.createTestCompany();
-            logger.info(`✅ 创建测试公司: ${companyId}\n`);
+            logger_1.default.info(`✅ 创建测试公司: ${companyId}\n`);
             // 4. 创建测试任务1并生成成长总结
             const taskId1 = await this.createTestTask(companyId, studentId, 1);
-            logger.info(`✅ 创建测试任务1: ${taskId1}`);
-            logger.info(`⏳ 生成即时成长总结...`);
+            logger_1.default.info(`✅ 创建测试任务1: ${taskId1}`);
+            logger_1.default.info(`⏳ 生成即时成长总结...`);
             await this.generateGrowthSummary(studentId, taskId1, 1);
-            logger.info(`✅ 成长总结生成完成\n`);
+            logger_1.default.info(`✅ 成长总结生成完成\n`);
             // 5. 创建测试任务2
             const taskId2 = await this.createTestTask(companyId, studentId, 2);
-            logger.info(`✅ 创建测试任务2: ${taskId2}`);
-            logger.info(`⏳ 生成即时成长总结...`);
+            logger_1.default.info(`✅ 创建测试任务2: ${taskId2}`);
+            logger_1.default.info(`⏳ 生成即时成长总结...`);
             await this.generateGrowthSummary(studentId, taskId2, 2);
-            logger.info(`✅ 成长总结生成完成\n`);
+            logger_1.default.info(`✅ 成长总结生成完成\n`);
             // 6. 生成毕业报告（模拟Lv.6学生）
-            logger.info(`⏳ 生成毕业报告（这可能需要1-2分钟）...`);
+            logger_1.default.info(`⏳ 生成毕业报告（这可能需要1-2分钟）...`);
             const reportId = await this.generateGraduationReport(studentId);
-            logger.info(`✅ 毕业报告生成完成: ${reportId}\n`);
-            logger.info('🎉 测试数据生成完成！');
-            logger.info(`\n现在可以运行验收测试：`);
-            logger.info(`npx ts-node --transpile-only src/scripts/validateGrowthSystem.ts`);
+            logger_1.default.info(`✅ 毕业报告生成完成: ${reportId}\n`);
+            logger_1.default.info('🎉 测试数据生成完成！');
+            logger_1.default.info(`\n现在可以运行验收测试：`);
+            logger_1.default.info(`npx ts-node --transpile-only src/scripts/validateGrowthSystem.ts`);
         }
         catch (error) {
-            logger.error('❌ 生成测试数据失败:', error);
+            logger_1.default.error('❌ 生成测试数据失败:', error);
             throw error;
         }
         finally {

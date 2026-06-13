@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import aiReviewService from '../../services/aiReviewService';
 import { authenticate } from '../../middleware/auth';
 

@@ -4,6 +4,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import logger from '../../utils/logger';
 import { authenticate } from '../../middleware/auth';
 import { invitationTaskService } from '../../services/invitation/invitationService';
 import { invitationMatchService } from '../../services/invitation/matchService';

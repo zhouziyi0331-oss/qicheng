@@ -1,4 +1,5 @@
 import { pool } from '../config/database';
+import logger from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
 import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';

@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dynamicProfileService = void 0;
 const aiServiceClient_1 = require("./aiServiceClient");
+const logger_1 = __importDefault(require("../utils/logger"));
 const errorHandler_1 = require("../middleware/errorHandler");
 const db_1 = require("../utils/db");
 class DynamicProfileService {
@@ -27,7 +31,7 @@ class DynamicProfileService {
             return result;
         }
         catch (error) {
-            logger.error('Profile update failed:', error);
+            logger_1.default.error('Profile update failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to update student profile');
         }
     }
@@ -116,7 +120,7 @@ class DynamicProfileService {
             return results;
         }
         catch (error) {
-            logger.error('Batch profile update failed:', error);
+            logger_1.default.error('Batch profile update failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to batch update profiles');
         }
     }
@@ -174,7 +178,7 @@ class DynamicProfileService {
             }));
         }
         catch (error) {
-            logger.error('Failed to get profile history:', error);
+            logger_1.default.error('Failed to get profile history:', error);
             throw new errorHandler_1.AppError(500, 'Failed to get profile history');
         }
     }

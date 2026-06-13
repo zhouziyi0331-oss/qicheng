@@ -6,6 +6,7 @@
  */
 
 import instantGrowthSummaryService from '../services/instantGrowthSummaryService';
+import logger from '../utils/logger';
 import abilityDimensionUpdateService from '../services/abilityDimensionUpdateService';
 import graduationReportService from '../services/graduationReportService';
 import { pool } from '../config/database';

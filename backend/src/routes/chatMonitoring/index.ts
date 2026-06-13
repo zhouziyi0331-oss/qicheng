@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import chatScopeMonitoringService from '../../services/chatScopeMonitoringService';
 import { authenticate } from '../../middleware/auth';
 

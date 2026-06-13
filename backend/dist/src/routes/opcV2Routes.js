@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const logger_1 = __importDefault(require("../../utils/logger"));
 const opcV2AnalysisService_1 = __importDefault(require("../services/opcV2AnalysisService"));
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
@@ -23,7 +24,7 @@ router.post('/start', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('启动OPC v2.0测试失败:', error);
+        logger_1.default.error('启动OPC v2.0测试失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '启动测试失败'
@@ -69,7 +70,7 @@ router.post('/answer', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('提交答案失败:', error);
+        logger_1.default.error('提交答案失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '提交答案失败'
@@ -92,7 +93,7 @@ router.post('/:assessmentId/complete', auth_1.authenticate, async (req, res) => 
         });
     }
     catch (error) {
-        logger.error('完成测试失败:', error);
+        logger_1.default.error('完成测试失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '分析失败，请重试'
@@ -119,7 +120,7 @@ router.get('/:assessmentId/progress', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取进度失败:', error);
+        logger_1.default.error('获取进度失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取进度失败'
@@ -146,7 +147,7 @@ router.get('/:assessmentId/result', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取结果失败:', error);
+        logger_1.default.error('获取结果失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取结果失败'
@@ -173,7 +174,7 @@ router.get('/latest', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取最新结果失败:', error);
+        logger_1.default.error('获取最新结果失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取结果失败'

@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import roiAnalyticsService from '../../services/roiAnalyticsService';
 import { authenticate } from '../../middleware/auth';
 

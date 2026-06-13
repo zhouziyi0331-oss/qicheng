@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import logger from '../utils/logger';
 import { query, queryOne } from '../utils/db';
 
 /**

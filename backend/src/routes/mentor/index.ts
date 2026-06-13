@@ -1,6 +1,7 @@
 // AI导师系统 - 路由
 
 import { Router } from 'express';
+import logger from '../../utils/logger';
 import { authenticate } from '../../middleware/auth';
 import { handleStuckMessage, getConversations } from './controller';
 import { mentorChat, getHistory, getFirstStep } from '../../controllers/mentorController';

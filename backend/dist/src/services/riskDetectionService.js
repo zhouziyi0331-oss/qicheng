@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
 const uuid_1 = require("uuid");
 const config_1 = __importDefault(require("../config"));
@@ -123,7 +124,7 @@ ${deliverableRequirements ? `交付要求：${deliverableRequirements}` : '交�
             };
         }
         catch (error) {
-            logger.error('AI风险评估失败:', error);
+            logger_1.default.error('AI风险评估失败:', error);
             // 返回降级方案
             return this.generateFallbackAssessment(taskId, deadlineDays, budget);
         }
@@ -195,7 +196,7 @@ ${deliverableRequirements ? `交付要求：${deliverableRequirements}` : '交�
             return JSON.parse(jsonText);
         }
         catch (error) {
-            logger.error('解析AI响应失败:', error);
+            logger_1.default.error('解析AI响应失败:', error);
             throw error;
         }
     }

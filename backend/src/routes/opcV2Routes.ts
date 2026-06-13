@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express'
+import logger from '../../utils/logger';
 import opcV2AnalysisService from '../services/opcV2AnalysisService'
 import { authenticate } from '../middleware/auth'
 

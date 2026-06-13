@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDraft = exports.getSubmitDraft = exports.saveSubmitDraft = exports.getTaskDraft = exports.saveTaskDraft = void 0;
+const logger_1 = __importDefault(require("../../utils/logger"));
 const db_1 = require("../../utils/db");
 /**
  * 草稿箱控制器
@@ -45,7 +49,7 @@ const saveTaskDraft = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('保存草稿失败:', error);
+        logger_1.default.error('保存草稿失败:', error);
         res.status(500).json({ success: false, message: '保存草稿失败' });
     }
 };
@@ -72,7 +76,7 @@ const getTaskDraft = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取草稿失败:', error);
+        logger_1.default.error('获取草稿失败:', error);
         res.status(500).json({ success: false, message: '获取草稿失败' });
     }
 };
@@ -118,7 +122,7 @@ const saveSubmitDraft = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('保存提交草稿失败:', error);
+        logger_1.default.error('保存提交草稿失败:', error);
         res.status(500).json({ success: false, message: '保存草稿失败' });
     }
 };
@@ -146,7 +150,7 @@ const getSubmitDraft = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取提交草稿失败:', error);
+        logger_1.default.error('获取提交草稿失败:', error);
         res.status(500).json({ success: false, message: '获取草稿失败' });
     }
 };
@@ -160,7 +164,7 @@ const deleteDraft = async (req, res) => {
         res.json({ success: true, message: '草稿已删除' });
     }
     catch (error) {
-        logger.error('删除草稿失败:', error);
+        logger_1.default.error('删除草稿失败:', error);
         res.status(500).json({ success: false, message: '删除草稿失败' });
     }
 };

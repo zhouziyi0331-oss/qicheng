@@ -1,6 +1,7 @@
 // AI导师系统 - Cron定时任务
 
 import cron from 'node-cron';
+import logger from '../utils/logger';
 import { checkIdleStudents } from '../routes/mentor/controller';
 
 // 每小时检查一次长时间无操作的学生

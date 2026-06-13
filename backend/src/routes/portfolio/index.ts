@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import portfolioService from '../../services/portfolioService';
 import { authenticate } from '../../middleware/auth';
 

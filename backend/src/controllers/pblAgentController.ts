@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import logger from '../utils/logger';
 import { pblAgentService } from '../services/pblAgentService';
 
 export class PBLAgentController {

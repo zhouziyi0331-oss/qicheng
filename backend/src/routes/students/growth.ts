@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from '../../utils/logger';
 import studentGrowthService from '../../services/studentGrowthService';
 import { authenticate } from '../../middleware/auth';
 

@@ -9,6 +9,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startMatchingWorker = startMatchingWorker;
 const queue_1 = require("../config/queue");
+const logger_1 = __importDefault(require("../utils/logger"));
 const crossPlatformService_1 = __importDefault(require("../services/crossPlatformService"));
 const queue_2 = require("../config/queue");
 // ============================================================================
@@ -20,7 +21,7 @@ const queue_2 = require("../config/queue");
  */
 queue_1.matchingQueue.process('recalculate-matches', 5, async (job) => {
     const { task_id, student_ids, new_requirements } = job.data;
-    logger.info(`🔄 Recalculating matches for task ${task_id}, ${student_ids.length} students`);
+    logger_1.default.info(`🔄 Recalculating matches for task ${task_id}, ${student_ids.length} students`);
     const results = [];
     let completed = 0;
     // 并行处理学生匹配
@@ -44,7 +45,7 @@ queue_1.matchingQueue.process('recalculate-matches', 5, async (job) => {
             });
         }
         catch (error) {
-            logger.error(`Failed to recalculate for student ${studentId}:`, error);
+            logger_1.default.error(`Failed to recalculate for student ${studentId}:`, error);
             results.push({
                 student_id: studentId,
                 status: 'failed',
@@ -52,7 +53,7 @@ queue_1.matchingQueue.process('recalculate-matches', 5, async (job) => {
             });
         }
     }
-    logger.info(`✅ Recalculation completed: ${completed}/${student_ids.length} succeeded`);
+    logger_1.default.info(`✅ Recalculation completed: ${completed}/${student_ids.length} succeeded`);
     return {
         completed,
         total: student_ids.length,
@@ -65,14 +66,14 @@ queue_1.matchingQueue.process('recalculate-matches', 5, async (job) => {
  */
 queue_1.matchingQueue.process('student-level-changed', 3, async (job) => {
     const { student_id, old_level, new_level } = job.data;
-    logger.info(`🔄 Processing level change for student ${student_id}: ${old_level} → ${new_level}`);
+    logger_1.default.info(`🔄 Processing level change for student ${student_id}: ${old_level} → ${new_level}`);
     try {
         const result = await crossPlatformService_1.default.handleLevelChange(student_id, old_level, new_level);
-        logger.info(`✅ Level change processed:`, result);
+        logger_1.default.info(`✅ Level change processed:`, result);
         return result;
     }
     catch (error) {
-        logger.error(`Failed to process level change:`, error);
+        logger_1.default.error(`Failed to process level change:`, error);
         throw error;
     }
 });
@@ -80,18 +81,18 @@ queue_1.matchingQueue.process('student-level-changed', 3, async (job) => {
 // Worker启动
 // ============================================================================
 function startMatchingWorker() {
-    logger.info('🚀 Matching worker started');
-    logger.info('  - recalculate-matches: concurrency 5');
-    logger.info('  - student-level-changed: concurrency 3');
+    logger_1.default.info('🚀 Matching worker started');
+    logger_1.default.info('  - recalculate-matches: concurrency 5');
+    logger_1.default.info('  - student-level-changed: concurrency 3');
     // 监听队列事件
     queue_1.matchingQueue.on('completed', (job, result) => {
-        logger.info(`✅ [Matching] ${job.name} completed:`, {
+        logger_1.default.info(`✅ [Matching] ${job.name} completed:`, {
             jobId: job.id,
             duration: `${Date.now() - job.timestamp}ms`,
         });
     });
     queue_1.matchingQueue.on('failed', (job, err) => {
-        logger.error(`❌ [Matching] ${job?.name} failed:`, {
+        logger_1.default.error(`❌ [Matching] ${job?.name} failed:`, {
             jobId: job?.id,
             error: err.message,
         });
