@@ -121,7 +121,7 @@ export async function triggerTaskMatching(taskId: string): Promise<number> {
       // 计算匹配分数（简化版，实际应该调用完整的匹配引擎）
       const match_score = calculateMatchScore(task, student);
 
-      if (matchScore.overall_score > 0.5) {
+      if (match_score.overall_score > 0.5) {
         // 插入或更新匹配记录
         await pool.query(
           `INSERT INTO task_student_matches (
@@ -144,14 +144,14 @@ export async function triggerTaskMatching(taskId: string): Promise<number> {
           [
             taskId,
             student.id,
-            matchScore.overall_score,
-            matchScore.skill_match_score,
-            matchScore.difficulty_match_score,
-            matchScore.domain_match_score,
-            matchScore.growth_potential_score,
-            matchScore.reliability_score,
-            matchScore.preference_score,
-            JSON.stringify(matchScore.breakdown)
+            match_score.overall_score,
+            match_score.skill_match_score,
+            match_score.difficulty_match_score,
+            match_score.domain_match_score,
+            match_score.growth_potential_score,
+            match_score.reliability_score,
+            match_score.preference_score,
+            JSON.stringify(match_score.breakdown)
           ]
         );
 
