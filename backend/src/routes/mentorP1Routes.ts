@@ -24,7 +24,7 @@ const router = express.Router();
  */
 router.get('/retrospectives/pending', authenticate, async (req, res) => {
   try {
-    const studentId = req.user.id;
+    const studentId = req.user!.id;
 
     const retrospectives = await mentorRetrospectiveService.getPendingRetrospectives(studentId);
 
@@ -52,7 +52,7 @@ router.post('/retrospectives/:id/submit', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const { answer1, answer2, answer3 } = req.body;
-    const studentId = req.user.id;
+    const studentId = req.user!.id;
 
     // 验证必填字段
     if (!answer1 || !answer2 || !answer3) {
@@ -100,7 +100,7 @@ router.post('/retrospectives/:id/submit', authenticate, async (req, res) => {
 router.post('/retrospectives/:id/skip', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
-    const studentId = req.user.id;
+    const studentId = req.user!.id;
 
     // 验证复盘归属
     const retrospective = await mentorRetrospectiveService.getPendingRetrospectives(studentId);
@@ -135,7 +135,7 @@ router.post('/retrospectives/:id/skip', authenticate, async (req, res) => {
  */
 router.get('/retrospectives/history', authenticate, async (req, res) => {
   try {
-    const studentId = req.user.id;
+    const studentId = req.user!.id;
     const limit = parseInt(req.query.limit as string) || 10;
 
     const retrospectives = await mentorRetrospectiveService.getRetrospectiveHistory(
@@ -170,7 +170,7 @@ router.get('/retrospectives/history', authenticate, async (req, res) => {
 router.post('/admin/batch-trigger-retrospectives', authenticate, async (req, res) => {
   try {
     // 检查是否是管理员
-    if (req.user.role !== 'admin') {
+    if (req.user!.role !== 'admin') {
       return res.status(403).json({
         success: false,
         message: '无权限访问'
@@ -235,7 +235,7 @@ router.post('/admin/batch-trigger-retrospectives', authenticate, async (req, res
 router.get('/admin/retrospective-stats', authenticate, async (req, res) => {
   try {
     // 检查是否是管理员
-    if (req.user.role !== 'admin') {
+    if (req.user!.role !== 'admin') {
       return res.status(403).json({
         success: false,
         message: '无权限访问'
@@ -265,7 +265,7 @@ router.get('/admin/retrospective-stats', authenticate, async (req, res) => {
 router.get('/admin/example-stats', authenticate, async (req, res) => {
   try {
     // 检查是否是管理员
-    if (req.user.role !== 'admin') {
+    if (req.user!.role !== 'admin') {
       return res.status(403).json({
         success: false,
         message: '无权限访问'

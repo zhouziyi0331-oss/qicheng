@@ -49,7 +49,7 @@ export function requireRole(...roles: Array<'student' | 'company' | 'admin'>) {
     if (!req.user) {
       return next(new AppError(401, '请先登录', 'UNAUTHORIZED'));
     }
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req.user!.role)) {
       return next(new AppError(403, '权限不足', 'FORBIDDEN'));
     }
     next();
@@ -61,7 +61,7 @@ export function requireRole(...roles: Array<'student' | 'company' | 'admin'>) {
  */
 export function requireAdminRole(...adminRoles: Array<'super' | 'ops' | 'cs'>) {
   return (req: Request, _res: Response, next: NextFunction): void => {
-    if (!req.user || req.user.role !== 'admin') {
+    if (!req.user || req.user!.role !== 'admin') {
       return next(new AppError(403, '需要管理员权限', 'FORBIDDEN'));
     }
     if (adminRoles.length > 0 && req.user.adminRole && !adminRoles.includes(req.user.adminRole)) {

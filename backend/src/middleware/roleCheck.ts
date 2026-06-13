@@ -13,7 +13,7 @@ export const requireRole = (role: 'student' | 'company' | 'admin') => {
       });
     }
 
-    if (req.user.role !== role) {
+    if (req.user!.role !== role) {
       return res.status(403).json({
         success: false,
         message: '权限不足',
@@ -37,7 +37,7 @@ export const requireAnyRole = (roles: Array<'student' | 'company' | 'admin'>) =>
       });
     }
 
-    if (!roles.includes(req.user.role as any)) {
+    if (!roles.includes(req.user!.role as any)) {
       return res.status(403).json({
         success: false,
         message: '权限不足',
