@@ -82,7 +82,7 @@ const submitOPCTest = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('提交OPC测试失败:', error);
+        logger.error('提交OPC测试失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -125,7 +125,7 @@ const getOPCResult = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取OPC结果失败:', error);
+        logger.error('获取OPC结果失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };

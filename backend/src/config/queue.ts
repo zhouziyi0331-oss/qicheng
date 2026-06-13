@@ -4,6 +4,7 @@
  */
 
 import Bull from 'bull';
+import logger from '../utils/logger';
 
 const redisConfig = {
   host: process.env.REDIS_HOST || 'localhost',

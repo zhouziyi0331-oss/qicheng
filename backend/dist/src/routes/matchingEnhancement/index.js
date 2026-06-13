@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
  * E-05a: 试稿机制
  */
 // 创建试稿邀请
-router.post('/trial-invitations', auth_1.authenticateToken, async (req, res) => {
+router.post('/trial-invitations', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { task_id, student_id, trial_requirement, trial_deadline, trial_budget } = req.body;
@@ -43,7 +43,7 @@ router.post('/trial-invitations', auth_1.authenticateToken, async (req, res) => 
     }
 });
 // 学生响应试稿邀请
-router.post('/trial-invitations/:id/respond', auth_1.authenticateToken, async (req, res) => {
+router.post('/trial-invitations/:id/respond', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const { id } = req.params;
@@ -63,7 +63,7 @@ router.post('/trial-invitations/:id/respond', auth_1.authenticateToken, async (r
     }
 });
 // 学生提交试稿
-router.post('/trial-invitations/:id/submit', auth_1.authenticateToken, async (req, res) => {
+router.post('/trial-invitations/:id/submit', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const { id } = req.params;
@@ -89,7 +89,7 @@ router.post('/trial-invitations/:id/submit', auth_1.authenticateToken, async (re
     }
 });
 // 企业评估试稿
-router.post('/trial-invitations/:id/evaluate', auth_1.authenticateToken, async (req, res) => {
+router.post('/trial-invitations/:id/evaluate', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { id } = req.params;
@@ -115,7 +115,7 @@ router.post('/trial-invitations/:id/evaluate', auth_1.authenticateToken, async (
     }
 });
 // 获取试稿邀请列表
-router.get('/trial-invitations', auth_1.authenticateToken, async (req, res) => {
+router.get('/trial-invitations', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.userId;
         const userRole = req.user.role;
@@ -134,7 +134,7 @@ router.get('/trial-invitations', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 获取试稿统计
-router.get('/trial-stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/trial-stats', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.userId;
         const userRole = req.user.role;
@@ -155,7 +155,7 @@ router.get('/trial-stats', auth_1.authenticateToken, async (req, res) => {
  * E-05b: 学生对比视图
  */
 // 对比多个学生
-router.post('/compare-students', auth_1.authenticateToken, async (req, res) => {
+router.post('/compare-students', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { student_ids, task_id, dimensions } = req.body;
@@ -188,7 +188,7 @@ router.post('/compare-students', auth_1.authenticateToken, async (req, res) => {
  * E-05c: 手动搜索和筛选
  */
 // 搜索学生
-router.post('/search-students', auth_1.authenticateToken, async (req, res) => {
+router.post('/search-students', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { filters, task_id } = req.body;
@@ -216,7 +216,7 @@ router.post('/search-students', auth_1.authenticateToken, async (req, res) => {
  * E-05d: 匹配拒绝反馈
  */
 // 记录拒绝反馈
-router.post('/rejection-feedback', auth_1.authenticateToken, async (req, res) => {
+router.post('/rejection-feedback', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { task_id, student_id, reason, detail } = req.body;
@@ -241,7 +241,7 @@ router.post('/rejection-feedback', auth_1.authenticateToken, async (req, res) =>
     }
 });
 // 获取学生的拒绝反馈
-router.get('/rejection-feedback/student', auth_1.authenticateToken, async (req, res) => {
+router.get('/rejection-feedback/student', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const feedback = await matchingEnhancementService_1.default.getStudentRejectionFeedback(studentId);
@@ -258,7 +258,7 @@ router.get('/rejection-feedback/student', auth_1.authenticateToken, async (req, 
     }
 });
 // 分析拒绝原因统计
-router.get('/rejection-patterns', auth_1.authenticateToken, async (req, res) => {
+router.get('/rejection-patterns', auth_1.authenticate, async (req, res) => {
     try {
         const { task_id } = req.query;
         const patterns = await matchingEnhancementService_1.default.analyzeRejectionPatterns(task_id);
@@ -278,7 +278,7 @@ router.get('/rejection-patterns', auth_1.authenticateToken, async (req, res) => 
  * 学生可见度设置
  */
 // 更新学生可见度设置
-router.put('/visibility-settings', auth_1.authenticateToken, async (req, res) => {
+router.put('/visibility-settings', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const settings = req.body;

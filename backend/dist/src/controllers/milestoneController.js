@@ -32,7 +32,7 @@ const handleSecondTaskComplete = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('处理第2单完成失败:', error);
+        logger.error('处理第2单完成失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -79,7 +79,7 @@ const getStoryWall = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取故事墙失败:', error);
+        logger.error('获取故事墙失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -114,7 +114,7 @@ const submitStory = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('提交故事失败:', error);
+        logger.error('提交故事失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };

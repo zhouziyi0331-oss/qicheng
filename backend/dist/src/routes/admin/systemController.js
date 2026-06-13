@@ -63,7 +63,7 @@ async function getAdminList(req, res) {
         });
     }
     catch (error) {
-        console.error('获取管理员列表失败:', error);
+        logger.error('获取管理员列表失败:', error);
         res.status(500).json({ message: '获取管理员列表失败' });
     }
 }
@@ -86,7 +86,7 @@ async function createAdmin(req, res) {
         res.json({ id: result[0].id, message: '管理员创建成功' });
     }
     catch (error) {
-        console.error('创建管理员失败:', error);
+        logger.error('创建管理员失败:', error);
         res.status(500).json({ message: '创建管理员失败' });
     }
 }
@@ -107,7 +107,7 @@ async function updateAdmin(req, res) {
         res.json({ message: '管理员更新成功' });
     }
     catch (error) {
-        console.error('更新管理员失败:', error);
+        logger.error('更新管理员失败:', error);
         res.status(500).json({ message: '更新管理员失败' });
     }
 }
@@ -126,7 +126,7 @@ async function resetAdminPassword(req, res) {
         res.json({ message: '密码重置成功' });
     }
     catch (error) {
-        console.error('重置密码失败:', error);
+        logger.error('重置密码失败:', error);
         res.status(500).json({ message: '重置密码失败' });
     }
 }
@@ -140,7 +140,7 @@ async function deleteAdmin(req, res) {
         res.json({ message: '管理员删除成功' });
     }
     catch (error) {
-        console.error('删除管理员失败:', error);
+        logger.error('删除管理员失败:', error);
         res.status(500).json({ message: '删除管理员失败' });
     }
 }
@@ -207,7 +207,7 @@ async function getOperationLogs(req, res) {
         });
     }
     catch (error) {
-        console.error('获取操作日志失败:', error);
+        logger.error('获取操作日志失败:', error);
         res.status(500).json({ message: '获取操作日志失败' });
     }
 }
@@ -226,7 +226,7 @@ async function getSystemConfig(req, res) {
         res.json({ configs });
     }
     catch (error) {
-        console.error('获取系统配置失败:', error);
+        logger.error('获取系统配置失败:', error);
         res.status(500).json({ message: '获取系统配置失败' });
     }
 }
@@ -244,7 +244,7 @@ async function updateSystemConfig(req, res) {
         res.json({ message: '系统配置更新成功' });
     }
     catch (error) {
-        console.error('更新系统配置失败:', error);
+        logger.error('更新系统配置失败:', error);
         res.status(500).json({ message: '更新系统配置失败' });
     }
 }

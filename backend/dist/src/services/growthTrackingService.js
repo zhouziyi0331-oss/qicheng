@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.growthTrackingService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 class GrowthTrackingService {
     constructor() {
@@ -36,12 +39,12 @@ class GrowthTrackingService {
             await this.updateStudentProfile(studentId, analysis);
             // 4. 生成庆祝消息（异步，不阻塞）
             this.generateCelebrationMessage(milestone.id, studentId).catch(err => {
-                logger_1.logger.error('生成庆祝消息失败', { error: err, milestoneId: milestone.id });
+                logger_1.default.error('生成庆祝消息失败', { error: err, milestoneId: milestone.id });
             });
             return milestone;
         }
         catch (error) {
-            logger_1.logger.error('检测里程碑失败', { error, studentId, sessionId });
+            logger_1.default.error('检测里程碑失败', { error, studentId, sessionId });
             return null;
         }
     }
@@ -179,7 +182,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
             return JSON.parse(response.content);
         }
         catch (error) {
-            logger_1.logger.error('AI里程碑分析失败', { error });
+            logger_1.default.error('AI里程碑分析失败', { error });
             return { shouldCreateMilestone: false };
         }
     }
@@ -241,7 +244,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
          WHERE id = $2`, [response.content, milestoneId]);
         }
         catch (error) {
-            logger_1.logger.error('生成庆祝消息失败', { error, milestoneId });
+            logger_1.default.error('生成庆祝消息失败', { error, milestoneId });
         }
     }
     /**
@@ -340,7 +343,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
             };
         }
         catch (error) {
-            logger_1.logger.error('获取成长统计失败', { error, studentId });
+            logger_1.default.error('获取成长统计失败', { error, studentId });
             return {
                 totalMilestones: 0,
                 milestonesByType: {},

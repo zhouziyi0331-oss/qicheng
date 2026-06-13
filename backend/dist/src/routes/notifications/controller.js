@@ -68,7 +68,7 @@ async function getNotifications(req, res) {
         });
     }
     catch (error) {
-        console.error('Get notifications error:', error);
+        logger.error('Get notifications error:', error);
         res.status(500).json({ success: false, message: '获取通知列表失败' });
     }
 }
@@ -82,7 +82,7 @@ async function getUnreadCountHandler(req, res) {
         res.json({ success: true, data: { unreadCount: count } });
     }
     catch (error) {
-        console.error('Get unread count error:', error);
+        logger.error('Get unread count error:', error);
         res.status(500).json({ success: false, message: '获取未读数量失败' });
     }
 }
@@ -97,7 +97,7 @@ async function markNotificationAsRead(req, res) {
         res.json({ success: true, message: '已标记为已读' });
     }
     catch (error) {
-        console.error('Mark as read error:', error);
+        logger.error('Mark as read error:', error);
         res.status(500).json({ success: false, message: '标记失败' });
     }
 }
@@ -111,7 +111,7 @@ async function markAllNotificationsAsRead(req, res) {
         res.json({ success: true, message: '已全部标记为已读' });
     }
     catch (error) {
-        console.error('Mark all as read error:', error);
+        logger.error('Mark all as read error:', error);
         res.status(500).json({ success: false, message: '标记失败' });
     }
 }
@@ -126,7 +126,7 @@ async function deleteNotification(req, res) {
         res.json({ success: true, message: '删除成功' });
     }
     catch (error) {
-        console.error('Delete notification error:', error);
+        logger.error('Delete notification error:', error);
         res.status(500).json({ success: false, message: '删除失败' });
     }
 }
@@ -144,7 +144,7 @@ async function updateNotificationPreferences(req, res) {
         res.json({ success: true, message: '偏好设置已更新' });
     }
     catch (error) {
-        console.error('Update preferences error:', error);
+        logger.error('Update preferences error:', error);
         res.status(500).json({ success: false, message: '更新失败' });
     }
 }
@@ -167,7 +167,7 @@ async function getNotificationPreferences(req, res) {
         res.json({ success: true, data: { preferences } });
     }
     catch (error) {
-        console.error('Get preferences error:', error);
+        logger.error('Get preferences error:', error);
         res.status(500).json({ success: false, message: '获取偏好设置失败' });
     }
 }

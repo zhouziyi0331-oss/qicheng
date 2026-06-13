@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deepGuidanceService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 class DeepGuidanceService {
     /**
@@ -21,7 +24,7 @@ class DeepGuidanceService {
             return detection;
         }
         catch (error) {
-            logger_1.logger.error('检测深层模式失败', { error, studentId });
+            logger_1.default.error('检测深层模式失败', { error, studentId });
             return {
                 detected: false,
                 confidence: 0,
@@ -55,7 +58,7 @@ class DeepGuidanceService {
             return guidance;
         }
         catch (error) {
-            logger_1.logger.error('生成深层引导失败', { error, studentId });
+            logger_1.default.error('生成深层引导失败', { error, studentId });
             return {
                 content: '',
                 dialogueStage: 'none'
@@ -121,7 +124,7 @@ ${p.patternName}:
             };
         }
         catch (error) {
-            logger_1.logger.error('AI分析深层模式失败', { error });
+            logger_1.default.error('AI分析深层模式失败', { error });
             return {
                 detected: false,
                 confidence: 0,
@@ -244,7 +247,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             };
         }
         catch (error) {
-            logger_1.logger.error('生成深层引导对话失败', { error });
+            logger_1.default.error('生成深层引导对话失败', { error });
             return {
                 content: '',
                 dialogueStage: 'none'
@@ -278,7 +281,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             return result.rows[0];
         }
         catch (error) {
-            logger_1.logger.error('提议成长挑战失败', { error, studentId, patternId });
+            logger_1.default.error('提议成长挑战失败', { error, studentId, patternId });
             return null;
         }
     }
@@ -301,7 +304,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             }));
         }
         catch (error) {
-            logger_1.logger.error('获取深层模式失败', { error });
+            logger_1.default.error('获取深层模式失败', { error });
             return [];
         }
     }
@@ -327,7 +330,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             };
         }
         catch (error) {
-            logger_1.logger.error('获取模式失败', { error, patternId });
+            logger_1.default.error('获取模式失败', { error, patternId });
             return null;
         }
     }
@@ -353,7 +356,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             ]);
         }
         catch (error) {
-            logger_1.logger.error('记录模式检测失败', { error });
+            logger_1.default.error('记录模式检测失败', { error });
         }
     }
     /**
@@ -366,7 +369,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             return result.rows[0] || null;
         }
         catch (error) {
-            logger_1.logger.error('获取学生模式进展失败', { error });
+            logger_1.default.error('获取学生模式进展失败', { error });
             return null;
         }
     }
@@ -401,7 +404,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             return result.rows[0] || null;
         }
         catch (error) {
-            logger_1.logger.error('获取对话模板失败', { error });
+            logger_1.default.error('获取对话模板失败', { error });
             return null;
         }
     }
@@ -421,7 +424,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
          WHERE student_id = $1 AND pattern_id = $2`, [studentId, patternId, dialogueStage]);
         }
         catch (error) {
-            logger_1.logger.error('更新引导进展失败', { error });
+            logger_1.default.error('更新引导进展失败', { error });
         }
     }
     /**
@@ -482,7 +485,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
             return result.rows;
         }
         catch (error) {
-            logger_1.logger.error('获取学生模式失败', { error, studentId });
+            logger_1.default.error('获取学生模式失败', { error, studentId });
             return [];
         }
     }

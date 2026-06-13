@@ -24,7 +24,7 @@ router.get('/questions', async (req, res, next) => {
         });
     }
     catch (error) {
-        console.error('获取OPC题目失败:', error);
+        logger.error('获取OPC题目失败:', error);
         next(error);
     }
 });
@@ -59,7 +59,7 @@ router.post('/submit-answers', auth_1.authenticate, [
         });
     }
     catch (error) {
-        console.error('OPC分析失败:', error);
+        logger.error('OPC分析失败:', error);
         next(error);
     }
 });
@@ -107,7 +107,7 @@ router.get('/profile', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        console.error('获取OPC结果失败:', error);
+        logger.error('获取OPC结果失败:', error);
         next(error);
     }
 });
@@ -140,7 +140,7 @@ router.post('/generate-card', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        console.error('生成身份卡片失败:', error);
+        logger.error('生成身份卡片失败:', error);
         next(error);
     }
 });

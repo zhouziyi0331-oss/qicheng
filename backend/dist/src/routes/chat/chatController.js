@@ -54,7 +54,7 @@ const getOrCreateSession = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取或创建会话失败:', error);
+        logger.error('获取或创建会话失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -97,7 +97,7 @@ const getChatSessions = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取会话列表失败:', error);
+        logger.error('获取会话列表失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -144,7 +144,7 @@ const getChatMessages = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取聊天记录失败:', error);
+        logger.error('获取聊天记录失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -195,7 +195,7 @@ const sendMessage = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('发送消息失败:', error);
+        logger.error('发送消息失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -252,7 +252,7 @@ const markMessagesAsRead = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('标记已读失败:', error);
+        logger.error('标记已读失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -276,7 +276,7 @@ const getUnreadCount = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取未读数失败:', error);
+        logger.error('获取未读数失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'
@@ -305,7 +305,7 @@ const archiveSession = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('归档会话失败:', error);
+        logger.error('归档会话失败:', error);
         res.status(500).json({
             success: false,
             message: '服务器错误'

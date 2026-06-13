@@ -70,7 +70,7 @@ async function getStudentList(req, res) {
         });
     }
     catch (error) {
-        console.error('获取学生列表失败:', error);
+        logger.error('获取学生列表失败:', error);
         res.status(500).json({ error: '获取学生列表失败' });
     }
 }
@@ -184,7 +184,7 @@ async function getStudentDetail(req, res) {
         });
     }
     catch (error) {
-        console.error('获取学生详情失败:', error);
+        logger.error('获取学生详情失败:', error);
         res.status(500).json({ error: '获取学生详情失败' });
     }
 }
@@ -246,7 +246,7 @@ async function getStudentAbility(req, res) {
         });
     }
     catch (error) {
-        console.error('获取学生能力画像失败:', error);
+        logger.error('获取学生能力画像失败:', error);
         res.status(500).json({ error: '获取学生能力画像失败' });
     }
 }
@@ -307,7 +307,7 @@ async function getStudentGrowth(req, res) {
         });
     }
     catch (error) {
-        console.error('获取学生成长轨迹失败:', error);
+        logger.error('获取学生成长轨迹失败:', error);
         res.status(500).json({ error: '获取学生成长轨迹失败' });
     }
 }
@@ -325,7 +325,7 @@ async function updateStudentStatus(req, res) {
         res.json({ message: '状态更新成功' });
     }
     catch (error) {
-        console.error('更新学生状态失败:', error);
+        logger.error('更新学生状态失败:', error);
         res.status(500).json({ error: '更新学生状态失败' });
     }
 }

@@ -45,7 +45,7 @@ class MatchService {
                 completedTasks = result.rows[0].completed_tasks;
             }
             const unlockEligible = completedTasks >= 2;
-            console.log(`[MatchService] 学生 ${studentId} 完成商家 ${companyId} 第 ${completedTasks} 个任务，解锁资格: ${unlockEligible}`);
+            logger.info(`[MatchService] 学生 ${studentId} 完成商家 ${companyId} 第 ${completedTasks} 个任务，解锁资格: ${unlockEligible}`);
             return { unlockEligible, matchId };
         });
     }

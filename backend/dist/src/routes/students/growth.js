@@ -46,7 +46,7 @@ router.get('/:id/growth-timeline', auth_1.authenticateToken, async (req, res) =>
         });
     }
     catch (error) {
-        console.error('获取成长时间轴失败:', error);
+        logger.error('获取成长时间轴失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取成长时间轴失败',
@@ -81,7 +81,7 @@ router.get('/:id/milestones', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取里程碑失败:', error);
+        logger.error('获取里程碑失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取里程碑失败',
@@ -119,7 +119,7 @@ router.get('/:id/skill-evolution', auth_1.authenticateToken, async (req, res) =>
         });
     }
     catch (error) {
-        console.error('获取技能进化失败:', error);
+        logger.error('获取技能进化失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取技能进化失败',
@@ -166,7 +166,7 @@ router.post('/:id/growth-events', auth_1.authenticateToken, async (req, res) => 
         });
     }
     catch (error) {
-        console.error('记录成长事件失败:', error);
+        logger.error('记录成长事件失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '记录成长事件失败',
@@ -207,7 +207,7 @@ router.get('/:id/growth-summary', auth_1.authenticateToken, async (req, res) => 
         });
     }
     catch (error) {
-        console.error('获取成长概览失败:', error);
+        logger.error('获取成长概览失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取成长概览失败',

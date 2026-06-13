@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
 const uuid_1 = require("uuid");
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
-const config_1 = __importDefault(require("../config"));
+const config_1 = require("../../config");
 const anthropic = new sdk_1.default({
-    apiKey: config_1.default.ai.anthropicApiKey,
+    apiKey: config_1.config.ai.anthropicApiKey,
 });
 /**
  * E-05a, E-05b, E-05c, E-05d: 匹配增强服务
@@ -306,7 +306,7 @@ class MatchingEnhancementService {
             }
         }
         catch (error) {
-            console.error('AI分析拒绝原因失败:', error);
+            logger.error('AI分析拒绝原因失败:', error);
         }
         // 降级方案
         return {

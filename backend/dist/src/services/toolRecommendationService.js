@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toolRecommendationService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 class ToolRecommendationService {
     /**
      * 根据任务和学生情况推荐工具
@@ -48,7 +51,7 @@ class ToolRecommendationService {
             }));
         }
         catch (error) {
-            logger_1.logger.error('推荐工具失败', { error, taskId, studentId });
+            logger_1.default.error('推荐工具失败', { error, taskId, studentId });
             return [];
         }
     }
@@ -64,7 +67,7 @@ class ToolRecommendationService {
             return result.rows[0].id;
         }
         catch (error) {
-            logger_1.logger.error('记录工具推荐失败', { error });
+            logger_1.default.error('记录工具推荐失败', { error });
             return 0;
         }
     }
@@ -129,7 +132,7 @@ class ToolRecommendationService {
             };
         }
         catch (error) {
-            logger_1.logger.error('记录工具使用失败', { error, trackingId });
+            logger_1.default.error('记录工具使用失败', { error, trackingId });
             return {
                 success: false,
                 message: '记录失败'
@@ -159,7 +162,7 @@ class ToolRecommendationService {
             return result.rows[0];
         }
         catch (error) {
-            logger_1.logger.error('获取工具统计失败', { error, toolId });
+            logger_1.default.error('获取工具统计失败', { error, toolId });
             return null;
         }
     }
@@ -208,7 +211,7 @@ class ToolRecommendationService {
             }));
         }
         catch (error) {
-            logger_1.logger.error('获取热门工具失败', { error });
+            logger_1.default.error('获取热门工具失败', { error });
             return [];
         }
     }
@@ -238,7 +241,7 @@ class ToolRecommendationService {
             return result.rows[0].id;
         }
         catch (error) {
-            logger_1.logger.error('添加工具失败', { error });
+            logger_1.default.error('添加工具失败', { error });
             return 0;
         }
     }
@@ -268,7 +271,7 @@ class ToolRecommendationService {
             return 'general';
         }
         catch (error) {
-            logger_1.logger.error('分析任务类型失败', { error, taskId });
+            logger_1.default.error('分析任务类型失败', { error, taskId });
             return 'general';
         }
     }
@@ -299,7 +302,7 @@ class ToolRecommendationService {
             }
         }
         catch (error) {
-            logger_1.logger.error('获取学生技能水平失败', { error, studentId });
+            logger_1.default.error('获取学生技能水平失败', { error, studentId });
             return 'beginner';
         }
     }
@@ -314,7 +317,7 @@ class ToolRecommendationService {
          WHERE id = $1`, [toolId]);
         }
         catch (error) {
-            logger_1.logger.error('更新推荐次数失败', { error, toolId });
+            logger_1.default.error('更新推荐次数失败', { error, toolId });
         }
     }
     /**
@@ -332,7 +335,7 @@ class ToolRecommendationService {
             }
         }
         catch (error) {
-            logger_1.logger.error('更新工具成功率失败', { error, toolId });
+            logger_1.default.error('更新工具成功率失败', { error, toolId });
         }
     }
 }

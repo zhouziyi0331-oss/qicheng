@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
  * E-12: 定向培养计划路由
  */
 // 创建培养计划
-router.post('/plans', auth_1.authenticateToken, async (req, res) => {
+router.post('/plans', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const plan = await cultivationService_1.default.createPlan({
@@ -32,7 +32,7 @@ router.post('/plans', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 学生响应培养计划
-router.post('/plans/:id/respond', auth_1.authenticateToken, async (req, res) => {
+router.post('/plans/:id/respond', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const { id } = req.params;
@@ -52,7 +52,7 @@ router.post('/plans/:id/respond', auth_1.authenticateToken, async (req, res) => 
     }
 });
 // 获取企业的培养计划列表
-router.get('/plans/company', auth_1.authenticateToken, async (req, res) => {
+router.get('/plans/company', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { status } = req.query;
@@ -70,7 +70,7 @@ router.get('/plans/company', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 获取学生的培养计划列表
-router.get('/plans/student', auth_1.authenticateToken, async (req, res) => {
+router.get('/plans/student', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const { status } = req.query;
@@ -88,7 +88,7 @@ router.get('/plans/student', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 获取培养计划详情
-router.get('/plans/:id', auth_1.authenticateToken, async (req, res) => {
+router.get('/plans/:id', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const plan = await cultivationService_1.default.getPlanById(id);
@@ -105,7 +105,7 @@ router.get('/plans/:id', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 更新培养计划
-router.put('/plans/:id', auth_1.authenticateToken, async (req, res) => {
+router.put('/plans/:id', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const plan = await cultivationService_1.default.updatePlan(id, req.body);
@@ -123,7 +123,7 @@ router.put('/plans/:id', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 关联任务到培养计划
-router.post('/plans/:id/link-task', auth_1.authenticateToken, async (req, res) => {
+router.post('/plans/:id/link-task', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const { task_id, phase_number, purpose } = req.body;
@@ -147,7 +147,7 @@ router.post('/plans/:id/link-task', auth_1.authenticateToken, async (req, res) =
     }
 });
 // 记录技能学习
-router.post('/plans/:id/skills/start', auth_1.authenticateToken, async (req, res) => {
+router.post('/plans/:id/skills/start', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.userId;
         const { id } = req.params;
@@ -173,7 +173,7 @@ router.post('/plans/:id/skills/start', auth_1.authenticateToken, async (req, res
     }
 });
 // 完成技能学习
-router.post('/skills/:recordId/complete', auth_1.authenticateToken, async (req, res) => {
+router.post('/skills/:recordId/complete', auth_1.authenticate, async (req, res) => {
     try {
         const { recordId } = req.params;
         const { proficiency_level, verified_by_task_id } = req.body;
@@ -198,7 +198,7 @@ router.post('/skills/:recordId/complete', auth_1.authenticateToken, async (req, 
     }
 });
 // 添加反馈
-router.post('/plans/:id/feedback', auth_1.authenticateToken, async (req, res) => {
+router.post('/plans/:id/feedback', auth_1.authenticate, async (req, res) => {
     try {
         const feedbackBy = req.user.userId;
         const { id } = req.params;
@@ -224,7 +224,7 @@ router.post('/plans/:id/feedback', auth_1.authenticateToken, async (req, res) =>
     }
 });
 // 获取反馈列表
-router.get('/plans/:id/feedback', auth_1.authenticateToken, async (req, res) => {
+router.get('/plans/:id/feedback', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const feedbacks = await cultivationService_1.default.getFeedbacks(id);
@@ -241,7 +241,7 @@ router.get('/plans/:id/feedback', auth_1.authenticateToken, async (req, res) => 
     }
 });
 // 评估培养计划
-router.post('/plans/:id/evaluate', auth_1.authenticateToken, async (req, res) => {
+router.post('/plans/:id/evaluate', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const { evaluation, success_score } = req.body;
@@ -266,7 +266,7 @@ router.post('/plans/:id/evaluate', auth_1.authenticateToken, async (req, res) =>
     }
 });
 // 获取培养统计
-router.get('/stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const stats = await cultivationService_1.default.getCultivationStats(companyId);
@@ -283,7 +283,7 @@ router.get('/stats', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 获取推荐培养方案模板
-router.get('/templates/:targetRole', auth_1.authenticateToken, async (req, res) => {
+router.get('/templates/:targetRole', auth_1.authenticate, async (req, res) => {
     try {
         const { targetRole } = req.params;
         const template = await cultivationService_1.default.getRecommendedTemplate(targetRole);

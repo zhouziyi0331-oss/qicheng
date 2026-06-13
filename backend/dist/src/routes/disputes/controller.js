@@ -58,7 +58,7 @@ const createDispute = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('创建申诉失败:', error);
+        logger.error('创建申诉失败:', error);
         res.status(500).json({ success: false, message: '创建申诉失败' });
     }
 };
@@ -88,7 +88,7 @@ const getMyDisputes = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取申诉列表失败:', error);
+        logger.error('获取申诉列表失败:', error);
         res.status(500).json({ success: false, message: '获取申诉列表失败' });
     }
 };
@@ -124,7 +124,7 @@ const getDisputeDetail = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取申诉详情失败:', error);
+        logger.error('获取申诉详情失败:', error);
         res.status(500).json({ success: false, message: '获取申诉详情失败' });
     }
 };
@@ -177,7 +177,7 @@ const handleDispute = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('处理申诉失败:', error);
+        logger.error('处理申诉失败:', error);
         res.status(500).json({ success: false, message: '处理申诉失败' });
     }
 };
@@ -233,7 +233,7 @@ const getAllDisputes = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取申诉列表失败:', error);
+        logger.error('获取申诉列表失败:', error);
         res.status(500).json({ success: false, message: '获取申诉列表失败' });
     }
 };

@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emotionAnalysisService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 class EmotionAnalysisService {
     constructor() {
@@ -65,7 +68,7 @@ class EmotionAnalysisService {
             return finalResult;
         }
         catch (error) {
-            logger_1.logger.error('情绪分析失败', { error, studentId, content });
+            logger_1.default.error('情绪分析失败', { error, studentId, content });
             // 返回中性情绪
             return {
                 emotion: 'neutral',
@@ -175,7 +178,7 @@ ${context ? `上下文：\n${context}` : ''}
             };
         }
         catch (error) {
-            logger_1.logger.error('AI情绪检测失败', { error });
+            logger_1.default.error('AI情绪检测失败', { error });
             return {
                 emotion: 'neutral',
                 intensity: 0.5,
@@ -275,7 +278,7 @@ ${context ? `上下文：\n${context}` : ''}
             };
         }
         catch (error) {
-            logger_1.logger.error('获取情绪响应策略失败', { error, emotion });
+            logger_1.default.error('获取情绪响应策略失败', { error, emotion });
             return null;
         }
     }
@@ -299,7 +302,7 @@ ${context ? `上下文：\n${context}` : ''}
             }));
         }
         catch (error) {
-            logger_1.logger.error('获取情绪历史失败', { error, studentId });
+            logger_1.default.error('获取情绪历史失败', { error, studentId });
             return [];
         }
     }
@@ -317,7 +320,7 @@ ${context ? `上下文：\n${context}` : ''}
             return result.rows[0] || null;
         }
         catch (error) {
-            logger_1.logger.error('获取对话上下文失败', { error, sessionId });
+            logger_1.default.error('获取对话上下文失败', { error, sessionId });
             return null;
         }
     }

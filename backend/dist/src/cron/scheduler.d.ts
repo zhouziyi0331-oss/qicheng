@@ -16,9 +16,21 @@ export declare class CronScheduler {
      */
     stop(): void;
     /**
+     * 启动48小时自动确认任务
+     */
+    private startAutoAcceptanceJob;
+    /**
      * 启动7天自动确认任务
      */
     private startAutoConfirmationJob;
+    /**
+     * 启动任务过期处理任务
+     */
+    private startTaskExpirationJob;
+    /**
+     * 启动申请超时取消任务
+     */
+    private startApplicationTimeoutJob;
     /**
      * 手动触发7天自动确认任务（用于测试）
      */

@@ -39,7 +39,7 @@ async function getFinanceOverview(req, res) {
         });
     }
     catch (error) {
-        console.error('获取财务概览失败:', error);
+        logger.error('获取财务概览失败:', error);
         res.status(500).json({ message: '获取财务概览失败' });
     }
 }
@@ -108,7 +108,7 @@ async function getTransactionList(req, res) {
         });
     }
     catch (error) {
-        console.error('获取交易流水失败:', error);
+        logger.error('获取交易流水失败:', error);
         res.status(500).json({ message: '获取交易流水失败' });
     }
 }
@@ -161,7 +161,7 @@ async function getWithdrawalList(req, res) {
         });
     }
     catch (error) {
-        console.error('获取提现申请列表失败:', error);
+        logger.error('获取提现申请列表失败:', error);
         res.status(500).json({ message: '获取提现申请列表失败' });
     }
 }
@@ -228,7 +228,7 @@ async function approveWithdrawal(req, res) {
         }
     }
     catch (error) {
-        console.error('审核提现申请失败:', error);
+        logger.error('审核提现申请失败:', error);
         res.status(500).json({ message: '审核提现申请失败' });
     }
 }
@@ -274,7 +274,7 @@ async function getRevenueStats(req, res) {
         res.json(stats);
     }
     catch (error) {
-        console.error('获取收入统计失败:', error);
+        logger.error('获取收入统计失败:', error);
         res.status(500).json({ message: '获取收入统计失败' });
     }
 }
@@ -289,7 +289,7 @@ async function getCommissionConfig(req, res) {
         res.json(config);
     }
     catch (error) {
-        console.error('获取平台抽成配置失败:', error);
+        logger.error('获取平台抽成配置失败:', error);
         res.status(500).json({ message: '获取平台抽成配置失败' });
     }
 }
@@ -306,7 +306,7 @@ async function updateCommissionConfig(req, res) {
         res.json({ message: '平台抽成配置更新成功' });
     }
     catch (error) {
-        console.error('更新平台抽成配置失败:', error);
+        logger.error('更新平台抽成配置失败:', error);
         res.status(500).json({ message: '更新平台抽成配置失败' });
     }
 }

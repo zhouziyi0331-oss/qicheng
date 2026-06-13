@@ -52,7 +52,7 @@ class EncryptionService {
             };
         }
         catch (error) {
-            console.error('Encryption failed:', error);
+            logger.error('Encryption failed:', error);
             throw new Error('Failed to encrypt data');
         }
     }
@@ -71,7 +71,7 @@ class EncryptionService {
             return decrypted;
         }
         catch (error) {
-            console.error('Decryption failed:', error);
+            logger.error('Decryption failed:', error);
             throw new Error('Failed to decrypt data');
         }
     }
@@ -111,7 +111,7 @@ class EncryptionService {
             JSON.stringify(encryptedFieldsMetadata),
             userId,
         ]);
-        console.log(`Encrypted deliverable ${deliverableId} with ${Object.keys(fields).length} fields`);
+        logger.info(`Encrypted deliverable ${deliverableId} with ${Object.keys(fields).length} fields`);
         return encryptedFields;
     }
     /**
@@ -156,7 +156,7 @@ class EncryptionService {
         }
         catch (error) {
             // 忽略错误，不影响主流程
-            console.error('Failed to update key usage:', error);
+            logger.error('Failed to update key usage:', error);
         }
     }
     /**

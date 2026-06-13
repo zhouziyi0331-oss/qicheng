@@ -134,7 +134,7 @@ ${taskContext ? `**任务背景**
             };
         }
         catch (error) {
-            console.error('AI监测失败:', error);
+            logger.error('AI监测失败:', error);
             return null;
         }
     }
@@ -246,7 +246,7 @@ ${taskContext ? `**任务背景**
             return JSON.parse(jsonText);
         }
         catch (error) {
-            console.error('解析AI响应失败:', error);
+            logger.error('解析AI响应失败:', error);
             return { has_issue: false };
         }
     }

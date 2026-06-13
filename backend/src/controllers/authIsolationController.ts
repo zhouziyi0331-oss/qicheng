@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { pool } from '../utils/db';
 import { generateToken } from '../utils/jwt';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 
 /**
  * 学生注册

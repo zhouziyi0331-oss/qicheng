@@ -21,7 +21,7 @@ router.get('/dashboard', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        console.error('获取资产仪表盘失败:', error);
+        logger.error('获取资产仪表盘失败:', error);
         next(error);
     }
 });
@@ -46,7 +46,7 @@ router.post('/growth-comparison', auth_1.authenticate, async (req, res, next) =>
         });
     }
     catch (error) {
-        console.error('生成成长对比卡片失败:', error);
+        logger.error('生成成长对比卡片失败:', error);
         next(error);
     }
 });
@@ -71,7 +71,7 @@ router.post('/level-up', auth_1.authenticate, async (req, res, next) => {
         });
     }
     catch (error) {
-        console.error('生成升级仪式失败:', error);
+        logger.error('生成升级仪式失败:', error);
         next(error);
     }
 });
@@ -111,7 +111,7 @@ router.get('/growth-history', auth_1.authenticate, async (req, res, next) => {
         }
     }
     catch (error) {
-        console.error('获取成长历史失败:', error);
+        logger.error('获取成长历史失败:', error);
         next(error);
     }
 });
@@ -149,7 +149,7 @@ router.get('/level-history', auth_1.authenticate, async (req, res, next) => {
         }
     }
     catch (error) {
-        console.error('获取升级历史失败:', error);
+        logger.error('获取升级历史失败:', error);
         next(error);
     }
 });

@@ -41,7 +41,7 @@ router.get('/:taskId/flow', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取托管流程失败:', error);
+        logger.error('获取托管流程失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取托管流程失败',
@@ -94,7 +94,7 @@ router.post('/:taskId/deposit', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('托管充值失败:', error);
+        logger.error('托管充值失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '充值失败',
@@ -136,7 +136,7 @@ router.post('/:taskId/release', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('释放资金失败:', error);
+        logger.error('释放资金失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '释放资金失败',
@@ -171,7 +171,7 @@ router.post('/:taskId/refund', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('退款失败:', error);
+        logger.error('退款失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '退款失败',
@@ -202,7 +202,7 @@ router.put('/nodes/:nodeId/status', auth_1.authenticateToken, async (req, res) =
         });
     }
     catch (error) {
-        console.error('更新节点状态失败:', error);
+        logger.error('更新节点状态失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '更新失败',
@@ -230,7 +230,7 @@ router.post('/transactions/:transactionId/complete', auth_1.authenticateToken, a
         });
     }
     catch (error) {
-        console.error('完成交易失败:', error);
+        logger.error('完成交易失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '完成交易失败',
@@ -265,7 +265,7 @@ router.post('/transactions/:transactionId/fail', auth_1.authenticateToken, async
         });
     }
     catch (error) {
-        console.error('标记交易失败:', error);
+        logger.error('标记交易失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '操作失败',

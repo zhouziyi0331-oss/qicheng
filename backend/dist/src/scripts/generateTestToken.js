@@ -20,12 +20,12 @@ const companyToken = jsonwebtoken_1.default.sign(companyPayload, config_1.config
 const studentToken = jsonwebtoken_1.default.sign(studentPayload, config_1.config.jwt.accessSecret, {
     expiresIn: '7d'
 });
-console.log('\n=== 测试令牌 ===\n');
-console.log('企业令牌 (Company Token):');
-console.log(companyToken);
-console.log('\n学生令牌 (Student Token):');
-console.log(studentToken);
-console.log('\n使用方式:');
-console.log('curl -H "Authorization: Bearer <token>" http://localhost:3000/api/v1/...');
-console.log('\n');
+logger.info('\n=== 测试令牌 ===\n');
+logger.info('企业令牌 (Company Token):');
+logger.info(companyToken);
+logger.info('\n学生令牌 (Student Token):');
+logger.info(studentToken);
+logger.info('\n使用方式:');
+logger.info('curl -H "Authorization: Bearer <token>" http://localhost:3000/api/v1/...');
+logger.info('\n');
 //# sourceMappingURL=generateTestToken.js.map

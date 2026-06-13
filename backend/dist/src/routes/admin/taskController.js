@@ -71,7 +71,7 @@ async function getTaskList(req, res) {
         });
     }
     catch (error) {
-        console.error('获取项目列表失败:', error);
+        logger.error('获取项目列表失败:', error);
         res.status(500).json({ error: '获取项目列表失败' });
     }
 }
@@ -95,7 +95,7 @@ async function getTaskDetail(req, res) {
         res.json(taskInfo[0]);
     }
     catch (error) {
-        console.error('获取项目详情失败:', error);
+        logger.error('获取项目详情失败:', error);
         res.status(500).json({ error: '获取项目详情失败' });
     }
 }
@@ -138,7 +138,7 @@ async function getPendingReviewTasks(req, res) {
         });
     }
     catch (error) {
-        console.error('获取待审核项目列表失败:', error);
+        logger.error('获取待审核项目列表失败:', error);
         res.status(500).json({ error: '获取待审核项目列表失败' });
     }
 }
@@ -186,7 +186,7 @@ async function reviewTask(req, res) {
         res.json({ message: approved ? '项目已发布' : '项目已拒绝' });
     }
     catch (error) {
-        console.error('审核项目失败:', error);
+        logger.error('审核项目失败:', error);
         res.status(500).json({ error: '审核项目失败' });
     }
 }
@@ -208,7 +208,7 @@ async function toggleTaskStatus(req, res) {
         res.json({ message: action === 'publish' ? '项目已上架' : '项目已下架' });
     }
     catch (error) {
-        console.error('更新项目状态失败:', error);
+        logger.error('更新项目状态失败:', error);
         res.status(500).json({ error: '更新项目状态失败' });
     }
 }
@@ -240,7 +240,7 @@ async function getTaskCategories(req, res) {
         });
     }
     catch (error) {
-        console.error('获取项目分类统计失败:', error);
+        logger.error('获取项目分类统计失败:', error);
         res.status(500).json({ error: '获取项目分类统计失败' });
     }
 }
@@ -276,7 +276,7 @@ async function updateTask(req, res) {
         res.json({ message: '项目更新成功' });
     }
     catch (error) {
-        console.error('更新项目失败:', error);
+        logger.error('更新项目失败:', error);
         res.status(500).json({ error: '更新项目失败' });
     }
 }

@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../utils/db");
 const embeddingService_1 = require("../services/embeddingService");
 async function generateTaskEmbeddings() {
-    console.log('开始生成任务embedding向量...');
+    logger.info('开始生成任务embedding向量...');
     const result = await db_1.pool.query(`
     SELECT id, title, description, track, acceptance_criteria, level_required
     FROM tasks
     WHERE title_embedding IS NULL
     LIMIT 100
   `);
-    console.log(`找到 ${result.rows.length} 个待处理任务`);
+    logger.info(`找到 ${result.rows.length} 个待处理任务`);
     for (const task of result.rows) {
         try {
             const text = `
@@ -20,19 +20,19 @@ async function generateTaskEmbeddings() {
         等级要求: ${task.level_required || 0}
         验收标准: ${task.acceptance_criteria || ''}
       `.trim();
-            console.log(`处理任务 ${task.id}: ${task.title}`);
+            logger.info(`处理任务 ${task.id}: ${task.title}`);
             const embedding = await embeddingService_1.embeddingService.generateEmbedding(text);
             await db_1.pool.query('UPDATE tasks SET title_embedding = $1 WHERE id = $2', [`[${embedding.join(',')}]`, task.id]);
-            console.log(`✓ 任务 ${task.id} embedding已生成`);
+            logger.info(`✓ 任务 ${task.id} embedding已生成`);
         }
         catch (error) {
-            console.error(`✗ 任务 ${task.id} 失败:`, error);
+            logger.error(`✗ 任务 ${task.id} 失败:`, error);
         }
     }
-    console.log('任务embedding生成完成');
+    logger.info('任务embedding生成完成');
 }
 async function generateStudentEmbeddings() {
-    console.log('开始生成学生embedding向量...');
+    logger.info('开始生成学生embedding向量...');
     const result = await db_1.pool.query(`
     SELECT
       u.id,
@@ -55,7 +55,7 @@ async function generateStudentEmbeddings() {
     WHERE u.role = 'student' AND u.skills_embedding IS NULL
     LIMIT 100
   `);
-    console.log(`找到 ${result.rows.length} 个待处理学生`);
+    logger.info(`找到 ${result.rows.length} 个待处理学生`);
     for (const student of result.rows) {
         try {
             const text = `
@@ -68,16 +68,16 @@ async function generateStudentEmbeddings() {
         等级: A赛道${student.current_level || 0}级, B赛道${student.level_b || 0}级, 当前${student.current_level || 0}级
         能力: 开放性${student.openness || 50}, 坚持性${student.persistence || 50}, 创造性${student.creativity || 50}
       `.trim();
-            console.log(`处理学生 ${student.id}: ${student.nickname || 'unknown'}`);
+            logger.info(`处理学生 ${student.id}: ${student.nickname || 'unknown'}`);
             const embedding = await embeddingService_1.embeddingService.generateEmbedding(text);
             await db_1.pool.query('UPDATE users SET skills_embedding = $1, interests_embedding = $1, profile_embedding = $1 WHERE id = $2', [JSON.stringify(embedding), student.id]);
-            console.log(`✓ 学生 ${student.id} embedding已生成`);
+            logger.info(`✓ 学生 ${student.id} embedding已生成`);
         }
         catch (error) {
-            console.error(`✗ 学生 ${student.id} 失败:`, error);
+            logger.error(`✗ 学生 ${student.id} 失败:`, error);
         }
     }
-    console.log('学生embedding生成完成');
+    logger.info('学生embedding生成完成');
 }
 async function main() {
     try {
@@ -97,12 +97,12 @@ async function main() {
       FROM users
       WHERE role = 'student'
     `);
-        console.log('\n=== 统计信息 ===');
-        console.log(`任务: ${taskStats.rows[0].with_embedding}/${taskStats.rows[0].total} 已生成embedding`);
-        console.log(`学生: ${studentStats.rows[0].with_embedding}/${studentStats.rows[0].total} 已生成embedding`);
+        logger.info('\n=== 统计信息 ===');
+        logger.info(`任务: ${taskStats.rows[0].with_embedding}/${taskStats.rows[0].total} 已生成embedding`);
+        logger.info(`学生: ${studentStats.rows[0].with_embedding}/${studentStats.rows[0].total} 已生成embedding`);
     }
     catch (error) {
-        console.error('生成embedding失败:', error);
+        logger.error('生成embedding失败:', error);
         process.exit(1);
     }
     finally {

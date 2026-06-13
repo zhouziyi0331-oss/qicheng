@@ -160,7 +160,7 @@ ${JSON.stringify(answersByDimension, null, 2)}
             return result;
         }
         catch (error) {
-            console.error('AI分析失败:', error);
+            logger.error('AI分析失败:', error);
             throw new Error('AI分析服务暂时不可用，请稍后重试');
         }
     }

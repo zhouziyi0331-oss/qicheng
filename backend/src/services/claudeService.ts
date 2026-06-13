@@ -4,7 +4,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,

@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CronScheduler = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
 const autoConfirmationJob_1 = require("./autoConfirmationJob");
+const autoAcceptanceJob_1 = require("./autoAcceptanceJob");
+const taskExpirationJob_1 = require("./taskExpirationJob");
+const applicationTimeoutJob_1 = require("./applicationTimeoutJob");
 const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 定时任务调度器
@@ -23,6 +26,12 @@ class CronScheduler {
         logger_1.default.info('启动定时任务调度器');
         // 启动7天自动确认任务
         this.startAutoConfirmationJob();
+        // 启动48小时自动确认任务
+        this.startAutoAcceptanceJob();
+        // 启动任务过期处理任务
+        this.startTaskExpirationJob();
+        // 启动申请超时取消任务
+        this.startApplicationTimeoutJob();
         logger_1.default.info(`已启动${this.tasks.length}个定时任务`);
     }
     /**
@@ -35,6 +44,23 @@ class CronScheduler {
         });
         this.tasks = [];
         logger_1.default.info('所有定时任务已停止');
+    }
+    /**
+     * 启动48小时自动确认任务
+     */
+    startAutoAcceptanceJob() {
+        const job = new autoAcceptanceJob_1.AutoAcceptanceJob(this.pool);
+        const schedule = autoAcceptanceJob_1.AutoAcceptanceJob.getCronSchedule();
+        const task = node_cron_1.default.schedule(schedule, async () => {
+            try {
+                await job.execute();
+            }
+            catch (error) {
+                logger_1.default.error('48小时自动确认任务执行失败:', error);
+            }
+        });
+        this.tasks.push(task);
+        logger_1.default.info(`已启动48小时自动确认任务，调度时间: ${schedule}`);
     }
     /**
      * 启动7天自动确认任务
@@ -63,6 +89,40 @@ class CronScheduler {
                 logger_1.default.error('测试执行失败:', err);
             });
         }
+    }
+    /**
+     * 启动任务过期处理任务
+     */
+    startTaskExpirationJob() {
+        const job = new taskExpirationJob_1.TaskExpirationJob(this.pool);
+        const schedule = taskExpirationJob_1.TaskExpirationJob.getCronSchedule();
+        const task = node_cron_1.default.schedule(schedule, async () => {
+            try {
+                await job.execute();
+            }
+            catch (error) {
+                logger_1.default.error('任务过期处理执行失败:', error);
+            }
+        });
+        this.tasks.push(task);
+        logger_1.default.info(`已启动任务过期处理任务，调度时间: ${schedule}`);
+    }
+    /**
+     * 启动申请超时取消任务
+     */
+    startApplicationTimeoutJob() {
+        const job = new applicationTimeoutJob_1.ApplicationTimeoutJob(this.pool);
+        const schedule = applicationTimeoutJob_1.ApplicationTimeoutJob.getCronSchedule();
+        const task = node_cron_1.default.schedule(schedule, async () => {
+            try {
+                await job.execute();
+            }
+            catch (error) {
+                logger_1.default.error('申请超时取消任务执行失败:', error);
+            }
+        });
+        this.tasks.push(task);
+        logger_1.default.info(`已启动申请超时取消任务，调度时间: ${schedule}`);
     }
     /**
      * 手动触发7天自动确认任务（用于测试）

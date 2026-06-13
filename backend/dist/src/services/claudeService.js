@@ -9,7 +9,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.claudeService = void 0;
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const anthropic = new sdk_1.default({
     apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -41,7 +41,7 @@ class ClaudeService {
             };
         }
         catch (error) {
-            logger_1.logger.error('Claude API调用失败:', error);
+            logger_1.default.error('Claude API调用失败:', error);
             throw error;
         }
     }

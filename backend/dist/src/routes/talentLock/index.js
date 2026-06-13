@@ -27,7 +27,7 @@ router.post('/calculate-fee', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('计算费用失败:', error);
+        logger.error('计算费用失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '计算费用失败',
@@ -71,7 +71,7 @@ router.post('/apply', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('创建锁定申请失败:', error);
+        logger.error('创建锁定申请失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建锁定申请失败',
@@ -96,7 +96,7 @@ router.get('/applications', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取申请列表失败:', error);
+        logger.error('获取申请列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取申请列表失败',
@@ -133,7 +133,7 @@ router.post('/applications/:id/respond', auth_1.authenticateToken, async (req, r
         });
     }
     catch (error) {
-        console.error('响应申请失败:', error);
+        logger.error('响应申请失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '响应申请失败',
@@ -171,7 +171,7 @@ router.get('/list', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取锁定列表失败:', error);
+        logger.error('获取锁定列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取锁定列表失败',
@@ -192,7 +192,7 @@ router.get('/:id', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取锁定详情失败:', error);
+        logger.error('获取锁定详情失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取锁定详情失败',
@@ -221,7 +221,7 @@ router.post('/:id/renew', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('续约失败:', error);
+        logger.error('续约失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '续约失败',
@@ -244,7 +244,7 @@ router.post('/:id/cancel', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('取消锁定失败:', error);
+        logger.error('取消锁定失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '取消锁定失败',
@@ -268,7 +268,7 @@ router.post('/:id/pause', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('暂停锁定失败:', error);
+        logger.error('暂停锁定失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '暂停锁定失败',
@@ -291,7 +291,7 @@ router.post('/:id/resume', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('恢复锁定失败:', error);
+        logger.error('恢复锁定失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '恢复锁定失败',
@@ -313,7 +313,7 @@ router.get('/student/:studentId/status', auth_1.authenticateToken, async (req, r
         });
     }
     catch (error) {
-        console.error('检查锁定状态失败:', error);
+        logger.error('检查锁定状态失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '检查锁定状态失败',
@@ -341,7 +341,7 @@ router.get('/stats/overview', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取锁定统计失败:', error);
+        logger.error('获取锁定统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取锁定统计失败',
@@ -368,7 +368,7 @@ router.get('/pricing/config', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取价格配置失败:', error);
+        logger.error('获取价格配置失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取价格配置失败',

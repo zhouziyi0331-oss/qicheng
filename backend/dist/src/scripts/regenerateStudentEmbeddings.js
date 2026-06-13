@@ -14,24 +14,24 @@ async function regenerateStudentEmbeddings() {
       WHERE u.role = 'student'
       ORDER BY u.created_at
     `);
-        console.log(`找到 ${result.length} 个学生，开始重新生成embedding...`);
-        console.log('=====================================');
+        logger.info(`找到 ${result.length} 个学生，开始重新生成embedding...`);
+        logger.info('=====================================');
         for (const student of result) {
-            console.log(`\n正在处理学生: ${student.nickname || student.id}`);
+            logger.info(`\n正在处理学生: ${student.nickname || student.id}`);
             try {
                 await hybridMatchingService_1.hybridMatchingService.generateStudentEmbedding(student.id);
-                console.log(`✅ 成功生成embedding`);
+                logger.info(`✅ 成功生成embedding`);
             }
             catch (error) {
-                console.error(`❌ 失败: ${error.message}`);
+                logger.error(`❌ 失败: ${error.message}`);
             }
         }
-        console.log('\n=====================================');
-        console.log('所有学生embedding生成完成！');
+        logger.info('\n=====================================');
+        logger.info('所有学生embedding生成完成！');
         process.exit(0);
     }
     catch (error) {
-        console.error('错误:', error);
+        logger.error('错误:', error);
         process.exit(1);
     }
 }

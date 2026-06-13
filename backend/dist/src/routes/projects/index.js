@@ -45,7 +45,7 @@ router.post('/', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('创建项目失败:', error);
+        logger.error('创建项目失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '创建项目失败',
@@ -78,7 +78,7 @@ router.get('/', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取项目列表失败:', error);
+        logger.error('获取项目列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取项目列表失败',
@@ -113,7 +113,7 @@ router.get('/:id', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取项目详情失败:', error);
+        logger.error('获取项目详情失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取项目详情失败',
@@ -144,7 +144,7 @@ router.put('/:id', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('更新项目失败:', error);
+        logger.error('更新项目失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '更新项目失败',
@@ -193,7 +193,7 @@ router.post('/:id/milestones', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('添加里程碑失败:', error);
+        logger.error('添加里程碑失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '添加里程碑失败',
@@ -225,7 +225,7 @@ router.get('/:id/milestones', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取里程碑失败:', error);
+        logger.error('获取里程碑失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取里程碑失败',
@@ -256,7 +256,7 @@ router.put('/milestones/:milestoneId', auth_1.authenticateToken, async (req, res
         });
     }
     catch (error) {
-        console.error('更新里程碑失败:', error);
+        logger.error('更新里程碑失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '更新里程碑失败',
@@ -293,7 +293,7 @@ router.post('/:id/tasks', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('关联任务失败:', error);
+        logger.error('关联任务失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '关联任务失败',
@@ -325,7 +325,7 @@ router.get('/:id/tasks', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取任务列表失败:', error);
+        logger.error('获取任务列表失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取任务列表失败',
@@ -362,7 +362,7 @@ router.post('/:id/collaborators', auth_1.authenticateToken, async (req, res) => 
         });
     }
     catch (error) {
-        console.error('添加协作者失败:', error);
+        logger.error('添加协作者失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '添加协作者失败',
@@ -394,7 +394,7 @@ router.get('/:id/collaborators', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取协作者失败:', error);
+        logger.error('获取协作者失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取协作者失败',
@@ -424,7 +424,7 @@ router.post('/:id/publish', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('发布项目失败:', error);
+        logger.error('发布项目失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '发布项目失败',
@@ -447,7 +447,7 @@ router.get('/:id/progress', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('计算项目进度失败:', error);
+        logger.error('计算项目进度失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '计算进度失败',

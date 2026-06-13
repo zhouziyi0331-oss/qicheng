@@ -109,6 +109,10 @@ if (process.env.NODE_ENV !== 'test') {
     // 启动AI导师自动触发定时任务（每30秒检查一次）
     const { mentorTriggerCronService } = require('./services/mentorTriggerCronService');
     mentorTriggerCronService.start();
+    // 启动匹配Worker（处理学生升级和需求变更的异步任务）
+    const { startMatchingWorker } = require('./workers/matchingWorker');
+    startMatchingWorker();
+    logger_1.default.info('匹配Worker已启动');
     // 优雅关闭时停止定时任务
     process.on('SIGTERM', () => {
         cronScheduler.stop();

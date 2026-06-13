@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.proactiveFollowUpService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const mentorStageService_1 = require("./mentorStageService");
 class ProactiveFollowUpService {
     /**
@@ -26,7 +29,7 @@ class ProactiveFollowUpService {
             return tasks;
         }
         catch (error) {
-            logger_1.logger.error('检查跟进任务失败', { error });
+            logger_1.default.error('检查跟进任务失败', { error });
             return [];
         }
     }
@@ -81,7 +84,7 @@ class ProactiveFollowUpService {
             };
         }
         catch (error) {
-            logger_1.logger.error('生成跟进消息失败', { error, sessionId });
+            logger_1.default.error('生成跟进消息失败', { error, sessionId });
             return {
                 content: '',
                 tone: 'neutral',
@@ -108,7 +111,7 @@ class ProactiveFollowUpService {
             return true;
         }
         catch (error) {
-            logger_1.logger.error('发送跟进消息失败', { error, sessionId });
+            logger_1.default.error('发送跟进消息失败', { error, sessionId });
             return false;
         }
     }
@@ -142,7 +145,7 @@ class ProactiveFollowUpService {
             }));
         }
         catch (error) {
-            logger_1.logger.error('查找不活跃会话失败', { error });
+            logger_1.default.error('查找不活跃会话失败', { error });
             return [];
         }
     }
@@ -175,7 +178,7 @@ class ProactiveFollowUpService {
             }));
         }
         catch (error) {
-            logger_1.logger.error('查找困难学生失败', { error });
+            logger_1.default.error('查找困难学生失败', { error });
             return [];
         }
     }
@@ -208,7 +211,7 @@ class ProactiveFollowUpService {
             }));
         }
         catch (error) {
-            logger_1.logger.error('查找工具跟进失败', { error });
+            logger_1.default.error('查找工具跟进失败', { error });
             return [];
         }
     }
@@ -241,7 +244,7 @@ class ProactiveFollowUpService {
             }));
         }
         catch (error) {
-            logger_1.logger.error('查找未庆祝里程碑失败', { error });
+            logger_1.default.error('查找未庆祝里程碑失败', { error });
             return [];
         }
     }
@@ -337,7 +340,7 @@ class ProactiveFollowUpService {
             return result.rows[0] || null;
         }
         catch (error) {
-            logger_1.logger.error('获取人性化上下文失败', { error, sessionId });
+            logger_1.default.error('获取人性化上下文失败', { error, sessionId });
             return null;
         }
     }
@@ -355,7 +358,7 @@ class ProactiveFollowUpService {
                     const success = await this.sendFollowUp(task.sessionId, message.content);
                     if (success) {
                         sent++;
-                        logger_1.logger.info('发送跟进消息成功', {
+                        logger_1.default.info('发送跟进消息成功', {
                             sessionId: task.sessionId,
                             reason: task.reason
                         });
@@ -372,7 +375,7 @@ class ProactiveFollowUpService {
             };
         }
         catch (error) {
-            logger_1.logger.error('执行跟进任务失败', { error });
+            logger_1.default.error('执行跟进任务失败', { error });
             return {
                 total: 0,
                 sent: 0,

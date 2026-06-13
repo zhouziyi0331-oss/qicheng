@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
  * E-01d: 任务草稿箱
  */
 // 保存草稿
-router.post('/drafts', auth_1.authenticateToken, async (req, res) => {
+router.post('/drafts', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const draft = await taskExperienceService_1.default.saveDraft({
@@ -32,7 +32,7 @@ router.post('/drafts', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 更新草稿
-router.put('/drafts/:id', auth_1.authenticateToken, async (req, res) => {
+router.put('/drafts/:id', authenticateToken, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { id } = req.params;
@@ -51,7 +51,7 @@ router.put('/drafts/:id', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 获取草稿列表
-router.get('/drafts', auth_1.authenticateToken, async (req, res) => {
+router.get('/drafts', authenticateToken, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const drafts = await taskExperienceService_1.default.getDrafts(companyId);
@@ -68,7 +68,7 @@ router.get('/drafts', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 删除草稿
-router.delete('/drafts/:id', auth_1.authenticateToken, async (req, res) => {
+router.delete('/drafts/:id', authenticateToken, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { id } = req.params;
@@ -86,7 +86,7 @@ router.delete('/drafts/:id', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 从草稿发布任务
-router.post('/drafts/:id/publish', auth_1.authenticateToken, async (req, res) => {
+router.post('/drafts/:id/publish', authenticateToken, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { id } = req.params;
@@ -142,7 +142,7 @@ router.get('/templates/:id', async (req, res) => {
     }
 });
 // 使用模板创建草稿
-router.post('/templates/:id/use', auth_1.authenticateToken, async (req, res) => {
+router.post('/templates/:id/use', authenticateToken, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { id } = req.params;
@@ -203,7 +203,7 @@ router.get('/templates/search', async (req, res) => {
  * E-01b: 预算智能建议
  */
 // 获取预算建议
-router.post('/budget-suggestion', auth_1.authenticateToken, async (req, res) => {
+router.post('/budget-suggestion', authenticateToken, async (req, res) => {
     try {
         const companyId = req.user.userId;
         const { task_category, task_description, required_skills, quality_expectation } = req.body;

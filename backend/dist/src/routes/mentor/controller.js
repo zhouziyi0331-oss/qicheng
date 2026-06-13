@@ -111,10 +111,10 @@ ${student?.tasks_completed === 0 ? '这是你的第一单，不用紧张，我�
                 JSON.stringify({ taskId, fullMessage: mentorResponse }),
             ]);
         }, 30000);
-        console.log(`[Mentor] Task start guidance sent to student ${studentId} for task ${taskId}`);
+        logger.info(`[Mentor] Task start guidance sent to student ${studentId} for task ${taskId}`);
     }
     catch (error) {
-        console.error('[Mentor] Error sending task start guidance:', error);
+        logger.error('[Mentor] Error sending task start guidance:', error);
     }
 }
 // ══════════════════════════════════════════════════════════════
@@ -286,7 +286,7 @@ ${rejectionReason}
         return mentorResponse;
     }
     catch (error) {
-        console.error('[Mentor] Error generating rejection feedback:', error);
+        logger.error('[Mentor] Error generating rejection feedback:', error);
         return '';
     }
 }
@@ -344,11 +344,11 @@ async function checkIdleStudents() {
             // 推送通知
             await (0, db_1.query)(`INSERT INTO notifications (user_id, type, title, body)
          VALUES ($1, $2, $3, $4)`, [student.student_id, 'mentor_nudge', '🐱 AI导师', message]);
-            console.log(`[Mentor] Nudge sent to student ${student.student_id} for task ${student.task_id}`);
+            logger.info(`[Mentor] Nudge sent to student ${student.student_id} for task ${student.task_id}`);
         }
     }
     catch (error) {
-        console.error('[Mentor] Error checking idle students:', error);
+        logger.error('[Mentor] Error checking idle students:', error);
     }
 }
 // ══════════════════════════════════════════════════════════════
@@ -428,10 +428,10 @@ ${milestoneHistory.map((m) => `- ${m.milestone_type}: ${m.mentor_message}`).join
         // 推送通知
         await (0, db_1.query)(`INSERT INTO notifications (user_id, type, title, body)
        VALUES ($1, $2, $3, $4)`, [studentId, 'milestone', '🎉 成长里程碑', mentorResponse]);
-        console.log(`[Mentor] Milestone celebrated for student ${studentId}: ${milestoneType}`);
+        logger.info(`[Mentor] Milestone celebrated for student ${studentId}: ${milestoneType}`);
     }
     catch (error) {
-        console.error('[Mentor] Error celebrating milestone:', error);
+        logger.error('[Mentor] Error celebrating milestone:', error);
     }
 }
 // ══════════════════════════════════════════════════════════════

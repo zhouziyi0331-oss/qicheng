@@ -35,7 +35,7 @@ router.get('/commitments', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Failed to get security commitments:', error);
+        logger.error('Failed to get security commitments:', error);
         res.status(500).json({
             success: false,
             message: '获取安全承诺失败',
@@ -78,7 +78,7 @@ router.get('/collaboration-progress/:studentId/:companyId', auth_1.authenticate,
         });
     }
     catch (error) {
-        console.error('Failed to get collaboration progress:', error);
+        logger.error('Failed to get collaboration progress:', error);
         res.status(500).json({
             success: false,
             message: '获取合作进度失败',
@@ -118,7 +118,7 @@ router.get('/my-collaborations', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Failed to get collaborations:', error);
+        logger.error('Failed to get collaborations:', error);
         res.status(500).json({
             success: false,
             message: '获取合作列表失败',
@@ -149,7 +149,7 @@ router.get('/access-logs/:resourceType/:resourceId', auth_1.authenticate, async 
         });
     }
     catch (error) {
-        console.error('Failed to get access logs:', error);
+        logger.error('Failed to get access logs:', error);
         res.status(500).json({
             success: false,
             message: '获取访问日志失败',
@@ -171,7 +171,7 @@ router.get('/my-access-logs', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Failed to get user access logs:', error);
+        logger.error('Failed to get user access logs:', error);
         res.status(500).json({
             success: false,
             message: '获取访问历史失败',
@@ -201,7 +201,7 @@ router.post('/generate-key', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Failed to generate key:', error);
+        logger.error('Failed to generate key:', error);
         res.status(500).json({
             success: false,
             message: '生成密钥失败',
@@ -242,7 +242,7 @@ router.post('/unlock-contact/request', auth_1.authenticate, async (req, res) => 
         });
     }
     catch (error) {
-        console.error('Failed to request unlock:', error);
+        logger.error('Failed to request unlock:', error);
         res.status(400).json({
             success: false,
             message: error.message || '申请解锁失败',
@@ -278,7 +278,7 @@ router.post('/unlock-contact/approve', auth_1.authenticate, async (req, res) => 
         });
     }
     catch (error) {
-        console.error('Failed to approve unlock:', error);
+        logger.error('Failed to approve unlock:', error);
         res.status(400).json({
             success: false,
             message: error.message || '同意解锁失败',
@@ -313,7 +313,7 @@ router.post('/unlock-contact/reject', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Failed to reject unlock:', error);
+        logger.error('Failed to reject unlock:', error);
         res.status(400).json({
             success: false,
             message: error.message || '拒绝解锁失败',
@@ -348,7 +348,7 @@ router.get('/unlock-contact/:studentId/:companyId', auth_1.authenticate, async (
         });
     }
     catch (error) {
-        console.error('Failed to get unlocked contact:', error);
+        logger.error('Failed to get unlocked contact:', error);
         res.status(400).json({
             success: false,
             message: error.message || '获取联系方式失败',
@@ -383,7 +383,7 @@ router.get('/unlock-status/:studentId/:companyId', auth_1.authenticate, async (r
         });
     }
     catch (error) {
-        console.error('Failed to get unlock status:', error);
+        logger.error('Failed to get unlock status:', error);
         res.status(500).json({
             success: false,
             message: '获取解锁状态失败',
@@ -410,7 +410,7 @@ router.get('/my-unlock-requests', auth_1.authenticate, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Failed to get unlock requests:', error);
+        logger.error('Failed to get unlock requests:', error);
         res.status(500).json({
             success: false,
             message: '获取解锁请求失败',

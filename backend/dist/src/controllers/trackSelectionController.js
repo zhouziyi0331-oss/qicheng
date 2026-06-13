@@ -3,13 +3,16 @@
  * 赛道选择控制器
  * 实现学生赛道选择和路径展示功能
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTrackRecommendation = getTrackRecommendation;
 exports.selectTrack = selectTrack;
 exports.getTrackPaths = getTrackPaths;
 exports.getMyTrack = getMyTrack;
 const db_1 = require("../utils/db");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 获取赛道推荐和分析
  * GET /api/v1/students/track-recommendation
@@ -60,7 +63,7 @@ async function getTrackRecommendation(req, res) {
         });
     }
     catch (error) {
-        logger_1.logger.error('Get track recommendation failed', { error, userId });
+        logger_1.default.error('Get track recommendation failed', { error, userId });
         res.status(500).json({
             success: false,
             message: '获取赛道推荐失败'
@@ -103,7 +106,7 @@ async function selectTrack(req, res) {
        SET track_recommendation = $1
        WHERE user_id = $2`, [track, userId]);
         await client.query('COMMIT');
-        logger_1.logger.info('Track selected successfully', { userId, track });
+        logger_1.default.info('Track selected successfully', { userId, track });
         res.json({
             success: true,
             message: '赛道选择成功',
@@ -115,7 +118,7 @@ async function selectTrack(req, res) {
     }
     catch (error) {
         await client.query('ROLLBACK');
-        logger_1.logger.error('Select track failed', { error, userId, track });
+        logger_1.default.error('Select track failed', { error, userId, track });
         res.status(500).json({
             success: false,
             message: '赛道选择失败'
@@ -278,7 +281,7 @@ async function getTrackPaths(req, res) {
         });
     }
     catch (error) {
-        logger_1.logger.error('Get track paths failed', { error });
+        logger_1.default.error('Get track paths failed', { error });
         res.status(500).json({
             success: false,
             message: '获取赛道路径失败'
@@ -325,7 +328,7 @@ async function getMyTrack(req, res) {
         });
     }
     catch (error) {
-        logger_1.logger.error('Get my track failed', { error, userId });
+        logger_1.default.error('Get my track failed', { error, userId });
         res.status(500).json({
             success: false,
             message: '获取赛道信息失败'

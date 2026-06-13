@@ -27,7 +27,7 @@ class GraduationReportService {
      * 生成毕业报告（学生达到Lv.6时触发）
      */
     async generateGraduationReport(userId) {
-        console.log(`[毕业报告] 开始为学生 ${userId} 生成毕业报告`);
+        logger.info(`[毕业报告] 开始为学生 ${userId} 生成毕业报告`);
         // 1. 检查学生是否达到Lv.6
         const userLevel = await this.checkUserLevel(userId);
         if (userLevel < 6) {
@@ -36,7 +36,7 @@ class GraduationReportService {
         // 2. 检查是否已有报告
         const existingReport = await this.getExistingReport(userId);
         if (existingReport) {
-            console.log(`[毕业报告] 学生已有报告，报告ID: ${existingReport.id}`);
+            logger.info(`[毕业报告] 学生已有报告，报告ID: ${existingReport.id}`);
             return existingReport.id;
         }
         // 3. 收集学生所有数据
@@ -45,7 +45,7 @@ class GraduationReportService {
         const report = await this.generateFullReport(studentData);
         // 5. 保存报告
         const reportId = await this.saveReport(userId, report);
-        console.log(`[毕业报告] 报告生成完成，报告ID: ${reportId}`);
+        logger.info(`[毕业报告] 报告生成完成，报告ID: ${reportId}`);
         return reportId;
     }
     /**
@@ -159,11 +159,11 @@ class GraduationReportService {
      * 生成完整的六章报告
      */
     async generateFullReport(studentData) {
-        console.log(`[毕业报告] 开始生成六章报告`);
+        logger.info(`[毕业报告] 开始生成六章报告`);
         const chapters = [];
         // 生成六章
         for (let i = 1; i <= 6; i++) {
-            console.log(`[毕业报告] 生成第 ${i} 章...`);
+            logger.info(`[毕业报告] 生成第 ${i} 章...`);
             const chapter = await this.generateChapter(i, studentData);
             chapters.push(chapter);
         }
@@ -173,7 +173,7 @@ class GraduationReportService {
         const previewContent = chapters[0].content.substring(0, 300) + '...';
         // 生成目录
         const tableOfContents = chapters.map((ch) => `第${ch.chapter_number}章：${ch.chapter_title}`);
-        console.log(`[毕业报告] 六章报告生成完成，总字数: ${totalWordCount}`);
+        logger.info(`[毕业报告] 六章报告生成完成，总字数: ${totalWordCount}`);
         return {
             chapters,
             total_word_count: totalWordCount,
@@ -189,7 +189,7 @@ class GraduationReportService {
         const chapterConfig = this.getChapterConfig(chapterNumber);
         const systemPrompt = this.buildChapterSystemPrompt(chapterNumber);
         const userPrompt = this.buildChapterUserPrompt(chapterNumber, studentData);
-        console.log(`[毕业报告] 生成第${chapterNumber}章，目标字数: ${chapterConfig.targetWords}字`);
+        logger.info(`[毕业报告] 生成第${chapterNumber}章，目标字数: ${chapterConfig.targetWords}字`);
         // 【关键】根据目标字数设置maxTokens（中文约1字=1.5tokens）
         const maxTokens = Math.ceil(chapterConfig.targetWords * 1.5);
         const response = await this.anthropic.messages.create({
@@ -210,16 +210,16 @@ class GraduationReportService {
         }
         const chapterContent = content.text;
         const wordCount = chapterContent.length;
-        console.log(`[毕业报告] 第${chapterNumber}章实际字数: ${wordCount}字`);
+        logger.info(`[毕业报告] 第${chapterNumber}章实际字数: ${wordCount}字`);
         // 【关键】字数验证
         if (wordCount < chapterConfig.minWords && retryCount === 0) {
-            console.warn(`[毕业报告] 第${chapterNumber}章字数不足(${wordCount}/${chapterConfig.minWords})，重试生成...`);
+            logger.warn(`[毕业报告] 第${chapterNumber}章字数不足(${wordCount}/${chapterConfig.minWords})，重试生成...`);
             // 重试时增加maxTokens
             return this.generateChapter(chapterNumber, studentData, 1);
         }
         // 重试后仍不足，记录错误
         if (wordCount < chapterConfig.minWords) {
-            console.error(`[毕业报告] 第${chapterNumber}章重试后字数仍不足: ${wordCount}/${chapterConfig.minWords}字`);
+            logger.error(`[毕业报告] 第${chapterNumber}章重试后字数仍不足: ${wordCount}/${chapterConfig.minWords}字`);
         }
         return {
             chapter_number: chapterNumber,
@@ -582,7 +582,7 @@ class GraduationReportService {
          SET is_paid = true, paid_at = NOW(), payment_amount = $1
          WHERE id = $2`, [amount, reportId]);
             await client.query('COMMIT');
-            console.log(`[毕业报告] 付费成功，报告ID: ${reportId}`);
+            logger.info(`[毕业报告] 付费成功，报告ID: ${reportId}`);
         }
         catch (error) {
             await client.query('ROLLBACK');
@@ -623,7 +623,7 @@ class GraduationReportService {
      * 更新报告（重新生成）
      */
     async updateReport(reportId, userId) {
-        console.log(`[毕业报告] 开始更新报告 ${reportId}`);
+        logger.info(`[毕业报告] 开始更新报告 ${reportId}`);
         // 1. 收集最新数据
         const studentData = await this.collectStudentData(userId);
         // 2. 重新生成报告
@@ -637,7 +637,7 @@ class GraduationReportService {
              update_count = update_count + 1,
              updated_at = NOW()
          WHERE id = $3`, [JSON.stringify(report), report.preview_content, reportId]);
-            console.log(`[毕业报告] 报告更新完成`);
+            logger.info(`[毕业报告] 报告更新完成`);
         }
         finally {
             client.release();

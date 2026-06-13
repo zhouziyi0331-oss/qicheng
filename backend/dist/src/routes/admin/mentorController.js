@@ -59,7 +59,7 @@ async function getMentorList(req, res) {
         });
     }
     catch (error) {
-        console.error('获取导师列表失败:', error);
+        logger.error('获取导师列表失败:', error);
         res.status(500).json({ message: '获取导师列表失败' });
     }
 }
@@ -106,7 +106,7 @@ async function getMentorDetail(req, res) {
         });
     }
     catch (error) {
-        console.error('获取导师详情失败:', error);
+        logger.error('获取导师详情失败:', error);
         res.status(500).json({ message: '获取导师详情失败' });
     }
 }
@@ -124,7 +124,7 @@ async function updateMentorStatus(req, res) {
         res.json({ message: '导师状态更新成功' });
     }
     catch (error) {
-        console.error('更新导师状态失败:', error);
+        logger.error('更新导师状态失败:', error);
         res.status(500).json({ message: '更新导师状态失败' });
     }
 }
@@ -187,7 +187,7 @@ async function getMentorSessions(req, res) {
         });
     }
     catch (error) {
-        console.error('获取咨询会话列表失败:', error);
+        logger.error('获取咨询会话列表失败:', error);
         res.status(500).json({ message: '获取咨询会话列表失败' });
     }
 }

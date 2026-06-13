@@ -75,7 +75,7 @@ async function getAICallLogs(req, res) {
         });
     }
     catch (error) {
-        console.error('获取AI调用日志失败:', error);
+        logger.error('获取AI调用日志失败:', error);
         res.status(500).json({ message: '获取AI调用日志失败' });
     }
 }
@@ -135,7 +135,7 @@ async function getAICallStats(req, res) {
         });
     }
     catch (error) {
-        console.error('获取AI调用统计失败:', error);
+        logger.error('获取AI调用统计失败:', error);
         res.status(500).json({ message: '获取AI调用统计失败' });
     }
 }
@@ -190,7 +190,7 @@ async function getPromptTemplates(req, res) {
         });
     }
     catch (error) {
-        console.error('获取Prompt模板列表失败:', error);
+        logger.error('获取Prompt模板列表失败:', error);
         res.status(500).json({ message: '获取Prompt模板列表失败' });
     }
 }
@@ -206,7 +206,7 @@ async function createPromptTemplate(req, res) {
         res.json({ id: result[0].id, message: 'Prompt模板创建成功' });
     }
     catch (error) {
-        console.error('创建Prompt模板失败:', error);
+        logger.error('创建Prompt模板失败:', error);
         res.status(500).json({ message: '创建Prompt模板失败' });
     }
 }
@@ -229,7 +229,7 @@ async function updatePromptTemplate(req, res) {
         res.json({ message: 'Prompt模板更新成功' });
     }
     catch (error) {
-        console.error('更新Prompt模板失败:', error);
+        logger.error('更新Prompt模板失败:', error);
         res.status(500).json({ message: '更新Prompt模板失败' });
     }
 }
@@ -243,7 +243,7 @@ async function deletePromptTemplate(req, res) {
         res.json({ message: 'Prompt模板删除成功' });
     }
     catch (error) {
-        console.error('删除Prompt模板失败:', error);
+        logger.error('删除Prompt模板失败:', error);
         res.status(500).json({ message: '删除Prompt模板失败' });
     }
 }

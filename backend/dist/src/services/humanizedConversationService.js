@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.humanizedConversationService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 const mentorMemoryService_1 = require("./mentorMemoryService");
 const deepGuidanceService_1 = require("./deepGuidanceService");
@@ -74,7 +77,7 @@ class HumanizedConversationService {
             };
         }
         catch (error) {
-            logger_1.logger.error('生成人性化回复失败', { error, studentId, sessionId });
+            logger_1.default.error('生成人性化回复失败', { error, studentId, sessionId });
             throw error;
         }
     }
@@ -300,7 +303,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
             return JSON.parse(response.content);
         }
         catch (error) {
-            logger_1.logger.error('分析具体困难失败', { error });
+            logger_1.default.error('分析具体困难失败', { error });
             return null;
         }
     }
@@ -331,7 +334,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
             }));
         }
         catch (error) {
-            logger_1.logger.error('分析任务并推荐工具失败', { error, taskId });
+            logger_1.default.error('分析任务并推荐工具失败', { error, taskId });
             return [];
         }
     }
@@ -378,7 +381,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
             };
         }
         catch (error) {
-            logger_1.logger.error('获取对话片段失败', { error, emotion, situation });
+            logger_1.default.error('获取对话片段失败', { error, emotion, situation });
             return null;
         }
     }
@@ -403,7 +406,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
             return result.rows[0];
         }
         catch (error) {
-            logger_1.logger.error('获取人性化上下文失败', { error, sessionId });
+            logger_1.default.error('获取人性化上下文失败', { error, sessionId });
             return null;
         }
     }
@@ -448,7 +451,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
             }
         }
         catch (error) {
-            logger_1.logger.error('更新人性化上下文失败', { error, sessionId });
+            logger_1.default.error('更新人性化上下文失败', { error, sessionId });
         }
     }
     /**
@@ -516,7 +519,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
             ]);
         }
         catch (error) {
-            logger_1.logger.error('记录具体困难失败', { error });
+            logger_1.default.error('记录具体困难失败', { error });
         }
     }
     /**

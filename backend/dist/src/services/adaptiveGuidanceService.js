@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adaptiveGuidanceService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 const emotionAnalysisService_1 = require("./emotionAnalysisService");
 const growthTrackingService_1 = require("./growthTrackingService");
@@ -38,12 +41,12 @@ class AdaptiveGuidanceService {
             const guidance = await this.generateGuidanceWithAI(context, emotionResult, emotionStrategy, memoryRecall, profile, conversationContext, milestone);
             // 8. 异步提取并保存新记忆
             this.extractAndSaveMemories(context, emotionResult.emotion).catch(err => {
-                logger_1.logger.error('提取记忆失败', { error: err });
+                logger_1.default.error('提取记忆失败', { error: err });
             });
             return guidance;
         }
         catch (error) {
-            logger_1.logger.error('生成自适应引导失败', { error, context });
+            logger_1.default.error('生成自适应引导失败', { error, context });
             // 返回基础回复
             return {
                 content: '我理解你的问题，让我们一起来解决它。',
@@ -263,7 +266,7 @@ ${milestone.milestone_description}
             return result.rows[0] || null;
         }
         catch (error) {
-            logger_1.logger.error('获取学生档案失败', { error, studentId });
+            logger_1.default.error('获取学生档案失败', { error, studentId });
             return null;
         }
     }
@@ -275,7 +278,7 @@ ${milestone.milestone_description}
             await mentorMemoryService_1.mentorMemoryService.extractMemoryFromConversation(context.studentId, context.taskId, context.sessionId, context.conversationHistory, currentEmotion);
         }
         catch (error) {
-            logger_1.logger.error('提取并保存记忆失败', { error });
+            logger_1.default.error('提取并保存记忆失败', { error });
         }
     }
     /**
@@ -323,7 +326,7 @@ ${milestone.milestone_description}
             await database_1.pool.query(query, values);
         }
         catch (error) {
-            logger_1.logger.error('更新学习档案失败', { error, studentId, updates });
+            logger_1.default.error('更新学习档案失败', { error, studentId, updates });
         }
     }
     /**
@@ -369,7 +372,7 @@ ${milestone.milestone_description}
             ]);
         }
         catch (error) {
-            logger_1.logger.error('分析学习模式失败', { error, studentId });
+            logger_1.default.error('分析学习模式失败', { error, studentId });
         }
     }
     /**
@@ -430,7 +433,7 @@ ${milestone.milestone_description}
             };
         }
         catch (error) {
-            logger_1.logger.error('获取引导建议失败', { error, studentId });
+            logger_1.default.error('获取引导建议失败', { error, studentId });
             return {
                 recommendedApproach: 'socratic',
                 recommendedTone: 'supportive',

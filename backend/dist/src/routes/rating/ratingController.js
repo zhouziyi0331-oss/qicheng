@@ -91,7 +91,7 @@ const submitRating = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('提交评价失败:', error);
+        logger.error('提交评价失败:', error);
         const errorMessage = error instanceof Error ? error.message : '提交评价失败';
         const statusCode = errorMessage.includes('不存在') ? 404 :
             errorMessage.includes('无权限') || errorMessage.includes('不是此任务') ? 403 : 400;
@@ -129,7 +129,7 @@ const getTaskRatings = async (req, res) => {
         res.json({ ratings });
     }
     catch (error) {
-        console.error('获取任务评价失败:', error);
+        logger.error('获取任务评价失败:', error);
         res.status(500).json({ error: '获取任务评价失败' });
     }
 };
@@ -155,7 +155,7 @@ const getUserRatingStats = async (req, res) => {
         res.json({ stats: result[0] });
     }
     catch (error) {
-        console.error('获取用户评分统计失败:', error);
+        logger.error('获取用户评分统计失败:', error);
         res.status(500).json({ error: '获取用户评分统计失败' });
     }
 };
@@ -201,7 +201,7 @@ const getUserReceivedRatings = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取用户评价列表失败:', error);
+        logger.error('获取用户评价列表失败:', error);
         res.status(500).json({ error: '获取用户评价列表失败' });
     }
 };
@@ -236,7 +236,7 @@ const getUserGivenRatings = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取用户发出的评价失败:', error);
+        logger.error('获取用户发出的评价失败:', error);
         res.status(500).json({ error: '获取用户发出的评价失败' });
     }
 };
@@ -270,7 +270,7 @@ const replyToRating = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('回复评价失败:', error);
+        logger.error('回复评价失败:', error);
         res.status(500).json({ error: '回复评价失败' });
     }
 };
@@ -290,7 +290,7 @@ const getRatingTagPresets = async (req, res) => {
         res.json({ tags: result });
     }
     catch (error) {
-        console.error('获取评价标签失败:', error);
+        logger.error('获取评价标签失败:', error);
         res.status(500).json({ error: '获取评价标签失败' });
     }
 };
@@ -339,7 +339,7 @@ const checkRatingEligibility = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('检查评价资格失败:', error);
+        logger.error('检查评价资格失败:', error);
         res.status(500).json({ error: '检查评价资格失败' });
     }
 };
@@ -375,7 +375,7 @@ const getPendingRatingTasks = async (req, res) => {
         res.json({ tasks: result });
     }
     catch (error) {
-        console.error('获取待评价任务失败:', error);
+        logger.error('获取待评价任务失败:', error);
         res.status(500).json({ error: '获取待评价任务失败' });
     }
 };

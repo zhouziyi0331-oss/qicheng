@@ -65,7 +65,7 @@ class MentorRouterService {
             }
         }
         catch (err) {
-            console.error('AI分析失败:', err);
+            logger.error('AI分析失败:', err);
             // 降级到关键词匹配
             return this.fallbackAnalysis(message);
         }

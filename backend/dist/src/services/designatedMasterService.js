@@ -15,7 +15,7 @@ class DesignatedMasterService {
      * 获取大师列表
      */
     async getMasterList(filter = {}) {
-        console.log('[指定大师] 获取大师列表', filter);
+        logger.info('[指定大师] 获取大师列表', filter);
         const client = await database_1.pool.connect();
         try {
             let query = `
@@ -75,7 +75,7 @@ class DesignatedMasterService {
                 avgRating: parseFloat(row.avg_rating) || 0,
                 createdAt: row.created_at
             }));
-            console.log(`[指定大师] 找到 ${masters.length} 位大师`);
+            logger.info(`[指定大师] 找到 ${masters.length} 位大师`);
             return masters;
         }
         finally {
@@ -132,7 +132,7 @@ class DesignatedMasterService {
      * 发送邀请给大师
      */
     async sendInvitation(input) {
-        console.log('[指定大师] 发送邀请', input);
+        logger.info('[指定大师] 发送邀请', input);
         const client = await database_1.pool.connect();
         try {
             // 1. 验证大师是否接受指定邀请
@@ -170,7 +170,7 @@ class DesignatedMasterService {
                 input.message || null
             ]);
             const invitationId = result.rows[0].id;
-            console.log(`[指定大师] 邀请已发送: invitationId=${invitationId}`);
+            logger.info(`[指定大师] 邀请已发送: invitationId=${invitationId}`);
             // TODO: 发送通知给大师
             return {
                 invitationId,
@@ -185,7 +185,7 @@ class DesignatedMasterService {
      * 大师响应邀请
      */
     async respondToInvitation(invitationId, masterId, action, counterOffer, note) {
-        console.log('[指定大师] 大师响应邀请', { invitationId, action });
+        logger.info('[指定大师] 大师响应邀请', { invitationId, action });
         const client = await database_1.pool.connect();
         try {
             // 1. 验证邀请是否存在且属于该大师
@@ -249,7 +249,7 @@ class DesignatedMasterService {
             }
             const result = await client.query(updateQuery, updateParams);
             const updated = result.rows[0];
-            console.log(`[指定大师] 邀请已更新: status=${updated.status}`);
+            logger.info(`[指定大师] 邀请已更新: status=${updated.status}`);
             // TODO: 发送通知给企业
             return {
                 invitationId: updated.id,
@@ -282,7 +282,7 @@ class DesignatedMasterService {
             await client.query(`UPDATE users
          SET master_current_load = master_current_load + 1
          WHERE id = $1`, [masterId]);
-            console.log(`[指定大师] 任务分配已创建: taskId=${taskId}, masterId=${masterId}`);
+            logger.info(`[指定大师] 任务分配已创建: taskId=${taskId}, masterId=${masterId}`);
         }
         finally {
             client.release();
@@ -327,7 +327,7 @@ class DesignatedMasterService {
          RETURNING id`);
             const expiredCount = result.rows.length;
             if (expiredCount > 0) {
-                console.log(`[指定大师] 已过期 ${expiredCount} 个邀请`);
+                logger.info(`[指定大师] 已过期 ${expiredCount} 个邀请`);
             }
             return expiredCount;
         }

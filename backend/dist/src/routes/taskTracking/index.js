@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
  * E-23: 任务进度仪表盘
  */
 // 获取任务进度仪表盘
-router.get('/tasks/:taskId/progress-dashboard', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/progress-dashboard', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const dashboard = await taskTrackingService_1.default.getProgressDashboard(taskId);
@@ -28,7 +28,7 @@ router.get('/tasks/:taskId/progress-dashboard', auth_1.authenticateToken, async 
     }
 });
 // 创建进度快照
-router.post('/tasks/:taskId/snapshot', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/snapshot', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         await taskTrackingService_1.default.createProgressSnapshot(taskId);
@@ -48,7 +48,7 @@ router.post('/tasks/:taskId/snapshot', auth_1.authenticateToken, async (req, res
  * E-24: 里程碑确认机制
  */
 // 创建里程碑
-router.post('/tasks/:taskId/milestones', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/milestones', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const milestone = await taskTrackingService_1.default.createMilestone({
@@ -69,7 +69,7 @@ router.post('/tasks/:taskId/milestones', auth_1.authenticateToken, async (req, r
     }
 });
 // 学生提交里程碑
-router.post('/milestones/:milestoneId/submit', auth_1.authenticateToken, async (req, res) => {
+router.post('/milestones/:milestoneId/submit', auth_1.authenticate, async (req, res) => {
     try {
         const { milestoneId } = req.params;
         const { submission, files } = req.body;
@@ -94,7 +94,7 @@ router.post('/milestones/:milestoneId/submit', auth_1.authenticateToken, async (
     }
 });
 // 企业确认里程碑
-router.post('/milestones/:milestoneId/confirm', auth_1.authenticateToken, async (req, res) => {
+router.post('/milestones/:milestoneId/confirm', auth_1.authenticate, async (req, res) => {
     try {
         const { milestoneId } = req.params;
         const { approved, feedback, rejected_reason } = req.body;
@@ -119,7 +119,7 @@ router.post('/milestones/:milestoneId/confirm', auth_1.authenticateToken, async 
     }
 });
 // 获取任务里程碑列表
-router.get('/tasks/:taskId/milestones', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/milestones', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const milestones = await taskTrackingService_1.default.getMilestones(taskId);
@@ -139,7 +139,7 @@ router.get('/tasks/:taskId/milestones', auth_1.authenticateToken, async (req, re
  * E-25: 交付提前通知
  */
 // 创建通知
-router.post('/delivery-notifications', auth_1.authenticateToken, async (req, res) => {
+router.post('/delivery-notifications', auth_1.authenticate, async (req, res) => {
     try {
         const notification = await taskTrackingService_1.default.createDeliveryNotification(req.body);
         res.json({
@@ -156,7 +156,7 @@ router.post('/delivery-notifications', auth_1.authenticateToken, async (req, res
     }
 });
 // 获取用户的通知列表
-router.get('/delivery-notifications', auth_1.authenticateToken, async (req, res) => {
+router.get('/delivery-notifications', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.userId;
         const { unread_only } = req.query;
@@ -174,7 +174,7 @@ router.get('/delivery-notifications', auth_1.authenticateToken, async (req, res)
     }
 });
 // 标记通知为已读
-router.post('/delivery-notifications/:notificationId/read', auth_1.authenticateToken, async (req, res) => {
+router.post('/delivery-notifications/:notificationId/read', auth_1.authenticate, async (req, res) => {
     try {
         const { notificationId } = req.params;
         await taskTrackingService_1.default.markNotificationAsRead(notificationId);
@@ -194,7 +194,7 @@ router.post('/delivery-notifications/:notificationId/read', auth_1.authenticateT
  * E-26: 沟通记录归档
  */
 // 创建归档
-router.post('/tasks/:taskId/archive-communication', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/archive-communication', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const userId = req.user.userId;
@@ -220,7 +220,7 @@ router.post('/tasks/:taskId/archive-communication', auth_1.authenticateToken, as
     }
 });
 // 获取任务的归档记录
-router.get('/tasks/:taskId/archives', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/archives', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const archives = await taskTrackingService_1.default.getArchives(taskId);
@@ -240,7 +240,7 @@ router.get('/tasks/:taskId/archives', auth_1.authenticateToken, async (req, res)
  * E-27: 任务延期预警
  */
 // 创建延期预警
-router.post('/delay-warnings', auth_1.authenticateToken, async (req, res) => {
+router.post('/delay-warnings', auth_1.authenticate, async (req, res) => {
     try {
         const warning = await taskTrackingService_1.default.createDelayWarning(req.body);
         res.json({
@@ -257,7 +257,7 @@ router.post('/delay-warnings', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 解决预警
-router.post('/delay-warnings/:warningId/resolve', auth_1.authenticateToken, async (req, res) => {
+router.post('/delay-warnings/:warningId/resolve', auth_1.authenticate, async (req, res) => {
     try {
         const { warningId } = req.params;
         const { resolution_note } = req.body;
@@ -276,7 +276,7 @@ router.post('/delay-warnings/:warningId/resolve', auth_1.authenticateToken, asyn
     }
 });
 // 获取任务的预警列表
-router.get('/tasks/:taskId/warnings', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/warnings', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const { include_resolved } = req.query;
@@ -297,7 +297,7 @@ router.get('/tasks/:taskId/warnings', auth_1.authenticateToken, async (req, res)
  * E-28: 紧急介入按钮
  */
 // 创建紧急介入请求
-router.post('/emergency-interventions', auth_1.authenticateToken, async (req, res) => {
+router.post('/emergency-interventions', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.userId;
         const userRole = req.user.role;
@@ -320,7 +320,7 @@ router.post('/emergency-interventions', auth_1.authenticateToken, async (req, re
     }
 });
 // 管理员响应介入请求
-router.post('/emergency-interventions/:interventionId/respond', auth_1.authenticateToken, async (req, res) => {
+router.post('/emergency-interventions/:interventionId/respond', auth_1.authenticate, async (req, res) => {
     try {
         const adminId = req.user.userId;
         const { interventionId } = req.params;
@@ -346,7 +346,7 @@ router.post('/emergency-interventions/:interventionId/respond', auth_1.authentic
     }
 });
 // 解决介入请求
-router.post('/emergency-interventions/:interventionId/resolve', auth_1.authenticateToken, async (req, res) => {
+router.post('/emergency-interventions/:interventionId/resolve', auth_1.authenticate, async (req, res) => {
     try {
         const { interventionId } = req.params;
         const { resolution, resolution_actions } = req.body;
@@ -371,7 +371,7 @@ router.post('/emergency-interventions/:interventionId/resolve', auth_1.authentic
     }
 });
 // 获取介入请求列表
-router.get('/emergency-interventions', auth_1.authenticateToken, async (req, res) => {
+router.get('/emergency-interventions', auth_1.authenticate, async (req, res) => {
     try {
         const { task_id, status, admin_id } = req.query;
         const interventions = await taskTrackingService_1.default.getInterventions({

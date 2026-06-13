@@ -124,7 +124,7 @@ async function getDashboardStats(req, res) {
         });
     }
     catch (error) {
-        console.error('获取数据看板失败:', error);
+        logger.error('获取数据看板失败:', error);
         res.status(500).json({ error: '获取数据失败' });
     }
 }
@@ -204,7 +204,7 @@ async function getAlerts(req, res) {
         res.json({ alerts });
     }
     catch (error) {
-        console.error('获取预警列表失败:', error);
+        logger.error('获取预警列表失败:', error);
         res.status(500).json({ error: '获取预警失败' });
     }
 }

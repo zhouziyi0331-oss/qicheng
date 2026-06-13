@@ -97,7 +97,7 @@ ${deliverableFiles.length > 0 ? `文件：${deliverableFiles.join(', ')}` : ''}
             return result.rows[0];
         }
         catch (error) {
-            console.error('AI审核失败:', error);
+            logger.error('AI审核失败:', error);
             // 返回降级方案
             return this.generateFallbackReview(taskId, reviewVersion);
         }
@@ -172,7 +172,7 @@ ${rejectionReason}
             return result.rows[0];
         }
         catch (error) {
-            console.error('生成改进指引失败:', error);
+            logger.error('生成改进指引失败:', error);
             return this.generateFallbackGuide(taskId, guideVersion, rejectionReason, companyId);
         }
     }
@@ -226,7 +226,7 @@ ${rejectionReason}
             return JSON.parse(jsonText);
         }
         catch (error) {
-            console.error('解析AI响应失败:', error);
+            logger.error('解析AI响应失败:', error);
             throw error;
         }
     }
@@ -243,7 +243,7 @@ ${rejectionReason}
             return JSON.parse(jsonText);
         }
         catch (error) {
-            console.error('解析改进指引失败:', error);
+            logger.error('解析改进指引失败:', error);
             throw error;
         }
     }

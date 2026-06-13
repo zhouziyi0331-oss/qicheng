@@ -5,7 +5,7 @@
 
 import { Request, Response } from 'express';
 import { pool } from '../utils/db';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 
 /**
  * 获取赛道推荐和分析

@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
  * E-29: 逐项验收清单
  */
 // 创建验收清单
-router.post('/tasks/:taskId/checklist', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/checklist', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const { items } = req.body;
@@ -36,7 +36,7 @@ router.post('/tasks/:taskId/checklist', auth_1.authenticateToken, async (req, re
     }
 });
 // 更新清单项
-router.put('/checklists/:checklistId/items/:itemId', auth_1.authenticateToken, async (req, res) => {
+router.put('/checklists/:checklistId/items/:itemId', auth_1.authenticate, async (req, res) => {
     try {
         const { checklistId, itemId } = req.params;
         const { status } = req.body;
@@ -62,7 +62,7 @@ router.put('/checklists/:checklistId/items/:itemId', auth_1.authenticateToken, a
     }
 });
 // 获取验收清单
-router.get('/tasks/:taskId/checklist', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/checklist', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const checklist = await acceptanceService_1.default.getChecklist(taskId);
@@ -82,7 +82,7 @@ router.get('/tasks/:taskId/checklist', auth_1.authenticateToken, async (req, res
  * E-30: 修改意见模板化
  */
 // 获取修改意见模板列表
-router.get('/revision-templates', auth_1.authenticateToken, async (req, res) => {
+router.get('/revision-templates', auth_1.authenticate, async (req, res) => {
     try {
         const { category } = req.query;
         const templates = await acceptanceService_1.default.getRevisionTemplates(category);
@@ -99,7 +99,7 @@ router.get('/revision-templates', auth_1.authenticateToken, async (req, res) => 
     }
 });
 // 使用模板生成修改意见
-router.post('/revision-templates/:templateId/apply', auth_1.authenticateToken, async (req, res) => {
+router.post('/revision-templates/:templateId/apply', auth_1.authenticate, async (req, res) => {
     try {
         const { templateId } = req.params;
         const { placeholder_values } = req.body;
@@ -126,7 +126,7 @@ router.post('/revision-templates/:templateId/apply', auth_1.authenticateToken, a
  * E-31: 维度化验收评分
  */
 // 创建维度化评分
-router.post('/tasks/:taskId/dimensional-score', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/dimensional-score', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const companyId = req.user.userId;
@@ -149,7 +149,7 @@ router.post('/tasks/:taskId/dimensional-score', auth_1.authenticateToken, async 
     }
 });
 // 获取维度评分
-router.get('/tasks/:taskId/dimensional-score', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/dimensional-score', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const score = await acceptanceService_1.default.getDimensionalScore(taskId);
@@ -166,7 +166,7 @@ router.get('/tasks/:taskId/dimensional-score', auth_1.authenticateToken, async (
     }
 });
 // 获取学生评分统计
-router.get('/students/:studentId/score-stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/students/:studentId/score-stats', auth_1.authenticate, async (req, res) => {
     try {
         const { studentId } = req.params;
         const stats = await acceptanceService_1.default.getStudentScoreStats(studentId);
@@ -186,7 +186,7 @@ router.get('/students/:studentId/score-stats', auth_1.authenticateToken, async (
  * E-32: 愿意再合作标记
  */
 // 记录合作意愿
-router.post('/cooperation-willingness', auth_1.authenticateToken, async (req, res) => {
+router.post('/cooperation-willingness', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.userId;
         const userRole = req.user.role;
@@ -208,7 +208,7 @@ router.post('/cooperation-willingness', auth_1.authenticateToken, async (req, re
     }
 });
 // 获取合作意愿
-router.get('/tasks/:taskId/cooperation-willingness', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/cooperation-willingness', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const willingness = await acceptanceService_1.default.getCooperationWillingness(taskId);
@@ -225,7 +225,7 @@ router.get('/tasks/:taskId/cooperation-willingness', auth_1.authenticateToken, a
     }
 });
 // 获取双向愿意合作的记录
-router.get('/mutual-cooperation-partners', auth_1.authenticateToken, async (req, res) => {
+router.get('/mutual-cooperation-partners', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.userId;
         const userRole = req.user.role;
@@ -246,7 +246,7 @@ router.get('/mutual-cooperation-partners', auth_1.authenticateToken, async (req,
  * E-33: 知识产权声明
  */
 // 创建知识产权声明
-router.post('/tasks/:taskId/ip-declaration', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/ip-declaration', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const declaration = await acceptanceService_1.default.createIPDeclaration({
@@ -267,7 +267,7 @@ router.post('/tasks/:taskId/ip-declaration', auth_1.authenticateToken, async (re
     }
 });
 // 确认知识产权声明
-router.post('/ip-declarations/:declarationId/confirm', auth_1.authenticateToken, async (req, res) => {
+router.post('/ip-declarations/:declarationId/confirm', auth_1.authenticate, async (req, res) => {
     try {
         const { declarationId } = req.params;
         const userRole = req.user.role;
@@ -286,7 +286,7 @@ router.post('/ip-declarations/:declarationId/confirm', auth_1.authenticateToken,
     }
 });
 // 获取知识产权声明
-router.get('/tasks/:taskId/ip-declaration', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/ip-declaration', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const declaration = await acceptanceService_1.default.getIPDeclaration(taskId);
@@ -306,7 +306,7 @@ router.get('/tasks/:taskId/ip-declaration', auth_1.authenticateToken, async (req
  * E-34: 退款补偿机制
  */
 // 创建退款申请
-router.post('/refund-requests', auth_1.authenticateToken, async (req, res) => {
+router.post('/refund-requests', auth_1.authenticate, async (req, res) => {
     try {
         const applicantId = req.user.userId;
         const applicantRole = req.user.role;
@@ -329,7 +329,7 @@ router.post('/refund-requests', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // 审核退款申请
-router.post('/refund-requests/:requestId/review', auth_1.authenticateToken, async (req, res) => {
+router.post('/refund-requests/:requestId/review', auth_1.authenticate, async (req, res) => {
     try {
         const { requestId } = req.params;
         const reviewedBy = req.user.userId;
@@ -355,7 +355,7 @@ router.post('/refund-requests/:requestId/review', auth_1.authenticateToken, asyn
     }
 });
 // 处理退款
-router.post('/refund-requests/:requestId/process', auth_1.authenticateToken, async (req, res) => {
+router.post('/refund-requests/:requestId/process', auth_1.authenticate, async (req, res) => {
     try {
         const { requestId } = req.params;
         const { transaction_id } = req.body;
@@ -380,7 +380,7 @@ router.post('/refund-requests/:requestId/process', auth_1.authenticateToken, asy
     }
 });
 // 获取退款申请列表
-router.get('/refund-requests', auth_1.authenticateToken, async (req, res) => {
+router.get('/refund-requests', auth_1.authenticate, async (req, res) => {
     try {
         const { applicant_id, status, task_id } = req.query;
         const requests = await acceptanceService_1.default.getRefundRequests({

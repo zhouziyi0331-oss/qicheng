@@ -1,5 +1,5 @@
 import { pool } from '../config/database';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import { claudeService } from './claudeService';
 import { emotionAnalysisService } from './emotionAnalysisService';
 import { mentorMemoryService } from './mentorMemoryService';

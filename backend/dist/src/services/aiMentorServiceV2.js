@@ -419,7 +419,7 @@ ${similarCases.length > 0
             };
         }
         catch (error) {
-            console.error('AI调用失败:', error);
+            logger.error('AI调用失败:', error);
             throw new Error('导师服务暂时不可用，请稍后重试');
         }
     }

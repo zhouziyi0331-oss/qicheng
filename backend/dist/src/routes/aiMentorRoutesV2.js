@@ -46,7 +46,7 @@ router.post('/message', auth_1.authenticate, [
         });
     }
     catch (error) {
-        console.error('AI导师消息处理失败:', error);
+        logger.error('AI导师消息处理失败:', error);
         next(error);
     }
 });
@@ -76,7 +76,7 @@ router.post('/trigger/onboarding', auth_1.authenticate, [
         });
     }
     catch (error) {
-        console.error('T-01触发失败:', error);
+        logger.error('T-01触发失败:', error);
         next(error);
     }
 });
@@ -105,7 +105,7 @@ router.post('/trigger/rejected', auth_1.authenticate, [
         });
     }
     catch (error) {
-        console.error('T-03触发失败:', error);
+        logger.error('T-03触发失败:', error);
         next(error);
     }
 });
@@ -134,7 +134,7 @@ router.post('/trigger/milestone', auth_1.authenticate, [
         });
     }
     catch (error) {
-        console.error('T-05触发失败:', error);
+        logger.error('T-05触发失败:', error);
         next(error);
     }
 });
@@ -174,7 +174,7 @@ router.get('/history', auth_1.authenticate, async (req, res, next) => {
         }
     }
     catch (error) {
-        console.error('获取对话历史失败:', error);
+        logger.error('获取对话历史失败:', error);
         next(error);
     }
 });

@@ -27,7 +27,7 @@ class DynamicProfileService {
             return result;
         }
         catch (error) {
-            console.error('Profile update failed:', error);
+            logger.error('Profile update failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to update student profile');
         }
     }
@@ -116,7 +116,7 @@ class DynamicProfileService {
             return results;
         }
         catch (error) {
-            console.error('Batch profile update failed:', error);
+            logger.error('Batch profile update failed:', error);
             throw new errorHandler_1.AppError(error.response?.status || 500, error.response?.data?.message || 'Failed to batch update profiles');
         }
     }
@@ -174,7 +174,7 @@ class DynamicProfileService {
             }));
         }
         catch (error) {
-            console.error('Failed to get profile history:', error);
+            logger.error('Failed to get profile history:', error);
             throw new errorHandler_1.AppError(500, 'Failed to get profile history');
         }
     }

@@ -87,7 +87,7 @@ const matchTasksForStudent = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('项目匹配失败:', error);
+        logger.error('项目匹配失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -230,7 +230,7 @@ const getTaskDetailWithMatch = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取任务详情失败:', error);
+        logger.error('获取任务详情失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };

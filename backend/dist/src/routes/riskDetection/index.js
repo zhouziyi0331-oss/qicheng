@@ -35,7 +35,7 @@ router.post('/assess', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('风险评估失败:', error);
+        logger.error('风险评估失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '风险评估失败',
@@ -83,7 +83,7 @@ router.post('/tasks/:taskId/assess', auth_1.authenticateToken, async (req, res) 
         });
     }
     catch (error) {
-        console.error('评估任务风险失败:', error);
+        logger.error('评估任务风险失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '风险评估失败',
@@ -124,7 +124,7 @@ router.get('/tasks/:taskId/history', auth_1.authenticateToken, async (req, res) 
         });
     }
     catch (error) {
-        console.error('获取风险历史失败:', error);
+        logger.error('获取风险历史失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取风险历史失败',
@@ -177,7 +177,7 @@ router.post('/assessments/:assessmentId/acknowledge', auth_1.authenticateToken, 
         });
     }
     catch (error) {
-        console.error('确认风险失败:', error);
+        logger.error('确认风险失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '确认风险失败',
@@ -205,7 +205,7 @@ router.get('/my-stats', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取风险统计失败:', error);
+        logger.error('获取风险统计失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取统计失败',
@@ -228,7 +228,7 @@ router.get('/risk-types', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('获取风险类型失败:', error);
+        logger.error('获取风险类型失败:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取风险类型失败',

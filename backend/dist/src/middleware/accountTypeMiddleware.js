@@ -3,11 +3,14 @@
  * 账号类型校验中间件
  * 确保学生端和企业端接口的访问隔离
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireStudentAccount = requireStudentAccount;
 exports.requireEnterpriseAccount = requireEnterpriseAccount;
 exports.requireTrackSelected = requireTrackSelected;
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 校验学生账号
  * 用于 /api/v1/student/* 路径
@@ -22,7 +25,7 @@ function requireStudentAccount(req, res, next) {
         });
     }
     if (accountType !== 'student') {
-        logger_1.logger.warn('Enterprise account attempted to access student endpoint', {
+        logger_1.default.warn('Enterprise account attempted to access student endpoint', {
             userId: req.user?.userId,
             path: req.path
         });
@@ -48,7 +51,7 @@ function requireEnterpriseAccount(req, res, next) {
         });
     }
     if (accountType !== 'enterprise') {
-        logger_1.logger.warn('Student account attempted to access enterprise endpoint', {
+        logger_1.default.warn('Student account attempted to access enterprise endpoint', {
             userId: req.user?.userId,
             path: req.path
         });

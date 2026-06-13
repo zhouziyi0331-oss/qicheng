@@ -59,7 +59,7 @@ async function login(req, res) {
         });
     }
     catch (error) {
-        console.error('管理员登录失败:', error);
+        logger.error('管理员登录失败:', error);
         res.status(500).json({ error: '登录失败' });
     }
 }
@@ -93,7 +93,7 @@ async function getCurrentAdmin(req, res) {
         });
     }
     catch (error) {
-        console.error('获取管理员信息失败:', error);
+        logger.error('获取管理员信息失败:', error);
         res.status(500).json({ error: '获取信息失败' });
     }
 }
@@ -119,7 +119,7 @@ async function changePassword(req, res) {
         res.json({ message: '密码修改成功' });
     }
     catch (error) {
-        console.error('修改密码失败:', error);
+        logger.error('修改密码失败:', error);
         res.status(500).json({ error: '修改密码失败' });
     }
 }

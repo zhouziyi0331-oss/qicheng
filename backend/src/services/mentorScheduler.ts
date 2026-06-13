@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import { proactiveFollowUpService } from '../services/proactiveFollowUpService';
 import { mentorMemoryService } from '../services/mentorMemoryService';
 

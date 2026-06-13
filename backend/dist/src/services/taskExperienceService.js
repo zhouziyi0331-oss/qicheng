@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
 const uuid_1 = require("uuid");
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
-const config_1 = __importDefault(require("../config"));
+const config_1 = require("../../config");
 const anthropic = new sdk_1.default({
-    apiKey: config_1.default.ai.anthropicApiKey,
+    apiKey: config_1.config.ai.anthropicApiKey,
 });
 /**
  * E-01a, E-01b, E-01d: 任务发布体验优化服务
@@ -248,7 +248,7 @@ class TaskExperienceService {
             }
         }
         catch (error) {
-            console.error('AI生成预算理由失败:', error);
+            logger.error('AI生成预算理由失败:', error);
         }
         // 降级方案
         return `基于${sampleSize}个同类任务的成交数据，建议预算¥${optimalBudget}可以匹配到${quality === 'premium' ? '高级' : quality === 'basic' ? '入门' : '中级'}水平的学生，预期交付质量良好。`;

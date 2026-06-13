@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mentorMemoryService = void 0;
 const database_1 = require("../config/database");
-const logger_1 = require("../utils/logger");
+const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 class MentorMemoryService {
     /**
@@ -41,12 +44,12 @@ class MentorMemoryService {
             const memory = result.rows[0];
             // 异步查找并关联相关记忆
             this.linkRelatedMemories(memory.id, input.studentId, relevanceTags).catch(err => {
-                logger_1.logger.error('关联相关记忆失败', { error: err, memoryId: memory.id });
+                logger_1.default.error('关联相关记忆失败', { error: err, memoryId: memory.id });
             });
             return memory;
         }
         catch (error) {
-            logger_1.logger.error('创建记忆失败', { error, input });
+            logger_1.default.error('创建记忆失败', { error, input });
             throw error;
         }
     }
@@ -135,7 +138,7 @@ class MentorMemoryService {
             }
         }
         catch (error) {
-            logger_1.logger.error('关联记忆失败', { error, memoryId });
+            logger_1.default.error('关联记忆失败', { error, memoryId });
         }
     }
     /**
@@ -188,7 +191,7 @@ class MentorMemoryService {
             };
         }
         catch (error) {
-            logger_1.logger.error('召回记忆失败', { error, studentId, context });
+            logger_1.default.error('召回记忆失败', { error, studentId, context });
             return {
                 relevantMemories: [],
                 summary: '',
@@ -305,7 +308,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
             return createdMemories;
         }
         catch (error) {
-            logger_1.logger.error('从对话提取记忆失败', { error, studentId, sessionId });
+            logger_1.default.error('从对话提取记忆失败', { error, studentId, sessionId });
             return [];
         }
     }
@@ -346,7 +349,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
             return result.rows;
         }
         catch (error) {
-            logger_1.logger.error('获取记忆失败', { error, studentId, options });
+            logger_1.default.error('获取记忆失败', { error, studentId, options });
             return [];
         }
     }
@@ -364,11 +367,11 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
             const result = await database_1.pool.query(`DELETE FROM mentor_memory
          WHERE expires_at IS NOT NULL AND expires_at < NOW()
          RETURNING id`);
-            logger_1.logger.info('清理过期记忆', { count: result.rowCount });
+            logger_1.default.info('清理过期记忆', { count: result.rowCount });
             return result.rowCount || 0;
         }
         catch (error) {
-            logger_1.logger.error('清理过期记忆失败', { error });
+            logger_1.default.error('清理过期记忆失败', { error });
             return 0;
         }
     }
@@ -411,7 +414,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
             };
         }
         catch (error) {
-            logger_1.logger.error('获取记忆统计失败', { error, studentId });
+            logger_1.default.error('获取记忆统计失败', { error, studentId });
             return {
                 totalMemories: 0,
                 byType: {},

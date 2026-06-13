@@ -57,7 +57,7 @@ router.post('/price-recommendation', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[价格推荐API] 错误:', error);
+        logger.error('[价格推荐API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '价格推荐计算失败'
@@ -84,7 +84,7 @@ router.post('/validate-price', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[价格验证API] 错误:', error);
+        logger.error('[价格验证API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '价格验证失败'
@@ -121,7 +121,7 @@ router.get('/masters', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[大师列表API] 错误:', error);
+        logger.error('[大师列表API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取大师列表失败'
@@ -148,7 +148,7 @@ router.get('/masters/:masterId', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[大师详情API] 错误:', error);
+        logger.error('[大师详情API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取大师详情失败'
@@ -188,7 +188,7 @@ router.post('/invitations', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[发送邀请API] 错误:', error);
+        logger.error('[发送邀请API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '发送邀请失败'
@@ -229,7 +229,7 @@ router.post('/invitations/:invitationId/respond', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[响应邀请API] 错误:', error);
+        logger.error('[响应邀请API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '响应邀请失败'
@@ -256,7 +256,7 @@ router.get('/invitations/:invitationId', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[邀请详情API] 错误:', error);
+        logger.error('[邀请详情API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '获取邀请详情失败'
@@ -278,7 +278,7 @@ router.post('/invitations/expire', async (req, res) => {
         });
     }
     catch (error) {
-        console.error('[过期邀请清理API] 错误:', error);
+        logger.error('[过期邀请清理API] 错误:', error);
         res.status(500).json({
             success: false,
             message: error.message || '清理过期邀请失败'

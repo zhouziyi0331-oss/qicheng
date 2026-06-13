@@ -105,11 +105,11 @@ ${params.studentAnswer}
             const result = JSON.parse(content);
             // 记录日志
             await this.logJudge(sessionId, round, modelUsed, response.data.usage?.prompt_tokens || 0, response.data.usage?.completion_tokens || 0, result.result, result.reason, latencyMs);
-            console.log(`[AIJudgeService] ${round} 判断完成: ${result.result}, 耗时: ${latencyMs}ms`);
+            logger.info(`[AIJudgeService] ${round} 判断完成: ${result.result}, 耗时: ${latencyMs}ms`);
             return result;
         }
         catch (error) {
-            console.error(`[AIJudgeService] DeepSeek调用失败，尝试GPT备用:`, error.message);
+            logger.error(`[AIJudgeService] DeepSeek调用失败，尝试GPT备用:`, error.message);
             // 降级到GPT-4o-mini
             try {
                 apiUrl = this.GPT_API_URL;
@@ -132,11 +132,11 @@ ${params.studentAnswer}
                 const content = response.data.choices[0].message.content;
                 const result = JSON.parse(content);
                 await this.logJudge(sessionId, round, modelUsed, response.data.usage?.prompt_tokens || 0, response.data.usage?.completion_tokens || 0, result.result, result.reason, latencyMs);
-                console.log(`[AIJudgeService] GPT备用成功: ${result.result}, 耗时: ${latencyMs}ms`);
+                logger.info(`[AIJudgeService] GPT备用成功: ${result.result}, 耗时: ${latencyMs}ms`);
                 return result;
             }
             catch (gptError) {
-                console.error(`[AIJudgeService] GPT备用也失败:`, gptError.message);
+                logger.error(`[AIJudgeService] GPT备用也失败:`, gptError.message);
                 throw new Error('AI判断服务暂时不可用，请稍后重试');
             }
         }
@@ -151,7 +151,7 @@ ${params.studentAnswer}
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [sessionId, round, modelUsed, promptTokens, completionTokens, result, reason, latencyMs]);
         }
         catch (error) {
-            console.error('[AIJudgeService] 记录日志失败:', error);
+            logger.error('[AIJudgeService] 记录日志失败:', error);
             // 不抛出错误，避免影响主流程
         }
     }
