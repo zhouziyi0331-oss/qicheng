@@ -1,6 +1,6 @@
 import express from 'express';
 import followService from '../../services/followService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/follow/student
  * 关注学生
  */
-router.post('/student', authenticateToken, async (req, res) => {
+router.post('/student', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -56,7 +56,7 @@ router.post('/student', authenticateToken, async (req, res) => {
  * DELETE /api/follow/student/:studentId
  * 取消关注学生
  */
-router.delete('/student/:studentId', authenticateToken, async (req, res) => {
+router.delete('/student/:studentId', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -88,7 +88,7 @@ router.delete('/student/:studentId', authenticateToken, async (req, res) => {
  * GET /api/follow/student/:studentId/status
  * 检查是否关注某学生
  */
-router.get('/student/:studentId/status', authenticateToken, async (req, res) => {
+router.get('/student/:studentId/status', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { studentId } = req.params;
@@ -112,7 +112,7 @@ router.get('/student/:studentId/status', authenticateToken, async (req, res) => 
  * GET /api/follow/following
  * 获取企业关注的学生列表
  */
-router.get('/following', authenticateToken, async (req, res) => {
+router.get('/following', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -151,7 +151,7 @@ router.get('/following', authenticateToken, async (req, res) => {
  * GET /api/follow/followers
  * 获取学生的粉丝列表（学生查看谁关注了我）
  */
-router.get('/followers', authenticateToken, async (req, res) => {
+router.get('/followers', authenticate, async (req, res) => {
   try {
     const studentId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -190,7 +190,7 @@ router.get('/followers', authenticateToken, async (req, res) => {
  * PUT /api/follow/student/:studentId/settings
  * 更新关注设置
  */
-router.put('/student/:studentId/settings', authenticateToken, async (req, res) => {
+router.put('/student/:studentId/settings', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { studentId } = req.params;
@@ -215,7 +215,7 @@ router.put('/student/:studentId/settings', authenticateToken, async (req, res) =
  * GET /api/follow/activities/feed
  * 获取关注学生的动态流
  */
-router.get('/activities/feed', authenticateToken, async (req, res) => {
+router.get('/activities/feed', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -284,7 +284,7 @@ router.get('/activities/student/:studentId', async (req, res) => {
  * GET /api/follow/notifications
  * 获取关注通知
  */
-router.get('/notifications', authenticateToken, async (req, res) => {
+router.get('/notifications', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -323,7 +323,7 @@ router.get('/notifications', authenticateToken, async (req, res) => {
  * POST /api/follow/notifications/:id/read
  * 标记通知已读
  */
-router.post('/notifications/:id/read', authenticateToken, async (req, res) => {
+router.post('/notifications/:id/read', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -347,7 +347,7 @@ router.post('/notifications/:id/read', authenticateToken, async (req, res) => {
  * POST /api/follow/notifications/read-all
  * 标记所有通知已读
  */
-router.post('/notifications/read-all', authenticateToken, async (req, res) => {
+router.post('/notifications/read-all', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
 
@@ -370,7 +370,7 @@ router.post('/notifications/read-all', authenticateToken, async (req, res) => {
  * GET /api/follow/notifications/unread-count
  * 获取未读通知数
  */
-router.get('/notifications/unread-count', authenticateToken, async (req, res) => {
+router.get('/notifications/unread-count', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
 
@@ -393,7 +393,7 @@ router.get('/notifications/unread-count', authenticateToken, async (req, res) =>
  * POST /api/follow/collections
  * 创建收藏夹
  */
-router.post('/collections', authenticateToken, async (req, res) => {
+router.post('/collections', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -438,7 +438,7 @@ router.post('/collections', authenticateToken, async (req, res) => {
  * GET /api/follow/collections
  * 获取收藏夹列表
  */
-router.get('/collections', authenticateToken, async (req, res) => {
+router.get('/collections', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -472,7 +472,7 @@ router.get('/collections', authenticateToken, async (req, res) => {
  * PUT /api/follow/collections/:id
  * 更新收藏夹
  */
-router.put('/collections/:id', authenticateToken, async (req, res) => {
+router.put('/collections/:id', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -496,7 +496,7 @@ router.put('/collections/:id', authenticateToken, async (req, res) => {
  * DELETE /api/follow/collections/:id
  * 删除收藏夹
  */
-router.delete('/collections/:id', authenticateToken, async (req, res) => {
+router.delete('/collections/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -520,7 +520,7 @@ router.delete('/collections/:id', authenticateToken, async (req, res) => {
  * POST /api/follow/collections/:id/students
  * 将学生添加到收藏夹
  */
-router.post('/collections/:id/students', authenticateToken, async (req, res) => {
+router.post('/collections/:id/students', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const { studentId } = req.body;
@@ -551,7 +551,7 @@ router.post('/collections/:id/students', authenticateToken, async (req, res) => 
  * DELETE /api/follow/collections/:id/students/:studentId
  * 从收藏夹移除学生
  */
-router.delete('/collections/:id/students/:studentId', authenticateToken, async (req, res) => {
+router.delete('/collections/:id/students/:studentId', authenticate, async (req, res) => {
   try {
     const { id, studentId } = req.params;
 
@@ -574,7 +574,7 @@ router.delete('/collections/:id/students/:studentId', authenticateToken, async (
  * GET /api/follow/collections/:id/students
  * 获取收藏夹中的学生
  */
-router.get('/collections/:id/students', authenticateToken, async (req, res) => {
+router.get('/collections/:id/students', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -600,7 +600,7 @@ router.get('/collections/:id/students', authenticateToken, async (req, res) => {
  * GET /api/follow/stats
  * 获取关注统计
  */
-router.get('/stats', authenticateToken, async (req, res) => {
+router.get('/stats', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -631,7 +631,7 @@ router.get('/stats', authenticateToken, async (req, res) => {
  * GET /api/follow/recommended
  * 获取推荐关注的学生
  */
-router.get('/recommended', authenticateToken, async (req, res) => {
+router.get('/recommended', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;

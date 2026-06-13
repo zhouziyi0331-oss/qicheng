@@ -1,6 +1,6 @@
 import express from 'express';
 import directAssignmentService from '../../services/directAssignmentService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/direct-assignment/invite
  * 企业创建定向邀请
  */
-router.post('/invite', authenticateToken, async (req, res) => {
+router.post('/invite', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -64,7 +64,7 @@ router.post('/invite', authenticateToken, async (req, res) => {
  * POST /api/direct-assignment/invitations/:id/respond
  * 学生响应邀请
  */
-router.post('/invitations/:id/respond', authenticateToken, async (req, res) => {
+router.post('/invitations/:id/respond', authenticate, async (req, res) => {
   try {
     const studentId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -110,7 +110,7 @@ router.post('/invitations/:id/respond', authenticateToken, async (req, res) => {
  * DELETE /api/direct-assignment/invitations/:id
  * 企业取消邀请
  */
-router.delete('/invitations/:id', authenticateToken, async (req, res) => {
+router.delete('/invitations/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -143,7 +143,7 @@ router.delete('/invitations/:id', authenticateToken, async (req, res) => {
  * GET /api/direct-assignment/tasks/:taskId/invitations
  * 获取任务的邀请列表
  */
-router.get('/tasks/:taskId/invitations', authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/invitations', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -182,7 +182,7 @@ router.get('/tasks/:taskId/invitations', authenticateToken, async (req, res) => 
  * GET /api/direct-assignment/my-invitations
  * 学生获取收到的邀请列表
  */
-router.get('/my-invitations', authenticateToken, async (req, res) => {
+router.get('/my-invitations', authenticate, async (req, res) => {
   try {
     const studentId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -221,7 +221,7 @@ router.get('/my-invitations', authenticateToken, async (req, res) => {
  * POST /api/direct-assignment/favorites
  * 添加收藏学生
  */
-router.post('/favorites', authenticateToken, async (req, res) => {
+router.post('/favorites', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -266,7 +266,7 @@ router.post('/favorites', authenticateToken, async (req, res) => {
  * DELETE /api/direct-assignment/favorites/:studentId
  * 移除收藏学生
  */
-router.delete('/favorites/:studentId', authenticateToken, async (req, res) => {
+router.delete('/favorites/:studentId', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -299,7 +299,7 @@ router.delete('/favorites/:studentId', authenticateToken, async (req, res) => {
  * GET /api/direct-assignment/favorites
  * 获取收藏学生列表
  */
-router.get('/favorites', authenticateToken, async (req, res) => {
+router.get('/favorites', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -336,7 +336,7 @@ router.get('/favorites', authenticateToken, async (req, res) => {
  * GET /api/direct-assignment/stats
  * 获取邀请统计
  */
-router.get('/stats', authenticateToken, async (req, res) => {
+router.get('/stats', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;

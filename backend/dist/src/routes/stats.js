@@ -50,6 +50,6 @@ router.get('/personality/:tag', statsController.getPersonalityStats);
 // 获取赛道统计（用于市场均价等）
 router.get('/track/:track', statsController.getTrackStats);
 // 获取学生能力估值（需要登录）
-router.get('/student-valuation', auth_1.authenticateToken, statsController.getStudentValuation);
+router.get('/student-valuation', auth_1.authenticate, statsController.getStudentValuation);
 exports.default = router;
 //# sourceMappingURL=stats.js.map

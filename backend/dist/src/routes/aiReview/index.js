@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * POST /api/ai-review/tasks/:taskId/review
  * AI审核任务交付物
  */
-router.post('/tasks/:taskId/review', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/review', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const { taskTitle, taskDescription, deliverableDescription, deliverableFiles, deliverableUrl, requirements, } = req.body;
@@ -48,7 +48,7 @@ router.post('/tasks/:taskId/review', auth_1.authenticateToken, async (req, res) 
  * GET /api/ai-review/tasks/:taskId/reports
  * 获取任务的审核历史
  */
-router.get('/tasks/:taskId/reports', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/reports', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const userId = req.user.id;
@@ -92,7 +92,7 @@ router.get('/tasks/:taskId/reports', auth_1.authenticateToken, async (req, res) 
  * POST /api/ai-review/tasks/:taskId/revision-guide
  * 企业驳回后生成改进指引
  */
-router.post('/tasks/:taskId/revision-guide', auth_1.authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/revision-guide', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const companyId = req.user.id;
@@ -149,7 +149,7 @@ router.post('/tasks/:taskId/revision-guide', auth_1.authenticateToken, async (re
  * GET /api/ai-review/tasks/:taskId/revision-guides
  * 获取任务的改进指引列表
  */
-router.get('/tasks/:taskId/revision-guides', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/revision-guides', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const userId = req.user.id;
@@ -193,7 +193,7 @@ router.get('/tasks/:taskId/revision-guides', auth_1.authenticateToken, async (re
  * PUT /api/ai-review/revision-guides/:guideId/viewed
  * 学生标记已查看改进指引
  */
-router.put('/revision-guides/:guideId/viewed', auth_1.authenticateToken, async (req, res) => {
+router.put('/revision-guides/:guideId/viewed', auth_1.authenticate, async (req, res) => {
     try {
         const { guideId } = req.params;
         const studentId = req.user.id;
@@ -222,7 +222,7 @@ router.put('/revision-guides/:guideId/viewed', auth_1.authenticateToken, async (
  * POST /api/ai-review/revision-guides/:guideId/rate
  * 学生对改进指引评分
  */
-router.post('/revision-guides/:guideId/rate', auth_1.authenticateToken, async (req, res) => {
+router.post('/revision-guides/:guideId/rate', auth_1.authenticate, async (req, res) => {
     try {
         const { guideId } = req.params;
         const { rating, feedback } = req.body;

@@ -13,7 +13,7 @@ exports.savePricingHistory = savePricingHistory;
 exports.recordAdjustment = recordAdjustment;
 exports.getPricingAccuracy = getPricingAccuracy;
 exports.updateBenchmarks = updateBenchmarks;
-const aiPricingService_1 = require("../services/aiPricingService");
+const aiPricingService_1 = __importDefault(require("../services/aiPricingService"));
 const logger_1 = __importDefault(require("../utils/logger"));
 // =====================================================
 // 定价建议接口
@@ -37,7 +37,7 @@ async function getPricingSuggestion(req, res) {
         if (!title || !description) {
             return res.status(400).json({ error: 'Missing required fields: title and description' });
         }
-        const suggestion = await aiPricingService_1.aiPricingService.getPricingSuggestion({
+        const suggestion = await aiPricingService_1.default.getPricingSuggestion({
             title,
             description,
             requirements,
@@ -80,7 +80,7 @@ async function savePricingHistory(req, res) {
         if (!task_id || !suggestion || actual_min === undefined || actual_max === undefined) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const historyId = await aiPricingService_1.aiPricingService.savePricingHistory(task_id, userId, suggestion, actual_min, actual_max);
+        const historyId = await aiPricingService_1.default.savePricingHistory(task_id, userId, suggestion, actual_min, actual_max);
         return res.json({
             success: true,
             data: {
@@ -119,7 +119,7 @@ async function recordAdjustment(req, res) {
             !reason) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        await aiPricingService_1.aiPricingService.recordPricingAdjustment(task_id, userId, original_min, original_max, adjusted_min, adjusted_max, reason, note);
+        await aiPricingService_1.default.recordPricingAdjustment(task_id, userId, original_min, original_max, adjusted_min, adjusted_max, reason, note);
         return res.json({
             success: true,
             message: 'Pricing adjustment recorded',
@@ -153,7 +153,7 @@ async function getPricingAccuracy(req, res) {
         }
         const category = req.query.category;
         const difficulty = req.query.difficulty;
-        const accuracy = await aiPricingService_1.aiPricingService.getPricingAccuracy(category, difficulty);
+        const accuracy = await aiPricingService_1.default.getPricingAccuracy(category, difficulty);
         return res.json({
             success: true,
             data: accuracy,
@@ -182,7 +182,7 @@ async function updateBenchmarks(req, res) {
         if (userRole !== 'admin' && userRole !== 'platform') {
             return res.status(403).json({ error: 'Admin access required' });
         }
-        await aiPricingService_1.aiPricingService.updateMarketBenchmarks();
+        await aiPricingService_1.default.updateMarketBenchmarks();
         return res.json({
             success: true,
             message: 'Market benchmarks updated successfully',

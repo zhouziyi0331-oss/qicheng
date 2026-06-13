@@ -31,7 +31,7 @@ router.post('/drafts', authenticate, async (req: Request, res: Response) => {
 });
 
 // 更新草稿
-router.put('/drafts/:id', authenticateToken, async (req: Request, res: Response) => {
+router.put('/drafts/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const companyId = req.user!.userId;
     const { id } = req.params;
@@ -52,7 +52,7 @@ router.put('/drafts/:id', authenticateToken, async (req: Request, res: Response)
 });
 
 // 获取草稿列表
-router.get('/drafts', authenticateToken, async (req: Request, res: Response) => {
+router.get('/drafts', authenticate, async (req: Request, res: Response) => {
   try {
     const companyId = req.user!.userId;
     const drafts = await taskExperienceService.getDrafts(companyId);
@@ -70,7 +70,7 @@ router.get('/drafts', authenticateToken, async (req: Request, res: Response) => 
 });
 
 // 删除草稿
-router.delete('/drafts/:id', authenticateToken, async (req: Request, res: Response) => {
+router.delete('/drafts/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const companyId = req.user!.userId;
     const { id } = req.params;
@@ -90,7 +90,7 @@ router.delete('/drafts/:id', authenticateToken, async (req: Request, res: Respon
 });
 
 // 从草稿发布任务
-router.post('/drafts/:id/publish', authenticateToken, async (req: Request, res: Response) => {
+router.post('/drafts/:id/publish', authenticate, async (req: Request, res: Response) => {
   try {
     const companyId = req.user!.userId;
     const { id } = req.params;
@@ -151,7 +151,7 @@ router.get('/templates/:id', async (req: Request, res: Response) => {
 });
 
 // 使用模板创建草稿
-router.post('/templates/:id/use', authenticateToken, async (req: Request, res: Response) => {
+router.post('/templates/:id/use', authenticate, async (req: Request, res: Response) => {
   try {
     const companyId = req.user!.userId;
     const { id } = req.params;
@@ -219,7 +219,7 @@ router.get('/templates/search', async (req: Request, res: Response) => {
  */
 
 // 获取预算建议
-router.post('/budget-suggestion', authenticateToken, async (req: Request, res: Response) => {
+router.post('/budget-suggestion', authenticate, async (req: Request, res: Response) => {
   try {
     const companyId = req.user!.userId;
     const { task_category, task_description, required_skills, quality_expectation } = req.body;

@@ -1,6 +1,6 @@
 import express from 'express';
 import projectService from '../../services/projectService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/projects
  * 创建项目
  */
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -66,7 +66,7 @@ router.post('/', authenticateToken, async (req, res) => {
  * GET /api/projects
  * 获取企业的项目列表
  */
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -103,7 +103,7 @@ router.get('/', authenticateToken, async (req, res) => {
  * GET /api/projects/:id
  * 获取项目详情
  */
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -142,7 +142,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
  * PUT /api/projects/:id
  * 更新项目
  */
-router.put('/:id', authenticateToken, async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -177,7 +177,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
  * POST /api/projects/:id/milestones
  * 添加里程碑
  */
-router.post('/:id/milestones', authenticateToken, async (req, res) => {
+router.post('/:id/milestones', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -241,7 +241,7 @@ router.post('/:id/milestones', authenticateToken, async (req, res) => {
  * GET /api/projects/:id/milestones
  * 获取项目的里程碑列表
  */
-router.get('/:id/milestones', authenticateToken, async (req, res) => {
+router.get('/:id/milestones', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -276,7 +276,7 @@ router.get('/:id/milestones', authenticateToken, async (req, res) => {
  * PUT /api/projects/milestones/:milestoneId
  * 更新里程碑
  */
-router.put('/milestones/:milestoneId', authenticateToken, async (req, res) => {
+router.put('/milestones/:milestoneId', authenticate, async (req, res) => {
   try {
     const { milestoneId } = req.params;
     const companyId = (req as any).user.id;
@@ -311,7 +311,7 @@ router.put('/milestones/:milestoneId', authenticateToken, async (req, res) => {
  * POST /api/projects/:id/tasks
  * 关联任务到项目
  */
-router.post('/:id/tasks', authenticateToken, async (req, res) => {
+router.post('/:id/tasks', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -359,7 +359,7 @@ router.post('/:id/tasks', authenticateToken, async (req, res) => {
  * GET /api/projects/:id/tasks
  * 获取项目的任务列表
  */
-router.get('/:id/tasks', authenticateToken, async (req, res) => {
+router.get('/:id/tasks', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -394,7 +394,7 @@ router.get('/:id/tasks', authenticateToken, async (req, res) => {
  * POST /api/projects/:id/collaborators
  * 添加协作者到项目
  */
-router.post('/:id/collaborators', authenticateToken, async (req, res) => {
+router.post('/:id/collaborators', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -441,7 +441,7 @@ router.post('/:id/collaborators', authenticateToken, async (req, res) => {
  * GET /api/projects/:id/collaborators
  * 获取项目协作者
  */
-router.get('/:id/collaborators', authenticateToken, async (req, res) => {
+router.get('/:id/collaborators', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -476,7 +476,7 @@ router.get('/:id/collaborators', authenticateToken, async (req, res) => {
  * POST /api/projects/:id/publish
  * 发布项目
  */
-router.post('/:id/publish', authenticateToken, async (req, res) => {
+router.post('/:id/publish', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
     const companyId = (req as any).user.id;
@@ -509,7 +509,7 @@ router.post('/:id/publish', authenticateToken, async (req, res) => {
  * GET /api/projects/:id/progress
  * 计算项目进度
  */
-router.get('/:id/progress', authenticateToken, async (req, res) => {
+router.get('/:id/progress', authenticate, async (req, res) => {
   try {
     const { id: projectId } = req.params;
 

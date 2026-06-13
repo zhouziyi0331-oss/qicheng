@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.completeStretchChallenge = exports.applyStretchChallenge = exports.upgradeLevel = exports.checkUpgradeConditions = exports.getUserLevel = void 0;
 const db_1 = require("../utils/db");
+const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 等级名称映射
  */
@@ -36,7 +40,7 @@ const getUserLevel = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('获取等级信息失败:', error);
+        logger_1.default.error('获取等级信息失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -107,7 +111,7 @@ const checkUpgradeConditions = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('检查升级条件失败:', error);
+        logger_1.default.error('检查升级条件失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -140,7 +144,7 @@ const upgradeLevel = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('升级失败:', error);
+        logger_1.default.error('升级失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -213,7 +217,7 @@ const applyStretchChallenge = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error('申请跳级挑战失败:', error);
+        logger_1.default.error('申请跳级挑战失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };
@@ -255,7 +259,7 @@ const completeStretchChallenge = async (req, res) => {
         }
     }
     catch (error) {
-        logger.error('完成跳级挑战失败:', error);
+        logger_1.default.error('完成跳级挑战失败:', error);
         res.status(500).json({ error: '服务器错误' });
     }
 };

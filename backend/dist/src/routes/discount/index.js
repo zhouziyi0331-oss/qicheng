@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * GET /api/discount/tiers
  * 获取所有折扣阶梯
  */
-router.get('/tiers', auth_1.authenticateToken, async (req, res) => {
+router.get('/tiers', auth_1.authenticate, async (req, res) => {
     try {
         const tiers = await tieredDiscountService_1.default.getAllTiers();
         res.json({
@@ -34,7 +34,7 @@ router.get('/tiers', auth_1.authenticateToken, async (req, res) => {
  * GET /api/discount/my-tier
  * 获取企业当前阶梯信息
  */
-router.get('/my-tier', auth_1.authenticateToken, async (req, res) => {
+router.get('/my-tier', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -62,7 +62,7 @@ router.get('/my-tier', auth_1.authenticateToken, async (req, res) => {
  * GET /api/discount/my-progress
  * 获取企业折扣进度（包含详细信息用于UI展示）
  */
-router.get('/my-progress', auth_1.authenticateToken, async (req, res) => {
+router.get('/my-progress', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -90,7 +90,7 @@ router.get('/my-progress', auth_1.authenticateToken, async (req, res) => {
  * GET /api/discount/monthly-stats
  * 获取企业月度统计
  */
-router.get('/monthly-stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/monthly-stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -119,7 +119,7 @@ router.get('/monthly-stats', auth_1.authenticateToken, async (req, res) => {
  * POST /api/discount/calculate
  * 计算折扣金额（不保存）
  */
-router.post('/calculate', auth_1.authenticateToken, async (req, res) => {
+router.post('/calculate', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -154,7 +154,7 @@ router.post('/calculate', auth_1.authenticateToken, async (req, res) => {
  * POST /api/discount/apply
  * 应用折扣到任务
  */
-router.post('/apply', auth_1.authenticateToken, async (req, res) => {
+router.post('/apply', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -204,7 +204,7 @@ router.post('/apply', auth_1.authenticateToken, async (req, res) => {
  * GET /api/discount/history
  * 获取企业折扣历史
  */
-router.get('/history', auth_1.authenticateToken, async (req, res) => {
+router.get('/history', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -233,7 +233,7 @@ router.get('/history', auth_1.authenticateToken, async (req, res) => {
  * GET /api/discount/historical-stats
  * 获取企业历史月度统计
  */
-router.get('/historical-stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/historical-stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -265,7 +265,7 @@ router.get('/historical-stats', auth_1.authenticateToken, async (req, res) => {
  * POST /api/discount/refresh-stats
  * 手动刷新月度统计（管理员功能）
  */
-router.post('/refresh-stats', auth_1.authenticateToken, async (req, res) => {
+router.post('/refresh-stats', auth_1.authenticate, async (req, res) => {
     try {
         const userRole = req.user.role;
         if (userRole !== 'admin') {

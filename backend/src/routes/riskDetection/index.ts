@@ -1,6 +1,6 @@
 import express from 'express';
 import riskDetectionService from '../../services/riskDetectionService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/risk-detection/assess
  * 实时风险评估（任务发布前）
  */
-router.post('/assess', authenticateToken, async (req, res) => {
+router.post('/assess', authenticate, async (req, res) => {
   try {
     const {
       title,
@@ -53,7 +53,7 @@ router.post('/assess', authenticateToken, async (req, res) => {
  * POST /api/risk-detection/tasks/:taskId/assess
  * 评估已创建任务的风险
  */
-router.post('/tasks/:taskId/assess', authenticateToken, async (req, res) => {
+router.post('/tasks/:taskId/assess', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const userId = (req as any).user.id;
@@ -110,7 +110,7 @@ router.post('/tasks/:taskId/assess', authenticateToken, async (req, res) => {
  * GET /api/risk-detection/tasks/:taskId/history
  * 获取任务的风险评估历史
  */
-router.get('/tasks/:taskId/history', authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/history', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const userId = (req as any).user.id;
@@ -161,7 +161,7 @@ router.get('/tasks/:taskId/history', authenticateToken, async (req, res) => {
  * POST /api/risk-detection/assessments/:assessmentId/acknowledge
  * 企业确认风险评估
  */
-router.post('/assessments/:assessmentId/acknowledge', authenticateToken, async (req, res) => {
+router.post('/assessments/:assessmentId/acknowledge', authenticate, async (req, res) => {
   try {
     const { assessmentId } = req.params;
     const companyId = (req as any).user.id;
@@ -230,7 +230,7 @@ router.post('/assessments/:assessmentId/acknowledge', authenticateToken, async (
  * GET /api/risk-detection/my-stats
  * 获取企业的风险统计
  */
-router.get('/my-stats', authenticateToken, async (req, res) => {
+router.get('/my-stats', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -261,7 +261,7 @@ router.get('/my-stats', authenticateToken, async (req, res) => {
  * GET /api/risk-detection/risk-types
  * 获取常见风险类型
  */
-router.get('/risk-types', authenticateToken, async (req, res) => {
+router.get('/risk-types', authenticate, async (req, res) => {
   try {
     const riskTypes = await riskDetectionService.getCommonRiskTypes();
 

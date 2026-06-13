@@ -1,6 +1,6 @@
 import express from 'express';
 import roiAnalyticsService from '../../services/roiAnalyticsService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * GET /api/roi/dashboard
  * 获取ROI看板数据
  */
-router.get('/dashboard', authenticateToken, async (req, res) => {
+router.get('/dashboard', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -44,7 +44,7 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
  * GET /api/roi/financial-stats
  * 获取财务统计
  */
-router.get('/financial-stats', authenticateToken, async (req, res) => {
+router.get('/financial-stats', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -85,7 +85,7 @@ router.get('/financial-stats', authenticateToken, async (req, res) => {
  * GET /api/roi/historical-stats
  * 获取历史统计数据
  */
-router.get('/historical-stats', authenticateToken, async (req, res) => {
+router.get('/historical-stats', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -124,7 +124,7 @@ router.get('/historical-stats', authenticateToken, async (req, res) => {
  * POST /api/roi/cost-comparison
  * 创建成本对比分析
  */
-router.post('/cost-comparison', authenticateToken, async (req, res) => {
+router.post('/cost-comparison', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -170,7 +170,7 @@ router.post('/cost-comparison', authenticateToken, async (req, res) => {
  * GET /api/roi/market-benchmarks
  * 获取市场价格基准
  */
-router.get('/market-benchmarks', authenticateToken, async (req, res) => {
+router.get('/market-benchmarks', authenticate, async (req, res) => {
   try {
     const benchmarks = await roiAnalyticsService.getMarketBenchmarks();
 
@@ -194,7 +194,7 @@ router.get('/market-benchmarks', authenticateToken, async (req, res) => {
  * POST /api/roi/refresh-stats
  * 刷新财务统计（手动）
  */
-router.post('/refresh-stats', authenticateToken, async (req, res) => {
+router.post('/refresh-stats', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;

@@ -1,6 +1,6 @@
 import express from 'express';
 import talentLockService from '../../services/talentLockService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/talent-lock/calculate-fee
  * 计算锁定费用
  */
-router.post('/calculate-fee', authenticateToken, async (req, res) => {
+router.post('/calculate-fee', authenticate, async (req, res) => {
   try {
     const { lock_type, student_level, duration_months } = req.body;
 
@@ -42,7 +42,7 @@ router.post('/calculate-fee', authenticateToken, async (req, res) => {
  * POST /api/talent-lock/apply
  * 创建锁定申请
  */
-router.post('/apply', authenticateToken, async (req, res) => {
+router.post('/apply', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -92,7 +92,7 @@ router.post('/apply', authenticateToken, async (req, res) => {
  * GET /api/talent-lock/applications
  * 获取锁定申请列表
  */
-router.get('/applications', authenticateToken, async (req, res) => {
+router.get('/applications', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -119,7 +119,7 @@ router.get('/applications', authenticateToken, async (req, res) => {
  * POST /api/talent-lock/applications/:id/respond
  * 学生响应锁定申请
  */
-router.post('/applications/:id/respond', authenticateToken, async (req, res) => {
+router.post('/applications/:id/respond', authenticate, async (req, res) => {
   try {
     const studentId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -165,7 +165,7 @@ router.post('/applications/:id/respond', authenticateToken, async (req, res) => 
  * GET /api/talent-lock/list
  * 获取锁定列表
  */
-router.get('/list', authenticateToken, async (req, res) => {
+router.get('/list', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -203,7 +203,7 @@ router.get('/list', authenticateToken, async (req, res) => {
  * GET /api/talent-lock/:id
  * 获取锁定详情
  */
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -226,7 +226,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
  * POST /api/talent-lock/:id/renew
  * 续约锁定
  */
-router.post('/:id/renew', authenticateToken, async (req, res) => {
+router.post('/:id/renew', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const { additional_months } = req.body;
@@ -258,7 +258,7 @@ router.post('/:id/renew', authenticateToken, async (req, res) => {
  * POST /api/talent-lock/:id/cancel
  * 取消锁定
  */
-router.post('/:id/cancel', authenticateToken, async (req, res) => {
+router.post('/:id/cancel', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const { id } = req.params;
@@ -283,7 +283,7 @@ router.post('/:id/cancel', authenticateToken, async (req, res) => {
  * POST /api/talent-lock/:id/pause
  * 暂停锁定
  */
-router.post('/:id/pause', authenticateToken, async (req, res) => {
+router.post('/:id/pause', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const { id } = req.params;
@@ -309,7 +309,7 @@ router.post('/:id/pause', authenticateToken, async (req, res) => {
  * POST /api/talent-lock/:id/resume
  * 恢复锁定
  */
-router.post('/:id/resume', authenticateToken, async (req, res) => {
+router.post('/:id/resume', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const { id } = req.params;
@@ -334,7 +334,7 @@ router.post('/:id/resume', authenticateToken, async (req, res) => {
  * GET /api/talent-lock/student/:studentId/status
  * 检查学生是否被锁定
  */
-router.get('/student/:studentId/status', authenticateToken, async (req, res) => {
+router.get('/student/:studentId/status', authenticate, async (req, res) => {
   try {
     const { studentId } = req.params;
     const companyId = (req as any).user.id;
@@ -358,7 +358,7 @@ router.get('/student/:studentId/status', authenticateToken, async (req, res) => 
  * GET /api/talent-lock/stats
  * 获取锁定统计
  */
-router.get('/stats/overview', authenticateToken, async (req, res) => {
+router.get('/stats/overview', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;

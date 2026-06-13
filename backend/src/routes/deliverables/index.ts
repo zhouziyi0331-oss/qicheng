@@ -1,6 +1,6 @@
 import express from 'express';
 import deliverableArchiveService from '../../services/deliverableArchiveService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/deliverables/create
  * 手动创建档案
  */
-router.post('/create', authenticateToken, async (req, res) => {
+router.post('/create', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -70,7 +70,7 @@ router.post('/create', authenticateToken, async (req, res) => {
  * GET /api/deliverables/list
  * 获取档案列表
  */
-router.get('/list', authenticateToken, async (req, res) => {
+router.get('/list', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -126,7 +126,7 @@ router.get('/list', authenticateToken, async (req, res) => {
  * GET /api/deliverables/:id
  * 获取档案详情
  */
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -150,7 +150,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
  * PUT /api/deliverables/:id
  * 更新档案
  */
-router.put('/:id', authenticateToken, async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -175,7 +175,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
  * DELETE /api/deliverables/:id
  * 删除档案
  */
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -199,7 +199,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
  * POST /api/deliverables/:id/download
  * 记录下载
  */
-router.post('/:id/download', authenticateToken, async (req, res) => {
+router.post('/:id/download', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const { id } = req.params;
@@ -229,7 +229,7 @@ router.post('/:id/download', authenticateToken, async (req, res) => {
  * POST /api/deliverables/:id/versions
  * 添加版本
  */
-router.post('/:id/versions', authenticateToken, async (req, res) => {
+router.post('/:id/versions', authenticate, async (req, res) => {
   try {
     const userId = (req as any).user.id;
     const { id } = req.params;
@@ -267,7 +267,7 @@ router.post('/:id/versions', authenticateToken, async (req, res) => {
  * POST /api/deliverables/categories
  * 创建自定义分类
  */
-router.post('/categories/create', authenticateToken, async (req, res) => {
+router.post('/categories/create', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -313,7 +313,7 @@ router.post('/categories/create', authenticateToken, async (req, res) => {
  * GET /api/deliverables/categories/list
  * 获取分类列表
  */
-router.get('/categories/list', authenticateToken, async (req, res) => {
+router.get('/categories/list', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -347,7 +347,7 @@ router.get('/categories/list', authenticateToken, async (req, res) => {
  * PUT /api/deliverables/categories/:id
  * 更新分类
  */
-router.put('/categories/:id', authenticateToken, async (req, res) => {
+router.put('/categories/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -372,7 +372,7 @@ router.put('/categories/:id', authenticateToken, async (req, res) => {
  * DELETE /api/deliverables/categories/:id
  * 删除分类
  */
-router.delete('/categories/:id', authenticateToken, async (req, res) => {
+router.delete('/categories/:id', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -396,7 +396,7 @@ router.delete('/categories/:id', authenticateToken, async (req, res) => {
  * POST /api/deliverables/:id/share
  * 创建分享链接
  */
-router.post('/:id/share', authenticateToken, async (req, res) => {
+router.post('/:id/share', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { id } = req.params;
@@ -478,7 +478,7 @@ router.post('/share/:code/download', async (req, res) => {
  * GET /api/deliverables/stats
  * 获取档案统计
  */
-router.get('/stats/overview', authenticateToken, async (req, res) => {
+router.get('/stats/overview', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -509,7 +509,7 @@ router.get('/stats/overview', authenticateToken, async (req, res) => {
  * POST /api/deliverables/batch-update
  * 批量更新档案
  */
-router.post('/batch-update', authenticateToken, async (req, res) => {
+router.post('/batch-update', authenticate, async (req, res) => {
   try {
     const companyId = (req as any).user.id;
     const { archive_ids, updates } = req.body;

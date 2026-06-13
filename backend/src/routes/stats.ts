@@ -1,6 +1,6 @@
 import express from 'express';
 import * as statsController from '../controllers/statsController';
-import { authenticateToken } from '../middleware/auth';
+import { authenticate } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -17,6 +17,6 @@ router.get('/personality/:tag', statsController.getPersonalityStats);
 router.get('/track/:track', statsController.getTrackStats);
 
 // 获取学生能力估值（需要登录）
-router.get('/student-valuation', authenticateToken, statsController.getStudentValuation);
+router.get('/student-valuation', authenticate, statsController.getStudentValuation);
 
 export default router;

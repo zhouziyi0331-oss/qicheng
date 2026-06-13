@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * POST /api/chat-monitoring/monitor
  * 监测消息（实时）
  */
-router.post('/monitor', auth_1.authenticateToken, async (req, res) => {
+router.post('/monitor', auth_1.authenticate, async (req, res) => {
     try {
         const senderId = req.user.id;
         const senderRole = req.user.role;
@@ -49,7 +49,7 @@ router.post('/monitor', auth_1.authenticateToken, async (req, res) => {
  * GET /api/chat-monitoring/tasks/:taskId/alerts
  * 获取任务的警报列表
  */
-router.get('/tasks/:taskId/alerts', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/alerts', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const { status } = req.query;
@@ -94,7 +94,7 @@ router.get('/tasks/:taskId/alerts', auth_1.authenticateToken, async (req, res) =
  * POST /api/chat-monitoring/alerts/:alertId/acknowledge
  * 用户确认警报
  */
-router.post('/alerts/:alertId/acknowledge', auth_1.authenticateToken, async (req, res) => {
+router.post('/alerts/:alertId/acknowledge', auth_1.authenticate, async (req, res) => {
     try {
         const { alertId } = req.params;
         const userId = req.user.id;
@@ -142,7 +142,7 @@ router.post('/alerts/:alertId/acknowledge', auth_1.authenticateToken, async (req
  * GET /api/chat-monitoring/tasks/:taskId/stats
  * 获取任务的监测统计
  */
-router.get('/tasks/:taskId/stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/stats', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const userId = req.user.id;
@@ -183,7 +183,7 @@ router.get('/tasks/:taskId/stats', auth_1.authenticateToken, async (req, res) =>
  * GET /api/chat-monitoring/rules
  * 获取监测规则
  */
-router.get('/rules', auth_1.authenticateToken, async (req, res) => {
+router.get('/rules', auth_1.authenticate, async (req, res) => {
     try {
         const rules = await chatScopeMonitoringService_1.default.getMonitoringRules();
         res.json({

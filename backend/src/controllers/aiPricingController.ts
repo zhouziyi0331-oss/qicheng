@@ -5,18 +5,16 @@
  */
 
 import { Request, Response } from 'express';
-import { aiPricingService } from '../services/aiPricingService';
+import aiPricingService from '../services/aiPricingService';
 import logger from '../utils/logger';
+import { JwtPayload } from 'jsonwebtoken';
 
 // =====================================================
 // 类型定义
 // =====================================================
 
 interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
+  user?: JwtPayload;
 }
 
 // =====================================================

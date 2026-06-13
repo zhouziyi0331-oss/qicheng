@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * POST /api/direct-assignment/invite
  * 企业创建定向邀请
  */
-router.post('/invite', auth_1.authenticateToken, async (req, res) => {
+router.post('/invite', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -55,7 +55,7 @@ router.post('/invite', auth_1.authenticateToken, async (req, res) => {
  * POST /api/direct-assignment/invitations/:id/respond
  * 学生响应邀请
  */
-router.post('/invitations/:id/respond', auth_1.authenticateToken, async (req, res) => {
+router.post('/invitations/:id/respond', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.id;
         const userRole = req.user.role;
@@ -92,7 +92,7 @@ router.post('/invitations/:id/respond', auth_1.authenticateToken, async (req, re
  * DELETE /api/direct-assignment/invitations/:id
  * 企业取消邀请
  */
-router.delete('/invitations/:id', auth_1.authenticateToken, async (req, res) => {
+router.delete('/invitations/:id', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -121,7 +121,7 @@ router.delete('/invitations/:id', auth_1.authenticateToken, async (req, res) => 
  * GET /api/direct-assignment/tasks/:taskId/invitations
  * 获取任务的邀请列表
  */
-router.get('/tasks/:taskId/invitations', auth_1.authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/invitations', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -153,7 +153,7 @@ router.get('/tasks/:taskId/invitations', auth_1.authenticateToken, async (req, r
  * GET /api/direct-assignment/my-invitations
  * 学生获取收到的邀请列表
  */
-router.get('/my-invitations', auth_1.authenticateToken, async (req, res) => {
+router.get('/my-invitations', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user.id;
         const userRole = req.user.role;
@@ -185,7 +185,7 @@ router.get('/my-invitations', auth_1.authenticateToken, async (req, res) => {
  * POST /api/direct-assignment/favorites
  * 添加收藏学生
  */
-router.post('/favorites', auth_1.authenticateToken, async (req, res) => {
+router.post('/favorites', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -221,7 +221,7 @@ router.post('/favorites', auth_1.authenticateToken, async (req, res) => {
  * DELETE /api/direct-assignment/favorites/:studentId
  * 移除收藏学生
  */
-router.delete('/favorites/:studentId', auth_1.authenticateToken, async (req, res) => {
+router.delete('/favorites/:studentId', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -250,7 +250,7 @@ router.delete('/favorites/:studentId', auth_1.authenticateToken, async (req, res
  * GET /api/direct-assignment/favorites
  * 获取收藏学生列表
  */
-router.get('/favorites', auth_1.authenticateToken, async (req, res) => {
+router.get('/favorites', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -283,7 +283,7 @@ router.get('/favorites', auth_1.authenticateToken, async (req, res) => {
  * GET /api/direct-assignment/stats
  * 获取邀请统计
  */
-router.get('/stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;

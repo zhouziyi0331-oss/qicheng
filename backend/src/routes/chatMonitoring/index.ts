@@ -1,6 +1,6 @@
 import express from 'express';
 import chatScopeMonitoringService from '../../services/chatScopeMonitoringService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/chat-monitoring/monitor
  * 监测消息（实时）
  */
-router.post('/monitor', authenticateToken, async (req, res) => {
+router.post('/monitor', authenticate, async (req, res) => {
   try {
     const senderId = (req as any).user.id;
     const senderRole = (req as any).user.role;
@@ -50,7 +50,7 @@ router.post('/monitor', authenticateToken, async (req, res) => {
  * GET /api/chat-monitoring/tasks/:taskId/alerts
  * 获取任务的警报列表
  */
-router.get('/tasks/:taskId/alerts', authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/alerts', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const { status } = req.query;
@@ -108,7 +108,7 @@ router.get('/tasks/:taskId/alerts', authenticateToken, async (req, res) => {
  * POST /api/chat-monitoring/alerts/:alertId/acknowledge
  * 用户确认警报
  */
-router.post('/alerts/:alertId/acknowledge', authenticateToken, async (req, res) => {
+router.post('/alerts/:alertId/acknowledge', authenticate, async (req, res) => {
   try {
     const { alertId } = req.params;
     const userId = (req as any).user.id;
@@ -166,7 +166,7 @@ router.post('/alerts/:alertId/acknowledge', authenticateToken, async (req, res) 
  * GET /api/chat-monitoring/tasks/:taskId/stats
  * 获取任务的监测统计
  */
-router.get('/tasks/:taskId/stats', authenticateToken, async (req, res) => {
+router.get('/tasks/:taskId/stats', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const userId = (req as any).user.id;
@@ -217,7 +217,7 @@ router.get('/tasks/:taskId/stats', authenticateToken, async (req, res) => {
  * GET /api/chat-monitoring/rules
  * 获取监测规则
  */
-router.get('/rules', authenticateToken, async (req, res) => {
+router.get('/rules', authenticate, async (req, res) => {
   try {
     const rules = await chatScopeMonitoringService.getMonitoringRules();
 

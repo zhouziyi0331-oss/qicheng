@@ -1,6 +1,6 @@
 import express from 'express';
 import studentGrowthService from '../../services/studentGrowthService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * GET /api/students/:id/growth-timeline
  * 获取学生成长时间轴
  */
-router.get('/:id/growth-timeline', authenticateToken, async (req, res) => {
+router.get('/:id/growth-timeline', authenticate, async (req, res) => {
   try {
     const { id: studentId } = req.params;
     const { startDate, endDate, eventTypes, limit } = req.query;
@@ -66,7 +66,7 @@ router.get('/:id/growth-timeline', authenticateToken, async (req, res) => {
  * GET /api/students/:id/milestones
  * 获取学生里程碑列表
  */
-router.get('/:id/milestones', authenticateToken, async (req, res) => {
+router.get('/:id/milestones', authenticate, async (req, res) => {
   try {
     const { id: studentId } = req.params;
 
@@ -105,7 +105,7 @@ router.get('/:id/milestones', authenticateToken, async (req, res) => {
  * GET /api/students/:id/skill-evolution
  * 获取学生技能进化轨迹
  */
-router.get('/:id/skill-evolution', authenticateToken, async (req, res) => {
+router.get('/:id/skill-evolution', authenticate, async (req, res) => {
   try {
     const { id: studentId } = req.params;
 
@@ -147,7 +147,7 @@ router.get('/:id/skill-evolution', authenticateToken, async (req, res) => {
  * POST /api/students/:id/growth-events
  * 记录成长事件（内部使用）
  */
-router.post('/:id/growth-events', authenticateToken, async (req, res) => {
+router.post('/:id/growth-events', authenticate, async (req, res) => {
   try {
     const { id: studentId } = req.params;
     const {
@@ -207,7 +207,7 @@ router.post('/:id/growth-events', authenticateToken, async (req, res) => {
  * GET /api/students/:id/growth-summary
  * 获取学生成长概览
  */
-router.get('/:id/growth-summary', authenticateToken, async (req, res) => {
+router.get('/:id/growth-summary', authenticate, async (req, res) => {
   try {
     const { id: studentId } = req.params;
 

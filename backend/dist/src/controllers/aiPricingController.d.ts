@@ -4,11 +4,9 @@
  * 处理AI智能定价相关的HTTP请求
  */
 import { Request, Response } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 interface AuthRequest extends Request {
-    user?: {
-        id: string;
-        role: string;
-    };
+    user?: JwtPayload;
 }
 /**
  * 获取智能定价建议

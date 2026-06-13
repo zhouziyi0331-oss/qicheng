@@ -1,6 +1,6 @@
 import express from 'express';
 import portfolioService from '../../services/portfolioService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * POST /api/portfolio/create
  * 创建作品集
  */
-router.post('/create', authenticateToken, async (req, res) => {
+router.post('/create', authenticate, async (req, res) => {
   try {
     const studentId = (req as any).user.id;
     const userRole = (req as any).user.role;
@@ -144,7 +144,7 @@ router.get('/:id', async (req, res) => {
  * PUT /api/portfolio/:id
  * 更新作品集
  */
-router.put('/:id', authenticateToken, async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const studentId = (req as any).user.id;
@@ -197,7 +197,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
  * DELETE /api/portfolio/:id
  * 删除作品集
  */
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const studentId = (req as any).user.id;
@@ -229,7 +229,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
  * POST /api/portfolio/:id/like
  * 点赞/取消点赞
  */
-router.post('/:id/like', authenticateToken, async (req, res) => {
+router.post('/:id/like', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = (req as any).user.id;
@@ -254,7 +254,7 @@ router.post('/:id/like', authenticateToken, async (req, res) => {
  * POST /api/portfolio/:id/tags
  * 添加标签
  */
-router.post('/:id/tags', authenticateToken, async (req, res) => {
+router.post('/:id/tags', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const studentId = (req as any).user.id;
@@ -306,7 +306,7 @@ router.post('/:id/tags', authenticateToken, async (req, res) => {
  * DELETE /api/portfolio/:id/tags/:tagName
  * 删除标签
  */
-router.delete('/:id/tags/:tagName', authenticateToken, async (req, res) => {
+router.delete('/:id/tags/:tagName', authenticate, async (req, res) => {
   try {
     const { id, tagName } = req.params;
     const studentId = (req as any).user.id;
@@ -437,7 +437,7 @@ router.get('/search/query', async (req, res) => {
  * POST /api/portfolio/:id/review
  * 审核作品集（管理员）
  */
-router.post('/:id/review', authenticateToken, async (req, res) => {
+router.post('/:id/review', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
     const reviewerId = (req as any).user.id;

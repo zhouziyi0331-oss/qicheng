@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * GET /api/roi/dashboard
  * 获取ROI看板数据
  */
-router.get('/dashboard', auth_1.authenticateToken, async (req, res) => {
+router.get('/dashboard', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -40,7 +40,7 @@ router.get('/dashboard', auth_1.authenticateToken, async (req, res) => {
  * GET /api/roi/financial-stats
  * 获取财务统计
  */
-router.get('/financial-stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/financial-stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -72,7 +72,7 @@ router.get('/financial-stats', auth_1.authenticateToken, async (req, res) => {
  * GET /api/roi/historical-stats
  * 获取历史统计数据
  */
-router.get('/historical-stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/historical-stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -104,7 +104,7 @@ router.get('/historical-stats', auth_1.authenticateToken, async (req, res) => {
  * POST /api/roi/cost-comparison
  * 创建成本对比分析
  */
-router.post('/cost-comparison', auth_1.authenticateToken, async (req, res) => {
+router.post('/cost-comparison', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -140,7 +140,7 @@ router.post('/cost-comparison', auth_1.authenticateToken, async (req, res) => {
  * GET /api/roi/market-benchmarks
  * 获取市场价格基准
  */
-router.get('/market-benchmarks', auth_1.authenticateToken, async (req, res) => {
+router.get('/market-benchmarks', auth_1.authenticate, async (req, res) => {
     try {
         const benchmarks = await roiAnalyticsService_1.default.getMarketBenchmarks();
         res.json({
@@ -163,7 +163,7 @@ router.get('/market-benchmarks', auth_1.authenticateToken, async (req, res) => {
  * POST /api/roi/refresh-stats
  * 刷新财务统计（手动）
  */
-router.post('/refresh-stats', auth_1.authenticateToken, async (req, res) => {
+router.post('/refresh-stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;

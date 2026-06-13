@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { query, queryOne } from '../utils/db';
+import logger from '../utils/logger';
 
 /**
  * 等级名称映射

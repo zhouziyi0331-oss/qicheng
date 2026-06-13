@@ -1,6 +1,6 @@
 import express from 'express';
 import escrowTransparencyService from '../../services/escrowTransparencyService';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * GET /api/escrow/:taskId/flow
  * 获取任务的托管流程概览
  */
-router.get('/:taskId/flow', authenticateToken, async (req, res) => {
+router.get('/:taskId/flow', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const userId = (req as any).user.id;
@@ -59,7 +59,7 @@ router.get('/:taskId/flow', authenticateToken, async (req, res) => {
  * POST /api/escrow/:taskId/deposit
  * 企业充值到托管账户
  */
-router.post('/:taskId/deposit', authenticateToken, async (req, res) => {
+router.post('/:taskId/deposit', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const companyId = (req as any).user.id;
@@ -129,7 +129,7 @@ router.post('/:taskId/deposit', authenticateToken, async (req, res) => {
  * POST /api/escrow/:taskId/release
  * 释放资金给学生
  */
-router.post('/:taskId/release', authenticateToken, async (req, res) => {
+router.post('/:taskId/release', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const userRole = (req as any).user.role;
@@ -177,7 +177,7 @@ router.post('/:taskId/release', authenticateToken, async (req, res) => {
  * POST /api/escrow/:taskId/refund
  * 退款给企业
  */
-router.post('/:taskId/refund', authenticateToken, async (req, res) => {
+router.post('/:taskId/refund', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const userRole = (req as any).user.role;
@@ -217,7 +217,7 @@ router.post('/:taskId/refund', authenticateToken, async (req, res) => {
  * PUT /api/escrow/nodes/:nodeId/status
  * 更新流程节点状态
  */
-router.put('/nodes/:nodeId/status', authenticateToken, async (req, res) => {
+router.put('/nodes/:nodeId/status', authenticate, async (req, res) => {
   try {
     const { nodeId } = req.params;
     const { status, metadata } = req.body;
@@ -257,7 +257,7 @@ router.put('/nodes/:nodeId/status', authenticateToken, async (req, res) => {
  * POST /api/escrow/transactions/:transactionId/complete
  * 完成交易
  */
-router.post('/transactions/:transactionId/complete', authenticateToken, async (req, res) => {
+router.post('/transactions/:transactionId/complete', authenticate, async (req, res) => {
   try {
     const { transactionId } = req.params;
     const userRole = (req as any).user.role;
@@ -288,7 +288,7 @@ router.post('/transactions/:transactionId/complete', authenticateToken, async (r
  * POST /api/escrow/transactions/:transactionId/fail
  * 交易失败
  */
-router.post('/transactions/:transactionId/fail', authenticateToken, async (req, res) => {
+router.post('/transactions/:transactionId/fail', authenticate, async (req, res) => {
   try {
     const { transactionId } = req.params;
     const { reason } = req.body;

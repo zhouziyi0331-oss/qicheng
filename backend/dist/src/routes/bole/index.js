@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * POST /api/bole/discover
  * 创建伯乐推荐
  */
-router.post('/discover', auth_1.authenticateToken, async (req, res) => {
+router.post('/discover', auth_1.authenticate, async (req, res) => {
     try {
         const discovererId = req.user.id;
         const userRole = req.user.role;
@@ -53,7 +53,7 @@ router.post('/discover', auth_1.authenticateToken, async (req, res) => {
  * GET /api/bole/discoveries
  * 获取推荐列表
  */
-router.get('/discoveries', auth_1.authenticateToken, async (req, res) => {
+router.get('/discoveries', auth_1.authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const userRole = req.user.role;
@@ -90,7 +90,7 @@ router.get('/discoveries', auth_1.authenticateToken, async (req, res) => {
  * GET /api/bole/discoveries/:id
  * 获取推荐详情
  */
-router.get('/discoveries/:id', auth_1.authenticateToken, async (req, res) => {
+router.get('/discoveries/:id', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const discovery = await boleService_1.default.getDiscoveryById(id);
@@ -111,7 +111,7 @@ router.get('/discoveries/:id', auth_1.authenticateToken, async (req, res) => {
  * GET /api/bole/badges
  * 获取伯乐标签
  */
-router.get('/badges', auth_1.authenticateToken, async (req, res) => {
+router.get('/badges', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -142,7 +142,7 @@ router.get('/badges', auth_1.authenticateToken, async (req, res) => {
  * POST /api/bole/check-badge
  * 检查并授予标签
  */
-router.post('/check-badge', auth_1.authenticateToken, async (req, res) => {
+router.post('/check-badge', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -204,7 +204,7 @@ router.get('/leaderboard', async (req, res) => {
  * GET /api/bole/stats
  * 获取伯乐统计
  */
-router.get('/stats', auth_1.authenticateToken, async (req, res) => {
+router.get('/stats', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
@@ -252,7 +252,7 @@ router.get('/reward-config', async (req, res) => {
  * POST /api/bole/discoveries/:id/validate
  * 手动验证推荐（管理员）
  */
-router.post('/discoveries/:id/validate', auth_1.authenticateToken, async (req, res) => {
+router.post('/discoveries/:id/validate', auth_1.authenticate, async (req, res) => {
     try {
         const adminId = req.user.id;
         const userRole = req.user.role;
@@ -282,7 +282,7 @@ router.post('/discoveries/:id/validate', auth_1.authenticateToken, async (req, r
  * GET /api/bole/student/:studentId/growth
  * 获取学生成长轨迹
  */
-router.get('/student/:studentId/growth', auth_1.authenticateToken, async (req, res) => {
+router.get('/student/:studentId/growth', auth_1.authenticate, async (req, res) => {
     try {
         const { studentId } = req.params;
         const { months } = req.query;
@@ -307,7 +307,7 @@ router.get('/student/:studentId/growth', auth_1.authenticateToken, async (req, r
  * GET /api/bole/recommended-students
  * 获取推荐候选学生
  */
-router.get('/recommended-students', auth_1.authenticateToken, async (req, res) => {
+router.get('/recommended-students', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user.id;
         const userRole = req.user.role;
