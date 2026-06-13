@@ -18,11 +18,11 @@ export const redis = new Redis({
 
 // 连接事件
 redis.on('connect', () => {
-  console.log('✅ Redis connected');
+  logger.info('✅ Redis connected');
 });
 
 redis.on('error', (err) => {
-  console.error('❌ Redis error:', err);
+  logger.error('❌ Redis error:', err);
 });
 
 // ============================================================================
@@ -83,7 +83,7 @@ export async function getCache<T>(key: string): Promise<T | null> {
     if (!value) return null;
     return JSON.parse(value) as T;
   } catch (error) {
-    console.error(`Cache get error for key ${key}:`, error);
+    logger.error(`Cache get error for key ${key}:`, error);
     return null;
   }
 }
@@ -100,7 +100,7 @@ export async function setCache(key: string, value: any, ttl?: number): Promise<v
       await redis.set(key, serialized);
     }
   } catch (error) {
-    console.error(`Cache set error for key ${key}:`, error);
+    logger.error(`Cache set error for key ${key}:`, error);
   }
 }
 
@@ -117,7 +117,7 @@ export async function deleteCache(key: string | string[]): Promise<void> {
       await redis.del(key);
     }
   } catch (error) {
-    console.error(`Cache delete error:`, error);
+    logger.error(`Cache delete error:`, error);
   }
 }
 
@@ -131,7 +131,7 @@ export async function deleteCacheByPattern(pattern: string): Promise<number> {
     await redis.del(...keys);
     return keys.length;
   } catch (error) {
-    console.error(`Cache delete by pattern error for ${pattern}:`, error);
+    logger.error(`Cache delete by pattern error for ${pattern}:`, error);
     return 0;
   }
 }
@@ -144,7 +144,7 @@ export async function cacheExists(key: string): Promise<boolean> {
     const result = await redis.exists(key);
     return result === 1;
   } catch (error) {
-    console.error(`Cache exists check error for key ${key}:`, error);
+    logger.error(`Cache exists check error for key ${key}:`, error);
     return false;
   }
 }
@@ -225,9 +225,9 @@ export async function invalidateFollowCache(companyId: string, studentId: string
 // ============================================================================
 
 export async function closeRedis() {
-  console.log('Closing Redis connection...');
+  logger.info('Closing Redis connection...');
   await redis.quit();
-  console.log('✅ Redis connection closed');
+  logger.info('✅ Redis connection closed');
 }
 
 process.on('SIGTERM', closeRedis);

@@ -102,7 +102,7 @@ export class VerifyService {
         [matchId]
       );
 
-      console.log(`[VerifyService] 创建验证会话: ${sessionId}`);
+      logger.info(`[VerifyService] 创建验证会话: ${sessionId}`);
 
       return {
         sessionId,
@@ -160,7 +160,7 @@ export class VerifyService {
 
       // 异步调用AI判断（不阻塞）
       this.processRound1Judge(sessionId, session, answer).catch(err => {
-        console.error('[VerifyService] AI判断异步处理失败:', err);
+        logger.error('[VerifyService] AI判断异步处理失败:', err);
       });
 
       return { status: 'round1_judging' };
@@ -256,7 +256,7 @@ export class VerifyService {
         }
       });
     } catch (error) {
-      console.error('[VerifyService] 第一轮判断处理失败:', error);
+      logger.error('[VerifyService] 第一轮判断处理失败:', error);
       // 更新状态为失败
       await query(
         `UPDATE verify_sessions
@@ -306,7 +306,7 @@ export class VerifyService {
 
       // 异步调用AI判断
       this.processRound2Judge(sessionId, session, answer).catch(err => {
-        console.error('[VerifyService] 第二轮AI判断失败:', err);
+        logger.error('[VerifyService] 第二轮AI判断失败:', err);
       });
 
       return { status: 'round2_judging' };
@@ -358,7 +358,7 @@ export class VerifyService {
         }
       });
     } catch (error) {
-      console.error('[VerifyService] 第二轮判断处理失败:', error);
+      logger.error('[VerifyService] 第二轮判断处理失败:', error);
       await query(
         `UPDATE verify_sessions
          SET status = 'failed', updated_at = NOW()

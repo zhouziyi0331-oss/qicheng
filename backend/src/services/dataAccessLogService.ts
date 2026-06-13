@@ -72,11 +72,11 @@ class DataAccessLogService {
         ]
       );
 
-      console.log(
+      logger.info(
         `Logged access: ${params.action} on ${params.resourceType}:${params.resourceId} by ${params.userId}`
       );
     } catch (error) {
-      console.error('Failed to log access:', error);
+      logger.error('Failed to log access:', error);
       // 不抛出错误，避免影响主流程
     }
   }

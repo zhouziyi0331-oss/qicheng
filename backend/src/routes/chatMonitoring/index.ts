@@ -38,7 +38,7 @@ router.post('/monitor', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('监测消息失败:', error);
+    logger.error('监测消息失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '监测消息失败',
@@ -96,7 +96,7 @@ router.get('/tasks/:taskId/alerts', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取警报失败:', error);
+    logger.error('获取警报失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取警报失败',
@@ -154,7 +154,7 @@ router.post('/alerts/:alertId/acknowledge', authenticateToken, async (req, res) 
       message: '警报已确认',
     });
   } catch (error: any) {
-    console.error('确认警报失败:', error);
+    logger.error('确认警报失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '确认警报失败',
@@ -205,7 +205,7 @@ router.get('/tasks/:taskId/stats', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取监测统计失败:', error);
+    logger.error('获取监测统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取统计失败',
@@ -229,7 +229,7 @@ router.get('/rules', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取监测规则失败:', error);
+    logger.error('获取监测规则失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取规则失败',

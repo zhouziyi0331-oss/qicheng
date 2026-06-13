@@ -63,7 +63,7 @@ router.post('/tasks', authenticate, async (req: Request, res: Response) => {
       message: `成功创建邀请任务，已向${result.invitations.length}位学生发送邀请`,
     });
   } catch (error: any) {
-    console.error('创建邀请任务失败:', error);
+    logger.error('创建邀请任务失败:', error);
     res.status(500).json({ error: error.message || '创建邀请任务失败' });
   }
 });
@@ -84,7 +84,7 @@ router.get('/tasks/:taskId/invitations', authenticate, async (req: Request, res:
       invitations,
     });
   } catch (error: any) {
-    console.error('获取邀请记录失败:', error);
+    logger.error('获取邀请记录失败:', error);
     res.status(500).json({ error: error.message || '获取邀请记录失败' });
   }
 });
@@ -105,7 +105,7 @@ router.delete('/invitations/:invitationId', authenticate, async (req: Request, r
       message: '邀请已撤回',
     });
   } catch (error: any) {
-    console.error('撤回邀请失败:', error);
+    logger.error('撤回邀请失败:', error);
     res.status(500).json({ error: error.message || '撤回邀请失败' });
   }
 });
@@ -125,7 +125,7 @@ router.get('/stats', authenticate, async (req: Request, res: Response) => {
       stats,
     });
   } catch (error: any) {
-    console.error('获取邀请统计失败:', error);
+    logger.error('获取邀请统计失败:', error);
     res.status(500).json({ error: error.message || '获取邀请统计失败' });
   }
 });
@@ -146,7 +146,7 @@ router.put('/match-config', authenticate, async (req: Request, res: Response) =>
       message: '匹配配置已更新',
     });
   } catch (error: any) {
-    console.error('更新匹配配置失败:', error);
+    logger.error('更新匹配配置失败:', error);
     res.status(500).json({ error: error.message || '更新匹配配置失败' });
   }
 });
@@ -175,7 +175,7 @@ router.get('/my-invitations', authenticate, async (req: Request, res: Response) 
       invitations,
     });
   } catch (error: any) {
-    console.error('获取邀请列表失败:', error);
+    logger.error('获取邀请列表失败:', error);
     res.status(500).json({ error: error.message || '获取邀请列表失败' });
   }
 });
@@ -208,7 +208,7 @@ router.post('/invitations/:invitationId/accept', authenticate, async (req: Reque
       taskId: result.taskId,
     });
   } catch (error: any) {
-    console.error('接受邀请失败:', error);
+    logger.error('接受邀请失败:', error);
     res.status(500).json({ error: error.message || '接受邀请失败' });
   }
 });
@@ -230,7 +230,7 @@ router.post('/invitations/:invitationId/reject', authenticate, async (req: Reque
       message: '邀请已拒绝',
     });
   } catch (error: any) {
-    console.error('拒绝邀请失败:', error);
+    logger.error('拒绝邀请失败:', error);
     res.status(500).json({ error: error.message || '拒绝邀请失败' });
   }
 });
@@ -250,7 +250,7 @@ router.post('/invitations/:invitationId/view', authenticate, async (req: Request
       success: true,
     });
   } catch (error: any) {
-    console.error('标记已查看失败:', error);
+    logger.error('标记已查看失败:', error);
     res.status(500).json({ error: error.message || '标记已查看失败' });
   }
 });
@@ -272,7 +272,7 @@ router.get('/eligibility', authenticate, async (req: Request, res: Response) => 
       activity: activityLog,
     });
   } catch (error: any) {
-    console.error('检查邀请资格失败:', error);
+    logger.error('检查邀请资格失败:', error);
     res.status(500).json({ error: error.message || '检查邀请资格失败' });
   }
 });
@@ -293,7 +293,7 @@ router.post('/cron/expire-invitations', async (req: Request, res: Response) => {
       count,
     });
   } catch (error: any) {
-    console.error('过期邀请失败:', error);
+    logger.error('过期邀请失败:', error);
     res.status(500).json({ error: error.message || '过期邀请失败' });
   }
 });
@@ -312,7 +312,7 @@ router.post('/cron/detect-inactive', async (req: Request, res: Response) => {
       count,
     });
   } catch (error: any) {
-    console.error('检测不活跃学生失败:', error);
+    logger.error('检测不活跃学生失败:', error);
     res.status(500).json({ error: error.message || '检测不活跃学生失败' });
   }
 });

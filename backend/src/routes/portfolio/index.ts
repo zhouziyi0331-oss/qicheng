@@ -70,7 +70,7 @@ router.post('/create', authenticateToken, async (req, res) => {
       message: '作品集创建成功',
     });
   } catch (error: any) {
-    console.error('创建作品集失败:', error);
+    logger.error('创建作品集失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建作品集失败',
@@ -104,7 +104,7 @@ router.get('/list', async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取作品集列表失败:', error);
+    logger.error('获取作品集列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取作品集列表失败',
@@ -132,7 +132,7 @@ router.get('/:id', async (req, res) => {
       data: portfolio,
     });
   } catch (error: any) {
-    console.error('获取作品集详情失败:', error);
+    logger.error('获取作品集详情失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取作品集详情失败',
@@ -185,7 +185,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
       message: '作品集更新成功',
     });
   } catch (error: any) {
-    console.error('更新作品集失败:', error);
+    logger.error('更新作品集失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '更新作品集失败',
@@ -217,7 +217,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
       message: '作品集删除成功',
     });
   } catch (error: any) {
-    console.error('删除作品集失败:', error);
+    logger.error('删除作品集失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '删除作品集失败',
@@ -242,7 +242,7 @@ router.post('/:id/like', authenticateToken, async (req, res) => {
       message: result.liked ? '点赞成功' : '取消点赞成功',
     });
   } catch (error: any) {
-    console.error('点赞操作失败:', error);
+    logger.error('点赞操作失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '点赞操作失败',
@@ -294,7 +294,7 @@ router.post('/:id/tags', authenticateToken, async (req, res) => {
       message: '标签添加成功',
     });
   } catch (error: any) {
-    console.error('添加标签失败:', error);
+    logger.error('添加标签失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '添加标签失败',
@@ -338,7 +338,7 @@ router.delete('/:id/tags/:tagName', authenticateToken, async (req, res) => {
       message: '标签删除成功',
     });
   } catch (error: any) {
-    console.error('删除标签失败:', error);
+    logger.error('删除标签失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '删除标签失败',
@@ -361,7 +361,7 @@ router.get('/student/:studentId/stats', async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取作品集统计失败:', error);
+    logger.error('获取作品集统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取作品集统计失败',
@@ -389,7 +389,7 @@ router.get('/trending/list', async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取热门作品集失败:', error);
+    logger.error('获取热门作品集失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取热门作品集失败',
@@ -425,7 +425,7 @@ router.get('/search/query', async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('搜索作品集失败:', error);
+    logger.error('搜索作品集失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '搜索作品集失败',
@@ -471,7 +471,7 @@ router.post('/:id/review', authenticateToken, async (req, res) => {
       message: '审核成功',
     });
   } catch (error: any) {
-    console.error('审核作品集失败:', error);
+    logger.error('审核作品集失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '审核作品集失败',

@@ -43,7 +43,7 @@ router.post('/discover', authenticateToken, async (req, res) => {
       message: '推荐成功，感谢您发现优秀人才！',
     });
   } catch (error: any) {
-    console.error('创建推荐失败:', error);
+    logger.error('创建推荐失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建推荐失败',
@@ -80,7 +80,7 @@ router.get('/discoveries', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取推荐列表失败:', error);
+    logger.error('获取推荐列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取推荐列表失败',
@@ -103,7 +103,7 @@ router.get('/discoveries/:id', authenticateToken, async (req, res) => {
       data: discovery,
     });
   } catch (error: any) {
-    console.error('获取推荐详情失败:', error);
+    logger.error('获取推荐详情失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取推荐详情失败',
@@ -137,7 +137,7 @@ router.get('/badges', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取标签失败:', error);
+    logger.error('获取标签失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取标签失败',
@@ -177,7 +177,7 @@ router.post('/check-badge', authenticateToken, async (req, res) => {
       });
     }
   } catch (error: any) {
-    console.error('检查标签失败:', error);
+    logger.error('检查标签失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '检查标签失败',
@@ -203,7 +203,7 @@ router.get('/leaderboard', async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取排行榜失败:', error);
+    logger.error('获取排行榜失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取排行榜失败',
@@ -234,7 +234,7 @@ router.get('/stats', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取伯乐统计失败:', error);
+    logger.error('获取伯乐统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取伯乐统计失败',
@@ -255,7 +255,7 @@ router.get('/reward-config', async (req, res) => {
       data: config,
     });
   } catch (error: any) {
-    console.error('获取奖励配置失败:', error);
+    logger.error('获取奖励配置失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取奖励配置失败',
@@ -288,7 +288,7 @@ router.post('/discoveries/:id/validate', authenticateToken, async (req, res) => 
       message: '验证成功',
     });
   } catch (error: any) {
-    console.error('验证推荐失败:', error);
+    logger.error('验证推荐失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '验证推荐失败',
@@ -318,7 +318,7 @@ router.get('/student/:studentId/growth', authenticateToken, async (req, res) => 
       },
     });
   } catch (error: any) {
-    console.error('获取成长轨迹失败:', error);
+    logger.error('获取成长轨迹失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取成长轨迹失败',
@@ -356,7 +356,7 @@ router.get('/recommended-students', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取推荐学生失败:', error);
+    logger.error('获取推荐学生失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取推荐学生失败',

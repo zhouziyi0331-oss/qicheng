@@ -55,11 +55,11 @@ export class RitualService {
         [unlockRecordId, certificateUrl]
       );
 
-      console.log(`[RitualService] 生成证书: ${certificateUrl}`);
+      logger.info(`[RitualService] 生成证书: ${certificateUrl}`);
 
       return certificateUrl;
     } catch (error) {
-      console.error('[RitualService] 生成证书失败:', error);
+      logger.error('[RitualService] 生成证书失败:', error);
       throw error;
     }
   }

@@ -406,7 +406,7 @@ class MatchingEnhancementService {
         }
       }
     } catch (error) {
-      console.error('AI分析拒绝原因失败:', error);
+      logger.error('AI分析拒绝原因失败:', error);
     }
 
     // 降级方案

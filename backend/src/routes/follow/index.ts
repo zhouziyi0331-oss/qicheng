@@ -44,7 +44,7 @@ router.post('/student', authenticateToken, async (req, res) => {
       message: '关注成功',
     });
   } catch (error: any) {
-    console.error('关注学生失败:', error);
+    logger.error('关注学生失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '关注学生失败',
@@ -76,7 +76,7 @@ router.delete('/student/:studentId', authenticateToken, async (req, res) => {
       message: '取消关注成功',
     });
   } catch (error: any) {
-    console.error('取消关注失败:', error);
+    logger.error('取消关注失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '取消关注失败',
@@ -100,7 +100,7 @@ router.get('/student/:studentId/status', authenticateToken, async (req, res) => 
       data: { is_following: isFollowing },
     });
   } catch (error: any) {
-    console.error('检查关注状态失败:', error);
+    logger.error('检查关注状态失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '检查关注状态失败',
@@ -139,7 +139,7 @@ router.get('/following', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取关注列表失败:', error);
+    logger.error('获取关注列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取关注列表失败',
@@ -178,7 +178,7 @@ router.get('/followers', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取粉丝列表失败:', error);
+    logger.error('获取粉丝列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取粉丝列表失败',
@@ -203,7 +203,7 @@ router.put('/student/:studentId/settings', authenticateToken, async (req, res) =
       message: '设置更新成功',
     });
   } catch (error: any) {
-    console.error('更新关注设置失败:', error);
+    logger.error('更新关注设置失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '更新关注设置失败',
@@ -241,7 +241,7 @@ router.get('/activities/feed', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取动态流失败:', error);
+    logger.error('获取动态流失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取动态流失败',
@@ -272,7 +272,7 @@ router.get('/activities/student/:studentId', async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取学生动态失败:', error);
+    logger.error('获取学生动态失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取学生动态失败',
@@ -311,7 +311,7 @@ router.get('/notifications', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取通知失败:', error);
+    logger.error('获取通知失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取通知失败',
@@ -335,7 +335,7 @@ router.post('/notifications/:id/read', authenticateToken, async (req, res) => {
       message: '已标记为已读',
     });
   } catch (error: any) {
-    console.error('标记已读失败:', error);
+    logger.error('标记已读失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '标记已读失败',
@@ -358,7 +358,7 @@ router.post('/notifications/read-all', authenticateToken, async (req, res) => {
       message: '所有通知已标记为已读',
     });
   } catch (error: any) {
-    console.error('标记所有已读失败:', error);
+    logger.error('标记所有已读失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '标记所有已读失败',
@@ -381,7 +381,7 @@ router.get('/notifications/unread-count', authenticateToken, async (req, res) =>
       data: { unread_count: count },
     });
   } catch (error: any) {
-    console.error('获取未读数失败:', error);
+    logger.error('获取未读数失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取未读数失败',
@@ -426,7 +426,7 @@ router.post('/collections', authenticateToken, async (req, res) => {
       message: '收藏夹创建成功',
     });
   } catch (error: any) {
-    console.error('创建收藏夹失败:', error);
+    logger.error('创建收藏夹失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建收藏夹失败',
@@ -460,7 +460,7 @@ router.get('/collections', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取收藏夹列表失败:', error);
+    logger.error('获取收藏夹列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取收藏夹列表失败',
@@ -484,7 +484,7 @@ router.put('/collections/:id', authenticateToken, async (req, res) => {
       message: '收藏夹更新成功',
     });
   } catch (error: any) {
-    console.error('更新收藏夹失败:', error);
+    logger.error('更新收藏夹失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '更新收藏夹失败',
@@ -508,7 +508,7 @@ router.delete('/collections/:id', authenticateToken, async (req, res) => {
       message: '收藏夹删除成功',
     });
   } catch (error: any) {
-    console.error('删除收藏夹失败:', error);
+    logger.error('删除收藏夹失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '删除收藏夹失败',
@@ -539,7 +539,7 @@ router.post('/collections/:id/students', authenticateToken, async (req, res) => 
       message: '学生添加成功',
     });
   } catch (error: any) {
-    console.error('添加学生到收藏夹失败:', error);
+    logger.error('添加学生到收藏夹失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '添加学生到收藏夹失败',
@@ -562,7 +562,7 @@ router.delete('/collections/:id/students/:studentId', authenticateToken, async (
       message: '学生移除成功',
     });
   } catch (error: any) {
-    console.error('移除学生失败:', error);
+    logger.error('移除学生失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '移除学生失败',
@@ -588,7 +588,7 @@ router.get('/collections/:id/students', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取收藏夹学生失败:', error);
+    logger.error('获取收藏夹学生失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取收藏夹学生失败',
@@ -619,7 +619,7 @@ router.get('/stats', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取关注统计失败:', error);
+    logger.error('获取关注统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取关注统计失败',
@@ -657,7 +657,7 @@ router.get('/recommended', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取推荐学生失败:', error);
+    logger.error('获取推荐学生失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取推荐学生失败',

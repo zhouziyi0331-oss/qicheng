@@ -35,7 +35,7 @@ interface StudentLevelChangedJob {
 matchingQueue.process('recalculate-matches', 5, async (job) => {
   const { task_id, student_ids, new_requirements } = job.data as RecalculateMatchesJob;
   
-  console.log(`🔄 Recalculating matches for task ${task_id}, ${student_ids.length} students`);
+  logger.info(`🔄 Recalculating matches for task ${task_id}, ${student_ids.length} students`);
   
   const results = [];
   let completed = 0;
@@ -69,7 +69,7 @@ matchingQueue.process('recalculate-matches', 5, async (job) => {
       });
       
     } catch (error: any) {
-      console.error(`Failed to recalculate for student ${studentId}:`, error);
+      logger.error(`Failed to recalculate for student ${studentId}:`, error);
       results.push({
         student_id: studentId,
         status: 'failed',
@@ -78,7 +78,7 @@ matchingQueue.process('recalculate-matches', 5, async (job) => {
     }
   }
   
-  console.log(`✅ Recalculation completed: ${completed}/${student_ids.length} succeeded`);
+  logger.info(`✅ Recalculation completed: ${completed}/${student_ids.length} succeeded`);
   
   return {
     completed,
@@ -94,7 +94,7 @@ matchingQueue.process('recalculate-matches', 5, async (job) => {
 matchingQueue.process('student-level-changed', 3, async (job) => {
   const { student_id, old_level, new_level } = job.data as StudentLevelChangedJob;
   
-  console.log(`🔄 Processing level change for student ${student_id}: ${old_level} → ${new_level}`);
+  logger.info(`🔄 Processing level change for student ${student_id}: ${old_level} → ${new_level}`);
   
   try {
     const result = await crossPlatformService.handleLevelChange(
@@ -103,11 +103,11 @@ matchingQueue.process('student-level-changed', 3, async (job) => {
       new_level
     );
     
-    console.log(`✅ Level change processed:`, result);
+    logger.info(`✅ Level change processed:`, result);
     
     return result;
   } catch (error: any) {
-    console.error(`Failed to process level change:`, error);
+    logger.error(`Failed to process level change:`, error);
     throw error;
   }
 });
@@ -117,20 +117,20 @@ matchingQueue.process('student-level-changed', 3, async (job) => {
 // ============================================================================
 
 export function startMatchingWorker() {
-  console.log('🚀 Matching worker started');
-  console.log('  - recalculate-matches: concurrency 5');
-  console.log('  - student-level-changed: concurrency 3');
+  logger.info('🚀 Matching worker started');
+  logger.info('  - recalculate-matches: concurrency 5');
+  logger.info('  - student-level-changed: concurrency 3');
   
   // 监听队列事件
   matchingQueue.on('completed', (job, result) => {
-    console.log(`✅ [Matching] ${job.name} completed:`, {
+    logger.info(`✅ [Matching] ${job.name} completed:`, {
       jobId: job.id,
       duration: `${Date.now() - job.timestamp}ms`,
     });
   });
   
   matchingQueue.on('failed', (job, err) => {
-    console.error(`❌ [Matching] ${job?.name} failed:`, {
+    logger.error(`❌ [Matching] ${job?.name} failed:`, {
       jobId: job?.id,
       error: err.message,
     });

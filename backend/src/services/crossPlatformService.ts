@@ -601,7 +601,7 @@ class CrossPlatformService {
 
       return message.content[0].type === 'text' ? message.content[0].text : '需求已更新';
     } catch (error) {
-      console.error('AI摘要生成失败:', error);
+      logger.error('AI摘要生成失败:', error);
       return '需求已更新';
     }
   }
@@ -743,7 +743,7 @@ class CrossPlatformService {
       return '任务需求有更新';
 
     } catch (error) {
-      console.error('变更原因生成失败:', error);
+      logger.error('变更原因生成失败:', error);
       return '任务需求已更新';
     }
   }

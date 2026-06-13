@@ -15,7 +15,7 @@ export class PBLAgentController {
         data: result
       });
     } catch (err) {
-      console.error('初始化项目失败:', err);
+      logger.error('初始化项目失败:', err);
       res.status(500).json({
         success: false,
         error: '初始化项目失败'
@@ -39,7 +39,7 @@ export class PBLAgentController {
         data: response
       });
     } catch (err) {
-      console.error('对话失败:', err);
+      logger.error('对话失败:', err);
       res.status(500).json({
         success: false,
         error: '对话失败'
@@ -62,7 +62,7 @@ export class PBLAgentController {
         data: result
       });
     } catch (err) {
-      console.error('任务拆解引导失败:', err);
+      logger.error('任务拆解引导失败:', err);
       res.status(500).json({
         success: false,
         error: '任务拆解引导失败'
@@ -85,7 +85,7 @@ export class PBLAgentController {
         data: evaluation
       });
     } catch (err) {
-      console.error('评估拆解失败:', err);
+      logger.error('评估拆解失败:', err);
       res.status(500).json({
         success: false,
         error: '评估拆解失败'
@@ -105,7 +105,7 @@ export class PBLAgentController {
         data: mvp
       });
     } catch (err) {
-      console.error('生成MVP方案失败:', err);
+      logger.error('生成MVP方案失败:', err);
       res.status(500).json({
         success: false,
         error: '生成MVP方案失败'
@@ -130,7 +130,7 @@ export class PBLAgentController {
         data: result
       });
     } catch (err) {
-      console.error('代码执行失败:', err);
+      logger.error('代码执行失败:', err);
       res.status(500).json({
         success: false,
         error: '代码执行失败'
@@ -153,7 +153,7 @@ export class PBLAgentController {
         data: { questions }
       });
     } catch (err) {
-      console.error('生成反思问题失败:', err);
+      logger.error('生成反思问题失败:', err);
       res.status(500).json({
         success: false,
         error: '生成反思问题失败'
@@ -177,7 +177,7 @@ export class PBLAgentController {
         data: log
       });
     } catch (err) {
-      console.error('保存反思日志失败:', err);
+      logger.error('保存反思日志失败:', err);
       res.status(500).json({
         success: false,
         error: '保存反思日志失败'

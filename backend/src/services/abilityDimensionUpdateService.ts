@@ -61,7 +61,7 @@ class AbilityDimensionUpdateService {
    * 订单完成后更新六维能力
    */
   async updateAbilityAfterOrder(orderId: string): Promise<AbilityUpdateResult> {
-    console.log(`[六维能力更新] 开始更新订单 ${orderId} 的能力数据`);
+    logger.info(`[六维能力更新] 开始更新订单 ${orderId} 的能力数据`);
 
     // 1. 获取任务表现数据
     const performance = await this.getTaskPerformance(orderId);
@@ -104,7 +104,7 @@ class AbilityDimensionUpdateService {
       aiInterpretation
     );
 
-    console.log(`[六维能力更新] 更新完成，新版本: ${newVersion}`);
+    logger.info(`[六维能力更新] 更新完成，新版本: ${newVersion}`);
     return aiInterpretation;
   }
 
@@ -518,15 +518,15 @@ class AbilityDimensionUpdateService {
       totalWordCount += wordCount;
 
       if (wordCount < 100) {
-        console.warn(`[六维能力更新] ${dim.dimension}解读字数不足: ${wordCount}字`);
+        logger.warn(`[六维能力更新] ${dim.dimension}解读字数不足: ${wordCount}字`);
       }
     });
 
-    console.log(`[六维能力更新] 总字数: ${totalWordCount}`);
+    logger.info(`[六维能力更新] 总字数: ${totalWordCount}`);
 
     // 如果总字数不足600字，记录警告
     if (totalWordCount < 600) {
-      console.error(`[六维能力更新] 总字数不足: ${totalWordCount}字，要求≥600字`);
+      logger.error(`[六维能力更新] 总字数不足: ${totalWordCount}字，要求≥600字`);
     }
 
     return result;

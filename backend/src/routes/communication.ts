@@ -21,7 +21,7 @@ router.post('/clarifications', authenticate, requireRole('company'), async (req:
     const clarification = await CommunicationService.addClarification(taskId, companyId, content, attachments);
     res.json({ success: true, data: clarification });
   } catch (error: any) {
-    console.error('添加补充说明失败:', error);
+    logger.error('添加补充说明失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -36,7 +36,7 @@ router.get('/clarifications/:taskId', authenticate, async (req: Request, res: Re
     const clarifications = await CommunicationService.getClarifications(parseInt(taskId));
     res.json({ success: true, data: clarifications });
   } catch (error: any) {
-    console.error('获取补充说明失败:', error);
+    logger.error('获取补充说明失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -57,7 +57,7 @@ router.post('/questions', authenticate, requireRole('student'), async (req: Requ
     const result = await CommunicationService.askQuestion(taskId, studentId, question);
     res.json({ success: true, data: result });
   } catch (error: any) {
-    console.error('提问失败:', error);
+    logger.error('提问失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -74,7 +74,7 @@ router.post('/questions/:questionId/forward', authenticate, requireRole('student
     const result = await CommunicationService.forwardToCompany(parseInt(questionId), studentId);
     res.json(result);
   } catch (error: any) {
-    console.error('转发问题失败:', error);
+    logger.error('转发问题失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -96,7 +96,7 @@ router.post('/questions/:questionId/answer', authenticate, requireRole('company'
     const result = await CommunicationService.answerQuestion(parseInt(questionId), companyId, answer);
     res.json({ success: true, data: result });
   } catch (error: any) {
-    console.error('回答问题失败:', error);
+    logger.error('回答问题失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -114,7 +114,7 @@ router.get('/questions/:taskId', authenticate, async (req: Request, res: Respons
     const questions = await CommunicationService.getQuestions(parseInt(taskId), userId, userRole);
     res.json({ success: true, data: questions });
   } catch (error: any) {
-    console.error('获取问答列表失败:', error);
+    logger.error('获取问答列表失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -131,7 +131,7 @@ router.post('/questions/:questionId/helpful', authenticate, async (req: Request,
     const result = await CommunicationService.markAIAnswerHelpful(parseInt(questionId), isHelpful);
     res.json(result);
   } catch (error: any) {
-    console.error('标记失败:', error);
+    logger.error('标记失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -152,7 +152,7 @@ router.post('/messages', authenticate, async (req: Request, res: Response) => {
     const result = await CommunicationService.sendRelayMessage(taskId, senderId, receiverId, content, attachments);
     res.json({ success: true, data: result });
   } catch (error: any) {
-    console.error('发送消息失败:', error);
+    logger.error('发送消息失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -169,7 +169,7 @@ router.get('/messages/:taskId', authenticate, async (req: Request, res: Response
     const messages = await CommunicationService.getRelayMessages(parseInt(taskId), userId);
     res.json({ success: true, data: messages });
   } catch (error: any) {
-    console.error('获取消息列表失败:', error);
+    logger.error('获取消息列表失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -184,7 +184,7 @@ router.get('/unread-count', authenticate, async (req: Request, res: Response) =>
     const count = await CommunicationService.getUnreadCount(userId);
     res.json({ success: true, data: { count } });
   } catch (error: any) {
-    console.error('获取未读数失败:', error);
+    logger.error('获取未读数失败:', error);
     res.status(500).json({ error: error.message });
   }
 });

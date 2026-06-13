@@ -1,7 +1,7 @@
 import { pool } from '../utils/db';
 
 async function analyzeSlowQueries() {
-  console.log('=== 分析数据库慢查询 ===\n');
+  logger.info('=== 分析数据库慢查询 ===\n');
 
   // 检查是否启用了pg_stat_statements扩展
   const extensionCheck = await pool.query(`
@@ -9,8 +9,8 @@ async function analyzeSlowQueries() {
   `);
 
   if (extensionCheck.rows.length === 0) {
-    console.log('⚠️  pg_stat_statements扩展未启用，无法分析慢查询');
-    console.log('建议运行: CREATE EXTENSION pg_stat_statements;\n');
+    logger.info('⚠️  pg_stat_statements扩展未启用，无法分析慢查询');
+    logger.info('建议运行: CREATE EXTENSION pg_stat_statements;\n');
   } else {
     // 查询最慢的10个查询
     const slowQueries = await pool.query(`
@@ -25,19 +25,19 @@ async function analyzeSlowQueries() {
       LIMIT 10
     `);
 
-    console.log('📊 最慢的10个查询:');
+    logger.info('📊 最慢的10个查询:');
     slowQueries.rows.forEach((row, i) => {
-      console.log(`\n${i + 1}. ${row.query_preview}...`);
-      console.log(`   调用次数: ${row.calls}`);
-      console.log(`   平均耗时: ${row.avg_time_ms}ms`);
-      console.log(`   最大耗时: ${row.max_time_ms}ms`);
-      console.log(`   总耗时: ${row.total_time_ms}ms`);
+      logger.info(`\n${i + 1}. ${row.query_preview}...`);
+      logger.info(`   调用次数: ${row.calls}`);
+      logger.info(`   平均耗时: ${row.avg_time_ms}ms`);
+      logger.info(`   最大耗时: ${row.max_time_ms}ms`);
+      logger.info(`   总耗时: ${row.total_time_ms}ms`);
     });
   }
 }
 
 async function analyzeTableSizes() {
-  console.log('\n\n=== 数据库表大小分析 ===\n');
+  logger.info('\n\n=== 数据库表大小分析 ===\n');
 
   const tableSizes = await pool.query(`
     SELECT
@@ -51,14 +51,14 @@ async function analyzeTableSizes() {
     LIMIT 20
   `);
 
-  console.log('📦 前20个最大的表:');
+  logger.info('📦 前20个最大的表:');
   tableSizes.rows.forEach((row, i) => {
-    console.log(`${i + 1}. ${row.tablename}: ${row.size}`);
+    logger.info(`${i + 1}. ${row.tablename}: ${row.size}`);
   });
 }
 
 async function analyzeIndexUsage() {
-  console.log('\n\n=== 索引使用情况分析 ===\n');
+  logger.info('\n\n=== 索引使用情况分析 ===\n');
 
   // 查找未使用的索引
   const unusedIndexes = await pool.query(`
@@ -75,12 +75,12 @@ async function analyzeIndexUsage() {
   `);
 
   if (unusedIndexes.rows.length > 0) {
-    console.log('⚠️  未使用的索引（可能需要删除）:');
+    logger.info('⚠️  未使用的索引（可能需要删除）:');
     unusedIndexes.rows.forEach((row, i) => {
-      console.log(`${i + 1}. ${row.tablename}.${row.indexname} (${row.index_size})`);
+      logger.info(`${i + 1}. ${row.tablename}.${row.indexname} (${row.index_size})`);
     });
   } else {
-    console.log('✅ 所有索引都在使用中');
+    logger.info('✅ 所有索引都在使用中');
   }
 
   // 查找缺失索引的表（频繁全表扫描）
@@ -98,17 +98,17 @@ async function analyzeIndexUsage() {
     LIMIT 10
   `);
 
-  console.log('\n📈 频繁全表扫描的表（可能需要添加索引）:');
+  logger.info('\n📈 频繁全表扫描的表（可能需要添加索引）:');
   missingIndexes.rows.forEach((row, i) => {
-    console.log(`${i + 1}. ${row.tablename}:`);
-    console.log(`   全表扫描次数: ${row.seq_scan}`);
-    console.log(`   索引扫描次数: ${row.idx_scan || 0}`);
-    console.log(`   平均扫描行数: ${Math.round(row.avg_seq_tup_read)}`);
+    logger.info(`${i + 1}. ${row.tablename}:`);
+    logger.info(`   全表扫描次数: ${row.seq_scan}`);
+    logger.info(`   索引扫描次数: ${row.idx_scan || 0}`);
+    logger.info(`   平均扫描行数: ${Math.round(row.avg_seq_tup_read)}`);
   });
 }
 
 async function analyzeConnectionPool() {
-  console.log('\n\n=== 数据库连接池状态 ===\n');
+  logger.info('\n\n=== 数据库连接池状态 ===\n');
 
   const connections = await pool.query(`
     SELECT
@@ -121,18 +121,18 @@ async function analyzeConnectionPool() {
   `);
 
   const conn = connections.rows[0];
-  console.log(`总连接数: ${conn.total_connections}`);
-  console.log(`活跃连接: ${conn.active}`);
-  console.log(`空闲连接: ${conn.idle}`);
-  console.log(`事务中空闲: ${conn.idle_in_transaction}`);
+  logger.info(`总连接数: ${conn.total_connections}`);
+  logger.info(`活跃连接: ${conn.active}`);
+  logger.info(`空闲连接: ${conn.idle}`);
+  logger.info(`事务中空闲: ${conn.idle_in_transaction}`);
 
   if (parseInt(conn.idle_in_transaction) > 0) {
-    console.log('\n⚠️  警告: 存在事务中空闲的连接，可能导致锁等待');
+    logger.info('\n⚠️  警告: 存在事务中空闲的连接，可能导致锁等待');
   }
 }
 
 async function analyzeDataStats() {
-  console.log('\n\n=== 数据统计 ===\n');
+  logger.info('\n\n=== 数据统计 ===\n');
 
   const stats = await pool.query(`
     SELECT
@@ -145,12 +145,12 @@ async function analyzeDataStats() {
   `);
 
   const data = stats.rows[0];
-  console.log(`任务总数: ${data.total_tasks}`);
-  console.log(`活跃任务: ${data.active_tasks}`);
-  console.log(`学生总数: ${data.total_students}`);
-  console.log(`企业总数: ${data.total_companies}`);
-  console.log(`已生成embedding的任务: ${data.tasks_with_embedding}/${data.total_tasks} (${Math.round(data.tasks_with_embedding / data.total_tasks * 100)}%)`);
-  console.log(`已生成embedding的学生: ${data.students_with_embedding}/${data.total_students} (${Math.round(data.students_with_embedding / data.total_students * 100)}%)`);
+  logger.info(`任务总数: ${data.total_tasks}`);
+  logger.info(`活跃任务: ${data.active_tasks}`);
+  logger.info(`学生总数: ${data.total_students}`);
+  logger.info(`企业总数: ${data.total_companies}`);
+  logger.info(`已生成embedding的任务: ${data.tasks_with_embedding}/${data.total_tasks} (${Math.round(data.tasks_with_embedding / data.total_tasks * 100)}%)`);
+  logger.info(`已生成embedding的学生: ${data.students_with_embedding}/${data.total_students} (${Math.round(data.students_with_embedding / data.total_students * 100)}%)`);
 }
 
 async function main() {
@@ -161,15 +161,15 @@ async function main() {
     await analyzeIndexUsage();
     await analyzeSlowQueries();
 
-    console.log('\n\n=== 性能优化建议 ===\n');
-    console.log('1. 如果发现慢查询，考虑添加索引或优化查询逻辑');
-    console.log('2. 删除未使用的索引以减少写入开销');
-    console.log('3. 对于频繁全表扫描的表，添加合适的索引');
-    console.log('4. 监控连接池状态，避免连接泄漏');
-    console.log('5. 定期运行 VACUUM ANALYZE 优化表统计信息');
+    logger.info('\n\n=== 性能优化建议 ===\n');
+    logger.info('1. 如果发现慢查询，考虑添加索引或优化查询逻辑');
+    logger.info('2. 删除未使用的索引以减少写入开销');
+    logger.info('3. 对于频繁全表扫描的表，添加合适的索引');
+    logger.info('4. 监控连接池状态，避免连接泄漏');
+    logger.info('5. 定期运行 VACUUM ANALYZE 优化表统计信息');
 
   } catch (error) {
-    console.error('性能分析失败:', error);
+    logger.error('性能分析失败:', error);
     process.exit(1);
   } finally {
     await pool.end();

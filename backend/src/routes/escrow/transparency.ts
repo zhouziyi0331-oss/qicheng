@@ -47,7 +47,7 @@ router.get('/:taskId/flow', authenticateToken, async (req, res) => {
       data: overview,
     });
   } catch (error: any) {
-    console.error('获取托管流程失败:', error);
+    logger.error('获取托管流程失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取托管流程失败',
@@ -117,7 +117,7 @@ router.post('/:taskId/deposit', authenticateToken, async (req, res) => {
       message: '充值成功，资金已锁定',
     });
   } catch (error: any) {
-    console.error('托管充值失败:', error);
+    logger.error('托管充值失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '充值失败',
@@ -165,7 +165,7 @@ router.post('/:taskId/release', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('释放资金失败:', error);
+    logger.error('释放资金失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '释放资金失败',
@@ -205,7 +205,7 @@ router.post('/:taskId/refund', authenticateToken, async (req, res) => {
       message: '退款成功',
     });
   } catch (error: any) {
-    console.error('退款失败:', error);
+    logger.error('退款失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '退款失败',
@@ -245,7 +245,7 @@ router.put('/nodes/:nodeId/status', authenticateToken, async (req, res) => {
       message: '节点状态已更新',
     });
   } catch (error: any) {
-    console.error('更新节点状态失败:', error);
+    logger.error('更新节点状态失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '更新失败',
@@ -276,7 +276,7 @@ router.post('/transactions/:transactionId/complete', authenticateToken, async (r
       message: '交易已完成',
     });
   } catch (error: any) {
-    console.error('完成交易失败:', error);
+    logger.error('完成交易失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '完成交易失败',
@@ -315,7 +315,7 @@ router.post('/transactions/:transactionId/fail', authenticateToken, async (req, 
       message: '交易已标记为失败',
     });
   } catch (error: any) {
-    console.error('标记交易失败:', error);
+    logger.error('标记交易失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '操作失败',

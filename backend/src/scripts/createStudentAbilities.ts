@@ -65,12 +65,12 @@ async function createStudentAbilities() {
         student.current_level
       ]);
 
-      console.log(`✅ Created/updated abilities for student ${student.id}`);
+      logger.info(`✅ Created/updated abilities for student ${student.id}`);
     }
 
-    console.log('\n✅ All student abilities created successfully!');
+    logger.info('\n✅ All student abilities created successfully!');
   } catch (error) {
-    console.error('❌ Error:', error);
+    logger.error('❌ Error:', error);
     process.exit(1);
   }
 }

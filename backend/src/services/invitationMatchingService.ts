@@ -63,7 +63,7 @@ class InvitationMatchingService {
 
       return result;
     } catch (error: any) {
-      console.error('Student matching failed:', error);
+      logger.error('Student matching failed:', error);
       throw new AppError(
         error.response?.status || 500,
         error.response?.data?.message || 'Failed to match students'
@@ -83,7 +83,7 @@ class InvitationMatchingService {
 
       return result;
     } catch (error: any) {
-      console.error('Task matching failed:', error);
+      logger.error('Task matching failed:', error);
       throw new AppError(
         error.response?.status || 500,
         error.response?.data?.message || 'Failed to match tasks'
@@ -197,7 +197,7 @@ class InvitationMatchingService {
       };
     } catch (error: any) {
       if (error instanceof AppError) throw error;
-      console.error('Failed to send invitation:', error);
+      logger.error('Failed to send invitation:', error);
       throw new AppError(500, 'Failed to send invitation');
     }
   }
@@ -234,7 +234,7 @@ class InvitationMatchingService {
         respondedAt: inv.responded_at,
       }));
     } catch (error) {
-      console.error('Failed to get student invitations:', error);
+      logger.error('Failed to get student invitations:', error);
       throw new AppError(500, 'Failed to get student invitations');
     }
   }
@@ -299,7 +299,7 @@ class InvitationMatchingService {
       };
     } catch (error: any) {
       if (error instanceof AppError) throw error;
-      console.error('Failed to update invitation status:', error);
+      logger.error('Failed to update invitation status:', error);
       throw new AppError(500, 'Failed to update invitation status');
     }
   }

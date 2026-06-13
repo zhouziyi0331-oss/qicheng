@@ -61,7 +61,7 @@ router.post(
         data: mentorResponse
       })
     } catch (error: any) {
-      console.error('AI导师消息处理失败:', error)
+      logger.error('AI导师消息处理失败:', error)
       next(error)
     }
   }
@@ -103,7 +103,7 @@ router.post(
         data: mentorResponse
       })
     } catch (error: any) {
-      console.error('T-01触发失败:', error)
+      logger.error('T-01触发失败:', error)
       next(error)
     }
   }
@@ -145,7 +145,7 @@ router.post(
         data: mentorResponse
       })
     } catch (error: any) {
-      console.error('T-03触发失败:', error)
+      logger.error('T-03触发失败:', error)
       next(error)
     }
   }
@@ -186,7 +186,7 @@ router.post(
         data: mentorResponse
       })
     } catch (error: any) {
-      console.error('T-05触发失败:', error)
+      logger.error('T-05触发失败:', error)
       next(error)
     }
   }
@@ -235,7 +235,7 @@ router.get(
         client.release()
       }
     } catch (error: any) {
-      console.error('获取对话历史失败:', error)
+      logger.error('获取对话历史失败:', error)
       next(error)
     }
   }

@@ -69,7 +69,7 @@ export async function sendNotification(payload: NotificationPayload): Promise<vo
             break;
         }
       } catch (error) {
-        console.error(`Failed to send ${channel} notification:`, error);
+        logger.error(`Failed to send ${channel} notification:`, error);
         // 不阻塞其他渠道发送
       }
     }
@@ -173,12 +173,12 @@ async function sendSMS(userId: string, content: string): Promise<void> {
   const ACCESS_KEY_SECRET = process.env.ALIYUN_ACCESS_KEY_SECRET;
 
   if (!ACCESS_KEY_ID || !ACCESS_KEY_SECRET) {
-    console.warn('SMS credentials not configured, skipping SMS');
+    logger.warn('SMS credentials not configured, skipping SMS');
     return;
   }
 
   // 这里简化处理，实际需要使用阿里云SDK
-  console.log(`[SMS] Sending to ${phone}: ${content}`);
+  logger.info(`[SMS] Sending to ${phone}: ${content}`);
 
   // 记录短信发送日志
   await query(
@@ -209,11 +209,11 @@ async function sendEmail(userId: string, subject: string, content: string): Prom
   const EMAIL_API_KEY = process.env.EMAIL_API_KEY;
 
   if (!EMAIL_API_KEY) {
-    console.warn('Email credentials not configured, skipping email');
+    logger.warn('Email credentials not configured, skipping email');
     return;
   }
 
-  console.log(`[EMAIL] Sending to ${email}: ${subject}`);
+  logger.info(`[EMAIL] Sending to ${email}: ${subject}`);
 
   // 记录邮件发送日志
   await query(
@@ -267,7 +267,7 @@ async function sendWechatTemplateMessage(
       throw new Error(`Wechat API error: ${response.data.errmsg}`);
     }
 
-    console.log(`[WECHAT] Template message sent to ${openid}`);
+    logger.info(`[WECHAT] Template message sent to ${openid}`);
 
     // 记录发送日志
     await query(
@@ -276,7 +276,7 @@ async function sendWechatTemplateMessage(
       [userId, openid, JSON.stringify({ type, data })]
     );
   } catch (error) {
-    console.error('Failed to send wechat template message:', error);
+    logger.error('Failed to send wechat template message:', error);
     throw error;
   }
 }

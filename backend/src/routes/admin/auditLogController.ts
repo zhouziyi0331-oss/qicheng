@@ -35,7 +35,7 @@ export async function getAuditLogList(req: Request, res: Response) {
       data: result
     });
   } catch (error) {
-    console.error('获取审计日志失败：', error);
+    logger.error('获取审计日志失败：', error);
     res.status(500).json({
       success: false,
       message: '获取审计日志失败'
@@ -60,7 +60,7 @@ export async function getAuditLogStats(req: Request, res: Response) {
       }
     });
   } catch (error) {
-    console.error('获取审计日志统计失败：', error);
+    logger.error('获取审计日志统计失败：', error);
     res.status(500).json({
       success: false,
       message: '获取审计日志统计失败'

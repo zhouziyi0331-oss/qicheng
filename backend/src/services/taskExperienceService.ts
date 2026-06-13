@@ -352,7 +352,7 @@ class TaskExperienceService {
         return content.text;
       }
     } catch (error) {
-      console.error('AI生成预算理由失败:', error);
+      logger.error('AI生成预算理由失败:', error);
     }
 
     // 降级方案

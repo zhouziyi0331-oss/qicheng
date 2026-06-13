@@ -52,7 +52,7 @@ router.post('/invite', authenticateToken, async (req, res) => {
       message: '邀请已发送',
     });
   } catch (error: any) {
-    console.error('创建定向邀请失败:', error);
+    logger.error('创建定向邀请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建邀请失败',
@@ -98,7 +98,7 @@ router.post('/invitations/:id/respond', authenticateToken, async (req, res) => {
       message: accept ? '已接受邀请' : '已拒绝邀请',
     });
   } catch (error: any) {
-    console.error('响应邀请失败:', error);
+    logger.error('响应邀请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '响应邀请失败',
@@ -131,7 +131,7 @@ router.delete('/invitations/:id', authenticateToken, async (req, res) => {
       message: '邀请已取消',
     });
   } catch (error: any) {
-    console.error('取消邀请失败:', error);
+    logger.error('取消邀请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '取消邀请失败',
@@ -170,7 +170,7 @@ router.get('/tasks/:taskId/invitations', authenticateToken, async (req, res) => 
       },
     });
   } catch (error: any) {
-    console.error('获取任务邀请失败:', error);
+    logger.error('获取任务邀请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取任务邀请失败',
@@ -209,7 +209,7 @@ router.get('/my-invitations', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取学生邀请失败:', error);
+    logger.error('获取学生邀请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取邀请失败',
@@ -254,7 +254,7 @@ router.post('/favorites', authenticateToken, async (req, res) => {
       message: '已添加到收藏',
     });
   } catch (error: any) {
-    console.error('添加收藏失败:', error);
+    logger.error('添加收藏失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '添加收藏失败',
@@ -287,7 +287,7 @@ router.delete('/favorites/:studentId', authenticateToken, async (req, res) => {
       message: '已移除收藏',
     });
   } catch (error: any) {
-    console.error('移除收藏失败:', error);
+    logger.error('移除收藏失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '移除收藏失败',
@@ -324,7 +324,7 @@ router.get('/favorites', authenticateToken, async (req, res) => {
       data: result,
     });
   } catch (error: any) {
-    console.error('获取收藏列表失败:', error);
+    logger.error('获取收藏列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取收藏列表失败',
@@ -355,7 +355,7 @@ router.get('/stats', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取邀请统计失败:', error);
+    logger.error('获取邀请统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取统计失败',

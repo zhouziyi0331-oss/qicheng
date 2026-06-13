@@ -32,7 +32,7 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
       data: dashboard,
     });
   } catch (error: any) {
-    console.error('获取ROI看板失败:', error);
+    logger.error('获取ROI看板失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取ROI看板失败',
@@ -73,7 +73,7 @@ router.get('/financial-stats', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取财务统计失败:', error);
+    logger.error('获取财务统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取财务统计失败',
@@ -112,7 +112,7 @@ router.get('/historical-stats', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取历史统计失败:', error);
+    logger.error('获取历史统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取历史统计失败',
@@ -158,7 +158,7 @@ router.post('/cost-comparison', authenticateToken, async (req, res) => {
       message: '成本对比分析创建成功',
     });
   } catch (error: any) {
-    console.error('创建成本对比失败:', error);
+    logger.error('创建成本对比失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建成本对比失败',
@@ -182,7 +182,7 @@ router.get('/market-benchmarks', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取市场基准失败:', error);
+    logger.error('获取市场基准失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取市场基准失败',
@@ -222,7 +222,7 @@ router.post('/refresh-stats', authenticateToken, async (req, res) => {
       message: '财务统计已刷新',
     });
   } catch (error: any) {
-    console.error('刷新统计失败:', error);
+    logger.error('刷新统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '刷新统计失败',

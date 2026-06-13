@@ -53,7 +53,7 @@ class DesignatedMasterService {
    * 获取大师列表
    */
   async getMasterList(filter: MasterFilter = {}): Promise<MasterInfo[]> {
-    console.log('[指定大师] 获取大师列表', filter);
+    logger.info('[指定大师] 获取大师列表', filter);
 
     const client = await pool.connect();
     try {
@@ -123,7 +123,7 @@ class DesignatedMasterService {
         createdAt: row.created_at
       }));
 
-      console.log(`[指定大师] 找到 ${masters.length} 位大师`);
+      logger.info(`[指定大师] 找到 ${masters.length} 位大师`);
 
       return masters;
     } finally {
@@ -186,7 +186,7 @@ class DesignatedMasterService {
    * 发送邀请给大师
    */
   async sendInvitation(input: InvitationInput): Promise<InvitationResponse> {
-    console.log('[指定大师] 发送邀请', input);
+    logger.info('[指定大师] 发送邀请', input);
 
     const client = await pool.connect();
     try {
@@ -243,7 +243,7 @@ class DesignatedMasterService {
 
       const invitationId = result.rows[0].id;
 
-      console.log(`[指定大师] 邀请已发送: invitationId=${invitationId}`);
+      logger.info(`[指定大师] 邀请已发送: invitationId=${invitationId}`);
 
       // TODO: 发送通知给大师
 
@@ -266,7 +266,7 @@ class DesignatedMasterService {
     counterOffer?: number,
     note?: string
   ): Promise<InvitationResponse> {
-    console.log('[指定大师] 大师响应邀请', { invitationId, action });
+    logger.info('[指定大师] 大师响应邀请', { invitationId, action });
 
     const client = await pool.connect();
     try {
@@ -343,7 +343,7 @@ class DesignatedMasterService {
       const result = await client.query(updateQuery, updateParams);
       const updated = result.rows[0];
 
-      console.log(`[指定大师] 邀请已更新: status=${updated.status}`);
+      logger.info(`[指定大师] 邀请已更新: status=${updated.status}`);
 
       // TODO: 发送通知给企业
 
@@ -390,7 +390,7 @@ class DesignatedMasterService {
         [masterId]
       );
 
-      console.log(`[指定大师] 任务分配已创建: taskId=${taskId}, masterId=${masterId}`);
+      logger.info(`[指定大师] 任务分配已创建: taskId=${taskId}, masterId=${masterId}`);
     } finally {
       client.release();
     }
@@ -444,7 +444,7 @@ class DesignatedMasterService {
       const expiredCount = result.rows.length;
 
       if (expiredCount > 0) {
-        console.log(`[指定大师] 已过期 ${expiredCount} 个邀请`);
+        logger.info(`[指定大师] 已过期 ${expiredCount} 个邀请`);
       }
 
       return expiredCount;

@@ -91,7 +91,7 @@ export const createAmendment = async (req: AuthRequest, res: Response) => {
     });
 
   } catch (error) {
-    console.error('创建追加需求失败:', error);
+    logger.error('创建追加需求失败:', error);
     res.status(500).json({ success: false, message: '创建追加需求失败' });
   }
 };
@@ -172,7 +172,7 @@ export const respondToAmendment = async (req: AuthRequest, res: Response) => {
     });
 
   } catch (error) {
-    console.error('响应追加需求失败:', error);
+    logger.error('响应追加需求失败:', error);
     res.status(500).json({ success: false, message: '响应追加需求失败' });
   }
 };
@@ -215,7 +215,7 @@ export const getTaskAmendments = async (req: AuthRequest, res: Response) => {
     });
 
   } catch (error) {
-    console.error('获取追加需求列表失败:', error);
+    logger.error('获取追加需求列表失败:', error);
     res.status(500).json({ success: false, message: '获取追加需求列表失败' });
   }
 };
@@ -242,7 +242,7 @@ export const getMyPendingAmendments = async (req: AuthRequest, res: Response) =>
     });
 
   } catch (error) {
-    console.error('获取待处理追加需求失败:', error);
+    logger.error('获取待处理追加需求失败:', error);
     res.status(500).json({ success: false, message: '获取待处理追加需求失败' });
   }
 };

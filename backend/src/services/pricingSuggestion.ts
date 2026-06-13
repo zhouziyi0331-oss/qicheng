@@ -128,7 +128,7 @@ export const getPricingSuggestion = async (req: AuthRequest, res: Response) => {
     });
 
   } catch (error) {
-    console.error('获取定价建议失败:', error);
+    logger.error('获取定价建议失败:', error);
 
     // 降级方案：返回基础定价建议
     const { level, track } = req.body;
@@ -184,8 +184,8 @@ export const cleanExpiredPricingSuggestions = async () => {
     const result = await query(
       'DELETE FROM pricing_suggestions WHERE expires_at < NOW()'
     );
-    console.log(`清理了${result.length}条过期的定价建议`);
+    logger.info(`清理了${result.length}条过期的定价建议`);
   } catch (error) {
-    console.error('清理定价建议缓存失败:', error);
+    logger.error('清理定价建议缓存失败:', error);
   }
 };

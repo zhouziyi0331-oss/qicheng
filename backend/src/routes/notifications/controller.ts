@@ -80,7 +80,7 @@ export async function getNotifications(req: AuthRequest, res: Response) {
       }
     });
   } catch (error) {
-    console.error('Get notifications error:', error);
+    logger.error('Get notifications error:', error);
     res.status(500).json({ success: false, message: '获取通知列表失败' });
   }
 }
@@ -94,7 +94,7 @@ export async function getUnreadCountHandler(req: AuthRequest, res: Response) {
     const count = await getUnreadCount(userId);
     res.json({ success: true, data: { unreadCount: count } });
   } catch (error) {
-    console.error('Get unread count error:', error);
+    logger.error('Get unread count error:', error);
     res.status(500).json({ success: false, message: '获取未读数量失败' });
   }
 }
@@ -109,7 +109,7 @@ export async function markNotificationAsRead(req: AuthRequest, res: Response) {
     await markAsRead(notificationId, userId);
     res.json({ success: true, message: '已标记为已读' });
   } catch (error) {
-    console.error('Mark as read error:', error);
+    logger.error('Mark as read error:', error);
     res.status(500).json({ success: false, message: '标记失败' });
   }
 }
@@ -123,7 +123,7 @@ export async function markAllNotificationsAsRead(req: AuthRequest, res: Response
     await markAllAsRead(userId);
     res.json({ success: true, message: '已全部标记为已读' });
   } catch (error) {
-    console.error('Mark all as read error:', error);
+    logger.error('Mark all as read error:', error);
     res.status(500).json({ success: false, message: '标记失败' });
   }
 }
@@ -138,7 +138,7 @@ export async function deleteNotification(req: AuthRequest, res: Response) {
     await query(`DELETE FROM notifications WHERE id = $1 AND user_id = $2`, [notificationId, userId]);
     res.json({ success: true, message: '删除成功' });
   } catch (error) {
-    console.error('Delete notification error:', error);
+    logger.error('Delete notification error:', error);
     res.status(500).json({ success: false, message: '删除失败' });
   }
 }
@@ -156,7 +156,7 @@ export async function updateNotificationPreferences(req: AuthRequest, res: Respo
     await query(`UPDATE users SET notification_preferences = $1 WHERE id = $2`, [JSON.stringify(preferences), userId]);
     res.json({ success: true, message: '偏好设置已更新' });
   } catch (error) {
-    console.error('Update preferences error:', error);
+    logger.error('Update preferences error:', error);
     res.status(500).json({ success: false, message: '更新失败' });
   }
 }
@@ -179,7 +179,7 @@ export async function getNotificationPreferences(req: AuthRequest, res: Response
     };
     res.json({ success: true, data: { preferences } });
   } catch (error) {
-    console.error('Get preferences error:', error);
+    logger.error('Get preferences error:', error);
     res.status(500).json({ success: false, message: '获取偏好设置失败' });
   }
 }

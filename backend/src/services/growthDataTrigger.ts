@@ -15,13 +15,13 @@ class GrowthDataTrigger {
    * 订单完成后触发成长数据更新
    */
   async onOrderCompleted(orderId: string): Promise<void> {
-    console.log(`[成长数据触发器] 订单 ${orderId} 完成，开始更新成长数据`);
+    logger.info(`[成长数据触发器] 订单 ${orderId} 完成，开始更新成长数据`);
 
     try {
       // 获取订单信息
       const orderInfo = await this.getOrderInfo(orderId);
       if (!orderInfo) {
-        console.error(`[成长数据触发器] 订单 ${orderId} 不存在`);
+        logger.error(`[成长数据触发器] 订单 ${orderId} 不存在`);
         return;
       }
 
@@ -29,24 +29,24 @@ class GrowthDataTrigger {
 
       // 1. 生成即时成长总结（异步，不阻塞）
       this.generateSummaryAsync(orderId).catch((error) => {
-        console.error(`[成长数据触发器] 生成即时总结失败:`, error);
+        logger.error(`[成长数据触发器] 生成即时总结失败:`, error);
       });
 
       // 2. 更新六维能力数据（异步，不阻塞）
       this.updateAbilityAsync(orderId).catch((error) => {
-        console.error(`[成长数据触发器] 更新六维能力失败:`, error);
+        logger.error(`[成长数据触发器] 更新六维能力失败:`, error);
       });
 
       // 3. 检查是否达到Lv.6，如果是则生成毕业报告
       if (current_level >= 6) {
         this.checkAndGenerateGraduationReport(student_id).catch((error) => {
-          console.error(`[成长数据触发器] 生成毕业报告失败:`, error);
+          logger.error(`[成长数据触发器] 生成毕业报告失败:`, error);
         });
       }
 
-      console.log(`[成长数据触发器] 订单 ${orderId} 的成长数据更新已触发`);
+      logger.info(`[成长数据触发器] 订单 ${orderId} 的成长数据更新已触发`);
     } catch (error) {
-      console.error(`[成长数据触发器] 处理订单 ${orderId} 失败:`, error);
+      logger.error(`[成长数据触发器] 处理订单 ${orderId} 失败:`, error);
     }
   }
 
@@ -73,15 +73,15 @@ class GrowthDataTrigger {
    * 异步生成即时成长总结
    */
   private async generateSummaryAsync(orderId: string): Promise<void> {
-    console.log(`[成长数据触发器] 开始生成即时总结: ${orderId}`);
+    logger.info(`[成长数据触发器] 开始生成即时总结: ${orderId}`);
     const startTime = Date.now();
 
     try {
       await instantGrowthSummaryService.generateInstantSummary(orderId);
       const duration = Date.now() - startTime;
-      console.log(`[成长数据触发器] 即时总结生成完成，耗时: ${duration}ms`);
+      logger.info(`[成长数据触发器] 即时总结生成完成，耗时: ${duration}ms`);
     } catch (error) {
-      console.error(`[成长数据触发器] 即时总结生成失败:`, error);
+      logger.error(`[成长数据触发器] 即时总结生成失败:`, error);
       throw error;
     }
   }
@@ -90,15 +90,15 @@ class GrowthDataTrigger {
    * 异步更新六维能力
    */
   private async updateAbilityAsync(orderId: string): Promise<void> {
-    console.log(`[成长数据触发器] 开始更新六维能力: ${orderId}`);
+    logger.info(`[成长数据触发器] 开始更新六维能力: ${orderId}`);
     const startTime = Date.now();
 
     try {
       await abilityDimensionUpdateService.updateAbilityAfterOrder(orderId);
       const duration = Date.now() - startTime;
-      console.log(`[成长数据触发器] 六维能力更新完成，耗时: ${duration}ms`);
+      logger.info(`[成长数据触发器] 六维能力更新完成，耗时: ${duration}ms`);
     } catch (error) {
-      console.error(`[成长数据触发器] 六维能力更新失败:`, error);
+      logger.error(`[成长数据触发器] 六维能力更新失败:`, error);
       throw error;
     }
   }
@@ -107,25 +107,25 @@ class GrowthDataTrigger {
    * 检查并生成毕业报告
    */
   private async checkAndGenerateGraduationReport(studentId: string): Promise<void> {
-    console.log(`[成长数据触发器] 检查学生 ${studentId} 是否需要生成毕业报告`);
+    logger.info(`[成长数据触发器] 检查学生 ${studentId} 是否需要生成毕业报告`);
 
     try {
       // 检查是否已有报告
       const preview = await graduationReportService.getReportPreview(studentId);
       if (preview) {
-        console.log(`[成长数据触发器] 学生已有毕业报告，跳过生成`);
+        logger.info(`[成长数据触发器] 学生已有毕业报告，跳过生成`);
         return;
       }
 
       // 生成报告
-      console.log(`[成长数据触发器] 开始生成毕业报告`);
+      logger.info(`[成长数据触发器] 开始生成毕业报告`);
       const reportId = await graduationReportService.generateGraduationReport(studentId);
-      console.log(`[成长数据触发器] 毕业报告生成完成，报告ID: ${reportId}`);
+      logger.info(`[成长数据触发器] 毕业报告生成完成，报告ID: ${reportId}`);
 
       // 发送通知给学生（这里可以集成通知服务）
       await this.notifyStudentAboutGraduationReport(studentId, reportId);
     } catch (error) {
-      console.error(`[成长数据触发器] 毕业报告生成失败:`, error);
+      logger.error(`[成长数据触发器] 毕业报告生成失败:`, error);
       throw error;
     }
   }
@@ -139,7 +139,7 @@ class GrowthDataTrigger {
   ): Promise<void> {
     // TODO: 集成通知服务
     // 可以发送小程序通知、邮件、短信等
-    console.log(`[成长数据触发器] 通知学生 ${studentId} 毕业报告已生成: ${reportId}`);
+    logger.info(`[成长数据触发器] 通知学生 ${studentId} 毕业报告已生成: ${reportId}`);
 
     // 这里可以调用通知服务
     // await notificationService.send({
@@ -155,7 +155,7 @@ class GrowthDataTrigger {
    * 批量处理历史订单（用于初始化或补充数据）
    */
   async processHistoricalOrders(studentId?: string): Promise<void> {
-    console.log(`[成长数据触发器] 开始批量处理历史订单`);
+    logger.info(`[成长数据触发器] 开始批量处理历史订单`);
 
     const client = await pool.connect();
     try {
@@ -178,7 +178,7 @@ class GrowthDataTrigger {
       const result = await client.query(query, params);
       const orders = result.rows;
 
-      console.log(`[成长数据触发器] 找到 ${orders.length} 个待处理订单`);
+      logger.info(`[成长数据触发器] 找到 ${orders.length} 个待处理订单`);
 
       // 逐个处理订单
       for (const order of orders) {
@@ -187,11 +187,11 @@ class GrowthDataTrigger {
           // 添加延迟，避免API限流
           await this.sleep(2000);
         } catch (error) {
-          console.error(`[成长数据触发器] 处理订单 ${order.id} 失败:`, error);
+          logger.error(`[成长数据触发器] 处理订单 ${order.id} 失败:`, error);
         }
       }
 
-      console.log(`[成长数据触发器] 批量处理完成`);
+      logger.info(`[成长数据触发器] 批量处理完成`);
     } finally {
       client.release();
     }

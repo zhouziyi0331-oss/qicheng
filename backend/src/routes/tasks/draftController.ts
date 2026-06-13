@@ -56,7 +56,7 @@ export const saveTaskDraft = async (req: AuthRequest, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('保存草稿失败:', error);
+    logger.error('保存草稿失败:', error);
     res.status(500).json({ success: false, message: '保存草稿失败' });
   }
 };
@@ -88,7 +88,7 @@ export const getTaskDraft = async (req: AuthRequest, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('获取草稿失败:', error);
+    logger.error('获取草稿失败:', error);
     res.status(500).json({ success: false, message: '获取草稿失败' });
   }
 };
@@ -144,7 +144,7 @@ export const saveSubmitDraft = async (req: AuthRequest, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('保存提交草稿失败:', error);
+    logger.error('保存提交草稿失败:', error);
     res.status(500).json({ success: false, message: '保存草稿失败' });
   }
 };
@@ -177,7 +177,7 @@ export const getSubmitDraft = async (req: AuthRequest, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('获取提交草稿失败:', error);
+    logger.error('获取提交草稿失败:', error);
     res.status(500).json({ success: false, message: '获取草稿失败' });
   }
 };
@@ -195,7 +195,7 @@ export const deleteDraft = async (req: AuthRequest, res: Response) => {
 
     res.json({ success: true, message: '草稿已删除' });
   } catch (error) {
-    console.error('删除草稿失败:', error);
+    logger.error('删除草稿失败:', error);
     res.status(500).json({ success: false, message: '删除草稿失败' });
   }
 };

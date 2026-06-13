@@ -11,23 +11,23 @@ async function runMigration() {
   });
 
   try {
-    console.log('连接数据库...');
+    logger.info('连接数据库...');
 
     const migrationPath = path.join(__dirname, '../../scripts/db/016_fix_ai_matches_uuid.sql');
     const sql = fs.readFileSync(migrationPath, 'utf-8');
 
-    console.log('执行迁移: 016_fix_ai_matches_uuid.sql');
-    console.log('修复 ai_matches 表的 UUID 类型问题...');
+    logger.info('执行迁移: 016_fix_ai_matches_uuid.sql');
+    logger.info('修复 ai_matches 表的 UUID 类型问题...');
 
     await pool.query(sql);
 
-    console.log('✅ 迁移成功完成！');
-    console.log('已修复：');
-    console.log('  - ai_matches.task_id: INTEGER → UUID');
-    console.log('  - ai_matches.student_id: INTEGER → UUID');
+    logger.info('✅ 迁移成功完成！');
+    logger.info('已修复：');
+    logger.info('  - ai_matches.task_id: INTEGER → UUID');
+    logger.info('  - ai_matches.student_id: INTEGER → UUID');
 
   } catch (error) {
-    console.error('❌ 迁移失败:', error);
+    logger.error('❌ 迁移失败:', error);
     process.exit(1);
   } finally {
     await pool.end();

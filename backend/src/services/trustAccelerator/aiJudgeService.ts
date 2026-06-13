@@ -156,11 +156,11 @@ ${params.studentAnswer}
         latencyMs
       );
 
-      console.log(`[AIJudgeService] ${round} 判断完成: ${result.result}, 耗时: ${latencyMs}ms`);
+      logger.info(`[AIJudgeService] ${round} 判断完成: ${result.result}, 耗时: ${latencyMs}ms`);
 
       return result;
     } catch (error: any) {
-      console.error(`[AIJudgeService] DeepSeek调用失败，尝试GPT备用:`, error.message);
+      logger.error(`[AIJudgeService] DeepSeek调用失败，尝试GPT备用:`, error.message);
 
       // 降级到GPT-4o-mini
       try {
@@ -201,11 +201,11 @@ ${params.studentAnswer}
           latencyMs
         );
 
-        console.log(`[AIJudgeService] GPT备用成功: ${result.result}, 耗时: ${latencyMs}ms`);
+        logger.info(`[AIJudgeService] GPT备用成功: ${result.result}, 耗时: ${latencyMs}ms`);
 
         return result;
       } catch (gptError: any) {
-        console.error(`[AIJudgeService] GPT备用也失败:`, gptError.message);
+        logger.error(`[AIJudgeService] GPT备用也失败:`, gptError.message);
         throw new Error('AI判断服务暂时不可用，请稍后重试');
       }
     }
@@ -232,7 +232,7 @@ ${params.studentAnswer}
         [sessionId, round, modelUsed, promptTokens, completionTokens, result, reason, latencyMs]
       );
     } catch (error) {
-      console.error('[AIJudgeService] 记录日志失败:', error);
+      logger.error('[AIJudgeService] 记录日志失败:', error);
       // 不抛出错误，避免影响主流程
     }
   }

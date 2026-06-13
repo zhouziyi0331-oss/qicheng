@@ -54,7 +54,7 @@ router.post('/', authenticateToken, async (req, res) => {
       message: '项目创建成功',
     });
   } catch (error: any) {
-    console.error('创建项目失败:', error);
+    logger.error('创建项目失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建项目失败',
@@ -91,7 +91,7 @@ router.get('/', authenticateToken, async (req, res) => {
       data: result,
     });
   } catch (error: any) {
-    console.error('获取项目列表失败:', error);
+    logger.error('获取项目列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取项目列表失败',
@@ -130,7 +130,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
       data: project,
     });
   } catch (error: any) {
-    console.error('获取项目详情失败:', error);
+    logger.error('获取项目详情失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取项目详情失败',
@@ -165,7 +165,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
       message: '项目更新成功',
     });
   } catch (error: any) {
-    console.error('更新项目失败:', error);
+    logger.error('更新项目失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '更新项目失败',
@@ -229,7 +229,7 @@ router.post('/:id/milestones', authenticateToken, async (req, res) => {
       message: '里程碑添加成功',
     });
   } catch (error: any) {
-    console.error('添加里程碑失败:', error);
+    logger.error('添加里程碑失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '添加里程碑失败',
@@ -264,7 +264,7 @@ router.get('/:id/milestones', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取里程碑失败:', error);
+    logger.error('获取里程碑失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取里程碑失败',
@@ -299,7 +299,7 @@ router.put('/milestones/:milestoneId', authenticateToken, async (req, res) => {
       message: '里程碑更新成功',
     });
   } catch (error: any) {
-    console.error('更新里程碑失败:', error);
+    logger.error('更新里程碑失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '更新里程碑失败',
@@ -347,7 +347,7 @@ router.post('/:id/tasks', authenticateToken, async (req, res) => {
       message: '任务关联成功',
     });
   } catch (error: any) {
-    console.error('关联任务失败:', error);
+    logger.error('关联任务失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '关联任务失败',
@@ -382,7 +382,7 @@ router.get('/:id/tasks', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取任务列表失败:', error);
+    logger.error('获取任务列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取任务列表失败',
@@ -429,7 +429,7 @@ router.post('/:id/collaborators', authenticateToken, async (req, res) => {
       message: '协作者添加成功',
     });
   } catch (error: any) {
-    console.error('添加协作者失败:', error);
+    logger.error('添加协作者失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '添加协作者失败',
@@ -464,7 +464,7 @@ router.get('/:id/collaborators', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取协作者失败:', error);
+    logger.error('获取协作者失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取协作者失败',
@@ -497,7 +497,7 @@ router.post('/:id/publish', authenticateToken, async (req, res) => {
       message: '项目发布成功',
     });
   } catch (error: any) {
-    console.error('发布项目失败:', error);
+    logger.error('发布项目失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '发布项目失败',
@@ -522,7 +522,7 @@ router.get('/:id/progress', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('计算项目进度失败:', error);
+    logger.error('计算项目进度失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '计算进度失败',

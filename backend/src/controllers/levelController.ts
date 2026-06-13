@@ -42,7 +42,7 @@ export const getUserLevel = async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('获取等级信息失败:', error);
+    logger.error('获取等级信息失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }
 };
@@ -133,7 +133,7 @@ export const checkUpgradeConditions = async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('检查升级条件失败:', error);
+    logger.error('检查升级条件失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }
 };
@@ -174,7 +174,7 @@ export const upgradeLevel = async (req: Request, res: Response) => {
       message: message
     });
   } catch (error) {
-    console.error('升级失败:', error);
+    logger.error('升级失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }
 };
@@ -282,7 +282,7 @@ export const applyStretchChallenge = async (req: Request, res: Response) => {
       message: '跳级挑战申请成功！完成这个项目后，你将直接升到Lv.' + (currentLevel + 2)
     });
   } catch (error) {
-    console.error('申请跳级挑战失败:', error);
+    logger.error('申请跳级挑战失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }
 };
@@ -338,7 +338,7 @@ export const completeStretchChallenge = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error('完成跳级挑战失败:', error);
+    logger.error('完成跳级挑战失败:', error);
     res.status(500).json({ error: '服务器错误' });
   }
 };

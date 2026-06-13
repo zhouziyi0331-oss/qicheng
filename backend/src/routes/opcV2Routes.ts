@@ -21,7 +21,7 @@ router.post('/start', authenticate, async (req: Request, res: Response) => {
       }
     })
   } catch (error: any) {
-    console.error('启动OPC v2.0测试失败:', error)
+    logger.error('启动OPC v2.0测试失败:', error)
     res.status(500).json({
       success: false,
       message: error.message || '启动测试失败'
@@ -78,7 +78,7 @@ router.post('/answer', authenticate, async (req: Request, res: Response) => {
       message: '答案已保存'
     })
   } catch (error: any) {
-    console.error('提交答案失败:', error)
+    logger.error('提交答案失败:', error)
     res.status(500).json({
       success: false,
       message: error.message || '提交答案失败'
@@ -103,7 +103,7 @@ router.post('/:assessmentId/complete', authenticate, async (req: Request, res: R
       message: '分析完成'
     })
   } catch (error: any) {
-    console.error('完成测试失败:', error)
+    logger.error('完成测试失败:', error)
     res.status(500).json({
       success: false,
       message: error.message || '分析失败，请重试'
@@ -131,7 +131,7 @@ router.get('/:assessmentId/progress', authenticate, async (req: Request, res: Re
       }
     })
   } catch (error: any) {
-    console.error('获取进度失败:', error)
+    logger.error('获取进度失败:', error)
     res.status(500).json({
       success: false,
       message: error.message || '获取进度失败'
@@ -161,7 +161,7 @@ router.get('/:assessmentId/result', authenticate, async (req: Request, res: Resp
       data: result
     })
   } catch (error: any) {
-    console.error('获取结果失败:', error)
+    logger.error('获取结果失败:', error)
     res.status(500).json({
       success: false,
       message: error.message || '获取结果失败'
@@ -191,7 +191,7 @@ router.get('/latest', authenticate, async (req: Request, res: Response) => {
       data: result
     })
   } catch (error: any) {
-    console.error('获取最新结果失败:', error)
+    logger.error('获取最新结果失败:', error)
     res.status(500).json({
       success: false,
       message: error.message || '获取结果失败'

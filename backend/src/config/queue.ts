@@ -80,36 +80,36 @@ export const syncQueue = new Bull('data-sync', {
 
 // 匹配队列事件
 matchingQueue.on('completed', (job, result) => {
-  console.log(`✅ [Matching] Job ${job.id} completed:`, {
+  logger.info(`✅ [Matching] Job ${job.id} completed:`, {
     type: job.name,
     result: typeof result === 'object' ? JSON.stringify(result).slice(0, 100) : result
   });
 });
 
 matchingQueue.on('failed', (job, err) => {
-  console.error(`❌ [Matching] Job ${job?.id} failed:`, err.message);
+  logger.error(`❌ [Matching] Job ${job?.id} failed:`, err.message);
 });
 
 matchingQueue.on('stalled', (job) => {
-  console.warn(`⚠️  [Matching] Job ${job.id} stalled`);
+  logger.warn(`⚠️  [Matching] Job ${job.id} stalled`);
 });
 
 // 通知队列事件
 notificationQueue.on('completed', (job) => {
-  console.log(`✅ [Notification] Job ${job.id} completed`);
+  logger.info(`✅ [Notification] Job ${job.id} completed`);
 });
 
 notificationQueue.on('failed', (job, err) => {
-  console.error(`❌ [Notification] Job ${job?.id} failed:`, err.message);
+  logger.error(`❌ [Notification] Job ${job?.id} failed:`, err.message);
 });
 
 // AI队列事件
 aiQueue.on('completed', (job, result) => {
-  console.log(`✅ [AI] Job ${job.id} completed in ${Date.now() - job.timestamp}ms`);
+  logger.info(`✅ [AI] Job ${job.id} completed in ${Date.now() - job.timestamp}ms`);
 });
 
 aiQueue.on('failed', (job, err) => {
-  console.error(`❌ [AI] Job ${job?.id} failed:`, err.message);
+  logger.error(`❌ [AI] Job ${job?.id} failed:`, err.message);
 });
 
 // ============================================================================
@@ -138,14 +138,14 @@ export async function getQueuesHealth() {
 // ============================================================================
 
 export async function closeQueues() {
-  console.log('Closing all queues...');
+  logger.info('Closing all queues...');
   await Promise.all([
     matchingQueue.close(),
     notificationQueue.close(),
     aiQueue.close(),
     syncQueue.close(),
   ]);
-  console.log('✅ All queues closed');
+  logger.info('✅ All queues closed');
 }
 
 // 进程退出时关闭队列

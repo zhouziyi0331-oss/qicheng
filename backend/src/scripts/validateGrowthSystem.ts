@@ -25,8 +25,8 @@ class GrowthSystemValidator {
    * 执行所有验收测试
    */
   async runAllTests(): Promise<void> {
-    console.log('🚀 开始执行学生成长数据闭环系统验收测试\n');
-    console.log('=' .repeat(80));
+    logger.info('🚀 开始执行学生成长数据闭环系统验收测试\n');
+    logger.info('=' .repeat(80));
 
     try {
       // 1. 数据库结构验证
@@ -45,7 +45,7 @@ class GrowthSystemValidator {
       this.generateReport();
 
     } catch (error) {
-      console.error('❌ 验收测试执行失败:', error);
+      logger.error('❌ 验收测试执行失败:', error);
     } finally {
       await pool.end();
     }
@@ -55,8 +55,8 @@ class GrowthSystemValidator {
    * 1. 验证数据库结构
    */
   private async validateDatabaseStructure(): Promise<void> {
-    console.log('\n📊 1. 数据库结构验证');
-    console.log('-'.repeat(80));
+    logger.info('\n📊 1. 数据库结构验证');
+    logger.info('-'.repeat(80));
 
     const client = await pool.connect();
     try {
@@ -134,8 +134,8 @@ class GrowthSystemValidator {
    * 2. 验证即时成长总结
    */
   private async validateInstantSummary(): Promise<void> {
-    console.log('\n📝 2. 即时成长总结验证');
-    console.log('-'.repeat(80));
+    logger.info('\n📝 2. 即时成长总结验证');
+    logger.info('-'.repeat(80));
 
     const client = await pool.connect();
     try {
@@ -198,9 +198,9 @@ class GrowthSystemValidator {
       });
 
       // 总结
-      console.log(`\n   检查了 ${result.rows.length} 条成长总结`);
-      console.log(`   ✅ 通过: ${passedCount} 条`);
-      console.log(`   ❌ 失败: ${failedCount} 条`);
+      logger.info(`\n   检查了 ${result.rows.length} 条成长总结`);
+      logger.info(`   ✅ 通过: ${passedCount} 条`);
+      logger.info(`   ❌ 失败: ${failedCount} 条`);
 
     } finally {
       client.release();
@@ -211,8 +211,8 @@ class GrowthSystemValidator {
    * 3. 验证六维能力更新
    */
   private async validateAbilityUpdate(): Promise<void> {
-    console.log('\n📊 3. 六维能力更新验证');
-    console.log('-'.repeat(80));
+    logger.info('\n📊 3. 六维能力更新验证');
+    logger.info('-'.repeat(80));
 
     const client = await pool.connect();
     try {
@@ -284,8 +284,8 @@ class GrowthSystemValidator {
    * 4. 验证毕业报告
    */
   private async validateGraduationReport(): Promise<void> {
-    console.log('\n🎓 4. 毕业报告验证');
-    console.log('-'.repeat(80));
+    logger.info('\n🎓 4. 毕业报告验证');
+    logger.info('-'.repeat(80));
 
     const client = await pool.connect();
     try {
@@ -377,26 +377,26 @@ class GrowthSystemValidator {
 
     // 实时输出
     const icon = result.passed ? '✅' : '❌';
-    console.log(`   ${icon} ${result.testName}: ${result.message}`);
+    logger.info(`   ${icon} ${result.testName}: ${result.message}`);
   }
 
   /**
    * 生成验收报告
    */
   private generateReport(): void {
-    console.log('\n' + '='.repeat(80));
-    console.log('📋 验收报告');
-    console.log('='.repeat(80));
+    logger.info('\n' + '='.repeat(80));
+    logger.info('📋 验收报告');
+    logger.info('='.repeat(80));
 
     const totalTests = this.results.length;
     const passedTests = this.results.filter(r => r.passed).length;
     const failedTests = totalTests - passedTests;
     const passRate = ((passedTests / totalTests) * 100).toFixed(1);
 
-    console.log(`\n总测试数: ${totalTests}`);
-    console.log(`✅ 通过: ${passedTests}`);
-    console.log(`❌ 失败: ${failedTests}`);
-    console.log(`通过率: ${passRate}%`);
+    logger.info(`\n总测试数: ${totalTests}`);
+    logger.info(`✅ 通过: ${passedTests}`);
+    logger.info(`❌ 失败: ${failedTests}`);
+    logger.info(`通过率: ${passRate}%`);
 
     // 按类别统计
     const categories = {
@@ -406,37 +406,37 @@ class GrowthSystemValidator {
       '毕业报告': this.results.filter(r => r.testName.includes('毕业报告')),
     };
 
-    console.log('\n按类别统计:');
+    logger.info('\n按类别统计:');
     Object.entries(categories).forEach(([category, tests]) => {
       const passed = tests.filter(t => t.passed).length;
       const total = tests.length;
       const rate = total > 0 ? ((passed / total) * 100).toFixed(1) : '0.0';
-      console.log(`  ${category}: ${passed}/${total} (${rate}%)`);
+      logger.info(`  ${category}: ${passed}/${total} (${rate}%)`);
     });
 
     // 失败的测试
     const failedResults = this.results.filter(r => !r.passed);
     if (failedResults.length > 0) {
-      console.log('\n❌ 失败的测试:');
+      logger.info('\n❌ 失败的测试:');
       failedResults.forEach(r => {
-        console.log(`  - ${r.testName}`);
-        console.log(`    ${r.message}`);
+        logger.info(`  - ${r.testName}`);
+        logger.info(`    ${r.message}`);
         if (r.actualValue && r.expectedValue) {
-          console.log(`    实际值: ${r.actualValue}, 期望值: ${r.expectedValue}`);
+          logger.info(`    实际值: ${r.actualValue}, 期望值: ${r.expectedValue}`);
         }
       });
     }
 
     // 最终结论
-    console.log('\n' + '='.repeat(80));
+    logger.info('\n' + '='.repeat(80));
     if (failedTests === 0) {
-      console.log('🎉 验收结论: 全部通过！系统符合技术规格，可以上线。');
+      logger.info('🎉 验收结论: 全部通过！系统符合技术规格，可以上线。');
     } else if (passRate >= 80) {
-      console.log('⚠️  验收结论: 大部分通过，但仍有问题需要修复。');
+      logger.info('⚠️  验收结论: 大部分通过，但仍有问题需要修复。');
     } else {
-      console.log('❌ 验收结论: 未通过验收，需要重新实现。');
+      logger.info('❌ 验收结论: 未通过验收，需要重新实现。');
     }
-    console.log('='.repeat(80) + '\n');
+    logger.info('='.repeat(80) + '\n');
   }
 }
 

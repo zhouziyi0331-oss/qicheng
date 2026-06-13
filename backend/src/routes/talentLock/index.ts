@@ -30,7 +30,7 @@ router.post('/calculate-fee', authenticateToken, async (req, res) => {
       data: fee,
     });
   } catch (error: any) {
-    console.error('计算费用失败:', error);
+    logger.error('计算费用失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '计算费用失败',
@@ -80,7 +80,7 @@ router.post('/apply', authenticateToken, async (req, res) => {
       message: '申请已提交，等待学生确认',
     });
   } catch (error: any) {
-    console.error('创建锁定申请失败:', error);
+    logger.error('创建锁定申请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '创建锁定申请失败',
@@ -107,7 +107,7 @@ router.get('/applications', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取申请列表失败:', error);
+    logger.error('获取申请列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取申请列表失败',
@@ -153,7 +153,7 @@ router.post('/applications/:id/respond', authenticateToken, async (req, res) => 
       message: status === 'accepted' ? '已接受锁定' : '已拒绝锁定',
     });
   } catch (error: any) {
-    console.error('响应申请失败:', error);
+    logger.error('响应申请失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '响应申请失败',
@@ -191,7 +191,7 @@ router.get('/list', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取锁定列表失败:', error);
+    logger.error('获取锁定列表失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取锁定列表失败',
@@ -214,7 +214,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
       data: lock,
     });
   } catch (error: any) {
-    console.error('获取锁定详情失败:', error);
+    logger.error('获取锁定详情失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取锁定详情失败',
@@ -246,7 +246,7 @@ router.post('/:id/renew', authenticateToken, async (req, res) => {
       message: '续约成功',
     });
   } catch (error: any) {
-    console.error('续约失败:', error);
+    logger.error('续约失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '续约失败',
@@ -271,7 +271,7 @@ router.post('/:id/cancel', authenticateToken, async (req, res) => {
       message: '锁定已取消',
     });
   } catch (error: any) {
-    console.error('取消锁定失败:', error);
+    logger.error('取消锁定失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '取消锁定失败',
@@ -297,7 +297,7 @@ router.post('/:id/pause', authenticateToken, async (req, res) => {
       message: '锁定已暂停',
     });
   } catch (error: any) {
-    console.error('暂停锁定失败:', error);
+    logger.error('暂停锁定失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '暂停锁定失败',
@@ -322,7 +322,7 @@ router.post('/:id/resume', authenticateToken, async (req, res) => {
       message: '锁定已恢复',
     });
   } catch (error: any) {
-    console.error('恢复锁定失败:', error);
+    logger.error('恢复锁定失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '恢复锁定失败',
@@ -346,7 +346,7 @@ router.get('/student/:studentId/status', authenticateToken, async (req, res) => 
       data: status,
     });
   } catch (error: any) {
-    console.error('检查锁定状态失败:', error);
+    logger.error('检查锁定状态失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '检查锁定状态失败',
@@ -377,7 +377,7 @@ router.get('/stats/overview', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取锁定统计失败:', error);
+    logger.error('获取锁定统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取锁定统计失败',
@@ -410,7 +410,7 @@ router.get('/pricing/config', async (req, res) => {
       data: pricing,
     });
   } catch (error: any) {
-    console.error('获取价格配置失败:', error);
+    logger.error('获取价格配置失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取价格配置失败',

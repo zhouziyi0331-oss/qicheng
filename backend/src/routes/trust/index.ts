@@ -29,7 +29,7 @@ router.get('/eligible-matches', async (req, res) => {
       data: matches
     });
   } catch (error: any) {
-    console.error('[Trust API] 获取解锁资格失败:', error);
+    logger.error('[Trust API] 获取解锁资格失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -61,7 +61,7 @@ router.get('/match-status/:companyId', async (req, res) => {
       }
     });
   } catch (error: any) {
-    console.error('[Trust API] 查询匹配状态失败:', error);
+    logger.error('[Trust API] 查询匹配状态失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -90,7 +90,7 @@ router.post('/verify/start', async (req, res) => {
       data: result
     });
   } catch (error: any) {
-    console.error('[Trust API] 创建验证会话失败:', error);
+    logger.error('[Trust API] 创建验证会话失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -114,7 +114,7 @@ router.post('/verify/round1', async (req, res) => {
       data: result
     });
   } catch (error: any) {
-    console.error('[Trust API] 提交第一轮回答失败:', error);
+    logger.error('[Trust API] 提交第一轮回答失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -138,7 +138,7 @@ router.post('/verify/round2', async (req, res) => {
       data: result
     });
   } catch (error: any) {
-    console.error('[Trust API] 提交第二轮回答失败:', error);
+    logger.error('[Trust API] 提交第二轮回答失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -170,7 +170,7 @@ router.get('/verify/status/:sessionId', async (req, res) => {
       }
     });
   } catch (error: any) {
-    console.error('[Trust API] 获取验证状态失败:', error);
+    logger.error('[Trust API] 获取验证状态失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -214,7 +214,7 @@ router.post('/unlock/create-payment', async (req, res) => {
       }
     });
   } catch (error: any) {
-    console.error('[Trust API] 创建解锁支付失败:', error);
+    logger.error('[Trust API] 创建解锁支付失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -233,7 +233,7 @@ router.post('/unlock/payment-callback', async (req, res) => {
 
     // 异步生成证书
     RitualService.generateCertificate(result.unlockRecordId).catch(err => {
-      console.error('[Trust API] 生成证书失败:', err);
+      logger.error('[Trust API] 生成证书失败:', err);
     });
 
     res.json({
@@ -241,7 +241,7 @@ router.post('/unlock/payment-callback', async (req, res) => {
       data: result
     });
   } catch (error: any) {
-    console.error('[Trust API] 处理支付回调失败:', error);
+    logger.error('[Trust API] 处理支付回调失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -266,7 +266,7 @@ router.get('/unlock/record/:companyId', async (req, res) => {
       data: record
     });
   } catch (error: any) {
-    console.error('[Trust API] 获取解锁记录失败:', error);
+    logger.error('[Trust API] 获取解锁记录失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -287,7 +287,7 @@ router.post('/unlock/view-contact', async (req, res) => {
 
     res.json({ success: true });
   } catch (error: any) {
-    console.error('[Trust API] 记录查看失败:', error);
+    logger.error('[Trust API] 记录查看失败:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -312,7 +312,7 @@ router.post('/unlock/feedback', async (req, res) => {
 
     res.json({ success: true });
   } catch (error: any) {
-    console.error('[Trust API] 提交反馈失败:', error);
+    logger.error('[Trust API] 提交反馈失败:', error);
     res.status(500).json({ error: error.message });
   }
 });

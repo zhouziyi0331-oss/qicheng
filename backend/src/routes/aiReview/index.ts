@@ -43,7 +43,7 @@ router.post('/tasks/:taskId/review', authenticateToken, async (req, res) => {
       message: 'AI审核完成',
     });
   } catch (error: any) {
-    console.error('AI审核失败:', error);
+    logger.error('AI审核失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || 'AI审核失败',
@@ -97,7 +97,7 @@ router.get('/tasks/:taskId/reports', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取审核历史失败:', error);
+    logger.error('获取审核历史失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取审核历史失败',
@@ -165,7 +165,7 @@ router.post('/tasks/:taskId/revision-guide', authenticateToken, async (req, res)
       message: 'AI改进指引生成成功',
     });
   } catch (error: any) {
-    console.error('生成改进指引失败:', error);
+    logger.error('生成改进指引失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '生成改进指引失败',
@@ -219,7 +219,7 @@ router.get('/tasks/:taskId/revision-guides', authenticateToken, async (req, res)
       },
     });
   } catch (error: any) {
-    console.error('获取改进指引失败:', error);
+    logger.error('获取改进指引失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取改进指引失败',
@@ -251,7 +251,7 @@ router.put('/revision-guides/:guideId/viewed', authenticateToken, async (req, re
       message: '已标记为已查看',
     });
   } catch (error: any) {
-    console.error('标记查看失败:', error);
+    logger.error('标记查看失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '标记查看失败',
@@ -290,7 +290,7 @@ router.post('/revision-guides/:guideId/rate', authenticateToken, async (req, res
       message: '评分成功',
     });
   } catch (error: any) {
-    console.error('评分失败:', error);
+    logger.error('评分失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '评分失败',

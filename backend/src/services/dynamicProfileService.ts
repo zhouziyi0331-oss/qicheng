@@ -83,7 +83,7 @@ class DynamicProfileService {
 
       return result;
     } catch (error: any) {
-      console.error('Profile update failed:', error);
+      logger.error('Profile update failed:', error);
       throw new AppError(
         error.response?.status || 500,
         error.response?.data?.message || 'Failed to update student profile'
@@ -194,7 +194,7 @@ class DynamicProfileService {
 
       return results;
     } catch (error: any) {
-      console.error('Batch profile update failed:', error);
+      logger.error('Batch profile update failed:', error);
       throw new AppError(
         error.response?.status || 500,
         error.response?.data?.message || 'Failed to batch update profiles'
@@ -257,7 +257,7 @@ class DynamicProfileService {
         createdAt: record.created_at,
       }));
     } catch (error) {
-      console.error('Failed to get profile history:', error);
+      logger.error('Failed to get profile history:', error);
       throw new AppError(500, 'Failed to get profile history');
     }
   }

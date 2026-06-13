@@ -64,7 +64,7 @@ export class UnlockService {
         [studentId, sessionId, this.UNLOCK_PRICE_FEN, outTradeNo]
       );
 
-      console.log(`[UnlockService] 创建解锁支付订单: ${paymentResult.rows[0].id}`);
+      logger.info(`[UnlockService] 创建解锁支付订单: ${paymentResult.rows[0].id}`);
 
       return {
         paymentId: paymentResult.rows[0].id,
@@ -97,7 +97,7 @@ export class UnlockService {
 
       // 幂等检查
       if (payment.status === 'paid') {
-        console.log(`[UnlockService] 支付已处理，跳过: ${payment.id}`);
+        logger.info(`[UnlockService] 支付已处理，跳过: ${payment.id}`);
         const existingUnlock = await client.query(
           `SELECT id FROM unlock_records WHERE payment_id = $1`,
           [payment.id]
@@ -195,7 +195,7 @@ export class UnlockService {
         [session.match_id]
       );
 
-      console.log(`[UnlockService] 解锁成功: ${unlockResult.rows[0].id}`);
+      logger.info(`[UnlockService] 解锁成功: ${unlockResult.rows[0].id}`);
 
       return {
         unlockRecordId: unlockResult.rows[0].id,

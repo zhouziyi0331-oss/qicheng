@@ -62,7 +62,7 @@ class PriceRecommendationService {
    * 计算价格推荐
    */
   async calculatePriceRecommendation(input: PriceRecommendationInput): Promise<PriceRecommendation> {
-    console.log('[价格推荐] 开始计算', input);
+    logger.info('[价格推荐] 开始计算', input);
 
     // 1. 计算基准价格
     const basePrice = this.calculateBasePrice(input);
@@ -78,12 +78,12 @@ class PriceRecommendationService {
       // 有足够历史数据，基于历史均价计算
       priceMin = Math.round(historicalData.avgPrice * 0.8);
       priceMax = Math.round(historicalData.avgPrice * 1.5);
-      console.log(`[价格推荐] 基于历史数据：均价=${historicalData.avgPrice}, 样本数=${historicalData.count}`);
+      logger.info(`[价格推荐] 基于历史数据：均价=${historicalData.avgPrice}, 样本数=${historicalData.count}`);
     } else {
       // 历史数据不足，基于基准价计算
       priceMin = Math.round(basePrice * 0.85);
       priceMax = Math.round(basePrice * 1.3);
-      console.log(`[价格推荐] 基于基准价：basePrice=${basePrice}`);
+      logger.info(`[价格推荐] 基于基准价：basePrice=${basePrice}`);
     }
 
     // 4. 计算指定大师兜底价（推荐上限 × 1.5）
@@ -98,7 +98,7 @@ class PriceRecommendationService {
       similarTasksCount: historicalData.count
     };
 
-    console.log('[价格推荐] 计算完成', recommendation);
+    logger.info('[价格推荐] 计算完成', recommendation);
 
     return recommendation;
   }
@@ -186,7 +186,7 @@ class PriceRecommendationService {
         ]
       );
 
-      console.log(`[价格推荐] 已保存计算历史: taskId=${taskId}`);
+      logger.info(`[价格推荐] 已保存计算历史: taskId=${taskId}`);
     } finally {
       client.release();
     }

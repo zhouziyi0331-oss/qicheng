@@ -34,7 +34,7 @@ router.get('/summaries', authenticate, async (req, res) => {
       data: summaries,
     });
   } catch (error) {
-    console.error('获取成长总结失败:', error);
+    logger.error('获取成长总结失败:', error);
     res.status(500).json({
       success: false,
       message: '获取成长总结失败',
@@ -61,7 +61,7 @@ router.get('/summaries/:orderId', authenticate, async (req, res) => {
       data: summary,
     });
   } catch (error) {
-    console.error('获取订单成长总结失败:', error);
+    logger.error('获取订单成长总结失败:', error);
     res.status(500).json({
       success: false,
       message: '获取订单成长总结失败',
@@ -85,7 +85,7 @@ router.post('/summaries/:summaryId/view', authenticate, async (req, res) => {
       message: '已标记为已查看',
     });
   } catch (error) {
-    console.error('标记已查看失败:', error);
+    logger.error('标记已查看失败:', error);
     res.status(500).json({
       success: false,
       message: '标记已查看失败',
@@ -117,7 +117,7 @@ router.post('/summaries/:summaryId/feedback', authenticate, async (req, res) => 
       message: '反馈提交成功',
     });
   } catch (error) {
-    console.error('提交反馈失败:', error);
+    logger.error('提交反馈失败:', error);
     res.status(500).json({
       success: false,
       message: '提交反馈失败',
@@ -145,7 +145,7 @@ router.get('/ability-history', authenticate, async (req, res) => {
       data: history,
     });
   } catch (error) {
-    console.error('获取能力历史失败:', error);
+    logger.error('获取能力历史失败:', error);
     res.status(500).json({
       success: false,
       message: '获取能力历史失败',
@@ -169,7 +169,7 @@ router.get('/profile-versions', authenticate, async (req, res) => {
       data: versions,
     });
   } catch (error) {
-    console.error('获取画像版本失败:', error);
+    logger.error('获取画像版本失败:', error);
     res.status(500).json({
       success: false,
       message: '获取画像版本失败',
@@ -196,7 +196,7 @@ router.post('/ability-update/:orderId', authenticate, async (req, res) => {
       message: '能力更新成功',
     });
   } catch (error) {
-    console.error('能力更新失败:', error);
+    logger.error('能力更新失败:', error);
     res.status(500).json({
       success: false,
       message: '能力更新失败',
@@ -227,7 +227,7 @@ router.post('/graduation-report/generate', authenticate, async (req, res) => {
       message: '毕业报告生成成功',
     });
   } catch (error) {
-    console.error('生成毕业报告失败:', error);
+    logger.error('生成毕业报告失败:', error);
     res.status(500).json({
       success: false,
       message: '生成毕业报告失败',
@@ -258,7 +258,7 @@ router.get('/graduation-report/preview', authenticate, async (req, res) => {
       data: preview,
     });
   } catch (error) {
-    console.error('获取报告预览失败:', error);
+    logger.error('获取报告预览失败:', error);
     res.status(500).json({
       success: false,
       message: '获取报告预览失败',
@@ -296,7 +296,7 @@ router.get('/graduation-report/:reportId', authenticate, async (req, res) => {
       });
     }
 
-    console.error('获取完整报告失败:', error);
+    logger.error('获取完整报告失败:', error);
     res.status(500).json({
       success: false,
       message: '获取完整报告失败',
@@ -335,7 +335,7 @@ router.post('/graduation-report/:reportId/pay', authenticate, async (req, res) =
       message: '付费成功，报告已解锁',
     });
   } catch (error) {
-    console.error('处理付费失败:', error);
+    logger.error('处理付费失败:', error);
     res.status(500).json({
       success: false,
       message: '处理付费失败',
@@ -361,7 +361,7 @@ router.get('/graduation-report/check-update', authenticate, async (req, res) => 
       },
     });
   } catch (error) {
-    console.error('检查更新失败:', error);
+    logger.error('检查更新失败:', error);
     res.status(500).json({
       success: false,
       message: '检查更新失败',
@@ -386,7 +386,7 @@ router.post('/graduation-report/:reportId/update', authenticate, async (req, res
       message: '报告更新成功',
     });
   } catch (error) {
-    console.error('更新报告失败:', error);
+    logger.error('更新报告失败:', error);
     res.status(500).json({
       success: false,
       message: '更新报告失败',
@@ -444,7 +444,7 @@ router.get('/overview', authenticate, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('获取成长概览失败:', error);
+    logger.error('获取成长概览失败:', error);
     res.status(500).json({
       success: false,
       message: '获取成长概览失败',

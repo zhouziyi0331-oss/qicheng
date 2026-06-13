@@ -21,7 +21,7 @@ router.get('/questions', async (req: Request, res: Response, next: NextFunction)
       }
     })
   } catch (error: any) {
-    console.error('获取OPC题目失败:', error)
+    logger.error('获取OPC题目失败:', error)
     next(error)
   }
 })
@@ -63,7 +63,7 @@ router.post(
         }
       })
     } catch (error: any) {
-      console.error('OPC分析失败:', error)
+      logger.error('OPC分析失败:', error)
       next(error)
   }
 })
@@ -114,7 +114,7 @@ router.get('/profile', authenticate, async (req: Request, res: Response, next: N
       }
     })
   } catch (error: any) {
-    console.error('获取OPC结果失败:', error)
+    logger.error('获取OPC结果失败:', error)
     next(error)
   }
 })
@@ -150,7 +150,7 @@ router.post('/generate-card', authenticate, async (req: Request, res: Response, 
       }
     })
   } catch (error: any) {
-    console.error('生成身份卡片失败:', error)
+    logger.error('生成身份卡片失败:', error)
     next(error)
   }
 })

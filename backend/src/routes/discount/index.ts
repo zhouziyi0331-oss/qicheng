@@ -20,7 +20,7 @@ router.get('/tiers', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取折扣阶梯失败:', error);
+    logger.error('获取折扣阶梯失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取折扣阶梯失败',
@@ -51,7 +51,7 @@ router.get('/my-tier', authenticateToken, async (req, res) => {
       data: tierInfo,
     });
   } catch (error: any) {
-    console.error('获取阶梯信息失败:', error);
+    logger.error('获取阶梯信息失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取阶梯信息失败',
@@ -82,7 +82,7 @@ router.get('/my-progress', authenticateToken, async (req, res) => {
       data: progress,
     });
   } catch (error: any) {
-    console.error('获取折扣进度失败:', error);
+    logger.error('获取折扣进度失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取进度失败',
@@ -119,7 +119,7 @@ router.get('/monthly-stats', authenticateToken, async (req, res) => {
       data: stats,
     });
   } catch (error: any) {
-    console.error('获取月度统计失败:', error);
+    logger.error('获取月度统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取统计失败',
@@ -162,7 +162,7 @@ router.post('/calculate', authenticateToken, async (req, res) => {
       data: discount,
     });
   } catch (error: any) {
-    console.error('计算折扣失败:', error);
+    logger.error('计算折扣失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '计算折扣失败',
@@ -227,7 +227,7 @@ router.post('/apply', authenticateToken, async (req, res) => {
       message: '折扣已应用',
     });
   } catch (error: any) {
-    console.error('应用折扣失败:', error);
+    logger.error('应用折扣失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '应用折扣失败',
@@ -264,7 +264,7 @@ router.get('/history', authenticateToken, async (req, res) => {
       data: history,
     });
   } catch (error: any) {
-    console.error('获取折扣历史失败:', error);
+    logger.error('获取折扣历史失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取历史失败',
@@ -303,7 +303,7 @@ router.get('/historical-stats', authenticateToken, async (req, res) => {
       },
     });
   } catch (error: any) {
-    console.error('获取历史统计失败:', error);
+    logger.error('获取历史统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '获取历史统计失败',
@@ -342,7 +342,7 @@ router.post('/refresh-stats', authenticateToken, async (req, res) => {
       message: '统计已刷新',
     });
   } catch (error: any) {
-    console.error('刷新统计失败:', error);
+    logger.error('刷新统计失败:', error);
     res.status(500).json({
       success: false,
       message: error.message || '刷新统计失败',

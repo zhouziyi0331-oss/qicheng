@@ -319,9 +319,9 @@ export class OPCV2AssessmentService {
         scores: result
       });
 
-      console.log(`[OPC] Enqueued work condition profile generation for student ${studentId}`);
+      logger.info(`[OPC] Enqueued work condition profile generation for student ${studentId}`);
     } catch (error) {
-      console.error('[OPC] Failed to enqueue work condition profile generation:', error);
+      logger.error('[OPC] Failed to enqueue work condition profile generation:', error);
       // 不影响测试完成流程，只记录错误
     }
 

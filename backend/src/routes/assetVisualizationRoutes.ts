@@ -19,7 +19,7 @@ router.get('/dashboard', authenticate, async (req: Request, res: Response, next:
       data: dashboard
     })
   } catch (error: any) {
-    console.error('获取资产仪表盘失败:', error)
+    logger.error('获取资产仪表盘失败:', error)
     next(error)
   }
 })
@@ -51,7 +51,7 @@ router.post('/growth-comparison', authenticate, async (req: Request, res: Respon
       data: card
     })
   } catch (error: any) {
-    console.error('生成成长对比卡片失败:', error)
+    logger.error('生成成长对比卡片失败:', error)
     next(error)
   }
 })
@@ -83,7 +83,7 @@ router.post('/level-up', authenticate, async (req: Request, res: Response, next:
       data: ceremony
     })
   } catch (error: any) {
-    console.error('生成升级仪式失败:', error)
+    logger.error('生成升级仪式失败:', error)
     next(error)
   }
 })
@@ -128,7 +128,7 @@ router.get('/growth-history', authenticate, async (req: Request, res: Response, 
       client.release()
     }
   } catch (error: any) {
-    console.error('获取成长历史失败:', error)
+    logger.error('获取成长历史失败:', error)
     next(error)
   }
 })
@@ -171,7 +171,7 @@ router.get('/level-history', authenticate, async (req: Request, res: Response, n
       client.release()
     }
   } catch (error: any) {
-    console.error('获取升级历史失败:', error)
+    logger.error('获取升级历史失败:', error)
     next(error)
   }
 })

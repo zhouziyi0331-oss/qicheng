@@ -48,7 +48,7 @@ class QAService {
 
       return result;
     } catch (error: any) {
-      console.error('QA service failed:', error);
+      logger.error('QA service failed:', error);
       throw new AppError(
         error.response?.status || 500,
         error.response?.data?.message || 'Failed to answer question'
@@ -73,7 +73,7 @@ class QAService {
       `;
       await pool.query(query, [conversationId, studentId, taskId, question, answer]);
     } catch (error) {
-      console.error('Failed to save conversation:', error);
+      logger.error('Failed to save conversation:', error);
       // 不抛出错误，避免影响主流程
     }
   }
@@ -115,7 +115,7 @@ class QAService {
       };
     } catch (error: any) {
       if (error instanceof AppError) throw error;
-      console.error('Failed to get conversation history:', error);
+      logger.error('Failed to get conversation history:', error);
       throw new AppError(500, 'Failed to get conversation history');
     }
   }
@@ -163,7 +163,7 @@ class QAService {
         updatedAt: result.rows[result.rows.length - 1].created_at,
       };
     } catch (error) {
-      console.error('Failed to get conversation:', error);
+      logger.error('Failed to get conversation:', error);
       throw new AppError(500, 'Failed to get conversation');
     }
   }

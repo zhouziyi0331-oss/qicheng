@@ -65,7 +65,7 @@ export async function getOPCStories(req: Request, res: Response) {
       }
     });
   } catch (error) {
-    console.error('获取OPC故事墙列表失败:', error);
+    logger.error('获取OPC故事墙列表失败:', error);
     res.status(500).json({ message: '获取OPC故事墙列表失败' });
   }
 }
@@ -88,7 +88,7 @@ export async function reviewOPCStory(req: Request, res: Response) {
 
     res.json({ message: '审核成功' });
   } catch (error) {
-    console.error('审核OPC故事失败:', error);
+    logger.error('审核OPC故事失败:', error);
     res.status(500).json({ message: '审核OPC故事失败' });
   }
 }
@@ -110,7 +110,7 @@ export async function deleteOPCStory(req: Request, res: Response) {
 
     res.json({ message: '删除成功' });
   } catch (error) {
-    console.error('删除OPC故事失败:', error);
+    logger.error('删除OPC故事失败:', error);
     res.status(500).json({ message: '删除OPC故事失败' });
   }
 }
@@ -170,7 +170,7 @@ export async function getAnnouncements(req: Request, res: Response) {
       }
     });
   } catch (error) {
-    console.error('获取公告列表失败:', error);
+    logger.error('获取公告列表失败:', error);
     res.status(500).json({ message: '获取公告列表失败' });
   }
 }
@@ -191,7 +191,7 @@ export async function createAnnouncement(req: Request, res: Response) {
 
     res.json({ id: result[0].id, message: '公告创建成功' });
   } catch (error) {
-    console.error('创建公告失败:', error);
+    logger.error('创建公告失败:', error);
     res.status(500).json({ message: '创建公告失败' });
   }
 }
@@ -218,7 +218,7 @@ export async function updateAnnouncement(req: Request, res: Response) {
 
     res.json({ message: '公告更新成功' });
   } catch (error) {
-    console.error('更新公告失败:', error);
+    logger.error('更新公告失败:', error);
     res.status(500).json({ message: '更新公告失败' });
   }
 }
@@ -243,7 +243,7 @@ export async function publishAnnouncement(req: Request, res: Response) {
 
     res.json({ message: '公告发布成功' });
   } catch (error) {
-    console.error('发布公告失败:', error);
+    logger.error('发布公告失败:', error);
     res.status(500).json({ message: '发布公告失败' });
   }
 }
@@ -262,7 +262,7 @@ export async function deleteAnnouncement(req: Request, res: Response) {
 
     res.json({ message: '公告删除成功' });
   } catch (error) {
-    console.error('删除公告失败:', error);
+    logger.error('删除公告失败:', error);
     res.status(500).json({ message: '删除公告失败' });
   }
 }
@@ -287,7 +287,7 @@ export async function getBanners(req: Request, res: Response) {
 
     res.json({ list: banners });
   } catch (error) {
-    console.error('获取轮播图列表失败:', error);
+    logger.error('获取轮播图列表失败:', error);
     res.status(500).json({ message: '获取轮播图列表失败' });
   }
 }
@@ -308,7 +308,7 @@ export async function createBanner(req: Request, res: Response) {
 
     res.json({ id: result[0].id, message: '轮播图创建成功' });
   } catch (error) {
-    console.error('创建轮播图失败:', error);
+    logger.error('创建轮播图失败:', error);
     res.status(500).json({ message: '创建轮播图失败' });
   }
 }
@@ -335,7 +335,7 @@ export async function updateBanner(req: Request, res: Response) {
 
     res.json({ message: '轮播图更新成功' });
   } catch (error) {
-    console.error('更新轮播图失败:', error);
+    logger.error('更新轮播图失败:', error);
     res.status(500).json({ message: '更新轮播图失败' });
   }
 }
@@ -354,7 +354,7 @@ export async function deleteBanner(req: Request, res: Response) {
 
     res.json({ message: '轮播图删除成功' });
   } catch (error) {
-    console.error('删除轮播图失败:', error);
+    logger.error('删除轮播图失败:', error);
     res.status(500).json({ message: '删除轮播图失败' });
   }
 }
