@@ -3,7 +3,7 @@
  * 支持站内信、短信、邮件、微信模板消息
  */
 
-import { query } from '../utils/db';
+import { query, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import axios from 'axios';
 

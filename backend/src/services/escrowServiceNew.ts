@@ -4,7 +4,7 @@
  * 基于063_escrow_withdrawal_system.sql的完整实现
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 
 // =====================================================

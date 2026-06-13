@@ -4,7 +4,7 @@
  * 处理任务等级计算、学生等级管理、智能匹配等功能
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';

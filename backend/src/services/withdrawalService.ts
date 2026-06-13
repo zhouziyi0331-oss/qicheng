@@ -1,4 +1,4 @@
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 
 export interface WithdrawalRequest {

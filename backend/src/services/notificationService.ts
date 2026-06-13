@@ -4,7 +4,7 @@
  * 提供完整的消息推送、管理和统计功能
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 
 // =====================================================

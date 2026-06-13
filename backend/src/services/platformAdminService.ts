@@ -4,7 +4,7 @@
  * 提供提现审核、评价管理、用户认证、任务审核等核心管理功能
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 
 // =====================================================

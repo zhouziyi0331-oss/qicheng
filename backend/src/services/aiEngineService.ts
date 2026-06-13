@@ -1,4 +1,4 @@
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 
 /**
  * AI需求确认引擎

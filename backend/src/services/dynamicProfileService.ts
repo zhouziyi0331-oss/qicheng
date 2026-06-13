@@ -1,7 +1,7 @@
 import { aiServiceClient } from './aiServiceClient';
 import logger from '../utils/logger';
 import { AppError } from '../middleware/errorHandler';
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 
 interface UpdateProfileRequest {
   studentId: string;

@@ -1,4 +1,4 @@
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 
 /**
  * 协议管理服务

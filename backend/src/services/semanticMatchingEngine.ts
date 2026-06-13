@@ -4,7 +4,7 @@
  * 用于精准匹配任务和学生
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import vectorGenerationService from './vectorGenerationService';
 

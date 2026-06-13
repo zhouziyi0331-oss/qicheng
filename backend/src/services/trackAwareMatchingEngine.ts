@@ -3,7 +3,7 @@
  * 确保只匹配学生选择的赛道的项目
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 
 /**

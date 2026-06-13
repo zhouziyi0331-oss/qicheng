@@ -1,4 +1,4 @@
-import { query } from '../utils/db';
+import { query, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import { exec } from 'child_process';
 import { promisify } from 'util';

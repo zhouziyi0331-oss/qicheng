@@ -4,7 +4,7 @@
  * 处理任务草稿的创建、编辑、保存、发布等功能
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';

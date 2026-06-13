@@ -4,7 +4,7 @@
  * 基于任务完成情况更新技能、质量、成长趋势
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import vectorGenerationService from './vectorGenerationService';
 

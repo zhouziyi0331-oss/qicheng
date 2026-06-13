@@ -4,7 +4,7 @@
  * 处理任务进行中的需求变更、价格调整、协商等功能
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';

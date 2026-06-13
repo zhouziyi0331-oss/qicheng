@@ -3,7 +3,7 @@
  * 管理交付标准模板库，提供标准化的交付要求
  */
 
-import { pool } from '../utils/db';
+import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
 
 interface DeliverableTemplate {

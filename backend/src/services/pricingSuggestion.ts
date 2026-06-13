@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import logger from '../utils/logger';
 import { AuthRequest } from '../middleware/auth';
-import { query } from '../utils/db';
+import { query, QueryResult } from '../utils/db';
 import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';
 
