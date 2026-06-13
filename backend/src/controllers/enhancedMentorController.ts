@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import enhancedMentorService from '../services/enhancedMentorService';
-import pblAgentService from '../services/pblAgentService';
+import { pblAgentService } from '../services/pblAgentService';
 import codeExecutionService from '../services/codeExecutionService';
 import fileProcessingService from '../services/fileProcessingService';
 import logger from '../utils/logger';
+import { JwtPayload } from 'jsonwebtoken';
 
 /**
  * 增强版导师控制器

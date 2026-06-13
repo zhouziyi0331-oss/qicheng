@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnhancedMentorController = void 0;
 const enhancedMentorService_1 = __importDefault(require("../services/enhancedMentorService"));
-const pblAgentService_1 = __importDefault(require("../services/pblAgentService"));
+const pblAgentService_1 = require("../services/pblAgentService");
 const codeExecutionService_1 = __importDefault(require("../services/codeExecutionService"));
 const fileProcessingService_1 = __importDefault(require("../services/fileProcessingService"));
 const logger_1 = __importDefault(require("../utils/logger"));
@@ -65,7 +65,7 @@ class EnhancedMentorController {
                 res.status(400).json({ error: 'Initial problem is required' });
                 return;
             }
-            const result = await pblAgentService_1.default.initializeProject(userId, initialProblem, { title, domain, learningGoals });
+            const result = await pblAgentService_1.pblAgentService.initializeProject(userId, initialProblem, { title, domain, learningGoals });
             res.json({
                 success: true,
                 data: result
@@ -152,7 +152,7 @@ class EnhancedMentorController {
                 res.status(400).json({ error: 'Task description is required' });
                 return;
             }
-            const result = await pblAgentService_1.default.guideTaskDecomposition(projectId, taskDescription);
+            const result = await pblAgentService_1.pblAgentService.guideTaskDecomposition(projectId, taskDescription);
             res.json({
                 success: true,
                 data: result
@@ -183,7 +183,7 @@ class EnhancedMentorController {
                 res.status(400).json({ error: 'Tasks array is required' });
                 return;
             }
-            const result = await pblAgentService_1.default.evaluateDecomposition(projectId, tasks);
+            const result = await pblAgentService_1.pblAgentService.evaluateDecomposition(projectId, tasks);
             res.json({
                 success: true,
                 data: result
@@ -363,7 +363,7 @@ class EnhancedMentorController {
                 res.status(400).json({ error: 'Reflection type is required' });
                 return;
             }
-            const result = await pblAgentService_1.default.guideReflection(projectId, reflectionType);
+            const result = await pblAgentService_1.pblAgentService.guideReflection(projectId, reflectionType);
             res.json({
                 success: true,
                 data: result
@@ -394,7 +394,7 @@ class EnhancedMentorController {
                 res.status(400).json({ error: 'Reflection type is required' });
                 return;
             }
-            const logId = await pblAgentService_1.default.saveReflectionLog(projectId, reflectionType, {
+            const logId = await pblAgentService_1.pblAgentService.saveReflectionLog(projectId, reflectionType, {
                 whatLearned,
                 whatWorked,
                 whatDidntWork,
