@@ -18,20 +18,22 @@ async function initializeStudentCapabilities() {
     logger.info('Starting student capabilities initialization...');
 
     // 1. 获取所有学生用户
-    const students = await query<Student>(
+    const studentsResult = await query<Student>(
       `SELECT id, username, student_level
        FROM users
        WHERE role = 'student'
        ORDER BY created_at ASC`
     );
 
-    logger.info(`Found ${students.rows.length} students to initialize`);
+    const students = studentsResult as any; // query返回数组，不是QueryResult
+
+    logger.info(`Found ${students.length} students to initialize`);
 
     let successCount = 0;
     let skipCount = 0;
     let errorCount = 0;
 
-    for (const student of students.rows) {
+    for (const student of students) {
       try {
         // 检查是否已存在能力画像
         const existing = await queryOne(
@@ -88,7 +90,7 @@ async function initializeStudentCapabilities() {
 
         // 5. 构建技能JSON
         const skillsJson: any = {};
-        for (const skill of skills.rows) {
+        for (const skill of skills) {
           skillsJson[skill.skill_name] = {
             proficiency: skill.proficiency || 0.5,
             confidence: 0.7,
