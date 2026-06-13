@@ -22,10 +22,10 @@ async function initializeStudentCapabilities() {
         logger_1.default.info('Starting student capabilities initialization...');
         // 获取所有学生
         const students = await (0, db_1.query)(`SELECT id, username FROM users WHERE role = 'student' AND status = 'active'`);
-        logger_1.default.info(`Found ${students.rows.length} students to initialize`);
+        logger_1.default.info(`Found ${students.length} students to initialize`);
         let successCount = 0;
         let errorCount = 0;
-        for (const student of students.rows) {
+        for (const student of students) {
             try {
                 // 检查是否已有能力画像
                 const existing = await (0, db_1.queryOne)(`SELECT id FROM student_capabilities WHERE student_id = $1`, [student.id]);
@@ -47,7 +47,7 @@ async function initializeStudentCapabilities() {
                     personalityStyle: opcResult.personality_style
                 } : undefined);
                 successCount++;
-                logger_1.default.info(`✓ Initialized capability for student ${student.username} (${successCount}/${students.rows.length})`);
+                logger_1.default.info(`✓ Initialized capability for student ${student.username} (${successCount}/${students.length})`);
                 // 避免API限流
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
@@ -71,10 +71,10 @@ async function initializeTaskVectors() {
         logger_1.default.info('Starting task vectors initialization...');
         // 获取所有开放的任务
         const tasks = await (0, db_1.query)(`SELECT id, title, status FROM tasks WHERE status IN ('open', 'in_progress')`);
-        logger_1.default.info(`Found ${tasks.rows.length} tasks to initialize`);
+        logger_1.default.info(`Found ${tasks.length} tasks to initialize`);
         let successCount = 0;
         let errorCount = 0;
-        for (const task of tasks.rows) {
+        for (const task of tasks) {
             try {
                 // 检查是否已有向量
                 const existing = await (0, db_1.queryOne)(`SELECT combined_embedding FROM tasks WHERE id = $1 AND combined_embedding IS NOT NULL`, [task.id]);
@@ -97,7 +97,7 @@ async function initializeTaskVectors() {
                     logger_1.default.info(`✓ Generated translation for task ${task.title}`);
                 }
                 successCount++;
-                logger_1.default.info(`✓ Initialized task ${task.title} (${successCount}/${tasks.rows.length})`);
+                logger_1.default.info(`✓ Initialized task ${task.title} (${successCount}/${tasks.length})`);
                 // 避免API限流
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }

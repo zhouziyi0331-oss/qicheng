@@ -59,7 +59,7 @@ async function registerStudent(req, res) {
             phone: user.phone,
             role: user.role
         });
-        logger_1.default.info('Student registered successfully', { userId: user.id, phone });
+        logger_1.default.info('Student registered successfully', { id: user.id, phone });
         res.status(201).json({
             success: true,
             message: '注册成功',
@@ -129,12 +129,12 @@ async function registerEnterprise(req, res) {
         // );
         // 6. 生成JWT token
         const token = (0, jwt_1.generateToken)({
-            userId: user.id,
+            id: user.id,
             phone: user.phone,
             role: user.role,
             accountType: 'enterprise'
         });
-        logger_1.default.info('Enterprise registered successfully', { userId: user.id, phone, company_name });
+        logger_1.default.info('Enterprise registered successfully', { id: user.id, phone, company_name });
         res.status(201).json({
             success: true,
             message: '注册成功',
@@ -197,14 +197,14 @@ async function loginStudent(req, res) {
         }
         // 4. 生成JWT token
         const token = (0, jwt_1.generateToken)({
-            userId: user.id,
+            id: user.id,
             phone: user.phone,
             role: user.role,
             accountType: 'student'
         });
         // 5. 更新最后登录时间
         await db_1.pool.query('UPDATE users SET last_login_at = NOW() WHERE id = $1', [user.id]);
-        logger_1.default.info('Student logged in successfully', { userId: user.id, phone });
+        logger_1.default.info('Student logged in successfully', { id: user.id, phone });
         res.json({
             success: true,
             message: '登录成功',
@@ -267,14 +267,14 @@ async function loginEnterprise(req, res) {
         }
         // 4. 生成JWT token
         const token = (0, jwt_1.generateToken)({
-            userId: user.id,
+            id: user.id,
             phone: user.phone,
             role: user.role,
             accountType: 'enterprise'
         });
         // 5. 更新最后登录时间
         await db_1.pool.query('UPDATE users SET last_login_at = NOW() WHERE id = $1', [user.id]);
-        logger_1.default.info('Enterprise logged in successfully', { userId: user.id, phone });
+        logger_1.default.info('Enterprise logged in successfully', { id: user.id, phone });
         res.json({
             success: true,
             message: '登录成功',
