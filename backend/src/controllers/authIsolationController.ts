@@ -69,7 +69,7 @@ export async function registerStudent(req: Request, res: Response) {
       role: user.role
     });
 
-    logger.info('Student registered successfully', { userId: user.id, phone });
+    logger.info('Student registered successfully', { id: user.id, phone });
 
     res.status(201).json({
       success: true,
@@ -157,13 +157,13 @@ export async function registerEnterprise(req: Request, res: Response) {
 
     // 6. 生成JWT token
     const token = generateToken({
-      userId: user.id,
+      id: user.id,
       phone: user.phone,
       role: user.role,
       accountType: 'enterprise'
     });
 
-    logger.info('Enterprise registered successfully', { userId: user.id, phone, company_name });
+    logger.info('Enterprise registered successfully', { id: user.id, phone, company_name });
 
     res.status(201).json({
       success: true,
@@ -237,7 +237,7 @@ export async function loginStudent(req: Request, res: Response) {
 
     // 4. 生成JWT token
     const token = generateToken({
-      userId: user.id,
+      id: user.id,
       phone: user.phone,
       role: user.role,
       accountType: 'student'
@@ -249,7 +249,7 @@ export async function loginStudent(req: Request, res: Response) {
       [user.id]
     );
 
-    logger.info('Student logged in successfully', { userId: user.id, phone });
+    logger.info('Student logged in successfully', { id: user.id, phone });
 
     res.json({
       success: true,
@@ -323,7 +323,7 @@ export async function loginEnterprise(req: Request, res: Response) {
 
     // 4. 生成JWT token
     const token = generateToken({
-      userId: user.id,
+      id: user.id,
       phone: user.phone,
       role: user.role,
       accountType: 'enterprise'
@@ -335,7 +335,7 @@ export async function loginEnterprise(req: Request, res: Response) {
       [user.id]
     );
 
-    logger.info('Enterprise logged in successfully', { userId: user.id, phone });
+    logger.info('Enterprise logged in successfully', { id: user.id, phone });
 
     res.json({
       success: true,
