@@ -2,11 +2,13 @@ import jwt from 'jsonwebtoken';
 import { config } from '../../config';
 
 export interface JwtPayload {
-  userId: string;
+  id: string;  // 统一使用id而不是userId
   role: 'student' | 'company' | 'admin';
   adminRole?: 'super' | 'ops' | 'cs';
   accountType?: 'student' | 'enterprise';
   selectedTrack?: 'content' | 'dev';
+  phone?: string;
+  email?: string;
 }
 
 /**

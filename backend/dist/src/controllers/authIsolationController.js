@@ -55,10 +55,8 @@ async function registerStudent(req, res) {
         const user = result.rows[0];
         // 5. 生成JWT token
         const token = (0, jwt_1.generateToken)({
-            userId: user.id,
-            phone: user.phone,
-            role: user.role,
-            accountType: 'student'
+            id: user.id,
+            role: user.role
         });
         logger_1.default.info('Student registered successfully', { userId: user.id, phone });
         res.status(201).json({

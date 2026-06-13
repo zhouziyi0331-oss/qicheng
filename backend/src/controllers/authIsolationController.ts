@@ -64,10 +64,9 @@ export async function registerStudent(req: Request, res: Response) {
 
     // 5. 生成JWT token
     const token = generateToken({
-      userId: user.id,
+      id: user.id,
       phone: user.phone,
-      role: user.role,
-      accountType: 'student'
+      role: user.role
     });
 
     logger.info('Student registered successfully', { userId: user.id, phone });

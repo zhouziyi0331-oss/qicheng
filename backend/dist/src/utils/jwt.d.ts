@@ -1,9 +1,11 @@
 export interface JwtPayload {
-    userId: string;
+    id: string;
     role: 'student' | 'company' | 'admin';
     adminRole?: 'super' | 'ops' | 'cs';
     accountType?: 'student' | 'enterprise';
     selectedTrack?: 'content' | 'dev';
+    phone?: string;
+    email?: string;
 }
 /**
  * Generate a single JWT token (for backward compatibility)
