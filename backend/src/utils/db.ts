@@ -1,6 +1,8 @@
-import { Pool, PoolClient } from 'pg';
+import { Pool, PoolClient, QueryResult } from 'pg';
 import { config } from '../../config';
 import logger from './logger';
+
+export { QueryResult };
 
 const pool = new Pool({
   connectionString: config.db.url,

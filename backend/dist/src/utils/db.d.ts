@@ -1,4 +1,5 @@
-import { Pool, PoolClient } from 'pg';
+import { Pool, PoolClient, QueryResult } from 'pg';
+export { QueryResult };
 declare const pool: Pool;
 /**
  * Execute a query with automatic connection management.
