@@ -106,7 +106,7 @@ class AILogService {
         [startDate || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), endDate || new Date()]
       );
 
-      return result.rows;
+      return result;
     } catch (error: unknown) {
       logger.error('Failed to get AI call stats:', error);
       return [];
@@ -125,7 +125,7 @@ class AILogService {
         []
       );
 
-      return parseFloat(result.rows[0]?.total_cost || 0);
+      return parseFloat(result[0]?.total_cost || 0);
     } catch (error: unknown) {
       logger.error('Failed to get today cost:', error);
       return 0;
@@ -146,7 +146,7 @@ class AILogService {
         [limit]
       );
 
-      return result.rows;
+      return result;
     } catch (error: unknown) {
       logger.error('Failed to get failed calls:', error);
       return [];
