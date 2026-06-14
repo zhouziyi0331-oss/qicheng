@@ -117,14 +117,14 @@ class MatchingScheduler {
             created_at = NOW()`,
           [
             taskId,
-            match.studentId,
+            match.student_id,
             match.match_score.overall_score,
             match.match_score.skillMatch.score,
             match.match_score.difficultyMatch.score,
             match.match_score.domainMatch.score,
-            match.match_score.growthPotential.score,
+            match.match_score.growth_potential.score,
             match.match_score.reliability.score,
-            match.match_score.preferenceAlignment.score,
+            match.match_score.preference_alignment.score,
             JSON.stringify(match.match_score.breakdown),
             match.rank,
           ]
@@ -157,9 +157,9 @@ class MatchingScheduler {
   /**
    * 新学生完成OPC测评后，触发增量匹配
    */
-  async matchNewStudentToOpenTasks(studentId: string): Promise<void> {
+  async matchNewStudentToOpenTasks(student_id: string): Promise<void> {
     try {
-      logger.info(`Matching new student ${studentId} to open tasks...`);
+      logger.info(`Matching new student ${student_id} to open tasks...`);
 
       // 获取所有开放任务
       const tasks = await query<{ id: string; title: string; company_id: string }>(
@@ -181,7 +181,7 @@ class MatchingScheduler {
       for (const task of tasks.rows) {
         try {
           // 计算这个学生与任务的匹配度
-          const match_score = await semanticMatchingEngine.matchTaskWithStudent(task.id, studentId);
+          const match_score = await semanticMatchingEngine.matchTaskWithStudent(task.id, student_id);
 
           // 只保存匹配度 > 0.5 的结果
           if (match_score.overall_score > 0.5) {
@@ -213,14 +213,14 @@ class MatchingScheduler {
                 rank_in_task = EXCLUDED.rank_in_task`,
               [
                 task.id,
-                studentId,
+                student_id,
                 match_score.overall_score,
                 match_score.skillMatch.score,
                 match_score.difficultyMatch.score,
                 match_score.domainMatch.score,
-                match_score.growthPotential.score,
+                match_score.growth_potential.score,
                 match_score.reliability.score,
-                match_score.preferenceAlignment.score,
+                match_score.preference_alignment.score,
                 JSON.stringify(match_score.breakdown),
                 rank,
               ]
@@ -237,13 +237,13 @@ class MatchingScheduler {
           // 避免过载
           await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error: unknown) {
-          logger.error(`Failed to match student ${studentId} with task ${task.id}:`, error);
+          logger.error(`Failed to match student ${student_id} with task ${task.id}:`, error);
         }
       }
 
-      logger.info(`New student ${studentId} matched to ${matchedCount} tasks`);
+      logger.info(`New student ${student_id} matched to ${matchedCount} tasks`);
     } catch (error: unknown) {
-      logger.error(`Failed to match new student ${studentId}:`, error);
+      logger.error(`Failed to match new student ${student_id}:`, error);
     }
   }
 
@@ -302,14 +302,14 @@ class MatchingScheduler {
             created_at = NOW()`,
           [
             taskId,
-            match.studentId,
+            match.student_id,
             match.match_score.overall_score,
             match.match_score.skillMatch.score,
             match.match_score.difficultyMatch.score,
             match.match_score.domainMatch.score,
-            match.match_score.growthPotential.score,
+            match.match_score.growth_potential.score,
             match.match_score.reliability.score,
-            match.match_score.preferenceAlignment.score,
+            match.match_score.preference_alignment.score,
             JSON.stringify(match.match_score.breakdown),
             match.rank,
           ]
@@ -333,7 +333,7 @@ class MatchingScheduler {
       // 通知Top 5学生有新的推荐任务
       const topStudents = matches.slice(0, 5);
       for (const match of topStudents) {
-        websocketService.notifyTaskRecommendation(match.studentId, {
+        websocketService.notifyTaskRecommendation(match.student_id, {
           taskId: task.id,
           taskTitle: task.title,
           message: `有一个新任务很适合你（匹配度${(match.match_score.overall_score * 100).toFixed(0)}%）`,
