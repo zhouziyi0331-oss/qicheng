@@ -260,7 +260,7 @@ export class CodeExecutionService {
       [projectId, limit]
     );
 
-    return result.rows;
+    return result;
   }
 
   /**
