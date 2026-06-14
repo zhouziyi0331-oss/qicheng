@@ -65,7 +65,7 @@ class DeepGuidanceService {
       }
 
       return detection;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('检测深层模式失败', { error, studentId });
       return {
         detected: false,
@@ -129,7 +129,7 @@ class DeepGuidanceService {
       );
 
       return guidance;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('生成深层引导失败', { error, studentId });
       return {
         content: '',
@@ -207,7 +207,7 @@ ${p.patternName}:
         manifestationExamples: [],
         triggerSituation: ''
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('AI分析深层模式失败', { error });
       return {
         detected: false,
@@ -342,7 +342,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
         beliefChallenged: pattern.underlyingBeliefs[0],
         newPerspectiveOffered: pattern.newPerspectives[0]
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('生成深层引导对话失败', { error });
       return {
         content: '',
@@ -385,7 +385,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
       );
 
       return result.rows[0];
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('提议成长挑战失败', { error, studentId, patternId });
       return null;
     }
@@ -411,7 +411,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
         reframingQuestions: row.reframing_questions,
         newPerspectives: row.new_perspectives
       }));
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取深层模式失败', { error });
       return [];
     }
@@ -441,7 +441,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
         reframingQuestions: row.reframing_questions,
         newPerspectives: row.new_perspectives
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取模式失败', { error, patternId });
       return null;
     }
@@ -476,7 +476,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
           triggerSituation
         ]
       );
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('记录模式检测失败', { error });
     }
   }
@@ -496,7 +496,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
       );
 
       return result.rows[0] || null;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取学生模式进展失败', { error });
       return null;
     }
@@ -544,7 +544,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
       );
 
       return result.rows[0] || null;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取对话模板失败', { error });
       return null;
     }
@@ -571,7 +571,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
          WHERE student_id = $1 AND pattern_id = $2`,
         [studentId, patternId, dialogueStage]
       );
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('更新引导进展失败', { error });
     }
   }
@@ -638,7 +638,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
       );
 
       return result.rows;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取学生模式失败', { error, studentId });
       return [];
     }

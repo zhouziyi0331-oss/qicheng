@@ -55,7 +55,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Chat error:', error);
       res.status(500).json({
         success: false,
@@ -94,7 +94,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Project initialization error:', error);
       res.status(500).json({
         success: false,
@@ -125,7 +125,7 @@ export class EnhancedMentorController {
         }
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Get projects error:', error);
       res.status(500).json({
         success: false,
@@ -156,7 +156,7 @@ export class EnhancedMentorController {
         }
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Get project detail error:', error);
       res.status(500).json({
         success: false,
@@ -195,7 +195,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Task decomposition error:', error);
       res.status(500).json({
         success: false,
@@ -234,7 +234,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Evaluate decomposition error:', error);
       res.status(500).json({
         success: false,
@@ -275,7 +275,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Code execution error:', error);
       res.status(500).json({
         success: false,
@@ -309,7 +309,7 @@ export class EnhancedMentorController {
         data: { history }
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Get execution history error:', error);
       res.status(500).json({
         success: false,
@@ -356,7 +356,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('File upload error:', error);
       res.status(500).json({
         success: false,
@@ -390,7 +390,7 @@ export class EnhancedMentorController {
         data: { files }
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Get project files error:', error);
       res.status(500).json({
         success: false,
@@ -420,7 +420,7 @@ export class EnhancedMentorController {
         message: success ? 'File deleted' : 'File not found'
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Delete file error:', error);
       res.status(500).json({
         success: false,
@@ -459,7 +459,7 @@ export class EnhancedMentorController {
         data: result
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Guide reflection error:', error);
       res.status(500).json({
         success: false,
@@ -514,7 +514,7 @@ export class EnhancedMentorController {
         data: { logId }
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Save reflection log error:', error);
       res.status(500).json({
         success: false,
@@ -548,7 +548,7 @@ export class EnhancedMentorController {
         message: `Switched to ${mode} mode`
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Switch mode error:', error);
       res.status(500).json({
         success: false,
@@ -581,7 +581,7 @@ export class EnhancedMentorController {
         }
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Get stats error:', error);
       res.status(500).json({
         success: false,

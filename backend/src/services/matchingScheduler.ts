@@ -61,14 +61,14 @@ class MatchingScheduler {
 
           // 避免过载
           await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch (error: unknown) {
+        } catch (error: any) {
           errorCount++;
           logger.error(`Failed to rematch task ${task.id}:`, error);
         }
       }
 
       logger.info(`Daily matching completed: ${successCount} success, ${errorCount} errors`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to rematch all open tasks:', error);
     }
   }
@@ -148,7 +148,7 @@ class MatchingScheduler {
       }
 
       logger.info(`Task ${taskId} rematched: ${matches.length} students, top score: ${topScore}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error(`Failed to rematch task ${taskId}:`, error);
       throw error;
     }
@@ -236,13 +236,13 @@ class MatchingScheduler {
 
           // 避免过载
           await new Promise(resolve => setTimeout(resolve, 500));
-        } catch (error: unknown) {
+        } catch (error: any) {
           logger.error(`Failed to match student ${student_id} with task ${task.id}:`, error);
         }
       }
 
       logger.info(`New student ${student_id} matched to ${matchedCount} tasks`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error(`Failed to match new student ${student_id}:`, error);
     }
   }
@@ -341,7 +341,7 @@ class MatchingScheduler {
       }
 
       logger.info(`New task ${taskId} matched to ${matches.length} students, top score: ${topScore}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error(`Failed to match new task ${taskId} to students:`, error);
       throw error;
     }

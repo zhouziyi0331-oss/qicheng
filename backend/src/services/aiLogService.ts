@@ -57,7 +57,7 @@ class AILogService {
         cost: log.costYuan,
         duration: log.durationMs,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       // 日志记录失败不应该影响主流程
       logger.error('Failed to log AI call:', error);
     }
@@ -107,7 +107,7 @@ class AILogService {
       );
 
       return result;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to get AI call stats:', error);
       return [];
     }
@@ -126,7 +126,7 @@ class AILogService {
       );
 
       return parseFloat(result[0]?.total_cost || 0);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to get today cost:', error);
       return 0;
     }
@@ -147,7 +147,7 @@ class AILogService {
       );
 
       return result;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to get failed calls:', error);
       return [];
     }

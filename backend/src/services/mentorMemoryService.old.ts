@@ -87,7 +87,7 @@ class MentorMemoryService {
       });
 
       return memory;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('创建记忆失败', { error, input });
       throw error;
     }
@@ -199,7 +199,7 @@ class MentorMemoryService {
           );
         }
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('关联记忆失败', { error, memoryId });
     }
   }
@@ -268,7 +268,7 @@ class MentorMemoryService {
         summary,
         insights
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('召回记忆失败', { error, studentId, context });
       return {
         relevantMemories: [],
@@ -417,7 +417,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
       }
 
       return createdMemories;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('从对话提取记忆失败', { error, studentId, sessionId });
       return [];
     }
@@ -472,7 +472,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
 
       const result = await pool.query(query, params);
       return result.rows;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取记忆失败', { error, studentId, options });
       return [];
     }
@@ -501,7 +501,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
 
       logger.info('清理过期记忆', { count: result.rowCount });
       return result.rowCount || 0;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('清理过期记忆失败', { error });
       return 0;
     }
@@ -570,7 +570,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
         averageImportance: parseFloat(avgResult.rows[0]?.avg || '0'),
         mostRecalled: mostRecalledResult.rows
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取记忆统计失败', { error, studentId });
       return {
         totalMemories: 0,

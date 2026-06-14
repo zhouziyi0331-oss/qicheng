@@ -37,7 +37,7 @@ router.get('/alerts', authenticate, async (req, res) => {
         count: alerts.length
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取预警列表失败:', error);
     res.status(500).json({
       success: false,
@@ -61,7 +61,7 @@ router.post('/alerts/:alertId/view', authenticate, async (req, res) => {
       success: true,
       message: '预警已标记为已读'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 标记预警已读失败:', error);
     res.status(500).json({
       success: false,
@@ -85,7 +85,7 @@ router.post('/alerts/:alertId/respond', authenticate, async (req, res) => {
       success: true,
       message: '预警已标记为已响应'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 标记预警已响应失败:', error);
     res.status(500).json({
       success: false,
@@ -115,7 +115,7 @@ router.get('/alerts/stats', authenticate, async (req, res) => {
       success: true,
       data: stats
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取预警统计失败:', error);
     res.status(500).json({
       success: false,
@@ -149,7 +149,7 @@ router.get('/profile', authenticate, async (req, res) => {
       success: true,
       data: profile
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取学生画像失败:', error);
     res.status(500).json({
       success: false,
@@ -176,7 +176,7 @@ router.post('/profile/refresh', authenticate, async (req, res) => {
       success: true,
       message: '画像刷新已启动，请稍后查看'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 刷新学生画像失败:', error);
     res.status(500).json({
       success: false,
@@ -223,7 +223,7 @@ router.post('/observations', authenticate, async (req, res) => {
       success: true,
       message: '成长观察已记录'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 记录成长观察失败:', error);
     res.status(500).json({
       success: false,
@@ -263,7 +263,7 @@ router.get('/sessions/:orderId', authenticate, async (req, res) => {
         count: sessions.length
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取对话历史失败:', error);
     res.status(500).json({
       success: false,
@@ -318,7 +318,7 @@ router.post('/message', authenticate, async (req, res) => {
         sessionId
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 发送消息失败:', error);
     res.status(500).json({
       success: false,
@@ -366,7 +366,7 @@ router.post('/pre-submit-check', authenticate, async (req, res) => {
         checklist
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 生成自查清单失败:', error);
     res.status(500).json({
       success: false,
@@ -400,7 +400,7 @@ router.post('/admin/trigger-alert-scan', authenticate, async (req, res) => {
       success: true,
       message: '预警扫描已完成'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 手动触发预警扫描失败:', error);
     res.status(500).json({
       success: false,
@@ -435,7 +435,7 @@ router.post('/admin/batch-init-profiles', authenticate, async (req, res) => {
       success: true,
       message: '批量初始化已启动，请查看日志'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 批量初始化画像失败:', error);
     res.status(500).json({
       success: false,

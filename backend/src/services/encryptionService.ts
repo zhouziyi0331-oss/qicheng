@@ -73,7 +73,7 @@ class EncryptionService {
         authTag: authTag.toString('base64'),
         keyId,
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Encryption failed:', error);
       throw new Error('Failed to encrypt data');
     }
@@ -95,7 +95,7 @@ class EncryptionService {
       decrypted += decipher.final('utf8');
 
       return decrypted;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Decryption failed:', error);
       throw new Error('Failed to decrypt data');
     }
@@ -208,7 +208,7 @@ class EncryptionService {
          WHERE key_id = $1`,
         [keyId]
       );
-    } catch (error: unknown) {
+    } catch (error: any) {
       // 忽略错误，不影响主流程
       logger.error('Failed to update key usage:', error);
     }

@@ -45,7 +45,7 @@ class GrowthSystemValidator {
       // 5. 生成验收报告
       this.generateReport();
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('❌ 验收测试执行失败:', error);
     } finally {
       await pool.end();

@@ -34,7 +34,7 @@ export async function getAccount(req: Request, res: Response) {
       success: true,
       data: account,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get escrow account', { error });
     return res.status(500).json({
       error: 'Failed to get escrow account',
@@ -64,7 +64,7 @@ export async function initAccount(req: Request, res: Response) {
       data: account,
       message: 'Account initialized successfully',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to initialize escrow account', { error });
     return res.status(500).json({
       error: 'Failed to initialize escrow account',
@@ -110,7 +110,7 @@ export async function depositFunds(req: Request, res: Response) {
       data: transaction,
       message: 'Funds deposited successfully',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to deposit funds', { error });
     return res.status(500).json({
       error: 'Failed to deposit funds',
@@ -148,7 +148,7 @@ export async function releaseFunds(req: Request, res: Response) {
       data: result,
       message: 'Funds released successfully',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to release funds', { error });
     return res.status(500).json({
       error: 'Failed to release funds',
@@ -204,7 +204,7 @@ export async function requestWithdrawal(req: Request, res: Response) {
       data: withdrawalRequest,
       message: 'Withdrawal request submitted successfully',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to request withdrawal', { error });
     return res.status(500).json({
       error: 'Failed to request withdrawal',
@@ -236,7 +236,7 @@ export async function getWithdrawalHistory(req: Request, res: Response) {
       limit,
       offset,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get withdrawal history', { error });
     return res.status(500).json({
       error: 'Failed to get withdrawal history',
@@ -272,7 +272,7 @@ export async function getTransactions(req: Request, res: Response) {
       limit,
       offset,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get transactions', { error });
     return res.status(500).json({
       error: 'Failed to get transactions',

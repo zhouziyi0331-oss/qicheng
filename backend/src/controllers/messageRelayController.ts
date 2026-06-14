@@ -55,7 +55,7 @@ export async function sendMessage(req: Request, res: Response) {
       success: true,
       data: result,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to send message:', error);
     return res.status(500).json({
       error: 'Failed to send message',
@@ -95,7 +95,7 @@ export async function getMessages(req: Request, res: Response) {
       success: true,
       data: messages,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get messages:', error);
     return res.status(500).json({
       error: 'Failed to get messages',
@@ -142,7 +142,7 @@ export async function getStatistics(req: Request, res: Response) {
       success: true,
       data: statistics,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get statistics:', error);
     return res.status(500).json({
       error: 'Failed to get statistics',
@@ -185,7 +185,7 @@ export async function getViolations(req: Request, res: Response) {
       success: true,
       data: violations,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get violations:', error);
     return res.status(500).json({
       error: 'Failed to get violations',
@@ -237,7 +237,7 @@ export async function agreeToExchange(req: Request, res: Response) {
       success: true,
       data: result,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to agree to exchange:', error);
     return res.status(500).json({
       error: 'Failed to agree to exchange',
@@ -282,7 +282,7 @@ export async function getExchangeStatus(req: Request, res: Response) {
       success: true,
       data: status,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get exchange status:', error);
     return res.status(500).json({
       error: 'Failed to get exchange status',
@@ -329,7 +329,7 @@ export async function canExchange(req: Request, res: Response) {
         canExchange: canExchangeResult,
       },
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to check exchange eligibility:', error);
     return res.status(500).json({
       error: 'Failed to check exchange eligibility',

@@ -22,7 +22,7 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
     );
     if (!profile) throw new AppError(404, '用户不存在', 'USER_NOT_FOUND');
     res.json({ success: true, data: profile });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // POST /student/profile
@@ -42,7 +42,7 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
       [nickname, avatarUrl, university, city, major, grade, userId]
     );
     res.json({ success: true, message: '信息已更新' });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // GET /student/test/questions
@@ -53,7 +53,7 @@ export async function getTestQuestions(req: Request, res: Response, next: NextFu
        FROM test_questions WHERE is_active = TRUE ORDER BY question_num ASC`
     );
     res.json({ success: true, data: questions });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // POST /student/test/submit
@@ -165,7 +165,7 @@ export async function submitTest(req: Request, res: Response, next: NextFunction
         nextStep: 'first_task', // 引导到首单
       },
     });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // GET /student/onboarding
@@ -177,7 +177,7 @@ export async function getOnboardingStatus(req: Request, res: Response, next: Nex
       [userId]
     );
     res.json({ success: true, data: status });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // POST /student/onboarding/:step/complete
@@ -200,7 +200,7 @@ export async function completeOnboardingStep(req: Request, res: Response, next: 
     );
 
     res.json({ success: true, message: `${step} 已完成` });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // GET /student/emotion-signals
@@ -217,7 +217,7 @@ export async function getEmotionSignals(req: Request, res: Response, next: NextF
       [userId]
     );
     res.json({ success: true, data: signals });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // 降级分析逻辑 (AI服务不可用时)
@@ -285,7 +285,7 @@ export async function getBalance(req: Request, res: Response, next: NextFunction
         availableBalance: balance.balance - balance.frozen_balance,
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }
@@ -334,7 +334,7 @@ export async function getLevel(req: Request, res: Response, next: NextFunction):
         canUpgrade: profile.tasks_completed >= nextLevelRequirements.requiredTasks,
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }
@@ -373,7 +373,7 @@ export async function checkLevelUpgrade(req: Request, res: Response, next: NextF
         nextLevel: requirements.nextLevel,
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }
@@ -415,7 +415,7 @@ export async function getNextLevel(req: Request, res: Response, next: NextFuncti
         benefits: requirements.benefits,
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }
@@ -457,7 +457,7 @@ export async function getTestResult(req: Request, res: Response, next: NextFunct
         currentLevel: { a: profile.current_level, b: profile.level_b },
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }

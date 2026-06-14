@@ -71,7 +71,7 @@ export async function generateStudentProfile(req: Request, res: Response) {
       },
       message: '工作条件画像生成成功'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to generate student profile:', error);
     res.status(500).json({ error: '生成画像失败，请稍后重试' });
   }
@@ -122,7 +122,7 @@ export async function getStudentProfile(req: Request, res: Response) {
         updatedAt: profile.updated_at
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get student profile:', error);
     res.status(500).json({ error: '获取画像失败' });
   }
@@ -230,7 +230,7 @@ export async function generateTaskRequirement(req: Request, res: Response) {
       message: '需求条件画像生成成功',
       async: false
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to generate task requirement:', error);
     res.status(500).json({ error: '生成需求画像失败，请稍后重试' });
   }
@@ -281,7 +281,7 @@ export async function getTaskRequirement(req: Request, res: Response) {
         updatedAt: profile.updated_at
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get task requirement:', error);
     res.status(500).json({ error: '获取需求画像失败' });
   }
@@ -435,7 +435,7 @@ export async function triggerWorkConditionMatching(req: Request, res: Response) 
       })),
       message: `成功匹配${matches.length}个学生`
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to trigger work condition matching:', error);
     res.status(500).json({ error: '匹配失败，请稍后重试' });
   }
@@ -519,7 +519,7 @@ export async function getWorkConditionMatches(req: Request, res: Response) {
         recommendation: m.recommendation_for_company
       }))
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get work condition matches:', error);
     res.status(500).json({ error: '获取匹配结果失败' });
   }
@@ -595,7 +595,7 @@ export async function getRecommendedTasksForStudent(req: Request, res: Response)
         recommendation: t.recommendation_for_student
       }))
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get recommended tasks for student:', error);
     res.status(500).json({ error: '获取推荐任务失败' });
   }
@@ -649,7 +649,7 @@ export async function getMatchDetail(req: Request, res: Response) {
         recommendation: match.recommendation_for_student
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get match detail:', error);
     res.status(500).json({ error: '获取匹配详情失败' });
   }

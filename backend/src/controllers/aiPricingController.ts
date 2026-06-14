@@ -65,7 +65,7 @@ export async function getPricingSuggestion(req: Request, res: Response) {
       success: true,
       data: suggestion,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get pricing suggestion', { error });
     return res.status(500).json({
       error: 'Failed to get pricing suggestion',
@@ -111,7 +111,7 @@ export async function savePricingHistory(req: Request, res: Response) {
         history_id: historyId,
       },
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to save pricing history', { error });
     return res.status(500).json({
       error: 'Failed to save pricing history',
@@ -173,7 +173,7 @@ export async function recordAdjustment(req: Request, res: Response) {
       success: true,
       message: 'Pricing adjustment recorded',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to record adjustment', { error });
     return res.status(500).json({
       error: 'Failed to record adjustment',
@@ -213,7 +213,7 @@ export async function getPricingAccuracy(req: Request, res: Response) {
       success: true,
       data: accuracy,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get pricing accuracy', { error });
     return res.status(500).json({
       error: 'Failed to get pricing accuracy',
@@ -246,7 +246,7 @@ export async function updateBenchmarks(req: Request, res: Response) {
       success: true,
       message: 'Market benchmarks updated successfully',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to update benchmarks', { error });
     return res.status(500).json({
       error: 'Failed to update benchmarks',

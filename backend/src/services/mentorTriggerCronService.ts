@@ -77,7 +77,7 @@ class MentorTriggerCronService {
       for (const trigger of triggers) {
         await this.executeTrigger(trigger);
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Error processing pending triggers:', error);
     } finally {
       this.isProcessing = false;

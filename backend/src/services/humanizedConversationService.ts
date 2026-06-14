@@ -160,7 +160,7 @@ class HumanizedConversationService {
           patternDetected: false
         }
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('生成人性化回复失败', { error, studentId, sessionId });
       throw error;
     }
@@ -423,7 +423,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
       );
 
       return JSON.parse(response.content);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('分析具体困难失败', { error });
       return null;
     }
@@ -469,7 +469,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
         quickStartSteps: row.quick_start_steps,
         websiteUrl: row.website_url
       }));
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('分析任务并推荐工具失败', { error, taskId });
       return [];
     }
@@ -525,7 +525,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
         phraseText: result.rows[0].phrase_text,
         variations: result.rows[0].variations || []
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取对话片段失败', { error, emotion, situation });
       return null;
     }
@@ -558,7 +558,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
       }
 
       return result.rows[0];
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取人性化上下文失败', { error, sessionId });
       return null;
     }
@@ -618,7 +618,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
 
         await pool.query(query, values);
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('更新人性化上下文失败', { error, sessionId });
     }
   }
@@ -704,7 +704,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
           toolId
         ]
       );
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('记录具体困难失败', { error });
     }
   }
@@ -719,7 +719,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
         [toolName]
       );
       return result.rows.length > 0 ? result.rows[0].id : null;
-    } catch (error: unknown) {
+    } catch (error: any) {
       return null;
     }
   }

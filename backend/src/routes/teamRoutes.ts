@@ -42,7 +42,7 @@ router.post(
         data: { teamId },
         message: '队伍创建成功',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -65,7 +65,7 @@ router.get(
         success: true,
         data: team,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -97,7 +97,7 @@ router.post(
         success: true,
         message: '申请已提交，等待队长审核',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -143,7 +143,7 @@ router.post(
         success: true,
         message: approved ? '申请已通过' : '申请已拒绝',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -182,7 +182,7 @@ router.post(
         success: true,
         message: '模块分配成功',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -209,7 +209,7 @@ router.get(
           inviteUrl: `${process.env.FRONTEND_URL}/teams/join/${inviteToken}`,
         },
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -238,7 +238,7 @@ router.get(
         success: true,
         data: teams,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }

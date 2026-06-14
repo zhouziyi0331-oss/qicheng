@@ -171,7 +171,7 @@ export class MentorCoreService {
         detectedSignals: signals,
         suggestions: this.generateSuggestions(signals),
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('AI导师对话失败:', error);
       throw error;
     }
@@ -709,7 +709,7 @@ ${conversationText}
       });
 
       return summary.trim();
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('生成对话摘要失败:', error);
       // 降级：返回简单的统计信息
       return `前面进行了${messages.length}轮对话，讨论了学生的学习进展和遇到的问题。`;
@@ -1008,7 +1008,7 @@ ${conversationText}
         detectedSignals: signals,
         suggestions: this.generateSuggestions(signals),
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('AI导师流式对话失败:', error);
       throw error;
     }
@@ -1024,7 +1024,7 @@ ${conversationText}
         [orderId, studentId]
       );
       return result.length > 0;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('验证订单归属失败:', error);
       return false;
     }
@@ -1045,7 +1045,7 @@ ${conversationText}
         [orderId]
       );
       return result;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('获取会话历史失败:', error);
       return [];
     }
@@ -1067,7 +1067,7 @@ ${conversationText}
       );
 
       return sessionId;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('创建学生消息失败:', error);
       throw error;
     }
@@ -1085,7 +1085,7 @@ ${conversationText}
     try {
       // 调用chat方法生成回复
       await this.chat(studentId, message, orderId, sessionId);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('处理学生消息失败:', error);
       throw error;
     }
@@ -1170,7 +1170,7 @@ ${submissionPreview}` : ''}
       );
 
       return checklist;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('生成自查清单失败:', error);
       throw error;
     }

@@ -96,7 +96,7 @@ export async function triggerMatching(req: Request, res: Response) {
       topScore,
       message: `成功匹配${matches.length}个学生`
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to trigger matching:', error);
     res.status(500).json({ error: '匹配失败，请稍后重试' });
   }
@@ -194,7 +194,7 @@ export async function getMatchedStudents(req: Request, res: Response) {
         rank: m.rank_in_task
       }))
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get matched students:', error);
     res.status(500).json({ error: '获取匹配学生失败' });
   }
@@ -251,7 +251,7 @@ export async function pushToStudents(req: Request, res: Response) {
       pushedCount: studentIds.length,
       message: `已推送给${studentIds.length}个学生`
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to push to students:', error);
     res.status(500).json({ error: '推送失败' });
   }
@@ -346,7 +346,7 @@ export async function getRecommendedTasks(req: Request, res: Response) {
         viewed: t.student_viewed
       }))
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get recommended tasks:', error);
     res.status(500).json({ error: '获取推荐任务失败' });
   }
@@ -383,7 +383,7 @@ export async function getTaskTranslation(req: Request, res: Response) {
         careerImpact: translation.careerImpact
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get task translation:', error);
     res.status(500).json({ error: '获取任务翻译失败' });
   }
@@ -424,7 +424,7 @@ export async function acceptRecommendation(req: Request, res: Response) {
       success: true,
       message: '已接受任务推荐'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to accept recommendation:', error);
     res.status(500).json({ error: '接受任务失败' });
   }
@@ -485,7 +485,7 @@ export async function getMatchingStats(req: Request, res: Response) {
         topScore: stats?.top_score || 0
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get matching stats:', error);
     res.status(500).json({ error: '获取统计数据失败' });
   }
@@ -522,7 +522,7 @@ export async function rematchTask(req: Request, res: Response) {
       success: true,
       message: '重新匹配完成'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to rematch task:', error);
     res.status(500).json({ error: '重新匹配失败' });
   }

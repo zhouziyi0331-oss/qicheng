@@ -66,7 +66,7 @@ class BehaviorLearningService {
       if (log.actionType === 'accepted' || log.actionType === 'rejected') {
         await this.analyzeAndUpdatePreference(log);
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to log behavior:', error);
       throw error;
     }
@@ -146,7 +146,7 @@ class BehaviorLearningService {
       if (log.actionType === 'rejected') {
         await this.analyzeRejectionReason(log, profile);
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to analyze and update preference:', error);
     }
   }
@@ -226,7 +226,7 @@ class BehaviorLearningService {
         acceptanceRate: result.acceptance_rate || 0,
         completionRate: result.completion_rate || 0,
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error(`Failed to get preference profile for student ${studentId}:`, error);
       return null;
     }
@@ -278,7 +278,7 @@ class BehaviorLearningService {
 
       // 限制boost范围在 [-0.2, 0.2]
       return Math.max(-0.2, Math.min(0.2, boost));
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Failed to calculate preference boost:', error);
       return 0;
     }
