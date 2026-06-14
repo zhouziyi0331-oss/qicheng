@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const logger_1 = __importDefault(require("../../utils/logger"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const aiMentorServiceV2_1 = __importDefault(require("../services/aiMentorServiceV2"));
 const auth_1 = require("../middleware/auth");
 const express_validator_1 = require("express-validator");
