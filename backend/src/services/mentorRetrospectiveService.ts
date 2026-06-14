@@ -98,7 +98,7 @@ class MentorRetrospectiveService {
       ]);
 
       logger.info(`[MentorRetrospective] 复盘已发送: ${retrospectiveId}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 触发复盘失败:', error);
       throw error;
     }
@@ -187,7 +187,7 @@ ${stuckPointsText}` : ''}
       const questions = JSON.parse(responseText);
 
       return questions;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 生成问题失败，使用默认问题:', error);
 
       // 降级：使用默认问题
@@ -237,7 +237,7 @@ ${stuckPointsText}` : ''}
       await this.extractFeaturedInsights(retrospectiveId);
 
       logger.info(`[MentorRetrospective] 回答已保存`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 保存回答失败:', error);
       throw error;
     }
@@ -255,7 +255,7 @@ ${stuckPointsText}` : ''}
       `, [retrospectiveId]);
 
       logger.info(`[MentorRetrospective] 复盘已跳过: ${retrospectiveId}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 跳过复盘失败:', error);
       throw error;
     }
@@ -321,7 +321,7 @@ ${stuckPointsText}` : ''}
 
         logger.info(`[MentorRetrospective] 精华复盘已提取: ${retrospectiveId}`);
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 提取精华失败:', error);
     }
   }
@@ -372,7 +372,7 @@ ${stuckPointsText}` : ''}
       `, [studentId]);
 
       return result.rows;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 获取待完成复盘失败:', error);
       return [];
     }
@@ -401,7 +401,7 @@ ${stuckPointsText}` : ''}
       `, [studentId, limit]);
 
       return result.rows;
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 获取历史复盘失败:', error);
       return [];
     }
@@ -428,7 +428,7 @@ ${stuckPointsText}` : ''}
       `);
 
       return result.rows[0];
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorRetrospective] 获取统计失败:', error);
       return {
         total_sent: 0,

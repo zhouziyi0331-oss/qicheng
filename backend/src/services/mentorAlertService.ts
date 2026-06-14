@@ -60,7 +60,7 @@ class MentorAlertService {
       }
 
       logger.info('[MentorAlert] 风险扫描完成');
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorAlert] 扫描失败:', error);
       throw error;
     }
@@ -357,7 +357,7 @@ class MentorAlertService {
       // TODO: 通过WebSocket推送给前端
       // await this.pushAlertToFrontend(studentId, orderId, alertMessage);
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('[MentorAlert] 触发预警失败:', error);
       throw error;
     }

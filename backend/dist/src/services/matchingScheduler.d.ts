@@ -23,7 +23,7 @@ declare class MatchingScheduler {
     /**
      * 新学生完成OPC测评后，触发增量匹配
      */
-    matchNewStudentToOpenTasks(studentId: string): Promise<void>;
+    matchNewStudentToOpenTasks(student_id: string): Promise<void>;
     /**
      * 手动触发重新匹配（供API调用）
      */

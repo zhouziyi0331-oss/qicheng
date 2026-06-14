@@ -181,7 +181,7 @@ ${deliverableRequirements ? `交付要求：${deliverableRequirements}` : '交�
         ai_analysis: aiResult.analysis,
         confidence_level: aiResult.confidence_level,
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('AI风险评估失败:', error);
       // 返回降级方案
       return this.generateFallbackAssessment(taskId, deadlineDays, budget);
@@ -277,7 +277,7 @@ ${deliverableRequirements ? `交付要求：${deliverableRequirements}` : '交�
       }
       const jsonText = jsonMatch[1] || jsonMatch[0];
       return JSON.parse(jsonText);
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('解析AI响应失败:', error);
       throw error;
     }
