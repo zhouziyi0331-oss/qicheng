@@ -3,25 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../../config';
 import { AppError } from './errorHandler';
 
-export interface JwtPayload {
-  userId: string;
-  role: 'student' | 'company' | 'admin';
-  adminRole?: 'super' | 'ops' | 'cs';
-  accountType?: 'student' | 'enterprise';
-  selectedTrack?: 'content' | 'dev';
-}
-
-export interface AuthRequest extends Request {
-  user?: JwtPayload;
-}
-
-declare global {
-  namespace Express {
-    interface Request {
-      user?: JwtPayload;
-    }
-  }
-}
+// 使用types/index.d.ts中定义的全局JwtPayload
 
 /**
  * Middleware: require valid JWT access token.
@@ -33,7 +15,7 @@ export function authenticate(req: Request, _res: Response, next: NextFunction): 
   }
   const token = authHeader.slice(7);
   try {
-    const payload = jwt.verify(token, config.jwt.accessSecret) as JwtPayload;
+    const payload = jwt.verify(token, config.jwt.accessSecret) as any;
     req.user = payload;
     next();
   } catch {
