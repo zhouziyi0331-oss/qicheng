@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 export interface JwtPayload {
-    id?: string;
-    userId?: string;
+    userId: string;
     role: 'student' | 'company' | 'admin';
     adminRole?: 'super' | 'ops' | 'cs';
     accountType?: 'student' | 'enterprise';
