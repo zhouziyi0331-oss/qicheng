@@ -21,7 +21,7 @@ import logger from '../utils/logger';
  * 创建追加需求（企业）
  * POST /api/v1/task-amendments
  */
-export async function createAmendment(req: AuthRequest, res: Response) {
+export async function createAmendment(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -85,7 +85,7 @@ export async function createAmendment(req: AuthRequest, res: Response) {
  * 学生响应追加需求
  * POST /api/v1/task-amendments/:id/respond
  */
-export async function studentRespond(req: AuthRequest, res: Response) {
+export async function studentRespond(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -135,7 +135,7 @@ export async function studentRespond(req: AuthRequest, res: Response) {
  * 企业最终决定（协商后）
  * POST /api/v1/task-amendments/:id/decide
  */
-export async function companyDecide(req: AuthRequest, res: Response) {
+export async function companyDecide(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -184,7 +184,7 @@ export async function companyDecide(req: AuthRequest, res: Response) {
  * 取消追加需求（企业主动取消）
  * POST /api/v1/task-amendments/:id/cancel
  */
-export async function cancelAmendment(req: AuthRequest, res: Response) {
+export async function cancelAmendment(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -224,7 +224,7 @@ export async function cancelAmendment(req: AuthRequest, res: Response) {
  * 获取任务的所有追加需求
  * GET /api/v1/task-amendments/task/:taskId
  */
-export async function getTaskAmendments(req: AuthRequest, res: Response) {
+export async function getTaskAmendments(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { taskId } = req.params;
@@ -252,7 +252,7 @@ export async function getTaskAmendments(req: AuthRequest, res: Response) {
  * 获取追加需求详情
  * GET /api/v1/task-amendments/:id
  */
-export async function getAmendment(req: AuthRequest, res: Response) {
+export async function getAmendment(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -288,7 +288,7 @@ export async function getAmendment(req: AuthRequest, res: Response) {
  * AI评估追加需求的合理性
  * POST /api/v1/task-amendments/:id/analyze
  */
-export async function analyzeAmendment(req: AuthRequest, res: Response) {
+export async function analyzeAmendment(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;

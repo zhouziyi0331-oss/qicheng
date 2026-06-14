@@ -21,7 +21,7 @@ import logger from '../utils/logger';
  * 创建新草稿
  * POST /api/v1/task-drafts
  */
-export async function createDraft(req: AuthRequest, res: Response) {
+export async function createDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -57,7 +57,7 @@ export async function createDraft(req: AuthRequest, res: Response) {
  * 获取草稿列表
  * GET /api/v1/task-drafts
  */
-export async function getDrafts(req: AuthRequest, res: Response) {
+export async function getDrafts(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
 
@@ -95,7 +95,7 @@ export async function getDrafts(req: AuthRequest, res: Response) {
  * 获取草稿详情
  * GET /api/v1/task-drafts/:id
  */
-export async function getDraft(req: AuthRequest, res: Response) {
+export async function getDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -127,7 +127,7 @@ export async function getDraft(req: AuthRequest, res: Response) {
  * 更新草稿
  * PUT /api/v1/task-drafts/:id
  */
-export async function updateDraft(req: AuthRequest, res: Response) {
+export async function updateDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -155,7 +155,7 @@ export async function updateDraft(req: AuthRequest, res: Response) {
  * 删除草稿
  * DELETE /api/v1/task-drafts/:id
  */
-export async function deleteDraft(req: AuthRequest, res: Response) {
+export async function deleteDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -183,7 +183,7 @@ export async function deleteDraft(req: AuthRequest, res: Response) {
  * 复制草稿
  * POST /api/v1/task-drafts/:id/duplicate
  */
-export async function duplicateDraft(req: AuthRequest, res: Response) {
+export async function duplicateDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -215,7 +215,7 @@ export async function duplicateDraft(req: AuthRequest, res: Response) {
  * AI审核草稿
  * POST /api/v1/task-drafts/:id/review
  */
-export async function reviewDraft(req: AuthRequest, res: Response) {
+export async function reviewDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -243,7 +243,7 @@ export async function reviewDraft(req: AuthRequest, res: Response) {
  * 获取AI定价建议
  * POST /api/v1/task-drafts/:id/pricing-suggestion
  */
-export async function getPricingSuggestion(req: AuthRequest, res: Response) {
+export async function getPricingSuggestion(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -275,7 +275,7 @@ export async function getPricingSuggestion(req: AuthRequest, res: Response) {
  * 发布草稿为正式任务
  * POST /api/v1/task-drafts/:id/publish
  */
-export async function publishDraft(req: AuthRequest, res: Response) {
+export async function publishDraft(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -306,7 +306,7 @@ export async function publishDraft(req: AuthRequest, res: Response) {
  * 获取草稿历史版本
  * GET /api/v1/task-drafts/:id/history
  */
-export async function getDraftHistory(req: AuthRequest, res: Response) {
+export async function getDraftHistory(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -335,7 +335,7 @@ export async function getDraftHistory(req: AuthRequest, res: Response) {
  * 恢复到历史版本
  * POST /api/v1/task-drafts/:id/restore/:historyId
  */
-export async function restoreDraftVersion(req: AuthRequest, res: Response) {
+export async function restoreDraftVersion(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id, historyId } = req.params;

@@ -17,7 +17,7 @@ import logger from '../utils/logger';
  * 获取托管账户信息
  * GET /api/v1/escrow/account
  */
-export async function getAccount(req: AuthRequest, res: Response) {
+export async function getAccount(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     if (!userId) {
@@ -47,7 +47,7 @@ export async function getAccount(req: AuthRequest, res: Response) {
  * 获取或创建托管账户
  * POST /api/v1/escrow/account/init
  */
-export async function initAccount(req: AuthRequest, res: Response) {
+export async function initAccount(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -81,7 +81,7 @@ export async function initAccount(req: AuthRequest, res: Response) {
  * 托管资金（企业支付任务款项）
  * POST /api/v1/escrow/deposit
  */
-export async function depositFunds(req: AuthRequest, res: Response) {
+export async function depositFunds(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -123,7 +123,7 @@ export async function depositFunds(req: AuthRequest, res: Response) {
  * 释放资金（任务完成后支付给学生）
  * POST /api/v1/escrow/release
  */
-export async function releaseFunds(req: AuthRequest, res: Response) {
+export async function releaseFunds(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -165,7 +165,7 @@ export async function releaseFunds(req: AuthRequest, res: Response) {
  * 申请提现
  * POST /api/v1/escrow/withdrawal/request
  */
-export async function requestWithdrawal(req: AuthRequest, res: Response) {
+export async function requestWithdrawal(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { amount, withdrawal_method, withdrawal_account, account_name } = req.body;
@@ -217,7 +217,7 @@ export async function requestWithdrawal(req: AuthRequest, res: Response) {
  * 获取提现记录
  * GET /api/v1/escrow/withdrawal/history
  */
-export async function getWithdrawalHistory(req: AuthRequest, res: Response) {
+export async function getWithdrawalHistory(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const limit = parseInt(req.query.limit as string) || 20;
@@ -253,7 +253,7 @@ export async function getWithdrawalHistory(req: AuthRequest, res: Response) {
  * 获取账户流水
  * GET /api/v1/escrow/transactions
  */
-export async function getTransactions(req: AuthRequest, res: Response) {
+export async function getTransactions(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const limit = parseInt(req.query.limit as string) || 20;
