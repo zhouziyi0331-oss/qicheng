@@ -1,4 +1,4 @@
-import { JwtPayload as OriginalJwtPayload } from 'jsonwebtoken';
+import 'jsonwebtoken';
 
 declare module 'jsonwebtoken' {
   export interface JwtPayload {
@@ -14,7 +14,12 @@ declare module 'jsonwebtoken' {
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload;
+      user?: {
+        id: string;
+        role: 'student' | 'company' | 'admin';
+        phone?: string;
+        email?: string;
+      };
     }
   }
 }
