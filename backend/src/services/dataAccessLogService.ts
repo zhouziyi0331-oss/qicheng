@@ -103,7 +103,7 @@ class DataAccessLogService {
       [resourceType, resourceId, limit]
     );
 
-    return result.rows;
+    return result;
   }
 
   /**
@@ -118,7 +118,7 @@ class DataAccessLogService {
       [userId, limit]
     );
 
-    return result.rows;
+    return result;
   }
 
   /**
@@ -144,7 +144,7 @@ class DataAccessLogService {
       [resourceType, resourceId, limit]
     );
 
-    return result.rows;
+    return result;
   }
 
   /**
@@ -158,7 +158,7 @@ class DataAccessLogService {
       [resourceType, resourceId]
     );
 
-    return parseInt(result.rows[0].count, 10);
+    return parseInt(result[0].count, 10);
   }
 
   /**
@@ -174,7 +174,7 @@ class DataAccessLogService {
       [resourceType, resourceId]
     );
 
-    return result.rows.length > 0 ? result.rows[0].created_at : null;
+    return result.length > 0 ? result[0].created_at : null;
   }
 
   /**

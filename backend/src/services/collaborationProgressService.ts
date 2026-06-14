@@ -35,7 +35,7 @@ class CollaborationProgressService {
       [studentId, companyId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       // 返回默认值
       return {
         studentId,
@@ -52,7 +52,7 @@ class CollaborationProgressService {
       };
     }
 
-    const row = result.rows[0];
+    const row = result[0];
     return {
       studentId: row.student_id,
       companyId: row.company_id,
@@ -124,7 +124,7 @@ class CollaborationProgressService {
       [studentId, companyId]
     );
 
-    return result.rows[0].can_unlock;
+    return result[0].can_unlock;
   }
 
   /**
@@ -138,7 +138,7 @@ class CollaborationProgressService {
       [studentId]
     );
 
-    return result.rows.map((row) => ({
+    return result.map((row) => ({
       studentId: row.student_id,
       companyId: row.company_id,
       completedCount: parseInt(row.completed_count, 10),
@@ -164,7 +164,7 @@ class CollaborationProgressService {
       [companyId]
     );
 
-    return result.rows.map((row) => ({
+    return result.map((row) => ({
       studentId: row.student_id,
       companyId: row.company_id,
       completedCount: parseInt(row.completed_count, 10),

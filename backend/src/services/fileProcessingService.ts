@@ -428,7 +428,7 @@ ${content.substring(0, 2000)}
       params
     );
 
-    return result.rows;
+    return result;
   }
 
   /**

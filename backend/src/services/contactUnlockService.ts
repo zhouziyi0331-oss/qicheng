@@ -104,7 +104,7 @@ class ContactUnlockService {
       );
     }
 
-    const request = result.rows[0];
+    const request = result[0];
 
     // 3. 检查是否双方都同意，如果是则自动解锁
     if (request.student_agreed && request.company_agreed && !request.exchanged) {
@@ -127,11 +127,11 @@ class ContactUnlockService {
       [studentId, companyId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       throw new Error('未找到解锁申请');
     }
 
-    const request = result.rows[0];
+    const request = result[0];
 
     if (request.exchanged) {
       throw new Error('联系方式已解锁');
@@ -214,11 +214,11 @@ class ContactUnlockService {
       [targetUserId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       throw new Error('用户不存在');
     }
 
-    const contact = result.rows[0];
+    const contact = result[0];
 
     // 3. 记录访问日志
     await dataAccessLogService.logAccess({
@@ -250,7 +250,7 @@ class ContactUnlockService {
 
     const canUnlock = await this.canUnlock(studentId, companyId);
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return {
         id: '',
         studentId,
@@ -263,7 +263,7 @@ class ContactUnlockService {
       };
     }
 
-    return this.formatUnlockResponse(result.rows[0], canUnlock);
+    return this.formatUnlockResponse(result[0], canUnlock);
   }
 
   /**
@@ -277,7 +277,7 @@ class ContactUnlockService {
       [studentId, companyId]
     );
 
-    const completedCount = parseInt(result.rows[0].count, 10);
+    const completedCount = parseInt(result[0].count, 10);
     return {
       eligible: completedCount >= 2,
       completedCount
@@ -298,7 +298,7 @@ class ContactUnlockService {
     );
 
     const requests = await Promise.all(
-      result.rows.map(async (row) => {
+      result.map(async (row) => {
         const canUnlock = await this.canUnlock(row.student_id, row.company_id);
         return this.formatUnlockResponse(row, canUnlock);
       })

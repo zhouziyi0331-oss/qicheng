@@ -171,11 +171,11 @@ class EncryptionService {
       [deliverableId, deliverableType]
     );
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       throw new Error('Encryption metadata not found');
     }
 
-    const metadata = result.rows[0];
+    const metadata = result[0];
     const decryptedFields: EncryptedFields = {};
 
     // 解密每个字段
@@ -229,7 +229,7 @@ class EncryptionService {
         `SELECT company_id FROM tasks WHERE id = $1`,
         [taskId]
       );
-      return result.rows.length > 0 && result.rows[0].company_id === userId;
+      return result.length > 0 && result[0].company_id === userId;
     }
 
     // 学生只能解密自己提交的交付物
@@ -238,7 +238,7 @@ class EncryptionService {
         `SELECT accepted_student_id FROM tasks WHERE id = $1`,
         [taskId]
       );
-      return result.rows.length > 0 && result.rows[0].accepted_student_id === userId;
+      return result.length > 0 && result[0].accepted_student_id === userId;
     }
 
     // 平台管理员可以解密
