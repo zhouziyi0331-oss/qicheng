@@ -123,10 +123,10 @@ class EncryptionService {
         const result = await db_1.default.query(`SELECT * FROM deliverable_encryption_metadata
        WHERE deliverable_id = $1 AND deliverable_type = $2
        ORDER BY created_at DESC LIMIT 1`, [deliverableId, deliverableType]);
-        if (result.rows.length === 0) {
+        if (result.length === 0) {
             throw new Error('Encryption metadata not found');
         }
-        const metadata = result.rows[0];
+        const metadata = result[0];
         const decryptedFields = {};
         // 解密每个字段
         for (const [fieldName, encryptedValue] of Object.entries(encryptedFields)) {
@@ -167,12 +167,12 @@ class EncryptionService {
         // 企业只能解密自己任务的交付物
         if (userRole === 'company') {
             const result = await db_1.default.query(`SELECT company_id FROM tasks WHERE id = $1`, [taskId]);
-            return result.rows.length > 0 && result.rows[0].company_id === userId;
+            return result.length > 0 && result[0].company_id === userId;
         }
         // 学生只能解密自己提交的交付物
         if (userRole === 'student') {
             const result = await db_1.default.query(`SELECT accepted_student_id FROM tasks WHERE id = $1`, [taskId]);
-            return result.rows.length > 0 && result.rows[0].accepted_student_id === userId;
+            return result.length > 0 && result[0].accepted_student_id === userId;
         }
         // 平台管理员可以解密
         if (userRole === 'platform_admin' || userRole === 'admin') {

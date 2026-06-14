@@ -352,7 +352,7 @@ ${content.substring(0, 2000)}
        FROM pbl_project_files
        ${condition}
        ORDER BY created_at DESC`, params);
-        return result.rows;
+        return result;
     }
     /**
      * 删除文件

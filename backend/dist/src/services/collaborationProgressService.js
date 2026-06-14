@@ -20,7 +20,7 @@ class CollaborationProgressService {
     async getProgress(studentId, companyId) {
         const result = await db_1.default.query(`SELECT * FROM collaboration_progress
        WHERE student_id = $1 AND company_id = $2`, [studentId, companyId]);
-        if (result.rows.length === 0) {
+        if (result.length === 0) {
             // 返回默认值
             return {
                 studentId,
@@ -36,7 +36,7 @@ class CollaborationProgressService {
                 avgCompanyRating: null,
             };
         }
-        const row = result.rows[0];
+        const row = result[0];
         return {
             studentId: row.student_id,
             companyId: row.company_id,
@@ -104,7 +104,7 @@ class CollaborationProgressService {
      */
     async canUnlock(studentId, companyId) {
         const result = await db_1.default.query(`SELECT can_exchange_contacts($1, $2) as can_unlock`, [studentId, companyId]);
-        return result.rows[0].can_unlock;
+        return result[0].can_unlock;
     }
     /**
      * 获取所有合作进度（用于学生查看所有企业）
@@ -113,7 +113,7 @@ class CollaborationProgressService {
         const result = await db_1.default.query(`SELECT * FROM collaboration_progress
        WHERE student_id = $1
        ORDER BY completed_count DESC, last_completed_at DESC`, [studentId]);
-        return result.rows.map((row) => ({
+        return result.map((row) => ({
             studentId: row.student_id,
             companyId: row.company_id,
             completedCount: parseInt(row.completed_count, 10),
@@ -134,7 +134,7 @@ class CollaborationProgressService {
         const result = await db_1.default.query(`SELECT * FROM collaboration_progress
        WHERE company_id = $1
        ORDER BY completed_count DESC, last_completed_at DESC`, [companyId]);
-        return result.rows.map((row) => ({
+        return result.map((row) => ({
             studentId: row.student_id,
             companyId: row.company_id,
             completedCount: parseInt(row.completed_count, 10),

@@ -65,7 +65,7 @@ class ContactUnlockService {
                 canUnlock.completedCount
             ]);
         }
-        const request = result.rows[0];
+        const request = result[0];
         // 3. 检查是否双方都同意，如果是则自动解锁
         if (request.student_agreed && request.company_agreed && !request.exchanged) {
             await this.executeUnlock(request.id);
@@ -81,10 +81,10 @@ class ContactUnlockService {
         // 检查是否有待处理的请求
         const result = await db_1.default.query(`SELECT * FROM contact_exchange_requests
        WHERE student_id = $1 AND company_id = $2`, [studentId, companyId]);
-        if (result.rows.length === 0) {
+        if (result.length === 0) {
             throw new Error('未找到解锁申请');
         }
-        const request = result.rows[0];
+        const request = result[0];
         if (request.exchanged) {
             throw new Error('联系方式已解锁');
         }
@@ -138,10 +138,10 @@ class ContactUnlockService {
         const targetUserId = requestedBy === 'student' ? companyId : studentId;
         const targetUserType = requestedBy === 'student' ? 'company' : 'student';
         const result = await db_1.default.query(`SELECT phone, wechat, email FROM users WHERE id = $1`, [targetUserId]);
-        if (result.rows.length === 0) {
+        if (result.length === 0) {
             throw new Error('用户不存在');
         }
-        const contact = result.rows[0];
+        const contact = result[0];
         // 3. 记录访问日志
         await dataAccessLogService_1.default.logAccess({
             userId: requesterId,
@@ -165,7 +165,7 @@ class ContactUnlockService {
         const result = await db_1.default.query(`SELECT * FROM contact_exchange_requests
        WHERE student_id = $1 AND company_id = $2`, [studentId, companyId]);
         const canUnlock = await this.canUnlock(studentId, companyId);
-        if (result.rows.length === 0) {
+        if (result.length === 0) {
             return {
                 id: '',
                 studentId,
@@ -177,7 +177,7 @@ class ContactUnlockService {
                 collaborationCount: canUnlock.completedCount
             };
         }
-        return this.formatUnlockResponse(result.rows[0], canUnlock);
+        return this.formatUnlockResponse(result[0], canUnlock);
     }
     /**
      * 检查是否可以解锁
@@ -186,7 +186,7 @@ class ContactUnlockService {
         const result = await db_1.default.query(`SELECT COUNT(*) as count
        FROM collaboration_history
        WHERE student_id = $1 AND company_id = $2 AND status = 'completed'`, [studentId, companyId]);
-        const completedCount = parseInt(result.rows[0].count, 10);
+        const completedCount = parseInt(result[0].count, 10);
         return {
             eligible: completedCount >= 2,
             completedCount
@@ -200,7 +200,7 @@ class ContactUnlockService {
         const result = await db_1.default.query(`SELECT * FROM contact_exchange_requests
        WHERE ${field} = $1
        ORDER BY created_at DESC`, [userId]);
-        const requests = await Promise.all(result.rows.map(async (row) => {
+        const requests = await Promise.all(result.map(async (row) => {
             const canUnlock = await this.canUnlock(row.student_id, row.company_id);
             return this.formatUnlockResponse(row, canUnlock);
         }));

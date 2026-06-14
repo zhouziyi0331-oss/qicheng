@@ -58,7 +58,7 @@ class DataAccessLogService {
        WHERE dal.resource_type = $1 AND dal.resource_id = $2
        ORDER BY dal.created_at DESC
        LIMIT $3`, [resourceType, resourceId, limit]);
-        return result.rows;
+        return result;
     }
     /**
      * 获取用户访问历史
@@ -68,7 +68,7 @@ class DataAccessLogService {
        WHERE user_id = $1
        ORDER BY created_at DESC
        LIMIT $2`, [userId, limit]);
-        return result.rows;
+        return result;
     }
     /**
      * 获取解密操作历史
@@ -85,7 +85,7 @@ class DataAccessLogService {
          AND dal.decryption_performed = true
        ORDER BY dal.created_at DESC
        LIMIT $3`, [resourceType, resourceId, limit]);
-        return result.rows;
+        return result;
     }
     /**
      * 统计访问次数
@@ -94,7 +94,7 @@ class DataAccessLogService {
         const result = await db_1.default.query(`SELECT COUNT(*) as count
        FROM data_access_logs
        WHERE resource_type = $1 AND resource_id = $2`, [resourceType, resourceId]);
-        return parseInt(result.rows[0].count, 10);
+        return parseInt(result[0].count, 10);
     }
     /**
      * 获取最近访问时间
@@ -105,7 +105,7 @@ class DataAccessLogService {
        WHERE resource_type = $1 AND resource_id = $2
        ORDER BY created_at DESC
        LIMIT 1`, [resourceType, resourceId]);
-        return result.rows.length > 0 ? result.rows[0].created_at : null;
+        return result.length > 0 ? result[0].created_at : null;
     }
     /**
      * 从请求对象提取访问信息
