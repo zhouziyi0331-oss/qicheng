@@ -49,12 +49,12 @@ class MatchingScheduler {
          ORDER BY created_at DESC`
       );
 
-      logger.info(`Found ${tasks.rows.length} open tasks to rematch`);
+      logger.info(`Found ${tasks.length} open tasks to rematch`);
 
       let successCount = 0;
       let errorCount = 0;
 
-      for (const task of tasks.rows) {
+      for (const task of tasks) {
         try {
           await this.rematchTask(task.id, task.company_id);
           successCount++;
@@ -119,9 +119,9 @@ class MatchingScheduler {
             taskId,
             match.student_id,
             match.match_score.overall_score,
-            match.match_score.skillMatch.score,
-            match.match_score.difficultyMatch.score,
-            match.match_score.domainMatch.score,
+            match.match_score.skill_match.score,
+            match.match_score.difficulty_match.score,
+            match.match_score.domain_match.score,
             match.match_score.growth_potential.score,
             match.match_score.reliability.score,
             match.match_score.preference_alignment.score,
@@ -171,14 +171,14 @@ class MatchingScheduler {
          LIMIT 50`
       );
 
-      if (tasks.rows.length === 0) {
+      if (tasks.length === 0) {
         logger.info('No open tasks to match');
         return;
       }
 
       let matchedCount = 0;
 
-      for (const task of tasks.rows) {
+      for (const task of tasks) {
         try {
           // 计算这个学生与任务的匹配度
           const match_score = await semanticMatchingEngine.matchTaskWithStudent(task.id, student_id);
@@ -215,9 +215,9 @@ class MatchingScheduler {
                 task.id,
                 student_id,
                 match_score.overall_score,
-                match_score.skillMatch.score,
-                match_score.difficultyMatch.score,
-                match_score.domainMatch.score,
+                match_score.skill_match.score,
+                match_score.difficulty_match.score,
+                match_score.domain_match.score,
                 match_score.growth_potential.score,
                 match_score.reliability.score,
                 match_score.preference_alignment.score,
@@ -304,9 +304,9 @@ class MatchingScheduler {
             taskId,
             match.student_id,
             match.match_score.overall_score,
-            match.match_score.skillMatch.score,
-            match.match_score.difficultyMatch.score,
-            match.match_score.domainMatch.score,
+            match.match_score.skill_match.score,
+            match.match_score.difficulty_match.score,
+            match.match_score.domain_match.score,
             match.match_score.growth_potential.score,
             match.match_score.reliability.score,
             match.match_score.preference_alignment.score,
