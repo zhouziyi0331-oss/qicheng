@@ -23,7 +23,7 @@ import logger from '../utils/logger';
  */
 export async function createDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {
@@ -59,7 +59,7 @@ export async function createDraft(req: Request, res: Response) {
  */
 export async function getDrafts(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
 
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -97,7 +97,7 @@ export async function getDrafts(req: Request, res: Response) {
  */
 export async function getDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -129,7 +129,7 @@ export async function getDraft(req: Request, res: Response) {
  */
 export async function updateDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -157,7 +157,7 @@ export async function updateDraft(req: Request, res: Response) {
  */
 export async function deleteDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -185,7 +185,7 @@ export async function deleteDraft(req: Request, res: Response) {
  */
 export async function duplicateDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -217,7 +217,7 @@ export async function duplicateDraft(req: Request, res: Response) {
  */
 export async function reviewDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -245,7 +245,7 @@ export async function reviewDraft(req: Request, res: Response) {
  */
 export async function getPricingSuggestion(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -277,7 +277,7 @@ export async function getPricingSuggestion(req: Request, res: Response) {
  */
 export async function publishDraft(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -308,7 +308,7 @@ export async function publishDraft(req: Request, res: Response) {
  */
 export async function getDraftHistory(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
     const limit = parseInt(req.query.limit as string) || 10;
 
@@ -337,7 +337,7 @@ export async function getDraftHistory(req: Request, res: Response) {
  */
 export async function restoreDraftVersion(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id, historyId } = req.params;
 
     if (!userId) {

@@ -46,7 +46,7 @@ export async function getPendingWithdrawals(req: Request, res: Response) {
  */
 export async function approveWithdrawal(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { id } = req.params;
     const { reason } = req.body;
 
@@ -76,7 +76,7 @@ export async function approveWithdrawal(req: Request, res: Response) {
  */
 export async function rejectWithdrawal(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { id } = req.params;
     const { reason, risk_level } = req.body;
 
@@ -141,7 +141,7 @@ export async function getPendingVerifications(req: Request, res: Response) {
  */
 export async function approveVerification(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { id } = req.params;
     const { note } = req.body;
 
@@ -171,7 +171,7 @@ export async function approveVerification(req: Request, res: Response) {
  */
 export async function rejectVerification(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { id } = req.params;
     const { reason } = req.body;
 
@@ -209,7 +209,7 @@ export async function rejectVerification(req: Request, res: Response) {
  */
 export async function reviewTask(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { id } = req.params;
     const { review_type, status, issues, note } = req.body;
 
@@ -254,7 +254,7 @@ export async function reviewTask(req: Request, res: Response) {
  */
 export async function hideRating(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { id } = req.params;
     const { reason } = req.body;
 
@@ -451,7 +451,7 @@ export async function getSystemConfig(req: Request, res: Response) {
  */
 export async function updateSystemConfig(req: Request, res: Response) {
   try {
-    const adminId = req.user?.id;
+    const adminId = req.user?.userId;
     const { key } = req.params;
     const { value } = req.body;
 

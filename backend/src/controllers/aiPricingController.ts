@@ -20,7 +20,7 @@ import logger from '../utils/logger';
  */
 export async function getPricingSuggestion(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {
@@ -80,7 +80,7 @@ export async function getPricingSuggestion(req: Request, res: Response) {
  */
 export async function savePricingHistory(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {
@@ -126,7 +126,7 @@ export async function savePricingHistory(req: Request, res: Response) {
  */
 export async function recordAdjustment(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {
@@ -192,7 +192,7 @@ export async function recordAdjustment(req: Request, res: Response) {
  */
 export async function getPricingAccuracy(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {
@@ -228,7 +228,7 @@ export async function getPricingAccuracy(req: Request, res: Response) {
  */
 export async function updateBenchmarks(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {

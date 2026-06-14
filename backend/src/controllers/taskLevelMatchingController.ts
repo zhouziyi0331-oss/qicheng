@@ -44,7 +44,7 @@ export async function getTaskLevels(req: Request, res: Response) {
  */
 export async function calculateTaskLevel(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { taskId } = req.params;
 
     if (!userId) {
@@ -106,7 +106,7 @@ export async function getStudentLevel(req: Request, res: Response) {
  */
 export async function updateStudentLevel(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { studentId } = req.params;
 
     if (!userId) {
@@ -146,7 +146,7 @@ export async function updateStudentLevel(req: Request, res: Response) {
  */
 export async function matchTaskWithStudents(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { taskId } = req.params;
     const limit = parseInt(req.query.limit as string) || 10;
@@ -182,7 +182,7 @@ export async function matchTaskWithStudents(req: Request, res: Response) {
  */
 export async function getTaskMatches(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { taskId } = req.params;
     const limit = parseInt(req.query.limit as string) || 10;
 
@@ -212,7 +212,7 @@ export async function getTaskMatches(req: Request, res: Response) {
  */
 export async function getStudentRecommendations(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { studentId } = req.params;
     const limit = parseInt(req.query.limit as string) || 10;
 
@@ -250,7 +250,7 @@ export async function getStudentRecommendations(req: Request, res: Response) {
  */
 export async function notifyMatchedStudents(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { taskId } = req.params;
     const topN = parseInt(req.body.top_n) || 5;

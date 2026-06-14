@@ -23,7 +23,7 @@ import logger from '../utils/logger';
  */
 export async function createAmendment(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId) {
@@ -87,7 +87,7 @@ export async function createAmendment(req: Request, res: Response) {
  */
 export async function studentRespond(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { id } = req.params;
 
@@ -137,7 +137,7 @@ export async function studentRespond(req: Request, res: Response) {
  */
 export async function companyDecide(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { id } = req.params;
 
@@ -186,7 +186,7 @@ export async function companyDecide(req: Request, res: Response) {
  */
 export async function cancelAmendment(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { id } = req.params;
 
@@ -226,7 +226,7 @@ export async function cancelAmendment(req: Request, res: Response) {
  */
 export async function getTaskAmendments(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { taskId } = req.params;
 
     if (!userId) {
@@ -254,7 +254,7 @@ export async function getTaskAmendments(req: Request, res: Response) {
  */
 export async function getAmendment(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {
@@ -290,7 +290,7 @@ export async function getAmendment(req: Request, res: Response) {
  */
 export async function analyzeAmendment(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { id } = req.params;
 
     if (!userId) {

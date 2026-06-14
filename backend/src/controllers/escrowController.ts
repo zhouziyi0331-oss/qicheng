@@ -19,7 +19,7 @@ import logger from '../utils/logger';
  */
 export async function getAccount(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -49,7 +49,7 @@ export async function getAccount(req: Request, res: Response) {
  */
 export async function initAccount(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
 
     if (!userId || !userRole) {
@@ -83,7 +83,7 @@ export async function initAccount(req: Request, res: Response) {
  */
 export async function depositFunds(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { task_id, payee_id, amount } = req.body;
 
@@ -125,7 +125,7 @@ export async function depositFunds(req: Request, res: Response) {
  */
 export async function releaseFunds(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const userRole = req.user?.role;
     const { task_id } = req.body;
 
@@ -167,7 +167,7 @@ export async function releaseFunds(req: Request, res: Response) {
  */
 export async function requestWithdrawal(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { amount, withdrawal_method, withdrawal_account, account_name } = req.body;
 
     if (!userId) {
@@ -219,7 +219,7 @@ export async function requestWithdrawal(req: Request, res: Response) {
  */
 export async function getWithdrawalHistory(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;
 
@@ -255,7 +255,7 @@ export async function getWithdrawalHistory(req: Request, res: Response) {
  */
 export async function getTransactions(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;
 
