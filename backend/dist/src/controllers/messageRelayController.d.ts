@@ -4,12 +4,6 @@
  * 处理消息中转和联系方式交换的HTTP请求
  */
 import { Request, Response } from 'express';
-interface AuthRequest extends Request {
-    user?: {
-        id: string;
-        role: string;
-    };
-}
 /**
  * 发送消息（通过AI中转）
  *
@@ -22,7 +16,7 @@ interface AuthRequest extends Request {
  *   content: string;
  * }
  */
-export declare function sendMessage(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export declare function sendMessage(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
  * 获取任务的中转消息
  *
@@ -32,7 +26,7 @@ export declare function sendMessage(req: AuthRequest, res: Response): Promise<Re
  * - limit: number (default: 50)
  * - offset: number (default: 0)
  */
-export declare function getMessages(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export declare function getMessages(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
  * 获取消息统计
  *
@@ -44,7 +38,7 @@ export declare function getMessages(req: AuthRequest, res: Response): Promise<Re
  * - startDate: string (optional)
  * - endDate: string (optional)
  */
-export declare function getStatistics(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export declare function getStatistics(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
  * 获取违规记录
  *
@@ -55,7 +49,7 @@ export declare function getStatistics(req: AuthRequest, res: Response): Promise<
  * - limit: number (default: 20)
  * - offset: number (default: 0)
  */
-export declare function getViolations(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export declare function getViolations(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
  * 同意交换联系方式
  *
@@ -67,7 +61,7 @@ export declare function getViolations(req: AuthRequest, res: Response): Promise<
  *   companyId: string;
  * }
  */
-export declare function agreeToExchange(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export declare function agreeToExchange(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
  * 获取交换状态
  *
@@ -77,7 +71,7 @@ export declare function agreeToExchange(req: AuthRequest, res: Response): Promis
  * - studentId: string
  * - companyId: string
  */
-export declare function getExchangeStatus(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
+export declare function getExchangeStatus(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 /**
  * 检查是否可以交换联系方式
  *
@@ -87,6 +81,5 @@ export declare function getExchangeStatus(req: AuthRequest, res: Response): Prom
  * - studentId: string
  * - companyId: string
  */
-export declare function canExchange(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>>>;
-export {};
+export declare function canExchange(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 //# sourceMappingURL=messageRelayController.d.ts.map

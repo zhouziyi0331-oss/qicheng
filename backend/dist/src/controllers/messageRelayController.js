@@ -19,6 +19,9 @@ const messageRelayService_1 = require("../services/messageRelayService");
 const contactExchangeService_1 = require("../services/contactExchangeService");
 const logger_1 = __importDefault(require("../utils/logger"));
 // =====================================================
+// 类型定义
+// =====================================================
+// =====================================================
 // 消息中转接口
 // =====================================================
 /**

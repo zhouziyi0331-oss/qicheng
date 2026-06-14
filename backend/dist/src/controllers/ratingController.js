@@ -21,6 +21,9 @@ exports.deleteRating = deleteRating;
 const ratingService_1 = require("../services/ratingService");
 const logger_1 = __importDefault(require("../utils/logger"));
 // =====================================================
+// 类型定义
+// =====================================================
+// =====================================================
 // 评价CRUD接口
 // =====================================================
 /**
