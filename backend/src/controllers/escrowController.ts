@@ -11,10 +11,12 @@ import logger from '../utils/logger';
 declare global {
   namespace Express {
     interface Request {
-  user?: {
-    id: string;
-    role: string;
-  };
+      user?: {
+        id: string;
+        role: string;
+      };
+    }
+  }
 }
 
 // =====================================================
