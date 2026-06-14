@@ -7,7 +7,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { pool, QueryResult } from '../utils/db';
 import logger from '../utils/logger';
-import config from '../config';
+import { config } from '../../config';
 
 interface Student {
   id: string;

@@ -4,7 +4,13 @@ import { pblAgentService } from '../services/pblAgentService';
 import codeExecutionService from '../services/codeExecutionService';
 import fileProcessingService from '../services/fileProcessingService';
 import logger from '../utils/logger';
-import { JwtPayload } from 'jsonwebtoken';
+
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    role: string;
+  };
+}
 
 /**
  * 增强版导师控制器
@@ -16,7 +22,7 @@ export class EnhancedMentorController {
    * 统一对话接口
    * POST /api/v1/mentor/chat
    */
-  async chat(req: Request, res: Response): Promise<void> {
+  async chat(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -62,7 +68,7 @@ export class EnhancedMentorController {
    * 初始化新项目
    * POST /api/v1/mentor/projects/init
    */
-  async initProject(req: Request, res: Response): Promise<void> {
+  async initProject(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -101,7 +107,7 @@ export class EnhancedMentorController {
    * 获取用户的项目列表
    * GET /api/v1/mentor/projects
    */
-  async getProjects(req: Request, res: Response): Promise<void> {
+  async getProjects(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -132,7 +138,7 @@ export class EnhancedMentorController {
    * 获取项目详情
    * GET /api/v1/mentor/projects/:projectId
    */
-  async getProjectDetail(req: Request, res: Response): Promise<void> {
+  async getProjectDetail(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -163,7 +169,7 @@ export class EnhancedMentorController {
    * 任务拆解引导
    * POST /api/v1/mentor/projects/:projectId/decompose
    */
-  async guideDecomposition(req: Request, res: Response): Promise<void> {
+  async guideDecomposition(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -202,7 +208,7 @@ export class EnhancedMentorController {
    * 评估任务拆解
    * POST /api/v1/mentor/projects/:projectId/evaluate-decomposition
    */
-  async evaluateDecomposition(req: Request, res: Response): Promise<void> {
+  async evaluateDecomposition(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -241,7 +247,7 @@ export class EnhancedMentorController {
    * 执行代码
    * POST /api/v1/mentor/projects/:projectId/execute-code
    */
-  async executeCode(req: Request, res: Response): Promise<void> {
+  async executeCode(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -282,7 +288,7 @@ export class EnhancedMentorController {
    * 获取代码执行历史
    * GET /api/v1/mentor/projects/:projectId/execution-history
    */
-  async getExecutionHistory(req: Request, res: Response): Promise<void> {
+  async getExecutionHistory(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -316,7 +322,7 @@ export class EnhancedMentorController {
    * 上传文件
    * POST /api/v1/mentor/projects/:projectId/upload
    */
-  async uploadFile(req: Request, res: Response): Promise<void> {
+  async uploadFile(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -363,7 +369,7 @@ export class EnhancedMentorController {
    * 获取项目文件列表
    * GET /api/v1/mentor/projects/:projectId/files
    */
-  async getProjectFiles(req: Request, res: Response): Promise<void> {
+  async getProjectFiles(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -397,7 +403,7 @@ export class EnhancedMentorController {
    * 删除文件
    * DELETE /api/v1/mentor/files/:fileId
    */
-  async deleteFile(req: Request, res: Response): Promise<void> {
+  async deleteFile(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -427,7 +433,7 @@ export class EnhancedMentorController {
    * 引导反思
    * POST /api/v1/mentor/projects/:projectId/reflect
    */
-  async guideReflection(req: Request, res: Response): Promise<void> {
+  async guideReflection(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -466,7 +472,7 @@ export class EnhancedMentorController {
    * 保存反思日志
    * POST /api/v1/mentor/projects/:projectId/reflection-log
    */
-  async saveReflectionLog(req: Request, res: Response): Promise<void> {
+  async saveReflectionLog(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -521,7 +527,7 @@ export class EnhancedMentorController {
    * 切换导师模式
    * POST /api/v1/mentor/switch-mode
    */
-  async switchMode(req: Request, res: Response): Promise<void> {
+  async switchMode(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -555,7 +561,7 @@ export class EnhancedMentorController {
    * 获取导师使用统计
    * GET /api/v1/mentor/stats
    */
-  async getStats(req: Request, res: Response): Promise<void> {
+  async getStats(req: AuthRequest, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {

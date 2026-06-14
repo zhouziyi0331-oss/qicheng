@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import logger from '../utils/logger';
 import { pool } from '../config/database';
 import { v4 as uuidv4 } from 'uuid';
-import config from '../config';
+import { config } from '../../config';
 
 const anthropic = new Anthropic({
   apiKey: config.ai.anthropicApiKey,

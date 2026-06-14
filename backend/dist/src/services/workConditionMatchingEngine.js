@@ -68,8 +68,8 @@ class WorkConditionMatchingEngine {
          WHERE swcp.profile_vector IS NOT NULL
          ORDER BY swcp.profile_vector <=> $1::vector
          LIMIT $2`, [JSON.stringify(vectorArray), limit]);
-            logger_1.default.info(`Vector search found ${result.rows.length} candidates`);
-            return result.rows;
+            logger_1.default.info(`Vector search found ${result.length} candidates`);
+            return result;
         }
         catch (error) {
             logger_1.default.error('Vector similarity search failed, falling back to all profiles:', error);
