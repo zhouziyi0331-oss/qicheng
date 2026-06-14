@@ -215,7 +215,7 @@ class CodeExecutionService {
        WHERE project_id = $1
        ORDER BY created_at DESC
        LIMIT $2`, [projectId, limit]);
-        return result.rows;
+        return result;
     }
     /**
      * 安装Python包（仅用于开发环境）
