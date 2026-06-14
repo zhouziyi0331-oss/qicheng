@@ -306,7 +306,7 @@ class TeamService {
         status: team.status,
         currentMembers: team.current_members,
         maxMembers: team.max_members,
-        members: members.rows.map(m => ({
+        members: members.map(m => ({
           userId: m.user_id,
           role: m.role,
           assignedModule: m.assigned_module,
@@ -336,14 +336,14 @@ class TeamService {
       );
 
       // 验证分润比例总和
-      const totalPercent = members.rows.reduce((sum, m) => sum + m.revenue_share_percent, 0);
+      const totalPercent = members.reduce((sum, m) => sum + m.revenue_share_percent, 0);
 
       if (Math.abs(totalPercent - 100) > 0.01) {
         throw new Error(`分润比例总和必须为100%，当前为${totalPercent}%`);
       }
 
       // 创建分润记录
-      for (const member of members.rows) {
+      for (const member of members) {
         const memberAmount = (totalRevenue * member.revenue_share_percent) / 100;
 
         await query(
