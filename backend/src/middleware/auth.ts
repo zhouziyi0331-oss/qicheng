@@ -4,7 +4,7 @@ import { config } from '../../config';
 import { AppError } from './errorHandler';
 
 export interface JwtPayload {
-  userId: string;
+  id: string;  // 统一使用id
   role: 'student' | 'company' | 'admin';
   adminRole?: 'super' | 'ops' | 'cs';
   accountType?: 'student' | 'enterprise';
