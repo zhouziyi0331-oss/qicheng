@@ -15,6 +15,7 @@ exports.getPricingAccuracy = getPricingAccuracy;
 exports.updateBenchmarks = updateBenchmarks;
 const aiPricingService_1 = __importDefault(require("../services/aiPricingService"));
 const logger_1 = __importDefault(require("../utils/logger"));
+// 扩展Request以包含user
 // =====================================================
 // 定价建议接口
 // =====================================================

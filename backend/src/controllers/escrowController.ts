@@ -8,16 +8,6 @@ import { Request, Response } from 'express';
 import { escrowServiceNew } from '../services/escrowServiceNew';
 import logger from '../utils/logger';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        role: string;
-      };
-    }
-  }
-}
 
 // =====================================================
 // 账户管理

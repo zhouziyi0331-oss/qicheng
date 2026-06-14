@@ -4,16 +4,6 @@
  * 处理任务追加需求相关的HTTP请求
  */
 import { Response } from 'express';
-declare global {
-    namespace Express {
-        interface Request {
-            user?: {
-                id: string;
-                role: string;
-            };
-        }
-    }
-}
 /**
  * 创建追加需求（企业）
  * POST /api/v1/task-amendments

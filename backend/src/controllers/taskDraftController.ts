@@ -12,16 +12,6 @@ import logger from '../utils/logger';
 // 类型定义
 // =====================================================
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        role: string;
-      };
-    }
-  }
-}
 
 // =====================================================
 // 草稿CRUD接口

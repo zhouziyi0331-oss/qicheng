@@ -4,16 +4,6 @@
  * 处理任务草稿相关的HTTP请求
  */
 import { Response } from 'express';
-declare global {
-    namespace Express {
-        interface Request {
-            user?: {
-                id: string;
-                role: string;
-            };
-        }
-    }
-}
 /**
  * 创建新草稿
  * POST /api/v1/task-drafts

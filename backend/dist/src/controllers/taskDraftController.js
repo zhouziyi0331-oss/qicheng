@@ -22,6 +22,9 @@ exports.restoreDraftVersion = restoreDraftVersion;
 const taskDraftService_1 = require("../services/taskDraftService");
 const logger_1 = __importDefault(require("../utils/logger"));
 // =====================================================
+// 类型定义
+// =====================================================
+// =====================================================
 // 草稿CRUD接口
 // =====================================================
 /**

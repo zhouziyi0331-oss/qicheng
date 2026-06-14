@@ -4,16 +4,6 @@
  * 处理AI智能定价相关的HTTP请求
  */
 import { Request, Response } from 'express';
-declare global {
-    namespace Express {
-        interface Request {
-            user?: {
-                id: string;
-                role: string;
-            };
-        }
-    }
-}
 /**
  * 获取智能定价建议
  * POST /api/v1/ai-pricing/suggest

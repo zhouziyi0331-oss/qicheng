@@ -4,16 +4,6 @@
  * 基于063_escrow_withdrawal_system.sql的完整实现
  */
 import { Response } from 'express';
-declare global {
-    namespace Express {
-        interface Request {
-            user?: {
-                id: string;
-                role: string;
-            };
-        }
-    }
-}
 /**
  * 获取托管账户信息
  * GET /api/v1/escrow/account

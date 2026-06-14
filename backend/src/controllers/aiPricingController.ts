@@ -9,16 +9,6 @@ import aiPricingService from '../services/aiPricingService';
 import logger from '../utils/logger';
 
 // 扩展Request以包含user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        role: string;
-      };
-    }
-  }
-}
 
 // =====================================================
 // 定价建议接口
