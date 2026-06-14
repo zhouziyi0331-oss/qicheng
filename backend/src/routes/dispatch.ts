@@ -8,7 +8,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 import priceRecommendationService from '../services/priceRecommendationService';
 import designatedMasterService from '../services/designatedMasterService';
 

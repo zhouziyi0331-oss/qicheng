@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const logger_1 = __importDefault(require("../../utils/logger"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const encryptionService_1 = __importDefault(require("../services/encryptionService"));
 const dataAccessLogService_1 = __importDefault(require("../services/dataAccessLogService"));
 const collaborationProgressService_1 = __importDefault(require("../services/collaborationProgressService"));

@@ -8,7 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const logger_1 = __importDefault(require("../../utils/logger"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const instantGrowthSummaryService_1 = __importDefault(require("../services/instantGrowthSummaryService"));
 const abilityDimensionUpdateService_1 = __importDefault(require("../services/abilityDimensionUpdateService"));
 const graduationReportService_1 = __importDefault(require("../services/graduationReportService"));

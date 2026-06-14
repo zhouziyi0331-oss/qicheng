@@ -8,7 +8,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 import encryptionService from '../services/encryptionService';
 import dataAccessLogService from '../services/dataAccessLogService';
 import collaborationProgressService from '../services/collaborationProgressService';

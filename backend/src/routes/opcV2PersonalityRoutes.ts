@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express'
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 import opcV2PersonalityService from '../services/opcV2PersonalityService'
 import { authenticate } from '../middleware/auth'
 import { body, validationResult } from 'express-validator'

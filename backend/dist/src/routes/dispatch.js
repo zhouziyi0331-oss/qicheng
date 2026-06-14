@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const logger_1 = __importDefault(require("../../utils/logger"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const priceRecommendationService_1 = __importDefault(require("../services/priceRecommendationService"));
 const designatedMasterService_1 = __importDefault(require("../services/designatedMasterService"));
 const router = (0, express_1.Router)();

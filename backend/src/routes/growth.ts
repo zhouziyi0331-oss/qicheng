@@ -4,7 +4,7 @@
  */
 
 import express from 'express';
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 import instantGrowthSummaryService from '../services/instantGrowthSummaryService';
 import abilityDimensionUpdateService from '../services/abilityDimensionUpdateService';
 import graduationReportService from '../services/graduationReportService';
