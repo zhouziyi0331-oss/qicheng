@@ -32,7 +32,7 @@ export const triggerMatching = async (req: Request, res: Response) => {
     res.json({
       success: true,
       matchedCount: matches.length,
-      topScore: matches[0]?.overallScore || 0,
+      topScore: matches[0]?.overall_score || 0,
       message: `成功为任务匹配${matches.length}个学生`
     });
   } catch (error: any) {
@@ -62,7 +62,7 @@ export const getMatchedStudents = async (req: Request, res: Response) => {
         nickname: match.student_nickname,
         avatar: match.student_avatar,
         level: match.student_level,
-        overallScore: Math.round(match.overallScore * 100),
+        overall_score: Math.round(match.overall_score * 100),
         skillMatch: Math.round(match.skillMatch * 100),
         difficultyMatch: Math.round(match.difficultyMatch * 100),
         domainMatch: Math.round(match.domainMatch * 100),
@@ -135,7 +135,7 @@ export const getRecommendedTasks = async (req: Request, res: Response) => {
         level: task.task_level,
         budget: task.task_budget,
         duration: task.task_duration,
-        match_score: Math.round(task.overallScore * 100),
+        match_score: Math.round(task.overall_score * 100),
         matchReason: task.match_reason,
         studentFriendlyTitle: task.student_friendly_title,
         whatYouWillDo: task.what_you_will_do,

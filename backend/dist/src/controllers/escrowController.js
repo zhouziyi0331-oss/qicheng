@@ -26,7 +26,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
  */
 async function getAccount(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -53,7 +53,7 @@ async function getAccount(req, res) {
  */
 async function initAccount(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         if (!userId || !userRole) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -83,7 +83,7 @@ async function initAccount(req, res) {
  */
 async function depositFunds(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { task_id, payee_id, amount } = req.body;
         if (!userId) {
@@ -119,7 +119,7 @@ async function depositFunds(req, res) {
  */
 async function releaseFunds(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { task_id } = req.body;
         if (!userId) {
@@ -155,7 +155,7 @@ async function releaseFunds(req, res) {
  */
 async function requestWithdrawal(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { amount, withdrawal_method, withdrawal_account, account_name } = req.body;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -195,7 +195,7 @@ async function requestWithdrawal(req, res) {
  */
 async function getWithdrawalHistory(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const limit = parseInt(req.query.limit) || 20;
         const offset = parseInt(req.query.offset) || 0;
         if (!userId) {
@@ -227,7 +227,7 @@ async function getWithdrawalHistory(req, res) {
  */
 async function getTransactions(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const limit = parseInt(req.query.limit) || 20;
         const offset = parseInt(req.query.offset) || 0;
         if (!userId) {

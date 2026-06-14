@@ -50,7 +50,7 @@ async function getTaskLevels(req, res) {
  */
 async function calculateTaskLevel(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { taskId } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -105,7 +105,7 @@ async function getStudentLevel(req, res) {
  */
 async function updateStudentLevel(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { studentId } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -139,7 +139,7 @@ async function updateStudentLevel(req, res) {
  */
 async function matchTaskWithStudents(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { taskId } = req.params;
         const limit = parseInt(req.query.limit) || 10;
@@ -171,7 +171,7 @@ async function matchTaskWithStudents(req, res) {
  */
 async function getTaskMatches(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { taskId } = req.params;
         const limit = parseInt(req.query.limit) || 10;
         if (!userId) {
@@ -198,7 +198,7 @@ async function getTaskMatches(req, res) {
  */
 async function getStudentRecommendations(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { studentId } = req.params;
         const limit = parseInt(req.query.limit) || 10;
         if (!userId) {
@@ -229,7 +229,7 @@ async function getStudentRecommendations(req, res) {
  */
 async function notifyMatchedStudents(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { taskId } = req.params;
         const topN = parseInt(req.body.top_n) || 5;

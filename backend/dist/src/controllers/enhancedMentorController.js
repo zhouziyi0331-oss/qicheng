@@ -20,7 +20,7 @@ class EnhancedMentorController {
      */
     async chat(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -55,7 +55,7 @@ class EnhancedMentorController {
      */
     async initProject(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -85,7 +85,7 @@ class EnhancedMentorController {
      */
     async getProjects(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -113,7 +113,7 @@ class EnhancedMentorController {
      */
     async getProjectDetail(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -141,7 +141,7 @@ class EnhancedMentorController {
      */
     async guideDecomposition(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -172,7 +172,7 @@ class EnhancedMentorController {
      */
     async evaluateDecomposition(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -203,7 +203,7 @@ class EnhancedMentorController {
      */
     async executeCode(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -234,7 +234,7 @@ class EnhancedMentorController {
      */
     async getExecutionHistory(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -261,7 +261,7 @@ class EnhancedMentorController {
      */
     async uploadFile(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -299,7 +299,7 @@ class EnhancedMentorController {
      */
     async getProjectFiles(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -326,7 +326,7 @@ class EnhancedMentorController {
      */
     async deleteFile(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -352,7 +352,7 @@ class EnhancedMentorController {
      */
     async guideReflection(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -383,7 +383,7 @@ class EnhancedMentorController {
      */
     async saveReflectionLog(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -421,7 +421,7 @@ class EnhancedMentorController {
      */
     async switchMode(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
@@ -451,7 +451,7 @@ class EnhancedMentorController {
      */
     async getStats(req, res) {
         try {
-            const userId = req.user?.id;
+            const userId = req.user?.userId;
             if (!userId) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;

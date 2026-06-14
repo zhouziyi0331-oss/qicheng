@@ -118,7 +118,7 @@ class MatchingScheduler {
           [
             taskId,
             match.studentId,
-            match.match_score.overallScore,
+            match.match_score.overall_score,
             match.match_score.skillMatch.score,
             match.match_score.difficultyMatch.score,
             match.match_score.domainMatch.score,
@@ -138,11 +138,11 @@ class MatchingScheduler {
           top_match_score = $2,
           matching_completed_at = NOW()
          WHERE id = $3`,
-        [matches.length, matches[0].match_score.overallScore, taskId]
+        [matches.length, matches[0].match_score.overall_score, taskId]
       );
 
       // 5. 通知企业（如果有新的高分匹配）
-      const topScore = matches[0].match_score.overallScore;
+      const topScore = matches[0].match_score.overall_score;
       if (topScore > 0.8) {
         websocketService.notifyMatchComplete(companyId, taskId, matches.length);
       }
@@ -184,7 +184,7 @@ class MatchingScheduler {
           const match_score = await semanticMatchingEngine.matchTaskWithStudent(task.id, studentId);
 
           // 只保存匹配度 > 0.5 的结果
-          if (match_score.overallScore > 0.5) {
+          if (match_score.overall_score > 0.5) {
             // 获取当前任务的匹配学生数量
             const currentMatches = await queryOne<{ count: number }>(
               `SELECT COUNT(*) as count FROM task_student_matches WHERE task_id = $1`,
@@ -214,7 +214,7 @@ class MatchingScheduler {
               [
                 task.id,
                 studentId,
-                match_score.overallScore,
+                match_score.overall_score,
                 match_score.skillMatch.score,
                 match_score.difficultyMatch.score,
                 match_score.domainMatch.score,
@@ -229,7 +229,7 @@ class MatchingScheduler {
             matchedCount++;
 
             // 如果匹配度很高（Top 10），通知企业
-            if (match_score.overallScore > 0.8 && rank <= 10) {
+            if (match_score.overall_score > 0.8 && rank <= 10) {
               websocketService.notifyMatchComplete(task.company_id, task.id, 1);
             }
           }
@@ -303,7 +303,7 @@ class MatchingScheduler {
           [
             taskId,
             match.studentId,
-            match.match_score.overallScore,
+            match.match_score.overall_score,
             match.match_score.skillMatch.score,
             match.match_score.difficultyMatch.score,
             match.match_score.domainMatch.score,
@@ -323,11 +323,11 @@ class MatchingScheduler {
           top_match_score = $2,
           matching_completed_at = NOW()
          WHERE id = $3`,
-        [matches.length, matches[0].match_score.overallScore, taskId]
+        [matches.length, matches[0].match_score.overall_score, taskId]
       );
 
       // 通知企业匹配完成
-      const topScore = matches[0].match_score.overallScore;
+      const topScore = matches[0].match_score.overall_score;
       websocketService.notifyMatchComplete(task.company_id, taskId, matches.length);
 
       // 通知Top 5学生有新的推荐任务
@@ -336,7 +336,7 @@ class MatchingScheduler {
         websocketService.notifyTaskRecommendation(match.studentId, {
           taskId: task.id,
           taskTitle: task.title,
-          message: `有一个新任务很适合你（匹配度${(match.match_score.overallScore * 100).toFixed(0)}%）`,
+          message: `有一个新任务很适合你（匹配度${(match.match_score.overall_score * 100).toFixed(0)}%）`,
         });
       }
 

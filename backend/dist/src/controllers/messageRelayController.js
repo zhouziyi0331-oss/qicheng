@@ -39,7 +39,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
 async function sendMessage(req, res) {
     try {
         const { taskId, receiverId, content } = req.body;
-        const senderId = req.user?.id;
+        const senderId = req.user?.userId;
         if (!senderId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -73,7 +73,7 @@ async function sendMessage(req, res) {
 async function getMessages(req, res) {
     try {
         const { taskId } = req.params;
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const limit = parseInt(req.query.limit) || 50;
         const offset = parseInt(req.query.offset) || 0;
         if (!userId) {
@@ -110,7 +110,7 @@ async function getMessages(req, res) {
  */
 async function getStatistics(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -151,7 +151,7 @@ async function getStatistics(req, res) {
  */
 async function getViolations(req, res) {
     try {
-        const currentUserId = req.user?.id;
+        const currentUserId = req.user?.userId;
         const userRole = req.user?.role;
         if (!currentUserId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -194,7 +194,7 @@ async function getViolations(req, res) {
 async function agreeToExchange(req, res) {
     try {
         const { studentId, companyId } = req.body;
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -231,7 +231,7 @@ async function agreeToExchange(req, res) {
 async function getExchangeStatus(req, res) {
     try {
         const { studentId, companyId } = req.query;
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -268,7 +268,7 @@ async function getExchangeStatus(req, res) {
 async function canExchange(req, res) {
     try {
         const { studentId, companyId } = req.query;
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }

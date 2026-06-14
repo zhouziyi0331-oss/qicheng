@@ -33,7 +33,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
  */
 async function createDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -65,7 +65,7 @@ async function createDraft(req, res) {
  */
 async function getDrafts(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -99,7 +99,7 @@ async function getDrafts(req, res) {
  */
 async function getDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -127,7 +127,7 @@ async function getDraft(req, res) {
  */
 async function updateDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -152,7 +152,7 @@ async function updateDraft(req, res) {
  */
 async function deleteDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -177,7 +177,7 @@ async function deleteDraft(req, res) {
  */
 async function duplicateDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -205,7 +205,7 @@ async function duplicateDraft(req, res) {
  */
 async function reviewDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -230,7 +230,7 @@ async function reviewDraft(req, res) {
  */
 async function getPricingSuggestion(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -258,7 +258,7 @@ async function getPricingSuggestion(req, res) {
  */
 async function publishDraft(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -286,7 +286,7 @@ async function publishDraft(req, res) {
  */
 async function getDraftHistory(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         const limit = parseInt(req.query.limit) || 10;
         if (!userId) {
@@ -312,7 +312,7 @@ async function getDraftHistory(req, res) {
  */
 async function restoreDraftVersion(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id, historyId } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });

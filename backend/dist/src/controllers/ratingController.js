@@ -32,7 +32,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
  */
 async function createRating(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -72,7 +72,7 @@ async function createRating(req, res) {
  */
 async function updateRating(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -103,7 +103,7 @@ async function updateRating(req, res) {
  */
 async function respondToRating(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         const { response } = req.body;
         if (!userId) {
@@ -135,7 +135,7 @@ async function respondToRating(req, res) {
  */
 async function getTaskRatings(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { taskId } = req.params;
         const ratings = await ratingService_1.ratingService.getTaskRatings(taskId, userId);
         return res.json({
@@ -243,7 +243,7 @@ async function getAvailableTags(req, res) {
  */
 async function markHelpful(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         const { is_helpful } = req.body;
         if (!userId) {
@@ -272,7 +272,7 @@ async function markHelpful(req, res) {
  */
 async function reportRating(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         const { reason, description } = req.body;
         if (!userId) {
@@ -308,7 +308,7 @@ async function reportRating(req, res) {
  */
 async function deleteRating(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { id } = req.params;
         const { reason } = req.body;

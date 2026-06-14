@@ -62,7 +62,7 @@ async function triggerMatching(req, res) {
           rank_in_task = EXCLUDED.rank_in_task`, [
                 taskId,
                 match.studentId,
-                match.match_score.overallScore,
+                match.match_score.overall_score,
                 match.match_score.skillMatch.score,
                 match.match_score.difficultyMatch.score,
                 match.match_score.domainMatch.score,
@@ -74,7 +74,7 @@ async function triggerMatching(req, res) {
             ]);
         }
         // 5. 更新任务的匹配状态
-        const topScore = matches.length > 0 ? matches[0].match_score.overallScore : 0;
+        const topScore = matches.length > 0 ? matches[0].match_score.overall_score : 0;
         await (0, db_1.query)(`UPDATE tasks SET
         matched_students_count = $1,
         top_match_score = $2,

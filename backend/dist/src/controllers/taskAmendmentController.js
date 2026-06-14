@@ -29,7 +29,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
  */
 async function createAmendment(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -75,7 +75,7 @@ async function createAmendment(req, res) {
  */
 async function studentRespond(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { id } = req.params;
         if (!userId) {
@@ -118,7 +118,7 @@ async function studentRespond(req, res) {
  */
 async function companyDecide(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { id } = req.params;
         if (!userId) {
@@ -160,7 +160,7 @@ async function companyDecide(req, res) {
  */
 async function cancelAmendment(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const userRole = req.user?.role;
         const { id } = req.params;
         if (!userId) {
@@ -194,7 +194,7 @@ async function cancelAmendment(req, res) {
  */
 async function getTaskAmendments(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { taskId } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -219,7 +219,7 @@ async function getTaskAmendments(req, res) {
  */
 async function getAmendment(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -250,7 +250,7 @@ async function getAmendment(req, res) {
  */
 async function analyzeAmendment(req, res) {
     try {
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
         const { id } = req.params;
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });

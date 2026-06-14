@@ -59,7 +59,7 @@ async function getPendingWithdrawals(req, res) {
  */
 async function approveWithdrawal(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { id } = req.params;
         const { reason } = req.body;
         if (!adminId) {
@@ -86,7 +86,7 @@ async function approveWithdrawal(req, res) {
  */
 async function rejectWithdrawal(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { id } = req.params;
         const { reason, risk_level } = req.body;
         if (!adminId) {
@@ -144,7 +144,7 @@ async function getPendingVerifications(req, res) {
  */
 async function approveVerification(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { id } = req.params;
         const { note } = req.body;
         if (!adminId) {
@@ -171,7 +171,7 @@ async function approveVerification(req, res) {
  */
 async function rejectVerification(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { id } = req.params;
         const { reason } = req.body;
         if (!adminId) {
@@ -204,7 +204,7 @@ async function rejectVerification(req, res) {
  */
 async function reviewTask(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { id } = req.params;
         const { review_type, status, issues, note } = req.body;
         if (!adminId) {
@@ -237,7 +237,7 @@ async function reviewTask(req, res) {
  */
 async function hideRating(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { id } = req.params;
         const { reason } = req.body;
         if (!adminId) {
@@ -405,7 +405,7 @@ async function getSystemConfig(req, res) {
  */
 async function updateSystemConfig(req, res) {
     try {
-        const adminId = req.user?.id;
+        const adminId = req.user?.userId;
         const { key } = req.params;
         const { value } = req.body;
         if (!adminId) {
