@@ -5,9 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const database_1 = require("../config/database");
-const config_1 = require("../../config");
 const anthropic = new sdk_1.default({
-    apiKey: config_1.config.anthropicApiKey
+    apiKey: process.env.ANTHROPIC_API_KEY || ""
 });
 class OPCv2AnalysisService {
     /**

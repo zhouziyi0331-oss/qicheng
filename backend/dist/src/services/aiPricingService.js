@@ -11,7 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
-const config_1 = require("../../config");
 class AIPricingService {
     constructor() {
         // 基础定价标准（元/小时）
@@ -39,7 +38,7 @@ class AIPricingService {
             'UX设计': 1.2,
         };
         this.anthropic = new sdk_1.default({
-            apiKey: config_1.config.anthropicApiKey,
+            apiKey: process.env.ANTHROPIC_API_KEY || "",
         });
     }
     /**

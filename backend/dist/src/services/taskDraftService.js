@@ -12,9 +12,8 @@ exports.taskDraftService = void 0;
 const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
-const config_1 = require("../../config");
 const anthropic = new sdk_1.default({
-    apiKey: config_1.config.anthropicApiKey,
+    apiKey: process.env.ANTHROPIC_API_KEY || "",
 });
 // =====================================================
 // 草稿服务类

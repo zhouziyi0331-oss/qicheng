@@ -6,10 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
-const config_1 = require("../../config");
 const uuid_1 = require("uuid");
 const anthropic = new sdk_1.default({
-    apiKey: config_1.config.anthropicApiKey
+    apiKey: process.env.ANTHROPIC_API_KEY || ""
 });
 // 人格标签映射
 const PERSONALITY_LABELS = {

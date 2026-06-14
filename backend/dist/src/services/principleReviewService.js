@@ -6,9 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrincipleReviewService = void 0;
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const logger_1 = __importDefault(require("../utils/logger"));
-const config_1 = require("../../config");
 const client = new sdk_1.default({
-    apiKey: config_1.config.anthropicApiKey
+    apiKey: process.env.ANTHROPIC_API_KEY || ""
 });
 const REVIEW_SYSTEM_PROMPT = `# 任务
 你是一个内容安全审核AI，负责审查AI导师对学生的回复。
