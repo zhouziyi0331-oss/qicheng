@@ -12,12 +12,6 @@ import logger from '../utils/logger';
 // 类型定义
 // =====================================================
 
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
-}
 
 // =====================================================
 // 评价CRUD接口
@@ -27,7 +21,7 @@ interface AuthRequest extends Request {
  * 创建评价
  * POST /api/v1/ratings
  */
-export async function createRating(req: AuthRequest, res: Response) {
+export async function createRating(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
 
@@ -81,7 +75,7 @@ export async function createRating(req: AuthRequest, res: Response) {
  * 更新评价
  * PUT /api/v1/ratings/:id
  */
-export async function updateRating(req: AuthRequest, res: Response) {
+export async function updateRating(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -116,7 +110,7 @@ export async function updateRating(req: AuthRequest, res: Response) {
  * 回复评价
  * POST /api/v1/ratings/:id/respond
  */
-export async function respondToRating(req: AuthRequest, res: Response) {
+export async function respondToRating(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -153,7 +147,7 @@ export async function respondToRating(req: AuthRequest, res: Response) {
  * 获取任务的评价
  * GET /api/v1/ratings/task/:taskId
  */
-export async function getTaskRatings(req: AuthRequest, res: Response) {
+export async function getTaskRatings(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { taskId } = req.params;
@@ -177,7 +171,7 @@ export async function getTaskRatings(req: AuthRequest, res: Response) {
  * 获取用户收到的评价
  * GET /api/v1/ratings/user/:userId
  */
-export async function getUserRatings(req: AuthRequest, res: Response) {
+export async function getUserRatings(req: Request, res: Response) {
   try {
     const { userId } = req.params;
     const rating = req.query.rating ? parseInt(req.query.rating as string) : undefined;
@@ -210,7 +204,7 @@ export async function getUserRatings(req: AuthRequest, res: Response) {
  * 获取用户评价统计
  * GET /api/v1/ratings/user/:userId/stats
  */
-export async function getUserRatingStats(req: AuthRequest, res: Response) {
+export async function getUserRatingStats(req: Request, res: Response) {
   try {
     const { userId } = req.params;
 
@@ -244,7 +238,7 @@ export async function getUserRatingStats(req: AuthRequest, res: Response) {
  * 获取可用标签
  * GET /api/v1/ratings/tags
  */
-export async function getAvailableTags(req: AuthRequest, res: Response) {
+export async function getAvailableTags(req: Request, res: Response) {
   try {
     const applicableTo = req.query.applicable_to as string;
 
@@ -271,7 +265,7 @@ export async function getAvailableTags(req: AuthRequest, res: Response) {
  * 标记评价有用/无用
  * POST /api/v1/ratings/:id/helpful
  */
-export async function markHelpful(req: AuthRequest, res: Response) {
+export async function markHelpful(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -304,7 +298,7 @@ export async function markHelpful(req: AuthRequest, res: Response) {
  * 举报评价
  * POST /api/v1/ratings/:id/report
  */
-export async function reportRating(req: AuthRequest, res: Response) {
+export async function reportRating(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
@@ -346,7 +340,7 @@ export async function reportRating(req: AuthRequest, res: Response) {
  * 删除评价（管理员）
  * DELETE /api/v1/ratings/:id
  */
-export async function deleteRating(req: AuthRequest, res: Response) {
+export async function deleteRating(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;

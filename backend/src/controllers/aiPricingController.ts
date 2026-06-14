@@ -7,14 +7,17 @@
 import { Request, Response } from 'express';
 import aiPricingService from '../services/aiPricingService';
 import logger from '../utils/logger';
-import { JwtPayload } from 'jsonwebtoken';
 
-// =====================================================
-// 类型定义
-// =====================================================
-
-interface AuthRequest extends Request {
-  user?: JwtPayload;
+// 扩展Request以包含user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        role: string;
+      };
+    }
+  }
 }
 
 // =====================================================
@@ -25,7 +28,7 @@ interface AuthRequest extends Request {
  * 获取智能定价建议
  * POST /api/v1/ai-pricing/suggest
  */
-export async function getPricingSuggestion(req: AuthRequest, res: Response) {
+export async function getPricingSuggestion(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -85,7 +88,7 @@ export async function getPricingSuggestion(req: AuthRequest, res: Response) {
  * 保存定价历史（任务发布时调用）
  * POST /api/v1/ai-pricing/save-history
  */
-export async function savePricingHistory(req: AuthRequest, res: Response) {
+export async function savePricingHistory(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -131,7 +134,7 @@ export async function savePricingHistory(req: AuthRequest, res: Response) {
  * 记录定价调整
  * POST /api/v1/ai-pricing/record-adjustment
  */
-export async function recordAdjustment(req: AuthRequest, res: Response) {
+export async function recordAdjustment(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -197,7 +200,7 @@ export async function recordAdjustment(req: AuthRequest, res: Response) {
  * 获取定价准确度分析
  * GET /api/v1/ai-pricing/accuracy
  */
-export async function getPricingAccuracy(req: AuthRequest, res: Response) {
+export async function getPricingAccuracy(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -233,7 +236,7 @@ export async function getPricingAccuracy(req: AuthRequest, res: Response) {
  * 手动更新市场基准价格（管理员）
  * POST /api/v1/ai-pricing/update-benchmarks
  */
-export async function updateBenchmarks(req: AuthRequest, res: Response) {
+export async function updateBenchmarks(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;

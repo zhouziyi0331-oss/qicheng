@@ -8,12 +8,6 @@ import { Request, Response } from 'express';
 import { platformAdminService } from '../services/platformAdminService';
 import logger from '../utils/logger';
 
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
-}
 
 // =====================================================
 // 提现审核
@@ -23,7 +17,7 @@ interface AuthRequest extends Request {
  * 获取待审核提现列表
  * GET /api/v1/admin/platform/withdrawals/pending
  */
-export async function getPendingWithdrawals(req: AuthRequest, res: Response) {
+export async function getPendingWithdrawals(req: Request, res: Response) {
   try {
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;
@@ -50,7 +44,7 @@ export async function getPendingWithdrawals(req: AuthRequest, res: Response) {
  * 批准提现
  * POST /api/v1/admin/platform/withdrawals/:id/approve
  */
-export async function approveWithdrawal(req: AuthRequest, res: Response) {
+export async function approveWithdrawal(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { id } = req.params;
@@ -80,7 +74,7 @@ export async function approveWithdrawal(req: AuthRequest, res: Response) {
  * 拒绝提现
  * POST /api/v1/admin/platform/withdrawals/:id/reject
  */
-export async function rejectWithdrawal(req: AuthRequest, res: Response) {
+export async function rejectWithdrawal(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { id } = req.params;
@@ -118,7 +112,7 @@ export async function rejectWithdrawal(req: AuthRequest, res: Response) {
  * 获取待审核用户认证列表
  * GET /api/v1/admin/platform/verifications/pending
  */
-export async function getPendingVerifications(req: AuthRequest, res: Response) {
+export async function getPendingVerifications(req: Request, res: Response) {
   try {
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;
@@ -145,7 +139,7 @@ export async function getPendingVerifications(req: AuthRequest, res: Response) {
  * 批准用户认证
  * POST /api/v1/admin/platform/verifications/:id/approve
  */
-export async function approveVerification(req: AuthRequest, res: Response) {
+export async function approveVerification(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { id } = req.params;
@@ -175,7 +169,7 @@ export async function approveVerification(req: AuthRequest, res: Response) {
  * 拒绝用户认证
  * POST /api/v1/admin/platform/verifications/:id/reject
  */
-export async function rejectVerification(req: AuthRequest, res: Response) {
+export async function rejectVerification(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { id } = req.params;
@@ -213,7 +207,7 @@ export async function rejectVerification(req: AuthRequest, res: Response) {
  * 审核任务
  * POST /api/v1/admin/platform/tasks/:id/review
  */
-export async function reviewTask(req: AuthRequest, res: Response) {
+export async function reviewTask(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { id } = req.params;
@@ -258,7 +252,7 @@ export async function reviewTask(req: AuthRequest, res: Response) {
  * 隐藏评价
  * POST /api/v1/admin/platform/ratings/:id/hide
  */
-export async function hideRating(req: AuthRequest, res: Response) {
+export async function hideRating(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { id } = req.params;
@@ -296,7 +290,7 @@ export async function hideRating(req: AuthRequest, res: Response) {
  * 创建风险预警
  * POST /api/v1/admin/platform/risk-alerts
  */
-export async function createRiskAlert(req: AuthRequest, res: Response) {
+export async function createRiskAlert(req: Request, res: Response) {
   try {
     const { alert_type, severity, entity_type, entity_id, reason, data } = req.body;
 
@@ -331,7 +325,7 @@ export async function createRiskAlert(req: AuthRequest, res: Response) {
  * 获取风险预警列表
  * GET /api/v1/admin/platform/risk-alerts
  */
-export async function getRiskAlerts(req: AuthRequest, res: Response) {
+export async function getRiskAlerts(req: Request, res: Response) {
   try {
     const status = req.query.status as string;
     const severity = req.query.severity as string;
@@ -364,7 +358,7 @@ export async function getRiskAlerts(req: AuthRequest, res: Response) {
  * 获取平台指标
  * GET /api/v1/admin/platform/metrics
  */
-export async function getPlatformMetrics(req: AuthRequest, res: Response) {
+export async function getPlatformMetrics(req: Request, res: Response) {
   try {
     const startDate = new Date(req.query.start_date as string);
     const endDate = new Date(req.query.end_date as string);
@@ -392,7 +386,7 @@ export async function getPlatformMetrics(req: AuthRequest, res: Response) {
  * 计算每日指标
  * POST /api/v1/admin/platform/metrics/calculate
  */
-export async function calculateDailyMetrics(req: AuthRequest, res: Response) {
+export async function calculateDailyMetrics(req: Request, res: Response) {
   try {
     const { date } = req.body;
 
@@ -428,7 +422,7 @@ export async function calculateDailyMetrics(req: AuthRequest, res: Response) {
  * 获取系统配置
  * GET /api/v1/admin/platform/config/:key
  */
-export async function getSystemConfig(req: AuthRequest, res: Response) {
+export async function getSystemConfig(req: Request, res: Response) {
   try {
     const { key } = req.params;
 
@@ -455,7 +449,7 @@ export async function getSystemConfig(req: AuthRequest, res: Response) {
  * 更新系统配置
  * PUT /api/v1/admin/platform/config/:key
  */
-export async function updateSystemConfig(req: AuthRequest, res: Response) {
+export async function updateSystemConfig(req: Request, res: Response) {
   try {
     const adminId = req.user?.id;
     const { key } = req.params;
@@ -493,7 +487,7 @@ export async function updateSystemConfig(req: AuthRequest, res: Response) {
  * 获取所有待审核项目
  * GET /api/v1/admin/platform/pending-reviews
  */
-export async function getPendingReviews(req: AuthRequest, res: Response) {
+export async function getPendingReviews(req: Request, res: Response) {
   try {
     const reviews = await platformAdminService.getPendingReviews();
 

@@ -7,9 +7,9 @@ const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const database_1 = require("../config/database");
 const uuid_1 = require("uuid");
-const config_1 = __importDefault(require("../config"));
+const config_1 = require("../../config");
 const anthropic = new sdk_1.default({
-    apiKey: config_1.default.ai.anthropicApiKey,
+    apiKey: config_1.config.ai.anthropicApiKey,
 });
 /**
  * E-03: 风险预检服务

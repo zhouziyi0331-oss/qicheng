@@ -13,12 +13,6 @@ import logger from '../utils/logger';
 // 类型定义
 // =====================================================
 
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
-}
 
 // =====================================================
 // 消息中转接口
@@ -36,7 +30,7 @@ interface AuthRequest extends Request {
  *   content: string;
  * }
  */
-export async function sendMessage(req: AuthRequest, res: Response) {
+export async function sendMessage(req: Request, res: Response) {
   try {
     const { taskId, receiverId, content } = req.body;
     const senderId = req.user?.id;
@@ -79,7 +73,7 @@ export async function sendMessage(req: AuthRequest, res: Response) {
  * - limit: number (default: 50)
  * - offset: number (default: 0)
  */
-export async function getMessages(req: AuthRequest, res: Response) {
+export async function getMessages(req: Request, res: Response) {
   try {
     const { taskId } = req.params;
     const userId = req.user?.id;
@@ -121,7 +115,7 @@ export async function getMessages(req: AuthRequest, res: Response) {
  * - startDate: string (optional)
  * - endDate: string (optional)
  */
-export async function getStatistics(req: AuthRequest, res: Response) {
+export async function getStatistics(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -167,7 +161,7 @@ export async function getStatistics(req: AuthRequest, res: Response) {
  * - limit: number (default: 20)
  * - offset: number (default: 0)
  */
-export async function getViolations(req: AuthRequest, res: Response) {
+export async function getViolations(req: Request, res: Response) {
   try {
     const currentUserId = req.user?.id;
     const userRole = req.user?.role;
@@ -215,7 +209,7 @@ export async function getViolations(req: AuthRequest, res: Response) {
  *   companyId: string;
  * }
  */
-export async function agreeToExchange(req: AuthRequest, res: Response) {
+export async function agreeToExchange(req: Request, res: Response) {
   try {
     const { studentId, companyId } = req.body;
     const userId = req.user?.id;
@@ -261,7 +255,7 @@ export async function agreeToExchange(req: AuthRequest, res: Response) {
  * - studentId: string
  * - companyId: string
  */
-export async function getExchangeStatus(req: AuthRequest, res: Response) {
+export async function getExchangeStatus(req: Request, res: Response) {
   try {
     const { studentId, companyId } = req.query;
     const userId = req.user?.id;
@@ -306,7 +300,7 @@ export async function getExchangeStatus(req: AuthRequest, res: Response) {
  * - studentId: string
  * - companyId: string
  */
-export async function canExchange(req: AuthRequest, res: Response) {
+export async function canExchange(req: Request, res: Response) {
   try {
     const { studentId, companyId } = req.query;
     const userId = req.user?.id;

@@ -12,12 +12,6 @@ import logger from '../utils/logger';
 // 类型定义
 // =====================================================
 
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
-}
 
 // =====================================================
 // 任务等级接口
@@ -27,7 +21,7 @@ interface AuthRequest extends Request {
  * 获取所有任务等级定义
  * GET /api/v1/task-levels
  */
-export async function getTaskLevels(req: AuthRequest, res: Response) {
+export async function getTaskLevels(req: Request, res: Response) {
   try {
     const levels = await taskLevelMatchingService.getTaskLevels();
 
@@ -48,7 +42,7 @@ export async function getTaskLevels(req: AuthRequest, res: Response) {
  * 计算任务等级
  * POST /api/v1/task-levels/calculate/:taskId
  */
-export async function calculateTaskLevel(req: AuthRequest, res: Response) {
+export async function calculateTaskLevel(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { taskId } = req.params;
@@ -83,7 +77,7 @@ export async function calculateTaskLevel(req: AuthRequest, res: Response) {
  * 获取学生等级信息
  * GET /api/v1/student-levels/:studentId
  */
-export async function getStudentLevel(req: AuthRequest, res: Response) {
+export async function getStudentLevel(req: Request, res: Response) {
   try {
     const { studentId } = req.params;
 
@@ -110,7 +104,7 @@ export async function getStudentLevel(req: AuthRequest, res: Response) {
  * 更新学生等级（手动触发）
  * POST /api/v1/student-levels/:studentId/update
  */
-export async function updateStudentLevel(req: AuthRequest, res: Response) {
+export async function updateStudentLevel(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { studentId } = req.params;
@@ -150,7 +144,7 @@ export async function updateStudentLevel(req: AuthRequest, res: Response) {
  * 为任务匹配学生
  * POST /api/v1/matching/task/:taskId/match
  */
-export async function matchTaskWithStudents(req: AuthRequest, res: Response) {
+export async function matchTaskWithStudents(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -186,7 +180,7 @@ export async function matchTaskWithStudents(req: AuthRequest, res: Response) {
  * 获取任务的匹配学生列表
  * GET /api/v1/matching/task/:taskId/matches
  */
-export async function getTaskMatches(req: AuthRequest, res: Response) {
+export async function getTaskMatches(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { taskId } = req.params;
@@ -216,7 +210,7 @@ export async function getTaskMatches(req: AuthRequest, res: Response) {
  * 获取学生的推荐任务
  * GET /api/v1/matching/student/:studentId/recommendations
  */
-export async function getStudentRecommendations(req: AuthRequest, res: Response) {
+export async function getStudentRecommendations(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const { studentId } = req.params;
@@ -254,7 +248,7 @@ export async function getStudentRecommendations(req: AuthRequest, res: Response)
  * 通知匹配的学生
  * POST /api/v1/matching/task/:taskId/notify
  */
-export async function notifyMatchedStudents(req: AuthRequest, res: Response) {
+export async function notifyMatchedStudents(req: Request, res: Response) {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;

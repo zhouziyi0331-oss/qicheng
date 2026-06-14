@@ -11,11 +11,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
-const config_1 = __importDefault(require("../config"));
+const config_1 = require("../../config");
 class TaskBreakdownService {
     constructor() {
         this.anthropic = new sdk_1.default({
-            apiKey: config_1.default.anthropicApiKey,
+            apiKey: config_1.config.anthropicApiKey,
         });
     }
     /**
