@@ -112,8 +112,8 @@ class WorkConditionMatchingEngine {
         [JSON.stringify(vectorArray), limit]
       );
 
-      logger.info(`Vector search found ${result.rows.length} candidates`);
-      return result.rows;
+      logger.info(`Vector search found ${result.length} candidates`);
+      return result;
 
     } catch (error: unknown) {
       logger.error('Vector similarity search failed, falling back to all profiles:', error);
