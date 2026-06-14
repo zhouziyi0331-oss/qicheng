@@ -1,4 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
+export interface JwtPayload {
+    userId: string;
+    role: 'student' | 'company' | 'admin';
+    adminRole?: 'super' | 'ops' | 'cs';
+    accountType?: 'student' | 'enterprise';
+    selectedTrack?: 'content' | 'dev';
+}
+export interface AuthRequest extends Request {
+    user?: JwtPayload;
+}
+declare global {
+    namespace Express {
+        interface Request {
+            user?: JwtPayload;
+        }
+    }
+}
 /**
  * Middleware: require valid JWT access token.
  */

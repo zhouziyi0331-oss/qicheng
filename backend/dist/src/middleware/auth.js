@@ -10,7 +10,6 @@ exports.generateTokens = generateTokens;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../../config");
 const errorHandler_1 = require("./errorHandler");
-// 使用types/index.d.ts中定义的全局JwtPayload
 /**
  * Middleware: require valid JWT access token.
  */
