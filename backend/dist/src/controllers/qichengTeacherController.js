@@ -40,13 +40,13 @@ const getTaskTranslation = async (req, res) => {
         res.json({
             success: true,
             translation: {
-                studentFriendlyTitle: result.studentFriendlyTitle,
-                studentFriendlyDescription: result.studentFriendlyDescription,
-                functionalModules: result.functionalModules,
-                whatYouWillDo: result.whatYouWillDo,
-                whatYouWillLearn: result.whatYouWillLearn,
+                studentFriendlyTitle: result.student_friendly_title,
+                studentFriendlyDescription: result.student_friendly_description,
+                functionalModules: result.functional_modules,
+                whatYouWillDo: result.what_you_will_do,
+                whatYouWillLearn: result.what_you_will_learn,
                 difficulty: result.difficulty,
-                estimatedHours: result.estimatedHours
+                estimatedHours: result.estimated_hours
             }
         });
     }
