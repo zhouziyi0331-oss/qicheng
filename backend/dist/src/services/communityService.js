@@ -159,7 +159,7 @@ class CommunityService {
                WHEN 'member' THEN 2
                ELSE 3
              END`, [post.team_id]);
-                teamMembers = members.rows.map((m) => ({
+                teamMembers = members.map((m) => ({
                     id: m.id,
                     name: m.name,
                     avatar: m.avatar,
@@ -300,7 +300,7 @@ class CommunityService {
          JOIN users u ON cpa.applicant_id = u.id
          WHERE cpa.post_id = $1
          ORDER BY cpa.applied_at DESC`, [postId]);
-            return applications.rows;
+            return applications;
         }
         catch (error) {
             logger_1.default.error('Failed to get post applications:', error);
@@ -415,7 +415,7 @@ class CommunityService {
          JOIN users u ON cp.author_id = u.id
          WHERE cpa.applicant_id = $1
          ORDER BY cpa.applied_at DESC`, [userId]);
-            return applications.rows;
+            return applications;
         }
         catch (error) {
             logger_1.default.error('Failed to get user applications:', error);

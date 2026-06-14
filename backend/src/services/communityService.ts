@@ -247,7 +247,7 @@ class CommunityService {
           [post.team_id]
         );
 
-        teamMembers = members.rows.map((m: any) => ({
+        teamMembers = members.map((m: any) => ({
           id: m.id,
           name: m.name,
           avatar: m.avatar,
@@ -450,7 +450,7 @@ class CommunityService {
         [postId]
       );
 
-      return applications.rows;
+      return applications;
     } catch (error: unknown) {
       logger.error('Failed to get post applications:', error);
       throw error;
@@ -605,7 +605,7 @@ class CommunityService {
         [userId]
       );
 
-      return applications.rows;
+      return applications;
     } catch (error: unknown) {
       logger.error('Failed to get user applications:', error);
       throw error;
