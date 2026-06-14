@@ -76,7 +76,7 @@ class StudentProfileEnhancer {
 
   constructor() {
     this.anthropic = new Anthropic({
-      apiKey: config.anthropicApiKey,
+      apiKey: process.env.ANTHROPIC_API_KEY || "",
     });
   }
 

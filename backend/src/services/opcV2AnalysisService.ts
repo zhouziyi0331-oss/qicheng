@@ -3,7 +3,7 @@ import { pool } from '../config/database'
 import { config } from '../../config'
 
 const anthropic = new Anthropic({
-  apiKey: config.anthropicApiKey
+  apiKey: process.env.ANTHROPIC_API_KEY || ""
 })
 
 interface PreQuestionAnswer {

@@ -5,7 +5,7 @@ import { config } from '../../config'
 import { v4 as uuidv4 } from 'uuid'
 
 const anthropic = new Anthropic({
-  apiKey: config.anthropicApiKey
+  apiKey: process.env.ANTHROPIC_API_KEY || ""
 })
 
 interface MentorMessage {

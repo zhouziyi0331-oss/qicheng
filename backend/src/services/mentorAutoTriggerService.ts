@@ -5,7 +5,7 @@ import logger from '../utils/logger'
 import mentorContextEnhancer from './mentorContextEnhancer'
 
 const anthropic = new Anthropic({
-  apiKey: config.anthropicApiKey
+  apiKey: process.env.ANTHROPIC_API_KEY || ""
 })
 
 interface MentorMessage {

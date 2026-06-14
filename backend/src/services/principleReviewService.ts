@@ -17,7 +17,7 @@ interface ReviewResult {
 }
 
 const client = new Anthropic({
-  apiKey: config.anthropicApiKey
+  apiKey: process.env.ANTHROPIC_API_KEY || ""
 });
 
 const REVIEW_SYSTEM_PROMPT = `# 任务
