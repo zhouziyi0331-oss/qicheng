@@ -68,7 +68,7 @@ router.get('/stats/today', async (req, res, next) => {
         reviewPassRate
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -97,7 +97,7 @@ router.get('/overview/hourly', async (req, res, next) => {
       success: true,
       data: hourlyData
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -156,7 +156,7 @@ router.get('/students', async (req, res, next) => {
       success: true,
       data: studentsWithRate
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -215,7 +215,7 @@ router.get('/students/:studentId', async (req, res, next) => {
         tasks
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -264,7 +264,7 @@ router.get('/companies', async (req, res, next) => {
       success: true,
       data: companies
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -314,7 +314,7 @@ router.get('/companies/:companyId', async (req, res, next) => {
         tasks
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -364,7 +364,7 @@ router.get('/conversations', async (req, res, next) => {
       success: true,
       data: conversations
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -399,7 +399,7 @@ router.get('/conversations/:taskId/:studentId', async (req, res, next) => {
         student
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -449,7 +449,7 @@ router.get('/reviews', async (req, res, next) => {
       success: true,
       data: reviews
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });
@@ -482,7 +482,7 @@ router.get('/reviews/:reviewId', async (req, res, next) => {
       success: true,
       data: review
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     next(error);
   }
 });

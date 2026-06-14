@@ -35,7 +35,7 @@ router.get('/retrospectives/pending', authenticate, async (req, res) => {
         count: retrospectives.length
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取待完成复盘失败:', error);
     res.status(500).json({
       success: false,
@@ -84,7 +84,7 @@ router.post('/retrospectives/:id/submit', authenticate, async (req, res) => {
       success: true,
       message: '复盘已提交，感谢你的分享！'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 提交复盘失败:', error);
     res.status(500).json({
       success: false,
@@ -120,7 +120,7 @@ router.post('/retrospectives/:id/skip', authenticate, async (req, res) => {
       success: true,
       message: '已跳过复盘'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 跳过复盘失败:', error);
     res.status(500).json({
       success: false,
@@ -150,7 +150,7 @@ router.get('/retrospectives/history', authenticate, async (req, res) => {
         count: retrospectives.length
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取历史复盘失败:', error);
     res.status(500).json({
       success: false,
@@ -205,7 +205,7 @@ router.post('/admin/batch-trigger-retrospectives', authenticate, async (req, res
           );
           successCount++;
         }
-      } catch (error: unknown) {
+      } catch (error: any) {
         logger.error(`[MentorAPI] 触发复盘失败: ${orderId}`, error);
         failCount++;
       }
@@ -219,7 +219,7 @@ router.post('/admin/batch-trigger-retrospectives', authenticate, async (req, res
         failCount
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 批量触发复盘失败:', error);
     res.status(500).json({
       success: false,
@@ -249,7 +249,7 @@ router.get('/admin/retrospective-stats', authenticate, async (req, res) => {
       success: true,
       data: stats
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取复盘统计失败:', error);
     res.status(500).json({
       success: false,
@@ -279,7 +279,7 @@ router.get('/admin/example-stats', authenticate, async (req, res) => {
       success: true,
       data: stats
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('[MentorAPI] 获取范例统计失败:', error);
     res.status(500).json({
       success: false,

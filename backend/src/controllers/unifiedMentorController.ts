@@ -17,7 +17,7 @@ export class UnifiedMentorController {
         success: true,
         data: response
       });
-    } catch (err: unknown) {
+    } catch (err: any) {
       logger.error('对话失败:', err);
       res.status(500).json({
         success: false,
@@ -45,7 +45,7 @@ export class UnifiedMentorController {
         success: true,
         data: result
       });
-    } catch (err: unknown) {
+    } catch (err: any) {
       logger.error('切换模式失败:', err);
       res.status(500).json({
         success: false,
@@ -71,7 +71,7 @@ export class UnifiedMentorController {
         success: true,
         data: history
       });
-    } catch (err: unknown) {
+    } catch (err: any) {
       logger.error('获取历史失败:', err);
       res.status(500).json({
         success: false,
@@ -103,7 +103,7 @@ export class UnifiedMentorController {
         success: true,
         data: link
       });
-    } catch (err: unknown) {
+    } catch (err: any) {
       logger.error('创建关联失败:', err);
       res.status(500).json({
         success: false,
@@ -123,7 +123,7 @@ export class UnifiedMentorController {
         success: true,
         data: journey
       });
-    } catch (err: unknown) {
+    } catch (err: any) {
       logger.error('获取成长旅程失败:', err);
       res.status(500).json({
         success: false,

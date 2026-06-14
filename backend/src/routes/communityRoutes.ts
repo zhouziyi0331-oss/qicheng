@@ -47,7 +47,7 @@ router.post(
         data: { postId },
         message: '帖子发布成功',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -79,7 +79,7 @@ router.get(
         success: true,
         data: posts,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -105,7 +105,7 @@ router.get(
         success: true,
         data: post,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -139,7 +139,7 @@ router.post(
         success: true,
         message: '申请已提交',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -182,7 +182,7 @@ router.post(
         data: { replyId },
         message: '回复成功',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -210,7 +210,7 @@ router.post(
         success: true,
         message: '招募已关闭',
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }
@@ -233,7 +233,7 @@ router.get(
         success: true,
         data: applications,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       next(error);
     }
   }

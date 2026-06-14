@@ -61,7 +61,7 @@ router.post('/:taskId/stuck', authenticate, async (req, res) => {
       sessionId: result.sessionId,
       detectedSignals: result.detectedSignals
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('处理stuck消息失败:', error);
     res.status(500).json({ success: false, error: '处理失败' });
   }
@@ -97,7 +97,7 @@ router.post('/:taskId/rejection-guidance', authenticate, async (req, res) => {
       response: result.response,
       sessionId: result.sessionId
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('处理rejection消息失败:', error);
     res.status(500).json({ success: false, error: '处理失败' });
   }
@@ -133,7 +133,7 @@ router.post('/:taskId/milestone', authenticate, async (req, res) => {
       response: result.response,
       sessionId: result.sessionId
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('处理milestone消息失败:', error);
     res.status(500).json({ success: false, error: '处理失败' });
   }

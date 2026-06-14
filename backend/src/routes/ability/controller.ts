@@ -46,7 +46,7 @@ export async function getRadar(req: Request, res: Response, next: NextFunction):
         shareEnabled: true, // 可截图分享 (带平台水印)
       },
     });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // GET /ability/radar/detailed — 详细版 (付费)
@@ -97,7 +97,7 @@ export async function getDetailedRadar(req: Request, res: Response, next: NextFu
     );
 
     res.json({ success: true, data: report?.content_json });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // ============================================================
@@ -126,7 +126,7 @@ export async function getTimeline(req: Request, res: Response, next: NextFunctio
         milestones: events.filter((e) => (e as { is_milestone: boolean }).is_milestone),
       },
     });
-  } catch (err: unknown) { next(err); }
+  } catch (err: any) { next(err); }
 }
 
 // ============================================================
@@ -236,7 +236,7 @@ export async function getEmotionState(req: Request, res: Response, next: NextFun
         detectedAt: emotionSignal.detected_at,
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }
@@ -329,7 +329,7 @@ export async function updateAfterTask(req: Request, res: Response, next: NextFun
         taskCount: profile.task_count + 1,
       },
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     next(err);
   }
 }

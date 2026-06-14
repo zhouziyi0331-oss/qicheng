@@ -29,7 +29,7 @@ export async function getTaskLevels(req: Request, res: Response) {
       success: true,
       data: levels,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get task levels', { error });
     return res.status(500).json({
       error: 'Failed to get task levels',
@@ -60,7 +60,7 @@ export async function calculateTaskLevel(req: Request, res: Response) {
         level,
       },
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to calculate task level', { error });
     return res.status(500).json({
       error: 'Failed to calculate task level',
@@ -91,7 +91,7 @@ export async function getStudentLevel(req: Request, res: Response) {
       success: true,
       data: level,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get student level', { error });
     return res.status(500).json({
       error: 'Failed to get student level',
@@ -127,7 +127,7 @@ export async function updateStudentLevel(req: Request, res: Response) {
       data: updatedLevel,
       message: 'Student level updated successfully',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to update student level', { error });
     return res.status(500).json({
       error: 'Failed to update student level',
@@ -167,7 +167,7 @@ export async function matchTaskWithStudents(req: Request, res: Response) {
       data: matches,
       total: matches.length,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to match task with students', { error });
     return res.status(500).json({
       error: 'Failed to match task with students',
@@ -197,7 +197,7 @@ export async function getTaskMatches(req: Request, res: Response) {
       data: matches,
       total: matches.length,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get task matches', { error });
     return res.status(500).json({
       error: 'Failed to get task matches',
@@ -235,7 +235,7 @@ export async function getStudentRecommendations(req: Request, res: Response) {
       data: recommendations,
       total: recommendations.length,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to get student recommendations', { error });
     return res.status(500).json({
       error: 'Failed to get student recommendations',
@@ -270,7 +270,7 @@ export async function notifyMatchedStudents(req: Request, res: Response) {
       success: true,
       message: `Notified top ${topN} matched students`,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     logger.error('Failed to notify matched students', { error });
     return res.status(500).json({
       error: 'Failed to notify matched students',
