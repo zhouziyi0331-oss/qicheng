@@ -442,7 +442,7 @@ class EnhancedReasoningEngine {
         insight
       };
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       logger.error('Enhanced reasoning failed:', error);
       throw error;
     }
