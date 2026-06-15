@@ -5,11 +5,16 @@ import codeExecutionService from '../services/codeExecutionService';
 import fileProcessingService from '../services/fileProcessingService';
 import logger from '../utils/logger';
 
-interface AuthRequest extends Request {
-  user?: {
-    userId: string;
-    role: string;
-  };
+// Extending Request with user property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        userId: string;
+        role: string;
+      };
+    }
+  }
 }
 
 /**
