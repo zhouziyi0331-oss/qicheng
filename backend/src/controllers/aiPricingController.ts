@@ -101,7 +101,7 @@ export async function savePricingHistory(req: Request, res: Response) {
     return res.json({
       success: true,
       data: {
-        history_id: historyId,
+        history_id: task_id,
       },
     });
   } catch (error: any) {
