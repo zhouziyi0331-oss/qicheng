@@ -209,7 +209,7 @@ export async function getPricingAccuracy(req: Request, res: Response) {
     }
 
     // 只有管理员可以查看准确度分析
-    if (userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'admin') {
       return res.status(403).json({ error: 'Admin access required' });
     }
 
