@@ -246,7 +246,7 @@ export async function updateBenchmarks(req: Request, res: Response) {
     }
 
     // 只有管理员可以手动更新基准价格
-    if (userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'admin') {
       return res.status(403).json({ error: 'Admin access required' });
     }
 
