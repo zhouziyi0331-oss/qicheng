@@ -11,7 +11,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_cron_1 = __importDefault(require("node-cron"));
-const database_1 = __importDefault(require("../config/database"));
+';;
 const mentorRetrospectiveService_1 = __importDefault(require("../services/mentorRetrospectiveService"));
 const logger_1 = __importDefault(require("../utils/logger"));
 class MentorRetrospectiveJob {
@@ -52,7 +52,7 @@ class MentorRetrospectiveJob {
     async scanAndTriggerRetrospectives() {
         try {
             // 查找60秒前完成的订单，且未发送复盘
-            const orders = await database_1.default.query(`
+            const orders = await db.query(`
         SELECT o.id, o.student_id, p.title as project_title
         FROM orders o
         JOIN projects p ON o.project_id = p.id

@@ -20,7 +20,7 @@ class InvitationMatchService {
         for (const candidate of candidates) {
             const match_score = await this.calculateMatchScore(candidate, taskRequirements, config);
             if (match_score.match_score >= config.min_match_score) {
-                matches.push(matchScore);
+                matches.push(match_score);
             }
         }
         // 4. 按匹配分数排序，返回前N个

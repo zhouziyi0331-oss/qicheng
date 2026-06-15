@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const redis_1 = __importDefault(require("../utils/redis"));
 const logger_1 = __importDefault(require("../utils/logger"));
-const mentorTriggerService_1 = __importDefault(require("./mentorTriggerService"));
+const mentorTriggerService_1 = require("./mentorTriggerService");
 const QUEUE_KEY = 'mentor:delayed_jobs';
 const PROCESSING_KEY = 'mentor:processing';
 const MAX_RETRIES = 3;
@@ -120,19 +120,19 @@ class MentorQueueService {
         const { taskId, studentId, stage } = job;
         switch (stage) {
             case 'requirement_understanding':
-                await mentorTriggerService_1.default.triggerRequirementUnderstanding(taskId, studentId);
+                await mentorTriggerService_1.mentorTriggerService.triggerRequirementUnderstanding(taskId, studentId);
                 break;
             case 'execution_guidance':
-                await mentorTriggerService_1.default.triggerExecutionGuidance(taskId, studentId);
+                await mentorTriggerService_1.mentorTriggerService.triggerExecutionGuidance(taskId, studentId);
                 break;
             case 'quality_review':
-                await mentorTriggerService_1.default.triggerQualityReview(taskId, studentId);
+                await mentorTriggerService_1.mentorTriggerService.triggerQualityReview(taskId, studentId);
                 break;
             case 'communication_bridge':
-                await mentorTriggerService_1.default.triggerCommunicationBridge(taskId, studentId);
+                await mentorTriggerService_1.mentorTriggerService.triggerCommunicationBridge(taskId, studentId);
                 break;
             case 'growth_summary':
-                await mentorTriggerService_1.default.triggerGrowthSummary(taskId, studentId);
+                await mentorTriggerService_1.mentorTriggerService.triggerGrowthSummary(taskId, studentId);
                 break;
             default:
                 throw new Error(`Unknown mentor stage: ${stage}`);

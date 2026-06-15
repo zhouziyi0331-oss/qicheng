@@ -7,7 +7,7 @@
  */
 
 import cron from 'node-cron';
-import db from '../config/database';
+import { pool } from "./../config/database"';
 import mentorRetrospectiveService from '../services/mentorRetrospectiveService';
 import logger from '../utils/logger';
 

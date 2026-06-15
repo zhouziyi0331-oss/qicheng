@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
-const database_1 = __importDefault(require("../config/database"));
+';;
 const logger_1 = __importDefault(require("../utils/logger"));
 class MentorMemoryService {
     /**
@@ -59,7 +59,7 @@ class MentorMemoryService {
      * 收集学生基础数据
      */
     async collectStudentData(studentId) {
-        const result = await database_1.default.query(`
+        const result = await db.query(`
       SELECT
         u.id,
         u.current_level,
@@ -78,7 +78,7 @@ class MentorMemoryService {
      * 分析高频卡点（Top 3）
      */
     async analyzeTopStuckPoints(studentId) {
-        const result = await database_1.default.query(`
+        const result = await db.query(`
       SELECT
         observation_category as category,
         COUNT(*) as count,
@@ -107,7 +107,7 @@ class MentorMemoryService {
      * 提取最近突破（Top 3）
      */
     async extractRecentBreakthroughs(studentId) {
-        const result = await database_1.default.query(`
+        const result = await db.query(`
       SELECT
         breakthrough as description,
         order_id,
@@ -126,7 +126,7 @@ class MentorMemoryService {
      * 获取能力快照
      */
     async getAbilitySnapshot(studentId) {
-        const result = await database_1.default.query(`
+        const result = await db.query(`
       SELECT
         u.current_level as level,
         uap.six_dimensions,
@@ -157,7 +157,7 @@ class MentorMemoryService {
      * 计算工作模式
      */
     async calculateWorkPatterns(studentId) {
-        const result = await database_1.default.query(`
+        const result = await db.query(`
       SELECT
         AVG(EXTRACT(EPOCH FROM (deadline_at - completed_at)) / 86400) as avg_delivery_days_before_deadline,
         AVG(revision_count) as avg_revision_rounds,
@@ -311,7 +311,7 @@ ${recentBreakthroughs.map((bt, i) => `${i + 1}. ${bt.description}`).join('\n')}
      * 保存画像缓存
      */
     async saveProfileCache(cache) {
-        await database_1.default.query(`
+        await db.query(`
       INSERT INTO mentor_student_profile_cache (
         student_id, profile_summary, top_stuck_points, recent_breakthroughs,
         ability_snapshot, work_patterns, guidance_style, last_updated, update_trigger
@@ -341,7 +341,7 @@ ${recentBreakthroughs.map((bt, i) => `${i + 1}. ${bt.description}`).join('\n')}
      * 获取学生长期画像（供AI-06调用）
      */
     async getStudentProfile(studentId) {
-        const result = await database_1.default.query(`
+        const result = await db.query(`
       SELECT * FROM mentor_student_profile_cache WHERE student_id = $1
     `, [studentId]);
         if (result.rows.length === 0) {
@@ -397,7 +397,7 @@ ${styleSection}
      * 记录成长观察（供其他服务调用）
      */
     async recordGrowthObservation(studentId, orderId, observationType, content, category, isSignificant = false, tags = []) {
-        await database_1.default.query(`
+        await db.query(`
       INSERT INTO mentor_growth_observations (
         id, user_id, order_id, obs_type, obs_content,
         observation_category, is_significant, tags, observed_at
@@ -422,13 +422,13 @@ ${styleSection}
             // 如果没有指定学生ID，获取所有学生
             let students;
             if (studentIds && studentIds.length > 0) {
-                const result = await database_1.default.query(`
+                const result = await db.query(`
           SELECT id FROM users WHERE id = ANY($1) AND role = 'student'
         `, [studentIds]);
                 students = result.rows;
             }
             else {
-                const result = await database_1.default.query(`
+                const result = await db.query(`
           SELECT id FROM users WHERE role = 'student'
         `);
                 students = result.rows;
@@ -443,7 +443,7 @@ ${styleSection}
                         continue;
                     }
                     // 初始化画像（使用最近一个订单作为触发器）
-                    const lastOrder = await database_1.default.query(`
+                    const lastOrder = await db.query(`
             SELECT id FROM orders WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1
           `, [student.id]);
                     const orderId = lastOrder.rows.length > 0 ? lastOrder.rows[0].id : 'initial_migration';

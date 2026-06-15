@@ -1,6 +1,6 @@
 import redis from '../utils/redis';
 import logger from '../utils/logger';
-import mentorTriggerService from './mentorTriggerService';
+import { mentorTriggerService } from './mentorTriggerService';
 
 /**
  * 导师触发队列服务
