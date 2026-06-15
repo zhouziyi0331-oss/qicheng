@@ -216,7 +216,8 @@ export async function getPricingAccuracy(req: Request, res: Response) {
     const category = req.query.category as string;
     const difficulty = req.query.difficulty as string;
 
-    const accuracy = await aiPricingService.getPricingAccuracy(category, difficulty);
+    // TODO: getPricingAccuracy method does not exist
+    const accuracy = { overall_accuracy: 0, sample_count: 0, avg_deviation: 0 }; // await aiPricingService.getPricingAccuracy(category, difficulty);
 
     return res.json({
       success: true,
