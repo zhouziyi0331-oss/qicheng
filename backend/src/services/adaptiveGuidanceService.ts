@@ -3,7 +3,7 @@ import logger from '../utils/logger';
 import { claudeService } from './claudeService';
 import { emotionAnalysisService } from './emotionAnalysisService';
 import { growthTrackingService } from './growthTrackingService';
-import { mentorMemoryService } from './mentorMemoryService';
+import mentorMemoryService from './mentorMemoryService';
 
 interface StudentContext {
   studentId: number;

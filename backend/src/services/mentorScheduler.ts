@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import logger from '../utils/logger';
 import { proactiveFollowUpService } from '../services/proactiveFollowUpService';
-import { mentorMemoryService } from '../services/mentorMemoryService';
+import mentorMemoryService from '../services/mentorMemoryService';
 
 /**
  * AI导师定时任务调度器

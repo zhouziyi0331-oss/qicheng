@@ -8,7 +8,7 @@ const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
 const emotionAnalysisService_1 = require("./emotionAnalysisService");
 const growthTrackingService_1 = require("./growthTrackingService");
-const mentorMemoryService_1 = require("./mentorMemoryService");
+const mentorMemoryService_1 = __importDefault(require("./mentorMemoryService"));
 const adaptiveGuidanceService_1 = require("./adaptiveGuidanceService");
 const humanizedConversationService_1 = require("./humanizedConversationService");
 /**
@@ -282,7 +282,7 @@ class MentorStageService {
             });
             // 3. 记忆提取（每5条消息分析一次）
             if (messages.length % 5 === 0) {
-                await mentorMemoryService_1.mentorMemoryService.extractMemoryFromConversation(parseInt(studentId), parseInt(taskId), parseInt(sessionId), conversationHistory, emotionResult.emotion);
+                await mentorMemoryService_1.default.extractMemoryFromConversation(parseInt(studentId), parseInt(taskId), parseInt(sessionId), conversationHistory, emotionResult.emotion);
             }
             // 4. 定期更新学习模式（每10条消息）
             if (messages.length % 10 === 0) {

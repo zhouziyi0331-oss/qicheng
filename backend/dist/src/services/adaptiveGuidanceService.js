@@ -9,7 +9,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
 const emotionAnalysisService_1 = require("./emotionAnalysisService");
 const growthTrackingService_1 = require("./growthTrackingService");
-const mentorMemoryService_1 = require("./mentorMemoryService");
+const mentorMemoryService_1 = __importDefault(require("./mentorMemoryService"));
 class AdaptiveGuidanceService {
     /**
      * 生成自适应引导回复
@@ -27,7 +27,7 @@ class AdaptiveGuidanceService {
                 previousEmotions: recentEmotions
             });
             // 3. 召回相关记忆
-            const memoryRecall = await mentorMemoryService_1.mentorMemoryService.recallMemories(context.studentId, {
+            const memoryRecall = await mentorMemoryService_1.default.recallMemories(context.studentId, {
                 currentEmotion: emotionResult.emotion,
                 searchTags: this.extractTags(context.currentMessage)
             }, 3);
@@ -275,7 +275,7 @@ ${milestone.milestone_description}
      */
     async extractAndSaveMemories(context, currentEmotion) {
         try {
-            await mentorMemoryService_1.mentorMemoryService.extractMemoryFromConversation(context.studentId, context.taskId, context.sessionId, context.conversationHistory, currentEmotion);
+            await mentorMemoryService_1.default.extractMemoryFromConversation(context.studentId, context.taskId, context.sessionId, context.conversationHistory, currentEmotion);
         }
         catch (error) {
             logger_1.default.error('提取并保存记忆失败', { error });

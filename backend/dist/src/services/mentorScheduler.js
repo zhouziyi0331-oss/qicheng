@@ -7,7 +7,7 @@ exports.mentorScheduler = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const proactiveFollowUpService_1 = require("../services/proactiveFollowUpService");
-const mentorMemoryService_1 = require("../services/mentorMemoryService");
+const mentorMemoryService_1 = __importDefault(require("../services/mentorMemoryService"));
 /**
  * AI导师定时任务调度器
  */
@@ -71,7 +71,7 @@ class MentorScheduler {
         const task = node_cron_1.default.schedule('0 3 * * *', async () => {
             try {
                 logger_1.default.info('开始清理过期记忆');
-                const count = await mentorMemoryService_1.mentorMemoryService.cleanupExpiredMemories();
+                const count = await mentorMemoryService_1.default.cleanupExpiredMemories();
                 logger_1.default.info('过期记忆清理完成', { deletedCount: count });
             }
             catch (error) {

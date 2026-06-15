@@ -5,7 +5,7 @@ import { mentorPromptBuilder } from '../services/mentorPromptBuilder';
 import { aiServiceClient } from '../services/aiServiceClient';
 import { emotionAnalysisService } from '../services/emotionAnalysisService';
 import { growthTrackingService } from '../services/growthTrackingService';
-import { mentorMemoryService } from '../services/mentorMemoryService';
+import mentorMemoryService from '../services/mentorMemoryService';
 import { adaptiveGuidanceService } from '../services/adaptiveGuidanceService';
 import { toolRecommendationService } from '../services/toolRecommendationService';
 import { proactiveFollowUpService } from '../services/proactiveFollowUpService';

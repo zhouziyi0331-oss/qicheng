@@ -2,7 +2,7 @@ import { query, queryOne } from '../utils/db';
 import logger from '../utils/logger';
 import { emotionAnalysisService } from './emotionAnalysisService';
 import { growthTrackingService } from './growthTrackingService';
-import { mentorMemoryService } from './mentorMemoryService';
+import mentorMemoryService from './mentorMemoryService';
 import { adaptiveGuidanceService } from './adaptiveGuidanceService';
 import { humanizedConversationService } from './humanizedConversationService';
 

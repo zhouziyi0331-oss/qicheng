@@ -7,7 +7,7 @@ exports.humanizedConversationService = void 0;
 const database_1 = require("../config/database");
 const logger_1 = __importDefault(require("../utils/logger"));
 const claudeService_1 = require("./claudeService");
-const mentorMemoryService_1 = require("./mentorMemoryService");
+const mentorMemoryService_1 = __importDefault(require("./mentorMemoryService"));
 const deepGuidanceService_1 = require("./deepGuidanceService");
 class HumanizedConversationService {
     /**
@@ -41,7 +41,7 @@ class HumanizedConversationService {
             const humanizedContext = await this.getHumanizedContext(sessionId, studentId);
             const struggle = await this.analyzeSpecificStruggle(studentMessage, conversationHistory, currentEmotion);
             const phrases = await this.getAppropriatePhrase(currentEmotion, struggle?.situation);
-            const memories = await mentorMemoryService_1.mentorMemoryService.recallMemories(studentId, {
+            const memories = await mentorMemoryService_1.default.recallMemories(studentId, {
                 currentEmotion,
                 searchTags: this.extractTags(studentMessage)
             }, 3);

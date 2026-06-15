@@ -60,7 +60,7 @@ const mentorStageService_1 = require("../services/mentorStageService");
 const mentorTriggerService_1 = require("../services/mentorTriggerService");
 const emotionAnalysisService_1 = require("../services/emotionAnalysisService");
 const growthTrackingService_1 = require("../services/growthTrackingService");
-const mentorMemoryService_1 = require("../services/mentorMemoryService");
+const mentorMemoryService_1 = __importDefault(require("../services/mentorMemoryService"));
 const toolRecommendationService_1 = require("../services/toolRecommendationService");
 const mentorScheduler_1 = require("../services/mentorScheduler");
 const logger_1 = __importDefault(require("../utils/logger"));
@@ -460,7 +460,7 @@ async function getMentorMemories(req, res) {
         if (!studentId) {
             throw new errorHandler_1.AppError(401, '未授权', 'UNAUTHORIZED');
         }
-        const memories = await mentorMemoryService_1.mentorMemoryService.getAllMemories(parseInt(studentId), {
+        const memories = await mentorMemoryService_1.default.getAllMemories(parseInt(studentId), {
             memoryType: memoryType,
             memoryCategory: memoryCategory,
             minImportance: minImportance ? parseFloat(minImportance) : undefined,
@@ -485,7 +485,7 @@ async function getMemoryStats(req, res) {
         if (!studentId) {
             throw new errorHandler_1.AppError(401, '未授权', 'UNAUTHORIZED');
         }
-        const stats = await mentorMemoryService_1.mentorMemoryService.getMemoryStats(parseInt(studentId));
+        const stats = await mentorMemoryService_1.default.getMemoryStats(parseInt(studentId));
         res.json({
             success: true,
             data: stats,
