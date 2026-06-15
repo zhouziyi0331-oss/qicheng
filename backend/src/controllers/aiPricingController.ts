@@ -48,7 +48,7 @@ export async function getPricingSuggestion(req: Request, res: Response) {
       return res.status(400).json({ error: 'Missing required fields: title and description' });
     }
 
-    const suggestion = await aiPricingService.getPricingSuggestion({
+    const suggestion = await aiPricingService.calculatePrice({
       title,
       description,
       requirements,

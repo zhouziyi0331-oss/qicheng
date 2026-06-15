@@ -38,7 +38,7 @@ async function getPricingSuggestion(req, res) {
         if (!title || !description) {
             return res.status(400).json({ error: 'Missing required fields: title and description' });
         }
-        const suggestion = await aiPricingService_1.default.getPricingSuggestion({
+        const suggestion = await aiPricingService_1.default.calculatePrice({
             title,
             description,
             requirements,
