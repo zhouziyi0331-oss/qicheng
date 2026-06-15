@@ -11,7 +11,7 @@ class UnifiedMentorController {
     async chat(req, res) {
         try {
             const { message, session_id } = req.body;
-            const userId = req.user.id;
+            const userId = req.user.userId;
             const response = await unifiedMentorService_1.unifiedMentorService.chat(userId, message, {
                 session_id
             });
@@ -32,7 +32,7 @@ class UnifiedMentorController {
     async switchMode(req, res) {
         try {
             const { mode } = req.body;
-            const userId = req.user.id;
+            const userId = req.user.userId;
             if (!['emotional', 'project', 'hybrid', 'auto'].includes(mode)) {
                 return res.status(400).json({
                     success: false,
@@ -58,7 +58,7 @@ class UnifiedMentorController {
         try {
             const { session_id } = req.params;
             const { limit } = req.query;
-            const userId = req.user.id;
+            const userId = req.user.userId;
             const history = await unifiedMentorService_1.unifiedMentorService.getConversationHistory(userId, session_id, limit ? parseInt(limit) : 20);
             res.json({
                 success: true,
@@ -77,7 +77,7 @@ class UnifiedMentorController {
     async linkEmotionToProject(req, res) {
         try {
             const { emotional_data, project_id, link_type, transformation_story } = req.body;
-            const userId = req.user.id;
+            const userId = req.user.userId;
             const link = await unifiedMentorService_1.unifiedMentorService.linkEmotionToProject(userId, emotional_data, project_id, link_type, transformation_story);
             res.json({
                 success: true,
@@ -95,7 +95,7 @@ class UnifiedMentorController {
     // 获取成长旅程
     async getGrowthJourney(req, res) {
         try {
-            const userId = req.user.id;
+            const userId = req.user.userId;
             const journey = await unifiedMentorService_1.unifiedMentorService.getGrowthJourney(userId);
             res.json({
                 success: true,

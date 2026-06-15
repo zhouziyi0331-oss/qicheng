@@ -7,7 +7,7 @@ export class UnifiedMentorController {
   async chat(req: Request, res: Response) {
     try {
       const { message, session_id } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const response = await unifiedMentorService.chat(userId, message, {
         session_id
@@ -30,7 +30,7 @@ export class UnifiedMentorController {
   async switchMode(req: Request, res: Response) {
     try {
       const { mode } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       if (!['emotional', 'project', 'hybrid', 'auto'].includes(mode)) {
         return res.status(400).json({
@@ -59,7 +59,7 @@ export class UnifiedMentorController {
     try {
       const { session_id } = req.params;
       const { limit } = req.query;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const history = await unifiedMentorService.getConversationHistory(
         userId,
@@ -89,7 +89,7 @@ export class UnifiedMentorController {
         link_type,
         transformation_story
       } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const link = await unifiedMentorService.linkEmotionToProject(
         userId,
@@ -115,7 +115,7 @@ export class UnifiedMentorController {
   // 获取成长旅程
   async getGrowthJourney(req: Request, res: Response) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const journey = await unifiedMentorService.getGrowthJourney(userId);
 

@@ -11,7 +11,7 @@ class PBLAgentController {
     async initializeProject(req, res) {
         try {
             const { initial_problem } = req.body;
-            const userId = req.user.id;
+            const userId = req.user.userId;
             const result = await pblAgentService_1.pblAgentService.initializeProject(userId, initial_problem);
             res.json({
                 success: true,

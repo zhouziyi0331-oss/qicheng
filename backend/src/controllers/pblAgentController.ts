@@ -7,7 +7,7 @@ export class PBLAgentController {
   async initializeProject(req: Request, res: Response) {
     try {
       const { initial_problem } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const result = await pblAgentService.initializeProject(userId, initial_problem);
 
