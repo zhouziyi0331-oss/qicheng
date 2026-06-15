@@ -25,7 +25,7 @@ async function getProfile(req, res, next) {
     try {
         const userId = req.user.userId;
         const profile = await (0, db_1.queryOne)(`SELECT u.id, u.phone, u.nickname, u.avatar_url, u.university, u.city, u.major, u.grade,
-              u.track, u.current_level, u.current_level, sp.opc_label, sp.opc_label_secondary,
+              u.track, u.current_level, u.level_b, sp.opc_label, sp.opc_label_secondary,
               sp.six_dim_scores, sp.total_earnings, sp.tasks_completed, sp.graduated_at,
               sb.balance
        FROM users u

@@ -341,7 +341,7 @@ class EnhancedMentorService {
        WHERE use_case = $1
        ORDER BY RANDOM()
        LIMIT 3`, [analysis.projectIndicators.isStuck ? 'when_stuck' : 'when_planning']);
-        return templates.rows.map(t => t.question_template);
+        return templates.map(t => t.question_template);
     }
     /**
      * 生成MVP方案
@@ -472,10 +472,10 @@ class EnhancedMentorService {
             opcLabel: user.opc_label,
             lifeQuestion: user.life_question,
             level: user.level || 0,
-            recentEmotions: recentEmotions.rows.map(e => e.emotional_state),
-            emotionalState: recentEmotions.rows[0]?.emotional_state,
+            recentEmotions: recentEmotions.map(e => e.emotional_state),
+            emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state,
             activeProjects: activeProjects.rows,
-            currentProject: activeProjects.rows[0],
+            currentProject: activeProjects.filter(Boolean)[0],
             mentorMode: {
                 currentMode: mentorMode?.current_mode || 'emotional',
                 autoSwitch: mentorMode?.auto_switch !== false,

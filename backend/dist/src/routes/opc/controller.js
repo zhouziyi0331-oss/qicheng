@@ -113,7 +113,7 @@ async function getOpcReport(req, res, next) {
         // 查询用户基本信息
         const user = await (0, db_1.queryOne)('SELECT username, avatar_url FROM users WHERE id = $1', [userId]);
         // 查询学生画像数据
-        const profile = await (0, db_1.queryOne)(`SELECT sc.tasks_completed as task_count, sc.six_dim_scores, sc.opc_label, u.current_level, u.current_level as level_b
+        const profile = await (0, db_1.queryOne)(`SELECT sc.tasks_completed as task_count, sc.six_dim_scores, sc.opc_label, u.current_level, u.level_b
        FROM users u
        LEFT JOIN student_capabilities sc ON u.id = sc.student_id
        WHERE u.id = $1`, [userId]);

@@ -15,9 +15,8 @@ export async function getRadar(req: Request, res: Response, next: NextFunction):
       six_dim_scores: Record<string, number>;
       opc_label: string;
       current_level: number;
-      current_level: number;
     }>(
-      `SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, u.current_level, u.current_level
+      `SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, u.current_level
        FROM users u WHERE u.id = $1`,
       [userId]
     );
@@ -109,7 +108,7 @@ export async function getTimeline(req: Request, res: Response, next: NextFunctio
 
     const events = await query(
       `SELECT id, event_type, event_title, event_desc, event_data,
-              level_before, current_levelfter, level_before_label, level_after_label,
+              level_before, level_after, level_before_label, level_after_label,
               growth_comparison, is_milestone, share_card_generated, created_at
        FROM growth_timeline
        WHERE user_id = $1 AND deleted_at IS NULL
@@ -272,7 +271,7 @@ export async function updateAfterTask(req: Request, res: Response, next: NextFun
     const profile = await queryOne<{
       six_dim_scores: Record<string, number>;
       current_level: number;
-      current_level: number;
+      level_b: number;
       task_count: number;
     }>(
       'SELECT six_dim_scores, current_level, level_b, task_count FROM student_capabilities WHERE student_id = $1',

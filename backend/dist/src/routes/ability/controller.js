@@ -14,7 +14,7 @@ const errorHandler_1 = require("../../middleware/errorHandler");
 async function getRadar(req, res, next) {
     try {
         const userId = req.user.userId;
-        const profile = await (0, db_1.queryOne)(`SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, u.current_level, u.current_level
+        const profile = await (0, db_1.queryOne)(`SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, u.current_level
        FROM users u WHERE u.id = $1`, [userId]);
         if (!profile)
             throw new errorHandler_1.AppError(404, '请先完成测试', 'PROFILE_NOT_FOUND');
@@ -89,7 +89,7 @@ async function getTimeline(req, res, next) {
     try {
         const userId = req.user.userId;
         const events = await (0, db_1.query)(`SELECT id, event_type, event_title, event_desc, event_data,
-              level_before, current_levelfter, level_before_label, level_after_label,
+              level_before, level_after, level_before_label, level_after_label,
               growth_comparison, is_milestone, share_card_generated, created_at
        FROM growth_timeline
        WHERE user_id = $1 AND deleted_at IS NULL

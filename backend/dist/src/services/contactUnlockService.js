@@ -29,9 +29,9 @@ class ContactUnlockService {
         const existingRequest = await db_1.default.query(`SELECT * FROM contact_exchange_requests
        WHERE student_id = $1 AND company_id = $2`, [studentId, companyId]);
         let result;
-        if (existingRequest.rows.length > 0) {
+        if (existingRequest.length > 0) {
             // 更新现有请求
-            const existing = existingRequest.rows[0];
+            const existing = existingRequest.filter(Boolean)[0];
             if (existing.exchanged) {
                 throw new Error('联系方式已解锁');
             }
@@ -97,7 +97,7 @@ class ContactUnlockService {
            updated_at = NOW()
        WHERE id = $1
        RETURNING *`, [request.id]);
-        const updatedRequest = updated.rows[0];
+        const updatedRequest = updated.filter(Boolean)[0];
         // 如果双方都同意，执行解锁
         if (updatedRequest.student_agreed && updatedRequest.company_agreed) {
             await this.executeUnlock(updatedRequest.id);

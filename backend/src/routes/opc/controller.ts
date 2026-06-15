@@ -174,9 +174,9 @@ export async function getOpcReport(req: Request, res: Response, next: NextFuncti
       six_dim_scores: Record<string, number>;
       opc_label: string;
       current_level: number;
-      current_level: number;
+      level_b: number;
     }>(
-      `SELECT sc.tasks_completed as task_count, sc.six_dim_scores, sc.opc_label, u.current_level, u.current_level as level_b
+      `SELECT sc.tasks_completed as task_count, sc.six_dim_scores, sc.opc_label, u.current_level, u.level_b
        FROM users u
        LEFT JOIN student_capabilities sc ON u.id = sc.student_id
        WHERE u.id = $1`,

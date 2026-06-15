@@ -20,7 +20,7 @@ export async function startChallenge(req: AuthRequest, res: Response, next: Next
     const { targetLevel } = req.body;
 
     // 1. 获取学生当前等级
-    const profile = await queryOne<{ track: string; current_level: number; current_level: number }>(
+    const profile = await queryOne<{ track: string; current_level: number; level_b: number }>(
       'SELECT track, current_level, level_b FROM users u LEFT JOIN student_capabilities sc ON u.id = sc.student_id WHERE u.id = $1',
       [userId]
     );

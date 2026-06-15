@@ -38,7 +38,7 @@ class ConversationHistoryService {
       // TODO: 如果有学生消息表，也需要获取学生消息
       // 这里假设学生消息存储在某个表中，需要根据实际情况调整
 
-      if (mentorMessages.rows.length === 0) {
+      if (mentorMessages.length === 0) {
         return '这是第一次对话';
       }
 
@@ -80,7 +80,7 @@ class ConversationHistoryService {
       );
 
       // 转换为统一格式
-      const messages: ConversationMessage[] = mentorMessages.rows.map(msg => ({
+      const messages: ConversationMessage[] = mentorMessages.map(msg => ({
         role: 'mentor' as const,
         content: msg.message,
         created_at: msg.created_at,

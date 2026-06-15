@@ -22,7 +22,7 @@ class ConversationHistoryService {
          LIMIT $2`, [orderId, limit]);
             // TODO: 如果有学生消息表，也需要获取学生消息
             // 这里假设学生消息存储在某个表中，需要根据实际情况调整
-            if (mentorMessages.rows.length === 0) {
+            if (mentorMessages.length === 0) {
                 return '这是第一次对话';
             }
             // 格式化对话历史
@@ -55,7 +55,7 @@ class ConversationHistoryService {
          ORDER BY created_at DESC
          LIMIT $2`, [orderId, limit]);
             // 转换为统一格式
-            const messages = mentorMessages.rows.map(msg => ({
+            const messages = mentorMessages.map(msg => ({
                 role: 'mentor',
                 content: msg.message,
                 created_at: msg.created_at,

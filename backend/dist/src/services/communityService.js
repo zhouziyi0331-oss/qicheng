@@ -88,7 +88,7 @@ class CommunityService {
          LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`, [...params, limit, offset]);
             // 获取总数
             const countResult = await (0, db_1.queryOne)(`SELECT COUNT(*) as count FROM community_posts cp WHERE ${whereClause}`, params);
-            const formattedPosts = posts.rows.map((row) => ({
+            const formattedPosts = posts.map((row) => ({
                 id: row.id,
                 authorId: row.author_id,
                 type: row.type,
@@ -368,7 +368,7 @@ class CommunityService {
          ORDER BY cp.created_at DESC
          LIMIT $2 OFFSET $3`, [userId, limit, offset]);
             const countResult = await (0, db_1.queryOne)(`SELECT COUNT(*) as count FROM community_posts WHERE author_id = $1`, [userId]);
-            const formattedPosts = posts.rows.map((row) => ({
+            const formattedPosts = posts.map((row) => ({
                 id: row.id,
                 authorId: row.author_id,
                 type: row.type,

@@ -166,7 +166,7 @@ class CommunityService {
         params
       );
 
-      const formattedPosts: CommunityPost[] = posts.rows.map((row: any) => ({
+      const formattedPosts: CommunityPost[] = posts.map((row: any) => ({
         id: row.id,
         authorId: row.author_id,
         type: row.type,
@@ -553,7 +553,7 @@ class CommunityService {
         [userId]
       );
 
-      const formattedPosts: CommunityPost[] = posts.rows.map((row: any) => ({
+      const formattedPosts: CommunityPost[] = posts.map((row: any) => ({
         id: row.id,
         authorId: row.author_id,
         type: row.type,
