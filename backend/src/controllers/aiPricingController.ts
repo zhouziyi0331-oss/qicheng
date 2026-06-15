@@ -92,12 +92,10 @@ export async function savePricingHistory(req: Request, res: Response) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const historyId = await aiPricingService.savePricingHistory(
+    await aiPricingService.savePricingRecord(
       task_id,
-      userId,
-      suggestion,
-      actual_min,
-      actual_max
+      { title: '', description: '' },
+      { suggested_price: suggestion, min_price: actual_min, max_price: actual_max, confidence_level: 0.8, pricing_breakdown: { base_price: 0, skill_premium: 0, difficulty_premium: 0, market_adjustment: 0, urgency_multiplier: 1 }, reasoning: '', recommendations: [] }
     );
 
     return res.json({
