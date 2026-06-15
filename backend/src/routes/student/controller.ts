@@ -300,7 +300,7 @@ export async function getLevel(req: Request, res: Response, next: NextFunction):
 
     const profile = await queryOne<{
       current_level: number;
-      current_level: number;
+      level_b: number;
       track: string;
       tasks_completed: number;
       six_dim_scores: Record<string, number>;
