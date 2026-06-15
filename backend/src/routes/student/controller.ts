@@ -349,7 +349,7 @@ export async function checkLevelUpgrade(req: Request, res: Response, next: NextF
 
     const profile = await queryOne<{
       current_level: number;
-      current_level: number;
+      level_b: number;
       tasks_completed: number;
       six_dim_scores: Record<string, number>;
     }>(
@@ -388,7 +388,7 @@ export async function getNextLevel(req: Request, res: Response, next: NextFuncti
 
     const profile = await queryOne<{
       current_level: number;
-      current_level: number;
+      level_b: number;
       track: string;
       tasks_completed: number;
     }>(
@@ -435,7 +435,7 @@ export async function getTestResult(req: Request, res: Response, next: NextFunct
       opc_label_secondary: string;
       track: string;
       current_level: number;
-      current_level: number;
+      level_b: number;
     }>(
       `SELECT six_dim_scores, opc_label, opc_label_secondary, track, current_level, level_b
        FROM student_capabilities
