@@ -5,18 +5,6 @@ import codeExecutionService from '../services/codeExecutionService';
 import fileProcessingService from '../services/fileProcessingService';
 import logger from '../utils/logger';
 
-// Extending Request with user property
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        userId: string;
-        role: string;
-      };
-    }
-  }
-}
-
 /**
  * 增强版导师控制器
  * 统一的API入口，整合情感陪伴和项目实战功能
