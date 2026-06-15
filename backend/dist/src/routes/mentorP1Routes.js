@@ -173,7 +173,7 @@ router.post('/admin/batch-trigger-retrospectives', auth_1.authenticate, async (r
         for (const orderId of orderIds) {
             try {
                 // 获取订单的学生ID
-                const order = await db.query('SELECT student_id FROM orders WHERE id = $1', [orderId]);
+                const order = await pool.query('SELECT student_id FROM orders WHERE id = $1', [orderId]);
                 if (order.rows.length > 0) {
                     await mentorRetrospectiveService_1.default.triggerRetrospective(order.rows[0].student_id, orderId);
                     successCount++;
