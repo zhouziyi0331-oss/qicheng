@@ -107,7 +107,7 @@ export async function savePricingHistory(req: Request, res: Response) {
           urgency_premium: 0,
           market_adjustment: 0
         },
-        market_data: { avg_price: 0, min_price: 0, max_price: 0, sample_size: 0 },
+        market_comparison: { platform_average: 0, similar_tasks_avg: 0, percentile_rank: 0 },
         reasoning: '',
         recommendations: []
       }
