@@ -80,7 +80,7 @@ async function savePricingHistory(req, res) {
         return res.json({
             success: true,
             data: {
-                history_id: historyId,
+                history_id: task_id,
             },
         });
     }

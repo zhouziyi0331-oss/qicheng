@@ -95,7 +95,22 @@ export async function savePricingHistory(req: Request, res: Response) {
     await aiPricingService.savePricingRecord(
       task_id,
       { title: '', description: '' },
-      { suggested_price: suggestion, min_price: actual_min, max_price: actual_max, confidence_level: 0.8, pricing_breakdown: { base_price: 0, skill_premium: 0, difficulty_premium: 0, urgency_premium: 0, market_adjustment: 0 }, reasoning: '', recommendations: [] }
+      {
+        suggested_price: suggestion,
+        min_price: actual_min,
+        max_price: actual_max,
+        confidence_level: 0.8,
+        pricing_breakdown: {
+          base_price: 0,
+          skill_premium: 0,
+          difficulty_premium: 0,
+          urgency_premium: 0,
+          market_adjustment: 0
+        },
+        market_data: { avg_price: 0, min_price: 0, max_price: 0, sample_size: 0 },
+        reasoning: '',
+        recommendations: []
+      }
     );
 
     return res.json({
