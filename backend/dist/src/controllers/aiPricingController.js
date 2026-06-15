@@ -41,14 +41,9 @@ async function getPricingSuggestion(req, res) {
         const suggestion = await aiPricingService_1.default.calculatePrice({
             title,
             description,
-            requirements,
-            deliverables,
-            category,
-            difficulty_level,
-            estimated_hours,
-            required_abilities,
-            deadline: deadline ? new Date(deadline) : undefined,
-            company_id: userId,
+            estimated_hours: estimated_hours || 40,
+            difficulty: difficulty_level,
+            required_skills: category ? [category] : []
         });
         return res.json({
             success: true,
