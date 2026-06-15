@@ -72,7 +72,7 @@ export class InvitationMatchService {
       );
 
       if (match_score.match_score >= config.min_match_score) {
-        matches.push(matchScore);
+        matches.push(match_score);
       }
     }
 
