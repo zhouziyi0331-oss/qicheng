@@ -76,7 +76,7 @@ async function savePricingHistory(req, res) {
         if (!task_id || !suggestion || actual_min === undefined || actual_max === undefined) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        await aiPricingService_1.default.savePricingRecord(task_id, { title: '', description: '' }, { suggested_price: suggestion, min_price: actual_min, max_price: actual_max, confidence_level: 0.8, pricing_breakdown: { base_price: 0, skill_premium: 0, difficulty_premium: 0, market_adjustment: 0, urgency_multiplier: 1 }, reasoning: '', recommendations: [] });
+        await aiPricingService_1.default.savePricingRecord(task_id, { title: '', description: '' }, { suggested_price: suggestion, min_price: actual_min, max_price: actual_max, confidence_level: 0.8, pricing_breakdown: { base_price: 0, skill_premium: 0, difficulty_premium: 0, urgency_premium: 0, market_adjustment: 0 }, reasoning: '', recommendations: [] });
         return res.json({
             success: true,
             data: {
