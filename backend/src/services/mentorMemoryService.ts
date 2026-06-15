@@ -110,7 +110,7 @@ class MentorMemoryService {
    * 收集学生基础数据
    */
   private async collectStudentData(studentId: string): Promise<any> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         u.id,
         u.current_level,
@@ -131,7 +131,7 @@ class MentorMemoryService {
    * 分析高频卡点（Top 3）
    */
   private async analyzeTopStuckPoints(studentId: string): Promise<any[]> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         observation_category as category,
         COUNT(*) as count,
@@ -162,7 +162,7 @@ class MentorMemoryService {
    * 提取最近突破（Top 3）
    */
   private async extractRecentBreakthroughs(studentId: string): Promise<any[]> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         breakthrough as description,
         order_id,
@@ -183,7 +183,7 @@ class MentorMemoryService {
    * 获取能力快照
    */
   private async getAbilitySnapshot(studentId: string): Promise<any> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         u.current_level as level,
         uap.six_dimensions,
@@ -217,7 +217,7 @@ class MentorMemoryService {
    * 计算工作模式
    */
   private async calculateWorkPatterns(studentId: string): Promise<any> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         AVG(EXTRACT(EPOCH FROM (deadline_at - completed_at)) / 86400) as avg_delivery_days_before_deadline,
         AVG(revision_count) as avg_revision_rounds,
@@ -388,7 +388,7 @@ ${recentBreakthroughs.map((bt, i) => `${i + 1}. ${bt.description}`).join('\n')}
    * 保存画像缓存
    */
   private async saveProfileCache(cache: StudentProfileCache): Promise<void> {
-    await db.query(`
+    await pool.query(`
       INSERT INTO mentor_student_profile_cache (
         student_id, profile_summary, top_stuck_points, recent_breakthroughs,
         ability_snapshot, work_patterns, guidance_style, last_updated, update_trigger
@@ -419,7 +419,7 @@ ${recentBreakthroughs.map((bt, i) => `${i + 1}. ${bt.description}`).join('\n')}
    * 获取学生长期画像（供AI-06调用）
    */
   async getStudentProfile(studentId: string): Promise<StudentProfileCache | null> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT * FROM mentor_student_profile_cache WHERE student_id = $1
     `, [studentId]);
 
@@ -491,7 +491,7 @@ ${styleSection}
     isSignificant: boolean = false,
     tags: string[] = []
   ): Promise<void> {
-    await db.query(`
+    await pool.query(`
       INSERT INTO mentor_growth_observations (
         id, user_id, order_id, obs_type, obs_content,
         observation_category, is_significant, tags, observed_at
@@ -518,12 +518,12 @@ ${styleSection}
       // 如果没有指定学生ID，获取所有学生
       let students: any[];
       if (studentIds && studentIds.length > 0) {
-        const result = await db.query(`
+        const result = await pool.query(`
           SELECT id FROM users WHERE id = ANY($1) AND role = 'student'
         `, [studentIds]);
         students = result.rows;
       } else {
-        const result = await db.query(`
+        const result = await pool.query(`
           SELECT id FROM users WHERE role = 'student'
         `);
         students = result.rows;
@@ -541,7 +541,7 @@ ${styleSection}
           }
 
           // 初始化画像（使用最近一个订单作为触发器）
-          const lastOrder = await db.query(`
+          const lastOrder = await pool.query(`
             SELECT id FROM orders WHERE student_id = $1 ORDER BY created_at DESC LIMIT 1
           `, [student.id]);
 

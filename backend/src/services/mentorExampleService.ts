@@ -50,7 +50,7 @@ class MentorExampleService {
       logger.info(`[MentorExample] 开始检索相似案例: project=${currentProjectId}, level=${studentLevel}`);
 
       // 获取当前项目的描述向量
-      const currentProject = await db.query(`
+      const currentProject = await pool.query(`
         SELECT title, description, description_embedding
         FROM projects
         WHERE id = $1
@@ -69,7 +69,7 @@ class MentorExampleService {
       }
 
       // 使用pgvector检索相似项目
-      const similarCases = await db.query(`
+      const similarCases = await pool.query(`
         SELECT
           o.id as order_id,
           p.title as project_title,
@@ -236,7 +236,7 @@ ${learnings ? `**${learnings}**` : ''}
     similarityScore: number
   ): Promise<void> {
     try {
-      await db.query(`
+      await pool.query(`
         INSERT INTO mentor_sessions (
           id, user_id, order_id, trigger_type, sender_type,
           message, context_snapshot, created_at
@@ -265,7 +265,7 @@ ${learnings ? `**${learnings}**` : ''}
    */
   async getExampleStats(days: number = 7): Promise<any> {
     try {
-      const result = await db.query(`
+      const result = await pool.query(`
         SELECT
           COUNT(*) as total_shown,
           COUNT(DISTINCT user_id) as unique_students,

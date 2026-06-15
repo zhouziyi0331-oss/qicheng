@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
+const database_1 = require("../config/database");
 const logger_1 = __importDefault(require("../utils/logger"));
 class MentorExampleService {
     /**
@@ -25,7 +26,7 @@ class MentorExampleService {
         try {
             logger_1.default.info(`[MentorExample] 开始检索相似案例: project=${currentProjectId}, level=${studentLevel}`);
             // 获取当前项目的描述向量
-            const currentProject = await db.query(`
+            const currentProject = await database_1.pool.query(`
         SELECT title, description, description_embedding
         FROM projects
         WHERE id = $1
@@ -40,7 +41,7 @@ class MentorExampleService {
                 return null;
             }
             // 使用pgvector检索相似项目
-            const similarCases = await db.query(`
+            const similarCases = await database_1.pool.query(`
         SELECT
           o.id as order_id,
           p.title as project_title,
@@ -179,7 +180,7 @@ ${learnings ? `**${learnings}**` : ''}
      */
     async recordExampleShown(studentId, orderId, exampleOrderId, similarityScore) {
         try {
-            await db.query(`
+            await database_1.pool.query(`
         INSERT INTO mentor_sessions (
           id, user_id, order_id, trigger_type, sender_type,
           message, context_snapshot, created_at
@@ -207,7 +208,7 @@ ${learnings ? `**${learnings}**` : ''}
      */
     async getExampleStats(days = 7) {
         try {
-            const result = await db.query(`
+            const result = await database_1.pool.query(`
         SELECT
           COUNT(*) as total_shown,
           COUNT(DISTINCT user_id) as unique_students,

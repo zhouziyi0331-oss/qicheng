@@ -52,7 +52,7 @@ class MentorRetrospectiveJob {
   private async scanAndTriggerRetrospectives(): Promise<void> {
     try {
       // 查找60秒前完成的订单，且未发送复盘
-      const orders = await db.query(`
+      const orders = await pool.query(`
         SELECT o.id, o.student_id, p.title as project_title
         FROM orders o
         JOIN projects p ON o.project_id = p.id
