@@ -316,7 +316,7 @@ async function deleteRating(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有管理员可以删除评价
-        if (userRole !== 'admin' && userRole !== 'platform') {
+        if (userRole !== 'admin') {
             return res.status(403).json({ error: 'Admin access required' });
         }
         if (!reason) {

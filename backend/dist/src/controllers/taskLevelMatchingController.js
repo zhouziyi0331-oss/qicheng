@@ -111,7 +111,7 @@ async function updateStudentLevel(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有学生本人或管理员可以更新
-        if (userId !== studentId && req.user?.role !== 'admin' && req.user?.role !== 'platform') {
+        if (userId !== studentId && req.user?.role !== 'admin') {
             return res.status(403).json({ error: 'Forbidden' });
         }
         await taskLevelMatchingService_1.taskLevelMatchingService.updateStudentLevel(studentId);
@@ -147,7 +147,7 @@ async function matchTaskWithStudents(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有企业或管理员可以触发匹配
-        if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+        if (userRole !== 'company' && userRole !== 'admin') {
             return res.status(403).json({ error: 'Only companies can match tasks' });
         }
         const matches = await taskLevelMatchingService_1.taskLevelMatchingService.matchTaskWithStudents(taskId, limit);
@@ -205,7 +205,7 @@ async function getStudentRecommendations(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有学生本人可以查看推荐
-        if (userId !== studentId && req.user?.role !== 'admin' && req.user?.role !== 'platform') {
+        if (userId !== studentId && req.user?.role !== 'admin') {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const recommendations = await taskLevelMatchingService_1.taskLevelMatchingService.getStudentRecommendedTasks(studentId, limit);
@@ -237,7 +237,7 @@ async function notifyMatchedStudents(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有企业或管理员可以通知
-        if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+        if (userRole !== 'company' && userRole !== 'admin') {
             return res.status(403).json({ error: 'Only companies can notify students' });
         }
         await taskLevelMatchingService_1.taskLevelMatchingService.notifyMatchedStudents(taskId, topN);

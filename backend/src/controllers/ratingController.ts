@@ -352,7 +352,7 @@ export async function deleteRating(req: Request, res: Response) {
     }
 
     // 只有管理员可以删除评价
-    if (userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'admin') {
       return res.status(403).json({ error: 'Admin access required' });
     }
 

@@ -125,7 +125,7 @@ export async function getStatistics(req: Request, res: Response) {
     }
 
     // 只有平台管理员可以查看统计
-    if (userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'admin') {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
@@ -171,7 +171,7 @@ export async function getViolations(req: Request, res: Response) {
     }
 
     // 只有平台管理员可以查看违规记录
-    if (userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'admin') {
       return res.status(403).json({ error: 'Forbidden' });
     }
 

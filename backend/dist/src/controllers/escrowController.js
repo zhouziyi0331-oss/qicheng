@@ -125,7 +125,7 @@ async function releaseFunds(req, res) {
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
-        if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+        if (userRole !== 'company' && userRole !== 'admin') {
             return res.status(403).json({ error: 'Only companies can release funds' });
         }
         if (!task_id) {

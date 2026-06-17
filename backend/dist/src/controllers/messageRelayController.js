@@ -116,7 +116,7 @@ async function getStatistics(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有平台管理员可以查看统计
-        if (userRole !== 'admin' && userRole !== 'platform') {
+        if (userRole !== 'admin') {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const { studentId, companyId, startDate, endDate } = req.query;
@@ -157,7 +157,7 @@ async function getViolations(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         // 只有平台管理员可以查看违规记录
-        if (userRole !== 'admin' && userRole !== 'platform') {
+        if (userRole !== 'admin') {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const userId = req.query.userId;

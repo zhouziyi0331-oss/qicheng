@@ -114,7 +114,7 @@ export async function updateStudentLevel(req: Request, res: Response) {
     }
 
     // 只有学生本人或管理员可以更新
-    if (userId !== studentId && req.user?.role !== 'admin' && req.user?.role !== 'platform') {
+    if (userId !== studentId && req.user?.role !== 'admin') {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
@@ -156,7 +156,7 @@ export async function matchTaskWithStudents(req: Request, res: Response) {
     }
 
     // 只有企业或管理员可以触发匹配
-    if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'company' && userRole !== 'admin') {
       return res.status(403).json({ error: 'Only companies can match tasks' });
     }
 
@@ -221,7 +221,7 @@ export async function getStudentRecommendations(req: Request, res: Response) {
     }
 
     // 只有学生本人可以查看推荐
-    if (userId !== studentId && req.user?.role !== 'admin' && req.user?.role !== 'platform') {
+    if (userId !== studentId && req.user?.role !== 'admin') {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
@@ -260,7 +260,7 @@ export async function notifyMatchedStudents(req: Request, res: Response) {
     }
 
     // 只有企业或管理员可以通知
-    if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'company' && userRole !== 'admin') {
       return res.status(403).json({ error: 'Only companies can notify students' });
     }
 

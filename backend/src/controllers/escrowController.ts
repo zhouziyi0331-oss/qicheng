@@ -133,7 +133,7 @@ export async function releaseFunds(req: Request, res: Response) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    if (userRole !== 'company' && userRole !== 'admin' && userRole !== 'platform') {
+    if (userRole !== 'company' && userRole !== 'admin') {
       return res.status(403).json({ error: 'Only companies can release funds' });
     }
 
