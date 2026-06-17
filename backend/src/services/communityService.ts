@@ -260,18 +260,18 @@ class CommunityService {
       }
 
       return {
-        id: post.id,
-        authorId: post.author_id,
-        type: post.type,
-        title: post.title,
-        content: post.content,
+        id: post.id as string,
+        authorId: post.author_id as string,
+        type: post.type as string,
+        title: post.title as string,
+        content: post.content as string,
         coverImage: post.cover_image,
         requiredSkills: post.required_skills || [],
         track: post.track,
         teamId: post.team_id,
         vacancyCount: post.vacancy_count,
         totalApplicants: post.total_applicants,
-        status: post.status,
+        status: post.status as string,
         createdAt: post.created_at,
         expiresAt: post.expires_at,
         author: {
