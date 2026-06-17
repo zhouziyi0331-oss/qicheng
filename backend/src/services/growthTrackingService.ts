@@ -162,7 +162,7 @@ class GrowthTrackingService {
     // 检测：从沮丧到突破
     if (
       previousEmotions &&
-      previousEmotions.some(e => e.emotion === 'frustrated') &&
+      previousEmotions.some((e: any) => e.emotion === 'frustrated') &&
       (currentEmotion === 'excited' || currentEmotion === 'proud')
     ) {
       return {

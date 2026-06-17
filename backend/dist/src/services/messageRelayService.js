@@ -156,7 +156,7 @@ class MessageRelayService {
         }
         const sql = `SELECT get_collaboration_count($1, $2) as count`;
         const result = await (0, db_1.queryOne)(sql, [studentId, companyId]);
-        return result.count || 0;
+        return result?.count || 0;
     }
     /**
      * 检测和屏蔽联系方式
@@ -291,7 +291,7 @@ class MessageRelayService {
        SET total_messages = total_messages + 1,
            filtered_messages = filtered_messages + $1
        WHERE id = $2`, [params.isFiltered ? 1 : 0, params.taskId]);
-        return result.id;
+        return result?.id || '';
     }
     /**
      * 保存屏蔽日志

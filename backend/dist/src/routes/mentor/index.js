@@ -9,6 +9,8 @@ const logger_1 = __importDefault(require("../../utils/logger"));
 const auth_1 = require("../../middleware/auth");
 const controller_1 = require("./controller");
 const mentorController_1 = require("../../controllers/mentorController");
+const enhancedMentorService_1 = __importDefault(require("../../services/enhancedMentorService"));
+const mentorCoreService = enhancedMentorService_1.default;
 const router = (0, express_1.Router)();
 // AI导师通用聊天接口
 router.post('/chat', mentorController_1.mentorChat);

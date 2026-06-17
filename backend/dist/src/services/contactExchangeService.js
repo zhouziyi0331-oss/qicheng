@@ -68,7 +68,7 @@ class ContactExchangeService {
     async getCollaborationCount(studentId, companyId) {
         const sql = `SELECT get_collaboration_count($1, $2) as count`;
         const result = await (0, db_1.queryOne)(sql, [studentId, companyId]);
-        return result.count || 0;
+        return result?.count || 0;
     }
     /**
      * 检查是否已经交换过
@@ -368,7 +368,7 @@ ${contactDetails}
     async canExchange(studentId, companyId) {
         const sql = `SELECT can_exchange_contacts($1, $2) as can_exchange`;
         const result = await (0, db_1.queryOne)(sql, [studentId, companyId]);
-        return result.can_exchange === true;
+        return result?.can_exchange === true;
     }
 }
 // =====================================================

@@ -747,7 +747,7 @@ export class EnhancedMentorService {
       [userId]
     );
 
-    return result.session_id;
+    return result?.session_id || '';
   }
 
   /**

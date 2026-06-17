@@ -507,7 +507,7 @@ class EnhancedMentorService {
         const result = await (0, db_1.queryOne)(`INSERT INTO unified_mentor_conversations (user_id, session_id, role, content)
        VALUES ($1, gen_random_uuid(), 'system', 'Session started')
        RETURNING session_id`, [userId]);
-        return result.session_id;
+        return result?.session_id || '';
     }
     /**
      * 保存对话记录

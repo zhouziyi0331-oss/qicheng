@@ -127,7 +127,7 @@ export const getRecommendedTasks = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      tasks: tasks.map(task => ({
+      tasks: tasks.map((task: any) => ({
         taskId: task.task_id,
         title: task.task_title,
         description: task.task_description,

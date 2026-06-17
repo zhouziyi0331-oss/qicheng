@@ -105,7 +105,7 @@ class ContactExchangeService {
   private async getCollaborationCount(studentId: string, companyId: string): Promise<number> {
     const sql = `SELECT get_collaboration_count($1, $2) as count`;
     const result = await queryOne(sql, [studentId, companyId]);
-    return result.count || 0;
+    return result?.count || 0;
   }
 
   /**
@@ -483,7 +483,7 @@ ${contactDetails}
   async canExchange(studentId: string, companyId: string): Promise<boolean> {
     const sql = `SELECT can_exchange_contacts($1, $2) as can_exchange`;
     const result = await queryOne(sql, [studentId, companyId]);
-    return result.can_exchange === true;
+    return result?.can_exchange === true;
   }
 }
 

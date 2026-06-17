@@ -121,7 +121,7 @@ const getRecommendedTasks = async (req, res) => {
         const tasks = await semanticMatchingEngine_1.default.getRecommendedTasksForStudent(studentId);
         res.json({
             success: true,
-            tasks: tasks.map(task => ({
+            tasks: tasks.map((task) => ({
                 taskId: task.task_id,
                 title: task.task_title,
                 description: task.task_description,

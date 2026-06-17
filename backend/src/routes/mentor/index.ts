@@ -5,6 +5,9 @@ import logger from '../../utils/logger';
 import { authenticate } from '../../middleware/auth';
 import { handleStuckMessage, getConversations } from './controller';
 import { mentorChat, getHistory, getFirstStep } from '../../controllers/mentorController';
+import enhancedMentorService from '../../services/enhancedMentorService';
+
+const mentorCoreService = enhancedMentorService;
 
 const router = Router();
 

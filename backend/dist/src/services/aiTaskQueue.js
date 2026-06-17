@@ -147,7 +147,7 @@ async function processMatchAnalysis(data) {
         success: true,
         taskId: data.taskId,
         matchCount: matches.length,
-        topMatches: matches.slice(0, 5).map(m => ({
+        topMatches: matches.slice(0, 5).map((m) => ({
             studentId: m.studentId,
             fitScore: m.fitScore,
             overallFit: m.overallFit
