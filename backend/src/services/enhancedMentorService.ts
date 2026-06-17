@@ -699,11 +699,11 @@ export class EnhancedMentorService {
     }
 
     return {
-      id: user.id,
-      name: user.name,
-      role: user.role,
-      opcLabel: user.opc_label,
-      lifeQuestion: user.life_question,
+      id: user.id as string,
+      name: user.name as string,
+      role: user.role as string,
+      opcLabel: user.opc_label as string,
+      lifeQuestion: user.life_question as string | undefined,
       level: user.level || 0,
       recentEmotions: recentEmotions.map(e => e.emotional_state),
       emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state,

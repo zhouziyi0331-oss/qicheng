@@ -183,9 +183,9 @@ class EncryptionService {
       if (encryptedValue && metadata.encrypted_fields[fieldName]) {
         const decrypted = await this.decrypt({
           encryptedData: encryptedValue,
-          iv: metadata.iv,
-          authTag: metadata.auth_tag,
-          keyId: metadata.encryption_key_id,
+          iv: metadata.iv as string,
+          authTag: metadata.auth_tag as string,
+          keyId: metadata.encryption_key_id as string,
         });
         decryptedFields[fieldName] = decrypted;
       } else {
