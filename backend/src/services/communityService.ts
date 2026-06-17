@@ -266,7 +266,7 @@ class CommunityService {
         title: post.title as string,
         content: post.content as string,
         coverImage: post.cover_image as string | undefined,
-        requiredSkills: post.required_skills || [],
+        requiredSkills: (post.required_skills as string[]) || [],
         track: post.track as string | undefined,
         teamId: post.team_id as string | undefined,
         vacancyCount: post.vacancy_count as number | undefined,

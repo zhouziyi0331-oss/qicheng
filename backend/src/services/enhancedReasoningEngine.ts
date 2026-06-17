@@ -145,9 +145,9 @@ class EnhancedReasoningEngine {
       recentConfidence: avgConfidence,
       recentFrustration: avgFrustration,
       recentEngagement: avgEngagement,
-      coreStrengths: memory?.core_strengths || [],
-      growthAreas: memory?.growth_areas || [],
-      emotionalTriggers: memory?.emotional_triggers || []
+      coreStrengths: (memory?.core_strengths as string[]) || [],
+      growthAreas: (memory?.growth_areas as string[]) || [],
+      emotionalTriggers: (memory?.emotional_triggers as string[]) || []
     };
   }
 

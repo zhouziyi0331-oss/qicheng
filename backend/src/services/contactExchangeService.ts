@@ -105,7 +105,7 @@ class ContactExchangeService {
   private async getCollaborationCount(studentId: string, companyId: string): Promise<number> {
     const sql = `SELECT get_collaboration_count($1, $2) as count`;
     const result = await queryOne(sql, [studentId, companyId]);
-    return result?.count || 0;
+    return (result?.count as number) || 0;
   }
 
   /**

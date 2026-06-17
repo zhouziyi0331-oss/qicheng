@@ -704,13 +704,13 @@ export class EnhancedMentorService {
       role: user.role as string,
       opcLabel: user.opc_label as string,
       lifeQuestion: user.life_question as string | undefined,
-      level: user.level || 0,
+      level: (user.level as number) || 0,
       recentEmotions: recentEmotions.map(e => e.emotional_state),
       emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state as string | undefined,
       activeProjects: activeProjects,
       currentProject: activeProjects.filter(Boolean)[0],
       mentorMode: {
-        currentMode: mentorMode?.current_mode || 'emotional',
+        currentMode: (mentorMode?.current_mode as string) || 'emotional',
         autoSwitch: mentorMode?.auto_switch !== false,
         preferredMode: mentorMode?.preferred_mode as string | undefined
       }
@@ -747,7 +747,7 @@ export class EnhancedMentorService {
       [userId]
     );
 
-    return result?.session_id || '';
+    return (result?.session_id as string) || '';
   }
 
   /**
