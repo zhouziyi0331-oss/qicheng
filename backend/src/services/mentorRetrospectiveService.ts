@@ -54,7 +54,7 @@ class MentorRetrospectiveService {
       logger.info(`[MentorRetrospective] 触发复盘: student=${studentId}, order=${orderId}`);
 
       // 检查是否已经发送过复盘
-      const existing = await db.query(`
+      const existing = await pool.query(`
         SELECT id FROM mentor_retrospectives WHERE order_id = $1
       `, [orderId]);
 
@@ -68,7 +68,7 @@ class MentorRetrospectiveService {
 
       // 创建复盘记录
       const retrospectiveId = uuidv4();
-      await db.query(`
+      await pool.query(`
         INSERT INTO mentor_retrospectives (
           id, student_id, order_id, questions, status, sent_at
         ) VALUES ($1, $2, $3, $4, $5, NOW())
@@ -82,7 +82,7 @@ class MentorRetrospectiveService {
 
       // 发送复盘引导消息到mentor_sessions
       const messageText = this.formatRetrospectiveMessage(questions);
-      await db.query(`
+      await pool.query(`
         INSERT INTO mentor_sessions (
           id, user_id, order_id, trigger_type, sender_type,
           message, context_snapshot, created_at
@@ -113,7 +113,7 @@ class MentorRetrospectiveService {
   ): Promise<RetrospectiveQuestions> {
     try {
       // 获取订单和项目信息
-      const orderInfo = await db.query(`
+      const orderInfo = await pool.query(`
         SELECT
           o.id,
           p.title as project_title,
@@ -134,7 +134,7 @@ class MentorRetrospectiveService {
       const order = orderInfo.rows[0];
 
       // 获取学生在这个订单中的卡点
-      const stuckPoints = await db.query(`
+      const stuckPoints = await pool.query(`
         SELECT obs_content
         FROM mentor_growth_observations
         WHERE order_id = $1 AND obs_type = 'stuck_point'
@@ -225,7 +225,7 @@ ${stuckPointsText}` : ''}
       logger.info(`[MentorRetrospective] 保存回答: ${retrospectiveId}`);
 
       // 更新复盘记录
-      await db.query(`
+      await pool.query(`
         UPDATE mentor_retrospectives
         SET answers = $1,
             status = 'completed',
@@ -248,7 +248,7 @@ ${stuckPointsText}` : ''}
    */
   async skipRetrospective(retrospectiveId: string): Promise<void> {
     try {
-      await db.query(`
+      await pool.query(`
         UPDATE mentor_retrospectives
         SET status = 'skipped'
         WHERE id = $1
@@ -267,7 +267,7 @@ ${stuckPointsText}` : ''}
   async extractFeaturedInsights(retrospectiveId: string): Promise<void> {
     try {
       // 获取复盘内容
-      const retrospective = await db.query(`
+      const retrospective = await pool.query(`
         SELECT
           mr.*,
           o.project_id,
@@ -292,7 +292,7 @@ ${stuckPointsText}` : ''}
 
       if (isFeatured) {
         // 标记为精华
-        await db.query(`
+        await pool.query(`
           UPDATE mentor_retrospectives
           SET is_featured = true,
               featured_reason = $1
@@ -302,7 +302,7 @@ ${stuckPointsText}` : ''}
         // 写入成长观察表（作为突破记录）
         const breakthroughText = `项目复盘：${answers.answer1}。改进方向：${answers.answer2}。工具使用：${answers.answer3}`;
 
-        await db.query(`
+        await pool.query(`
           INSERT INTO mentor_growth_observations (
             id, user_id, order_id, obs_type, obs_content,
             observation_category, breakthrough, is_significant, tags

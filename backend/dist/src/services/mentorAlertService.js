@@ -111,7 +111,7 @@ class MentorAlertService {
         if (!rule)
             return;
         // 获取该订单最近的提交记录
-        const submissions = await db.query(`
+        const submissions = await database_1.pool.query(`
       SELECT
         id,
         version,
@@ -191,7 +191,7 @@ class MentorAlertService {
         if (!rule)
             return;
         // 获取最近一次提交的AI审核结果
-        const submission = await db.query(`
+        const submission = await database_1.pool.query(`
       SELECT ai_review_json
       FROM order_submissions
       WHERE order_id = $1
@@ -227,7 +227,7 @@ class MentorAlertService {
             const alertMessage = await this.generateAlertMessage(studentId, orderId, rule, triggerData);
             // 创建预警记录
             const alertId = (0, uuid_1.v4)();
-            await db.query(`
+            await database_1.pool.query(`
         INSERT INTO mentor_alerts (
           id, student_id, order_id, rule_id, rule_type,
           alert_message, trigger_data, is_sent, sent_at
@@ -242,7 +242,7 @@ class MentorAlertService {
                 JSON.stringify(triggerData)
             ]);
             // 同时写入mentor_sessions（导师对话记录）
-            await db.query(`
+            await database_1.pool.query(`
         INSERT INTO mentor_sessions (
           id, user_id, order_id, trigger_type, sender_type,
           message, context_snapshot, created_at
@@ -331,7 +331,7 @@ class MentorAlertService {
      * 标记预警为已读
      */
     async markAlertAsViewed(alertId, studentId) {
-        await db.query(`
+        await database_1.pool.query(`
       UPDATE mentor_alerts
       SET student_viewed = true, viewed_at = NOW()
       WHERE id = $1 AND student_id = $2
@@ -341,7 +341,7 @@ class MentorAlertService {
      * 标记预警为已响应
      */
     async markAlertAsResponded(alertId, studentId) {
-        await db.query(`
+        await database_1.pool.query(`
       UPDATE mentor_alerts
       SET student_responded = true, responded_at = NOW()
       WHERE id = $1 AND student_id = $2

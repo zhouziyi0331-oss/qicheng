@@ -25,18 +25,18 @@ class EnhancedReasoningEngine {
        ORDER BY timestamp DESC
        LIMIT 50`, [studentId]);
         // 3. 分析求助频率
-        const helpRequests = recentBehaviors.filter(b => b.behavior_type === 'seek_help');
+        const helpRequests = recentBehaviors.filter((b) => b.behavior_type === 'seek_help');
         const helpRequestRate = recentBehaviors.length > 0 ?
             helpRequests.length / recentBehaviors.length : 0;
         // 4. 分析修改频率
-        const revisions = recentBehaviors.filter(b => b.behavior_type === 'revise_work');
+        const revisions = recentBehaviors.filter((b) => b.behavior_type === 'revise_work');
         const revisionRate = recentBehaviors.length > 0 ?
             revisions.length / recentBehaviors.length : 0;
         // 5. 分析情绪趋势
         const recentEmotions = recentBehaviors
-            .filter(b => b.emotional_state)
+            .filter((b) => b.emotional_state)
             .slice(0, 10)
-            .map(b => typeof b.emotional_state === 'string' ?
+            .map((b) => typeof b.emotional_state === 'string' ?
             JSON.parse(b.emotional_state) : b.emotional_state);
         const avgConfidence = recentEmotions.length > 0 ?
             recentEmotions.reduce((sum, e) => sum + (e.confidence || 0), 0) / recentEmotions.length : 0.5;
@@ -221,7 +221,7 @@ class EnhancedReasoningEngine {
        WHERE student_id = $1
        ORDER BY timestamp DESC
        LIMIT 10`, [context.studentId]);
-        const recentHelpCount = recentBehaviors.filter(b => b.behavior_type === 'seek_help').length;
+        const recentHelpCount = recentBehaviors.filter((b) => b.behavior_type === 'seek_help').length;
         if (recentHelpCount >= 3) {
             hypotheses.push({
                 hypothesis: '学生求助频率突然升高，可能遇到了系统性困难',

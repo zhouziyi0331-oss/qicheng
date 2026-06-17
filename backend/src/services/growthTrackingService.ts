@@ -145,7 +145,7 @@ class GrowthTrackingService {
     // 检测：克服恐惧（从焦虑到自信）
     if (
       previousEmotions &&
-      previousEmotions.some(e => e.emotion === 'anxious' && e.intensity > 0.6) &&
+      previousEmotions.some((e: any) => e.emotion === 'anxious' && e.intensity > 0.6) &&
       currentEmotion === 'confident'
     ) {
       return {

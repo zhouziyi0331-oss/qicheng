@@ -57,7 +57,7 @@ export const getMatchedStudents = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      students: matches.map(match => ({
+      students: matches.map((match: any) => ({
         studentId: match.student_id,
         nickname: match.student_nickname,
         avatar: match.student_avatar,

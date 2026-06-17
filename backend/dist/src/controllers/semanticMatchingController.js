@@ -55,7 +55,7 @@ const getMatchedStudents = async (req, res) => {
         const matches = await semanticMatchingEngine_1.default.getMatchedStudentsForTask(taskId, limit);
         res.json({
             success: true,
-            students: matches.map(match => ({
+            students: matches.map((match) => ({
                 studentId: match.student_id,
                 nickname: match.student_nickname,
                 avatar: match.student_avatar,

@@ -353,7 +353,7 @@ class InstantGrowthSummaryService {
     // 导师对话记录
     if (mentorSessions.length > 0) {
       prompt += `\n## 导师对话记录\n`;
-      mentorSessions.forEach((session, index) => {
+      mentorSessions.forEach((session: any, index: number) => {
         prompt += `\n### 对话 ${index + 1}\n`;
         if (session.session_summary) {
           prompt += `总结：${session.session_summary}\n`;
@@ -370,7 +370,7 @@ class InstantGrowthSummaryService {
     // 成长观察
     if (growthObservations.length > 0) {
       prompt += `\n## 成长观察记录\n`;
-      growthObservations.forEach((obs, index) => {
+      growthObservations.forEach((obs: any, index: number) => {
         prompt += `\n### 观察 ${index + 1}\n`;
         prompt += `类型：${obs.observation_type}\n`;
         prompt += `内容：${obs.observation_content}\n`;
