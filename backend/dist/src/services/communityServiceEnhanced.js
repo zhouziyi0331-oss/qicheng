@@ -165,7 +165,7 @@ class CommunityServiceEnhanced {
            c.like_count DESC,
            c.created_at DESC
          LIMIT $2 OFFSET $3`, [postId, limit, offset]);
-            return comments.rows;
+            return comments;
         }
         catch (error) {
             logger_1.default.error('Failed to get comments:', error);

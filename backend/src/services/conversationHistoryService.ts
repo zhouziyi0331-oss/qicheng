@@ -43,7 +43,7 @@ class ConversationHistoryService {
       }
 
       // 格式化对话历史
-      const history = mentorMessages.rows
+      const history = mentorMessages
         .reverse() // 按时间正序排列
         .map((msg, index) => {
           const time = new Date(msg.created_at).toLocaleString('zh-CN');

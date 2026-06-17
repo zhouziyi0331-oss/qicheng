@@ -248,7 +248,7 @@ class CommunityServiceEnhanced {
         [postId, limit, offset]
       );
 
-      return comments.rows;
+      return comments;
     } catch (error: any) {
       logger.error('Failed to get comments:', error);
       throw error;

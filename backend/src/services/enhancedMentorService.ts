@@ -707,7 +707,7 @@ export class EnhancedMentorService {
       level: user.level || 0,
       recentEmotions: recentEmotions.map(e => e.emotional_state),
       emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state,
-      activeProjects: activeProjects.rows,
+      activeProjects: activeProjects,
       currentProject: activeProjects.filter(Boolean)[0],
       mentorMode: {
         currentMode: mentorMode?.current_mode || 'emotional',
@@ -730,7 +730,7 @@ export class EnhancedMentorService {
       [userId]
     );
 
-    return history.rows.reverse().map(msg => ({
+    return history.reverse().map(msg => ({
       role: msg.role === 'user' ? 'user' : 'assistant',
       content: msg.content
     }));

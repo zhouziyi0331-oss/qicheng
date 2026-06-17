@@ -156,7 +156,7 @@ class LevelFilterService {
       );
 
       return {
-        tasks: tasks.rows,
+        tasks: tasks,
         totalCount: countResult?.count || 0,
         studentLevel: levelInfo.currentLevel,
         allowedDifficulties: difficultyParams,

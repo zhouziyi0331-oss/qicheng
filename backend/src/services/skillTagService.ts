@@ -100,7 +100,7 @@ class SkillTagService {
       );
 
       const skillFrequency: Record<string, number> = {};
-      growthObservations.rows.forEach((row: any) => {
+      growthObservations.forEach((row: any) => {
         if (row.skills_shown && Array.isArray(row.skills_shown)) {
           row.skills_shown.forEach((skill: string) => {
             skillFrequency[skill] = (skillFrequency[skill] || 0) + 1;
