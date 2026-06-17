@@ -64,14 +64,14 @@ export async function triggerMatching(req: Request, res: Response) {
         [
           taskId,
           match.studentId,
-          match.match_score.overall_score,
-          match.match_score.skillMatch.score,
-          match.match_score.difficultyMatch.score,
-          match.match_score.domainMatch.score,
-          match.match_score.growthPotential.score,
-          match.match_score.reliability.score,
-          match.match_score.preferenceAlignment.score,
-          JSON.stringify(match.match_score.breakdown),
+          (match.match_score as any).overall_score,
+          (match.match_score as any).skillMatch.score,
+          (match.match_score as any).difficultyMatch.score,
+          (match.match_score as any).domainMatch.score,
+          (match.match_score as any).growthPotential.score,
+          (match.match_score as any).reliability.score,
+          (match.match_score as any).preferenceAlignment.score,
+          JSON.stringify((match.match_score as any).breakdown),
           match.rank
         ]
       );
