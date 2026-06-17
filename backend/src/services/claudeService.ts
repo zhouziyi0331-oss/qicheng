@@ -69,7 +69,7 @@ class ClaudeService {
    * 简化的单次对话接口
    */
   async chat(
-    prompt: string,
+    prompt: string | Array<{ role: string; content: string }>,
     options?: {
       model?: string;
       maxTokens?: number;
@@ -77,8 +77,12 @@ class ClaudeService {
       system?: string;
     }
   ): Promise<string> {
+    const messages = typeof prompt === 'string'
+      ? [{ role: 'user', content: prompt }]
+      : prompt;
+
     const response = await this.generateText(
-      [{ role: 'user', content: prompt }],
+      messages as any,
       options
     );
     return response.content;

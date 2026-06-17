@@ -49,7 +49,10 @@ class ClaudeService {
      * 简化的单次对话接口
      */
     async chat(prompt, options) {
-        const response = await this.generateText([{ role: 'user', content: prompt }], options);
+        const messages = typeof prompt === 'string'
+            ? [{ role: 'user', content: prompt }]
+            : prompt;
+        const response = await this.generateText(messages, options);
         return response.content;
     }
 }

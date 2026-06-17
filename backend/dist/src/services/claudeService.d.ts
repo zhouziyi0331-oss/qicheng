@@ -26,7 +26,10 @@ declare class ClaudeService {
     /**
      * 简化的单次对话接口
      */
-    chat(prompt: string, options?: {
+    chat(prompt: string | Array<{
+        role: string;
+        content: string;
+    }>, options?: {
         model?: string;
         maxTokens?: number;
         temperature?: number;
