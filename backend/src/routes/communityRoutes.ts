@@ -128,8 +128,6 @@ router.post(
       const { message } = req.body;
 
       await communityService.applyToPost(postId, applicantId, message, track);
-        message,
-      });
 
       logger.info('Community post application submitted via API', { postId, applicantId });
 
