@@ -29,9 +29,9 @@ export const getTaskTranslation = async (req: Request, res: Response) => {
           functionalModules: translation.functional_modules,
           whatYouWillDo: translation.what_you_will_do,
           whatYouWillLearn: translation.what_you_will_learn,
-          difficulty: translation.difficulty_breakdown,
+          difficulty: (translation as any).difficulty_breakdown,
           estimatedHours: translation.estimated_hours,
-          translatedAt: translation.created_at
+          translatedAt: (translation as any).created_at
         }
       });
     }
@@ -70,7 +70,7 @@ export const generateRequirementSummary = async (req: Request, res: Response) =>
   try {
     logger.info(`Generating requirement summary for task ${taskId}`);
 
-    const summary = await qichengTeacherService.generateProjectRequirementSummary(taskId);
+    const summary = await (qichengTeacherService as any).generateProjectRequirementSummary(taskId);
 
     res.json({
       success: true,

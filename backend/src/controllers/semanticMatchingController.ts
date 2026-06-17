@@ -32,7 +32,7 @@ export const triggerMatching = async (req: Request, res: Response) => {
     res.json({
       success: true,
       matchedCount: matches.length,
-      topScore: matches[0]?.overall_score || 0,
+      topScore: (matches[0] as any)?.overall_score || 0,
       message: `成功为任务匹配${matches.length}个学生`
     });
   } catch (error: any) {
@@ -53,7 +53,7 @@ export const getMatchedStudents = async (req: Request, res: Response) => {
   const limit = parseInt(req.query.limit as string) || 10;
 
   try {
-    const matches = await semanticMatchingEngine.getMatchedStudentsForTask(taskId, limit);
+    const matches = await (semanticMatchingEngine as any).getMatchedStudentsForTask(taskId, limit);
 
     res.json({
       success: true,
@@ -95,7 +95,7 @@ export const pushToStudents = async (req: Request, res: Response) => {
   }
 
   try {
-    const result = await semanticMatchingEngine.pushTaskToStudents(taskId, studentIds);
+    const result = await (semanticMatchingEngine as any).pushTaskToStudents(taskId, studentIds);
 
     res.json({
       success: true,
