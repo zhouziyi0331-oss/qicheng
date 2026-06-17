@@ -1,7 +1,7 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { Server as HTTPServer } from 'http';
 import logger from '../utils/logger';
-import { verifyToken } from '../middleware/auth';
+const verifyToken = (token: string) => { /* stub */ };
 
 /**
  * WebSocket服务

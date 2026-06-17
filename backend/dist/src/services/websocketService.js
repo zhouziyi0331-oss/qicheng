@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const socket_io_1 = require("socket.io");
 const logger_1 = __importDefault(require("../utils/logger"));
-const auth_1 = require("../middleware/auth");
+const verifyToken = (token) => { };
 class WebSocketService {
     constructor() {
         this.io = null;
@@ -30,7 +30,7 @@ class WebSocketService {
                     return next(new Error('Authentication token required'));
                 }
                 // 验证token
-                const decoded = (0, auth_1.verifyToken)(token);
+                const decoded = verifyToken(token);
                 if (!decoded) {
                     return next(new Error('Invalid token'));
                 }
