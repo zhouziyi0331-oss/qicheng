@@ -57,8 +57,8 @@ class EnhancedReasoningEngine {
         }
         // 7. 推断学习模式
         let learningPattern;
-        const tasksCompleted = parseInt(taskStats?.tasks_completed || '0');
-        const avgQuality = parseFloat(taskStats?.avg_quality || '0');
+        const tasksCompleted = parseInt(String(taskStats?.tasks_completed || '0'));
+        const avgQuality = parseFloat(String(taskStats?.avg_quality || '0'));
         if (tasksCompleted < 3) {
             learningPattern = 'new';
         }

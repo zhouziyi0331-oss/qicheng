@@ -47,8 +47,8 @@ class CollaborationProgressService {
             studentAgreed: row.student_agreed,
             companyAgreed: row.company_agreed,
             lastCompletedAt: row.last_completed_at,
-            avgStudentRating: row.avg_student_rating ? parseFloat(row.avg_student_rating) : null,
-            avgCompanyRating: row.avg_company_rating ? parseFloat(row.avg_company_rating) : null,
+            avgStudentRating: row.avg_student_rating ? parseFloat(String(row.avg_student_rating)) : null,
+            avgCompanyRating: row.avg_company_rating ? parseFloat(String(row.avg_company_rating)) : null,
         };
     }
     /**
@@ -123,8 +123,8 @@ class CollaborationProgressService {
             studentAgreed: row.student_agreed,
             companyAgreed: row.company_agreed,
             lastCompletedAt: row.last_completed_at,
-            avgStudentRating: row.avg_student_rating ? parseFloat(row.avg_student_rating) : null,
-            avgCompanyRating: row.avg_company_rating ? parseFloat(row.avg_company_rating) : null,
+            avgStudentRating: row.avg_student_rating ? parseFloat(String(row.avg_student_rating)) : null,
+            avgCompanyRating: row.avg_company_rating ? parseFloat(String(row.avg_company_rating)) : null,
         }));
     }
     /**
@@ -144,8 +144,8 @@ class CollaborationProgressService {
             studentAgreed: row.student_agreed,
             companyAgreed: row.company_agreed,
             lastCompletedAt: row.last_completed_at,
-            avgStudentRating: row.avg_student_rating ? parseFloat(row.avg_student_rating) : null,
-            avgCompanyRating: row.avg_company_rating ? parseFloat(row.avg_company_rating) : null,
+            avgStudentRating: row.avg_student_rating ? parseFloat(String(row.avg_student_rating)) : null,
+            avgCompanyRating: row.avg_company_rating ? parseFloat(String(row.avg_company_rating)) : null,
         }));
     }
     /**

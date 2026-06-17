@@ -63,8 +63,8 @@ class CollaborationProgressService {
       studentAgreed: row.student_agreed as boolean | null,
       companyAgreed: row.company_agreed as boolean | null,
       lastCompletedAt: row.last_completed_at as Date | null,
-      avgStudentRating: row.avg_student_rating ? parseFloat(row.avg_student_rating) : null,
-      avgCompanyRating: row.avg_company_rating ? parseFloat(row.avg_company_rating) : null,
+      avgStudentRating: row.avg_student_rating ? parseFloat(String(row.avg_student_rating)) : null,
+      avgCompanyRating: row.avg_company_rating ? parseFloat(String(row.avg_company_rating)) : null,
     };
   }
 
@@ -148,8 +148,8 @@ class CollaborationProgressService {
       studentAgreed: row.student_agreed as boolean | null,
       companyAgreed: row.company_agreed as boolean | null,
       lastCompletedAt: row.last_completed_at as Date | null,
-      avgStudentRating: row.avg_student_rating ? parseFloat(row.avg_student_rating) : null,
-      avgCompanyRating: row.avg_company_rating ? parseFloat(row.avg_company_rating) : null,
+      avgStudentRating: row.avg_student_rating ? parseFloat(String(row.avg_student_rating)) : null,
+      avgCompanyRating: row.avg_company_rating ? parseFloat(String(row.avg_company_rating)) : null,
     }));
   }
 
@@ -174,8 +174,8 @@ class CollaborationProgressService {
       studentAgreed: row.student_agreed as boolean | null,
       companyAgreed: row.company_agreed as boolean | null,
       lastCompletedAt: row.last_completed_at as Date | null,
-      avgStudentRating: row.avg_student_rating ? parseFloat(row.avg_student_rating) : null,
-      avgCompanyRating: row.avg_company_rating ? parseFloat(row.avg_company_rating) : null,
+      avgStudentRating: row.avg_student_rating ? parseFloat(String(row.avg_student_rating)) : null,
+      avgCompanyRating: row.avg_company_rating ? parseFloat(String(row.avg_company_rating)) : null,
     }));
   }
 

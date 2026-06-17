@@ -91,7 +91,7 @@ class AILogService {
             const result = await (0, db_1.query)(`SELECT SUM(cost_yuan) as total_cost
          FROM ai_call_logs
          WHERE created_at >= CURRENT_DATE`, []);
-            return parseFloat(result[0]?.total_cost || 0);
+            return parseFloat(String(result[0]?.total_cost || 0));
         }
         catch (error) {
             logger_1.default.error('Failed to get today cost:', error);

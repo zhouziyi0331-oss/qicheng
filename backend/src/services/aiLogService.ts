@@ -125,7 +125,7 @@ class AILogService {
         []
       );
 
-      return parseFloat(result[0]?.total_cost || 0);
+      return parseFloat(String(result[0]?.total_cost || 0));
     } catch (error: any) {
       logger.error('Failed to get today cost:', error);
       return 0;
