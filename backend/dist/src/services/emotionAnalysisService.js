@@ -165,7 +165,7 @@ ${context ? `上下文：\n${context}` : ''}
                 maxTokens: 500,
                 temperature: 0.3
             });
-            const result = JSON.parse(response.content);
+            const result = JSON.parse(response);
             return {
                 emotion: result.emotion,
                 intensity: result.intensity,

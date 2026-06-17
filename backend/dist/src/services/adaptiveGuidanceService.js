@@ -84,10 +84,10 @@ class AdaptiveGuidanceService {
         });
         // 解析响应
         return {
-            content: response.content,
+            content: response,
             tone: emotionStrategy?.toneGuidelines || 'supportive',
             approach: conversationContext?.guidance_approach || 'socratic',
-            encouragement: this.extractEncouragement(response.content),
+            encouragement: this.extractEncouragement(response),
             celebrationMessage: milestone?.celebration_message,
             detectedEmotion: emotionResult.emotion,
             emotionIntensity: emotionResult.intensity,

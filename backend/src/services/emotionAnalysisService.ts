@@ -214,7 +214,7 @@ ${context ? `上下文：\n${context}` : ''}
         }
       );
 
-      const result = JSON.parse(response.content);
+      const result = JSON.parse(response);
       return {
         emotion: result.emotion,
         intensity: result.intensity,

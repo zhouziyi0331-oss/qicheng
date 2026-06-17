@@ -188,7 +188,7 @@ ${p.patternName}:
         }
       );
 
-      const result = JSON.parse(response.content);
+      const result = JSON.parse(response);
 
       if (result.detected) {
         const pattern = patterns.find(p => p.patternName === result.patternName);
