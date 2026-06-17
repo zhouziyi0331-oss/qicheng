@@ -56,8 +56,8 @@ class CollaborationProgressService {
     return {
       studentId: row.student_id as string,
       companyId: row.company_id as string,
-      completedCount: parseInt(row.completed_count, 10),
-      inProgressCount: parseInt(row.in_progress_count, 10),
+      completedCount: parseInt(String(row.completed_count), 10),
+      inProgressCount: parseInt(String(row.in_progress_count), 10),
       canUnlockContact: row.can_unlock_contact as boolean,
       contactUnlocked: row.contact_unlocked as boolean,
       studentAgreed: row.student_agreed as boolean | null,

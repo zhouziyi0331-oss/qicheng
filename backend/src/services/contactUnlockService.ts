@@ -108,7 +108,7 @@ class ContactUnlockService {
 
     // 3. 检查是否双方都同意，如果是则自动解锁
     if (request.student_agreed && request.company_agreed && !request.exchanged) {
-      await this.executeUnlock(request.id);
+      await this.executeUnlock(String(request.id));
       request.exchanged = true;
       request.exchanged_at = new Date();
     }
