@@ -61,7 +61,7 @@ exports.aiCallLimiter = (0, express_rate_limit_1.default)({
     legacyHeaders: false,
     keyGenerator: (req) => {
         // 使用userId作为key
-        return req.user?.userId || req.ip;
+        return req.user?.userId || req.ip || 'unknown';
     },
     handler: (_req, res) => {
         res.status(429).json({
