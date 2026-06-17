@@ -411,7 +411,7 @@ ${(levelConfig.unlocked_features || []).map((f: string) => `- ${f}`).join('\n')}
         [track]
       );
 
-      return configs.rows;
+      return (configs as any).rows;
     } catch (error: any) {
       logger.error('Failed to get all level configs:', error);
       return [];

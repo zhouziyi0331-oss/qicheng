@@ -488,7 +488,7 @@ class CommunityServiceEnhanced {
           [post.team_id]
         );
 
-        teamMembers = members.rows;
+        teamMembers = (members as any).rows;
       }
 
       return {

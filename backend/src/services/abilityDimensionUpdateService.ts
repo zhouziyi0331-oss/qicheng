@@ -582,8 +582,8 @@ class AbilityDimensionUpdateService {
     ];
 
     dimensions.forEach((dim) => {
-      const oldScore = oldScores[dim.key] || 0;
-      const newScore = newScores[dim.key] || 0;
+      const oldScore = (oldScores as any)[dim.key] || 0;
+      const newScore = (newScores as any)[dim.key] || 0;
       const change = newScore - oldScore;
       prompt += `- ${dim.name}：${oldScore} → ${newScore} (${change >= 0 ? '+' : ''}${change})\n`;
     });
