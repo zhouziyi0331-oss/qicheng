@@ -114,8 +114,8 @@ class CollaborationProgressService {
        WHERE student_id = $1
        ORDER BY completed_count DESC, last_completed_at DESC`, [studentId]);
         return result.map((row) => ({
-            studentId: row.student_id,
-            companyId: row.company_id,
+            studentId: String(row.student_id),
+            companyId: String(row.company_id),
             completedCount: parseInt(row.completed_count, 10),
             inProgressCount: parseInt(row.in_progress_count, 10),
             canUnlockContact: row.can_unlock_contact,
@@ -135,8 +135,8 @@ class CollaborationProgressService {
        WHERE company_id = $1
        ORDER BY completed_count DESC, last_completed_at DESC`, [companyId]);
         return result.map((row) => ({
-            studentId: row.student_id,
-            companyId: row.company_id,
+            studentId: String(row.student_id),
+            companyId: String(row.company_id),
             completedCount: parseInt(row.completed_count, 10),
             inProgressCount: parseInt(row.in_progress_count, 10),
             canUnlockContact: row.can_unlock_contact,

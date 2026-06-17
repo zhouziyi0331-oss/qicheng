@@ -139,8 +139,8 @@ class CollaborationProgressService {
     );
 
     return result.map((row) => ({
-      studentId: row.student_id,
-      companyId: row.company_id,
+      studentId: String(row.student_id),
+      companyId: String(row.company_id),
       completedCount: parseInt(row.completed_count, 10),
       inProgressCount: parseInt(row.in_progress_count, 10),
       canUnlockContact: row.can_unlock_contact as boolean,
@@ -165,8 +165,8 @@ class CollaborationProgressService {
     );
 
     return result.map((row) => ({
-      studentId: row.student_id,
-      companyId: row.company_id,
+      studentId: String(row.student_id),
+      companyId: String(row.company_id),
       completedCount: parseInt(row.completed_count, 10),
       inProgressCount: parseInt(row.in_progress_count, 10),
       canUnlockContact: row.can_unlock_contact as boolean,
