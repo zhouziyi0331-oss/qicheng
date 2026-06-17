@@ -7,6 +7,11 @@ import { config } from '../config';
 import logger from './utils/logger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
+// 导入安全中间件
+import { securityHeaders, removeServerHeaders } from './middleware/securityHeaders';
+import { globalLimiter } from './middleware/rateLimiter';
+import { errorMonitor } from './middleware/errorMonitor';
+
 // Route imports (指令1-8 实现)
 import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
@@ -139,7 +144,29 @@ const app = express();
 // ============================================================
 // Security & parsing middleware
 // ============================================================
-app.use(helmet());
+
+// 移除敏感响应头
+app.use(removeServerHeaders);
+
+// 添加安全响应头
+app.use(securityHeaders);
+
+// Helmet配置（增强安全头）
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+  },
+}));
+
 app.use(cors({ origin: config.env === 'production' ? false : '*' }));
 app.use(compression());
 app.use(express.json({ limit: '10mb' }));
@@ -148,13 +175,11 @@ app.use(express.urlencoded({ extended: true }));
 // Rate limiting — disabled in test environment (in-memory store resets per process)
 const isTest = config.env === 'test' || process.env.NODE_ENV === 'test';
 
-app.use(rateLimit({
-  windowMs: 60 * 1000,
-  max: isTest ? 10000 : 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, code: 'RATE_LIMIT', message: '请求过于频繁，请稍后重试' },
-}));
+// 全局API限流
+if (!isTest) {
+  app.use('/api', globalLimiter);
+  logger.info('✅ 全局限流已启用: 100次/秒/IP');
+}
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -260,9 +285,10 @@ app.use('/api/v1/cultivation', cultivationRoutes); // E-12: 定向培养计划
 app.use('/uploads', express.static('uploads'));
 
 // ============================================================
-// Error handling
+// Error handling (must be last)
 // ============================================================
 app.use(notFoundHandler);
+app.use(errorMonitor); // 错误监控和告警
 app.use(errorHandler);
 
 export { app };

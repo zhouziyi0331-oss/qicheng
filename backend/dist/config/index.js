@@ -25,6 +25,10 @@ exports.config = {
         accessExpiry: '15m',
         refreshExpiry: '7d',
     },
+    // 数据加密配置
+    encryption: {
+        key: process.env.ENCRYPTION_KEY_DEFAULT || '',
+    },
     ai: {
         serviceUrl: process.env.AI_SERVICE_URL || 'http://localhost:8000',
         timeout: 30000, // 30s for most AI calls

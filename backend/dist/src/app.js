@@ -12,6 +12,10 @@ const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const config_1 = require("../config");
 const logger_1 = __importDefault(require("./utils/logger"));
 const errorHandler_1 = require("./middleware/errorHandler");
+// 导入安全中间件
+const securityHeaders_1 = require("./middleware/securityHeaders");
+const rateLimiter_1 = require("./middleware/rateLimiter");
+const errorMonitor_1 = require("./middleware/errorMonitor");
 // Route imports (指令1-8 实现)
 const auth_1 = __importDefault(require("./routes/auth"));
 const user_1 = __importDefault(require("./routes/user"));
@@ -130,20 +134,36 @@ exports.app = app;
 // ============================================================
 // Security & parsing middleware
 // ============================================================
-app.use((0, helmet_1.default)());
+// 移除敏感响应头
+app.use(securityHeaders_1.removeServerHeaders);
+// 添加安全响应头
+app.use(securityHeaders_1.securityHeaders);
+// Helmet配置（增强安全头）
+app.use((0, helmet_1.default)({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", "data:", "https:"],
+        },
+    },
+    hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+    },
+}));
 app.use((0, cors_1.default)({ origin: config_1.config.env === 'production' ? false : '*' }));
 app.use((0, compression_1.default)());
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true }));
 // Rate limiting — disabled in test environment (in-memory store resets per process)
 const isTest = config_1.config.env === 'test' || process.env.NODE_ENV === 'test';
-app.use((0, express_rate_limit_1.default)({
-    windowMs: 60 * 1000,
-    max: isTest ? 10000 : 100,
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: { success: false, code: 'RATE_LIMIT', message: '请求过于频繁，请稍后重试' },
-}));
+// 全局API限流
+if (!isTest) {
+    app.use('/api', rateLimiter_1.globalLimiter);
+    logger_1.default.info('✅ 全局限流已启用: 100次/秒/IP');
+}
 const authLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
     max: isTest ? 10000 : 10,
@@ -241,9 +261,10 @@ app.use('/api/v1/cultivation', cultivation_1.default); // E-12: 定向培养计�
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================
-// Error handling
+// Error handling (must be last)
 // ============================================================
 app.use(errorHandler_1.notFoundHandler);
+app.use(errorMonitor_1.errorMonitor); // 错误监控和告警
 app.use(errorHandler_1.errorHandler);
 exports.default = app;
 // Only start the HTTP server when this module is the entry point, not when imported by tests

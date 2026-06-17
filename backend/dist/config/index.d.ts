@@ -17,6 +17,9 @@ export declare const config: {
         accessExpiry: string;
         refreshExpiry: string;
     };
+    encryption: {
+        key: string;
+    };
     ai: {
         serviceUrl: string;
         timeout: number;
