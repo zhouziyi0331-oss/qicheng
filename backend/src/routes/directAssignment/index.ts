@@ -315,7 +315,7 @@ router.get('/favorites', authenticate, async (req, res) => {
     const { tags, limit, offset } = req.query;
 
     const result = await directAssignmentService.getFavoriteStudents(companyId, {
-      tags: tags ? (Array.isArray(tags) ? tags : [tags]) : undefined,
+      tags: tags ? (Array.isArray(tags) ? tags as string[] : [tags as string]) : undefined,
       limit: limit ? parseInt(limit as string, 10) : undefined,
       offset: offset ? parseInt(offset as string, 10) : undefined,
     });
