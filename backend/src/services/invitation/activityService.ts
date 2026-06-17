@@ -239,7 +239,7 @@ export class ActivityService {
       },
       tags: row.tags || [],
       last_login_at: row.last_login_at,
-    }));
+    })) as any;
   }
 
   /**
