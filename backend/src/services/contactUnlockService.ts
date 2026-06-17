@@ -277,7 +277,7 @@ class ContactUnlockService {
       [studentId, companyId]
     );
 
-    const completedCount = parseInt(result[0].count, 10);
+    const completedCount = parseInt(String(result[0].count), 10);
     return {
       eligible: completedCount >= 2,
       completedCount
@@ -299,7 +299,7 @@ class ContactUnlockService {
 
     const requests = await Promise.all(
       result.map(async (row) => {
-        const canUnlock = await this.canUnlock(row.student_id, row.company_id);
+        const canUnlock = await this.canUnlock(String(row.student_id), String(row.company_id));
         return this.formatUnlockResponse(row, canUnlock);
       })
     );

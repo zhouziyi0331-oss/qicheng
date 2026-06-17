@@ -365,7 +365,7 @@ ${content.substring(0, 2000)}
                 return false;
             }
             // 2. 删除物理文件
-            const filename = path.basename(file.file_url);
+            const filename = path.basename(String(file.file_url));
             const filePath = path.join(this.uploadDir, filename);
             try {
                 await fs.unlink(filePath);
@@ -391,7 +391,7 @@ ${content.substring(0, 2000)}
             if (!file) {
                 return null;
             }
-            const filename = path.basename(file.file_url);
+            const filename = path.basename(String(file.file_url));
             const filePath = path.join(this.uploadDir, filename);
             const content = await fs.readFile(filePath, 'utf-8');
             return content;

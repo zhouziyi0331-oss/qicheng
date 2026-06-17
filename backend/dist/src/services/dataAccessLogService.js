@@ -94,7 +94,7 @@ class DataAccessLogService {
         const result = await db_1.default.query(`SELECT COUNT(*) as count
        FROM data_access_logs
        WHERE resource_type = $1 AND resource_id = $2`, [resourceType, resourceId]);
-        return parseInt(result[0].count, 10);
+        return parseInt(String(result[0].count), 10);
     }
     /**
      * 获取最近访问时间

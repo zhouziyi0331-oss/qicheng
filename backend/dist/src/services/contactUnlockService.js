@@ -186,7 +186,7 @@ class ContactUnlockService {
         const result = await db_1.default.query(`SELECT COUNT(*) as count
        FROM collaboration_history
        WHERE student_id = $1 AND company_id = $2 AND status = 'completed'`, [studentId, companyId]);
-        const completedCount = parseInt(result[0].count, 10);
+        const completedCount = parseInt(String(result[0].count), 10);
         return {
             eligible: completedCount >= 2,
             completedCount
@@ -201,7 +201,7 @@ class ContactUnlockService {
        WHERE ${field} = $1
        ORDER BY created_at DESC`, [userId]);
         const requests = await Promise.all(result.map(async (row) => {
-            const canUnlock = await this.canUnlock(row.student_id, row.company_id);
+            const canUnlock = await this.canUnlock(String(row.student_id), String(row.company_id));
             return this.formatUnlockResponse(row, canUnlock);
         }));
         return requests;

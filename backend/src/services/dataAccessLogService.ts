@@ -158,7 +158,7 @@ class DataAccessLogService {
       [resourceType, resourceId]
     );
 
-    return parseInt(result[0].count, 10);
+    return parseInt(String(result[0].count), 10);
   }
 
   /**
