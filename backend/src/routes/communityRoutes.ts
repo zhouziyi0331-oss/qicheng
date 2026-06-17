@@ -31,7 +31,7 @@ router.post(
 
       const postId = await communityService.createPost({
         authorId,
-          type: type as string,
+          type: type as "recruit" | "showcase" | "collab",
         title,
         content,
         requiredSkills,
@@ -68,7 +68,7 @@ router.get(
       const { type, track, authorId, limit, offset } = req.query;
 
       const posts = await communityService.getPosts({
-        type: type as string,
+        type: type as "recruit" | "showcase" | "collab" | undefined,
         track: track as string,
         authorId: authorId as string,
         limit: limit ? parseInt(limit as string) : 20,

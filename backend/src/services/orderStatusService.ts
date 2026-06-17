@@ -236,7 +236,7 @@ class OrderStatusService {
     );
 
     await enqueueAITask({
-      type: AITaskType.SUBMISSION_REVIEW,
+      type: AITaskType.SUBMISSION_REVIEW as any,
       orderId,
       studentId,
       context: {
@@ -321,7 +321,7 @@ class OrderStatusService {
 
     // 触发AI-04成长报告
     await enqueueAITask({
-      type: AITaskType.GROWTH_REPORT,
+      type: AITaskType.GROWTH_REPORT as any,
       orderId,
       studentId,
       context: {
