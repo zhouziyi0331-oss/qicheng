@@ -222,7 +222,7 @@ class CommunityService {
       }
 
       // 如果是招募帖且关联了队伍，获取队伍成员及其技能
-      let teamMembers = [];
+      let teamMembers: any[] = [];
       if (post.type === 'recruit' && post.team_id) {
         const members = await query(
           `SELECT
