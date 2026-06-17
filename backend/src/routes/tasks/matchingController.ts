@@ -370,17 +370,17 @@ export async function getTaskTranslation(req: Request, res: Response) {
     res.json({
       success: true,
       translation: {
-        taskId: translation.taskId,
-        studentFriendlyTitle: translation.studentFriendlyTitle,
-        studentFriendlyDescription: translation.studentFriendlyDescription,
-        functionalModules: translation.functionalModules,
+        taskId: translation.task_id,
+        studentFriendlyTitle: translation.student_friendly_title,
+        studentFriendlyDescription: translation.student_friendly_description,
+        functionalModules: translation.functional_modules,
         whatYouWillDo: translation.what_you_will_do,
         whatYouWillLearn: translation.what_you_will_learn,
-        estimatedHours: translation.estimatedHours,
-        requiredSkills: translation.requiredSkills,
+        estimatedHours: translation.estimated_hours,
+        requiredSkills: translation.required_skills,
         difficulty: translation.difficulty,
-        learningValue: translation.learningValue,
-        careerImpact: translation.careerImpact
+        learningValue: translation.learning_value,
+        careerImpact: translation.career_impact
       }
     });
   } catch (error: any) {

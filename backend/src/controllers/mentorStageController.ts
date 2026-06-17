@@ -501,7 +501,7 @@ export async function getMentorMemories(req: Request, res: Response) {
       throw new AppError(401, '未授权', 'UNAUTHORIZED');
     }
 
-    const memories = await mentorMemoryService.getAllMemories(
+    const memories = await (mentorMemoryService as any).getAllMemories(
       parseInt(studentId),
       {
         memoryType: memoryType as string,
@@ -532,7 +532,7 @@ export async function getMemoryStats(req: Request, res: Response) {
       throw new AppError(401, '未授权', 'UNAUTHORIZED');
     }
 
-    const stats = await mentorMemoryService.getMemoryStats(parseInt(studentId));
+    const stats = await (mentorMemoryService as any).getMemoryStats(parseInt(studentId));
 
     res.json({
       success: true,
