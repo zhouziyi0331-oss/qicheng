@@ -63,7 +63,7 @@ export async function triggerMatching(req: Request, res: Response) {
           rank_in_task = EXCLUDED.rank_in_task`,
         [
           taskId,
-          match.studentId,
+          match.student_id,
           (match.match_score as any).overall_score,
           (match.match_score as any).skillMatch.score,
           (match.match_score as any).difficultyMatch.score,

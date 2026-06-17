@@ -61,7 +61,7 @@ async function triggerMatching(req, res) {
           match_breakdown = EXCLUDED.match_breakdown,
           rank_in_task = EXCLUDED.rank_in_task`, [
                 taskId,
-                match.studentId,
+                match.student_id,
                 match.match_score.overall_score,
                 match.match_score.skillMatch.score,
                 match.match_score.difficultyMatch.score,

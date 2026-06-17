@@ -99,7 +99,7 @@ router.get(
       const { id } = req.params;
       const userId = req.user!.userId;
 
-      const post = await communityService.getPostDetails(id, userId);
+      const post = await communityService.getPostDetail(id, userId);
 
       res.json({
         success: true,
@@ -168,7 +168,7 @@ router.post(
         });
       }
 
-      const replyId = await communityService.replyToPost(
+      const replyId = await communityService.applyToPost(
         postId,
         authorId,
         content,

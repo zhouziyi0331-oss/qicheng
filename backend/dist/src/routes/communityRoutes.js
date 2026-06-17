@@ -84,7 +84,7 @@ router.get('/posts/:id', auth_1.authenticate, async (req, res, next) => {
     try {
         const { id } = req.params;
         const userId = req.user.userId;
-        const post = await communityService_1.default.getPostDetails(id, userId);
+        const post = await communityService_1.default.getPostDetail(id, userId);
         res.json({
             success: true,
             data: post,
@@ -139,7 +139,7 @@ router.post('/posts/:id/reply', auth_1.authenticate, async (req, res, next) => {
                 error: 'content is required',
             });
         }
-        const replyId = await communityService_1.default.replyToPost(postId, authorId, content, parentReplyId);
+        const replyId = await communityService_1.default.applyToPost(postId, authorId, content, parentReplyId);
         logger_1.default.info('Community post reply created via API', { postId, replyId, authorId });
         res.json({
             success: true,
