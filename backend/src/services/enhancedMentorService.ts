@@ -705,7 +705,7 @@ export class EnhancedMentorService {
       opcLabel: user.opc_label as string,
       lifeQuestion: user.life_question as string | undefined,
       level: (user.level as number) || 0,
-      recentEmotions: recentEmotions.map(e => e.emotional_state),
+      recentEmotions: recentEmotions.map(e => e.emotional_state) as string[],
       emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state as string | undefined,
       activeProjects: activeProjects,
       currentProject: activeProjects.filter(Boolean)[0],

@@ -59,7 +59,7 @@ export const getPersonalityStats = async (req: Request, res: Response) => {
       [tag]
     );
 
-    const completedCount = parseInt(completionResult[0]?.completed_count || '0');
+    const completedCount = parseInt(String(completionResult[0]?.completed_count || '0'));
     const completionRate = totalCount > 0
       ? Math.round((completedCount / totalCount) * 100)
       : 0;

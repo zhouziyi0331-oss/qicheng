@@ -48,7 +48,7 @@ const getPersonalityStats = async (req, res) => {
          LIMIT 1
        ) first_order ON true
        WHERE uor.personality_tag = $1`, [tag]);
-        const completedCount = parseInt(completionResult[0]?.completed_count || '0');
+        const completedCount = parseInt(String(completionResult[0]?.completed_count || '0'));
         const completionRate = totalCount > 0
             ? Math.round((completedCount / totalCount) * 100)
             : 0;

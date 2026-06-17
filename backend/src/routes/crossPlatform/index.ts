@@ -18,7 +18,7 @@ router.post('/tasks/:taskId/requirement-change', authenticate, async (req, res) 
     
     const result = await crossPlatformService.recordRequirementChange({
       task_id: taskId,
-      changed_by: userId,
+      changed_by: userId as string,
       old_requirements,
       new_requirements
     });
