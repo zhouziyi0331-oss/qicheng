@@ -410,7 +410,7 @@ export class MentorStageService {
 
       // 3. 记忆提取（每5条消息分析一次）
       if (messages.length % 5 === 0) {
-        await mentorMemoryService.extractMemoryFromConversation(
+        await (mentorMemoryService as any).extractMemoryFromConversation(
           parseInt(studentId),
           parseInt(taskId),
           parseInt(sessionId),

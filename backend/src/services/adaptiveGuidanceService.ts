@@ -79,7 +79,7 @@ class AdaptiveGuidanceService {
       );
 
       // 3. 召回相关记忆
-      const memoryRecall = await mentorMemoryService.recallMemories(
+      const memoryRecall = await (mentorMemoryService as any).recallMemories(
         context.studentId,
         {
           currentEmotion: emotionResult.emotion,
@@ -397,7 +397,7 @@ ${milestone.milestone_description}
     currentEmotion: string
   ): Promise<void> {
     try {
-      await mentorMemoryService.extractMemoryFromConversation(
+      await (mentorMemoryService as any).extractMemoryFromConversation(
         context.studentId,
         context.taskId,
         context.sessionId,

@@ -91,7 +91,7 @@ class HumanizedConversationService {
         currentEmotion
       );
       const phrases = await this.getAppropriatePhrase(currentEmotion, struggle?.situation);
-      const memories = await mentorMemoryService.recallMemories(
+      const memories = await (mentorMemoryService as any).recallMemories(
         studentId,
         {
           currentEmotion,
