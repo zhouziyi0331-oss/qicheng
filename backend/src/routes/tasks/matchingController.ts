@@ -361,7 +361,7 @@ export async function getTaskTranslation(req: Request, res: Response) {
     const { taskId } = req.params;
 
     // 获取任务翻译
-    const translation = await qichengTeacherService.getTaskTranslation(taskId);
+    const translation = await qichengTeacherService.getTranslation(taskId);
 
     if (!translation) {
       return res.status(404).json({ error: '任务翻译不存在' });

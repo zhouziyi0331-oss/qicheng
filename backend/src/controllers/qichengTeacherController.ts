@@ -18,7 +18,7 @@ export const getTaskTranslation = async (req: Request, res: Response) => {
     logger.info(`Getting translation for task ${taskId}`);
 
     // 先查询缓存的翻译
-    const translation = await qichengTeacherService.getTaskTranslation(taskId);
+    const translation = await qichengTeacherService.getTranslation(taskId);
 
     if (translation) {
       return res.json({
