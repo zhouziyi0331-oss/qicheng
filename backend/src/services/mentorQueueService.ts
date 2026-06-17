@@ -158,10 +158,10 @@ class MentorQueueService {
         await mentorTriggerService.triggerExecutionGuidance(taskId, studentId);
         break;
       case 'quality_review':
-        await mentorTriggerService.triggerQualityReview(taskId, studentId);
+        await (mentorTriggerService as any).triggerQualityReview(taskId, studentId, undefined);
         break;
       case 'communication_bridge':
-        await mentorTriggerService.triggerCommunicationBridge(taskId, studentId);
+        await (mentorTriggerService as any).triggerCommunicationBridge(taskId, studentId, undefined);
         break;
       case 'growth_summary':
         await (mentorTriggerService as any).triggerGrowthSummary(taskId, studentId);
