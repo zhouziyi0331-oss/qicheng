@@ -52,7 +52,7 @@ router.post('/watch-student', authenticate, async (req, res) => {
     const { student_id, watch_condition, note } = req.body;
     
     const result = await crossPlatformService.setWatchStudent(
-      companyId, student_id, watch_condition, note
+      String(companyId), student_id, watch_condition, note
     );
     
     res.json({ success: true, data: result });
@@ -69,7 +69,7 @@ router.post('/tasks/:taskId/progress', authenticate, async (req, res) => {
     const { stage, progress_percentage, estimated_completion } = req.body;
     
     const result = await crossPlatformService.updateTaskProgress(
-      taskId, studentId, stage, progress_percentage, estimated_completion
+      taskId, String(studentId || ''), stage, progress_percentage, estimated_completion
     );
     
     res.json({ success: true, data: result });
@@ -83,7 +83,7 @@ router.get('/tasks/:taskId/progress', authenticate, async (req, res) => {
   try {
     const { taskId } = req.params;
     const companyId = req.user?.userId;
-    const progress = await crossPlatformService.getTaskProgress(taskId, companyId);
+    const progress = await crossPlatformService.getTaskProgress(taskId, String(companyId || ''));
     
     res.json({ success: true, data: progress });
   } catch (error: any) {
@@ -98,7 +98,7 @@ router.post('/follow-student', authenticate, async (req, res) => {
     const { student_id, reason, source } = req.body;
     
     const result = await crossPlatformService.followStudent(
-      companyId, student_id, reason, source
+      String(companyId || ''), student_id, reason, source
     );
     
     res.json({ success: true, data: result });
@@ -111,7 +111,7 @@ router.post('/follow-student', authenticate, async (req, res) => {
 router.get('/followed-students-updates', authenticate, async (req, res) => {
   try {
     const companyId = req.user?.userId;
-    const updates = await crossPlatformService.getFollowedStudentsUpdates(companyId);
+    const updates = await crossPlatformService.getFollowedStudentsUpdates(String(companyId || ''));
     
     res.json({ success: true, data: updates });
   } catch (error: any) {
@@ -123,7 +123,7 @@ router.get('/followed-students-updates', authenticate, async (req, res) => {
 router.get('/my-followers', authenticate, async (req, res) => {
   try {
     const studentId = req.user?.userId;
-    const followers = await crossPlatformService.getStudentFollowers(studentId);
+    const followers = await crossPlatformService.getStudentFollowers(String(studentId || ''));
     
     res.json({ success: true, data: followers, count: followers.length });
   } catch (error: any) {

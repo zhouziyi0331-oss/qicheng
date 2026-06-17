@@ -36,7 +36,7 @@ declare class MentorTriggerCronService {
     /**
      * 获取触发统计信息
      */
-    getStats(): Promise<any>;
+    getStats(): Promise<any[]>;
 }
 export declare const mentorTriggerCronService: MentorTriggerCronService;
 export {};

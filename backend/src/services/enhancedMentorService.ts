@@ -706,13 +706,13 @@ export class EnhancedMentorService {
       lifeQuestion: user.life_question as string | undefined,
       level: user.level || 0,
       recentEmotions: recentEmotions.map(e => e.emotional_state),
-      emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state,
+      emotionalState: recentEmotions.filter(Boolean)[0]?.emotional_state as string | undefined,
       activeProjects: activeProjects,
       currentProject: activeProjects.filter(Boolean)[0],
       mentorMode: {
         currentMode: mentorMode?.current_mode || 'emotional',
         autoSwitch: mentorMode?.auto_switch !== false,
-        preferredMode: mentorMode?.preferred_mode
+        preferredMode: mentorMode?.preferred_mode as string | undefined
       }
     };
   }

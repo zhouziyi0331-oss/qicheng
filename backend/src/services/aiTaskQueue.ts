@@ -1,4 +1,5 @@
 import Queue from 'bull';
+import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';
 import logger from '../utils/logger';
 import opcAnalysisService from '../services/opcAnalysisService';
@@ -6,6 +7,10 @@ import projectAnalysisService from '../services/projectAnalysisService';
 import vectorEmbeddingService from '../services/vectorEmbeddingService';
 import websocketService from '../services/websocketService';
 import aiLogService from '../services/aiLogService';
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY || '',
+});
 
 /**
  * AI任务队列处理器

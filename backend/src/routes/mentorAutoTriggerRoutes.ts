@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import mentorAutoTriggerService from '../services/mentorAutoTriggerService';
 import { mentorTriggerCronService } from '../services/mentorTriggerCronService';
 import { authenticate } from '../middleware/auth';
-import pool from '../config/database';
+import { pool } from '../config/database';
 
 const router = Router();
 

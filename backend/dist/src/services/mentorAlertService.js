@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
-const database_1 = __importDefault(require("../config/database"));
+const database_1 = require("../config/database");
 const logger_1 = __importDefault(require("../utils/logger"));
 class MentorAlertService {
     /**
@@ -45,14 +45,14 @@ class MentorAlertService {
      * 获取所有激活的预警规则
      */
     async getActiveRules() {
-        const result = await database_1.default.query(`SELECT * FROM mentor_alert_rules WHERE is_active = true ORDER BY priority ASC`);
+        const result = await database_1.pool.query(`SELECT * FROM mentor_alert_rules WHERE is_active = true ORDER BY priority ASC`);
         return result.rows;
     }
     /**
      * 获取所有进行中的订单
      */
     async getActiveOrders() {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT
         o.id as order_id,
         o.student_id,
@@ -111,7 +111,7 @@ class MentorAlertService {
         if (!rule)
             return;
         // 获取该订单最近的提交记录
-        const submissions = await database_1.default.query(`
+        const submissions = await db.query(`
       SELECT
         id,
         version,
@@ -191,7 +191,7 @@ class MentorAlertService {
         if (!rule)
             return;
         // 获取最近一次提交的AI审核结果
-        const submission = await database_1.default.query(`
+        const submission = await db.query(`
       SELECT ai_review_json
       FROM order_submissions
       WHERE order_id = $1
@@ -227,7 +227,7 @@ class MentorAlertService {
             const alertMessage = await this.generateAlertMessage(studentId, orderId, rule, triggerData);
             // 创建预警记录
             const alertId = (0, uuid_1.v4)();
-            await database_1.default.query(`
+            await db.query(`
         INSERT INTO mentor_alerts (
           id, student_id, order_id, rule_id, rule_type,
           alert_message, trigger_data, is_sent, sent_at
@@ -242,7 +242,7 @@ class MentorAlertService {
                 JSON.stringify(triggerData)
             ]);
             // 同时写入mentor_sessions（导师对话记录）
-            await database_1.default.query(`
+            await db.query(`
         INSERT INTO mentor_sessions (
           id, user_id, order_id, trigger_type, sender_type,
           message, context_snapshot, created_at
@@ -286,7 +286,7 @@ class MentorAlertService {
      * 检查是否在指定小时内已发送过同类预警
      */
     async hasRecentAlert(studentId, orderId, ruleType, hoursWindow) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT COUNT(*) as count
       FROM mentor_alerts
       WHERE student_id = $1
@@ -311,7 +311,7 @@ class MentorAlertService {
      * 获取学生的未读预警列表
      */
     async getUnreadAlerts(studentId) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT
         ma.*,
         mar.rule_name,
@@ -331,7 +331,7 @@ class MentorAlertService {
      * 标记预警为已读
      */
     async markAlertAsViewed(alertId, studentId) {
-        await database_1.default.query(`
+        await db.query(`
       UPDATE mentor_alerts
       SET student_viewed = true, viewed_at = NOW()
       WHERE id = $1 AND student_id = $2
@@ -341,7 +341,7 @@ class MentorAlertService {
      * 标记预警为已响应
      */
     async markAlertAsResponded(alertId, studentId) {
-        await database_1.default.query(`
+        await db.query(`
       UPDATE mentor_alerts
       SET student_responded = true, responded_at = NOW()
       WHERE id = $1 AND student_id = $2
@@ -351,7 +351,7 @@ class MentorAlertService {
      * 获取预警统计数据（用于监控和分析）
      */
     async getAlertStats(days = 7) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT
         rule_type,
         COUNT(*) as total_alerts,

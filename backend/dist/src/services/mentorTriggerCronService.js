@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mentorTriggerCronService = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
-const database_1 = __importDefault(require("../config/database"));
+const database_1 = require("../config/database");
 const mentorAutoTriggerService_1 = __importDefault(require("./mentorAutoTriggerService"));
 const logger_1 = __importDefault(require("../utils/logger"));
 /**
@@ -56,7 +56,7 @@ class MentorTriggerCronService {
         this.isProcessing = true;
         try {
             // 查询所有到期的待触发记录
-            const result = await database_1.default.query(`SELECT id, order_id, trigger_type
+            const result = await database_1.pool.query(`SELECT id, order_id, trigger_type
          FROM mentor_trigger_logs
          WHERE status = 'pending'
            AND scheduled_at <= NOW()
@@ -102,7 +102,7 @@ class MentorTriggerCronService {
                     throw new Error(`Unknown trigger type: ${trigger_type}`);
             }
             // 更新触发记录为成功
-            await database_1.default.query(`UPDATE mentor_trigger_logs
+            await database_1.pool.query(`UPDATE mentor_trigger_logs
          SET status = 'triggered',
              triggered_at = NOW(),
              message_id = $1,
@@ -113,7 +113,7 @@ class MentorTriggerCronService {
         catch (error) {
             logger_1.default.error(`Failed to execute ${trigger_type} for order ${order_id}:`, error);
             // 更新触发记录为失败
-            await database_1.default.query(`UPDATE mentor_trigger_logs
+            await database_1.pool.query(`UPDATE mentor_trigger_logs
          SET status = 'failed',
              error_message = $1,
              updated_at = NOW()
@@ -131,7 +131,7 @@ class MentorTriggerCronService {
      * 获取待处理的触发任务数量
      */
     async getPendingCount() {
-        const result = await database_1.default.query(`SELECT COUNT(*) as count
+        const result = await database_1.pool.query(`SELECT COUNT(*) as count
        FROM mentor_trigger_logs
        WHERE status = 'pending'
          AND scheduled_at <= NOW()`);
@@ -141,7 +141,7 @@ class MentorTriggerCronService {
      * 获取触发统计信息
      */
     async getStats() {
-        const result = await database_1.default.query(`SELECT
+        const result = await database_1.pool.query(`SELECT
          trigger_type,
          status,
          COUNT(*) as count

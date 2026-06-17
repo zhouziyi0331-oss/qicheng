@@ -7,12 +7,16 @@ exports.AITaskType = exports.aiTaskQueue = void 0;
 exports.enqueueAITask = enqueueAITask;
 exports.getQueueStats = getQueueStats;
 const bull_1 = __importDefault(require("bull"));
+const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const config_1 = require("../../config");
 const logger_1 = __importDefault(require("../utils/logger"));
 const opcAnalysisService_1 = __importDefault(require("../services/opcAnalysisService"));
 const projectAnalysisService_1 = __importDefault(require("../services/projectAnalysisService"));
 const websocketService_1 = __importDefault(require("../services/websocketService"));
 const aiLogService_1 = __importDefault(require("../services/aiLogService"));
+const anthropic = new sdk_1.default({
+    apiKey: process.env.ANTHROPIC_API_KEY || '',
+});
 /**
  * AI任务队列处理器
  * 统一调度所有AI相关的异步任务

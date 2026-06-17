@@ -7,7 +7,7 @@ const express_1 = require("express");
 const mentorAutoTriggerService_1 = __importDefault(require("../services/mentorAutoTriggerService"));
 const mentorTriggerCronService_1 = require("../services/mentorTriggerCronService");
 const auth_1 = require("../middleware/auth");
-const database_1 = __importDefault(require("../config/database"));
+const database_1 = require("../config/database");
 const router = (0, express_1.Router)();
 /**
  * 手动触发T-01（接单后引导）
@@ -85,7 +85,7 @@ router.post('/t05/:orderId', auth_1.authenticate, async (req, res) => {
 router.get('/messages/:orderId', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId } = req.params;
-        const result = await database_1.default.query(`SELECT
+        const result = await database_1.pool.query(`SELECT
          mm.id,
          mm.role,
          mm.content,
@@ -120,7 +120,7 @@ router.get('/messages/:orderId', auth_1.authenticate, async (req, res) => {
 router.get('/logs/:orderId', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId } = req.params;
-        const result = await database_1.default.query(`SELECT
+        const result = await database_1.pool.query(`SELECT
          id,
          trigger_type,
          status,
@@ -209,7 +209,7 @@ router.post('/process-now', auth_1.authenticate, async (req, res) => {
 router.post('/messages/:messageId/viewed', auth_1.authenticate, async (req, res) => {
     try {
         const { messageId } = req.params;
-        await database_1.default.query(`UPDATE mentor_messages
+        await database_1.pool.query(`UPDATE mentor_messages
        SET student_viewed = true,
            viewed_at = NOW()
        WHERE id = $1`, [messageId]);
@@ -232,7 +232,7 @@ router.post('/messages/:messageId/viewed', auth_1.authenticate, async (req, res)
 router.post('/messages/:messageId/replied', auth_1.authenticate, async (req, res) => {
     try {
         const { messageId } = req.params;
-        await database_1.default.query(`UPDATE mentor_messages
+        await database_1.pool.query(`UPDATE mentor_messages
        SET student_replied = true,
            replied_at = NOW()
        WHERE id = $1`, [messageId]);

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
-const database_1 = __importDefault(require("../config/database"));
+const database_1 = require("../config/database");
 const logger_1 = __importDefault(require("../utils/logger"));
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 class MentorRetrospectiveService {
@@ -29,7 +29,7 @@ class MentorRetrospectiveService {
         try {
             logger_1.default.info(`[MentorRetrospective] 触发复盘: student=${studentId}, order=${orderId}`);
             // 检查是否已经发送过复盘
-            const existing = await database_1.default.query(`
+            const existing = await db.query(`
         SELECT id FROM mentor_retrospectives WHERE order_id = $1
       `, [orderId]);
             if (existing.rows.length > 0) {
@@ -40,7 +40,7 @@ class MentorRetrospectiveService {
             const questions = await this.generateQuestions(studentId, orderId);
             // 创建复盘记录
             const retrospectiveId = (0, uuid_1.v4)();
-            await database_1.default.query(`
+            await db.query(`
         INSERT INTO mentor_retrospectives (
           id, student_id, order_id, questions, status, sent_at
         ) VALUES ($1, $2, $3, $4, $5, NOW())
@@ -53,7 +53,7 @@ class MentorRetrospectiveService {
             ]);
             // 发送复盘引导消息到mentor_sessions
             const messageText = this.formatRetrospectiveMessage(questions);
-            await database_1.default.query(`
+            await db.query(`
         INSERT INTO mentor_sessions (
           id, user_id, order_id, trigger_type, sender_type,
           message, context_snapshot, created_at
@@ -80,7 +80,7 @@ class MentorRetrospectiveService {
     async generateQuestions(studentId, orderId) {
         try {
             // 获取订单和项目信息
-            const orderInfo = await database_1.default.query(`
+            const orderInfo = await db.query(`
         SELECT
           o.id,
           p.title as project_title,
@@ -98,7 +98,7 @@ class MentorRetrospectiveService {
             }
             const order = orderInfo.rows[0];
             // 获取学生在这个订单中的卡点
-            const stuckPoints = await database_1.default.query(`
+            const stuckPoints = await db.query(`
         SELECT obs_content
         FROM mentor_growth_observations
         WHERE order_id = $1 AND obs_type = 'stuck_point'
@@ -178,7 +178,7 @@ ${stuckPointsText}` : ''}
         try {
             logger_1.default.info(`[MentorRetrospective] 保存回答: ${retrospectiveId}`);
             // 更新复盘记录
-            await database_1.default.query(`
+            await db.query(`
         UPDATE mentor_retrospectives
         SET answers = $1,
             status = 'completed',
@@ -199,7 +199,7 @@ ${stuckPointsText}` : ''}
      */
     async skipRetrospective(retrospectiveId) {
         try {
-            await database_1.default.query(`
+            await db.query(`
         UPDATE mentor_retrospectives
         SET status = 'skipped'
         WHERE id = $1
@@ -217,7 +217,7 @@ ${stuckPointsText}` : ''}
     async extractFeaturedInsights(retrospectiveId) {
         try {
             // 获取复盘内容
-            const retrospective = await database_1.default.query(`
+            const retrospective = await db.query(`
         SELECT
           mr.*,
           o.project_id,
@@ -238,7 +238,7 @@ ${stuckPointsText}` : ''}
             const isFeatured = this.shouldBeFeatured(retro);
             if (isFeatured) {
                 // 标记为精华
-                await database_1.default.query(`
+                await db.query(`
           UPDATE mentor_retrospectives
           SET is_featured = true,
               featured_reason = $1
@@ -246,7 +246,7 @@ ${stuckPointsText}` : ''}
         `, ['高质量复盘，包含具体方法和工具', retrospectiveId]);
                 // 写入成长观察表（作为突破记录）
                 const breakthroughText = `项目复盘：${answers.answer1}。改进方向：${answers.answer2}。工具使用：${answers.answer3}`;
-                await database_1.default.query(`
+                await db.query(`
           INSERT INTO mentor_growth_observations (
             id, user_id, order_id, obs_type, obs_content,
             observation_category, breakthrough, is_significant, tags
@@ -293,7 +293,7 @@ ${stuckPointsText}` : ''}
      */
     async getPendingRetrospectives(studentId) {
         try {
-            const result = await database_1.default.query(`
+            const result = await database_1.pool.query(`
         SELECT
           mr.*,
           p.title as project_title
@@ -316,7 +316,7 @@ ${stuckPointsText}` : ''}
      */
     async getRetrospectiveHistory(studentId, limit = 10) {
         try {
-            const result = await database_1.default.query(`
+            const result = await database_1.pool.query(`
         SELECT
           mr.*,
           p.title as project_title,
@@ -341,7 +341,7 @@ ${stuckPointsText}` : ''}
      */
     async getRetrospectiveStats(days = 7) {
         try {
-            const result = await database_1.default.query(`
+            const result = await database_1.pool.query(`
         SELECT
           COUNT(*) as total_sent,
           COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_count,

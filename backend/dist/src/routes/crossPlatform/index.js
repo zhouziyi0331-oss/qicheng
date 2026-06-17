@@ -49,7 +49,7 @@ router.post('/watch-student', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user?.userId;
         const { student_id, watch_condition, note } = req.body;
-        const result = await crossPlatformService_1.default.setWatchStudent(companyId, student_id, watch_condition, note);
+        const result = await crossPlatformService_1.default.setWatchStudent(String(companyId), student_id, watch_condition, note);
         res.json({ success: true, data: result });
     }
     catch (error) {
@@ -62,7 +62,7 @@ router.post('/tasks/:taskId/progress', auth_1.authenticate, async (req, res) => 
         const { taskId } = req.params;
         const studentId = req.user?.userId;
         const { stage, progress_percentage, estimated_completion } = req.body;
-        const result = await crossPlatformService_1.default.updateTaskProgress(taskId, studentId, stage, progress_percentage, estimated_completion);
+        const result = await crossPlatformService_1.default.updateTaskProgress(taskId, String(studentId || ''), stage, progress_percentage, estimated_completion);
         res.json({ success: true, data: result });
     }
     catch (error) {
@@ -74,7 +74,7 @@ router.get('/tasks/:taskId/progress', auth_1.authenticate, async (req, res) => {
     try {
         const { taskId } = req.params;
         const companyId = req.user?.userId;
-        const progress = await crossPlatformService_1.default.getTaskProgress(taskId, companyId);
+        const progress = await crossPlatformService_1.default.getTaskProgress(taskId, String(companyId || ''));
         res.json({ success: true, data: progress });
     }
     catch (error) {
@@ -86,7 +86,7 @@ router.post('/follow-student', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user?.userId;
         const { student_id, reason, source } = req.body;
-        const result = await crossPlatformService_1.default.followStudent(companyId, student_id, reason, source);
+        const result = await crossPlatformService_1.default.followStudent(String(companyId || ''), student_id, reason, source);
         res.json({ success: true, data: result });
     }
     catch (error) {
@@ -97,7 +97,7 @@ router.post('/follow-student', auth_1.authenticate, async (req, res) => {
 router.get('/followed-students-updates', auth_1.authenticate, async (req, res) => {
     try {
         const companyId = req.user?.userId;
-        const updates = await crossPlatformService_1.default.getFollowedStudentsUpdates(companyId);
+        const updates = await crossPlatformService_1.default.getFollowedStudentsUpdates(String(companyId || ''));
         res.json({ success: true, data: updates });
     }
     catch (error) {
@@ -108,7 +108,7 @@ router.get('/followed-students-updates', auth_1.authenticate, async (req, res) =
 router.get('/my-followers', auth_1.authenticate, async (req, res) => {
     try {
         const studentId = req.user?.userId;
-        const followers = await crossPlatformService_1.default.getStudentFollowers(studentId);
+        const followers = await crossPlatformService_1.default.getStudentFollowers(String(studentId || ''));
         res.json({ success: true, data: followers, count: followers.length });
     }
     catch (error) {

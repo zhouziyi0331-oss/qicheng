@@ -7,7 +7,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("../config/database"));
+const database_1 = require("../config/database");
 const logger_1 = __importDefault(require("../utils/logger"));
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const anthropic = new sdk_1.default({
@@ -21,7 +21,7 @@ class CrossPlatformService {
      * 记录需求变更并触发重新匹配
      */
     async recordRequirementChange(data) {
-        const client = await database_1.default.connect();
+        const client = await database_1.pool.connect();
         try {
             await client.query('BEGIN');
             // 1. 生成需求变更摘要
@@ -93,7 +93,7 @@ class CrossPlatformService {
      * 创建匹配更新通知
      */
     async createMatchingUpdateNotification(data) {
-        await database_1.default.query(`
+        await database_1.pool.query(`
       INSERT INTO matching_update_notifications 
         (student_id, task_id, change_type, old_match_score, new_match_score, change_reason)
       VALUES ($1, $2, $3, $4, $5, $6)
@@ -110,7 +110,7 @@ class CrossPlatformService {
      * 获取学生的匹配更新通知
      */
     async getMatchingUpdatesForStudent(studentId) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT 
         mun.*,
         t.title AS task_title,
@@ -127,7 +127,7 @@ class CrossPlatformService {
         // 标记为已发送
         if (result.rows.length > 0) {
             const ids = result.rows.map(r => r.id);
-            await database_1.default.query(`
+            await database_1.pool.query(`
         UPDATE matching_update_notifications
         SET notification_sent = TRUE
         WHERE id = ANY($1)
@@ -142,7 +142,7 @@ class CrossPlatformService {
      * 处理学生等级变化（由触发器调用）
      */
     async handleLevelChange(studentId, oldLevel, newLevel) {
-        const client = await database_1.default.connect();
+        const client = await database_1.pool.connect();
         try {
             // 1. 查找现在可以匹配的新任务
             const newTasks = await client.query(`
@@ -207,7 +207,7 @@ class CrossPlatformService {
      * 企业设置等待学生成长的条件
      */
     async setWatchStudent(companyId, studentId, condition, note) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       INSERT INTO company_student_watching 
         (company_id, student_id, watch_condition, watch_note)
       VALUES ($1, $2, $3, $4)
@@ -221,7 +221,7 @@ class CrossPlatformService {
      * 获取企业等待的学生列表
      */
     async getWatchingStudents(companyId) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT 
         csw.*,
         u.username AS student_name,
@@ -253,7 +253,7 @@ class CrossPlatformService {
             revising: '修改打磨中',
             finalizing: '最后润色中'
         };
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       INSERT INTO task_realtime_progress 
         (task_id, student_id, current_stage, stage_display_name, stage_started_at, 
          estimated_completion, progress_percentage)
@@ -269,7 +269,7 @@ class CrossPlatformService {
       RETURNING *
     `, [taskId, studentId, stage, stageNames[stage], estimatedCompletion, progressPercentage]);
         // 通知企业
-        await database_1.default.query(`SELECT pg_notify('task_progress_updated', $1)`, [
+        await database_1.pool.query(`SELECT pg_notify('task_progress_updated', $1)`, [
             JSON.stringify({ task_id: taskId, stage: stage, progress: progressPercentage })
         ]);
         return result.rows[0];
@@ -278,7 +278,7 @@ class CrossPlatformService {
      * 企业查看任务进度
      */
     async getTaskProgress(taskId, companyId) {
-        const client = await database_1.default.connect();
+        const client = await database_1.pool.connect();
         try {
             // 1. 获取进度
             const progress = await client.query(`
@@ -308,7 +308,7 @@ class CrossPlatformService {
     async recordBlockage(taskId, studentId, blockageType, description) {
         // 使用AI生成脱敏摘要
         const desensitizedSummary = await this.generateDesensitizedSummary(description, blockageType);
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       INSERT INTO task_blockage_summaries 
         (task_id, student_id, blockage_type, blockage_description, 
          desensitized_summary, resolution_status)
@@ -316,7 +316,7 @@ class CrossPlatformService {
       RETURNING *
     `, [taskId, studentId, blockageType, description, desensitizedSummary]);
         // 通知企业
-        await database_1.default.query(`SELECT pg_notify('task_blockage_detected', $1)`, [
+        await database_1.pool.query(`SELECT pg_notify('task_blockage_detected', $1)`, [
             JSON.stringify({ task_id: taskId, summary: desensitizedSummary })
         ]);
         return result.rows[0];
@@ -357,7 +357,7 @@ class CrossPlatformService {
      * 企业关注学生
      */
     async followStudent(companyId, studentId, reason, source) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       INSERT INTO company_student_follows 
         (company_id, student_id, follow_reason, follow_source)
       VALUES ($1, $2, $3, $4)
@@ -375,7 +375,7 @@ class CrossPlatformService {
      * 获取企业关注的学生动态
      */
     async getFollowedStudentsUpdates(companyId) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT * FROM company_followed_students_updates
       WHERE company_id = $1
       ORDER BY 
@@ -389,7 +389,7 @@ class CrossPlatformService {
      * 获取学生的关注者（企业）
      */
     async getStudentFollowers(studentId) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT * FROM student_company_followers
       WHERE student_id = $1
       ORDER BY followed_at DESC
@@ -405,7 +405,7 @@ class CrossPlatformService {
     async createMutualRating(data) {
         const mutualSatisfaction = data.company_to_student_rating >= 4.0 &&
             data.student_to_company_rating >= 4.0;
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       INSERT INTO mutual_ratings 
         (task_id, company_id, student_id, 
          company_to_student_rating, company_to_student_comment,
@@ -431,7 +431,7 @@ class CrossPlatformService {
      * 获取企业-学生的关系标签
      */
     async getRelationshipBadges(companyId, studentId) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       SELECT * FROM relationship_badges
       WHERE company_id = $1 AND student_id = $2
       ORDER BY earned_at DESC
@@ -442,7 +442,7 @@ class CrossPlatformService {
      * 学生添加创作说明
      */
     async addCreationNotes(data) {
-        const result = await database_1.default.query(`
+        const result = await database_1.pool.query(`
       INSERT INTO deliverable_creation_notes 
         (task_id, student_id, style_explanation, creative_challenge, 
          satisfaction_highlight, time_spent_hours, tools_used)
@@ -498,7 +498,7 @@ class CrossPlatformService {
      * 重新计算匹配分数 - 真实算法
      */
     async recalculateMatchScore(studentId, taskId, requirements) {
-        const client = await database_1.default.connect();
+        const client = await database_1.pool.connect();
         try {
             // 1. 获取学生能力数据
             const studentResult = await client.query(`

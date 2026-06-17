@@ -9,7 +9,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import db from '../config/database';
+import { pool } from '../config/database';
 import { addAITask, AITaskType } from './aiTaskQueue';
 import logger from '../utils/logger';
 
@@ -70,7 +70,7 @@ class MentorAlertService {
    * 获取所有激活的预警规则
    */
   private async getActiveRules(): Promise<AlertRule[]> {
-    const result = await db.query(
+    const result = await pool.query(
       `SELECT * FROM mentor_alert_rules WHERE is_active = true ORDER BY priority ASC`
     );
     return result.rows;
@@ -80,7 +80,7 @@ class MentorAlertService {
    * 获取所有进行中的订单
    */
   private async getActiveOrders(): Promise<any[]> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         o.id as order_id,
         o.student_id,
@@ -398,7 +398,7 @@ class MentorAlertService {
     ruleType: string,
     hoursWindow: number
   ): Promise<boolean> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT COUNT(*) as count
       FROM mentor_alerts
       WHERE student_id = $1
@@ -427,7 +427,7 @@ class MentorAlertService {
    * 获取学生的未读预警列表
    */
   async getUnreadAlerts(studentId: string): Promise<any[]> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         ma.*,
         mar.rule_name,
@@ -471,7 +471,7 @@ class MentorAlertService {
    * 获取预警统计数据（用于监控和分析）
    */
   async getAlertStats(days: number = 7): Promise<any> {
-    const result = await db.query(`
+    const result = await pool.query(`
       SELECT
         rule_type,
         COUNT(*) as total_alerts,

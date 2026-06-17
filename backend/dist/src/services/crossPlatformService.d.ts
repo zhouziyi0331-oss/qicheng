@@ -33,14 +33,14 @@ declare class CrossPlatformService {
     /**
      * 获取学生的匹配更新通知
      */
-    getMatchingUpdatesForStudent(studentId: string): Promise<any>;
+    getMatchingUpdatesForStudent(studentId: string): Promise<any[]>;
     /**
      * 处理学生等级变化（由触发器调用）
      */
     handleLevelChange(studentId: string, oldLevel: number, newLevel: number): Promise<{
-        new_tasks_count: any;
-        new_tasks: any;
-        notified_companies_count: any;
+        new_tasks_count: number;
+        new_tasks: any[];
+        notified_companies_count: number;
     }>;
     /**
      * 企业设置等待学生成长的条件
@@ -49,7 +49,7 @@ declare class CrossPlatformService {
     /**
      * 获取企业等待的学生列表
      */
-    getWatchingStudents(companyId: string): Promise<any>;
+    getWatchingStudents(companyId: string): Promise<any[]>;
     /**
      * 学生更新任务进度
      */
@@ -73,11 +73,11 @@ declare class CrossPlatformService {
     /**
      * 获取企业关注的学生动态
      */
-    getFollowedStudentsUpdates(companyId: string): Promise<any>;
+    getFollowedStudentsUpdates(companyId: string): Promise<any[]>;
     /**
      * 获取学生的关注者（企业）
      */
-    getStudentFollowers(studentId: string): Promise<any>;
+    getStudentFollowers(studentId: string): Promise<any[]>;
     /**
      * 创建双向评价
      */
@@ -94,7 +94,7 @@ declare class CrossPlatformService {
     /**
      * 获取企业-学生的关系标签
      */
-    getRelationshipBadges(companyId: string, studentId: string): Promise<any>;
+    getRelationshipBadges(companyId: string, studentId: string): Promise<any[]>;
     /**
      * 学生添加创作说明
      */

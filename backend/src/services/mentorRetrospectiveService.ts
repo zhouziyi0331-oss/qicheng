@@ -9,7 +9,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import db from '../config/database';
+import { pool } from '../config/database';
 import logger from '../utils/logger';
 import Anthropic from '@anthropic-ai/sdk';
 
@@ -359,7 +359,7 @@ ${stuckPointsText}` : ''}
    */
   async getPendingRetrospectives(studentId: string): Promise<Retrospective[]> {
     try {
-      const result = await db.query(`
+      const result = await pool.query(`
         SELECT
           mr.*,
           p.title as project_title
@@ -386,7 +386,7 @@ ${stuckPointsText}` : ''}
     limit: number = 10
   ): Promise<Retrospective[]> {
     try {
-      const result = await db.query(`
+      const result = await pool.query(`
         SELECT
           mr.*,
           p.title as project_title,
@@ -412,7 +412,7 @@ ${stuckPointsText}` : ''}
    */
   async getRetrospectiveStats(days: number = 7): Promise<any> {
     try {
-      const result = await db.query(`
+      const result = await pool.query(`
         SELECT
           COUNT(*) as total_sent,
           COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_count,

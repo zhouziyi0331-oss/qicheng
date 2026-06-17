@@ -3,7 +3,7 @@
  * 实现企业端和学生端的双向联动功能
  */
 
-import pool from '../config/database';
+import { pool } from '../config/database';
 import logger from '../utils/logger';
 import Anthropic from '@anthropic-ai/sdk';
 

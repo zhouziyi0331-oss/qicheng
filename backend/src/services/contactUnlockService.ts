@@ -232,9 +232,9 @@ class ContactUnlockService {
     });
 
     return {
-      phone: contact.phone,
-      wechat: contact.wechat,
-      email: contact.email
+      phone: contact.phone as string | undefined,
+      wechat: contact.wechat as string | undefined,
+      email: contact.email as string | undefined
     };
   }
 
