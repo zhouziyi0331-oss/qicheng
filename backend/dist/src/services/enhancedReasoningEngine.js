@@ -18,7 +18,7 @@ class EnhancedReasoningEngine {
        FROM tasks
        WHERE assignee_id = $1 AND status = 'completed'`, [studentId]);
         // 2. 获取最近的行为模式
-        const recentBehaviors = await (0, db_1.queryMany)(`SELECT behavior_type, emotional_state, timestamp
+        const recentBehaviors = await (0, db_1.query)(`SELECT behavior_type, emotional_state, timestamp
        FROM teacher_observations
        WHERE student_id = $1
          AND timestamp > NOW() - INTERVAL '30 days'
@@ -217,7 +217,7 @@ class EnhancedReasoningEngine {
             });
         }
         // 假设3：基于行为模式变化
-        const recentBehaviors = await (0, db_1.queryMany)(`SELECT behavior_type FROM teacher_observations
+        const recentBehaviors = await (0, db_1.query)(`SELECT behavior_type FROM teacher_observations
        WHERE student_id = $1
        ORDER BY timestamp DESC
        LIMIT 10`, [context.studentId]);

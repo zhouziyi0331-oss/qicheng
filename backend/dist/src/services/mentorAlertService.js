@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
 const database_1 = require("../config/database");
+const aiTaskQueue_1 = require("./aiTaskQueue");
+const addAITask = aiTaskQueue_1.enqueueAITask;
 const logger_1 = __importDefault(require("../utils/logger"));
 class MentorAlertService {
     /**

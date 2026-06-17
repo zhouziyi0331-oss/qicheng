@@ -10,7 +10,8 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { pool } from '../config/database';
-import { addAITask, AITaskType } from './aiTaskQueue';
+import { enqueueAITask, AITaskType } from './aiTaskQueue';
+const addAITask = enqueueAITask;
 import logger from '../utils/logger';
 
 interface AlertTriggerData {

@@ -1,4 +1,4 @@
-import { queryOne, queryMany } from '../utils/db';
+import { queryOne, query as queryMany } from '../utils/db';
 import logger from '../utils/logger';
 
 /**
