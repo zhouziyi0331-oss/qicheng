@@ -39,7 +39,7 @@ router.post('/t03/:orderId', authenticate, async (req: Request, res: Response) =
   try {
     const { orderId } = req.params;
 
-    const messageId = await mentorAutoTriggerService.triggerT03(orderId);
+    const messageId = await mentorAutoTriggerService.triggerT03(orderId, undefined);
 
     res.json({
       success: true,

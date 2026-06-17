@@ -93,10 +93,10 @@ class MentorTriggerCronService {
                     messageId = (await mentorAutoTriggerService_1.default.triggerT01(order_id));
                     break;
                 case 'T-03':
-                    messageId = (await mentorAutoTriggerService_1.default.triggerT03(order_id));
+                    messageId = (await mentorAutoTriggerService_1.default.triggerT03(order_id, undefined));
                     break;
                 case 'T-05':
-                    messageId = (await mentorAutoTriggerService_1.default.triggerT05(order_id));
+                    messageId = (await mentorAutoTriggerService_1.default.triggerT05(order_id, undefined));
                     break;
                 default:
                     throw new Error(`Unknown trigger type: ${trigger_type}`);
