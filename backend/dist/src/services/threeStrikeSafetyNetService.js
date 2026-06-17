@@ -40,7 +40,7 @@ class ThreeStrikeSafetyNetService {
     async getTransferCandidates(taskId, currentStudentId) {
         const task = await (0, db_1.queryOne)(`SELECT track, level_required FROM tasks WHERE id = $1`, [taskId]);
         if (!task) {
-            throw new errorHandler_1.AppError('Task not found', 404);
+            throw new errorHandler_1.AppError(404, 'Task not found');
         }
         const candidates = await (0, db_1.query)(`SELECT
          u.id,
@@ -75,7 +75,7 @@ class ThreeStrikeSafetyNetService {
             // 1. 获取任务信息
             const task = await client.query(`SELECT student_price FROM tasks WHERE id = $1`, [taskId]);
             if (task.rows.length === 0) {
-                throw new errorHandler_1.AppError('Task not found', 404);
+                throw new errorHandler_1.AppError(404, 'Task not found');
             }
             const studentPrice = task.rows[0].student_price;
             const transferFee = studentPrice * 0.2; // 原学生获得20%
@@ -117,7 +117,7 @@ class ThreeStrikeSafetyNetService {
     async getAvailableMasters(taskId) {
         const task = await (0, db_1.queryOne)(`SELECT track FROM tasks WHERE id = $1`, [taskId]);
         if (!task) {
-            throw new errorHandler_1.AppError('Task not found', 404);
+            throw new errorHandler_1.AppError(404, 'Task not found');
         }
         const masters = await (0, db_1.query)(`SELECT
          u.id,
@@ -145,7 +145,7 @@ class ThreeStrikeSafetyNetService {
             // 1. 获取大师费用
             const master = await client.query(`SELECT master_fee FROM users WHERE id = $1 AND is_master = true`, [masterId]);
             if (master.rows.length === 0) {
-                throw new errorHandler_1.AppError('Master not found', 404);
+                throw new errorHandler_1.AppError(404, 'Master not found');
             }
             const masterFee = master.rows[0].master_fee;
             // 2. 更新任务分配，添加大师

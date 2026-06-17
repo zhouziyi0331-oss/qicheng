@@ -82,7 +82,7 @@ class ThreeStrikeSafetyNetService {
     );
 
     if (!task) {
-      throw new AppError('Task not found', 404);
+      throw new AppError(404, 'Task not found');
     }
 
     const candidates = await query<any>(
@@ -128,7 +128,7 @@ class ThreeStrikeSafetyNetService {
       );
 
       if (task.rows.length === 0) {
-        throw new AppError('Task not found', 404);
+        throw new AppError(404, 'Task not found');
       }
 
       const studentPrice = task.rows[0].student_price;
@@ -193,7 +193,7 @@ class ThreeStrikeSafetyNetService {
     );
 
     if (!task) {
-      throw new AppError('Task not found', 404);
+      throw new AppError(404, 'Task not found');
     }
 
     const masters = await query<any>(
@@ -232,7 +232,7 @@ class ThreeStrikeSafetyNetService {
       );
 
       if (master.rows.length === 0) {
-        throw new AppError('Master not found', 404);
+        throw new AppError(404, 'Master not found');
       }
 
       const masterFee = master.rows[0].master_fee;
