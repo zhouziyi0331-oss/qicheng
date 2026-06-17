@@ -37,7 +37,7 @@ export async function triggerMatching(req: Request, res: Response) {
     await vectorGenerationService.updateTaskEmbedding(taskId);
 
     // 2. 生成任务翻译
-    await qichengTeacherService.analyzeAndTranslateTask(taskId);
+    await qichengTeacherService.analyzeAndTranslateTask(taskId as any);
 
     // 3. 找出最匹配的100个学生
     const matches = await semanticMatchingEngine.findBestStudentsForTask(taskId, 100);

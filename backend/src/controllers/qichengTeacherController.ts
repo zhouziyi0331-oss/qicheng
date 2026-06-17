@@ -37,7 +37,7 @@ export const getTaskTranslation = async (req: Request, res: Response) => {
     }
 
     // 如果没有缓存，实时生成
-    const result = await qichengTeacherService.analyzeAndTranslateTask(taskId);
+    const result = await qichengTeacherService.analyzeAndTranslateTask(taskId as any);
 
     res.json({
       success: true,

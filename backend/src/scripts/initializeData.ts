@@ -122,7 +122,7 @@ async function initializeTaskVectors() {
           logger.info(`Task ${task.title} already has translation, skipping`);
         } else {
           // 生成任务翻译
-          await qichengTeacherService.analyzeAndTranslateTask(task.id);
+          await qichengTeacherService.analyzeAndTranslateTask(task.id as any);
           logger.info(`✓ Generated translation for task ${task.title}`);
         }
 
