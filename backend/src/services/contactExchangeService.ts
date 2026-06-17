@@ -376,10 +376,10 @@ ${ratingsText}
     return {
       userId: user.id as string,
       name: user.name as string,
-      phone: user.phone,
-      wechat: user.wechat,
-      qq: user.qq,
-      email: user.email,
+      phone: user.phone as string | undefined,
+      wechat: user.wechat as string | undefined,
+      qq: user.qq as string | undefined,
+      email: user.email as string | undefined,
     };
   }
 

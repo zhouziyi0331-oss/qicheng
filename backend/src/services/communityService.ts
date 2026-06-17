@@ -275,10 +275,10 @@ class CommunityService {
         createdAt: post.created_at as Date,
         expiresAt: post.expires_at as Date,
         author: {
-          name: post.author_name,
-          level: post.author_level,
-          track: post.author_track,
-          avatar: post.author_avatar,
+          name: post.author_name as string,
+          level: post.author_level as number,
+          track: post.author_track as string,
+          avatar: post.author_avatar as string | undefined,
         },
         teamMembers, // 添加团队成员信息
       };
