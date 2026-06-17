@@ -101,7 +101,7 @@ router.post('/:id/review-application', auth_1.authenticate, async (req, res, nex
                 error: 'applicationId and approved are required',
             });
         }
-        await teamService_1.default.reviewApplication({
+        await teamService_1.default.reviewTeamApplication({
             applicationId,
             teamId,
             reviewerId,

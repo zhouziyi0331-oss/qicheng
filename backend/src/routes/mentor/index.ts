@@ -62,7 +62,7 @@ router.post('/:taskId/stuck', authenticate, async (req, res) => {
       success: true,
       response: result.response,
       sessionId: result.sessionId,
-      detectedSignals: result.detectedSignals
+      detectedSignals: (result as any).detectedSignals
     });
   } catch (error: any) {
     logger.error('处理stuck消息失败:', error);

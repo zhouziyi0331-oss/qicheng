@@ -123,7 +123,7 @@ export const getRecommendedTasks = async (req: Request, res: Response) => {
   }
 
   try {
-    const tasks = await semanticMatchingEngine.getRecommendedTasksForStudent(studentId);
+    const tasks = await (semanticMatchingEngine as any).getRecommendedTasksForStudent(studentId);
 
     res.json({
       success: true,

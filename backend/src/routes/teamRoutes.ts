@@ -59,7 +59,7 @@ router.get(
     try {
       const { id } = req.params;
 
-      const team = await teamService.getTeamDetails(id);
+      const team = await (teamService as any).getTeamDetails(id);
 
       res.json({
         success: true,
@@ -124,7 +124,7 @@ router.post(
         });
       }
 
-      await teamService.reviewApplication({
+      await (teamService as any).reviewTeamApplication({
         applicationId,
         teamId,
         reviewerId,
@@ -200,7 +200,7 @@ router.get(
       const teamId = req.params.id;
       const creatorId = req.user!.userId;
 
-      const inviteToken = await teamService.generateExternalInvite(teamId, creatorId);
+      const inviteToken = await (teamService as any).generateExternalInvite(teamId, creatorId);
 
       res.json({
         success: true,
@@ -227,7 +227,7 @@ router.get(
     try {
       const { track, requiredSkills, limit, offset } = req.query;
 
-      const teams = await teamService.getRecruitingTeams({
+      const teams = await (teamService as any).getRecruitingTeams({
         track: track as string,
         requiredSkills: requiredSkills ? (requiredSkills as string).split(',') : undefined,
         limit: limit ? parseInt(limit as string) : 20,
