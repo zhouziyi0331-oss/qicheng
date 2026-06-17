@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 /**
- * 全局错误处理中间件
+ * 全局错误处理中间件 - 真实记录和告警
  */
 export declare function errorMonitor(err: any, req: Request, res: Response, _next: NextFunction): void;
 /**
- * 获取错误统计
+ * 获取错误统计 - 真实统计数据
  */
 export declare function getErrorStats(): {
     totalErrors: number;
@@ -16,5 +16,6 @@ export declare function getErrorStats(): {
         statusCode: number;
     }[];
     lastReset: string;
+    uptimeHours: number;
 };
 //# sourceMappingURL=errorMonitor.d.ts.map

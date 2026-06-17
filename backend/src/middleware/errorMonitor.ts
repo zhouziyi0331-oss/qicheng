@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger';
+import axios from 'axios';
 
 /**
- * 异常监控和告警中间件
- *
+ * 异常监控和告警中间件 - 真实实现
  * 功能：
  * 1. 捕获所有未处理的错误
  * 2. 记录详细错误日志
  * 3. 监控错误率
- * 4. 发送告警通知
+ * 4. 真实发送告警通知（企业微信/钉钉）
  */
 
 // 错误统计
@@ -36,40 +36,77 @@ setInterval(() => {
 }, 60 * 60 * 1000); // 1小时
 
 /**
- * 发送告警通知
+ * 发送告警通知 - 真实发送到企业微信/钉钉
  */
 async function sendAlert(type: string, message: string): Promise<void> {
   logger.error(`🚨 [ALERT] ${type}: ${message}`);
 
-  // TODO: 集成企业微信/钉钉机器人
-  // 示例：企业微信机器人
   const webhookUrl = process.env.ALERT_WEBHOOK_URL;
-  if (!webhookUrl) {
+
+  // 如果没有配置Webhook，只记录日志
+  if (!webhookUrl || webhookUrl === 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx') {
+    logger.warn('未配置ALERT_WEBHOOK_URL，告警仅记录到日志');
     return;
   }
 
   try {
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        msgtype: 'text',
-        text: {
-          content: `🚨 启程项目告警\n\n类型: ${type}\n消息: ${message}\n时间: ${new Date().toLocaleString('zh-CN')}`,
+    // 真实发送到企业微信
+    if (webhookUrl.includes('qyapi.weixin.qq.com')) {
+      await axios.post(
+        webhookUrl,
+        {
+          msgtype: 'text',
+          text: {
+            content: `🚨 启程项目告警\n\n类型: ${type}\n消息: ${message}\n时间: ${new Date().toLocaleString('zh-CN')}`,
+          },
         },
-      }),
-    });
-
-    if (!response.ok) {
-      logger.error('发送告警失败:', response.statusText);
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 5000,
+        }
+      );
+      logger.info('✅ 告警已发送到企业微信');
+    }
+    // 真实发送到钉钉
+    else if (webhookUrl.includes('oapi.dingtalk.com')) {
+      await axios.post(
+        webhookUrl,
+        {
+          msgtype: 'text',
+          text: {
+            content: `🚨 启程项目告警\n\n类型: ${type}\n消息: ${message}\n时间: ${new Date().toLocaleString('zh-CN')}`,
+          },
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 5000,
+        }
+      );
+      logger.info('✅ 告警已发送到钉钉');
+    }
+    // 通用Webhook
+    else {
+      await axios.post(
+        webhookUrl,
+        {
+          type,
+          message,
+          timestamp: new Date().toISOString(),
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 5000,
+        }
+      );
+      logger.info('✅ 告警已发送到Webhook');
     }
   } catch (error) {
-    logger.error('发送告警异常:', error);
+    logger.error('❌ 发送告警失败:', error);
   }
 }
 
 /**
- * 全局错误处理中间件
+ * 全局错误处理中间件 - 真实记录和告警
  */
 export function errorMonitor(
   err: any,
@@ -113,6 +150,12 @@ export function errorMonitor(
     sendAlert('critical_error_rate', `5分钟内有${critical500Errors.length}个500错误！`);
   }
 
+  // 检查是否有严重错误需要立即告警
+  if (err.statusCode === 500 || err.code === 'ECONNREFUSED') {
+    const errorMessage = `严重错误: ${err.message} (${req.method} ${req.path})`;
+    sendAlert('critical_error', errorMessage);
+  }
+
   // 返回错误响应
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
@@ -123,7 +166,7 @@ export function errorMonitor(
 }
 
 /**
- * 获取错误统计
+ * 获取错误统计 - 真实统计数据
  */
 export function getErrorStats() {
   const now = Date.now();
@@ -134,5 +177,6 @@ export function getErrorStats() {
     errorRate: Math.round(errorStats.count / uptimeHours),
     recentErrors: errorStats.errors.slice(-10), // 最近10个错误
     lastReset: new Date(errorStats.lastReset).toISOString(),
+    uptimeHours: Math.round(uptimeHours * 100) / 100,
   };
 }

@@ -1,15 +1,19 @@
 import { Router } from 'express';
-import { authenticate } from '../../middleware/auth';
-import * as ctrl from './controller';
+import { authenticate, uploadImages, uploadDocuments } from './controller';
+import { uploadSingleImage, uploadMultipleImages, uploadDocument } from './controller';
 
 const router = Router();
 
+// 所有上传接口都需要认证
 router.use(authenticate);
 
-// POST /upload - 单文件上传
-router.post('/', ctrl.upload.single('file'), ctrl.uploadFile);
+// POST /api/v1/upload/image - 上传单个图片（带安全验证）
+router.post('/image', uploadImages[0], uploadImages[1], uploadSingleImage);
 
-// POST /upload/multiple - 多文件上传
-router.post('/multiple', ctrl.upload.array('files', 5), ctrl.uploadMultiple);
+// POST /api/v1/upload/images - 上传多个图片（带安全验证）
+router.post('/images', uploadImages[0], uploadImages[1], uploadMultipleImages);
+
+// POST /api/v1/upload/document - 上传文档（带安全验证）
+router.post('/document', uploadDocuments[0], uploadDocuments[1], uploadDocument);
 
 export default router;

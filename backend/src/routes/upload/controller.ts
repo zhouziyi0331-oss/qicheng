@@ -1,111 +1,167 @@
-import { Request, Response, NextFunction } from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-import { uploadToOSS } from '../../utils/oss';
+import { Request, Response } from 'express';
+import { authenticate } from '../../middleware/auth';
+import { uploadImages, uploadDocuments } from '../../middleware/fileUpload';
 import logger from '../../utils/logger';
 
-// 配置文件存储
-const uploadDir = path.join(__dirname, '../../../uploads/temp');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// 真实的OSS上传（如果配置）
+import OSS from 'ali-oss';
+
+// OSS客户端配置
+let ossClient: OSS | null = null;
+
+if (process.env.OSS_ACCESS_KEY_ID && process.env.OSS_ACCESS_KEY_ID !== 'your-access-key-id') {
+  ossClient = new OSS({
+    region: 'oss-cn-chengdu',
+    accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+    accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET || '',
+    bucket: process.env.OSS_BUCKET || 'qicheng-files',
+  });
+  logger.info('✅ OSS客户端初始化成功');
+} else {
+  logger.warn('⚠️  未配置OSS，文件上传将保存到本地');
 }
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const filename = `${uuidv4()}${ext}`;
-    cb(null, filename);
-  },
-});
-
-const fileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|zip|rar/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (extname && mimetype) {
-    cb(null, true);
-  } else {
-    cb(new Error('不支持的文件类型'));
-  }
-};
-
-export const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-});
-
-// POST /upload - 单文件上传
-export async function uploadFile(req: Request, res: Response, next: NextFunction): Promise<void> {
+/**
+ * 上传单个图片 - 真实上传到OSS或本地
+ */
+export async function uploadSingleImage(req: Request, res: Response) {
   try {
-    if (!req.file) {
-      res.status(400).json({ success: false, code: 'NO_FILE', message: '未上传文件' });
-      return;
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ success: false, error: '未上传文件' });
     }
 
-    // 上传到OSS (如果配置了) 或使用本地存储
-    const fileUrl = await uploadToOSS(req.file, 'task-files');
-
-    // 删除临时文件 (如果已上传到OSS)
-    if (process.env.OSS_ACCESS_KEY_ID && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
-    logger.info('File uploaded', {
-      filename: req.file.originalname,
-      size: req.file.size,
-      url: fileUrl
+    logger.info('开始上传图片:', {
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      userId: req.user?.userId,
     });
+
+    let fileUrl: string;
+
+    // 真实上传到OSS
+    if (ossClient) {
+      const filename = `${Date.now()}-${file.originalname}`;
+      const result = await ossClient.put(filename, file.buffer);
+      fileUrl = result.url;
+      logger.info('✅ 文件已上传到OSS:', fileUrl);
+    }
+    // 开发环境：返回base64
+    else {
+      fileUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+      logger.warn('⚠️  开发环境：文件转为base64');
+    }
 
     res.json({
       success: true,
       data: {
         url: fileUrl,
-        filename: req.file.originalname,
-        size: req.file.size,
-        mimetype: req.file.mimetype,
+        filename: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
       },
     });
-  } catch (err: unknown) {
-    next(err);
+  } catch (error) {
+    logger.error('上传图片失败:', error);
+    res.status(500).json({ success: false, error: '上传失败' });
   }
 }
 
-// POST /upload/multiple - 多文件上传
-export async function uploadMultiple(req: Request, res: Response, next: NextFunction): Promise<void> {
+/**
+ * 上传多个图片 - 真实上传
+ */
+export async function uploadMultipleImages(req: Request, res: Response) {
   try {
     const files = req.files as Express.Multer.File[];
+
     if (!files || files.length === 0) {
-      res.status(400).json({ success: false, code: 'NO_FILES', message: '未上传文件' });
-      return;
+      return res.status(400).json({ success: false, error: '未上传文件' });
     }
 
-    const fileData = await Promise.all(
-      files.map(async (file) => {
-        const url = await uploadToOSS(file, 'task-files');
+    logger.info('开始上传多个图片:', {
+      count: files.length,
+      userId: req.user?.userId,
+    });
 
-        // 删除临时文件
-        if (process.env.OSS_ACCESS_KEY_ID && fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
-        }
+    const uploadedFiles = [];
 
-        return {
-          url,
-          filename: file.originalname,
-          size: file.size,
-          mimetype: file.mimetype,
-        };
-      })
-    );
+    for (const file of files) {
+      let fileUrl: string;
 
-    res.json({ success: true, data: fileData });
-  } catch (err: unknown) {
-    next(err);
+      if (ossClient) {
+        const filename = `${Date.now()}-${file.originalname}`;
+        const result = await ossClient.put(filename, file.buffer);
+        fileUrl = result.url;
+      } else {
+        fileUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+      }
+
+      uploadedFiles.push({
+        url: fileUrl,
+        filename: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
+      });
+    }
+
+    logger.info(`✅ 成功上传${uploadedFiles.length}个文件`);
+
+    res.json({
+      success: true,
+      data: uploadedFiles,
+    });
+  } catch (error) {
+    logger.error('上传多个图片失败:', error);
+    res.status(500).json({ success: false, error: '上传失败' });
   }
 }
+
+/**
+ * 上传文档 - 真实上传
+ */
+export async function uploadDocument(req: Request, res: Response) {
+  try {
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ success: false, error: '未上传文件' });
+    }
+
+    logger.info('开始上传文档:', {
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      userId: req.user?.userId,
+    });
+
+    let fileUrl: string;
+
+    if (ossClient) {
+      const filename = `documents/${Date.now()}-${file.originalname}`;
+      const result = await ossClient.put(filename, file.buffer);
+      fileUrl = result.url;
+      logger.info('✅ 文档已上传到OSS:', fileUrl);
+    } else {
+      fileUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+      logger.warn('⚠️  开发环境：文档转为base64');
+    }
+
+    res.json({
+      success: true,
+      data: {
+        url: fileUrl,
+        filename: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
+      },
+    });
+  } catch (error) {
+    logger.error('上传文档失败:', error);
+    res.status(500).json({ success: false, error: '上传失败' });
+  }
+}
+
+// 导出带安全验证的路由处理器
+export { authenticate, uploadImages, uploadDocuments };

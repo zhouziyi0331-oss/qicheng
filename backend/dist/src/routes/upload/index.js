@@ -1,46 +1,16 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const auth_1 = require("../../middleware/auth");
-const ctrl = __importStar(require("./controller"));
+const controller_1 = require("./controller");
+const controller_2 = require("./controller");
 const router = (0, express_1.Router)();
-router.use(auth_1.authenticate);
-// POST /upload - 单文件上传
-router.post('/', ctrl.upload.single('file'), ctrl.uploadFile);
-// POST /upload/multiple - 多文件上传
-router.post('/multiple', ctrl.upload.array('files', 5), ctrl.uploadMultiple);
+// 所有上传接口都需要认证
+router.use(controller_1.authenticate);
+// POST /api/v1/upload/image - 上传单个图片（带安全验证）
+router.post('/image', controller_1.uploadImages[0], controller_1.uploadImages[1], controller_2.uploadSingleImage);
+// POST /api/v1/upload/images - 上传多个图片（带安全验证）
+router.post('/images', controller_1.uploadImages[0], controller_1.uploadImages[1], controller_2.uploadMultipleImages);
+// POST /api/v1/upload/document - 上传文档（带安全验证）
+router.post('/document', controller_1.uploadDocuments[0], controller_1.uploadDocuments[1], controller_2.uploadDocument);
 exports.default = router;
 //# sourceMappingURL=index.js.map
