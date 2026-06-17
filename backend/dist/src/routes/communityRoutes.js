@@ -84,7 +84,7 @@ router.get('/posts/:id', auth_1.authenticate, async (req, res, next) => {
     try {
         const { id } = req.params;
         const userId = req.user.userId;
-        const post = await communityService_1.default.getPostDetail(id, userId);
+        const post = await communityService_1.default.getPostDetail(id);
         res.json({
             success: true,
             data: post,

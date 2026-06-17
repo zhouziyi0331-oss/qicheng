@@ -99,7 +99,7 @@ router.get(
       const { id } = req.params;
       const userId = req.user!.userId;
 
-      const post = await communityService.getPostDetail(id, userId);
+      const post = await communityService.getPostDetail(id);
 
       res.json({
         success: true,
