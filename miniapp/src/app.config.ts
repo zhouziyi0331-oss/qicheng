@@ -1,5 +1,6 @@
 export default defineAppConfig({
   pages: [
+    'pages/auth/login/index',      // ✅ 登录页面（首页）
     'pages/index/index',           // 首页
     'pages/role-select/index',     // 角色选择
     'pages/opc-test/index',        // OPC测评

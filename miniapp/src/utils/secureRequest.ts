@@ -11,11 +11,11 @@
 import Taro from '@tarojs/taro';
 import { tokenManager, parseLoginLockError } from './token';
 
-// ✅ 修复：使用正确的API地址
-const BASE_URL = process.env.TARO_APP_API_URL || 'http://localhost:3000/api/v1';
+// ✅ 修复：使用正确的API地址（15775端口）
+const BASE_URL = process.env.TARO_APP_API_URL || 'http://127.0.0.1:15775/api/v1';
 
 // 开发环境小程序需要配置不校验合法域名
-console.log('API Base URL:', BASE_URL);
+console.log('🔗 API Base URL:', BASE_URL);
 
 // ✅ 请求超时时间
 const TIMEOUT = 30000; // 30秒
