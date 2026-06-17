@@ -7,7 +7,7 @@ exports.login = login;
 exports.getCurrentAdmin = getCurrentAdmin;
 exports.changePassword = changePassword;
 const logger_1 = __importDefault(require("../../utils/logger"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../../utils/db");
 const config_1 = require("../../../config");
@@ -27,7 +27,7 @@ async function login(req, res) {
         }
         const admin = result[0];
         // 验证密码
-        const isValid = await bcryptjs_1.default.compare(password, admin.password_hash);
+        const isValid = await bcrypt_1.default.compare(password, admin.password_hash);
         if (!isValid) {
             return res.status(401).json({ error: '用户名或密码错误' });
         }
@@ -110,12 +110,12 @@ async function changePassword(req, res) {
         if (result.length === 0) {
             return res.status(404).json({ error: '管理员不存在' });
         }
-        const isValid = await bcryptjs_1.default.compare(oldPassword, result[0].password_hash);
+        const isValid = await bcrypt_1.default.compare(oldPassword, result[0].password_hash);
         if (!isValid) {
             return res.status(401).json({ error: '原密码错误' });
         }
         // 更新密码
-        const newPasswordHash = await bcryptjs_1.default.hash(newPassword, 10);
+        const newPasswordHash = await bcrypt_1.default.hash(newPassword, 10);
         await (0, db_1.query)('UPDATE admin_users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [newPasswordHash, adminId]);
         res.json({ message: '密码修改成功' });
     }
