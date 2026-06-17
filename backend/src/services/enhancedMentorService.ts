@@ -268,7 +268,7 @@ export class EnhancedMentorService {
       const content = response.content[0];
       if (content.type === 'text') {
         const result = JSON.parse(content.text);
-        return result;
+        return (result as any) as string[];
       }
     } catch (error: any) {
       logger.error('AI analysis error:', error);
@@ -532,7 +532,7 @@ export class EnhancedMentorService {
       [analysis.projectIndicators.isStuck ? 'when_stuck' : 'when_planning']
     );
 
-    return templates.map(t => t.question_template);
+    return templates.map(t => t.question_template) as string[];
   }
 
   /**

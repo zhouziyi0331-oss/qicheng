@@ -90,13 +90,13 @@ class MentorTriggerCronService {
             // 根据触发类型调用对应的服务方法
             switch (trigger_type) {
                 case 'T-01':
-                    messageId = await mentorAutoTriggerService_1.default.triggerT01(order_id);
+                    messageId = (await mentorAutoTriggerService_1.default.triggerT01(order_id));
                     break;
                 case 'T-03':
-                    messageId = await mentorAutoTriggerService_1.default.triggerT03(order_id);
+                    messageId = (await mentorAutoTriggerService_1.default.triggerT03(order_id));
                     break;
                 case 'T-05':
-                    messageId = await mentorAutoTriggerService_1.default.triggerT05(order_id);
+                    messageId = (await mentorAutoTriggerService_1.default.triggerT05(order_id));
                     break;
                 default:
                     throw new Error(`Unknown trigger type: ${trigger_type}`);
