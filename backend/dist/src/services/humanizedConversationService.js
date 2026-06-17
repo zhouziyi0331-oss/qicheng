@@ -300,7 +300,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
                 maxTokens: 500,
                 temperature: 0.3
             });
-            return JSON.parse(response.content);
+            return JSON.parse(response);
         }
         catch (error) {
             logger_1.default.error('分析具体困难失败', { error });

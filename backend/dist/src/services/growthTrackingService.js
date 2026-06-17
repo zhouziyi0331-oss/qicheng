@@ -241,7 +241,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
             // 更新里程碑的庆祝消息
             await database_1.pool.query(`UPDATE student_growth_milestones
          SET celebration_message = $1, celebrated = true, celebration_at = NOW()
-         WHERE id = $2`, [response.content, milestoneId]);
+         WHERE id = $2`, [response, milestoneId]);
         }
         catch (error) {
             logger_1.default.error('生成庆祝消息失败', { error, milestoneId });

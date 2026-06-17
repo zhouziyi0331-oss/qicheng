@@ -336,7 +336,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
       );
 
       return {
-        content: response.content,
+        content: response,
         dialogueStage,
         patternAddressed: pattern.patternName,
         beliefChallenged: pattern.underlyingBeliefs[0],

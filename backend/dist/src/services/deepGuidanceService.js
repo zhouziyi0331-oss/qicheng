@@ -239,7 +239,7 @@ ${pattern.newPerspectives.map(p => `- ${p}`).join('\n')}
                 temperature: 0.7
             });
             return {
-                content: response.content,
+                content: response,
                 dialogueStage,
                 patternAddressed: pattern.patternName,
                 beliefChallenged: pattern.underlyingBeliefs[0],

@@ -336,7 +336,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
         `UPDATE student_growth_milestones
          SET celebration_message = $1, celebrated = true, celebration_at = NOW()
          WHERE id = $2`,
-        [response.content, milestoneId]
+        [response, milestoneId]
       );
     } catch (error: any) {
       logger.error('生成庆祝消息失败', { error, milestoneId });

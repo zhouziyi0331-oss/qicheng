@@ -422,7 +422,7 @@ ${conversationHistory.slice(-3).map(m => `${m.role}: ${m.content}`).join('\n')}
         }
       );
 
-      return JSON.parse(response.content);
+      return JSON.parse(response);
     } catch (error: any) {
       logger.error('分析具体困难失败', { error });
       return null;
