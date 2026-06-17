@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { taskBreakdownService } from '../services/taskBreakdownService';
+import taskBreakdownService from '../services/taskBreakdownService';
 import { authenticate } from '../middleware/auth';
 
 const router = Router();

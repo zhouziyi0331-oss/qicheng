@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.mentorTriggerCronService = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
 const database_1 = __importDefault(require("../config/database"));
-const mentorAutoTriggerService_1 = require("./mentorAutoTriggerService");
+const mentorAutoTriggerService_1 = __importDefault(require("./mentorAutoTriggerService"));
 const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * AI导师自动触发定时任务服务
@@ -90,13 +90,13 @@ class MentorTriggerCronService {
             // 根据触发类型调用对应的服务方法
             switch (trigger_type) {
                 case 'T-01':
-                    messageId = await mentorAutoTriggerService_1.mentorAutoTriggerService.triggerT01(order_id);
+                    messageId = await mentorAutoTriggerService_1.default.triggerT01(order_id);
                     break;
                 case 'T-03':
-                    messageId = await mentorAutoTriggerService_1.mentorAutoTriggerService.triggerT03(order_id);
+                    messageId = await mentorAutoTriggerService_1.default.triggerT03(order_id);
                     break;
                 case 'T-05':
-                    messageId = await mentorAutoTriggerService_1.mentorAutoTriggerService.triggerT05(order_id);
+                    messageId = await mentorAutoTriggerService_1.default.triggerT05(order_id);
                     break;
                 default:
                     throw new Error(`Unknown trigger type: ${trigger_type}`);

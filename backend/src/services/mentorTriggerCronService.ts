@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import pool from '../config/database';
-import { mentorAutoTriggerService } from './mentorAutoTriggerService';
+import mentorAutoTriggerService from './mentorAutoTriggerService';
 import logger from '../utils/logger';
 
 /**

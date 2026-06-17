@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const taskBreakdownService_1 = require("../services/taskBreakdownService");
+const taskBreakdownService_1 = __importDefault(require("../services/taskBreakdownService"));
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 /**
@@ -18,7 +21,7 @@ router.post('/:taskId/breakdown', auth_1.authenticate, async (req, res, next) =>
                 message: 'User not authenticated',
             });
         }
-        const result = await taskBreakdownService_1.taskBreakdownService.breakdownTask(taskId, studentId);
+        const result = await taskBreakdownService_1.default.breakdownTask(taskId, studentId);
         res.json({
             success: true,
             data: result,

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const mentorAutoTriggerService_1 = require("../services/mentorAutoTriggerService");
+const mentorAutoTriggerService_1 = __importDefault(require("../services/mentorAutoTriggerService"));
 const mentorTriggerCronService_1 = require("../services/mentorTriggerCronService");
 const auth_1 = require("../middleware/auth");
 const database_1 = __importDefault(require("../config/database"));
@@ -16,7 +16,7 @@ const router = (0, express_1.Router)();
 router.post('/t01/:orderId', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId } = req.params;
-        const messageId = await mentorAutoTriggerService_1.mentorAutoTriggerService.triggerT01(orderId);
+        const messageId = await mentorAutoTriggerService_1.default.triggerT01(orderId);
         res.json({
             success: true,
             data: {
@@ -39,7 +39,7 @@ router.post('/t01/:orderId', auth_1.authenticate, async (req, res) => {
 router.post('/t03/:orderId', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId } = req.params;
-        const messageId = await mentorAutoTriggerService_1.mentorAutoTriggerService.triggerT03(orderId);
+        const messageId = await mentorAutoTriggerService_1.default.triggerT03(orderId);
         res.json({
             success: true,
             data: {
@@ -62,7 +62,7 @@ router.post('/t03/:orderId', auth_1.authenticate, async (req, res) => {
 router.post('/t05/:orderId', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId } = req.params;
-        const messageId = await mentorAutoTriggerService_1.mentorAutoTriggerService.triggerT05(orderId);
+        const messageId = await mentorAutoTriggerService_1.default.triggerT05(orderId);
         res.json({
             success: true,
             data: {
