@@ -103,7 +103,7 @@ class DataAccessLogService {
       [resourceType, resourceId, limit]
     );
 
-    return result as AccessLog[];
+    return result as unknown as AccessLog[];
   }
 
   /**
@@ -118,7 +118,7 @@ class DataAccessLogService {
       [userId, limit]
     );
 
-    return result as AccessLog[];
+    return result as unknown as AccessLog[];
   }
 
   /**
@@ -144,7 +144,7 @@ class DataAccessLogService {
       [resourceType, resourceId, limit]
     );
 
-    return result as AccessLog[];
+    return result as unknown as AccessLog[];
   }
 
   /**
