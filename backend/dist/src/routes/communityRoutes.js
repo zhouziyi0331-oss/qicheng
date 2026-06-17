@@ -106,21 +106,22 @@ router.post('/posts/:id/apply', auth_1.authenticate, async (req, res, next) => {
         const postId = req.params.id;
         const applicantId = req.user.userId;
         const { message } = req.body;
-        await communityService_1.default.applyToPost({
-            postId,
-            applicantId,
-            message,
-        });
-        logger_1.default.info('Community post application submitted via API', { postId, applicantId });
-        res.json({
-            success: true,
-            message: '申请已提交',
-        });
+        await communityService_1.default.applyToPost(postId, applicantId, message, track);
+        message,
+        ;
     }
-    catch (error) {
-        next(error);
-    }
+    finally { }
 });
+logger_1.default.info('Community post application submitted via API', { postId, applicantId });
+res.json({
+    success: true,
+    message: '申请已提交',
+});
+try { }
+catch (error) {
+    next(error);
+}
+;
 /**
  * 回复帖子
  * POST /api/v1/community/posts/:id/reply

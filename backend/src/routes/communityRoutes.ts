@@ -127,9 +127,7 @@ router.post(
       const applicantId = req.user!.userId;
       const { message } = req.body;
 
-      await communityService.applyToPost({
-        postId,
-        applicantId,
+      await communityService.applyToPost(postId, applicantId, message, track);
         message,
       });
 
