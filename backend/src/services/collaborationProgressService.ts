@@ -124,7 +124,7 @@ class CollaborationProgressService {
       [studentId, companyId]
     );
 
-    return result[0].can_unlock;
+    return Boolean(result[0]?.can_unlock);
   }
 
   /**

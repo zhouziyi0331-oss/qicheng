@@ -27,7 +27,7 @@ export const getPersonalityStats = async (req: Request, res: Response) => {
       [tag]
     );
 
-    const totalCount = parseInt(countResult[0]?.count || '0');
+    const totalCount = parseInt(String(countResult[0]?.count || '0'));
 
     if (totalCount === 0) {
       return res.json({

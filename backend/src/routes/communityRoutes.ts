@@ -31,7 +31,7 @@ router.post(
 
       const postId = await communityService.createPost({
         authorId,
-        type,
+          type: type as string,
         title,
         content,
         requiredSkills,

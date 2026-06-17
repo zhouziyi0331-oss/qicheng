@@ -174,7 +174,7 @@ class DataAccessLogService {
       [resourceType, resourceId]
     );
 
-    return result.length > 0 ? result[0].created_at : null;
+    return result.length > 0 ? (result[0].created_at as Date) : null;
   }
 
   /**

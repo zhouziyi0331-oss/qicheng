@@ -104,7 +104,7 @@ class CollaborationProgressService {
      */
     async canUnlock(studentId, companyId) {
         const result = await db_1.default.query(`SELECT can_exchange_contacts($1, $2) as can_unlock`, [studentId, companyId]);
-        return result[0].can_unlock;
+        return Boolean(result[0]?.can_unlock);
     }
     /**
      * 获取所有合作进度（用于学生查看所有企业）

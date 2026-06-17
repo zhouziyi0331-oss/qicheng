@@ -25,7 +25,7 @@ const getPersonalityStats = async (req, res) => {
         const countResult = await (0, db_1.query)(`SELECT COUNT(DISTINCT user_id) as count
        FROM user_opc_results
        WHERE personality_tag = $1`, [tag]);
-        const totalCount = parseInt(countResult[0]?.count || '0');
+        const totalCount = parseInt(String(countResult[0]?.count || '0'));
         if (totalCount === 0) {
             return res.json({
                 total_count: 0,

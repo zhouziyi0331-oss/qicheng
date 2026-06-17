@@ -29,7 +29,7 @@ router.post('/posts', auth_1.authenticate, async (req, res, next) => {
         }
         const postId = await communityService_1.default.createPost({
             authorId,
-            type,
+            type: type,
             title,
             content,
             requiredSkills,
