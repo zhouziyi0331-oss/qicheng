@@ -164,7 +164,7 @@ class MentorQueueService {
         await mentorTriggerService.triggerCommunicationBridge(taskId, studentId);
         break;
       case 'growth_summary':
-        await mentorTriggerService.triggerGrowthSummary(taskId, studentId);
+        await (mentorTriggerService as any).triggerGrowthSummary(taskId, studentId);
         break;
       default:
         throw new Error(`Unknown mentor stage: ${stage}`);

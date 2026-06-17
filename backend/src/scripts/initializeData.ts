@@ -111,12 +111,12 @@ async function initializeTaskVectors() {
           logger.info(`Task ${task.title} already has embedding, skipping vector generation`);
         } else {
           // 生成任务向量
-          await vectorEmbeddingService.updateTaskEmbedding(task.id);
+          await (vectorEmbeddingService as any).updateTaskEmbedding(task.id);
           logger.info(`✓ Generated vector for task ${task.title}`);
         }
 
         // 检查是否已有翻译
-        const translation = await qichengTeacherService.getTaskTranslation(task.id);
+        const translation = await qichengTeacherService.getTranslation(task.id);
 
         if (translation) {
           logger.info(`Task ${task.title} already has translation, skipping`);

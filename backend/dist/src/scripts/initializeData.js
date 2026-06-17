@@ -87,7 +87,7 @@ async function initializeTaskVectors() {
                     logger_1.default.info(`✓ Generated vector for task ${task.title}`);
                 }
                 // 检查是否已有翻译
-                const translation = await qichengTeacherService_1.default.getTaskTranslation(task.id);
+                const translation = await qichengTeacherService_1.default.getTranslation(task.id);
                 if (translation) {
                     logger_1.default.info(`Task ${task.title} already has translation, skipping`);
                 }

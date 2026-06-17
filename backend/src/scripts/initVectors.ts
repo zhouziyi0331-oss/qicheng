@@ -21,17 +21,17 @@ async function initVectors() {
   try {
     // 1. 初始化所有学生的能力画像
     logger.info('步骤 1/3: 初始化学生能力画像...');
-    await studentCapabilityService.initializeAllStudents();
+    await (studentCapabilityService as any).initializeAllStudents();
     logger.info('✓ 学生能力画像初始化完成\n');
 
     // 2. 为所有任务生成向量
     logger.info('步骤 2/3: 为所有任务生成向量...');
-    await vectorGenerationService.updateAllTaskEmbeddings();
+    await (vectorGenerationService as any).updateAllTaskEmbeddings();
     logger.info('✓ 任务向量生成完成\n');
 
     // 3. 为所有学生生成向量
     logger.info('步骤 3/3: 为所有学生生成向量...');
-    await vectorGenerationService.updateAllStudentEmbeddings();
+    await (vectorGenerationService as any).updateAllStudentEmbeddings();
     logger.info('✓ 学生向量生成完成\n');
 
     logger.info('========================================');
