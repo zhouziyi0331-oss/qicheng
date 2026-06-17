@@ -94,7 +94,7 @@ class LevelFilterService {
            AND t.required_level <= $2
            AND t.difficulty = ANY($3::int[])`, [levelInfo.track, levelInfo.currentLevel, difficultyParams]);
             return {
-                tasks: tasks.rows,
+                tasks: tasks,
                 totalCount: countResult?.count || 0,
                 studentLevel: levelInfo.currentLevel,
                 allowedDifficulties: difficultyParams,

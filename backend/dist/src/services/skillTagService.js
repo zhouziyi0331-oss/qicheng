@@ -74,7 +74,7 @@ class SkillTagService {
          ORDER BY created_at DESC
          LIMIT 10`, [userId]);
             const skillFrequency = {};
-            growthObservations.rows.forEach((row) => {
+            growthObservations.forEach((row) => {
                 if (row.skills_shown && Array.isArray(row.skills_shown)) {
                     row.skills_shown.forEach((skill) => {
                         skillFrequency[skill] = (skillFrequency[skill] || 0) + 1;

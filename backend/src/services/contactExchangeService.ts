@@ -155,7 +155,7 @@ class ContactExchangeService {
     `;
 
     const result = await queryOne(sql, [studentId, companyId, taskId, collaborationCount]);
-    return result?.id;
+    return result?.id as string;
   }
 
   /**
@@ -374,8 +374,8 @@ ${ratingsText}
     }
 
     return {
-      userId: user.id,
-      name: user.name,
+      userId: user.id as string,
+      name: user.name as string,
       phone: user.phone,
       wechat: user.wechat,
       qq: user.qq,
