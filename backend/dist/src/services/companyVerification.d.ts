@@ -1,6 +1,6 @@
 /**
  * P2安全功能：企业资质验证
- * 真实实现 - 支持真实API调用和开发环境降级
+ * 真实实现 - 强制调用真实API，没有降级
  */
 export interface BusinessLicense {
     companyName: string;
@@ -13,12 +13,12 @@ export interface BusinessLicense {
 }
 /**
  * OCR识别营业执照
- * 真实调用阿里云OCR（如果配置了API Key）
+ * 强制调用阿里云OCR - 必须配置API Key
  */
 export declare function ocrBusinessLicense(imageUrl: string): Promise<BusinessLicense>;
 /**
  * 验证企业信息真实性
- * 真实调用天眼查API（如果配置了API Key）
+ * 强制调用天眼查API - 必须配置API Key
  */
 export declare function verifyCompanyInfo(creditCode: string): Promise<{
     valid: boolean;
