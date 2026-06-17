@@ -138,7 +138,7 @@ class EnhancedReasoningEngine {
       avgQuality,
       helpRequestRate,
       revisionRate,
-      onTimeRate: parseFloat(taskStats?.on_time_rate || '0'),
+      onTimeRate: parseFloat(String(taskStats?.on_time_rate || '0')),
       workStyle,
       learningPattern,
       communicationStyle,
