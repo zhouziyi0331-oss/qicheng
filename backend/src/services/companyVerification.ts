@@ -1,6 +1,6 @@
 /**
  * P2安全功能：企业资质验证
- * 真实实现 - 支持真实API调用和开发环境降级
+ * 真实实现 - 强制调用真实API，没有降级
  */
 
 import logger from '../utils/logger';
@@ -19,62 +19,58 @@ export interface BusinessLicense {
 
 /**
  * OCR识别营业执照
- * 真实调用阿里云OCR（如果配置了API Key）
+ * 强制调用阿里云OCR - 必须配置API Key
  */
 export async function ocrBusinessLicense(imageUrl: string): Promise<BusinessLicense> {
   logger.info('OCR识别营业执照:', imageUrl);
 
   const ocrApiKey = process.env.ALIYUN_OCR_KEY;
 
-  // 真实API调用
-  if (ocrApiKey && ocrApiKey !== 'your-key') {
-    try {
-      const response = await axios.post(
-        'https://ocr.cn-shanghai.aliyuncs.com',
-        { image: imageUrl, configure: JSON.stringify({ side: 'face' }) },
-        {
-          headers: {
-            Authorization: `APPCODE ${ocrApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          timeout: 10000,
-        }
-      );
-
-      if (response.data && response.data.success) {
-        const data = response.data.data;
-        return {
-          companyName: data.company_name || '',
-          creditCode: data.credit_code || '',
-          legalPerson: data.legal_person || '',
-          registeredCapital: data.registered_capital || '',
-          establishDate: data.establish_date || '',
-          businessScope: data.business_scope || '',
-          licenseImageUrl: imageUrl,
-        };
-      }
-    } catch (error) {
-      logger.error('OCR API调用失败:', error);
-      throw new Error('OCR识别失败，请稍后重试');
-    }
+  // 强制要求配置API Key
+  if (!ocrApiKey || ocrApiKey === 'your-key') {
+    throw new Error('未配置ALIYUN_OCR_KEY，请在.env中配置阿里云OCR密钥');
   }
 
-  // 开发环境降级
-  logger.warn('未配置ALIYUN_OCR_KEY，返回测试数据');
-  return {
-    companyName: '示例科技有限公司',
-    creditCode: '91110000000000000X',
-    legalPerson: '张三',
-    registeredCapital: '100万',
-    establishDate: '2020-01-01',
-    businessScope: '技术开发、技术服务',
-    licenseImageUrl: imageUrl,
-  };
+  try {
+    // 真实调用阿里云OCR
+    const response = await axios.post(
+      'https://ocr.cn-shanghai.aliyuncs.com',
+      { image: imageUrl, configure: JSON.stringify({ side: 'face' }) },
+      {
+        headers: {
+          Authorization: `APPCODE ${ocrApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        timeout: 10000,
+      }
+    );
+
+    if (response.data && response.data.success) {
+      const data = response.data.data;
+      return {
+        companyName: data.company_name || '',
+        creditCode: data.credit_code || '',
+        legalPerson: data.legal_person || '',
+        registeredCapital: data.registered_capital || '',
+        establishDate: data.establish_date || '',
+        businessScope: data.business_scope || '',
+        licenseImageUrl: imageUrl,
+      };
+    } else {
+      throw new Error('OCR识别失败：' + (response.data?.message || '未知错误'));
+    }
+  } catch (error: any) {
+    logger.error('OCR API调用失败:', error);
+    if (error.response) {
+      throw new Error(`OCR识别失败: ${error.response.status} - ${error.response.data?.message || '请求失败'}`);
+    }
+    throw new Error('OCR识别失败，请检查网络连接或API配置');
+  }
 }
 
 /**
  * 验证企业信息真实性
- * 真实调用天眼查API（如果配置了API Key）
+ * 强制调用天眼查API - 必须配置API Key
  */
 export async function verifyCompanyInfo(creditCode: string): Promise<{
   valid: boolean;
@@ -85,65 +81,49 @@ export async function verifyCompanyInfo(creditCode: string): Promise<{
 
   const apiKey = process.env.TIANYANCHA_API_KEY;
 
-  // 真实API调用
-  if (apiKey && apiKey !== 'your-key') {
-    try {
-      const response = await axios.get(
-        `https://open.api.tianyancha.com/services/open/ic/baseinfoV2/${creditCode}`,
-        {
-          headers: { Authorization: apiKey },
-          timeout: 10000,
-        }
-      );
+  // 强制要求配置API Key
+  if (!apiKey || apiKey === 'your-key') {
+    throw new Error('未配置TIANYANCHA_API_KEY，请在.env中配置天眼查API密钥');
+  }
 
-      if (response.data && response.data.error_code === 0) {
-        const result = response.data.result;
-        return {
-          valid: true,
-          message: '企业信息验证通过',
-          companyInfo: {
-            name: result.name,
-            status: result.regStatus,
-            creditCode: result.creditCode,
-            legalPerson: result.legalPersonName,
-          },
-        };
-      } else {
-        return {
-          valid: false,
-          message: '企业信息验证失败：未找到该企业',
-        };
+  try {
+    // 真实调用天眼查API
+    const response = await axios.get(
+      `https://open.api.tianyancha.com/services/open/ic/baseinfoV2/${creditCode}`,
+      {
+        headers: { Authorization: apiKey },
+        timeout: 10000,
       }
-    } catch (error) {
-      logger.error('天眼查API调用失败:', error);
+    );
+
+    if (response.data && response.data.error_code === 0) {
+      const result = response.data.result;
+      return {
+        valid: true,
+        message: '企业信息验证通过',
+        companyInfo: {
+          name: result.name,
+          status: result.regStatus,
+          creditCode: result.creditCode,
+          legalPerson: result.legalPersonName,
+        },
+      };
+    } else {
       return {
         valid: false,
-        message: '企业信息验证服务暂时不可用',
+        message: '企业信息验证失败：' + (response.data?.reason || '未找到该企业'),
       };
     }
+  } catch (error: any) {
+    logger.error('天眼查API调用失败:', error);
+    if (error.response) {
+      return {
+        valid: false,
+        message: `企业信息验证失败: ${error.response.status} - ${error.response.data?.reason || '请求失败'}`,
+      };
+    }
+    throw new Error('企业信息验证服务不可用，请检查网络连接');
   }
-
-  // 开发环境降级：格式验证
-  logger.warn('未配置TIANYANCHA_API_KEY，进行格式验证');
-  const creditCodeRegex = /^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/;
-  const isValidFormat = creditCodeRegex.test(creditCode);
-
-  if (!isValidFormat) {
-    return {
-      valid: false,
-      message: '统一社会信用代码格式不正确',
-    };
-  }
-
-  return {
-    valid: true,
-    message: '企业信息格式验证通过',
-    companyInfo: {
-      name: '示例科技有限公司',
-      status: '存续',
-      creditCode,
-    },
-  };
 }
 
 /**

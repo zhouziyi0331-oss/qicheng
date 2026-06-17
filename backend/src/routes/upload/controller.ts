@@ -2,27 +2,36 @@ import { Request, Response } from 'express';
 import { authenticate } from '../../middleware/auth';
 import { uploadImages, uploadDocuments } from '../../middleware/fileUpload';
 import logger from '../../utils/logger';
-
-// 真实的OSS上传（如果配置）
 import OSS from 'ali-oss';
 
-// OSS客户端配置
-let ossClient: OSS | null = null;
+/**
+ * 文件上传控制器 - 强制上传到OSS
+ * 必须配置OSS，不使用base64降级
+ */
 
-if (process.env.OSS_ACCESS_KEY_ID && process.env.OSS_ACCESS_KEY_ID !== 'your-access-key-id') {
-  ossClient = new OSS({
-    region: 'oss-cn-chengdu',
-    accessKeyId: process.env.OSS_ACCESS_KEY_ID,
-    accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET || '',
-    bucket: process.env.OSS_BUCKET || 'qicheng-files',
-  });
-  logger.info('✅ OSS客户端初始化成功');
-} else {
-  logger.warn('⚠️  未配置OSS，文件上传将保存到本地');
+// OSS客户端配置 - 强制要求
+const ossAccessKeyId = process.env.OSS_ACCESS_KEY_ID;
+const ossAccessKeySecret = process.env.OSS_ACCESS_KEY_SECRET;
+const ossBucket = process.env.OSS_BUCKET;
+
+if (!ossAccessKeyId || ossAccessKeyId === 'your-access-key-id' ||
+    !ossAccessKeySecret || ossAccessKeySecret === 'your-access-key-secret') {
+  logger.error('❌ 未配置OSS凭证！文件上传功能将不可用');
+  logger.error('请在.env中配置: OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET');
+  throw new Error('文件上传功能需要配置OSS凭证');
 }
 
+const ossClient = new OSS({
+  region: 'oss-cn-chengdu',
+  accessKeyId: ossAccessKeyId,
+  accessKeySecret: ossAccessKeySecret,
+  bucket: ossBucket || 'qicheng-files',
+});
+
+logger.info('✅ OSS客户端初始化成功');
+
 /**
- * 上传单个图片 - 真实上传到OSS或本地
+ * 上传单个图片 - 强制上传到OSS
  */
 export async function uploadSingleImage(req: Request, res: Response) {
   try {
@@ -32,27 +41,19 @@ export async function uploadSingleImage(req: Request, res: Response) {
       return res.status(400).json({ success: false, error: '未上传文件' });
     }
 
-    logger.info('开始上传图片:', {
+    logger.info('开始上传图片到OSS:', {
       originalname: file.originalname,
       mimetype: file.mimetype,
       size: file.size,
       userId: req.user?.userId,
     });
 
-    let fileUrl: string;
+    // 强制上传到OSS
+    const filename = `images/${Date.now()}-${file.originalname}`;
+    const result = await ossClient.put(filename, file.buffer);
+    const fileUrl = result.url;
 
-    // 真实上传到OSS
-    if (ossClient) {
-      const filename = `${Date.now()}-${file.originalname}`;
-      const result = await ossClient.put(filename, file.buffer);
-      fileUrl = result.url;
-      logger.info('✅ 文件已上传到OSS:', fileUrl);
-    }
-    // 开发环境：返回base64
-    else {
-      fileUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-      logger.warn('⚠️  开发环境：文件转为base64');
-    }
+    logger.info('✅ 文件已上传到OSS:', fileUrl);
 
     res.json({
       success: true,
@@ -64,13 +65,16 @@ export async function uploadSingleImage(req: Request, res: Response) {
       },
     });
   } catch (error) {
-    logger.error('上传图片失败:', error);
-    res.status(500).json({ success: false, error: '上传失败' });
+    logger.error('上传图片到OSS失败:', error);
+    res.status(500).json({
+      success: false,
+      error: '上传失败: ' + (error as Error).message
+    });
   }
 }
 
 /**
- * 上传多个图片 - 真实上传
+ * 上传多个图片 - 强制上传到OSS
  */
 export async function uploadMultipleImages(req: Request, res: Response) {
   try {
@@ -80,7 +84,7 @@ export async function uploadMultipleImages(req: Request, res: Response) {
       return res.status(400).json({ success: false, error: '未上传文件' });
     }
 
-    logger.info('开始上传多个图片:', {
+    logger.info('开始批量上传图片到OSS:', {
       count: files.length,
       userId: req.user?.userId,
     });
@@ -88,15 +92,9 @@ export async function uploadMultipleImages(req: Request, res: Response) {
     const uploadedFiles = [];
 
     for (const file of files) {
-      let fileUrl: string;
-
-      if (ossClient) {
-        const filename = `${Date.now()}-${file.originalname}`;
-        const result = await ossClient.put(filename, file.buffer);
-        fileUrl = result.url;
-      } else {
-        fileUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-      }
+      const filename = `images/${Date.now()}-${file.originalname}`;
+      const result = await ossClient.put(filename, file.buffer);
+      const fileUrl = result.url;
 
       uploadedFiles.push({
         url: fileUrl,
@@ -106,20 +104,23 @@ export async function uploadMultipleImages(req: Request, res: Response) {
       });
     }
 
-    logger.info(`✅ 成功上传${uploadedFiles.length}个文件`);
+    logger.info(`✅ 成功上传${uploadedFiles.length}个文件到OSS`);
 
     res.json({
       success: true,
       data: uploadedFiles,
     });
   } catch (error) {
-    logger.error('上传多个图片失败:', error);
-    res.status(500).json({ success: false, error: '上传失败' });
+    logger.error('批量上传图片到OSS失败:', error);
+    res.status(500).json({
+      success: false,
+      error: '上传失败: ' + (error as Error).message
+    });
   }
 }
 
 /**
- * 上传文档 - 真实上传
+ * 上传文档 - 强制上传到OSS
  */
 export async function uploadDocument(req: Request, res: Response) {
   try {
@@ -129,24 +130,19 @@ export async function uploadDocument(req: Request, res: Response) {
       return res.status(400).json({ success: false, error: '未上传文件' });
     }
 
-    logger.info('开始上传文档:', {
+    logger.info('开始上传文档到OSS:', {
       originalname: file.originalname,
       mimetype: file.mimetype,
       size: file.size,
       userId: req.user?.userId,
     });
 
-    let fileUrl: string;
+    // 强制上传到OSS
+    const filename = `documents/${Date.now()}-${file.originalname}`;
+    const result = await ossClient.put(filename, file.buffer);
+    const fileUrl = result.url;
 
-    if (ossClient) {
-      const filename = `documents/${Date.now()}-${file.originalname}`;
-      const result = await ossClient.put(filename, file.buffer);
-      fileUrl = result.url;
-      logger.info('✅ 文档已上传到OSS:', fileUrl);
-    } else {
-      fileUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-      logger.warn('⚠️  开发环境：文档转为base64');
-    }
+    logger.info('✅ 文档已上传到OSS:', fileUrl);
 
     res.json({
       success: true,
@@ -158,10 +154,12 @@ export async function uploadDocument(req: Request, res: Response) {
       },
     });
   } catch (error) {
-    logger.error('上传文档失败:', error);
-    res.status(500).json({ success: false, error: '上传失败' });
+    logger.error('上传文档到OSS失败:', error);
+    res.status(500).json({
+      success: false,
+      error: '上传失败: ' + (error as Error).message
+    });
   }
 }
 
-// 导出带安全验证的路由处理器
 export { authenticate, uploadImages, uploadDocuments };
