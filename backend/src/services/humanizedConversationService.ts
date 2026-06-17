@@ -134,7 +134,7 @@ class HumanizedConversationService {
         sessionId,
         studentId,
         studentMessage,
-        response.content,
+        response,
         struggle
       );
 
@@ -149,9 +149,9 @@ class HumanizedConversationService {
       }
 
       return {
-        content: response.content,
-        tone: this.detectTone(response.content),
-        hasEmpathy: this.hasEmpathy(response.content),
+        content: response,
+        tone: this.detectTone(response),
+        hasEmpathy: this.hasEmpathy(response),
         hasWarmth: this.hasWarmth(response.content),
         remembersPast: memories.relevantMemories.length > 0,
         toolRecommendations,

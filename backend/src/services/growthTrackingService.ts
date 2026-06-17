@@ -256,7 +256,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
         }
       );
 
-      return JSON.parse(response.content);
+      return JSON.parse(response);
     } catch (error: any) {
       logger.error('AI里程碑分析失败', { error });
       return { shouldCreateMilestone: false };

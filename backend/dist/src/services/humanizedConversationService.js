@@ -59,14 +59,14 @@ class HumanizedConversationService {
                 maxTokens: 2000,
                 temperature: 0.8
             });
-            await this.updateHumanizedContext(sessionId, studentId, studentMessage, response.content, struggle);
+            await this.updateHumanizedContext(sessionId, studentId, studentMessage, response, struggle);
             if (struggle) {
                 await this.recordSpecificStruggle(studentId, taskId, sessionId, struggle, toolRecommendations);
             }
             return {
-                content: response.content,
-                tone: this.detectTone(response.content),
-                hasEmpathy: this.hasEmpathy(response.content),
+                content: response,
+                tone: this.detectTone(response),
+                hasEmpathy: this.hasEmpathy(response),
                 hasWarmth: this.hasWarmth(response.content),
                 remembersPast: memories.relevantMemories.length > 0,
                 toolRecommendations,

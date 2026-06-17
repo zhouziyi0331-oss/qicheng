@@ -179,7 +179,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
                 maxTokens: 800,
                 temperature: 0.3
             });
-            return JSON.parse(response.content);
+            return JSON.parse(response);
         }
         catch (error) {
             logger_1.default.error('AI里程碑分析失败', { error });
