@@ -31,7 +31,7 @@ async function initiateRequirementConfirmation(req, res, next) {
         // 获取任务详情
         const task = await (0, db_1.queryOne)('SELECT * FROM tasks WHERE id = $1', [taskId]);
         if (!task) {
-            throw new errorHandler_1.AppError('任务不存在', 404);
+            throw new errorHandler_1.AppError(404, '任务不存在');
         }
         // 获取企业方的原始需求描述
         const companyRequirement = await (0, db_1.queryOne)('SELECT original_description, expected_deliverables FROM task_requirements WHERE task_id = $1', [taskId]);

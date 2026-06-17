@@ -29,10 +29,10 @@ router.post('/apply', auth_1.authenticate, async (req, res, next) => {
         // 检查用户等级
         const user = await (0, db_1.queryOne)(`SELECT current_level, is_master FROM users WHERE id = $1`, [userId]);
         if (!user || user.current_level < 5) {
-            throw new errorHandler_1.AppError('Only Lv.5+ students can apply to be a master', 403);
+            throw new errorHandler_1.AppError(403, 'Only Lv.5+ students can apply to be a master');
         }
         if (user.is_master) {
-            throw new errorHandler_1.AppError('You are already a master', 400);
+            throw new errorHandler_1.AppError(400, 'You are already a master');
         }
         // 更新用户为大师（待审核）
         await (0, db_1.query)(`UPDATE users
@@ -69,7 +69,7 @@ router.get('/dashboard', auth_1.authenticate, async (req, res, next) => {
         // 检查是否为认证大师
         const user = await (0, db_1.queryOne)(`SELECT is_master, master_approved_at FROM users WHERE id = $1`, [userId]);
         if (!user?.is_master || !user.master_approved_at) {
-            throw new errorHandler_1.AppError('Only certified masters can access dashboard', 403);
+            throw new errorHandler_1.AppError(403, 'Only certified masters can access dashboard');
         }
         // 获取大师统计数据
         const stats = await (0, db_1.queryOne)(`SELECT
@@ -121,7 +121,7 @@ router.put('/settings', auth_1.authenticate, async (req, res, next) => {
         // 检查是否为认证大师
         const user = await (0, db_1.queryOne)(`SELECT is_master, master_approved_at FROM users WHERE id = $1`, [userId]);
         if (!user?.is_master || !user.master_approved_at) {
-            throw new errorHandler_1.AppError('Only certified masters can update settings', 403);
+            throw new errorHandler_1.AppError(403, 'Only certified masters can update settings');
         }
         // 构建更新语句
         const updates = [];
@@ -236,10 +236,10 @@ router.post('/:id/invite-master', auth_1.authenticate, async (req, res, next) =>
         // 检查任务是否存在且属于当前企业
         const task = await (0, db_1.queryOne)(`SELECT company_id, dispatch_mode FROM tasks WHERE id = $1`, [taskId]);
         if (!task) {
-            throw new errorHandler_1.AppError('Task not found', 404);
+            throw new errorHandler_1.AppError(404, 'Task not found');
         }
         if (task.company_id !== req.user.userId) {
-            throw new errorHandler_1.AppError('You can only invite masters for your own tasks', 403);
+            throw new errorHandler_1.AppError(403, 'You can only invite masters for your own tasks');
         }
         // 创建邀请记录
         await (0, db_1.query)(`INSERT INTO project_invitations (
@@ -280,10 +280,10 @@ router.post('/:id/respond', auth_1.authenticate, async (req, res, next) => {
         // 检查邀请是否存在且属于当前大师
         const invitation = await (0, db_1.queryOne)(`SELECT * FROM project_invitations WHERE id = $1 AND master_id = $2`, [invitationId, masterId]);
         if (!invitation) {
-            throw new errorHandler_1.AppError('Invitation not found', 404);
+            throw new errorHandler_1.AppError(404, 'Invitation not found');
         }
         if (invitation.status !== 'pending' && invitation.status !== 'negotiating') {
-            throw new errorHandler_1.AppError('Invitation already responded', 400);
+            throw new errorHandler_1.AppError(400, 'Invitation already responded');
         }
         await (0, db_1.withTransaction)(async (client) => {
             if (action === 'accept') {
@@ -305,7 +305,7 @@ router.post('/:id/respond', auth_1.authenticate, async (req, res, next) => {
             else if (action === 'negotiate') {
                 // 协商价格
                 if (!counterOffer) {
-                    throw new errorHandler_1.AppError('counterOffer is required for negotiation', 400);
+                    throw new errorHandler_1.AppError(400, 'counterOffer is required for negotiation');
                 }
                 await client.query(`UPDATE project_invitations
              SET status = 'negotiating',
@@ -366,7 +366,7 @@ router.post('/guidance/:taskId', auth_1.authenticate, async (req, res, next) => 
          LEFT JOIN mentor_stage_sessions mss ON ta.task_id = mss.task_id AND ta.student_id = mss.student_id
          WHERE ta.task_id = $1 AND ta.master_id = $2`, [taskId, masterId]);
         if (!assignment) {
-            throw new errorHandler_1.AppError('You are not assigned to this task', 403);
+            throw new errorHandler_1.AppError(403, 'You are not assigned to this task');
         }
         // 发送指导消息
         await (0, db_1.query)(`INSERT INTO mentor_stage_messages (

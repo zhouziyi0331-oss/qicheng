@@ -148,7 +148,7 @@ router.get('/students/:studentId', async (req, res, next) => {
        WHERE u.id = $1
        GROUP BY u.id, u.id`, [studentId]);
         if (!student) {
-            throw new errorHandler_1.AppError('学生不存在', 404);
+            throw new errorHandler_1.AppError(404, '学生不存在');
         }
         // 获取最近的对话
         const recentConversations = await (0, db_1.query)(`SELECT * FROM mentor_conversations 
@@ -231,7 +231,7 @@ router.get('/companies/:companyId', async (req, res, next) => {
        WHERE u.id = $1
        GROUP BY u.id, cp.user_id`, [companyId]);
         if (!company) {
-            throw new errorHandler_1.AppError('企业不存在', 404);
+            throw new errorHandler_1.AppError(404, '企业不存在');
         }
         // 获取任务列表
         const tasks = await (0, db_1.query)(`SELECT t.*, 
@@ -375,7 +375,7 @@ router.get('/reviews/:reviewId', async (req, res, next) => {
        LEFT JOIN task_submissions ts ON asr.submission_id = ts.id
        WHERE asr.id = $1`, [reviewId]);
         if (!review) {
-            throw new errorHandler_1.AppError('审核记录不存在', 404);
+            throw new errorHandler_1.AppError(404, '审核记录不存在');
         }
         res.json({
             success: true,

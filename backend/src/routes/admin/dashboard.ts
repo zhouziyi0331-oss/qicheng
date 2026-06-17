@@ -185,7 +185,7 @@ router.get('/students/:studentId', async (req, res, next) => {
     );
 
     if (!student) {
-      throw new AppError('学生不存在', 404);
+      throw new AppError(404, '学生不存在');
     }
 
     // 获取最近的对话
@@ -290,7 +290,7 @@ router.get('/companies/:companyId', async (req, res, next) => {
     );
 
     if (!company) {
-      throw new AppError('企业不存在', 404);
+      throw new AppError(404, '企业不存在');
     }
 
     // 获取任务列表
@@ -475,7 +475,7 @@ router.get('/reviews/:reviewId', async (req, res, next) => {
     );
 
     if (!review) {
-      throw new AppError('审核记录不存在', 404);
+      throw new AppError(404, '审核记录不存在');
     }
 
     res.json({

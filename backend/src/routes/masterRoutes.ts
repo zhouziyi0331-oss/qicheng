@@ -35,11 +35,11 @@ router.post(
       );
 
       if (!user || user.current_level < 5) {
-        throw new AppError('Only Lv.5+ students can apply to be a master', 403);
+        throw new AppError(403, 'Only Lv.5+ students can apply to be a master');
       }
 
       if (user.is_master) {
-        throw new AppError('You are already a master', 400);
+        throw new AppError(400, 'You are already a master');
       }
 
       // 更新用户为大师（待审核）
@@ -94,7 +94,7 @@ router.get(
       );
 
       if (!user?.is_master || !user.master_approved_at) {
-        throw new AppError('Only certified masters can access dashboard', 403);
+        throw new AppError(403, 'Only certified masters can access dashboard');
       }
 
       // 获取大师统计数据
@@ -164,7 +164,7 @@ router.put(
       );
 
       if (!user?.is_master || !user.master_approved_at) {
-        throw new AppError('Only certified masters can update settings', 403);
+        throw new AppError(403, 'Only certified masters can update settings');
       }
 
       // 构建更新语句
@@ -313,11 +313,11 @@ router.post(
       );
 
       if (!task) {
-        throw new AppError('Task not found', 404);
+        throw new AppError(404, 'Task not found');
       }
 
       if (task.company_id !== req.user!.userId) {
-        throw new AppError('You can only invite masters for your own tasks', 403);
+        throw new AppError(403, 'You can only invite masters for your own tasks');
       }
 
       // 创建邀请记录
@@ -378,11 +378,11 @@ router.post(
       );
 
       if (!invitation) {
-        throw new AppError('Invitation not found', 404);
+        throw new AppError(404, 'Invitation not found');
       }
 
       if (invitation.status !== 'pending' && invitation.status !== 'negotiating') {
-        throw new AppError('Invitation already responded', 400);
+        throw new AppError(400, 'Invitation already responded');
       }
 
       await withTransaction(async (client) => {
@@ -413,7 +413,7 @@ router.post(
         } else if (action === 'negotiate') {
           // 协商价格
           if (!counterOffer) {
-            throw new AppError('counterOffer is required for negotiation', 400);
+            throw new AppError(400, 'counterOffer is required for negotiation');
           }
 
           await client.query(
@@ -495,7 +495,7 @@ router.post(
       );
 
       if (!assignment) {
-        throw new AppError('You are not assigned to this task', 403);
+        throw new AppError(403, 'You are not assigned to this task');
       }
 
       // 发送指导消息

@@ -33,7 +33,7 @@ export async function initiateRequirementConfirmation(req: Request, res: Respons
     }>('SELECT * FROM tasks WHERE id = $1', [taskId]);
 
     if (!task) {
-      throw new AppError('任务不存在', 404);
+      throw new AppError(404, '任务不存在');
     }
 
     // 获取企业方的原始需求描述
