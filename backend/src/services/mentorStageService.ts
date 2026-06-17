@@ -666,7 +666,7 @@ export class MentorStageService {
         },
         growthSummary: {
           milestonesAchieved: recentMilestones.length,
-          recentMilestones: recentMilestones.map(m => ({
+          recentMilestones: recentMilestones.map((m: any) => ({
             title: m.milestone_title,
             type: m.milestone_type
           }))
