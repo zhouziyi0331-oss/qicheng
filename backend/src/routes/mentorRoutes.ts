@@ -26,7 +26,7 @@ const router = express.Router();
  */
 router.get('/alerts', authenticate, async (req, res) => {
   try {
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     const alerts = await mentorAlertService.getUnreadAlerts(studentId);
 
@@ -53,7 +53,7 @@ router.get('/alerts', authenticate, async (req, res) => {
 router.post('/alerts/:alertId/view', authenticate, async (req, res) => {
   try {
     const { alertId } = req.params;
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     await mentorAlertService.markAlertAsViewed(alertId, studentId);
 
@@ -77,7 +77,7 @@ router.post('/alerts/:alertId/view', authenticate, async (req, res) => {
 router.post('/alerts/:alertId/respond', authenticate, async (req, res) => {
   try {
     const { alertId } = req.params;
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     await mentorAlertService.markAlertAsResponded(alertId, studentId);
 
@@ -134,7 +134,7 @@ router.get('/alerts/stats', authenticate, async (req, res) => {
  */
 router.get('/profile', authenticate, async (req, res) => {
   try {
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     const profile = await mentorMemoryService.getStudentProfile(studentId);
 
@@ -164,7 +164,7 @@ router.get('/profile', authenticate, async (req, res) => {
  */
 router.post('/profile/refresh', authenticate, async (req, res) => {
   try {
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     // 异步更新画像
     mentorMemoryService.updateStudentProfile(studentId, 'manual_refresh')
@@ -243,7 +243,7 @@ router.post('/observations', authenticate, async (req, res) => {
 router.get('/sessions/:orderId', authenticate, async (req, res) => {
   try {
     const { orderId } = req.params;
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     // 验证订单归属
     const orderCheck = await mentorCoreService.verifyOrderOwnership(orderId, studentId);
@@ -279,7 +279,7 @@ router.get('/sessions/:orderId', authenticate, async (req, res) => {
 router.post('/message', authenticate, async (req, res) => {
   try {
     const { orderId, message } = req.body;
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     // 验证必填字段
     if (!orderId || !message) {
@@ -334,7 +334,7 @@ router.post('/message', authenticate, async (req, res) => {
 router.post('/pre-submit-check', authenticate, async (req, res) => {
   try {
     const { orderId, submissionPreview } = req.body;
-    const studentId = req.user!.id;
+    const studentId = req.user!.userId;
 
     // 验证必填字段
     if (!orderId) {

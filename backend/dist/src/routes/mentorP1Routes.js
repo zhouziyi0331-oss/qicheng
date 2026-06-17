@@ -25,7 +25,7 @@ const router = express_1.default.Router();
  */
 router.get('/retrospectives/pending', auth_1.authenticate, async (req, res) => {
     try {
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         const retrospectives = await mentorRetrospectiveService_1.default.getPendingRetrospectives(studentId);
         res.json({
             success: true,
@@ -51,7 +51,7 @@ router.post('/retrospectives/:id/submit', auth_1.authenticate, async (req, res) 
     try {
         const { id } = req.params;
         const { answer1, answer2, answer3 } = req.body;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         // 验证必填字段
         if (!answer1 || !answer2 || !answer3) {
             return res.status(400).json({
@@ -94,7 +94,7 @@ router.post('/retrospectives/:id/submit', auth_1.authenticate, async (req, res) 
 router.post('/retrospectives/:id/skip', auth_1.authenticate, async (req, res) => {
     try {
         const { id } = req.params;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         // 验证复盘归属
         const retrospective = await mentorRetrospectiveService_1.default.getPendingRetrospectives(studentId);
         const found = retrospective.find(r => r.id === id);
@@ -125,7 +125,7 @@ router.post('/retrospectives/:id/skip', auth_1.authenticate, async (req, res) =>
  */
 router.get('/retrospectives/history', auth_1.authenticate, async (req, res) => {
     try {
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         const limit = parseInt(req.query.limit) || 10;
         const retrospectives = await mentorRetrospectiveService_1.default.getRetrospectiveHistory(studentId, limit);
         res.json({

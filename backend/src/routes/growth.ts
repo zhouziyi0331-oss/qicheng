@@ -22,7 +22,7 @@ const router = express.Router();
  */
 router.get('/summaries', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
     const limit = parseInt(req.query.limit as string) || 10;
 
     const summaries = await instantGrowthSummaryService.getStudentSummaries(
@@ -137,7 +137,7 @@ router.post('/summaries/:summaryId/feedback', authenticate, async (req, res) => 
  */
 router.get('/ability-history', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     const history = await abilityDimensionUpdateService.getAbilityHistory(userId);
 
@@ -161,7 +161,7 @@ router.get('/ability-history', authenticate, async (req, res) => {
  */
 router.get('/profile-versions', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     const versions = await abilityDimensionUpdateService.getProfileVersions(userId);
 
@@ -216,7 +216,7 @@ router.post('/ability-update/:orderId', authenticate, async (req, res) => {
  */
 router.post('/graduation-report/generate', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     const reportId = await graduationReportService.generateGraduationReport(userId);
 
@@ -243,7 +243,7 @@ router.post('/graduation-report/generate', authenticate, async (req, res) => {
  */
 router.get('/graduation-report/preview', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     const preview = await graduationReportService.getReportPreview(userId);
 
@@ -313,7 +313,7 @@ router.get('/graduation-report/:reportId', authenticate, async (req, res) => {
 router.post('/graduation-report/:reportId/pay', authenticate, async (req, res) => {
   try {
     const { reportId } = req.params;
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
     const { paymentMethod, transactionId, pointsUsed } = req.body;
 
     if (!paymentMethod || !transactionId) {
@@ -351,7 +351,7 @@ router.post('/graduation-report/:reportId/pay', authenticate, async (req, res) =
  */
 router.get('/graduation-report/check-update', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     const needUpdate = await graduationReportService.checkNeedUpdate(userId);
 
@@ -378,7 +378,7 @@ router.get('/graduation-report/check-update', authenticate, async (req, res) => 
 router.post('/graduation-report/:reportId/update', authenticate, async (req, res) => {
   try {
     const { reportId } = req.params;
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     await graduationReportService.updateReport(reportId, userId);
 
@@ -406,7 +406,7 @@ router.post('/graduation-report/:reportId/update', authenticate, async (req, res
  */
 router.get('/overview', authenticate, async (req, res) => {
   try {
-    const userId = req.user!.id;
+    const userId = req.user!.userId;
 
     // 并行获取各模块数据
     const [summaries, profileVersions, reportPreview] = await Promise.all([

@@ -27,7 +27,7 @@ const router = express_1.default.Router();
  */
 router.get('/alerts', auth_1.authenticate, async (req, res) => {
     try {
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         const alerts = await mentorAlertService_1.default.getUnreadAlerts(studentId);
         res.json({
             success: true,
@@ -52,7 +52,7 @@ router.get('/alerts', auth_1.authenticate, async (req, res) => {
 router.post('/alerts/:alertId/view', auth_1.authenticate, async (req, res) => {
     try {
         const { alertId } = req.params;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         await mentorAlertService_1.default.markAlertAsViewed(alertId, studentId);
         res.json({
             success: true,
@@ -74,7 +74,7 @@ router.post('/alerts/:alertId/view', auth_1.authenticate, async (req, res) => {
 router.post('/alerts/:alertId/respond', auth_1.authenticate, async (req, res) => {
     try {
         const { alertId } = req.params;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         await mentorAlertService_1.default.markAlertAsResponded(alertId, studentId);
         res.json({
             success: true,
@@ -126,7 +126,7 @@ router.get('/alerts/stats', auth_1.authenticate, async (req, res) => {
  */
 router.get('/profile', auth_1.authenticate, async (req, res) => {
     try {
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         const profile = await mentorMemoryService_1.default.getStudentProfile(studentId);
         if (!profile) {
             return res.status(404).json({
@@ -153,7 +153,7 @@ router.get('/profile', auth_1.authenticate, async (req, res) => {
  */
 router.post('/profile/refresh', auth_1.authenticate, async (req, res) => {
     try {
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         // 异步更新画像
         mentorMemoryService_1.default.updateStudentProfile(studentId, 'manual_refresh')
             .catch(error => {
@@ -210,7 +210,7 @@ router.post('/observations', auth_1.authenticate, async (req, res) => {
 router.get('/sessions/:orderId', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId } = req.params;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         // 验证订单归属
         const orderCheck = await mentorCoreService_1.default.verifyOrderOwnership(orderId, studentId);
         if (!orderCheck) {
@@ -243,7 +243,7 @@ router.get('/sessions/:orderId', auth_1.authenticate, async (req, res) => {
 router.post('/message', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId, message } = req.body;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         // 验证必填字段
         if (!orderId || !message) {
             return res.status(400).json({
@@ -289,7 +289,7 @@ router.post('/message', auth_1.authenticate, async (req, res) => {
 router.post('/pre-submit-check', auth_1.authenticate, async (req, res) => {
     try {
         const { orderId, submissionPreview } = req.body;
-        const studentId = req.user.id;
+        const studentId = req.user.userId;
         // 验证必填字段
         if (!orderId) {
             return res.status(400).json({

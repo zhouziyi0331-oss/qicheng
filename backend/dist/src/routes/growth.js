@@ -23,7 +23,7 @@ const router = express_1.default.Router();
  */
 router.get('/summaries', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const limit = parseInt(req.query.limit) || 10;
         const summaries = await instantGrowthSummaryService_1.default.getStudentSummaries(userId, limit);
         res.json({
@@ -123,7 +123,7 @@ router.post('/summaries/:summaryId/feedback', auth_1.authenticate, async (req, r
  */
 router.get('/ability-history', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const history = await abilityDimensionUpdateService_1.default.getAbilityHistory(userId);
         res.json({
             success: true,
@@ -145,7 +145,7 @@ router.get('/ability-history', auth_1.authenticate, async (req, res) => {
  */
 router.get('/profile-versions', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const versions = await abilityDimensionUpdateService_1.default.getProfileVersions(userId);
         res.json({
             success: true,
@@ -193,7 +193,7 @@ router.post('/ability-update/:orderId', auth_1.authenticate, async (req, res) =>
  */
 router.post('/graduation-report/generate', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const reportId = await graduationReportService_1.default.generateGraduationReport(userId);
         res.json({
             success: true,
@@ -218,7 +218,7 @@ router.post('/graduation-report/generate', auth_1.authenticate, async (req, res)
  */
 router.get('/graduation-report/preview', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const preview = await graduationReportService_1.default.getReportPreview(userId);
         if (!preview) {
             return res.status(404).json({
@@ -281,7 +281,7 @@ router.get('/graduation-report/:reportId', auth_1.authenticate, async (req, res)
 router.post('/graduation-report/:reportId/pay', auth_1.authenticate, async (req, res) => {
     try {
         const { reportId } = req.params;
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const { paymentMethod, transactionId, pointsUsed } = req.body;
         if (!paymentMethod || !transactionId) {
             return res.status(400).json({
@@ -310,7 +310,7 @@ router.post('/graduation-report/:reportId/pay', auth_1.authenticate, async (req,
  */
 router.get('/graduation-report/check-update', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const needUpdate = await graduationReportService_1.default.checkNeedUpdate(userId);
         res.json({
             success: true,
@@ -335,7 +335,7 @@ router.get('/graduation-report/check-update', auth_1.authenticate, async (req, r
 router.post('/graduation-report/:reportId/update', auth_1.authenticate, async (req, res) => {
     try {
         const { reportId } = req.params;
-        const userId = req.user.id;
+        const userId = req.user.userId;
         await graduationReportService_1.default.updateReport(reportId, userId);
         res.json({
             success: true,
@@ -360,7 +360,7 @@ router.post('/graduation-report/:reportId/update', auth_1.authenticate, async (r
  */
 router.get('/overview', auth_1.authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         // 并行获取各模块数据
         const [summaries, profileVersions, reportPreview] = await Promise.all([
             instantGrowthSummaryService_1.default.getStudentSummaries(userId, 5),
