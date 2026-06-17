@@ -92,7 +92,7 @@ class ContactExchangeService {
       WHERE student_id = $1 AND company_id = $2
     `;
         const result = await (0, db_1.queryOne)(sql, [studentId, companyId]);
-        return result || null;
+        return (result || null);
     }
     /**
      * 创建交换请求
@@ -360,7 +360,7 @@ ${contactDetails}
       WHERE student_id = $1 AND company_id = $2
     `;
         const result = await (0, db_1.queryOne)(sql, [studentId, companyId]);
-        return result || null;
+        return (result || null);
     }
     /**
      * 检查是否可以交换联系方式

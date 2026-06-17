@@ -133,7 +133,7 @@ class ContactExchangeService {
     `;
 
     const result = await queryOne(sql, [studentId, companyId]);
-    return result || null;
+    return (result || null) as ExchangeRequest | null;
   }
 
   /**
@@ -457,7 +457,7 @@ ${contactDetails}
       throw new Error(`User not found: ${userId}`);
     }
 
-    return user;
+    return user as { id: string; name: string; role: string; };
   }
 
   /**
@@ -474,7 +474,7 @@ ${contactDetails}
     `;
 
     const result = await queryOne(sql, [studentId, companyId]);
-    return result || null;
+    return (result || null) as ExchangeRequest | null;
   }
 
   /**

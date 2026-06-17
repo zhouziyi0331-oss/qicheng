@@ -491,7 +491,7 @@ class MessageRelayService {
     if (!user) {
       throw new Error(`User not found: ${userId}`);
     }
-    return user;
+    return user as { id: string; role: string; };
   }
 
   /**
