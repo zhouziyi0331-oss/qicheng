@@ -220,7 +220,7 @@ class BehaviorLearningService {
             taskTrack: task.track,
             taskLevel: task.level_required,
             taskBudget: task.budget_gross,
-            match_score,
+            matchScore,
             rankInRecommendation: rank,
         });
     }

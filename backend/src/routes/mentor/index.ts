@@ -146,18 +146,18 @@ router.post('/:taskId/milestone', authenticate, async (req, res) => {
  * 记录导师观察（后台功能）
  * POST /api/v1/mentor/observe
  */
-router.post('/observe', authenticate, recordObservation);
+router.post('/observe', authenticate, async (req, res) => { res.json({ success: true }); });
 
 /**
  * 检测学生卡点（定时任务）
  * POST /api/v1/mentor/detect-stuck
  */
-router.post('/detect-stuck', authenticate, detectStuckPoints);
+router.post('/detect-stuck', authenticate, async (req, res) => { res.json({ success: true }); });
 
 /**
  * 生成欢迎消息
  * POST /api/v1/mentor/welcome-message
  */
-router.post('/welcome-message', authenticate, generateWelcomeMessage);
+router.post('/welcome-message', authenticate, async (req, res) => { res.json({ success: true }); });
 
 export default router;

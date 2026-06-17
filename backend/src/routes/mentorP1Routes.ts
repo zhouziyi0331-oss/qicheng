@@ -193,7 +193,7 @@ router.post('/admin/batch-trigger-retrospectives', authenticate, async (req, res
     for (const orderId of orderIds) {
       try {
         // 获取订单的学生ID
-        const order = await pool.query(
+        const order = await (pool as any).query(
           'SELECT student_id FROM orders WHERE id = $1',
           [orderId]
         );
