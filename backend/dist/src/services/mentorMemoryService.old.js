@@ -294,7 +294,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
                 maxTokens: 1000,
                 temperature: 0.3
             });
-            const extractedMemories = JSON.parse(response.content);
+            const extractedMemories = JSON.parse(response);
             const createdMemories = [];
             for (const memoryData of extractedMemories) {
                 const memory = await this.createMemory({

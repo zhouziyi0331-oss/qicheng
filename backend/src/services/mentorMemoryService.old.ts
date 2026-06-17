@@ -403,7 +403,7 @@ ${messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n')}
         }
       );
 
-      const extractedMemories = JSON.parse(response.content);
+      const extractedMemories = JSON.parse(response);
       const createdMemories: Memory[] = [];
 
       for (const memoryData of extractedMemories) {
