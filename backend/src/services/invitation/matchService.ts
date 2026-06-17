@@ -182,7 +182,7 @@ export class InvitationMatchService {
       last_login_at: Date;
     }>(queryText, params);
 
-    return result.map(row => ({
+    return result.map((row: any) => ({
       student_id: row.student_id,
       level_a: row.current_level,
       abilities: {
@@ -198,7 +198,7 @@ export class InvitationMatchService {
       avg_rating: row.avg_rating || 0,
       success_rate: row.success_rate || 0,
       last_login_at: row.last_login_at,
-    }));
+    })) as any;
   }
 
   /**

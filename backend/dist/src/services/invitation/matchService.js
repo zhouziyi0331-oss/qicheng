@@ -96,7 +96,7 @@ class InvitationMatchService {
         }
         queryText += ` ORDER BY u.current_level DESC, sp.avg_rating DESC LIMIT 50`;
         const result = await (0, db_1.query)(queryText, params);
-        return result.map(row => ({
+        return result.map((row) => ({
             student_id: row.student_id,
             level_a: row.current_level,
             abilities: {
