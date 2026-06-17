@@ -160,7 +160,7 @@ ${context ? `上下文：\n${context}` : ''}
   "signals": ["信号词1", "信号词2"]
 }`;
         try {
-            const response = await claudeService_1.claudeService.chat([{ role: 'user', content: prompt }], {
+            const response = await claudeService_1.claudeService.chat(prompt, {
                 model: 'claude-haiku-4-5', // 使用Haiku降低成本
                 maxTokens: 500,
                 temperature: 0.3

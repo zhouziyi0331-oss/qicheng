@@ -100,7 +100,7 @@ ${p.patternName}:
 如果没有检测到，返回：
 { "detected": false, "confidence": 0 }`;
         try {
-            const response = await claudeService_1.claudeService.chat([{ role: 'user', content: prompt }], {
+            const response = await claudeService_1.claudeService.chat(prompt, {
                 model: 'claude-sonnet-4-6', // 使用Sonnet以获得更好的理解
                 maxTokens: 800,
                 temperature: 0.3

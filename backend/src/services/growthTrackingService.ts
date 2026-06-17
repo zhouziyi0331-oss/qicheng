@@ -248,7 +248,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
 
     try {
       const response = await claudeService.chat(
-        [{ role: 'user', content: prompt }],
+        prompt,
         {
           model: 'claude-haiku-4-5',
           maxTokens: 800,
@@ -323,7 +323,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
 直接返回庆祝消息文本，不要JSON格式。`;
 
       const response = await claudeService.chat(
-        [{ role: 'user', content: prompt }],
+        prompt,
         {
           model: 'claude-haiku-4-5',
           maxTokens: 200,

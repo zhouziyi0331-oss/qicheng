@@ -174,7 +174,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
 如果未达成，返回：
 { "shouldCreateMilestone": false }`;
         try {
-            const response = await claudeService_1.claudeService.chat([{ role: 'user', content: prompt }], {
+            const response = await claudeService_1.claudeService.chat(prompt, {
                 model: 'claude-haiku-4-5',
                 maxTokens: 800,
                 temperature: 0.3
@@ -233,7 +233,7 @@ ${recentMilestones.map(m => `- ${m.title} (${m.type})`).join('\n') || '无'}
 4. 50字以内
 
 直接返回庆祝消息文本，不要JSON格式。`;
-            const response = await claudeService_1.claudeService.chat([{ role: 'user', content: prompt }], {
+            const response = await claudeService_1.claudeService.chat(prompt, {
                 model: 'claude-haiku-4-5',
                 maxTokens: 200,
                 temperature: 0.8

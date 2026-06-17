@@ -206,7 +206,7 @@ ${context ? `上下文：\n${context}` : ''}
 
     try {
       const response = await claudeService.chat(
-        [{ role: 'user', content: prompt }],
+        prompt,
         {
           model: 'claude-haiku-4-5', // 使用Haiku降低成本
           maxTokens: 500,

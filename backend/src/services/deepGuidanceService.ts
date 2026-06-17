@@ -180,7 +180,7 @@ ${p.patternName}:
 
     try {
       const response = await claudeService.chat(
-        [{ role: 'user', content: prompt }],
+        prompt,
         {
           model: 'claude-sonnet-4-6', // 使用Sonnet以获得更好的理解
           maxTokens: 800,
