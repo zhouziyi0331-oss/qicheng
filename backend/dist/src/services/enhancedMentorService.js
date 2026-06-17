@@ -465,6 +465,9 @@ class EnhancedMentorService {
        WHERE student_id = $1
        ORDER BY created_at DESC
        LIMIT 5`, [userId]);
+        if (!user) {
+            throw new Error('User not found');
+        }
         return {
             id: user.id,
             name: user.name,

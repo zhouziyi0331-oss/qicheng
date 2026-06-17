@@ -694,6 +694,10 @@ export class EnhancedMentorService {
       [userId]
     );
 
+    if (!user) {
+      throw new Error('User not found');
+    }
+
     return {
       id: user.id,
       name: user.name,
