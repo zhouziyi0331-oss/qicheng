@@ -28,6 +28,8 @@ const config = {
   },
   mini: {
     webpackChain(chain) {
+      chain.resolve.alias
+        .set('@', require('path').resolve(__dirname, '..', 'src'))
       chain.optimization.runtimeChunk({
         name: 'runtime'
       })

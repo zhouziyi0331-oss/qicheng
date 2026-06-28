@@ -1,3 +1,3 @@
-{
-  "navigationBarTitleText": "登录"
+export default {
+  navigationBarTitleText: '登录'
 }
