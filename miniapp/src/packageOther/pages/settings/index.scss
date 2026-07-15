@@ -1,0 +1,222 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/morandi-colors.scss';
+
+.settings-page {
+  min-height: 100vh;
+  @include gradient-page-main;
+  padding: 32rpx;
+
+  // 账号信息卡片
+  .account-card {
+    background: linear-gradient(135deg, #3D1F10, #6B3520);
+    border-radius: 32rpx;
+    padding: 36rpx;
+    display: flex;
+    align-items: center;
+    gap: 28rpx;
+    margin-bottom: 32rpx;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8rpx 24rpx rgba(188, 100, 70, 0.3);
+    cursor: pointer;
+
+    &:active {
+      opacity: 0.9;
+    }
+
+    .account-bg-decoration {
+      position: absolute;
+      top: -60rpx;
+      right: -60rpx;
+      width: 240rpx;
+      height: 240rpx;
+      background: radial-gradient(circle, rgba(242, 205, 120, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .account-avatar {
+      width: 112rpx;
+      height: 112rpx;
+      border-radius: 36rpx;
+      background: linear-gradient(135deg, var(--rust), var(--terra));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 36rpx;
+      }
+
+      .avatar-placeholder {
+        font-size: 52rpx;
+      }
+    }
+
+    .account-info {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+
+      .account-name {
+        font-size: 32rpx;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 6rpx;
+      }
+
+      .account-desc {
+        font-size: 24rpx;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 12rpx;
+      }
+
+      .account-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8rpx;
+        padding: 6rpx 20rpx;
+        border-radius: 9999rpx;
+        background: rgba(242, 205, 120, 0.15);
+        border: 1px solid rgba(242, 205, 120, 0.25);
+
+        .badge-icon {
+          font-size: 20rpx;
+        }
+
+        .badge-text {
+          font-size: 20rpx;
+          font-weight: 700;
+          color: #F2CD78;
+        }
+      }
+    }
+
+    .account-arrow {
+      font-size: 32rpx;
+      color: rgba(255, 255, 255, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  // 设置分组
+  .setting-group {
+    margin-bottom: 16rpx;
+
+    .group-label {
+      font-size: 22rpx;
+      font-weight: 700;
+      color: $text-3;
+      letter-spacing: 1.6rpx;
+      padding: 0 8rpx 16rpx;
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      &::before {
+        content: '';
+        width: 6rpx;
+        height: 24rpx;
+        background: var(--rust);
+        border-radius: 4rpx;
+        display: block;
+      }
+    }
+  }
+
+  // 设置卡片
+  .setting-card {
+    background: white;
+    border-radius: 32rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(44, 36, 32, 0.08);
+  }
+
+  // 设置行
+  .setting-row {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    padding: 28rpx 32rpx;
+    position: relative;
+    transition: background 0.2s;
+
+    &:active {
+      background: rgba(188, 100, 70, 0.03);
+    }
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 104rpx;
+      right: 0;
+      height: 1rpx;
+      background: $border;
+    }
+
+    .setting-icon {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      .icon-text {
+        font-size: 36rpx;
+      }
+    }
+
+    .setting-body {
+      flex: 1;
+      min-width: 0;
+
+      .setting-title {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: $text-1;
+        line-height: 1.3;
+        margin-bottom: 4rpx;
+
+        &.danger-text {
+          color: #DC4444;
+        }
+      }
+
+      .setting-desc {
+        font-size: 22rpx;
+        color: $text-3;
+        line-height: 1.4;
+      }
+    }
+
+    .setting-arrow {
+      font-size: 28rpx;
+      color: $text-3;
+      flex-shrink: 0;
+    }
+
+    .update-badge {
+      padding: 4rpx 16rpx;
+      border-radius: 9999rpx;
+      font-size: 20rpx;
+      font-weight: 700;
+      background: rgba(58, 138, 132, 0.1);
+      color: #3A8A84;
+      flex-shrink: 0;
+    }
+
+    // 开关样式
+    switch {
+      transform: scale(0.8);
+    }
+  }
+}

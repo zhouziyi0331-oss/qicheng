@@ -1,0 +1,416 @@
+// ============================================================
+// S1 – 跳级说明入口页
+// 基于设计稿 Sunset Postcard 配色
+// ============================================================
+
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.skip-intro-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+// ========== Hero 区域 ==========
+.intro-hero {
+  background: linear-gradient(160deg, #EDD9C8, #E8C9A8, #F5EDE3);
+  padding: 40rpx 40rpx 56rpx;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80rpx;
+    right: -80rpx;
+    width: 360rpx;
+    height: 360rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -60rpx;
+    left: -40rpx;
+    width: 240rpx;
+    height: 240rpx;
+    background: radial-gradient(circle, rgba(190, 215, 209, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 10rpx 28rpx;
+  border-radius: 9999rpx;
+  background: rgba(188, 100, 70, 0.12);
+  color: $rust;
+  font-size: 24rpx;
+  font-weight: 700;
+  margin-bottom: 24rpx;
+  position: relative;
+  z-index: 1;
+
+  .badge-icon {
+    font-size: 26rpx;
+  }
+}
+
+.intro-title {
+  font-size: 52rpx;
+  font-weight: 900;
+  color: $text-1;
+  margin-bottom: 12rpx;
+  position: relative;
+  z-index: 1;
+  line-height: 1.2;
+  display: block;
+}
+
+.intro-sub {
+  font-size: 26rpx;
+  color: $text-2;
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.intro-level-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.intro-lv-badge {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $rust, $rust-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.3);
+  border: 5rpx solid rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  font-size: 36rpx;
+  font-weight: 900;
+  color: white;
+}
+
+.intro-lv-info {
+  flex: 1;
+
+  .lv-name {
+    font-size: 30rpx;
+    font-weight: 800;
+    color: $text-1;
+    display: block;
+  }
+
+  .lv-sub {
+    font-size: 24rpx;
+    color: $text-2;
+    margin-top: 4rpx;
+    display: block;
+  }
+}
+
+.intro-unlock-tag {
+  margin-left: auto;
+  padding: 10rpx 24rpx;
+  border-radius: 9999rpx;
+  background: rgba(94, 175, 122, 0.12);
+  color: #3A8A5A;
+  font-size: 22rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+// ========== 滚动区域 ==========
+.intro-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.intro-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+// ========== 规则卡片 ==========
+.rule-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, 0.06);
+  border: 1rpx solid $border;
+}
+
+.rule-card-title {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: $text-1;
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+
+  .title-icon {
+    font-size: 32rpx;
+    color: $rust;
+  }
+}
+
+.rule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.rule-item {
+  display: flex;
+  gap: 20rpx;
+  align-items: flex-start;
+}
+
+.rule-dot {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: 800;
+  color: white;
+  margin-top: 2rpx;
+}
+
+.rule-dot-1 {
+  background: linear-gradient(135deg, $rust, $rust-dark);
+}
+
+.rule-dot-2 {
+  background: linear-gradient(135deg, $terra, $rust);
+}
+
+.rule-dot-3 {
+  background: linear-gradient(135deg, $golden, $terra);
+}
+
+.rule-dot-4 {
+  background: linear-gradient(135deg, $sand, $terra);
+}
+
+.rule-dot-5 {
+  background: linear-gradient(135deg, $mist-dark, $mist);
+}
+
+.rule-text {
+  font-size: 26rpx;
+  color: $text-2;
+  line-height: 1.6;
+  flex: 1;
+
+  .bold {
+    color: $text-1;
+    font-weight: 700;
+  }
+}
+
+// ========== 可跳级路径图 ==========
+.level-map {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, 0.06);
+  border: 1rpx solid $border;
+}
+
+.lm-title {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: $text-1;
+  margin-bottom: 28rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+
+  .lm-icon {
+    font-size: 32rpx;
+    color: $golden;
+  }
+}
+
+.lm-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 16rpx;
+}
+
+.lm-row-2 {
+  margin-bottom: 0;
+}
+
+.lm-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.lm-circle {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: white;
+  border: 4rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.lm-circle-3 {
+  background: linear-gradient(135deg, $rust, $rust-dark);
+}
+
+.lm-circle-4 {
+  background: linear-gradient(135deg, $terra, $rust);
+}
+
+.lm-circle-5 {
+  background: linear-gradient(135deg, $golden, $terra);
+}
+
+.lm-circle-6 {
+  background: linear-gradient(135deg, $sand, $golden);
+}
+
+.lm-label {
+  font-size: 20rpx;
+  color: $text-3;
+  font-weight: 600;
+}
+
+.lm-arrow {
+  flex: 1;
+  height: 4rpx;
+  position: relative;
+  margin: 0 8rpx;
+  margin-bottom: 28rpx;
+}
+
+.lm-arrow-line {
+  height: 4rpx;
+  background: $border;
+  border-radius: 2rpx;
+}
+
+.lm-arrow-skip {
+  position: absolute;
+  top: -36rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lm-skip-line {
+  width: 100%;
+  height: 4rpx;
+  background: linear-gradient(90deg, $golden, $terra);
+  border-radius: 2rpx;
+}
+
+.lm-skip-label {
+  font-size: 18rpx;
+  font-weight: 700;
+  color: $golden;
+  background: rgba(242, 205, 120, 0.15);
+  padding: 2rpx 12rpx;
+  border-radius: 9999rpx;
+  margin-top: 4rpx;
+  white-space: nowrap;
+}
+
+// ========== 警告卡片 ==========
+.warn-card {
+  background: rgba(188, 100, 70, 0.06);
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  border: 2rpx solid rgba(188, 100, 70, 0.15);
+  display: flex;
+  gap: 20rpx;
+  align-items: flex-start;
+}
+
+.warn-icon {
+  font-size: 32rpx;
+  color: $rust;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.warn-text {
+  font-size: 24rpx;
+  color: $text-2;
+  line-height: 1.6;
+  flex: 1;
+
+  .warn-bold {
+    color: $rust;
+    font-weight: 700;
+  }
+}
+
+// ========== 底部按钮 ==========
+.intro-footer {
+  padding: 0 32rpx 32rpx;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 28rpx 48rpx;
+  border-radius: 9999rpx;
+  background: linear-gradient(135deg, $rust, $rust-dark);
+  color: white;
+  font-size: 30rpx;
+  font-weight: 700;
+  box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.35);
+  text-align: center;
+}

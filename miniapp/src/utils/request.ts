@@ -1,9 +1,9 @@
 import Taro from '@tarojs/taro';
+import { config } from '../config';
+import { tokenManager } from './token';
 
-// API基础地址
-export const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://api.qicheng.com' 
-  : 'http://localhost:3000';
+// API基础地址 - 统一使用config配置
+export const API_BASE_URL = config.apiBaseUrl;
 
 // 请求拦截器
 export const request = async <T = any>(options: {
@@ -13,8 +13,8 @@ export const request = async <T = any>(options: {
   header?: any;
 }): Promise<{ success: boolean; data: T; message?: string }> => {
   try {
-    // 获取token
-    const token = Taro.getStorageSync('accessToken');
+    // 获取token - 使用tokenManager统一管理
+    const token = tokenManager.getAccessToken();
     
     // 发起请求
     const res = await Taro.request({
@@ -33,10 +33,8 @@ export const request = async <T = any>(options: {
     if (res.statusCode === 200) {
       return res.data as any;
     } else if (res.statusCode === 401) {
-      // token过期，清除本地存储，跳转到登录页
-      Taro.removeStorageSync('accessToken');
-      Taro.removeStorageSync('refreshToken');
-      Taro.removeStorageSync('userInfo');
+      // token过期，使用tokenManager清除
+      await tokenManager.clearTokens();
       Taro.showToast({ title: '登录已过期，请重新登录', icon: 'none' });
       setTimeout(() => {
         Taro.redirectTo({ url: '/pages/login/index' });
@@ -63,7 +61,8 @@ export const request = async <T = any>(options: {
 // 上传文件
 export const uploadFile = async (filePath: string): Promise<string> => {
   try {
-    const token = Taro.getStorageSync('accessToken');
+    // 使用tokenManager统一管理
+    const token = tokenManager.getAccessToken();
     
     const res = await Taro.uploadFile({
       url: `${API_BASE_URL}/api/v1/upload`,

@@ -10,39 +10,92 @@ export async function getRadar(req: Request, res: Response, next: NextFunction):
   try {
     const userId = req.user!.userId;
 
-    const profile = await queryOne<{
-      task_count: number;
-      six_dim_scores: Record<string, number>;
-      opc_label: string;
-      current_level: number;
+    // 获取用户的OPC测评结果
+    const opcResult = await queryOne<{
+      personality_tag: string;
+      information_processing_normalized: number;
+      creation_drive_normalized: number;
+      tool_learning_normalized: number;
+      task_execution_normalized: number;
+      collaboration_normalized: number;
+      risk_attitude_normalized: number;
     }>(
-      `SELECT sp.task_count, sp.six_dim_scores, sp.opc_label, u.current_level
-       FROM users u WHERE u.id = $1`,
+      `SELECT personality_tag,
+              information_processing_normalized,
+              creation_drive_normalized,
+              tool_learning_normalized,
+              task_execution_normalized,
+              collaboration_normalized,
+              risk_attitude_normalized
+       FROM user_opc_results
+       WHERE user_id = $1
+       ORDER BY completed_at DESC
+       LIMIT 1`,
       [userId]
     );
 
-    if (!profile) throw new AppError(404, '请先完成测试', 'PROFILE_NOT_FOUND');
-    if (profile.task_count === 0) throw new AppError(403, '完成首单后可解锁六维雷达图', 'LOCKED');
+    if (!opcResult) throw new AppError(404, '请先完成OPC测评', 'OPC_NOT_COMPLETED');
 
-    const scores = profile.six_dim_scores as Record<string, number>;
+    // 获取用户基本信息
+    const user = await queryOne<{
+      current_level: number;
+      task_count: number;
+    }>(
+      `SELECT current_level,
+              COALESCE((SELECT COUNT(*) FROM task_assignments WHERE student_id = $1 AND status = 'completed'), 0) as task_count
+       FROM users WHERE id = $1`,
+      [userId]
+    );
 
-    // 能力描述语 (v7: 不只是数字，要有具体描述)
-    const dimensionDescriptions = buildDimensionDescriptions(scores);
+    // 获取进行中的任务数量
+    const ongoingTasks = await queryOne<{ count: number }>(
+      `SELECT COUNT(*) as count
+       FROM task_assignments
+       WHERE student_id = $1 AND status IN ('in_progress', 'pending')`,
+      [userId]
+    );
+
+    // 获取故事墙发布数量
+    const stories = await queryOne<{ count: number }>(
+      `SELECT COUNT(*) as count
+       FROM opc_stories
+       WHERE author_student_id = $1 AND deleted_at IS NULL`,
+      [userId]
+    );
+
+    // 计算经验值（基于任务完成情况）
+    const taskCount = user?.task_count || 0;
+    const currentLevel = user?.current_level || 1;
+    const baseExpPerLevel = 100;
+    const expMultiplier = currentLevel;
+    const maxExp = baseExpPerLevel * expMultiplier;
+    const exp = (taskCount % 5) * (maxExp / 5); // 每5个任务升一级，exp为当前进度
+
+    // 构建六维数据（使用中文字段名，匹配前端期望）
+    const dimensions = {
+      '信息处理': opcResult.information_processing_normalized,
+      '创作驱动': opcResult.creation_drive_normalized,
+      '工具学习': opcResult.tool_learning_normalized,
+      '任务执行': opcResult.task_execution_normalized,
+      '协作倾向': opcResult.collaboration_normalized,
+      '风险态度': opcResult.risk_attitude_normalized,
+    };
+
+    // 计算身份类型ID (根据最强维度)
+    const identityType = calculateIdentityType(dimensions);
 
     res.json({
       success: true,
       data: {
-        scores,
-        dimensions: dimensionDescriptions,
-        opcLabel: profile.opc_label,
-        level: { a: profile.current_level, b: profile.level_b },
-        // 前端使用这些数据渲染深色背景+发光效果雷达图
-        renderConfig: {
-          backgroundColor: '#0d1117',
-          glowEffect: true,
-          animationDuration: 1000,
-        },
-        shareEnabled: true, // 可截图分享 (带平台水印)
+        identityType,  // 身份类型ID (0-6)
+        identityName: opcResult.personality_tag,  // 身份类型名称
+        dimensions,  // 六维数据（中文字段名）
+        level: currentLevel,
+        exp: Math.round(exp),
+        max_exp: maxExp,
+        completed_tasks: taskCount,
+        ongoing_tasks: ongoingTasks?.count || 0,
+        stories: stories?.count || 0,
       },
     });
   } catch (err: any) { next(err); }
@@ -174,6 +227,37 @@ function buildDimensionDescriptions(scores: Record<string, number>) {
   return desc;
 }
 
+// ============================================================
+// 辅助函数: 根据六维数据计算身份类型ID
+// 7种身份类型映射 (与前端IDENTITY_TYPES保持一致)
+// ============================================================
+function calculateIdentityType(dimensions: Record<string, number>): number {
+  // 获取六维分数
+  const scores = [
+    dimensions['信息处理'] || 0,
+    dimensions['创作驱动'] || 0,
+    dimensions['工具学习'] || 0,
+    dimensions['任务执行'] || 0,
+    dimensions['协作倾向'] || 0,
+    dimensions['风险态度'] || 0,
+  ];
+
+  // 找出最高分的维度索引
+  const maxScore = Math.max(...scores);
+  const maxIndex = scores.indexOf(maxScore);
+
+  // 根据最强维度映射到身份类型ID
+  // 0:信息处理 -> 视觉叙事者(0)
+  // 1:创作驱动 -> 创意执行者(2)
+  // 2:工具学习 -> 系统构建者(1)
+  // 3:任务执行 -> 稳健交付者(4)
+  // 4:协作倾向 -> 探索整合者(5)
+  // 5:风险态度 -> 冒险驱动者(6)
+  const identityMap = [0, 2, 1, 4, 5, 6];
+
+  return identityMap[maxIndex] || 0;
+}
+
 function getScoreDesc(score: number, levels: string[]): string {
   if (score < 40) return levels[0];
   if (score < 75) return levels[1];
@@ -233,6 +317,216 @@ export async function getEmotionState(req: Request, res: Response, next: NextFun
         description: emotionDescriptions[emotionSignal.signal_type] || '未知状态',
         triggerEvent: emotionSignal.trigger_event,
         detectedAt: emotionSignal.detected_at,
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+}
+
+// ============================================================
+// GET /ability/growth-comparison
+// 获取成长对比数据（入驻时 vs 当前）
+// ============================================================
+export async function getGrowthComparison(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+
+    // 获取最早的OPC测评结果（入驻时）
+    const initialResult = await queryOne<{
+      information_processing_normalized: number;
+      creation_drive_normalized: number;
+      tool_learning_normalized: number;
+      task_execution_normalized: number;
+      collaboration_normalized: number;
+      risk_attitude_normalized: number;
+      completed_at: Date;
+    }>(
+      `SELECT information_processing_normalized,
+              creation_drive_normalized,
+              tool_learning_normalized,
+              task_execution_normalized,
+              collaboration_normalized,
+              risk_attitude_normalized,
+              completed_at
+       FROM user_opc_results
+       WHERE user_id = $1
+       ORDER BY completed_at ASC
+       LIMIT 1`,
+      [userId]
+    );
+
+    // 获取最新的OPC测评结果（当前）
+    const currentResult = await queryOne<{
+      information_processing_normalized: number;
+      creation_drive_normalized: number;
+      tool_learning_normalized: number;
+      task_execution_normalized: number;
+      collaboration_normalized: number;
+      risk_attitude_normalized: number;
+      completed_at: Date;
+    }>(
+      `SELECT information_processing_normalized,
+              creation_drive_normalized,
+              tool_learning_normalized,
+              task_execution_normalized,
+              collaboration_normalized,
+              risk_attitude_normalized,
+              completed_at
+       FROM user_opc_results
+       WHERE user_id = $1
+       ORDER BY completed_at DESC
+       LIMIT 1`,
+      [userId]
+    );
+
+    if (!initialResult || !currentResult) {
+      throw new AppError(404, '请先完成OPC测评', 'OPC_NOT_COMPLETED');
+    }
+
+    res.json({
+      success: true,
+      data: {
+        past: {
+          date: initialResult.completed_at,
+          dimensions: {
+            '信息处理': initialResult.information_processing_normalized,
+            '创作驱动': initialResult.creation_drive_normalized,
+            '工具学习': initialResult.tool_learning_normalized,
+            '任务执行': initialResult.task_execution_normalized,
+            '协作倾向': initialResult.collaboration_normalized,
+            '风险态度': initialResult.risk_attitude_normalized,
+          },
+        },
+        current: {
+          date: currentResult.completed_at,
+          dimensions: {
+            '信息处理': currentResult.information_processing_normalized,
+            '创作驱动': currentResult.creation_drive_normalized,
+            '工具学习': currentResult.tool_learning_normalized,
+            '任务执行': currentResult.task_execution_normalized,
+            '协作倾向': currentResult.collaboration_normalized,
+            '风险态度': currentResult.risk_attitude_normalized,
+          },
+        },
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+}
+
+// ============================================================
+// GET /ability/growth-dashboard
+// 获取成长仪表盘数据
+// ============================================================
+export async function getGrowthDashboard(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+
+    // 获取用户加入天数
+    const user = await queryOne<{ created_at: Date }>(
+      'SELECT created_at FROM users WHERE id = $1',
+      [userId]
+    );
+
+    const checkInDays = user
+      ? Math.floor((Date.now() - new Date(user.created_at).getTime()) / (1000 * 60 * 60 * 24))
+      : 0;
+
+    // 获取完成的任务数
+    const completedTasks = await queryOne<{ count: number }>(
+      `SELECT COUNT(*) as count
+       FROM task_assignments
+       WHERE student_id = $1 AND status = 'completed'`,
+      [userId]
+    );
+
+    // 计算成长趋势（基于OPC测评历史数据）
+    let growthTrend = 0;
+    const opcHistory = await query<{
+      information_processing_normalized: number;
+      creation_drive_normalized: number;
+      tool_learning_normalized: number;
+      task_execution_normalized: number;
+      collaboration_normalized: number;
+      risk_attitude_normalized: number;
+      completed_at: Date;
+    }>(
+      `SELECT information_processing_normalized,
+              creation_drive_normalized,
+              tool_learning_normalized,
+              task_execution_normalized,
+              collaboration_normalized,
+              risk_attitude_normalized,
+              completed_at
+       FROM user_opc_results
+       WHERE user_id = $1
+       ORDER BY completed_at ASC`,
+      [userId]
+    );
+
+    if (opcHistory.length >= 2) {
+      // 计算首次和最近一次的平均分
+      const firstResult = opcHistory[0];
+      const latestResult = opcHistory[opcHistory.length - 1];
+
+      const firstAvg = (
+        firstResult.information_processing_normalized +
+        firstResult.creation_drive_normalized +
+        firstResult.tool_learning_normalized +
+        firstResult.task_execution_normalized +
+        firstResult.collaboration_normalized +
+        firstResult.risk_attitude_normalized
+      ) / 6;
+
+      const latestAvg = (
+        latestResult.information_processing_normalized +
+        latestResult.creation_drive_normalized +
+        latestResult.tool_learning_normalized +
+        latestResult.task_execution_normalized +
+        latestResult.collaboration_normalized +
+        latestResult.risk_attitude_normalized
+      ) / 6;
+
+      growthTrend = latestAvg - firstAvg;
+    } else {
+      // 如果只有一次测评，默认趋势为0
+      growthTrend = 0;
+    }
+
+    // 获取最近活动
+    const recentActivities = await query(
+      `SELECT event_title as activity,
+              event_desc as description,
+              created_at as date
+       FROM growth_timeline
+       WHERE user_id = $1
+       ORDER BY created_at DESC
+       LIMIT 5`,
+      [userId]
+    );
+
+    // 获取里程碑
+    const milestones = await query(
+      `SELECT milestone_title as name,
+              achieved_at as date,
+              milestone_type as icon
+       FROM growth_milestones
+       WHERE student_id = $1
+       ORDER BY achieved_at DESC
+       LIMIT 5`,
+      [userId]
+    );
+
+    res.json({
+      success: true,
+      data: {
+        checkInDays,
+        achievements: completedTasks?.count || 0,
+        growthTrend,
+        recentActivities,
+        milestones,
       },
     });
   } catch (err: any) {

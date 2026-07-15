@@ -688,7 +688,26 @@ export class MentorStageService {
         [studentId]
       );
 
-      return result;
+      // 获取最近解锁的天赋标签（最近7天内解锁的，最多5个）
+      const recentTagsResult = await query<any>(
+        `SELECT
+           tt.tag_name,
+           tt.description as tag_description,
+           stt.strength,
+           stt.first_observed_at as unlocked_at
+         FROM student_talent_tags stt
+         JOIN talent_tags tt ON stt.tag_id = tt.id
+         WHERE stt.student_id = $1
+           AND stt.first_observed_at >= NOW() - INTERVAL '7 days'
+         ORDER BY stt.first_observed_at DESC
+         LIMIT 5`,
+        [studentId]
+      );
+
+      return {
+        ...result,
+        recentUnlockedTags: recentTagsResult || []
+      };
     } catch (error: any) {
       logger.error('获取成长仪表板失败', { error, studentId });
       return null;

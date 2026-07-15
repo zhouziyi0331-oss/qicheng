@@ -17,6 +17,12 @@ import { Router } from 'express';
 import { authenticate, requireRole } from '../../middleware/auth';
 import * as controller from './controller';
 import * as timelineCtrl from './timeline';
+import * as mentorCtrl from './mentor';
+import * as peerStatsCtrl from './peer-stats';
+import * as growthTimelineCtrl from './growth-timeline';
+import * as clientContactCtrl from './client-contact';
+import * as capabilityCtrl from './capability-verify';
+import { TalentController } from '../../controllers/talentController';
 
 const router = Router();
 router.use(authenticate, requireRole('student'));
@@ -33,6 +39,25 @@ router.get('/balance', controller.getBalance);
 router.get('/level', controller.getLevel);
 router.get('/level/check', controller.checkLevelUpgrade);
 router.get('/level/next', controller.getNextLevel);
+router.get('/is-first-order', controller.isFirstOrder);
+router.get('/orders/:orderId/payment-status', controller.getPaymentStatus);
+router.get('/available-skip-tests', controller.getAvailableSkipTests);
+router.post('/apply-skip-test', controller.applySkipTest);
+router.post('/submit-skip-test', controller.submitSkipTest);
+router.get('/skip-test-result/:testId', controller.getSkipTestResult);
+router.get('/growth-comparison', controller.getGrowthComparison);
+router.get('/asset-dashboard', controller.getAssetDashboard);
+router.post('/generate-identity-card', controller.generateIdentityCard);
+router.get('/can-be-mentor', mentorCtrl.canBeMentor);
+router.post('/become-mentor', mentorCtrl.becomeMentor);
+router.get('/my-mentees', mentorCtrl.getMyMentees);
+router.get('/peer-stats', peerStatsCtrl.getPeerStats);
+router.get('/growth-timeline', growthTimelineCtrl.getGrowthTimeline);
+router.get('/client-contact/:clientId', clientContactCtrl.getClientContactInfo);
+router.post('/verify-capability', capabilityCtrl.verifyCapability);
 router.get('/timeline', timelineCtrl.getTimeline);
+
+// 获取学生天赋标签
+router.get('/talent-tags', TalentController.getStudentTalentProfile);
 
 export default router;

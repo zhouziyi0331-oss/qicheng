@@ -1,6 +1,8 @@
 import { View, Text } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
+import { tokenManager } from '../../utils/token';
+import { getApiUrl } from '../../config';
 import './index.scss';
 
 interface FunctionalModule {
@@ -57,10 +59,10 @@ export default function TaskTranslation({ taskId }: Props) {
     setLoading(true);
     try {
       const res = await Taro.request({
-        url: `http://localhost:3000/api/v1/tasks/${taskId}/translation`,
+        url: getApiUrl(`/api/v1/tasks/${taskId}/translation`),
         method: 'GET',
         header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          'Authorization': `Bearer ${tokenManager.getAccessToken()}`
         }
       });
 
@@ -106,7 +108,7 @@ export default function TaskTranslation({ taskId }: Props) {
   return (
     <View className="task-translation">
       <View className="translation-header">
-        <View className="header-icon">👨‍🏫</View>
+        <View className="header-icon">●‍●</View>
         <View className="header-content">
           <Text className="header-title">启程老师帮你理解这个任务</Text>
           <Text className="header-subtitle">用通俗易懂的语言解释任务内容</Text>
@@ -115,7 +117,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section friendly-description">
         <View className="section-header">
-          <Text className="section-icon">📝</Text>
+          <Text className="section-icon">▪</Text>
           <Text className="section-title">任务简介</Text>
         </View>
         <Text className="description-text">{translation.studentFriendlyDescription}</Text>
@@ -123,7 +125,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section modules">
         <View className="section-header">
-          <Text className="section-icon">🧩</Text>
+          <Text className="section-icon">●</Text>
           <Text className="section-title">功能模块拆解</Text>
         </View>
         {translation.functionalModules.map((module, index) => (
@@ -163,7 +165,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section what-to-do">
         <View className="section-header">
-          <Text className="section-icon">✅</Text>
+          <Text className="section-icon">✓</Text>
           <Text className="section-title">你需要做什么</Text>
         </View>
         <Text className="content-text">{translation.whatYouWillDo}</Text>
@@ -171,7 +173,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section what-to-learn">
         <View className="section-header">
-          <Text className="section-icon">📚</Text>
+          <Text className="section-icon">●</Text>
           <Text className="section-title">你会学到什么</Text>
         </View>
         <Text className="content-text">{translation.whatYouWillLearn}</Text>
@@ -179,7 +181,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section skills-required">
         <View className="section-header">
-          <Text className="section-icon">🛠️</Text>
+          <Text className="section-icon">●️</Text>
           <Text className="section-title">技能要求</Text>
         </View>
         {translation.requiredSkills.map((skill, index) => (
@@ -201,7 +203,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section difficulty-assessment">
         <View className="section-header">
-          <Text className="section-icon">📊</Text>
+          <Text className="section-icon">●</Text>
           <Text className="section-title">难度评估</Text>
         </View>
         <View className="difficulty-grid">
@@ -267,7 +269,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section value-assessment">
         <View className="section-header">
-          <Text className="section-icon">💎</Text>
+          <Text className="section-icon">◆</Text>
           <Text className="section-title">价值评估</Text>
         </View>
         <View className="value-grid">
@@ -300,7 +302,7 @@ export default function TaskTranslation({ taskId }: Props) {
 
       <View className="section time-estimate">
         <View className="section-header">
-          <Text className="section-icon">⏱️</Text>
+          <Text className="section-icon">●️</Text>
           <Text className="section-title">预计工作时间</Text>
         </View>
         <View className="time-content">

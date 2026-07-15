@@ -1,0 +1,219 @@
+@import '../../styles/variables.scss';
+
+.cat-mascot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .cat-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // 简笔画小猫样式（使用纯CSS绘制）
+    .cat-drawing {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      // 小猫头部
+      .cat-head {
+        width: 80px;
+        height: 80px;
+        background: #B8B8B8;
+        border-radius: 50% 50% 45% 45%;
+        position: relative;
+        border: 3px solid $text-primary;
+
+        // 左耳
+        &::before {
+          content: '';
+          position: absolute;
+          top: -15px;
+          left: 10px;
+          width: 0;
+          height: 0;
+          border-left: 15px solid transparent;
+          border-right: 15px solid transparent;
+          border-bottom: 25px solid #B8B8B8;
+          border-bottom-color: #B8B8B8;
+          transform: rotate(-20deg);
+        }
+
+        // 右耳
+        &::after {
+          content: '';
+          position: absolute;
+          top: -15px;
+          right: 10px;
+          width: 0;
+          height: 0;
+          border-left: 15px solid transparent;
+          border-right: 15px solid transparent;
+          border-bottom: 25px solid #B8B8B8;
+          transform: rotate(20deg);
+        }
+
+        // 眼睛容器
+        .cat-eyes {
+          display: flex;
+          justify-content: space-around;
+          padding: 0 15px;
+          margin-top: 25px;
+
+          .cat-eye {
+            width: 12px;
+            height: 12px;
+            background: $text-primary;
+            border-radius: 50%;
+          }
+        }
+
+        // 鼻子和嘴巴
+        .cat-nose {
+          width: 6px;
+          height: 6px;
+          background: $text-primary;
+          border-radius: 50%;
+          margin: 8px auto 0;
+        }
+
+        // 胡须
+        .cat-whiskers {
+          position: absolute;
+          top: 40px;
+          left: 0;
+          right: 0;
+
+          .whisker {
+            position: absolute;
+            height: 2px;
+            background: $text-primary;
+
+            &--left-1 {
+              width: 20px;
+              left: -22px;
+              top: 0;
+            }
+
+            &--left-2 {
+              width: 18px;
+              left: -20px;
+              top: 8px;
+            }
+
+            &--right-1 {
+              width: 20px;
+              right: -22px;
+              top: 0;
+            }
+
+            &--right-2 {
+              width: 18px;
+              right: -20px;
+              top: 8px;
+            }
+          }
+        }
+      }
+
+      // 小猫身体
+      .cat-body {
+        width: 60px;
+        height: 40px;
+        background: #B8B8B8;
+        border-radius: 0 0 50% 50%;
+        border: 3px solid $text-primary;
+        border-top: none;
+        margin-top: -3px;
+      }
+
+      // 头顶书本（可选）
+      .cat-book {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        .book-stack {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .book {
+            width: 40px;
+            height: 8px;
+            margin-bottom: 2px;
+            border-radius: 2px;
+            border: 2px solid $text-primary;
+
+            &--1 {
+              background: #FFA07A;
+            }
+
+            &--2 {
+              background: #98D8C8;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 不同尺寸
+  &--xs {
+    .cat-drawing {
+      transform: scale(0.6);
+    }
+  }
+
+  &--sm {
+    .cat-drawing {
+      transform: scale(0.8);
+    }
+  }
+
+  &--md {
+    .cat-drawing {
+      transform: scale(1);
+    }
+  }
+
+  &--lg {
+    .cat-drawing {
+      transform: scale(1.5);
+    }
+  }
+
+  &--xl {
+    .cat-drawing {
+      transform: scale(2);
+    }
+  }
+
+  // 不同状态的小猫
+  &--happy {
+    .cat-eye {
+      animation: blink 3s infinite;
+    }
+  }
+
+  &--thinking {
+    .cat-head {
+      transform: rotate(-5deg);
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 48%, 52%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.1);
+  }
+}

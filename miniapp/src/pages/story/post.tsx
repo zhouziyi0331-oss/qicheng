@@ -1,7 +1,10 @@
 import { View, Text, Textarea, Button, Image } from '@tarojs/components'
 import { useState } from 'react'
 import Taro from '@tarojs/taro'
+import { tokenManager } from '../../utils/token'
+import { getApiUrl } from '../../config'
 import { storyAPI } from '../../services/api'
+import { checkTextSecurity } from '../../utils/contentSecurity'
 import './post.scss'
 
 export default function StoryPost() {
@@ -39,6 +42,12 @@ export default function StoryPost() {
       return
     }
 
+    // 锁 文本内容安全检查
+    const isContentSecure = await checkTextSecurity(content)
+    if (!isContentSecure) {
+      return
+    }
+
     try {
       setSubmitting(true)
 
@@ -46,11 +55,11 @@ export default function StoryPost() {
       const uploadedImages: string[] = []
       for (const imagePath of images) {
         const uploadRes = await Taro.uploadFile({
-          url: `${process.env.TARO_APP_API}/upload/image`,
+          url: getApiUrl('/upload/image'),
           filePath: imagePath,
           name: 'file',
           header: {
-            'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+            'Authorization': `Bearer ${tokenManager.getAccessToken()}`
           }
         })
         const data = JSON.parse(uploadRes.data)

@@ -60,14 +60,19 @@ class TaskBreakdownService {
    */
   async breakdownTask(rawDescription: string, options: BreakdownOptions = {}): Promise<BreakdownResult> {
     const startTime = Date.now();
-    
+
     try {
+      console.log('[taskBreakdownService] 开始拆解任务');
+      console.log('[taskBreakdownService] API Key存在:', !!process.env.ANTHROPIC_API_KEY);
+      console.log('[taskBreakdownService] API Key长度:', process.env.ANTHROPIC_API_KEY?.length || 0);
+
       logger.info('Breaking down task:', { rawDescription: rawDescription.substring(0, 100) });
 
       const prompt = this.buildBreakdownPrompt(rawDescription, options.additionalContext);
 
+      console.log('[taskBreakdownService] 调用Claude API...');
       const response = await this.anthropic.messages.create({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-20250514',
         max_tokens: 4096,
         temperature: 0.7,
         messages: [{
@@ -75,6 +80,8 @@ class TaskBreakdownService {
           content: prompt,
         }],
       });
+
+      console.log('[taskBreakdownService] API调用成功，tokens:', response.usage);
 
       const content = response.content[0];
       if (content.type !== 'text') {
@@ -109,6 +116,8 @@ class TaskBreakdownService {
 
       return result;
     } catch (error: unknown) {
+      console.error('[taskBreakdownService] AI拆解失败:', error);
+      console.error('[taskBreakdownService] 错误详情:', error instanceof Error ? error.message : String(error));
       logger.error('Error breaking down task:', error);
       // 返回降级结果
       return this.createFallbackBreakdown(rawDescription);

@@ -43,7 +43,8 @@ export async function triggerMatching(req: Request, res: Response) {
     const matches = await semanticMatchingEngine.findBestStudentsForTask(taskId, 100);
 
     // 4. 保存匹配结果到数据库
-    for (const match of matches) {
+    for (let i = 0; i < matches.length; i++) {
+      const match = matches[i];
       await query(
         `INSERT INTO task_student_matches (
           task_id, student_id, overall_score,
@@ -63,22 +64,22 @@ export async function triggerMatching(req: Request, res: Response) {
           rank_in_task = EXCLUDED.rank_in_task`,
         [
           taskId,
-          match.student_id,
-          (match.match_score as any).overall_score,
-          (match.match_score as any).skillMatch.score,
-          (match.match_score as any).difficultyMatch.score,
-          (match.match_score as any).domainMatch.score,
-          (match.match_score as any).growthPotential.score,
-          (match.match_score as any).reliability.score,
-          (match.match_score as any).preferenceAlignment.score,
-          JSON.stringify((match.match_score as any).breakdown),
-          match.rank
+          match.studentId,
+          match.overallScore,
+          match.skillMatch,
+          match.difficultyMatch,
+          match.domainMatch,
+          match.growthPotential,
+          match.reliability,
+          match.preferenceAlignment,
+          JSON.stringify({ reasoning: match.reasoning, concerns: match.concerns }),
+          i + 1
         ]
       );
     }
 
     // 5. 更新任务的匹配状态
-    const topScore = matches.length > 0 ? matches[0].match_score.overall_score : 0;
+    const topScore = matches.length > 0 ? matches[0].overallScore : 0;
     await query(
       `UPDATE tasks SET
         matched_students_count = $1,

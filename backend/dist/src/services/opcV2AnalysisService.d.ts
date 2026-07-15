@@ -24,6 +24,7 @@ interface OPCAnalysisResult {
     personalityTags: PersonalityTag[];
     selfPerception: SelfPerception;
     trackRecommendation: TrackRecommendation;
+    identityStatement?: string;
 }
 declare class OPCv2AnalysisService {
     /**

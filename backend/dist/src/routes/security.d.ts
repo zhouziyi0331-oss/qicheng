@@ -5,6 +5,7 @@
  * 1. 获取安全承诺列表
  * 2. 获取合作进度
  * 3. 获取访问日志
+ * 4. 微信小程序内容安全检查（新增）
  */
 declare const router: import("express-serve-static-core").Router;
 export default router;

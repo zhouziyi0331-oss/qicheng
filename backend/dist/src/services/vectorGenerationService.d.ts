@@ -1,81 +1,67 @@
-/**
- * 向量生成服务
- * 使用Claude API生成任务和学生的embedding向量
- * 用于语义匹配引擎
- */
-interface Task {
-    id: string;
-    title: string;
-    description: string;
-    required_skills?: any;
-    track?: string;
-    level?: number;
-}
-interface StudentCapability {
-    student_id: string;
-    skills: any;
-    tasks_completed: number;
-    avg_task_quality: number;
-    preferred_task_types: string[];
-    opc_openness?: number;
-    opc_persistence?: number;
-    opc_creativity?: number;
-}
-interface TaskVectors {
-    title_embedding: number[];
-    description_embedding: number[];
-    combined_embedding: number[];
-}
-interface StudentVectors {
-    skill_vector: number[];
-    trajectory_vector: number[];
-    quality_vector: number[];
-    preference_vector: number[];
-    combined_vector: number[];
-}
-declare class VectorGenerationService {
-    private anthropic;
-    private cache;
-    private readonly EMBEDDING_DIM;
-    constructor();
+export declare class VectorGenerationService {
     /**
-     * 生成文本的embedding向量
-     * 使用Claude生成语义向量（模拟embedding）
+     * 生成任务向量 (完全基于特征工程，不调用OpenAI)
+     * 向量维度: 64 + 7 + 1 + 1 + 1 + 10 + 1 + 1 = 86维
      */
-    private generateEmbedding;
+    generateTaskVector(taskDescription: string, requirements: any): Promise<number[]>;
     /**
-     * 归一化向量（L2范数）
+     * 生成学生向量 (完全基于特征工程)
+     * 向量维度: 64 + 7 + 1 + 1 + 1 + 1 + 1 + 1 = 77维
      */
-    private normalizeVector;
+    generateStudentVector(studentId: string): Promise<number[]>;
     /**
-     * 生成随机归一化向量
+     * 提取技能向量 (64维)
      */
-    private generateRandomNormalizedVector;
+    private extractSkillVector;
     /**
-     * 基于文本生成确定性向量（降级方案）
+     * 提取领域向量 (7维)
      */
-    private generateDeterministicVector;
+    private extractDomainVector;
     /**
-     * 简单的字符串hash函数
+     * 计算难度分数
      */
-    private hashString;
+    private calculateDifficultyScore;
     /**
-     * 生成任务向量
+     * 计算复杂度分数
      */
-    generateTaskVectors(task: Task): Promise<TaskVectors>;
+    private calculateComplexityScore;
     /**
-     * 生成学生向量
+     * 估算时间
      */
-    generateStudentVectors(studentId: string, capability: StudentCapability): Promise<StudentVectors>;
+    private estimateTime;
     /**
-     * 更新任务的embedding到数据库
+     * 提取交付物类型向量 (10维)
+     */
+    private extractDeliverableType;
+    /**
+     * 计算技能熟练度向量 (64维)
+     */
+    private calculateSkillProficiencyVector;
+    /**
+     * 计算领域经验向量 (7维)
+     */
+    private calculateDomainExperienceVector;
+    /**
+     * 计算学习速度
+     */
+    private calculateLearningSpeed;
+    /**
+     * 计算可靠性
+     */
+    private calculateReliability;
+    private countSkills;
+    private countTools;
+    private countSteps;
+    /**
+     * 兼容方法：更新任务向量
+     * 旧API兼容性
      */
     updateTaskEmbedding(taskId: string): Promise<void>;
     /**
-     * 更新学生的embedding到数据库
+     * 兼容方法：更新学生向量
+     * 旧API兼容性
      */
     updateStudentEmbedding(studentId: string): Promise<void>;
-    clearCache(): void;
 }
 declare const _default: VectorGenerationService;
 export default _default;

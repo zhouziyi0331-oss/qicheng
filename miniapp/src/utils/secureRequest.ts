@@ -1,5 +1,5 @@
 /**
- * ✅ 安全API请求封装
+ * ✓ 安全API请求封装
  *
  * 集成后端所有安全措施：
  * - 自动添加Token认证
@@ -10,14 +10,15 @@
 
 import Taro from '@tarojs/taro';
 import { tokenManager, parseLoginLockError } from './token';
+import { getApiUrl } from '../config';
 
-// ✅ 修复：使用正确的API地址（15775端口）
-const BASE_URL = process.env.TARO_APP_API_URL || 'http://127.0.0.1:15775/api/v1';
+// ✓ 统一使用config配置的API地址
+const BASE_URL = getApiUrl('/api/v1');
 
 // 开发环境小程序需要配置不校验合法域名
-console.log('🔗 API Base URL:', BASE_URL);
+console.log('● API Base URL:', BASE_URL);
 
-// ✅ 请求超时时间
+// ✓ 请求超时时间
 const TIMEOUT = 30000; // 30秒
 
 interface RequestOptions {
@@ -31,7 +32,7 @@ interface RequestOptions {
 }
 
 /**
- * ✅ 安全请求封装
+ * ✓ 安全请求封装
  */
 export async function request<T = any>(options: RequestOptions): Promise<T> {
   const {
@@ -50,7 +51,7 @@ export async function request<T = any>(options: RequestOptions): Promise<T> {
   }
 
   try {
-    // ✅ P0安全: 自动添加Token
+    // ✓ P0安全: 自动添加Token
     const accessToken = tokenManager.getAccessToken();
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -74,12 +75,12 @@ export async function request<T = any>(options: RequestOptions): Promise<T> {
       Taro.hideLoading();
     }
 
-    // ✅ 处理成功响应
+    // ✓ 处理成功响应
     if (response.statusCode === 200) {
       return response.data as T;
     }
 
-    // ✅ 处理Token过期（401）
+    // ✓ 处理Token过期（401）
     if (response.statusCode === 401) {
       // 尝试刷新Token
       const refreshed = await refreshAccessToken();
@@ -93,7 +94,7 @@ export async function request<T = any>(options: RequestOptions): Promise<T> {
       }
     }
 
-    // ✅ P1安全: 处理登录锁定（429）
+    // ✓ P1安全: 处理登录锁定（429）
     if (response.statusCode === 429) {
       const errorMsg = response.data?.error || response.data?.message || '请求过于频繁';
       const lockInfo = parseLoginLockError(errorMsg);
@@ -111,7 +112,7 @@ export async function request<T = any>(options: RequestOptions): Promise<T> {
       throw new Error(errorMsg);
     }
 
-    // ✅ 处理其他错误
+    // ✓ 处理其他错误
     const errorMsg = response.data?.error || response.data?.message || '请求失败';
     throw new Error(errorMsg);
 
@@ -134,7 +135,7 @@ export async function request<T = any>(options: RequestOptions): Promise<T> {
 }
 
 /**
- * ✅ P0安全: 刷新Access Token
+ * ✓ P0安全: 刷新Access Token
  */
 async function refreshAccessToken(): Promise<boolean> {
   try {
@@ -163,7 +164,7 @@ async function refreshAccessToken(): Promise<boolean> {
 }
 
 /**
- * ✅ P0安全: 处理未授权（跳转登录）
+ * ✓ P0安全: 处理未授权（跳转登录）
  */
 async function handleUnauthorized(): Promise<void> {
   await tokenManager.clearTokens();
@@ -181,7 +182,7 @@ async function handleUnauthorized(): Promise<void> {
 }
 
 /**
- * ✅ P1安全: 文件上传（带安全校验）
+ * ✓ P1安全: 文件上传（带安全校验）
  */
 export async function uploadFile(options: {
   filePath: string;
@@ -197,7 +198,7 @@ export async function uploadFile(options: {
   } = options;
 
   try {
-    // ✅ P1安全: 检查文件大小
+    // ✓ P1安全: 检查文件大小
     const fileInfo = await Taro.getFileInfo({ filePath });
     if (fileInfo.size > maxSize) {
       throw new Error(`文件大小不能超过${Math.floor(maxSize / 1024 / 1024)}MB`);
@@ -239,7 +240,7 @@ export async function uploadFile(options: {
 }
 
 /**
- * ✅ 便捷方法
+ * ✓ 便捷方法
  */
 export const http = {
   get: <T = any>(url: string, data?: any, options?: Partial<RequestOptions>) =>

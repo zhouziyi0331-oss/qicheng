@@ -1,0 +1,1003 @@
+@import '../../../styles/morandi-colors.scss';
+
+.levelup-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  // Content track - base dark red
+  background: linear-gradient(180deg, #1A0C06 0%, #2C1810 40%, #4A2818 100%);
+}
+
+/* Status Bar */
+.status-bar {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48rpx;
+  flex-shrink: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.time {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, .7);
+}
+
+.icons {
+  display: flex;
+  gap: 10rpx;
+  align-items: center;
+}
+
+.icon-text {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, .7);
+  letter-spacing: 2rpx;
+}
+
+/* Level Up Background */
+.levelup-bg {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64rpx 56rpx;
+  min-height: 100vh;
+  background: transparent;
+}
+
+/* Particles */
+.lu-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lu-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float-up 3s ease-in-out infinite;
+
+  &.p1 {
+    width: 16rpx;
+    height: 16rpx;
+    background: $golden;
+    top: 15%;
+    left: 20%;
+    animation-delay: 0s;
+  }
+
+  &.p2 {
+    width: 12rpx;
+    height: 12rpx;
+    background: $terra;
+    top: 25%;
+    right: 25%;
+    animation-delay: 0.5s;
+  }
+
+  &.p3 {
+    width: 20rpx;
+    height: 20rpx;
+    background: $mist-dark;
+    top: 70%;
+    left: 15%;
+    animation-delay: 1s;
+  }
+
+  &.p4 {
+    width: 14rpx;
+    height: 14rpx;
+    background: $golden;
+    top: 60%;
+    right: 20%;
+    animation-delay: 1.5s;
+  }
+
+  &.p5 {
+    width: 10rpx;
+    height: 10rpx;
+    background: $rust;
+    top: 40%;
+    left: 10%;
+    animation-delay: 0.8s;
+  }
+
+  &.p6 {
+    width: 18rpx;
+    height: 18rpx;
+    background: $golden;
+    top: 80%;
+    right: 30%;
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes float-up {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-40rpx) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.lu-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 560rpx;
+  height: 560rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 205, 120, .15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Badge */
+.lu-badge-wrap {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 56rpx;
+  animation: badge-pop 0.6s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+
+@keyframes badge-pop {
+  from {
+    transform: scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.lu-badge {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $golden, $terra);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 16rpx rgba(242, 205, 120, .15),
+              0 0 0 32rpx rgba(242, 205, 120, .08),
+              0 40rpx 120rpx rgba(188, 100, 70, .4);
+  border: 6rpx solid rgba(255, 255, 255, .3);
+}
+
+.lu-badge-num {
+  font-size: 96rpx;
+  font-weight: 900;
+  color: white;
+}
+
+/* Text */
+.lu-congrats {
+  font-size: 26rpx;
+  color: $golden;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  text-transform: uppercase;
+  margin-bottom: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.lu-title {
+  font-size: 56rpx;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 16rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.lu-sub {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, .55);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 56rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* Rewards */
+.lu-rewards {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 56rpx;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.lu-reward-item {
+  flex: 1;
+  background: rgba(255, 255, 255, .08);
+  border-radius: 32rpx;
+  padding: 28rpx 20rpx;
+  text-align: center;
+  border: 2rpx solid rgba(255, 255, 255, .12);
+}
+
+.lu-reward-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.lu-reward-val {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: $golden;
+  display: block;
+}
+
+.lu-reward-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, .4);
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* Button */
+.lu-btn {
+  width: 100%;
+  padding: 32rpx;
+  border-radius: 9999rpx;
+  background: linear-gradient(135deg, $rust, $rust-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 48rpx rgba(188, 100, 70, .5);
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.lu-btn-text {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: white;
+}
+
+/* ============================================================
+   CONTENT TRACK INTENSITY LEVELS (内容创作赛道红色渐变)
+============================================================ */
+
+.levelup-page {
+  // Lv.0 - Lightest red
+  &.content-level-0 {
+    background: linear-gradient(180deg, #2A1410 0%, #4A2018 40%, #6A2A20 100%);
+  }
+
+  // Lv.1 - Light red
+  &.content-level-1 {
+    background: linear-gradient(180deg, #2A1008 0%, #4A1A10 40%, #6A2820 100%);
+  }
+
+  // Lv.2 - Medium red
+  &.content-level-2 {
+    background: linear-gradient(180deg, #2A0C06 0%, #4A1610 40%, #6A2218 100%);
+  }
+
+  // Lv.3 - Deep red
+  &.content-level-3 {
+    background: linear-gradient(180deg, #2A0804 0%, #4A1208 40%, #6A1E12 100%);
+  }
+
+  // Lv.4 - Deeper red
+  &.content-level-4 {
+    background: linear-gradient(180deg, #2A0602 0%, #4A0E06 40%, #6A1A0E 100%);
+  }
+
+  // Lv.5 - Deepest red
+  &.content-level-5 {
+    background: linear-gradient(180deg, #2A0400 0%, #4A0A02 40%, #6A1408 100%);
+  }
+}
+
+// Content track glow intensity
+.lu-glow {
+  &.content-glow-0 {
+    background: radial-gradient(circle, rgba(220, 120, 100, .25) 0%, transparent 70%);
+  }
+
+  &.content-glow-1 {
+    background: radial-gradient(circle, rgba(220, 100, 80, .28) 0%, transparent 70%);
+  }
+
+  &.content-glow-2 {
+    background: radial-gradient(circle, rgba(220, 80, 60, .30) 0%, transparent 70%);
+  }
+
+  &.content-glow-3 {
+    background: radial-gradient(circle, rgba(210, 60, 40, .32) 0%, transparent 70%);
+  }
+
+  &.content-glow-4 {
+    background: radial-gradient(circle, rgba(200, 40, 20, .35) 0%, transparent 70%);
+  }
+
+  &.content-glow-5 {
+    background: radial-gradient(circle, rgba(190, 30, 10, .38) 0%, transparent 70%);
+  }
+}
+
+// Content track badge intensity
+.lu-badge {
+  &.content-badge-0 {
+    background: linear-gradient(135deg, #E08060, #C06040);
+  }
+
+  &.content-badge-1 {
+    background: linear-gradient(135deg, #D87050, #B85038);
+  }
+
+  &.content-badge-2 {
+    background: linear-gradient(135deg, #D06040, #A84030);
+  }
+
+  &.content-badge-3 {
+    background: linear-gradient(135deg, #C85030, #A03828);
+  }
+
+  &.content-badge-4 {
+    background: linear-gradient(135deg, #B84028, #902820);
+  }
+
+  &.content-badge-5 {
+    background: linear-gradient(135deg, #A83020, #802018);
+  }
+}
+
+// Content track congrats text colors
+.lu-congrats {
+  &.content-congrats-0 {
+    color: #E8A080;
+  }
+
+  &.content-congrats-1 {
+    color: #E09070;
+  }
+
+  &.content-congrats-2 {
+    color: #D88060;
+  }
+
+  &.content-congrats-3 {
+    color: #D07050;
+  }
+
+  &.content-congrats-4 {
+    color: #C86048;
+  }
+
+  &.content-congrats-5 {
+    color: #B85038;
+  }
+}
+
+// Content track reward values
+.lu-reward-val {
+  &.content-reward-0 {
+    color: #E8A080;
+  }
+
+  &.content-reward-1 {
+    color: #E09070;
+  }
+
+  &.content-reward-2 {
+    color: #D88060;
+  }
+
+  &.content-reward-3 {
+    color: #D07050;
+  }
+
+  &.content-reward-4 {
+    color: #C86048;
+  }
+
+  &.content-reward-5 {
+    color: #B85038;
+  }
+}
+
+// Content track buttons
+.lu-btn {
+  &.content-btn-0 {
+    background: linear-gradient(135deg, #C06040, #A04830);
+  }
+
+  &.content-btn-1 {
+    background: linear-gradient(135deg, #B85038, #983830);
+  }
+
+  &.content-btn-2 {
+    background: linear-gradient(135deg, #A84030, #883028);
+  }
+
+  &.content-btn-3 {
+    background: linear-gradient(135deg, #A03828, #802820);
+  }
+
+  &.content-btn-4 {
+    background: linear-gradient(135deg, #902820, #702018);
+  }
+
+  &.content-btn-5 {
+    background: linear-gradient(135deg, #802018, #601810);
+  }
+}
+
+/* ============================================================
+   DEV TRACK THEME (工具开发赛道 - Teal/Mist Blue)
+============================================================ */
+
+// Dev track page background
+.levelup-page.dev-theme {
+  background: linear-gradient(180deg, #061410 0%, #0D2820 40%, #1A4A40 100%);
+}
+
+// Dev track background with intensity levels
+.levelup-bg.dev-bg {
+  background: transparent;
+
+  &.dev-bg-light {
+    background: linear-gradient(180deg, #E8F5F0 0%, #C8E6DE 100%);
+  }
+
+  &.dev-bg-medium {
+    background: linear-gradient(180deg, #D4ECE6 0%, #A8D5CC 100%);
+  }
+
+  &.dev-bg-deep {
+    background: linear-gradient(180deg, #B8E0D8 0%, #80C8B8 100%);
+  }
+
+  &.dev-bg-deeper {
+    background: linear-gradient(180deg, #9AD0C6 0%, #5BB5A5 100%);
+  }
+
+  &.dev-bg-deepest {
+    background: linear-gradient(180deg, #6BB5AA 0%, #3A8A84 100%);
+  }
+}
+
+// Dev track glow with intensity levels
+.lu-glow.dev-glow {
+  background: radial-gradient(circle, rgba(190, 215, 209, .18) 0%, transparent 70%);
+
+  &.dev-glow-light {
+    background: radial-gradient(circle, rgba(58, 138, 132, .08) 0%, transparent 70%);
+  }
+
+  &.dev-glow-medium {
+    background: radial-gradient(circle, rgba(58, 138, 132, .12) 0%, transparent 70%);
+  }
+
+  &.dev-glow-deep {
+    background: radial-gradient(circle, rgba(58, 138, 132, .16) 0%, transparent 70%);
+  }
+
+  &.dev-glow-deeper {
+    background: radial-gradient(circle, rgba(58, 138, 132, .22) 0%, transparent 70%);
+  }
+
+  &.dev-glow-deepest {
+    background: radial-gradient(circle, rgba(58, 138, 132, .30) 0%, transparent 70%);
+  }
+}
+
+// Dev track badge with intensity levels
+.lu-badge.dev-badge {
+  background: linear-gradient(135deg, $mist, $teal);
+  box-shadow: 0 0 0 16rpx rgba(190, 215, 209, .15),
+              0 0 0 32rpx rgba(190, 215, 209, .08),
+              0 40rpx 120rpx rgba(58, 138, 132, .4);
+
+  &.dev-badge-light {
+    background: linear-gradient(135deg, #C8E6DE, #9ABFB8);
+  }
+
+  &.dev-badge-medium {
+    background: linear-gradient(135deg, #A8D5CC, #6BB5A8);
+  }
+
+  &.dev-badge-deep {
+    background: linear-gradient(135deg, #80C8B8, #4DA89A);
+  }
+
+  &.dev-badge-deeper {
+    background: linear-gradient(135deg, #5BB5A5, #3A8A84);
+  }
+
+  &.dev-badge-deepest {
+    background: linear-gradient(135deg, #3A8A84, #2A6E68);
+  }
+}
+
+// Dev track particles with teal colors
+.lu-particle.dev-particle {
+  &.p1, &.p4, &.p6 {
+    background: $mist;
+  }
+
+  &.p2 {
+    background: $teal-light;
+  }
+
+  &.p3 {
+    background: $blue-light;
+  }
+
+  &.p5 {
+    background: $teal;
+  }
+}
+
+// Dev track congrats text
+.lu-congrats.dev-congrats {
+  color: rgba(255, 255, 255, .85);
+}
+
+// Golden text for high levels (4-5)
+.lu-congrats.golden-text {
+  color: rgba(255, 215, 0, .9);
+}
+
+// Dev track reward values
+.lu-reward-val.dev-reward-val {
+  color: white;
+}
+
+// Golden values for high levels (4-5)
+.lu-reward-val.golden-val {
+  color: rgba(255, 215, 0, .95);
+}
+
+// Dev track button
+.lu-btn.dev-btn {
+  background: rgba(255, 255, 255, .2);
+  border: 2rpx solid rgba(255, 255, 255, .15);
+  box-shadow: none;
+  backdrop-filter: blur(8rpx);
+
+  &:active {
+    background: rgba(255, 255, 255, .3);
+  }
+}
+
+/* Status Bar */
+.status-bar {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48rpx;
+  flex-shrink: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.time {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, .7);
+}
+
+.icons {
+  display: flex;
+  gap: 10rpx;
+  align-items: center;
+}
+
+.icon-text {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, .7);
+  letter-spacing: 2rpx;
+}
+
+/* Level Up Background */
+.levelup-bg {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64rpx 56rpx;
+  min-height: 100vh;
+}
+
+/* Particles */
+.lu-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lu-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float-up 3s ease-in-out infinite;
+
+  &.p1 {
+    width: 16rpx;
+    height: 16rpx;
+    background: $golden;
+    top: 15%;
+    left: 20%;
+    animation-delay: 0s;
+  }
+
+  &.p2 {
+    width: 12rpx;
+    height: 12rpx;
+    background: $terra;
+    top: 25%;
+    right: 25%;
+    animation-delay: 0.5s;
+  }
+
+  &.p3 {
+    width: 20rpx;
+    height: 20rpx;
+    background: $mist-dark;
+    top: 70%;
+    left: 15%;
+    animation-delay: 1s;
+  }
+
+  &.p4 {
+    width: 14rpx;
+    height: 14rpx;
+    background: $golden;
+    top: 60%;
+    right: 20%;
+    animation-delay: 1.5s;
+  }
+
+  &.p5 {
+    width: 10rpx;
+    height: 10rpx;
+    background: $rust;
+    top: 40%;
+    left: 10%;
+    animation-delay: 0.8s;
+  }
+
+  &.p6 {
+    width: 18rpx;
+    height: 18rpx;
+    background: $golden;
+    top: 80%;
+    right: 30%;
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes float-up {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-40rpx) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.lu-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 560rpx;
+  height: 560rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 205, 120, .15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Badge */
+.lu-badge-wrap {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 56rpx;
+  animation: badge-pop 0.6s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+
+@keyframes badge-pop {
+  from {
+    transform: scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.lu-badge {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $golden, $terra);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 16rpx rgba(242, 205, 120, .15),
+              0 0 0 32rpx rgba(242, 205, 120, .08),
+              0 40rpx 120rpx rgba(188, 100, 70, .4);
+  border: 6rpx solid rgba(255, 255, 255, .3);
+}
+
+.lu-badge-num {
+  font-size: 96rpx;
+  font-weight: 900;
+  color: white;
+}
+
+/* Text */
+.lu-congrats {
+  font-size: 26rpx;
+  color: $golden;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  text-transform: uppercase;
+  margin-bottom: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.lu-title {
+  font-size: 56rpx;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 16rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.lu-sub {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, .55);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 56rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* Rewards */
+.lu-rewards {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 56rpx;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.lu-reward-item {
+  flex: 1;
+  background: rgba(255, 255, 255, .08);
+  border-radius: 32rpx;
+  padding: 28rpx 20rpx;
+  text-align: center;
+  border: 2rpx solid rgba(255, 255, 255, .12);
+}
+
+.lu-reward-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.lu-reward-val {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: $golden;
+  display: block;
+}
+
+.lu-reward-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, .4);
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* Button */
+.lu-btn {
+  width: 100%;
+  padding: 32rpx;
+  border-radius: 9999rpx;
+  background: linear-gradient(135deg, $rust, $rust-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 48rpx rgba(188, 100, 70, .5);
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.lu-btn-text {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: white;
+}
+
+/* ============================================================
+   DEV TRACK THEME (工具开发赛道 - Teal/Mist Blue)
+============================================================ */
+
+// Dev track page background
+.levelup-page.dev-theme {
+  background: linear-gradient(180deg, #061410 0%, #0D2820 40%, #1A4A40 100%);
+}
+
+// Dev track background with intensity levels
+.levelup-bg.dev-bg {
+  background: transparent;
+
+  &.dev-bg-light {
+    background: linear-gradient(180deg, #E8F5F0 0%, #C8E6DE 100%);
+  }
+
+  &.dev-bg-medium {
+    background: linear-gradient(180deg, #D4ECE6 0%, #A8D5CC 100%);
+  }
+
+  &.dev-bg-deep {
+    background: linear-gradient(180deg, #B8E0D8 0%, #80C8B8 100%);
+  }
+
+  &.dev-bg-deeper {
+    background: linear-gradient(180deg, #9AD0C6 0%, #5BB5A5 100%);
+  }
+
+  &.dev-bg-deepest {
+    background: linear-gradient(180deg, #6BB5AA 0%, #3A8A84 100%);
+  }
+}
+
+// Dev track glow with intensity levels
+.lu-glow.dev-glow {
+  background: radial-gradient(circle, rgba(190, 215, 209, .18) 0%, transparent 70%);
+
+  &.dev-glow-light {
+    background: radial-gradient(circle, rgba(58, 138, 132, .08) 0%, transparent 70%);
+  }
+
+  &.dev-glow-medium {
+    background: radial-gradient(circle, rgba(58, 138, 132, .12) 0%, transparent 70%);
+  }
+
+  &.dev-glow-deep {
+    background: radial-gradient(circle, rgba(58, 138, 132, .16) 0%, transparent 70%);
+  }
+
+  &.dev-glow-deeper {
+    background: radial-gradient(circle, rgba(58, 138, 132, .22) 0%, transparent 70%);
+  }
+
+  &.dev-glow-deepest {
+    background: radial-gradient(circle, rgba(58, 138, 132, .30) 0%, transparent 70%);
+  }
+}
+
+// Dev track badge with intensity levels
+.lu-badge.dev-badge {
+  background: linear-gradient(135deg, $mist, $teal);
+  box-shadow: 0 0 0 16rpx rgba(190, 215, 209, .15),
+              0 0 0 32rpx rgba(190, 215, 209, .08),
+              0 40rpx 120rpx rgba(58, 138, 132, .4);
+
+  &.dev-badge-light {
+    background: linear-gradient(135deg, #C8E6DE, #9ABFB8);
+  }
+
+  &.dev-badge-medium {
+    background: linear-gradient(135deg, #A8D5CC, #6BB5A8);
+  }
+
+  &.dev-badge-deep {
+    background: linear-gradient(135deg, #80C8B8, #4DA89A);
+  }
+
+  &.dev-badge-deeper {
+    background: linear-gradient(135deg, #5BB5A5, #3A8A84);
+  }
+
+  &.dev-badge-deepest {
+    background: linear-gradient(135deg, #3A8A84, #2A6E68);
+  }
+}
+
+// Dev track particles with teal colors
+.lu-particle.dev-particle {
+  &.p1, &.p4, &.p6 {
+    background: $mist;
+  }
+
+  &.p2 {
+    background: $teal-light;
+  }
+
+  &.p3 {
+    background: $blue-light;
+  }
+
+  &.p5 {
+    background: $teal;
+  }
+}
+
+// Dev track congrats text
+.lu-congrats.dev-congrats {
+  color: rgba(255, 255, 255, .85);
+}
+
+// Golden text for high levels (4-5)
+.lu-congrats.golden-text {
+  color: rgba(255, 215, 0, .9);
+}
+
+// Dev track reward values
+.lu-reward-val.dev-reward-val {
+  color: white;
+}
+
+// Golden values for high levels (4-5)
+.lu-reward-val.golden-val {
+  color: rgba(255, 215, 0, .95);
+}
+
+// Dev track button
+.lu-btn.dev-btn {
+  background: rgba(255, 255, 255, .2);
+  border: 2rpx solid rgba(255, 255, 255, .15);
+  box-shadow: none;
+  backdrop-filter: blur(8rpx);
+
+  &:active {
+    background: rgba(255, 255, 255, .3);
+  }
+}

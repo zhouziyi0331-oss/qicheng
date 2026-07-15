@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
+import { getApiUrl } from '../config'
 
-const BASE_URL = 'http://localhost:3000/api/v1'
+const BASE_URL = getApiUrl('/api/v1')
 
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -17,7 +18,8 @@ async function request(url: string, options: RequestOptions = {}) {
   }
 
   if (needAuth) {
-    const token = Taro.getStorageSync('accessToken')
+    // 使用tokenManager统一管理
+    const token = tokenManager.getAccessToken()
     if (token) {
       header['Authorization'] = `Bearer ${token}`
     }
@@ -35,7 +37,8 @@ async function request(url: string, options: RequestOptions = {}) {
     if (response.statusCode === 200) {
       return response.data
     } else if (response.statusCode === 401) {
-      Taro.removeStorageSync('accessToken')
+      // Token过期，使用tokenManager清除
+      await tokenManager.clearTokens()
       Taro.redirectTo({ url: '/pages/login/index' })
       throw new Error('请先登录')
     } else {

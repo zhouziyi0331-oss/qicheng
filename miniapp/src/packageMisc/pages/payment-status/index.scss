@@ -1,0 +1,382 @@
+@import '../../../styles/variables.scss';
+
+.payment-status-page {
+  min-height: 100vh;
+  background: $bg-secondary;
+
+  .page-scroll {
+    height: 100vh;
+    padding: $spacing-lg;
+  }
+
+  // 任务信息卡片
+  .task-card {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .task-header {
+      margin-bottom: $spacing-md;
+
+      .task-title {
+        display: block;
+        font-size: $font-size-h3;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        margin-bottom: $spacing-sm;
+      }
+
+      .task-id {
+        display: flex;
+        align-items: center;
+
+        .id-label {
+          font-size: $font-size-sm;
+          color: $text-tertiary;
+        }
+
+        .id-value {
+          font-size: $font-size-sm;
+          color: $text-secondary;
+          font-family: monospace;
+        }
+      }
+    }
+
+    .view-task-btn {
+      padding: $spacing-sm $spacing-md;
+      background: rgba($primary, 0.1);
+      border-radius: $radius-sm;
+      text-align: center;
+      @include clickable;
+
+      .btn-text {
+        font-size: $font-size-sm;
+        color: $primary;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  // 资金概览
+  .amount-overview {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-lg;
+
+      .overview-title {
+        font-size: $font-size-h3;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+      }
+
+      .total-amount {
+        font-size: $font-size-h2;
+        font-weight: $font-weight-bold;
+        color: $primary;
+      }
+    }
+
+    .progress-bar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-lg;
+
+      .progress-bar {
+        flex: 1;
+        height: 16rpx;
+        background: rgba($primary, 0.1);
+        border-radius: $radius-full;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, $primary-green 0%, $primary 100%);
+          transition: width 0.3s ease;
+        }
+      }
+
+      .progress-text {
+        font-size: $font-size-sm;
+        color: $primary;
+        font-weight: $font-weight-semibold;
+        min-width: 60rpx;
+        text-align: right;
+      }
+    }
+
+    .amount-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-md;
+      margin-bottom: $spacing-md;
+
+      .amount-item {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        padding: $spacing-md;
+        background: $bg-secondary;
+        border-radius: $radius-md;
+
+        &.unlocked {
+          background: rgba($primary-green, 0.1);
+        }
+
+        &.processing {
+          background: rgba($primary-yellow, 0.1);
+        }
+
+        &.pending {
+          background: rgba($text-tertiary, 0.05);
+        }
+
+        .item-icon {
+          font-size: 32rpx;
+        }
+
+        .item-content {
+          .item-label {
+            display: block;
+            font-size: $font-size-xs;
+            color: $text-tertiary;
+            margin-bottom: 4rpx;
+          }
+
+          .item-value {
+            display: block;
+            font-size: $font-size-base;
+            font-weight: $font-weight-semibold;
+            color: $text-primary;
+          }
+        }
+      }
+    }
+
+    .withdraw-hint {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-md;
+      background: linear-gradient(135deg, rgba($primary-yellow, 0.1) 0%, rgba($primary, 0.1) 100%);
+      border-radius: $radius-md;
+      @include clickable;
+
+      .hint-text {
+        font-size: $font-size-sm;
+        color: $text-secondary;
+      }
+
+      .hint-action {
+        font-size: $font-size-sm;
+        color: $primary;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  // 分阶段资金时间线
+  .milestones-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .section-desc {
+      display: block;
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-lg;
+    }
+
+    .milestones-timeline {
+      position: relative;
+
+      .milestone-item {
+        position: relative;
+        display: flex;
+        padding-bottom: $spacing-xl;
+
+        &:last-child {
+          padding-bottom: 0;
+        }
+
+        .timeline-connector {
+          position: absolute;
+          left: 20rpx;
+          top: 56rpx;
+          width: 4rpx;
+          height: calc(100% - 36rpx);
+          background: rgba($text-tertiary, 0.2);
+
+          &.active {
+            background: linear-gradient(180deg, $primary-green 0%, rgba($primary-green, 0.3) 100%);
+          }
+        }
+
+        .milestone-dot {
+          flex-shrink: 0;
+          width: 48rpx;
+          height: 48rpx;
+          border-radius: $radius-full;
+          border: 4rpx solid;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: white;
+          margin-right: $spacing-md;
+          z-index: 1;
+
+          .dot-icon {
+            font-size: 24rpx;
+          }
+        }
+
+        .milestone-content {
+          flex: 1;
+
+          .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $spacing-sm;
+
+            .milestone-stage {
+              font-size: $font-size-base;
+              font-weight: $font-weight-medium;
+              color: $text-primary;
+            }
+
+            .milestone-status {
+              font-size: $font-size-xs;
+              font-weight: $font-weight-medium;
+            }
+          }
+
+          .milestone-body {
+            .milestone-amount {
+              display: block;
+              font-size: $font-size-h3;
+              font-weight: $font-weight-bold;
+              color: $primary;
+              margin-bottom: $spacing-xs;
+            }
+
+            .milestone-desc {
+              display: block;
+              font-size: $font-size-sm;
+              color: $text-secondary;
+              margin-bottom: $spacing-xs;
+            }
+
+            .milestone-date {
+              display: block;
+              font-size: $font-size-xs;
+              color: $primary-green;
+              margin-top: $spacing-xs;
+            }
+
+            .milestone-hint {
+              display: block;
+              font-size: $font-size-xs;
+              color: $text-tertiary;
+              margin-top: $spacing-xs;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 资金流转说明
+  .info-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+    background: rgba($primary-blue, 0.05);
+
+    .info-title {
+      display: block;
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      color: $text-primary;
+      margin-bottom: $spacing-md;
+    }
+
+    .info-list {
+      .info-item {
+        display: flex;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-sm;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .info-bullet {
+          color: $primary;
+          font-size: $font-size-sm;
+          line-height: 1.6;
+        }
+
+        .info-text {
+          flex: 1;
+          font-size: $font-size-sm;
+          color: $text-secondary;
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+
+  // 底部时间信息
+  .time-info {
+    padding: $spacing-md 0;
+    text-align: center;
+
+    .time-text {
+      display: block;
+      font-size: $font-size-xs;
+      color: $text-tertiary;
+      margin-bottom: $spacing-xs;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // 空状态
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xxl;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 120rpx;
+      margin-bottom: $spacing-lg;
+    }
+
+    .empty-text {
+      font-size: $font-size-base;
+      color: $text-tertiary;
+    }
+  }
+}

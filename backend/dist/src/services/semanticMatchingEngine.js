@@ -1,363 +1,134 @@
 "use strict";
-/**
- * 语义匹配引擎
- * 6维度匹配算法：技能、难度、领域、成长潜力、可靠性、偏好
- * 用于精准匹配任务和学生
- */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../utils/db");
 const logger_1 = __importDefault(require("../utils/logger"));
+const vectorGenerationService_1 = __importDefault(require("./vectorGenerationService"));
 class SemanticMatchingEngine {
-    constructor() {
-        // 6个维度的权重配置（可调优）
-        this.weights = {
-            skill_match: 0.30, // 30% - 技能匹配
-            difficulty_match: 0.20, // 20% - 难度匹配
-            domain_match: 0.15, // 15% - 领域匹配
-            growth_potential: 0.15, // 15% - 成长潜力
-            reliability: 0.10, // 10% - 可靠性
-            preference: 0.10, // 10% - 偏好匹配
-        };
-    }
     /**
-     * 计算余弦相似度
+     * 为任务生成并存储向量
      */
-    cosineSimilarity(vec1, vec2) {
-        if (vec1.length !== vec2.length) {
-            throw new Error('Vectors must have same length');
-        }
-        let dotProduct = 0;
-        let mag1 = 0;
-        let mag2 = 0;
-        for (let i = 0; i < vec1.length; i++) {
-            dotProduct += vec1[i] * vec2[i];
-            mag1 += vec1[i] * vec1[i];
-            mag2 += vec2[i] * vec2[i];
-        }
-        const magnitude = Math.sqrt(mag1) * Math.sqrt(mag2);
-        return magnitude === 0 ? 0 : dotProduct / magnitude;
-    }
-    /**
-     * 维度1：技能匹配
-     */
-    async calculateSkillMatch(task, student) {
+    async indexTask(taskId, description, requirements) {
+        logger_1.default.info(`[Matching] Indexing task: ${taskId}`);
+        // 生成向量（86维）
+        const taskVector = await vectorGenerationService_1.default.generateTaskVector(description, requirements);
+        // 存储到数据库
+        const client = await db_1.pool.connect();
         try {
-            // 解析任务所需技能
-            const requiredSkills = task.required_skills || {};
-            const studentSkills = student.skills || {};
-            // 计算向量相似度
-            const taskVector = JSON.parse(task.combined_embedding || '[]');
-            const studentVector = JSON.parse(student.combined_vector || '[]');
-            let vectorSimilarity = 0;
-            if (taskVector.length > 0 && studentVector.length > 0) {
-                vectorSimilarity = this.cosineSimilarity(taskVector, studentVector);
-            }
-            // 计算技能覆盖率
-            const requiredSkillList = Object.keys(requiredSkills);
-            const studentSkillList = Object.keys(studentSkills);
-            const matchedSkills = requiredSkillList.filter(skill => studentSkillList.includes(skill));
-            const coverageRate = requiredSkillList.length > 0
-                ? matchedSkills.length / requiredSkillList.length
-                : 0;
-            // 综合评分（向量相似度60% + 技能覆盖率40%）
-            const score = (vectorSimilarity * 0.6 + coverageRate * 0.4);
-            return {
-                score: Math.min(Math.max(score, 0), 1),
-                reason: matchedSkills.length > 0
-                    ? `匹配技能: ${matchedSkills.join(', ')}`
-                    : '技能不完全匹配，但有学习潜力',
-                details: {
-                    vectorSimilarity,
-                    coverageRate,
-                    matchedSkills,
-                    missingSkills: requiredSkillList.filter(s => !matchedSkills.includes(s)),
-                },
-            };
+            await client.query(`
+        UPDATE atomic_courses
+        SET metadata = jsonb_set(
+          COALESCE(metadata, '{}'::jsonb),
+          '{taskVector}',
+          $1::jsonb
+        ),
+        metadata = jsonb_set(
+          metadata,
+          '{lastIndexed}',
+          $2::jsonb
+        )
+        WHERE id = $3
+      `, [JSON.stringify(taskVector), JSON.stringify(new Date().toISOString()), taskId]);
+            logger_1.default.info(`[Matching] Task indexed: ${taskVector.length} dimensions`);
         }
-        catch (error) {
-            logger_1.default.error('Error calculating skill match:', error);
-            return { score: 0.5, reason: '技能匹配评估失败' };
+        finally {
+            client.release();
         }
     }
     /**
-     * 维度2：难度匹配
+     * 为学生生成并存储向量
      */
-    calculateDifficultyMatch(task, student) {
+    async indexStudent(studentId) {
+        logger_1.default.info(`[Matching] Indexing student: ${studentId}`);
+        // 生成向量（77维）
+        const studentVector = await vectorGenerationService_1.default.generateStudentVector(studentId);
+        // 存储到数据库
+        const client = await db_1.pool.connect();
         try {
-            const taskLevel = task.level || 0;
-            const studentLevel = student.level || 0;
-            const tasksCompleted = student.tasks_completed || 0;
-            // 计算难度差距
-            const levelDiff = Math.abs(taskLevel - studentLevel);
-            // 最佳匹配：任务难度 = 学生等级 或 学生等级+1（挑战区）
-            let score = 0;
-            let reason = '';
-            if (levelDiff === 0) {
-                score = 1.0;
-                reason = '难度完全匹配';
-            }
-            else if (levelDiff === 1 && taskLevel > studentLevel) {
-                score = 0.9;
-                reason = '适度挑战，有利于成长';
-            }
-            else if (levelDiff === 1 && taskLevel < studentLevel) {
-                score = 0.8;
-                reason = '略低于当前水平，可快速完成';
-            }
-            else if (levelDiff === 2) {
-                score = 0.6;
-                reason = levelDiff > 0 ? '挑战较大，需要努力' : '任务相对简单';
-            }
-            else {
-                score = 0.3;
-                reason = levelDiff > 0 ? '难度过高，不建议' : '任务过于简单';
-            }
-            // 考虑学生经验：完成任务数越多，容忍度越高
-            const experienceBonus = Math.min(tasksCompleted / 50, 0.2);
-            score = Math.min(score + experienceBonus, 1.0);
-            return {
-                score,
-                reason,
-                details: { taskLevel, studentLevel, levelDiff, experienceBonus },
-            };
+            await client.query(`
+        UPDATE users
+        SET metadata = jsonb_set(
+          COALESCE(metadata, '{}'::jsonb),
+          '{studentVector}',
+          $1::jsonb
+        ),
+        metadata = jsonb_set(
+          metadata,
+          '{lastIndexed}',
+          $2::jsonb
+        )
+        WHERE id = $3
+      `, [JSON.stringify(studentVector), JSON.stringify(new Date().toISOString()), studentId]);
+            logger_1.default.info(`[Matching] Student indexed: ${studentVector.length} dimensions`);
         }
-        catch (error) {
-            logger_1.default.error('Error calculating difficulty match:', error);
-            return { score: 0.5, reason: '难度匹配评估失败' };
+        finally {
+            client.release();
         }
     }
     /**
-     * 维度3：领域匹配
-     */
-    calculateDomainMatch(task, student) {
-        try {
-            const taskTrack = task.track || 'unknown';
-            const preferredTypes = student.preferred_task_types || [];
-            // 检查任务类型是否在学生偏好中
-            const isPreferred = preferredTypes.includes(taskTrack);
-            let score = 0.5; // 默认中性
-            let reason = '';
-            if (isPreferred) {
-                score = 0.9;
-                reason = `擅长${taskTrack}领域`;
-            }
-            else if (preferredTypes.length === 0) {
-                score = 0.7;
-                reason = '新手，可尝试各类任务';
-            }
-            else {
-                score = 0.5;
-                reason = '非主要方向，可拓展技能';
-            }
-            return {
-                score,
-                reason,
-                details: { taskTrack, preferredTypes },
-            };
-        }
-        catch (error) {
-            logger_1.default.error('Error calculating domain match:', error);
-            return { score: 0.5, reason: '领域匹配评估失败' };
-        }
-    }
-    /**
-     * 维度4：成长潜力
-     */
-    calculateGrowthPotential(task, student) {
-        try {
-            const qualityTrend = student.quality_trend || 'stable';
-            const growthRate = student.growth_rate || 0.5;
-            const avgQuality = student.avg_task_quality || 0.5;
-            let score = 0.5;
-            let reason = '';
-            // 成长趋势加分
-            if (qualityTrend === 'improving') {
-                score += 0.3;
-                reason = '质量持续提升';
-            }
-            else if (qualityTrend === 'stable' && avgQuality > 0.7) {
-                score += 0.2;
-                reason = '表现稳定优秀';
-            }
-            else if (qualityTrend === 'declining') {
-                score -= 0.2;
-                reason = '近期表现下滑';
-            }
-            // 成长速度加分
-            if (growthRate > 0.7) {
-                score += 0.2;
-                reason += ', 成长速度快';
-            }
-            score = Math.min(Math.max(score, 0), 1);
-            return {
-                score,
-                reason: reason || '具备一定成长潜力',
-                details: { qualityTrend, growthRate, avgQuality },
-            };
-        }
-        catch (error) {
-            logger_1.default.error('Error calculating growth potential:', error);
-            return { score: 0.5, reason: '成长潜力评估失败' };
-        }
-    }
-    /**
-     * 维度5：可靠性
-     */
-    calculateReliability(task, student) {
-        try {
-            const onTimeRate = student.on_time_delivery_rate || 0.5;
-            const avgSatisfaction = student.avg_client_satisfaction || 0.5;
-            const tasksCompleted = student.tasks_completed || 0;
-            // 按时交付率（40%）
-            const timelinessScore = onTimeRate;
-            // 客户满意度（40%）
-            const satisfactionScore = avgSatisfaction;
-            // 经验值（20%）
-            const experienceScore = Math.min(tasksCompleted / 20, 1);
-            const score = timelinessScore * 0.4 + satisfactionScore * 0.4 + experienceScore * 0.2;
-            let reason = '';
-            if (score > 0.8) {
-                reason = '非常可靠';
-            }
-            else if (score > 0.6) {
-                reason = '表现良好';
-            }
-            else if (score > 0.4) {
-                reason = '基本可靠';
-            }
-            else {
-                reason = '经验较少';
-            }
-            return {
-                score,
-                reason,
-                details: { onTimeRate, avgSatisfaction, tasksCompleted },
-            };
-        }
-        catch (error) {
-            logger_1.default.error('Error calculating reliability:', error);
-            return { score: 0.5, reason: '可靠性评估失败' };
-        }
-    }
-    /**
-     * 维度6：偏好匹配
-     */
-    calculatePreferenceAlignment(task, student) {
-        try {
-            const taskBudget = task.budget || 0;
-            const taskDuration = task.duration || 0;
-            const maxHoursPerWeek = student.max_hours_per_week || 20;
-            const workStyle = student.work_style || {};
-            let score = 0.5;
-            let reason = '';
-            // 工作时长匹配
-            if (taskDuration > 0 && maxHoursPerWeek > 0) {
-                const requiredWeeks = taskDuration / maxHoursPerWeek;
-                if (requiredWeeks <= 2) {
-                    score += 0.2;
-                    reason = '工作时长合适';
-                }
-                else if (requiredWeeks > 4) {
-                    score -= 0.1;
-                    reason = '工作周期较长';
-                }
-            }
-            // 预算偏好（假设学生偏好中高预算任务）
-            if (taskBudget > 1000) {
-                score += 0.2;
-                reason += ', 预算充足';
-            }
-            score = Math.min(Math.max(score, 0), 1);
-            return {
-                score,
-                reason: reason || '工作偏好基本匹配',
-                details: { taskBudget, taskDuration, maxHoursPerWeek },
-            };
-        }
-        catch (error) {
-            logger_1.default.error('Error calculating preference alignment:', error);
-            return { score: 0.5, reason: '偏好匹配评估失败' };
-        }
-    }
-    /**
-     * 计算单个任务与学生的匹配度
+     * 核心匹配函数：基于向量计算匹配度
      */
     async matchTaskWithStudent(taskId, studentId) {
+        logger_1.default.info(`[Matching] Matching task ${taskId} with student ${studentId}`);
         const client = await db_1.pool.connect();
         try {
-            // 获取任务信息
-            const taskResult = await client.query(`SELECT t.*, tt.difficulty_overall
-         FROM tasks t
-         LEFT JOIN task_translations tt ON t.id = tt.task_id
-         WHERE t.id = $1`, [taskId]);
+            // 1. 获取任务向量
+            const taskResult = await client.query('SELECT id, name, scenario, stages, metadata FROM atomic_courses WHERE id = $1', [taskId]);
             if (taskResult.rows.length === 0) {
-                throw new Error(`Task not found: ${taskId}`);
+                throw new Error(`Task ${taskId} not found`);
             }
             const task = taskResult.rows[0];
-            // 获取学生能力信息
-            const studentResult = await client.query(`SELECT sc.*, u.name, u.level
-         FROM student_capabilities sc
-         JOIN users u ON sc.student_id = u.id
-         WHERE sc.student_id = $1`, [studentId]);
+            let taskVector = task.metadata?.taskVector;
+            // 如果向量不存在，生成它
+            if (!taskVector) {
+                await this.indexTask(taskId, task.scenario, task.stages);
+                const updatedTaskResult = await client.query('SELECT metadata FROM atomic_courses WHERE id = $1', [taskId]);
+                taskVector = updatedTaskResult.rows[0].metadata.taskVector;
+            }
+            // 2. 获取学生向量
+            const studentResult = await client.query('SELECT id, name, metadata FROM users WHERE id = $1', [studentId]);
             if (studentResult.rows.length === 0) {
-                throw new Error(`Student capability not found: ${studentId}`);
+                throw new Error(`Student ${studentId} not found`);
             }
             const student = studentResult.rows[0];
-            // 计算6个维度的分数
-            const skillMatch = await this.calculateSkillMatch(task, student);
-            const difficultyMatch = this.calculateDifficultyMatch(task, student);
-            const domainMatch = this.calculateDomainMatch(task, student);
-            const growthPotential = this.calculateGrowthPotential(task, student);
-            const reliability = this.calculateReliability(task, student);
-            const preference = this.calculatePreferenceAlignment(task, student);
-            // 计算综合分数（加权平均）
-            const overallScore = skillMatch.score * this.weights.skill_match +
-                difficultyMatch.score * this.weights.difficulty_match +
-                domainMatch.score * this.weights.domain_match +
-                growthPotential.score * this.weights.growth_potential +
-                reliability.score * this.weights.reliability +
-                preference.score * this.weights.preference;
-            // 构建匹配详情
-            const matchBreakdown = {
-                skillMatch: {
-                    score: skillMatch.score,
-                    reason: skillMatch.reason,
-                    details: skillMatch.details,
-                },
-                difficultyMatch: {
-                    score: difficultyMatch.score,
-                    reason: difficultyMatch.reason,
-                },
-                domainMatch: {
-                    score: domainMatch.score,
-                    reason: domainMatch.reason,
-                },
-                growthPotential: {
-                    score: growthPotential.score,
-                    reason: growthPotential.reason,
-                },
-                reliability: {
-                    score: reliability.score,
-                    reason: reliability.reason,
-                },
-                preference: {
-                    score: preference.score,
-                    reason: preference.reason,
-                },
-                weights: this.weights,
-            };
+            let studentVector = student.metadata?.studentVector;
+            // 如果向量不存在，生成它
+            if (!studentVector) {
+                await this.indexStudent(studentId);
+                const updatedStudentResult = await client.query('SELECT metadata FROM users WHERE id = $1', [studentId]);
+                studentVector = updatedStudentResult.rows[0].metadata.studentVector;
+            }
+            // 3. 基于向量计算6个维度的匹配分数
+            const skillMatch = this.calculateSkillMatchFromVectors(taskVector, studentVector);
+            const difficultyMatch = this.calculateDifficultyMatchFromVectors(taskVector, studentVector);
+            const domainMatch = this.calculateDomainMatchFromVectors(taskVector, studentVector);
+            const growthPotential = this.calculateGrowthPotentialFromVectors(taskVector, studentVector);
+            const reliability = this.extractReliabilityFromVector(studentVector);
+            const preferenceAlignment = this.calculatePreferenceAlignment(taskVector, studentVector);
+            // 4. 加权求和
+            const overallScore = skillMatch * 0.35 +
+                difficultyMatch * 0.20 +
+                domainMatch * 0.15 +
+                growthPotential * 0.15 +
+                reliability * 0.10 +
+                preferenceAlignment * 0.05;
+            // 5. 生成推荐
+            const { recommendation, reasoning, concerns } = this.generateRecommendation(overallScore, { skillMatch, difficultyMatch, domainMatch, growthPotential, reliability, preferenceAlignment });
             return {
-                overall_score: Number(overallScore.toFixed(2)),
-                skill_match_score: Number(skillMatch.score.toFixed(2)),
-                difficulty_match_score: Number(difficultyMatch.score.toFixed(2)),
-                domain_match_score: Number(domainMatch.score.toFixed(2)),
-                growth_potential_score: Number(growthPotential.score.toFixed(2)),
-                reliability_score: Number(reliability.score.toFixed(2)),
-                preference_score: Number(preference.score.toFixed(2)),
-                match_breakdown: matchBreakdown,
+                taskId,
+                studentId,
+                overallScore,
+                skillMatch,
+                difficultyMatch,
+                domainMatch,
+                growthPotential,
+                reliability,
+                preferenceAlignment,
+                recommendation,
+                reasoning,
+                concerns
             };
         }
         finally {
@@ -365,137 +136,302 @@ class SemanticMatchingEngine {
         }
     }
     /**
-     * 找出最适合任务的学生（Top K）
+     * 维度1：技能匹配 (35%)
      */
-    async findBestStudentsForTask(taskId, limit = 100) {
+    calculateSkillMatchFromVectors(taskVector, studentVector) {
+        const taskSkills = taskVector.slice(0, 64);
+        const studentSkills = studentVector.slice(0, 64);
+        let totalScore = 0;
+        let totalWeight = 0;
+        for (let i = 0; i < 64; i++) {
+            const required = taskSkills[i];
+            const studentProf = studentSkills[i];
+            if (required > 0.1) {
+                const weight = required;
+                const gap = required - studentProf;
+                let skillScore;
+                if (gap <= 0)
+                    skillScore = 1.0;
+                else if (gap <= 0.1)
+                    skillScore = 0.9;
+                else if (gap <= 0.2)
+                    skillScore = 0.7;
+                else if (gap <= 0.3)
+                    skillScore = 0.5;
+                else
+                    skillScore = 0.3;
+                totalScore += skillScore * weight;
+                totalWeight += weight;
+            }
+        }
+        return totalWeight > 0 ? totalScore / totalWeight : 0.8;
+    }
+    /**
+     * 维度2：难度匹配 (20%) - 最近发展区理论
+     */
+    calculateDifficultyMatchFromVectors(taskVector, studentVector) {
+        const taskDifficulty = taskVector[71];
+        const studentSkills = studentVector.slice(0, 64);
+        const avgSkill = studentSkills.reduce((a, b) => a + b, 0) / 64;
+        const coursesCompleted = studentVector[76];
+        const studentLevel = avgSkill * 0.7 + coursesCompleted * 0.3;
+        const optimalMin = studentLevel + 0.1;
+        const optimalMax = studentLevel + 0.2;
+        if (taskDifficulty >= optimalMin && taskDifficulty <= optimalMax) {
+            return 1.0;
+        }
+        const distance = Math.min(Math.abs(taskDifficulty - optimalMin), Math.abs(taskDifficulty - optimalMax));
+        if (distance <= 0.1)
+            return 0.9;
+        else if (distance <= 0.2)
+            return 0.7;
+        else if (taskDifficulty < optimalMin)
+            return 0.5;
+        else
+            return 0.3;
+    }
+    /**
+     * 维度3：领域匹配 (15%) - 余弦相似度
+     */
+    calculateDomainMatchFromVectors(taskVector, studentVector) {
+        const taskDomain = taskVector.slice(64, 71);
+        const studentDomain = studentVector.slice(64, 71);
+        return this.cosineSimilarity(taskDomain, studentDomain);
+    }
+    /**
+     * 维度4：成长潜力 (15%)
+     */
+    calculateGrowthPotentialFromVectors(taskVector, studentVector) {
+        const taskSkills = taskVector.slice(0, 64);
+        const studentSkills = studentVector.slice(0, 64);
+        let newSkillsCount = 0;
+        let improvableSkillsCount = 0;
+        for (let i = 0; i < 64; i++) {
+            const required = taskSkills[i];
+            const studentProf = studentSkills[i];
+            if (required > 0.1) {
+                if (studentProf < 0.2)
+                    newSkillsCount++;
+                else if (studentProf < 0.7)
+                    improvableSkillsCount++;
+            }
+        }
+        const newSkillValue = Math.min(newSkillsCount * 0.05, 0.6);
+        const improveValue = Math.min(improvableSkillsCount * 0.03, 0.4);
+        const learningSpeed = studentVector[71];
+        const speedBonus = learningSpeed * 0.2;
+        return Math.min(newSkillValue + improveValue + speedBonus + 0.2, 1.0);
+    }
+    /**
+     * 维度5：可靠性 (10%)
+     */
+    extractReliabilityFromVector(studentVector) {
+        return studentVector[72];
+    }
+    /**
+     * 维度6：偏好对齐 (5%)
+     */
+    calculatePreferenceAlignment(taskVector, studentVector) {
+        const domainMatch = this.calculateDomainMatchFromVectors(taskVector, studentVector);
+        return domainMatch * 0.5 + 0.5;
+    }
+    /**
+     * 余弦相似度
+     */
+    cosineSimilarity(vecA, vecB) {
+        if (vecA.length !== vecB.length)
+            return 0;
+        let dotProduct = 0;
+        let normA = 0;
+        let normB = 0;
+        for (let i = 0; i < vecA.length; i++) {
+            dotProduct += vecA[i] * vecB[i];
+            normA += vecA[i] * vecA[i];
+            normB += vecB[i] * vecB[i];
+        }
+        normA = Math.sqrt(normA);
+        normB = Math.sqrt(normB);
+        if (normA === 0 || normB === 0)
+            return 0;
+        return dotProduct / (normA * normB);
+    }
+    /**
+     * 生成推荐
+     */
+    generateRecommendation(overallScore, scores) {
+        const reasoning = [];
+        const concerns = [];
+        let recommendation;
+        if (overallScore >= 0.8) {
+            recommendation = 'highly_recommended';
+            reasoning.push('整体匹配度非常高，强烈推荐');
+        }
+        else if (overallScore >= 0.7) {
+            recommendation = 'recommended';
+            reasoning.push('整体匹配度良好，推荐尝试');
+        }
+        else if (overallScore >= 0.6) {
+            recommendation = 'acceptable';
+            reasoning.push('基本匹配，可以尝试但需要额外努力');
+        }
+        else {
+            recommendation = 'not_recommended';
+            reasoning.push('匹配度较低，不建议此时尝试');
+        }
+        if (scores.skillMatch >= 0.8) {
+            reasoning.push('技能匹配度高，具备完成任务的核心能力');
+        }
+        else if (scores.skillMatch < 0.6) {
+            concerns.push('缺少关键技能，需要大量学习');
+        }
+        if (scores.difficultyMatch >= 0.9) {
+            reasoning.push('难度适中，处于最近发展区，学习效果最佳');
+        }
+        else if (scores.difficultyMatch < 0.5) {
+            concerns.push('任务难度不太合适');
+        }
+        if (scores.growthPotential >= 0.7) {
+            reasoning.push('成长潜力大，能学到新技能');
+        }
+        if (scores.reliability < 0.6) {
+            concerns.push('历史完成率较低，建议提高学习稳定性');
+        }
+        return { recommendation, reasoning, concerns };
+    }
+    /**
+     * 批量匹配：为任务找到最合适的学生
+     */
+    async findBestStudentsForTask(taskId, limit = 10) {
         const client = await db_1.pool.connect();
         try {
-            logger_1.default.info(`Finding best students for task: ${taskId}`);
-            // 获取所有有能力画像的学生
-            const studentsResult = await client.query(`SELECT sc.student_id, u.name
-         FROM student_capabilities sc
-         JOIN users u ON sc.student_id = u.id
-         WHERE u.role = 'student' AND u.is_active = true
-         LIMIT 200`);
+            const studentsResult = await client.query("SELECT id FROM users WHERE role = 'student'");
             const students = studentsResult.rows;
-            logger_1.default.info(`Found ${students.length} candidate students`);
-            // 计算每个学生的匹配分数
-            const matchResults = [];
+            const results = await Promise.all(students.map(student => this.matchTaskWithStudent(taskId, student.id)));
+            results.sort((a, b) => b.overallScore - a.overallScore);
+            return results.slice(0, limit);
+        }
+        finally {
+            client.release();
+        }
+    }
+    /**
+     * 批量匹配：为学生找到最合适的任务
+     */
+    async findBestTasksForStudent(studentId, limit = 10) {
+        const client = await db_1.pool.connect();
+        try {
+            const tasksResult = await client.query('SELECT id FROM atomic_courses');
+            const tasks = tasksResult.rows;
+            const results = await Promise.all(tasks.map(task => this.matchTaskWithStudent(task.id, studentId)));
+            results.sort((a, b) => b.overallScore - a.overallScore);
+            return results.slice(0, limit);
+        }
+        finally {
+            client.release();
+        }
+    }
+    /**
+     * 批量索引所有任务
+     */
+    async indexAllTasks() {
+        logger_1.default.info('[Matching] Indexing all tasks...');
+        const client = await db_1.pool.connect();
+        try {
+            const coursesResult = await client.query('SELECT id, name, scenario, stages FROM atomic_courses');
+            const courses = coursesResult.rows;
+            for (const course of courses) {
+                try {
+                    await this.indexTask(course.id, course.scenario, course.stages);
+                    logger_1.default.info(`✓ Indexed: ${course.name}`);
+                }
+                catch (error) {
+                    logger_1.default.error(`✗ Failed: ${course.id}`, error);
+                }
+            }
+            logger_1.default.info('[Matching] All tasks indexed');
+        }
+        finally {
+            client.release();
+        }
+    }
+    /**
+     * 批量索引所有学生
+     */
+    async indexAllStudents() {
+        logger_1.default.info('[Matching] Indexing all students...');
+        const client = await db_1.pool.connect();
+        try {
+            const studentsResult = await client.query("SELECT id, name FROM users WHERE role = 'student'");
+            const students = studentsResult.rows;
             for (const student of students) {
                 try {
-                    const match_score = await this.matchTaskWithStudent(taskId, student.student_id);
-                    matchResults.push({
-                        student_id: student.student_id,
-                        student_name: student.name,
-                        match_score: match_score,
-                        rank: 0, // 稍后排序后设置
-                    });
+                    await this.indexStudent(student.id);
+                    logger_1.default.info(`✓ Indexed: ${student.id}`);
                 }
                 catch (error) {
-                    logger_1.default.error(`Error matching student ${student.student_id}:`, error);
+                    logger_1.default.error(`✗ Failed: ${student.id}`, error);
                 }
             }
-            // 按匹配分数排序
-            matchResults.sort((a, b) => b.match_score.overall_score - a.match_score.overall_score);
-            // 设置排名并返回Top K
-            return matchResults.slice(0, limit).map((result, index) => ({
-                ...result,
-                rank: index + 1,
-            }));
+            logger_1.default.info('[Matching] All students indexed');
         }
         finally {
             client.release();
         }
     }
     /**
-     * 找出最适合学生的任务
-     */
-    async findBestTasksForStudent(studentId, limit = 20) {
-        const client = await db_1.pool.connect();
-        try {
-            logger_1.default.info(`Finding best tasks for student: ${studentId}`);
-            // 获取所有未分配的任务
-            const tasksResult = await client.query(`SELECT id, title
-         FROM tasks
-         WHERE status = 'open' AND assigned_student_id IS NULL
-         ORDER BY created_at DESC
-         LIMIT 100`);
-            const tasks = tasksResult.rows;
-            logger_1.default.info(`Found ${tasks.length} available tasks`);
-            // 计算每个任务的匹配分数
-            const matchResults = [];
-            for (const task of tasks) {
-                try {
-                    const match_score = await this.matchTaskWithStudent(task.id, studentId);
-                    matchResults.push({
-                        task_id: task.id,
-                        task_title: task.title,
-                        match_score: match_score,
-                        rank: 0,
-                    });
-                }
-                catch (error) {
-                    logger_1.default.error(`Error matching task ${task.id}:`, error);
-                }
-            }
-            // 按匹配分数排序
-            matchResults.sort((a, b) => b.match_score.overall_score - a.match_score.overall_score);
-            // 设置排名并返回Top K
-            return matchResults.slice(0, limit).map((result, index) => ({
-                ...result,
-                rank: index + 1,
-            }));
-        }
-        finally {
-            client.release();
-        }
-    }
-    /**
-     * 保存匹配结果到数据库
+     * 兼容方法：保存匹配结果
+     * 旧API兼容性
      */
     async saveMatchResults(taskId, matchResults) {
+        logger_1.default.info(`[Matching] Saving ${matchResults.length} match results for task ${taskId}`);
         const client = await db_1.pool.connect();
         try {
             await client.query('BEGIN');
-            // 删除该任务的旧匹配记录
-            await client.query('DELETE FROM task_student_matches WHERE task_id = $1', [taskId]);
-            // 插入新的匹配记录
+            // 删除旧的匹配结果
+            await client.query('DELETE FROM task_matches WHERE task_id = $1', [taskId]);
+            // 插入新的匹配结果
             for (const result of matchResults) {
-                await client.query(`INSERT INTO task_student_matches (
+                await client.query(`
+          INSERT INTO task_matches (
             task_id, student_id, overall_score,
-            skill_match_score, difficulty_match_score, domain_match_score,
-            growth_potential_score, reliability_score, preference_score,
-            match_breakdown, rank_in_task
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
+            skill_match, difficulty_match, domain_match,
+            growth_potential, reliability, preference_alignment,
+            recommendation, reasoning, concerns,
+            created_at
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW())
+          ON CONFLICT (task_id, student_id) DO UPDATE SET
+            overall_score = EXCLUDED.overall_score,
+            skill_match = EXCLUDED.skill_match,
+            difficulty_match = EXCLUDED.difficulty_match,
+            domain_match = EXCLUDED.domain_match,
+            growth_potential = EXCLUDED.growth_potential,
+            reliability = EXCLUDED.reliability,
+            preference_alignment = EXCLUDED.preference_alignment,
+            recommendation = EXCLUDED.recommendation,
+            reasoning = EXCLUDED.reasoning,
+            concerns = EXCLUDED.concerns,
+            updated_at = NOW()
+        `, [
                     taskId,
-                    result.student_id,
-                    result.match_score.overall_score,
-                    result.match_score.skill_match_score,
-                    result.match_score.difficulty_match_score,
-                    result.match_score.domain_match_score,
-                    result.match_score.growth_potential_score,
-                    result.match_score.reliability_score,
-                    result.match_score.preference_score,
-                    JSON.stringify(result.match_score.match_breakdown),
-                    result.rank,
+                    result.studentId,
+                    result.overallScore,
+                    result.skillMatch,
+                    result.difficultyMatch,
+                    result.domainMatch,
+                    result.growthPotential,
+                    result.reliability,
+                    result.preferenceAlignment,
+                    result.recommendation,
+                    JSON.stringify(result.reasoning),
+                    JSON.stringify(result.concerns)
                 ]);
             }
-            // 更新tasks表的匹配信息
-            await client.query(`UPDATE tasks SET
-          matched_students_count = $1,
-          top_match_score = $2,
-          matching_completed_at = NOW()
-        WHERE id = $3`, [
-                matchResults.length,
-                matchResults[0]?.match_score.overall_score || 0,
-                taskId,
-            ]);
             await client.query('COMMIT');
-            logger_1.default.info(`Saved ${matchResults.length} match results for task ${taskId}`);
+            logger_1.default.info(`[Matching] Saved ${matchResults.length} match results`);
         }
         catch (error) {
             await client.query('ROLLBACK');
-            logger_1.default.error('Error saving match results:', error);
+            logger_1.default.error('[Matching] Error saving match results:', error);
             throw error;
         }
         finally {
@@ -503,5 +439,6 @@ class SemanticMatchingEngine {
         }
     }
 }
+// 导出单例
 exports.default = new SemanticMatchingEngine();
 //# sourceMappingURL=semanticMatchingEngine.js.map

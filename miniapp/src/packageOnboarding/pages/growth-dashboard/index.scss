@@ -1,0 +1,279 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/morandi-colors.scss';
+
+.growth-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #1A2A38 0%, #2A3A50 40%, #3A4A60 100%);
+  padding-bottom: 32rpx;
+
+  .dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28rpx 32rpx 20rpx;
+    background: transparent;
+
+    .back-btn {
+      width: 68rpx;
+      height: 68rpx;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .back-icon {
+        font-size: 48rpx;
+        color: white;
+        font-weight: 600;
+      }
+    }
+
+    .header-title {
+      font-size: 34rpx;
+      font-weight: 800;
+      color: white;
+    }
+  }
+
+  .hero-stats {
+    padding: 28rpx 40rpx;
+    display: flex;
+    align-items: center;
+    gap: 32rpx;
+    position: relative;
+    z-index: 1;
+
+    .hero-main {
+      text-align: center;
+
+      .hero-number {
+        font-size: 96rpx;
+        font-weight: 900;
+        color: $golden;
+        line-height: 1;
+        display: block;
+      }
+
+      .hero-label {
+        font-size: 24rpx;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 4rpx;
+        display: block;
+      }
+    }
+
+    .check-in-grid {
+      flex: 1;
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8rpx;
+        margin-bottom: 8rpx;
+
+        .grid-dot {
+          width: 100%;
+          aspect-ratio: 1;
+          border-radius: 8rpx;
+
+          &.checked {
+            background: rgba(242, 205, 120, 0.8);
+          }
+
+          &.unchecked {
+            background: rgba(255, 255, 255, 0.15);
+          }
+        }
+      }
+
+      .grid-label {
+        font-size: 20rpx;
+        color: rgba(255, 255, 255, 0.35);
+        display: block;
+      }
+    }
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rpx;
+    padding: 0 40rpx;
+    margin-bottom: 28rpx;
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 24rpx;
+      padding: 28rpx;
+      border: 1rpx solid rgba(255, 255, 255, 0.1);
+
+      .stat-value {
+        font-size: 56rpx;
+        font-weight: 900;
+        color: white;
+        line-height: 1;
+        display: block;
+      }
+
+      .stat-label {
+        font-size: 24rpx;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 8rpx;
+        display: block;
+      }
+
+      .stat-trend {
+        font-size: 22rpx;
+        color: #4ADE80;
+        margin-top: 8rpx;
+        font-weight: 600;
+        display: block;
+      }
+    }
+  }
+
+  .achievements-section {
+    padding: 0 40rpx;
+    margin-bottom: 28rpx;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20rpx;
+
+      .section-title {
+        font-size: 30rpx;
+        font-weight: 700;
+        color: white;
+      }
+
+      .section-more {
+        font-size: 24rpx;
+        color: $golden;
+        font-weight: 600;
+      }
+    }
+
+    .achievements-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20rpx;
+
+      .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 24rpx;
+        padding: 24rpx 28rpx;
+        border-radius: 20rpx;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1rpx solid rgba(255, 255, 255, 0.08);
+
+        &.highlight {
+          background: linear-gradient(
+            135deg,
+            rgba(242, 205, 120, 0.1),
+            rgba(188, 100, 70, 0.06)
+          );
+          border-color: rgba(242, 205, 120, 0.2);
+        }
+
+        .achievement-icon {
+          width: 80rpx;
+          height: 80rpx;
+          border-radius: 16rpx;
+          background: linear-gradient(135deg, $golden, #D88760);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+
+          .icon {
+            font-size: 40rpx;
+            color: white;
+          }
+        }
+
+        .achievement-content {
+          flex: 1;
+
+          .achievement-name {
+            font-size: 26rpx;
+            font-weight: 700;
+            color: white;
+            display: block;
+            margin-bottom: 4rpx;
+          }
+
+          .achievement-desc {
+            font-size: 22rpx;
+            color: rgba(255, 255, 255, 0.5);
+            display: block;
+          }
+        }
+
+        .achievement-time {
+          font-size: 22rpx;
+          color: rgba(255, 255, 255, 0.35);
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  .trend-section {
+    padding: 0 40rpx;
+    margin-bottom: 28rpx;
+
+    .section-header {
+      margin-bottom: 20rpx;
+
+      .section-title {
+        font-size: 30rpx;
+        font-weight: 700;
+        color: white;
+      }
+    }
+
+    .trend-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 16rpx;
+      height: 160rpx;
+      padding: 0 8rpx;
+      margin-bottom: 16rpx;
+
+      .chart-bar {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8rpx;
+
+        .bar-fill {
+          width: 100%;
+          border-radius: 8rpx 8rpx 0 0;
+          background: linear-gradient(180deg, $rust, $terra);
+          transition: height 0.3s ease;
+        }
+
+        .bar-label {
+          font-size: 20rpx;
+          color: rgba(255, 255, 255, 0.5);
+        }
+      }
+    }
+
+    .trend-note {
+      font-size: 22rpx;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+      display: block;
+    }
+  }
+
+  .bottom-space {
+    height: 32rpx;
+  }
+}

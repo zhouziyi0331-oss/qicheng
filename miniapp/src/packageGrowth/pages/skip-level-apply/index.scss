@@ -1,0 +1,455 @@
+// ============================================================
+// S2 – 跳级申请选择页
+// 基于设计稿 Sunset Postcard 配色
+// ============================================================
+
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.skip-apply-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+// ========== 顶部状态区 ==========
+.apply-hero {
+  background: linear-gradient(160deg, #EDD9C8 0%, #E8C9A8 40%, #F5EDE3 100%);
+  padding: 32rpx;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  .hero-glow-1 {
+    position: absolute;
+    top: -100rpx;
+    right: -100rpx;
+    width: 360rpx;
+    height: 360rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, 0.35) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    bottom: -40rpx;
+    left: -40rpx;
+    width: 200rpx;
+    height: 200rpx;
+    background: radial-gradient(circle, rgba(190, 215, 209, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .track-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12rpx;
+    padding: 10rpx 24rpx;
+    border-radius: 9999rpx;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2rpx solid rgba(188, 100, 70, 0.2);
+    margin-bottom: 20rpx;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4rpx 16rpx rgba(188, 100, 70, 0.1);
+
+    .track-icon {
+      width: 40rpx;
+      height: 40rpx;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.track-icon-dev {
+        background: linear-gradient(135deg, #BED7D1, #9ABFB8);
+      }
+
+      &.track-icon-content {
+        background: linear-gradient(135deg, #F2CD78, #D88760);
+      }
+
+      .icon-symbol {
+        font-size: 24rpx;
+        font-weight: 800;
+        color: white;
+      }
+    }
+
+    .track-name {
+      font-size: 24rpx;
+      font-weight: 700;
+      color: $rust;
+    }
+  }
+
+  .current-status {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    position: relative;
+    z-index: 1;
+
+    .status-badge {
+      width: 100rpx;
+      height: 100rpx;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $rust, $rust-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.3);
+      border: 4rpx solid rgba(255, 255, 255, 0.6);
+      flex-shrink: 0;
+
+      .status-level {
+        font-size: 36rpx;
+        font-weight: 900;
+        color: white;
+      }
+    }
+
+    .status-info {
+      flex: 1;
+
+      .status-name {
+        font-size: 34rpx;
+        font-weight: 800;
+        color: $text-1;
+        display: block;
+      }
+
+      .status-track {
+        font-size: 24rpx;
+        color: $text-2;
+        margin-top: 6rpx;
+        display: block;
+      }
+
+      .status-xp {
+        display: inline-flex;
+        align-items: center;
+        gap: 6rpx;
+        padding: 6rpx 16rpx;
+        border-radius: 9999rpx;
+        background: rgba(188, 100, 70, 0.1);
+        margin-top: 12rpx;
+
+        .xp-icon {
+          font-size: 20rpx;
+        }
+
+        .xp-text {
+          font-size: 22rpx;
+          font-weight: 700;
+          color: $rust;
+        }
+      }
+    }
+  }
+}
+
+// ========== 滚动区 ==========
+.apply-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.apply-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: $text-3;
+  letter-spacing: 1rpx;
+  display: block;
+}
+
+// ========== 目标级别列表 ==========
+.target-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.target-item {
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  border: 3rpx solid $border;
+  background: $surface;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+
+  &.selected {
+    border-color: $rust;
+    background: rgba(188, 100, 70, 0.04);
+    box-shadow: 0 4rpx 20rpx rgba(188, 100, 70, 0.15);
+  }
+
+  .selected-corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 56rpx 56rpx 0;
+    border-color: transparent $rust transparent transparent;
+  }
+
+  .target-badge {
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 4rpx solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4rpx 16rpx rgba(188, 100, 70, 0.25);
+
+    .badge-level {
+      font-size: 36rpx;
+      font-weight: 900;
+      color: white;
+    }
+  }
+
+  .target-info {
+    flex: 1;
+
+    .target-name {
+      font-size: 30rpx;
+      font-weight: 800;
+      color: $text-1;
+      display: block;
+    }
+
+    .target-desc {
+      font-size: 24rpx;
+      color: $text-3;
+      margin-top: 6rpx;
+      display: block;
+    }
+
+    .target-tags {
+      display: flex;
+      gap: 12rpx;
+      margin-top: 16rpx;
+      flex-wrap: wrap;
+    }
+  }
+
+  .target-check {
+    width: 44rpx;
+    height: 44rpx;
+    border-radius: 50%;
+    border: 4rpx solid $border;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  &.selected .target-check {
+    background: $rust;
+    border-color: $rust;
+
+    .check-icon {
+      font-size: 24rpx;
+      color: white;
+    }
+  }
+}
+
+// ========== 标签 ==========
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 16rpx;
+  border-radius: 9999rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+
+  &.tag-terra {
+    background: rgba(216, 135, 96, 0.12);
+    color: #8A4A20;
+  }
+
+  &.tag-rust {
+    background: rgba(188, 100, 70, 0.12);
+    color: $rust;
+  }
+
+  &.tag-sand {
+    background: rgba(191, 158, 113, 0.15);
+    color: #7A6030;
+  }
+
+  &.tag-mist {
+    background: rgba(190, 215, 209, 0.2);
+    color: #4A8A84;
+  }
+
+  &.tag-golden {
+    background: rgba(242, 205, 120, 0.2);
+    color: #8A6A20;
+  }
+
+  &.tag-outline {
+    background: transparent;
+    border: 2rpx solid $border;
+    color: $text-2;
+  }
+}
+
+// ========== 提示卡片 ==========
+.notice-card {
+  background: rgba(190, 215, 209, 0.12);
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  border: 2rpx solid rgba(190, 215, 209, 0.3);
+  display: flex;
+  gap: 16rpx;
+  align-items: flex-start;
+
+  .notice-icon {
+    font-size: 28rpx;
+    flex-shrink: 0;
+    margin-top: 2rpx;
+  }
+
+  .notice-content {
+    flex: 1;
+
+    .notice-text {
+      font-size: 24rpx;
+      color: $text-2;
+      line-height: 1.7;
+
+      .notice-highlight {
+        color: #4A8A84;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// ========== 任务预览卡片 ==========
+.preview-card {
+  background: $surface;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+  border: 1rpx solid $border;
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16rpx;
+
+    .preview-title {
+      font-size: 28rpx;
+      font-weight: 800;
+      color: $text-1;
+    }
+
+    .preview-tag {
+      padding: 4rpx 12rpx;
+      border-radius: 9999rpx;
+      background: rgba(188, 100, 70, 0.1);
+
+      .tag-text {
+        font-size: 20rpx;
+        font-weight: 700;
+        color: $rust;
+      }
+    }
+  }
+
+  .preview-name {
+    font-size: 28rpx;
+    font-weight: 800;
+    color: $text-1;
+    margin-bottom: 12rpx;
+    display: block;
+  }
+
+  .preview-desc {
+    font-size: 24rpx;
+    color: $text-2;
+    line-height: 1.7;
+    margin-bottom: 20rpx;
+    display: block;
+  }
+
+  .preview-tags {
+    display: flex;
+    gap: 12rpx;
+    flex-wrap: wrap;
+  }
+}
+
+// ========== 底部按钮 ==========
+.apply-footer {
+  padding: 0 32rpx 32rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+
+  .btn-primary {
+    width: 100%;
+    padding: 28rpx;
+    border-radius: 9999rpx;
+    background: linear-gradient(135deg, $rust, $rust-dark);
+    box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.35);
+    text-align: center;
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 800;
+      color: white;
+    }
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 28rpx;
+    border-radius: 9999rpx;
+    background: $surface;
+    border: 3rpx solid rgba(188, 100, 70, 0.3);
+    text-align: center;
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 700;
+      color: $rust;
+    }
+  }
+}

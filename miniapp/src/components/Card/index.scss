@@ -1,0 +1,128 @@
+@import '../../styles/variables.scss';
+
+.custom-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  transition: all $transition-fast $ease-out;
+
+  &--clickable {
+    &:active {
+      transform: scale(0.98);
+      opacity: 0.95;
+    }
+  }
+
+  // 数据卡片样式
+  &--data {
+    background: $bg-white;
+    padding: $spacing-xl;
+    text-align: center;
+
+    .data-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .data-card-icon {
+      margin-bottom: $spacing-md;
+    }
+
+    .data-card-value {
+      display: block;
+      font-size: $font-size-number-md;
+      font-weight: $font-weight-bold;
+      color: $primary;
+      line-height: 1;
+      margin-bottom: $spacing-xs;
+    }
+
+    .data-card-label {
+      display: block;
+      font-size: $font-size-sm;
+      color: $text-secondary;
+    }
+  }
+
+  // 任务卡片样式
+  &--task {
+    background: $bg-white;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    .task-card-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: $spacing-md;
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+    }
+
+    .task-card-tag {
+      padding: 4px 12px;
+      background: $primary-yellow;
+      border-radius: $radius-xs;
+      font-size: $font-size-xs;
+      color: $text-primary;
+    }
+
+    .task-card-title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      color: $text-primary;
+      margin-bottom: $spacing-sm;
+      line-height: $line-height-base;
+      @include text-ellipsis(2);
+    }
+
+    .task-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $border-light;
+    }
+
+    .task-card-price {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $primary;
+    }
+
+    .task-card-participants {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+    }
+  }
+
+  // 渐变卡片样式
+  &--gradient {
+    padding: $spacing-xl;
+
+    &-pink {
+      background: $gradient-card-pink;
+    }
+
+    &-green {
+      background: $gradient-card-green;
+    }
+
+    &-blue {
+      background: $gradient-card-blue;
+    }
+
+    &-yellow {
+      background: $gradient-card-yellow;
+    }
+
+    &-purple {
+      background: $gradient-card-purple;
+    }
+  }
+}

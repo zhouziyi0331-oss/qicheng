@@ -1,0 +1,96 @@
+@import '../../styles/variables.scss';
+
+.custom-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: $tabbar-height;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 $spacing-md;
+  z-index: $z-index-fixed;
+  @include safe-area-inset-bottom($tabbar-height);
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    position: relative;
+    transition: all $transition-base $ease-out;
+
+    &:active {
+      opacity: 0.7;
+    }
+
+    // 中间的导师tab（小猫放大向上突出）
+    &--center {
+      .tab-icon {
+        width: 96px;
+        height: 96px;
+        margin-top: -40px;
+        margin-bottom: 0;
+        background: $gradient-card-pink;
+        border-radius: $radius-full;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: $shadow-float;
+      }
+
+      .tab-label {
+        margin-top: 4px;
+      }
+    }
+
+    .tab-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all $transition-fast $ease-out;
+
+      .tab-icon-text {
+        font-size: 36px;
+        line-height: 1;
+      }
+    }
+
+    .tab-label {
+      font-size: $font-size-xs;
+      color: $text-secondary;
+      transition: all $transition-fast $ease-out;
+    }
+
+    // 激活状态
+    &--active {
+      .tab-label {
+        color: $primary;
+        font-weight: $font-weight-medium;
+      }
+
+      .tab-icon {
+        transform: scale(1.05);
+      }
+
+      &.tab-item--center {
+        .tab-icon {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
+
+// 为使用TabBar的页面预留底部空间
+.page-with-tabbar {
+  padding-bottom: calc(#{$tabbar-height} + #{$spacing-lg}) !important;
+}

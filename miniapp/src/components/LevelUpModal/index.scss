@@ -4,155 +4,271 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+}
 
-  &.show {
-    opacity: 1;
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8rpx);
+  animation: fadeIn 0.3s ease;
+}
 
-    .modal-content {
-      transform: scale(1);
-    }
+.modal-content {
+  position: relative;
+  width: 600rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 32rpx;
+  padding: 80rpx 40rpx 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow: hidden;
+}
+
+.decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  font-size: 48rpx;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.star-1 {
+  top: 40rpx;
+  left: 40rpx;
+  animation-delay: 0s;
+}
+
+.star-2 {
+  top: 80rpx;
+  right: 60rpx;
+  animation-delay: 0.5s;
+}
+
+.star-3 {
+  bottom: 120rpx;
+  left: 60rpx;
+  animation-delay: 1s;
+}
+
+.star-4 {
+  bottom: 80rpx;
+  right: 40rpx;
+  animation-delay: 1.5s;
+}
+
+.confetti {
+  position: absolute;
+  font-size: 56rpx;
+  animation: fall 3s linear infinite;
+}
+
+.confetti-1 {
+  top: -40rpx;
+  left: 30%;
+  animation-delay: 0s;
+}
+
+.confetti-2 {
+  top: -40rpx;
+  right: 30%;
+  animation-delay: 1s;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.congrats-icon {
+  font-size: 120rpx;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.congrats-text {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+}
+
+.level-display {
+  width: 200rpx;
+  height: 200rpx;
+  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.3);
+  margin: 24rpx 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.level-text {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
+}
+
+.level-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+.level-message {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.6;
+  padding: 0 20rpx;
+  margin-top: 12rpx;
+}
+
+.privileges-section {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-top: 32rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.privileges-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: white;
+  display: block;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.privileges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.privilege-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.privilege-check {
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.privilege-text {
+  font-size: 28rpx;
+  color: white;
+  flex: 1;
+}
+
+.close-btn {
+  width: 100%;
+  height: 88rpx;
+  background: white;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #667eea;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &::after {
+    border: none;
   }
 
-  .modal-content {
-    position: relative;
-    width: 320px;
-    background: linear-gradient(135deg, #FFE082 0%, #F9C6D9 100%);
-    border-radius: 32px;
-    padding: 48px 32px;
-    text-align: center;
-    transform: scale(0.8);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    overflow: hidden;
-
-    .fireworks {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-
-      .firework {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #FFFFFF;
-        animation: firework 1.5s ease-out infinite;
-
-        &:nth-child(1) {
-          top: 20%;
-          left: 20%;
-          animation-delay: 0s;
-        }
-
-        &:nth-child(2) {
-          top: 30%;
-          right: 20%;
-          animation-delay: 0.5s;
-        }
-
-        &:nth-child(3) {
-          bottom: 30%;
-          left: 30%;
-          animation-delay: 1s;
-        }
-      }
-    }
-
-    .level-badge {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 24px;
-      background: #FFFFFF;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-      animation: bounce 0.6s ease-out;
-
-      .level-text {
-        font-size: 36px;
-        font-weight: 700;
-        color: #1A1A1A;
-      }
-    }
-
-    .congrats-text {
-      display: block;
-      font-size: 28px;
-      font-weight: 700;
-      color: #1A1A1A;
-      margin-bottom: 8px;
-    }
-
-    .desc-text {
-      display: block;
-      font-size: 14px;
-      color: #636366;
-      margin-bottom: 32px;
-    }
-
-    .rewards {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-
-      .reward-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-
-        .reward-icon {
-          width: 48px;
-          height: 48px;
-          background: #FFFFFF;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .reward-text {
-          font-size: 12px;
-          color: #1A1A1A;
-          font-weight: 500;
-        }
-      }
-    }
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
   }
 }
 
-@keyframes firework {
-  0% {
-    transform: translate(0, 0) scale(1);
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
-  100% {
-    transform: translate(var(--tx, 50px), var(--ty, -50px)) scale(0);
+}
+
+@keyframes scaleIn {
+  from {
     opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
 @keyframes bounce {
-  0% {
-    transform: scale(0);
+  0%, 100% {
+    transform: translateY(0);
   }
   50% {
-    transform: scale(1.1);
+    transform: translateY(-20rpx);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 16rpx 50rpx rgba(0, 0, 0, 0.4);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
   }
   100% {
-    transform: scale(1);
+    transform: translateY(1200rpx) rotate(360deg);
+    opacity: 0;
   }
 }

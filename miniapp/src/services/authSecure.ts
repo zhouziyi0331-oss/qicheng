@@ -1,5 +1,5 @@
 /**
- * ✅ 学生端认证服务 - 集成所有安全措施
+ * ✓ 学生端认证服务 - 集成所有安全措施
  *
  * 使用新的安全API层，集成：
  * - P0: JWT黑名单
@@ -30,11 +30,11 @@ export interface WechatLoginParams {
 }
 
 /**
- * ✅ 认证服务
+ * ✓ 认证服务
  */
 class AuthService {
   /**
-   * ✅ P1安全: 手机号+密码登录（支持登录锁定提示）
+   * ✓ P1安全: 手机号+密码登录（支持登录锁定提示）
    */
   async loginWithPassword(phone: string, password: string): Promise<LoginResponse> {
     try {
@@ -43,7 +43,7 @@ class AuthService {
         password,
       });
 
-      // ✅ P0安全: 保存Token到安全存储
+      // ✓ P0安全: 保存Token到安全存储
       await tokenManager.saveTokens(response.accessToken, response.refreshToken);
       await tokenManager.saveUserInfo(response.user);
 
@@ -55,12 +55,12 @@ class AuthService {
   }
 
   /**
-   * ✅ 微信一键登录
+   * ✓ 微信一键登录
    */
   async loginWithWechat(params: WechatLoginParams): Promise<LoginResponse> {
     const response = await http.post<LoginResponse>('/auth/wechat/login', params);
 
-    // ✅ P0安全: 保存Token
+    // ✓ P0安全: 保存Token
     await tokenManager.saveTokens(response.accessToken, response.refreshToken);
     await tokenManager.saveUserInfo(response.user);
 
@@ -68,7 +68,7 @@ class AuthService {
   }
 
   /**
-   * ✅ 发送验证码
+   * ✓ 发送验证码
    */
   async sendSmsCode(phone: string): Promise<void> {
     await http.post('/auth/sms/send', { phone });
@@ -80,7 +80,7 @@ class AuthService {
   }
 
   /**
-   * ✅ 验证码登录
+   * ✓ 验证码登录
    */
   async loginWithSmsCode(phone: string, code: string): Promise<LoginResponse> {
     const response = await http.post<LoginResponse>('/auth/sms/login', {
@@ -88,7 +88,7 @@ class AuthService {
       code,
     });
 
-    // ✅ P0安全: 保存Token
+    // ✓ P0安全: 保存Token
     await tokenManager.saveTokens(response.accessToken, response.refreshToken);
     await tokenManager.saveUserInfo(response.user);
 
@@ -96,7 +96,7 @@ class AuthService {
   }
 
   /**
-   * ✅ P0安全: 退出登录（清除所有Token）
+   * ✓ P0安全: 退出登录（清除所有Token）
    */
   async logout(): Promise<void> {
     try {
@@ -106,7 +106,7 @@ class AuthService {
       // 即使后端调用失败，也要清除本地Token
       console.error('退出登录失败:', error);
     } finally {
-      // ✅ P0安全: 清除所有本地Token
+      // ✓ P0安全: 清除所有本地Token
       await tokenManager.clearTokens();
 
       // 跳转到登录页
@@ -115,7 +115,7 @@ class AuthService {
   }
 
   /**
-   * ✅ 退出所有设备
+   * ✓ 退出所有设备
    */
   async logoutAll(): Promise<void> {
     try {

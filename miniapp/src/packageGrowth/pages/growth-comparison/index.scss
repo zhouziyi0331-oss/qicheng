@@ -1,0 +1,413 @@
+@import '../../../styles/morandi-colors.scss';
+@import '../../../styles/variables.scss';
+
+.growth-comparison-page {
+  min-height: 100vh;
+  background: $bg-secondary;
+
+  .page-scroll {
+    height: 100vh;
+    padding: $spacing-lg;
+  }
+
+  // 头部
+  .header-section {
+    text-align: center;
+    padding: $spacing-xl 0 $spacing-lg;
+
+    .page-title {
+      display: block;
+      font-size: $font-size-h1;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .time-range {
+      font-size: $font-size-sm;
+      color: $text-tertiary;
+    }
+  }
+
+  // Tab切换
+  .tabs {
+    display: flex;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+    padding: $spacing-xs;
+    background: white;
+    border-radius: $radius-lg;
+
+    .tab-item {
+      flex: 1;
+      text-align: center;
+      padding: $spacing-sm;
+      border-radius: $radius-md;
+      @include clickable;
+
+      .tab-text {
+        font-size: $font-size-base;
+        color: $text-secondary;
+        font-weight: $font-weight-medium;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, $primary-blue 0%, $primary 100%);
+
+        .tab-text {
+          color: white;
+        }
+      }
+    }
+  }
+
+  // 雷达图区域
+  .chart-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .chart-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: $spacing-md;
+
+      .legend {
+        display: flex;
+        gap: $spacing-lg;
+
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: $spacing-xs;
+
+          .legend-dot {
+            width: 24rpx;
+            height: 24rpx;
+            border-radius: $radius-full;
+
+            &.initial {
+              background: rgba(156, 163, 175, 0.8);
+            }
+
+            &.current {
+              background: #3B82F6;
+            }
+          }
+
+          .legend-text {
+            font-size: $font-size-sm;
+            color: $text-secondary;
+          }
+        }
+      }
+    }
+
+    .comparison-canvas {
+      width: 100%;
+      height: 600rpx;
+    }
+  }
+
+  // 总体成长卡片
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+
+    .summary-card {
+      @include card-base;
+      padding: $spacing-lg;
+      text-align: center;
+
+      .card-icon {
+        display: block;
+        font-size: 48rpx;
+        margin-bottom: $spacing-sm;
+      }
+
+      .card-label {
+        display: block;
+        font-size: $font-size-xs;
+        color: $text-tertiary;
+        margin-bottom: $spacing-xs;
+      }
+
+      .card-value {
+        display: block;
+        font-size: $font-size-h3;
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+
+  // 六维能力变化
+  .dimensions-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+    }
+
+    .dimension-item {
+      margin-bottom: $spacing-xl;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .dimension-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-md;
+
+        .dimension-info {
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+
+          .dimension-icon {
+            font-size: 32rpx;
+          }
+
+          .dimension-name {
+            font-size: $font-size-base;
+            font-weight: $font-weight-medium;
+            color: $text-primary;
+          }
+        }
+
+        .dimension-change {
+          display: flex;
+          align-items: center;
+          gap: $spacing-xs;
+
+          .change-icon {
+            font-size: 24rpx;
+          }
+
+          .change-value {
+            font-size: $font-size-base;
+            font-weight: $font-weight-semibold;
+          }
+        }
+      }
+
+      .dimension-bars {
+        .bar-row {
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+          margin-bottom: $spacing-sm;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .bar-label {
+            width: 60rpx;
+            font-size: $font-size-xs;
+            color: $text-tertiary;
+          }
+
+          .bar-container {
+            flex: 1;
+            height: 16rpx;
+            background: $bg-secondary;
+            border-radius: $radius-full;
+            overflow: hidden;
+
+            .bar-fill {
+              height: 100%;
+              border-radius: $radius-full;
+              transition: width 0.3s ease;
+
+              &.initial {
+                background: rgba(156, 163, 175, 0.6);
+              }
+
+              &.current {
+                background: #3B82F6;
+              }
+            }
+          }
+
+          .bar-value {
+            width: 60rpx;
+            text-align: right;
+            font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
+            color: $text-secondary;
+          }
+        }
+      }
+    }
+  }
+
+  // 详细数据对比
+  .detail-section {
+    .detail-card {
+      @include card-base;
+      padding: $spacing-lg;
+      margin-bottom: $spacing-md;
+
+      &.current {
+        border: 2rpx solid $primary-blue;
+      }
+
+      .detail-title {
+        display: block;
+        font-size: $font-size-h3;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        margin-bottom: $spacing-xs;
+      }
+
+      .detail-date {
+        display: block;
+        font-size: $font-size-sm;
+        color: $text-tertiary;
+        margin-bottom: $spacing-lg;
+      }
+
+      .detail-stats {
+        display: flex;
+        gap: $spacing-xl;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-lg;
+        border-bottom: 1rpx solid $bg-secondary;
+
+        .stat-item {
+          text-align: center;
+
+          .stat-label {
+            display: block;
+            font-size: $font-size-xs;
+            color: $text-tertiary;
+            margin-bottom: $spacing-xs;
+          }
+
+          .stat-value {
+            display: block;
+            font-size: $font-size-h2;
+            font-weight: $font-weight-bold;
+            color: $text-primary;
+          }
+        }
+      }
+
+      .detail-dimensions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-md;
+
+        .detail-dim-item {
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+          padding: $spacing-md;
+          background: $bg-secondary;
+          border-radius: $radius-md;
+
+          .dim-icon {
+            font-size: 32rpx;
+          }
+
+          .dim-name {
+            flex: 1;
+            font-size: $font-size-sm;
+            color: $text-secondary;
+          }
+
+          .dim-value {
+            font-size: $font-size-base;
+            font-weight: $font-weight-semibold;
+            color: $text-primary;
+          }
+        }
+      }
+    }
+
+    .detail-arrow {
+      text-align: center;
+      padding: $spacing-lg 0;
+
+      .arrow-icon {
+        display: block;
+        font-size: 48rpx;
+        margin-bottom: $spacing-xs;
+      }
+
+      .arrow-text {
+        font-size: $font-size-sm;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  // 成长建议
+  .advice-section {
+    @include card-base;
+    padding: $spacing-lg;
+    background: linear-gradient(135deg, rgba($primary-yellow, 0.1) 0%, rgba($primary-pink, 0.1) 100%);
+    margin-bottom: $spacing-lg;
+
+    .advice-title {
+      display: block;
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      color: $text-primary;
+      margin-bottom: $spacing-md;
+    }
+
+    .advice-list {
+      .advice-item {
+        display: block;
+        font-size: $font-size-sm;
+        color: $text-secondary;
+        line-height: 1.6;
+        margin-bottom: $spacing-sm;
+        padding-left: $spacing-md;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  // 空状态
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xxl;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 120rpx;
+      margin-bottom: $spacing-lg;
+    }
+
+    .empty-text {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      color: $text-secondary;
+      margin-bottom: $spacing-sm;
+    }
+
+    .empty-hint {
+      font-size: $font-size-sm;
+      color: $text-tertiary;
+    }
+  }
+}

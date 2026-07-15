@@ -224,6 +224,30 @@ class OPCV2AssessmentService {
             logger_1.default.error('[OPC] Failed to enqueue work condition profile generation:', error);
             // 不影响测试完成流程，只记录错误
         }
+        // 🆕 自动推断天赋标签
+        try {
+            const { TalentTagInferenceService } = require('./talentTagInferenceService');
+            const studentId = assessmentInfo.rows[0].student_id;
+            await TalentTagInferenceService.inferFromOPC(studentId, {
+                info_processing_score: result.info_processing_score,
+                info_processing_tendency: result.info_processing_tendency,
+                creation_drive_score: result.creation_drive_score,
+                creation_drive_tendency: result.creation_drive_tendency,
+                tool_learning_score: result.tool_learning_score,
+                tool_learning_tendency: result.tool_learning_tendency,
+                task_execution_score: result.task_execution_score,
+                task_execution_tendency: result.task_execution_tendency,
+                collaboration_score: result.collaboration_score,
+                collaboration_tendency: result.collaboration_tendency,
+                risk_attitude_score: result.risk_attitude_score,
+                risk_attitude_tendency: result.risk_attitude_tendency
+            });
+            logger_1.default.info(`[OPC] 天赋标签推断完成 for student ${studentId}`);
+        }
+        catch (error) {
+            logger_1.default.error('[OPC] 天赋标签推断失败:', error);
+            // 不影响测试完成流程，只记录错误
+        }
         return savedResult.rows[0];
     }
     /**

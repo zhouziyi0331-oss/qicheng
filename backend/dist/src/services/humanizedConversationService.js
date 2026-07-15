@@ -67,7 +67,7 @@ class HumanizedConversationService {
                 content: response,
                 tone: this.detectTone(response),
                 hasEmpathy: this.hasEmpathy(response),
-                hasWarmth: this.hasWarmth(response.content),
+                hasWarmth: this.hasWarmth(response),
                 remembersPast: memories.relevantMemories.length > 0,
                 toolRecommendations,
                 followUpTopics: await this.generateFollowUpTopics(studentMessage, struggle),

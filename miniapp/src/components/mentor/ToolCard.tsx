@@ -12,16 +12,16 @@ interface ToolCardProps {
 }
 
 const TOOL_ICONS = {
-  'Figma': '🎨',
-  'Notion': '📝',
-  'Trello': '📋',
-  'Jira': '🎯',
-  'Slack': '💬',
-  'GitHub': '🐙',
-  'VS Code': '💻',
-  'Postman': '📮',
-  'Chrome DevTools': '🔧',
-  'default': '🛠️'
+  'Figma': '●',
+  'Notion': '▪',
+  'Trello': '▪',
+  'Jira': '◆',
+  'Slack': '●',
+  'GitHub': '○',
+  'VS Code': '●',
+  'Postman': '●',
+  'Chrome DevTools': '●',
+  'default': '●️'
 };
 
 export default function ToolCard({
@@ -64,7 +64,7 @@ export default function ToolCard({
       <Text className="tool-description">{description}</Text>
 
       <View className="tool-reason">
-        <Text className="reason-label">💡 为什么推荐给你</Text>
+        <Text className="reason-label">◇ 为什么推荐给你</Text>
         <Text className="reason-text">{reason}</Text>
       </View>
 

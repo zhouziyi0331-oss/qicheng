@@ -14,13 +14,13 @@ interface MilestoneCelebrationProps {
 }
 
 const MILESTONE_CONFIG = {
-  first_session: { icon: '🎉', color: '#8B5CF6', title: '首次对话' },
-  requirement_mastered: { icon: '📋', color: '#10B981', title: '需求理解达人' },
-  execution_expert: { icon: '🚀', color: '#EC4899', title: '执行专家' },
-  quality_champion: { icon: '✅', color: '#06B6D4', title: '质量冠军' },
-  communication_pro: { icon: '🌉', color: '#F59E0B', title: '沟通高手' },
-  week_streak: { icon: '🔥', color: '#EF4444', title: '连续学习' },
-  tool_explorer: { icon: '🛠️', color: '#3B82F6', title: '工具探索者' }
+  first_session: { icon: '◇', color: '#8B5CF6', title: '首次对话' },
+  requirement_mastered: { icon: '▪', color: '#10B981', title: '需求理解达人' },
+  execution_expert: { icon: '▲', color: '#EC4899', title: '执行专家' },
+  quality_champion: { icon: '✓', color: '#06B6D4', title: '质量冠军' },
+  communication_pro: { icon: '●', color: '#F59E0B', title: '沟通高手' },
+  week_streak: { icon: '▲', color: '#EF4444', title: '连续学习' },
+  tool_explorer: { icon: '●️', color: '#3B82F6', title: '工具探索者' }
 };
 
 export default function MilestoneCelebration({
@@ -66,7 +66,7 @@ export default function MilestoneCelebration({
 
           {milestone.reward && (
             <View className="milestone-reward">
-              <Text className="reward-label">🎁 解锁奖励</Text>
+              <Text className="reward-label">◆ 解锁奖励</Text>
               <Text className="reward-text">{milestone.reward}</Text>
             </View>
           )}

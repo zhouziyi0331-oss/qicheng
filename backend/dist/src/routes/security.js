@@ -6,6 +6,7 @@
  * 1. 获取安全承诺列表
  * 2. 获取合作进度
  * 3. 获取访问日志
+ * 4. 微信小程序内容安全检查（新增）
  */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -18,6 +19,7 @@ const dataAccessLogService_1 = __importDefault(require("../services/dataAccessLo
 const collaborationProgressService_1 = __importDefault(require("../services/collaborationProgressService"));
 const contactUnlockService_1 = __importDefault(require("../services/contactUnlockService"));
 const auth_1 = require("../middleware/auth");
+const securityController_1 = require("../controllers/securityController");
 const router = (0, express_1.Router)();
 /**
  * 获取安全承诺列表
@@ -418,5 +420,18 @@ router.get('/my-unlock-requests', auth_1.authenticate, async (req, res) => {
         });
     }
 });
+// ============================================================
+// 微信小程序内容安全检查（新增）
+// ============================================================
+/**
+ * 图片内容安全检查
+ * POST /api/v1/security/imgSecCheck
+ */
+router.post('/imgSecCheck', auth_1.authenticate, securityController_1.imgSecCheck);
+/**
+ * 文本内容安全检查
+ * POST /api/v1/security/msgSecCheck
+ */
+router.post('/msgSecCheck', auth_1.authenticate, securityController_1.msgSecCheck);
 exports.default = router;
 //# sourceMappingURL=security.js.map

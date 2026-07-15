@@ -1,6 +1,8 @@
 import Taro from '@tarojs/taro'
+import { getApiUrl } from '../config'
+import { tokenManager } from '../utils/token'
 
-const BASE_URL = 'http://localhost:3000/api/v1'
+const BASE_URL = getApiUrl('/api/v1')
 
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -16,9 +18,9 @@ async function request(url: string, options: RequestOptions = {}) {
     'Content-Type': 'application/json'
   }
 
-  // 添加认证token
+  // 添加认证token - 使用tokenManager统一管理
   if (needAuth) {
-    const token = Taro.getStorageSync('accessToken')
+    const token = tokenManager.getAccessToken()
     if (token) {
       header['Authorization'] = `Bearer ${token}`
     }
@@ -36,10 +38,8 @@ async function request(url: string, options: RequestOptions = {}) {
     if (response.statusCode === 200) {
       return response.data
     } else if (response.statusCode === 401) {
-      // Token过期，跳转登录
-      Taro.removeStorageSync('accessToken')
-      Taro.removeStorageSync('refreshToken')
-      Taro.removeStorageSync('userInfo')
+      // Token过期，使用tokenManager清除
+      await tokenManager.clearTokens()
       Taro.redirectTo({ url: '/pages/login/index' })
       throw new Error('请先登录')
     } else {
@@ -69,7 +69,26 @@ export const authAPI = {
     request('/auth/send-code', { method: 'POST', data: { phone }, needAuth: false }),
 
   // 获取当前用户信息
-  getCurrentUser: () => request('/auth/me')
+  getCurrentUser: () => request('/auth/me'),
+
+  // 更新用户资料
+  updateProfile: (data: { nickname?: string; avatar?: string; bio?: string }) =>
+    request('/auth/profile', { method: 'PUT', data }),
+
+  // 修改密码
+  changePassword: (data: { oldPassword: string; newPassword: string }) =>
+    request('/auth/change-password', { method: 'POST', data }),
+
+  // 更新用户设置
+  updateSettings: (data: { soundEnabled?: boolean; vibrationEnabled?: boolean; autoSave?: boolean; pushEnabled?: boolean }) =>
+    request('/auth/settings', { method: 'PUT', data }),
+
+  // 获取用户设置
+  getSettings: () => request('/auth/settings'),
+
+  // 提交意见反馈
+  submitFeedback: (data: { type: string; content: string; contact?: string }) =>
+    request('/feedback', { method: 'POST', data })
 }
 
 // OPC测评API
@@ -119,6 +138,18 @@ export const taskAPI = {
   getMyTasks: (status?: string) =>
     request('/tasks/my', { method: 'GET', data: { status } }),
 
+  // 获取任务邀请列表
+  getInvitations: () =>
+    request('/tasks/flow/invitations'),
+
+  // 接受任务邀请
+  acceptInvitation: (taskId: string) =>
+    request(`/tasks/flow/${taskId}/accept`, { method: 'POST' }),
+
+  // 拒绝任务邀请
+  rejectInvitation: (taskId: string, reason?: string) =>
+    request(`/tasks/flow/${taskId}/reject`, { method: 'POST', data: { reason } }),
+
   // 更新任务进度
   updateProgress: (id: string, stepIndex: number) =>
     request(`/tasks/${id}/progress`, { method: 'POST', data: { stepIndex } })
@@ -165,6 +196,12 @@ export const abilityAPI = {
 
   // 获取情绪状态（excited/calm/frustrated/cooling）
   getEmotionState: () => request('/ability/emotion-state'),
+
+  // 获取成长对比数据（入驻时 vs 当前）
+  getGrowthComparison: () => request('/ability/growth-comparison'),
+
+  // 获取成长仪表盘数据
+  getGrowthDashboard: () => request('/ability/growth-dashboard'),
 
   // 任务完成后更新六维能力
   updateAfterTask: (taskId: string) =>
@@ -374,7 +411,311 @@ export const opcV2API = {
 
   // 获取最新测试结果
   getLatestResult: () =>
-    request('/opc-v2/latest')
+    request('/opc-v2/latest'),
+
+  // Phase 2.1: 生成身份卡片
+  generateIdentityCard: (options?: { theme?: string; includeStats?: boolean }) =>
+    request('/opc/identity-cards', { method: 'POST', data: options }),
+
+  // 获取身份卡片列表
+  getIdentityCards: (limit?: number) =>
+    request(`/opc/identity-cards?limit=${limit || 10}`),
+
+  // 获取单个身份卡片详情
+  getIdentityCardById: (cardId: string) =>
+    request(`/opc/identity-cards/${cardId}`, { needAuth: false }),
+
+  // 删除身份卡片
+  deleteIdentityCard: (cardId: string) =>
+    request(`/opc/identity-cards/${cardId}`, { method: 'DELETE' })
+}
+
+// Phase 2.2: 资产仪表盘API
+export const assetDashboardAPI = {
+  // 获取资产仪表盘
+  getDashboard: () =>
+    request('/asset-dashboard'),
+
+  // 获取能力价值详情
+  getAbilityDetail: (abilityName: string) =>
+    request(`/asset-dashboard/ability/${encodeURIComponent(abilityName)}`),
+
+  // 获取市场价值对比
+  getMarketComparison: () =>
+    request('/asset-dashboard/market-comparison')
+}
+
+// Phase 2.3: 成长对比API
+export const growthComparisonAPI = {
+  // 获取成长对比数据
+  getComparison: () =>
+    request('/growth-comparison')
+}
+
+// Phase 2.4: 真实案例库API
+export const caseLibraryAPI = {
+  // 搜索案例
+  searchCases: (params: {
+    caseType?: 'stuck' | 'breakthrough' | 'success'
+    category?: string
+    difficulty?: number
+    tags?: string[]
+    search?: string
+    limit?: number
+    offset?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params.caseType) queryParams.append('caseType', params.caseType)
+    if (params.category) queryParams.append('category', params.category)
+    if (params.difficulty) queryParams.append('difficulty', params.difficulty.toString())
+    if (params.tags) params.tags.forEach(tag => queryParams.append('tags[]', tag))
+    if (params.search) queryParams.append('search', params.search)
+    if (params.limit) queryParams.append('limit', params.limit.toString())
+    if (params.offset) queryParams.append('offset', params.offset.toString())
+
+    return request(`/case-library/search?${queryParams.toString()}`)
+  },
+
+  // 获取案例详情
+  getCaseById: (caseId: string) =>
+    request(`/case-library/cases/${caseId}`),
+
+  // 标记案例为有帮助
+  markCaseHelpful: (caseId: string) =>
+    request(`/case-library/cases/${caseId}/helpful`, { method: 'POST' }),
+
+  // 获取案例统计
+  getStats: () =>
+    request('/case-library/stats')
+}
+
+// Phase 3.1: 引路人机制API
+export const mentorRelationshipAPI = {
+  // 检查引路人资格
+  checkQualification: () =>
+    request('/mentor-relationship/qualification/check'),
+
+  // 申请成为引路人
+  applyToBeMentor: (data: {
+    bio?: string
+    maxMentees?: number
+    specialties?: string[]
+  }) =>
+    request('/mentor-relationship/apply', { method: 'POST', data: {
+      applicationReason: data.bio || '希望帮助更多学弟学妹成长',
+      experienceSummary: data.bio,
+      specialties: data.specialties
+    } }),
+
+  // 匹配引路人
+  findMentors: () =>
+    request('/mentor-relationship/match'),
+
+  // 建立引路人关系
+  connectWithMentor: (data: {
+    mentorStudentId: string
+    matchedReason?: string
+  }) =>
+    request('/mentor-relationship/connect', { method: 'POST', data }),
+
+  // 记录互动
+  recordInteraction: (data: {
+    relationshipId: string
+    interactionType: 'message' | 'advice' | 'encouragement' | 'resource_share'
+    content: string
+    menteeStudentId: string
+    context?: any
+  }) =>
+    request('/mentor-relationship/interaction', { method: 'POST', data })
+}
+
+// Phase 3.2: OPC故事墙API
+export const opcStoryAPI = {
+  // 创建故事
+  createStory: (data: {
+    title: string
+    storyContent: string
+    storyType: 'discovery' | 'breakthrough' | 'acceptance' | 'growth'
+    emotionTags?: string[]
+    lifeQuestion?: string
+    beforeState?: string
+    afterState?: string
+    keyMoment?: string
+    reflection?: string
+  }) =>
+    request('/opc-stories', { method: 'POST', data }),
+
+  // 搜索故事
+  searchStories: (params: {
+    personalityType?: string
+    storyType?: 'discovery' | 'breakthrough' | 'acceptance' | 'growth'
+    emotionTags?: string[]
+    featured?: boolean
+    search?: string
+    limit?: number
+    offset?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params.personalityType) queryParams.append('personalityType', params.personalityType)
+    if (params.storyType) queryParams.append('storyType', params.storyType)
+    if (params.emotionTags) params.emotionTags.forEach(tag => queryParams.append('emotionTags[]', tag))
+    if (params.featured !== undefined) queryParams.append('featured', params.featured.toString())
+    if (params.search) queryParams.append('search', params.search)
+    if (params.limit) queryParams.append('limit', params.limit.toString())
+    if (params.offset) queryParams.append('offset', params.offset.toString())
+
+    return request(`/opc-stories/search?${queryParams.toString()}`)
+  },
+
+  // 获取故事详情
+  getStoryById: (storyId: string) =>
+    request(`/opc-stories/${storyId}`),
+
+  // 点赞故事
+  likeStory: (storyId: string) =>
+    request(`/opc-stories/${storyId}/like`, { method: 'POST' }),
+
+  // 标记共鸣
+  markResonance: (storyId: string, data: {
+    resonanceType: 'similar_experience' | 'same_feeling' | 'inspired'
+    note?: string
+  }) =>
+    request(`/opc-stories/${storyId}/resonate`, { method: 'POST', data }),
+
+  // 获取故事统计
+  getStats: () =>
+    request('/opc-stories-stats'),
+
+  // 推荐相似故事
+  getSimilarStories: (storyId: string, limit?: number) =>
+    request(`/opc-stories/${storyId}/similar${limit ? `?limit=${limit}` : ''}`),
+
+  // 获取公共故事列表（用于故事墙展示）
+  getPublicStories: (params?: {
+    limit?: number
+    offset?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+    if (params?.offset) queryParams.append('offset', params.offset.toString())
+    return request(`/opc-stories/public${queryParams.toString() ? '?' + queryParams.toString() : ''}`, { needAuth: false })
+  },
+
+  // 获取故事详情（公共访问）
+  getStoryDetail: (storyId: string) =>
+    request(`/opc-stories/public/${storyId}`, { needAuth: false }),
+
+  // 获取故事统计数据
+  getStoryStats: () =>
+    request('/opc-stories/public/stats', { needAuth: false }),
+
+  // 切换点赞状态
+  toggleLike: (storyId: string) =>
+    request(`/opc-stories/${storyId}/like`, { method: 'POST' })
+}
+
+// Phase 3.3: 企业-学生端打通API
+export const companyStudentBridgeAPI = {
+  // 学生获取自己的声誉标签
+  getMyReputationTags: () =>
+    request('/company-student-bridge/my-reputation'),
+
+  // 学生获取自己的成长里程碑
+  getMyMilestones: (params?: {
+    milestoneType?: string
+    limit?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.milestoneType) queryParams.append('milestoneType', params.milestoneType)
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+    return request(`/company-student-bridge/my-milestones${queryParams.toString() ? '?' + queryParams.toString() : ''}`)
+  },
+
+  // 企业订阅学生成长（企业端）
+  subscribeToStudent: (data: {
+    studentId: string
+    subscriptionType?: 'normal' | 'priority' | 'potential'
+    notificationPreferences?: any
+  }) =>
+    request('/company-student-bridge/subscribe', { method: 'POST', data }),
+
+  // 企业添加学生声誉标签（企业端）
+  addReputationTag: (studentId: string, data: {
+    tagType: 'strength' | 'potential' | 'concern'
+    tagName: string
+    description?: string
+    evidence?: string
+    sourceTaskId?: string
+    confidenceScore?: number
+    isVisibleToStudent?: boolean
+  }) =>
+    request('/company-student-bridge/reputation-tag', {
+      method: 'POST',
+      data: {
+        studentId,
+        tagType: data.tagType,
+        tagName: data.tagName,
+        tagDescription: data.description,
+        evidence: data.evidence,
+        sourceTaskId: data.sourceTaskId,
+        confidenceScore: data.confidenceScore,
+        isVisibleToStudent: data.isVisibleToStudent
+      }
+    }),
+
+  // 企业获取成长通知（企业端）
+  getCompanyNotifications: (params?: {
+    onlyUnread?: boolean
+    limit?: number
+    offset?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.onlyUnread) queryParams.append('unreadOnly', 'true')
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+    if (params?.offset) queryParams.append('offset', params.offset.toString())
+    return request(`/company-student-bridge/notifications${queryParams.toString() ? '?' + queryParams.toString() : ''}`)
+  },
+
+  // 标记通知为已读（企业端）
+  markNotificationAsRead: (notificationId: number) =>
+    request(`/company-student-bridge/notifications/${notificationId}/read`, { method: 'POST' })
+}
+
+// Phase 3.4: 需求自动拆解推送API
+export const demandDecompositionAPI = {
+  // 企业提交大需求拆解（企业端）
+  decomposeTask: (data: {
+    taskId: string
+    taskTitle: string
+    taskDescription: string
+    totalBudget?: number
+  }) =>
+    request('/demand-decomposition/decompose', { method: 'POST', data }),
+
+  // 推送子任务给学生（企业端）
+  pushSubtask: (subtaskId: string, maxPushCount?: number) =>
+    request(`/demand-decomposition/subtasks/${subtaskId}/push`, {
+      method: 'POST',
+      data: { maxPushCount }
+    }),
+
+  // 学生查看收到的子任务推送
+  getMyPushes: (params?: {
+    responseStatus?: 'pending' | 'accepted' | 'rejected' | 'ignored'
+    limit?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.responseStatus) queryParams.append('responseStatus', params.responseStatus)
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+    return request(`/demand-decomposition/my-pushes${queryParams.toString() ? '?' + queryParams.toString() : ''}`)
+  },
+
+  // 学生响应子任务推送
+  respondToSubtask: (subtaskId: string, data: {
+    response: 'accepted' | 'rejected'
+    rejectionReason?: string
+  }) =>
+    request(`/demand-decomposition/subtasks/${subtaskId}/respond`, { method: 'POST', data })
 }
 
 // 项目匹配系统API
@@ -531,6 +872,19 @@ export const mentorStageAPI = {
   getGrowthChallenges: (studentId: string, status?: 'active' | 'completed') =>
     request(`/mentor-stage/deep/challenges/${studentId}${status ? `?status=${status}` : ''}`),
 
+  // 接受挑战
+  acceptChallenge: (challengeId: string) =>
+    request(`/mentor-stage/deep/challenges/${challengeId}/accept`, {
+      method: 'POST'
+    }),
+
+  // 拒绝挑战
+  declineChallenge: (challengeId: string, reason?: string) =>
+    request(`/mentor-stage/deep/challenges/${challengeId}/decline`, {
+      method: 'POST',
+      data: { reason }
+    }),
+
   // 更新挑战进度
   updateChallengeProgress: (challengeId: string, progress: string) =>
     request(`/mentor-stage/deep/challenges/${challengeId}/progress`, {
@@ -544,6 +898,35 @@ export const mentorStageAPI = {
       method: 'POST',
       data: { reflection }
     }),
+
+  // ========== 导师报告系统 ==========
+
+  // 获取导师报告列表
+  getMentorReports: (studentId: string) =>
+    request(`/mentor-stage/reports/${studentId}`),
+
+  // 生成导师报告
+  generateReport: (studentId: string, reportType: 'weekly' | 'monthly') =>
+    request(`/mentor-stage/reports/${studentId}/generate`, {
+      method: 'POST',
+      data: { reportType }
+    }),
+
+  // 导出报告（PDF/图片）
+  exportReport: (reportId: string, format: 'pdf' | 'image' = 'pdf') =>
+    request(`/mentor-stage/reports/${reportId}/export?format=${format}`),
+
+  // 下载报告文件
+  downloadReport: (reportId: string, format: 'pdf' | 'image' = 'pdf') => {
+    // 使用tokenManager统一管理
+    const token = tokenManager.getAccessToken()
+    return Taro.downloadFile({
+      url: `${BASE_URL}/mentor-stage/reports/${reportId}/download?format=${format}`,
+      header: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+  },
 
   // ========== 主动跟进系统 ==========
 
@@ -1046,6 +1429,10 @@ export const escrowAPI = {
   getTransactions: (params?: { page?: number; limit?: number; type?: string }) =>
     request('/escrow/transactions', { method: 'GET', data: params }),
 
+  // 获取订单资金状态（分阶段支付详情）
+  getOrderStatus: (orderId: string) =>
+    request(`/escrow/orders/${orderId}/payment-status`),
+
   // 申请提现
   requestWithdrawal: (data: { amount: number; account_type: string; account_info: any }) =>
     request('/escrow/withdraw', { method: 'POST', data }),
@@ -1090,7 +1477,16 @@ export default {
   challengeGraduation: challengeGraduationAPI,
   aiEngine: aiEngineAPI,
   opcGrowth: opcGrowthAPI,
-  security: securityAPI
+  security: securityAPI,
+  analytics: analyticsAPI,
+  talent: talentAPI,
+  stats: statsAPI,
+  dailyTasks: dailyTasksAPI,
+  companyRating: companyRatingAPI,
+  taskTranslation: taskTranslationAPI,
+  studentRecommendation: studentRecommendationAPI,
+  taskFlow: taskFlowAPI,
+  submission: submissionAPI
 }
 
 // 安全相关API
@@ -1127,4 +1523,144 @@ export const securityAPI = {
 
   // 获取我的所有解锁请求
   getMyUnlockRequests: () => request('/security/my-unlock-requests')
+}
+
+// 分析统计API（游戏化相关）
+export const analyticsAPI = {
+  // 获取用户统计数据（包含思考点数）
+  getStats: () => request('/analytics/user/stats'),
+
+  // 获取活动日志
+  getActivityLog: (limit: number = 50) =>
+    request(`/analytics/activity?limit=${limit}`)
+}
+
+// 天赋标签系统API（语义级精准匹配）
+export const talentAPI = {
+  // 获取学生天赋画像
+  getProfile: (studentId?: string) =>
+    request(`/talent/profile${studentId ? '/' + studentId : ''}`),
+
+  // 获取学生成长统计
+  getStats: (studentId?: string) =>
+    request(`/talent/stats${studentId ? '/' + studentId : ''}`),
+
+  // 获取所有天赋标签列表（供企业选择）
+  getTags: () => request('/talent/tags'),
+
+  // 获取所有业务场景标签
+  getScenarios: () => request('/talent/scenarios'),
+
+  // 为任务匹配学生（使用天赋匹配算法）
+  matchStudentsForTask: (taskId: string, topN?: number) =>
+    request(`/talent/match/task/${taskId}${topN ? '?topN=' + topN : ''}`),
+
+  // 手动触发天赋推断（通常自动触发）
+  inferFromOPC: (opcScores: any) =>
+    request('/talent/infer/opc', { method: 'POST', data: { opcScores } }),
+
+  // 手动触发能力提取（通常在任务完成时自动触发）
+  extractFromTask: (taskId: string) =>
+    request(`/talent/extract/task/${taskId}`, { method: 'POST' }),
+
+  // 创建任务需求拆解
+  createBreakdown: (taskId: string, breakdown: any[]) =>
+    request(`/talent/breakdown/${taskId}`, { method: 'POST', data: { breakdown } }),
+
+  // 获取任务需求拆解
+  getBreakdown: (taskId: string) =>
+    request(`/talent/breakdown/${taskId}`),
+
+  // 为子需求匹配学生
+  matchStudentsForRequirement: (taskId: string, requirementId: string, topN?: number) =>
+    request(`/talent/match/requirement/${taskId}/${requirementId}${topN ? '?topN=' + topN : ''}`)
+}
+
+// 统计数据API
+export const statsAPI = {
+  // 获取人格标签统计（同类数据）
+  getPersonalityStats: (tag: string) =>
+    request(`/stats/personality/${tag}`, { needAuth: false }),
+
+  // 获取赛道统计
+  getTrackStats: (track: string) =>
+    request(`/stats/track/${track}`, { needAuth: false }),
+
+  // 获取学生能力估值
+  getStudentValuation: () =>
+    request('/stats/student-valuation')
+}
+
+// 每日任务API
+export const dailyTasksAPI = {
+  // 获取每日任务列表
+  getDailyTasks: () => request('/daily-tasks'),
+
+  // 完成每日任务
+  completeTask: (taskId: string) =>
+    request(`/daily-tasks/${taskId}/complete`, { method: 'POST' })
+}
+
+// 评价系统API（新版 - 企业评价）
+export const companyRatingAPI = {
+  // 获取待评价任务列表
+  getPendingRatings: () => request('/rating/pending'),
+
+  // 检查任务是否可评价
+  checkCanRate: (taskId: string) => request(`/rating/check/${taskId}`),
+
+  // 获取评价标签预设
+  getTagPresets: () => request('/rating/tags/presets'),
+
+  // 提交企业评价
+  submitRating: (data: {
+    taskId: number;
+    overallRating: number;
+    requirementClarity: number;
+    communicationQuality: number;
+    paymentTimeliness: number;
+    comment: string;
+    tags: string[];
+    isAnonymous: boolean;
+  }) => request('/rating/submit', { method: 'POST', data })
+}
+
+// 任务翻译API（启程老师）
+export const taskTranslationAPI = {
+  // 获取任务翻译
+  getTranslation: (taskId: string) => request(`/tasks/${taskId}/translation`),
+
+  // 接受任务推荐
+  acceptRecommendation: (taskId: string) =>
+    request(`/tasks/${taskId}/accept-recommendation`, { method: 'POST' })
+}
+
+// 学生推荐任务API
+export const studentRecommendationAPI = {
+  // 获取推荐任务列表
+  getRecommendedTasks: () => request('/students/recommended-tasks'),
+
+  // 检查是否首单
+  isFirstOrder: () => request('/student/is-first-order')
+}
+
+// 任务流程API
+export const taskFlowAPI = {
+  // 更新任务进度
+  updateProgress: (taskId: string, data: { progressPercent: number; note?: string }) =>
+    request(`/tasks/flow/${taskId}/progress`, { method: 'POST', data }),
+
+  // 提交交付物
+  submitDeliverable: (taskId: string, data: {
+    description: string;
+    fileUrls: string[];
+    links: string[];
+  }) => request(`/tasks/flow/${taskId}/deliverable`, { method: 'POST', data })
+}
+
+// 提交预审核API
+export const submissionAPI = {
+  // AI预审核
+  preCheck: (data: { taskId: string; submissionContent: string }) =>
+    request('/submissions/pre-check', { method: 'POST', data })
 }

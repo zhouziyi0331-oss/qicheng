@@ -1,0 +1,229 @@
+
+
+@import '../../../styles/variables.scss';
+
+.complete-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary 0%, $primary 100%);
+  padding: 96px 64px 320px;
+}
+
+.celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeOut 2s forwards;
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+  }
+
+  .celebration-icon {
+    font-size: 320px;
+    margin-bottom: 64px;
+    animation: bounce 1s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-80px); }
+  }
+
+  .celebration-text {
+    font-size: 96px;
+    font-weight: 700;
+    color: white;
+  }
+}
+
+.complete-card {
+  background: white;
+  border-radius: $radius-lg;
+  padding: 96px;
+  text-align: center;
+  margin-bottom: 64px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+
+  .complete-icon {
+    font-size: 240px;
+    margin-bottom: 48px;
+    display: block;
+  }
+
+  .complete-title {
+    font-size: 96px;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 32px;
+    display: block;
+  }
+
+  .complete-subtitle {
+    font-size: 56px;
+    color: $text-secondary;
+  }
+}
+
+.rewards-section,
+.ability-section {
+  background: white;
+  border-radius: $radius-lg;
+  padding: 64px;
+  margin-bottom: 48px;
+  box-shadow: $shadow-card;
+
+  .section-title {
+    font-size: 64px;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 32px;
+  }
+
+  .section-desc {
+    font-size: 48px;
+    color: $text-secondary;
+    margin-bottom: 48px;
+  }
+}
+
+.rewards-grid {
+  display: flex;
+  gap: 32px;
+
+  .reward-item {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 230, 109, 0.05) 100%);
+    border-radius: $radius-lg;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    .reward-icon {
+      font-size: 112px;
+    }
+
+    .reward-value {
+      font-size: 64px;
+      font-weight: 700;
+      color: $primary;
+    }
+
+    .reward-label {
+      font-size: 44px;
+      color: $text-secondary;
+    }
+  }
+}
+
+.ability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 48px;
+
+  .ability-item {
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.03) 0%, rgba(255, 230, 109, 0.03) 100%);
+    border-radius: 24px;
+
+    .ability-name {
+      font-size: 52px;
+      font-weight: 600;
+      color: $text-primary;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .ability-progress {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      .progress-bar {
+        flex: 1;
+        height: 16px;
+        background: #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, $primary 0%, $primary 100%);
+          transition: width 0.3s;
+          border-radius: 8px;
+        }
+      }
+
+      .progress-text {
+        font-size: 44px;
+        color: $text-secondary;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.view-map-btn {
+  width: 100%;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  color: #3b82f6;
+  border-radius: $radius-lg;
+  font-size: 52px;
+  font-weight: 500;
+  border: none;
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 64px;
+  background: white;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 32px;
+
+  .action-btn {
+    flex: 1;
+    padding: 48px;
+    border-radius: $radius-lg;
+    font-size: 56px;
+    font-weight: 500;
+    border: none;
+    transition: all var(--duration-fast) var(--ease-standard);
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &.primary {
+      background: linear-gradient(135deg, $primary 0%, $primary 100%);
+      color: white;
+      box-shadow: $shadow-soft;
+    }
+
+    &.secondary {
+      background: #f3f4f6;
+      color: $text-secondary;
+    }
+  }
+}

@@ -18,10 +18,11 @@ if (!ossAccessKeyId || ossAccessKeyId === 'your-access-key-id' ||
     !ossAccessKeySecret || ossAccessKeySecret === 'your-access-key-secret') {
   logger.error('❌ 未配置OSS凭证！文件上传功能将不可用');
   logger.error('请在.env中配置: OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET');
-  throw new Error('文件上传功能需要配置OSS凭证');
+  // 临时允许服务器启动，但文件上传功能不可用
+  // throw new Error('文件上传功能需要配置OSS凭证');
 }
 
-const ossClient = new OSS({
+const ossClient = !ossAccessKeyId || ossAccessKeyId === 'your-access-key-id' ? null : new OSS({
   region: 'oss-cn-chengdu',
   accessKeyId: ossAccessKeyId,
   accessKeySecret: ossAccessKeySecret,

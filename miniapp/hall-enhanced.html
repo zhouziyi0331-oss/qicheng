@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>启程 OPC · 赛道大厅</title>
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — Sunset Postcard
+    ============================================================ */
+    :root {
+      --rust:       #BC6446;
+      --rust-dark:  #A0503A;
+      --terra:      #D88760;
+      --sand:       #BF9E71;
+      --golden:     #F2CD78;
+      --mist:       #9ABFB8;
+      --mist-dark:  #7DA8A2;
+
+      --bg:         #FAF7F4;
+      --surface:    #FFFFFF;
+      --surface2:   #F5F0EB;
+      --border:     #EDE5DC;
+      --text-1:     #2C2018;
+      --text-2:     #6B5540;
+      --text-3:     #A8917A;
+
+      --r-sm:   8px;
+      --r-md:   16px;
+      --r-lg:   24px;
+      --r-xl:   32px;
+      --r-full: 9999px;
+
+      --shadow-sm: 0 2px 8px rgba(44,32,24,.06);
+      --shadow-md: 0 4px 20px rgba(44,32,24,.10);
+      --shadow-lg: 0 8px 32px rgba(44,32,24,.18);
+      --font: 'PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font);
+      background: #C8BDB4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* ============================================================
+       PHONE FRAME
+    ============================================================ */
+    .phone {
+      width: 375px;
+      height: 812px;
+      background: var(--bg);
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+      box-shadow:
+        0 0 0 10px #1A1008,
+        0 0 0 12px #2C2018,
+        0 30px 80px rgba(0,0,0,.4);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ============================================================
+       STATUS BAR
+    ============================================================ */
+    .status-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+      background: transparent;
+    }
+    .status-bar .time {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,.85);
+    }
+    .status-bar .icons {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .status-bar .icons svg {
+      width: 16px;
+      height: 16px;
+      fill: rgba(255,255,255,.85);
+    }
+
+    /* ============================================================
+       TOP BAR (inside hero)
+    ============================================================ */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0 16px;
+      position: relative;
+      z-index: 1;
+      background: transparent;
+    }
+    .top-bar .tb-back {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .top-bar .tb-back:hover {
+      background: rgba(255,255,255,.25);
+      transform: scale(1.05);
+    }
+    .top-bar .tb-back:active {
+      transform: scale(0.95);
+    }
+    .top-bar .tb-back svg {
+      width: 18px;
+      height: 18px;
+      color: white;
+    }
+    .top-bar .tb-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: white;
+    }
+    .top-bar .tb-spacer {
+      width: 34px;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hall-hero {
+      background: linear-gradient(160deg, #2C2018, #4A3020, #6B4030);
+      padding: 16px 20px 28px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hall-hero::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(242,205,120,.18) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: pulse 4s ease-in-out infinite;
+    }
+    .hall-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: -30px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(190,215,209,.12) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    .hall-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .hall-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,.55);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .hall-stats {
+      display: flex;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .hs-item {
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .hs-item:hover {
+      transform: translateY(-2px);
+    }
+    .hs-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--golden);
+    }
+    .hs-label {
+      font-size: 11px;
+      color: rgba(255,255,255,.45);
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       SCROLL AREA
+    ============================================================ */
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      background: var(--bg);
+    }
+    .scroll-area::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ============================================================
+       BODY / SECTOR CARDS
+    ============================================================ */
+    .hall-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sector-card {
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .sector-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sector-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .sector-card:hover::before {
+      opacity: 1;
+    }
+
+    .sector-card:active {
+      transform: translateY(-2px);
+    }
+
+    .sector-card-header {
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #BC6446, #D88760);
+      transition: background 0.5s ease;
+    }
+
+    .sector-card:hover .sector-card-header {
+      background: linear-gradient(145deg, #D88760, #BC6446);
+    }
+
+    .sector-card-header::after {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      transition: all 0.5s ease;
+    }
+
+    .sector-card:hover .sector-card-header::after {
+      transform: scale(1.2);
+      background: rgba(255,255,255,.12);
+    }
+
+    .sector-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .sector-card:hover .sector-icon {
+      transform: scale(1.15) rotate(5deg);
+    }
+
+    .sector-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .sector-desc {
+      font-size: 12px;
+      color: rgba(255,255,255,.7);
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+    .sector-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .sector-tag {
+      padding: 3px 10px;
+      border-radius: var(--r-full);
+      background: rgba(255,255,255,.15);
+      color: rgba(255,255,255,.8);
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .sector-tag:hover {
+      background: rgba(255,255,255,.28);
+      transform: translateY(-1px);
+    }
+
+    .sector-card-footer {
+      background: var(--surface);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .sector-meta {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+    .sector-btn {
+      padding: 6px 16px;
+      border-radius: var(--r-full);
+      background: linear-gradient(135deg, var(--rust), var(--rust-dark));
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(188,100,70,.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sector-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .sector-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(188,100,70,.4);
+    }
+
+    .sector-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .sector-btn:active {
+      transform: translateY(0);
+    }
+
+    .sector-btn.mist {
+      background: linear-gradient(135deg, #9ABFB8, #BED7D1);
+      color: #2C5A56;
+      box-shadow: 0 2px 8px rgba(154,191,184,.3);
+    }
+
+    .sector-btn.mist:hover {
+      box-shadow: 0 4px 12px rgba(154,191,184,.4);
+    }
+
+    /* ============================================================
+       TAG UTILITIES
+    ============================================================ */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: var(--r-full);
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .tag-rust {
+      background: rgba(188,100,70,.1);
+      color: var(--rust);
+      border: 1px solid rgba(188,100,70,.2);
+    }
+    .tag-rust:hover {
+      background: rgba(188,100,70,.15);
+      transform: scale(1.05);
+    }
+    .tag-golden {
+      background: rgba(242,205,120,.2);
+      color: #8A6A20;
+    }
+    .tag-sand {
+      background: rgba(191,158,113,.15);
+      color: #7A6030;
+    }
+    .tag-mist {
+      background: rgba(190,215,209,.2);
+      color: #4A8A84;
+    }
+
+    /* ============================================================
+       "更多赛道" placeholder
+    ============================================================ */
+    .coming-soon {
+      background: var(--surface2);
+      border-radius: var(--r-lg);
+      padding: 16px;
+      border: 1px dashed var(--border);
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+    .coming-soon:hover {
+      border-color: var(--rust);
+      background: linear-gradient(135deg, rgba(188,100,70,.03), rgba(190,215,209,.03));
+    }
+    .coming-soon .cs-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-2);
+      margin-bottom: 4px;
+    }
+    .coming-soon .cs-desc {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* ============================================================
+       BOTTOM NAV
+    ============================================================ */
+    .bottom-nav {
+      height: 80px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px 16px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      flex: 1;
+      transition: transform 0.2s ease;
+    }
+    .nav-item:active {
+      transform: scale(0.95);
+    }
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      transition: all 0.3s ease;
+    }
+    .nav-item:hover svg {
+      transform: translateY(-2px);
+    }
+    .nav-item span {
+      font-size: 10px;
+      color: var(--text-3);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .nav-item.active span {
+      color: var(--rust);
+    }
+    .nav-item:hover span {
+      color: var(--rust);
+    }
+    .nav-fab {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--rust), var(--rust-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -28px;
+      box-shadow: 0 4px 16px rgba(188,100,70,.4);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-fab::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+    }
+
+    .nav-fab:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 24px rgba(188,100,70,.5);
+    }
+
+    .nav-fab:hover::before {
+      width: 100px;
+      height: 100px;
+    }
+
+    .nav-fab:active {
+      transform: translateY(-2px) scale(1);
+    }
+
+    .nav-fab svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       RIPPLE EFFECT
+    ============================================================ */
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 480px) {
+      .phone {
+        width: 340px;
+        height: 736px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <span class="time">16:37</span>
+      <div class="icons">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hall-hero">
+      <div class="top-bar">
+        <div class="tb-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        </div>
+        <div class="tb-title">赛道大厅</div>
+        <div class="tb-spacer"></div>
+      </div>
+
+      <div class="hall-title">选择你的成长赛道</div>
+      <div class="hall-sub">每条赛道都有专属课程体系和任务资源</div>
+      <div class="hall-stats">
+        <div class="hs-item">
+          <div class="hs-val">2</div>
+          <div class="hs-label">可选赛道</div>
+        </div>
+        <div class="hs-item">
+          <div class="hs-val">570+</div>
+          <div class="hs-label">在读学员</div>
+        </div>
+        <div class="hs-item">
+          <div class="hs-val">¥1.2k</div>
+          <div class="hs-label">平均月收入</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="scroll-area">
+      <div class="hall-body">
+
+        <!-- 赛道卡片 1: 内容赛道 -->
+        <div class="sector-card" onclick="window.location.href='track-content-path.html'">
+          <div class="sector-card-header" style="background:linear-gradient(135deg,#BC6446,#D88760)">
+            <div class="sector-icon">✍️</div>
+            <div class="sector-name">内容赛道</div>
+            <div class="sector-desc">小红书运营 · 品牌设计 · 文案写作 · 用户研究</div>
+            <div class="sector-tags">
+              <div class="sector-tag">小红书</div>
+              <div class="sector-tag">品牌设计</div>
+              <div class="sector-tag">文案</div>
+              <div class="sector-tag">运营</div>
+            </div>
+          </div>
+          <div class="sector-card-footer">
+            <div>
+              <div class="sector-meta">312 人在读 · 平均月收入 ¥1,400</div>
+              <div style="margin-top:4px"><span class="tag tag-rust">已选择</span></div>
+            </div>
+            <button class="sector-btn" onclick="event.stopPropagation(); window.location.href='track-content-path.html'">了解升级</button>
+          </div>
+        </div>
+
+        <!-- 赛道卡片 2: 开发赛道 -->
+        <div class="sector-card" onclick="window.location.href='track-dev-path.html'">
+          <div class="sector-card-header" style="background:linear-gradient(135deg,#9ABFB8,#BED7D1)">
+            <div class="sector-icon">💻</div>
+            <div class="sector-name">开发赛道</div>
+            <div class="sector-desc">前端开发 · 小程序 · 数据分析 · 产品设计</div>
+            <div class="sector-tags">
+              <div class="sector-tag">前端</div>
+              <div class="sector-tag">小程序</div>
+              <div class="sector-tag">数据</div>
+              <div class="sector-tag">产品</div>
+            </div>
+          </div>
+          <div class="sector-card-footer">
+            <div>
+              <div class="sector-meta">258 人在读 · 平均月收入 ¥1,800</div>
+            </div>
+            <button class="sector-btn mist" onclick="event.stopPropagation(); window.location.href='track-dev-path.html'">了解升级</button>
+          </div>
+        </div>
+
+        <!-- 更多赛道提示 -->
+        <div class="coming-soon">
+          <div class="cs-title">🔮 更多赛道即将开放</div>
+          <div class="cs-desc">电商赛道、视频赛道、咨询赛道正在筹备中...</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#A8917A" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>首页</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#A8917A" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>任务</span>
+      </div>
+      <!-- FAB Cat -->
+      <div class="nav-fab">
+        <svg viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="36" r="18" fill="#EDD0B0"/>
+          <polygon points="24,22 18,10 30,18" fill="#EDD0B0"/>
+          <polygon points="56,22 62,10 50,18" fill="#EDD0B0"/>
+          <polygon points="25,21 20,13 29,18" fill="#BC6446" opacity=".4"/>
+          <polygon points="55,21 60,13 51,18" fill="#BC6446" opacity=".4"/>
+          <ellipse cx="33" cy="34" rx="3" ry="3.5" fill="#2C2018"/>
+          <ellipse cx="47" cy="34" rx="3" ry="3.5" fill="#2C2018"/>
+          <circle cx="34" cy="32.5" r="1.2" fill="white"/>
+          <circle cx="48" cy="32.5" r="1.2" fill="white"/>
+          <ellipse cx="40" cy="39" rx="1.8" ry="1.3" fill="#BC6446"/>
+          <rect x="28" y="18" width="24" height="14" rx="3" fill="#BF9E71"/>
+          <rect x="40" y="20" width="10" height="10" rx="2" fill="#F2CD78" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#BC6446" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>故事</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#A8917A" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>我的</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

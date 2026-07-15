@@ -1,0 +1,338 @@
+
+
+
+$spacing-xs: 8rpx;      // 极小间距（标签内边距）
+$spacing-sm: 16rpx;     // 小间距（卡片内元素）
+$spacing-md: 24rpx;     // 中等间距（卡片之间）
+$spacing-lg: 32rpx;     // 大间距（页面边距）
+$spacing-xl: 48rpx;     // 超大间距（模块之间）
+
+
+$font-xs: 24rpx;        // 极小（辅助说明）
+$font-sm: 28rpx;        // 小字（次要信息）
+$font-md: 32rpx;        // 正文（主要内容）
+$font-lg: 36rpx;        // 标题（卡片标题）
+$font-xl: 40rpx;        // 大标题（页面标题）
+$font-xxl: 48rpx;       // 超大（Slogan）
+
+$line-height-base: 1.5; // 基础行高
+$line-height-title: 1.3; // 标题行高
+
+
+
+// 主题背景色
+$strawberry-pink: #FFF0F3;      // 草莓奶昔粉
+$peach-yellow: #FFF6EB;         // 蜜桃黄
+$grape-green: #F0F7F2;          // 青提绿
+$cream-white: #FFFEF9;          // 奶油白
+
+// 主题强调色
+$grapefruit-orange: #FF6B6B;    // 西柚橙
+$blueberry-blue: #4ECDC4;       // 蓝莓蓝
+$mango-yellow: #FFE66D;         // 芒果黄
+$watermelon-red: #FF6B9D;       // 西瓜红
+
+// 基础色
+$bg-primary: #FEF3F8;           // 主背景（草莓奶昔粉）
+$primary: #EC4899;              // 主色（粉色）
+$text-primary: #1A1A1A;         // 主文字（深灰）
+$text-secondary: #666666;       // 次要文字（灰色）
+$text-tertiary: #999999;        // 辅助文字（浅灰）
+$border-color: #E0E0E0;         // 边框色
+$card-bg: #FFFFFF;              // 卡片背景（白色）
+
+// 功能色
+$success: #10B981;              // 成功（绿色）
+$warning: #F59E0B;              // 警告（橙色）
+$error: #EF4444;                // 错误（红色）
+$info: #3B82F6;                 // 信息（蓝色）
+
+
+$radius-sm: 8rpx;               // 小圆角（标签、按钮）
+$radius-md: 12rpx;              // 中圆角（小卡片）
+$radius-lg: 16rpx;              // 大圆角（中等卡片）
+$radius-xl: 24rpx;              // 超大圆角（大卡片）
+$radius-full: 999rpx;           // 全圆（头像、图标）
+
+
+$shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.04);     // 轻微阴影
+$shadow-md: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);     // 中等阴影
+$shadow-lg: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);    // 大阴影
+$shadow-xl: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);    // 超大阴影
+
+
+$transition-fast: 0.15s ease;
+$transition-base: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+
+
+// 大卡片（核心功能）
+@mixin card-primary {
+  background: $card-bg;
+  border-radius: $radius-xl;
+  padding: $spacing-lg;
+  box-shadow: $shadow-lg;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-md;
+  }
+}
+
+// 中等卡片（功能模块）
+@mixin card-secondary {
+  background: $card-bg;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  box-shadow: $shadow-md;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-sm;
+  }
+}
+
+// 小卡片（统计数据）
+@mixin card-tertiary {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: $radius-md;
+  padding: $spacing-sm;
+  box-shadow: $shadow-sm;
+  backdrop-filter: blur(10px);
+}
+
+
+
+// 主按钮
+@mixin btn-primary {
+  background: $primary;
+  color: #FFFFFF;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-md;
+  font-weight: 500;
+  border: none;
+  box-shadow: $shadow-md;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.96);
+    box-shadow: $shadow-sm;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 次要按钮
+@mixin btn-secondary {
+  background: $card-bg;
+  color: $primary;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-md;
+  font-weight: 500;
+  border: 2rpx solid $primary;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.96);
+    background: rgba($primary, 0.05);
+  }
+}
+
+// 文字按钮
+@mixin btn-text {
+  background: transparent;
+  color: $primary;
+  border: none;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-sm;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+
+
+// Flex 居中
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex 两端对齐
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Flex 垂直布局
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// 安全区域（顶部）
+@mixin safe-area-top {
+  padding-top: calc(env(safe-area-inset-top) + #{$spacing-lg});
+}
+
+// 安全区域（底部）
+@mixin safe-area-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$spacing-lg});
+}
+
+
+
+// 单行文本省略
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行文本省略
+@mixin text-ellipsis-multi($lines: 2) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 标题样式
+@mixin text-title {
+  font-size: $font-lg;
+  font-weight: 600;
+  color: $text-primary;
+  line-height: $line-height-title;
+}
+
+// 正文样式
+@mixin text-body {
+  font-size: $font-md;
+  color: $text-primary;
+  line-height: $line-height-base;
+}
+
+// 说明文字
+@mixin text-caption {
+  font-size: $font-sm;
+  color: $text-secondary;
+  line-height: $line-height-base;
+}
+
+
+
+// 粉色渐变
+@mixin gradient-pink {
+  background: linear-gradient(135deg, #FFE5F1 0%, #FFD6E8 100%);
+}
+
+// 橙色渐变
+@mixin gradient-orange {
+  background: linear-gradient(135deg, #FFE8D6 0%, #FFD6B8 100%);
+}
+
+// 蓝色渐变
+@mixin gradient-blue {
+  background: linear-gradient(135deg, #E0F2FE 0%, #DBEAFE 100%);
+}
+
+// 绿色渐变
+@mixin gradient-green {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+}
+
+
+
+// 页面容器
+.page-container {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: $spacing-lg;
+  @include safe-area-bottom;
+}
+
+// 滚动容器
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+// 内容区（留出 TabBar 空间）
+.content-with-tabbar {
+  padding-bottom: calc(100rpx + #{$spacing-lg});
+}
+
+// 分割线
+.divider {
+  height: 1rpx;
+  background: $border-color;
+  margin: $spacing-md 0;
+}
+
+// 标签
+.tag {
+  display: inline-block;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: $font-xs;
+  font-weight: 500;
+
+  &.tag-primary {
+    background: rgba($primary, 0.1);
+    color: $primary;
+  }
+
+  &.tag-success {
+    background: rgba($success, 0.1);
+    color: $success;
+  }
+
+  &.tag-warning {
+    background: rgba($warning, 0.1);
+    color: $warning;
+  }
+
+  &.tag-error {
+    background: rgba($error, 0.1);
+    color: $error;
+  }
+}
+
+// Loading 状态
+.loading-state {
+  @include flex-center;
+  padding: $spacing-xl;
+  color: $text-tertiary;
+}
+
+// 空状态
+.empty-state {
+  @include flex-center;
+  @include flex-column;
+  padding: $spacing-xl;
+  color: $text-tertiary;
+
+  .empty-icon {
+    font-size: 128rpx;
+    margin-bottom: $spacing-md;
+    opacity: 0.3;
+  }
+
+  .empty-text {
+    font-size: $font-md;
+  }
+}

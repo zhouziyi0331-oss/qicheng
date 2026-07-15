@@ -1,68 +1,87 @@
 /**
- * 语义匹配引擎
- * 6维度匹配算法：技能、难度、领域、成长潜力、可靠性、偏好
- * 用于精准匹配任务和学生
+ * 真正基于向量的匹配引擎
+ * 直接使用向量计算，不依赖中间对象
+ *
+ * 适配版：使用qicheng的PostgreSQL pool
  */
-interface MatchScore {
-    overall_score: number;
-    skill_match_score: number;
-    difficulty_match_score: number;
-    domain_match_score: number;
-    growth_potential_score: number;
-    reliability_score: number;
-    preference_score: number;
-    match_breakdown: any;
-}
 interface MatchResult {
-    student_id: string;
-    student_name: string;
-    match_score: MatchScore;
-    rank: number;
+    taskId: string;
+    studentId: string;
+    overallScore: number;
+    skillMatch: number;
+    difficultyMatch: number;
+    domainMatch: number;
+    growthPotential: number;
+    reliability: number;
+    preferenceAlignment: number;
+    recommendation: string;
+    reasoning: string[];
+    concerns: string[];
 }
 declare class SemanticMatchingEngine {
-    private weights;
     /**
-     * 计算余弦相似度
+     * 为任务生成并存储向量
      */
-    private cosineSimilarity;
+    indexTask(taskId: string, description: string, requirements: any): Promise<void>;
     /**
-     * 维度1：技能匹配
+     * 为学生生成并存储向量
      */
-    private calculateSkillMatch;
+    indexStudent(studentId: string): Promise<void>;
     /**
-     * 维度2：难度匹配
+     * 核心匹配函数：基于向量计算匹配度
      */
-    private calculateDifficultyMatch;
+    matchTaskWithStudent(taskId: string, studentId: string): Promise<MatchResult>;
     /**
-     * 维度3：领域匹配
+     * 维度1：技能匹配 (35%)
      */
-    private calculateDomainMatch;
+    private calculateSkillMatchFromVectors;
     /**
-     * 维度4：成长潜力
+     * 维度2：难度匹配 (20%) - 最近发展区理论
      */
-    private calculateGrowthPotential;
+    private calculateDifficultyMatchFromVectors;
     /**
-     * 维度5：可靠性
+     * 维度3：领域匹配 (15%) - 余弦相似度
      */
-    private calculateReliability;
+    private calculateDomainMatchFromVectors;
     /**
-     * 维度6：偏好匹配
+     * 维度4：成长潜力 (15%)
+     */
+    private calculateGrowthPotentialFromVectors;
+    /**
+     * 维度5：可靠性 (10%)
+     */
+    private extractReliabilityFromVector;
+    /**
+     * 维度6：偏好对齐 (5%)
      */
     private calculatePreferenceAlignment;
     /**
-     * 计算单个任务与学生的匹配度
+     * 余弦相似度
      */
-    matchTaskWithStudent(taskId: string, studentId: string): Promise<MatchScore>;
+    private cosineSimilarity;
     /**
-     * 找出最适合任务的学生（Top K）
+     * 生成推荐
+     */
+    private generateRecommendation;
+    /**
+     * 批量匹配：为任务找到最合适的学生
      */
     findBestStudentsForTask(taskId: string, limit?: number): Promise<MatchResult[]>;
     /**
-     * 找出最适合学生的任务
+     * 批量匹配：为学生找到最合适的任务
      */
-    findBestTasksForStudent(studentId: string, limit?: number): Promise<any[]>;
+    findBestTasksForStudent(studentId: string, limit?: number): Promise<MatchResult[]>;
     /**
-     * 保存匹配结果到数据库
+     * 批量索引所有任务
+     */
+    indexAllTasks(): Promise<void>;
+    /**
+     * 批量索引所有学生
+     */
+    indexAllStudents(): Promise<void>;
+    /**
+     * 兼容方法：保存匹配结果
+     * 旧API兼容性
      */
     saveMatchResults(taskId: string, matchResults: MatchResult[]): Promise<void>;
 }

@@ -75,6 +75,27 @@ export const syncQueue = new Bull('data-sync', {
   },
 });
 
+/**
+ * Phase R5.3: 报告生成队列 - 自动触发报告生成
+ */
+export const reportQueue = new Bull('report-generation', {
+  redis: redisConfig,
+  limiter: {
+    max: 5,         // 同时最多5个报告生成任务
+    duration: 60000, // 每分钟
+  },
+  defaultJobOptions: {
+    attempts: 3,      // 失败后重试3次
+    backoff: {
+      type: 'exponential',
+      delay: 5000,    // 从5秒开始指数退避
+    },
+    timeout: 60000,   // 报告生成超时60秒
+    removeOnComplete: 100,  // 保留最近100个成功任务
+    removeOnFail: false,    // 失败任务保留用于调试
+  },
+});
+
 // ============================================================================
 // 队列事件监听
 // ============================================================================
@@ -113,16 +134,38 @@ aiQueue.on('failed', (job, err) => {
   logger.error(`❌ [AI] Job ${job?.id} failed:`, err.message);
 });
 
+// Phase R5.3: 报告队列事件
+reportQueue.on('completed', (job, result) => {
+  logger.info(`✅ [Report] Job ${job.id} completed:`, {
+    studentId: job.data.studentId,
+    trigger: job.data.trigger,
+    duration: Date.now() - job.timestamp
+  });
+});
+
+reportQueue.on('failed', (job, err) => {
+  logger.error(`❌ [Report] Job ${job?.id} failed:`, {
+    studentId: job?.data?.studentId,
+    trigger: job?.data?.trigger,
+    error: err.message
+  });
+});
+
+reportQueue.on('stalled', (job) => {
+  logger.warn(`⚠️  [Report] Job ${job.id} stalled`);
+});
+
 // ============================================================================
 // 健康检查
 // ============================================================================
 
 export async function getQueuesHealth() {
-  const [matchingCounts, notificationCounts, aiCounts, syncCounts] = await Promise.all([
+  const [matchingCounts, notificationCounts, aiCounts, syncCounts, reportCounts] = await Promise.all([
     matchingQueue.getJobCounts(),
     notificationQueue.getJobCounts(),
     aiQueue.getJobCounts(),
     syncQueue.getJobCounts(),
+    reportQueue.getJobCounts(),
   ]);
 
   return {
@@ -130,6 +173,7 @@ export async function getQueuesHealth() {
     notification: notificationCounts,
     ai: aiCounts,
     sync: syncCounts,
+    report: reportCounts,
     timestamp: new Date().toISOString(),
   };
 }
@@ -145,6 +189,7 @@ export async function closeQueues() {
     notificationQueue.close(),
     aiQueue.close(),
     syncQueue.close(),
+    reportQueue.close(),
   ]);
   logger.info('✅ All queues closed');
 }
@@ -158,6 +203,7 @@ export default {
   notificationQueue,
   aiQueue,
   syncQueue,
+  reportQueue,
   getQueuesHealth,
   closeQueues,
 };

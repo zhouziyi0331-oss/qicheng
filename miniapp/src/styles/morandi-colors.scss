@@ -1,0 +1,460 @@
+// 日落明信片色系配色方案
+// Sunset Postcard Color System - 温暖、优雅、高级感
+
+// ============ 主色调 - 日落橙红系 ============
+$morandi-primary: #BC6446;        // 珊瑚橙红
+$morandi-secondary: #BED7D1;      // 青绿色
+$morandi-accent: #F2CD78;         // 琥珀黄
+
+// ============ 基础色系变量（用于页面布局）============
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+$teal: #3A8A84;
+$teal-light: #5ABFB8;
+$teal-dark: #2A6A64;
+$blue: #93AEC1;
+$blue-light: #B5CEE0;
+$blue-dark: #5B8FAB;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+// ============ 辅助色 - 日落大地色系 ============
+$morandi-sage: #B6C796;           // 鼠尾草绿
+$morandi-clay: #D88760;           // 桃粉色
+$morandi-rose: #F3B7AD;           // 玫瑰粉
+$morandi-sky: #93AEC1;            // 天空蓝
+$morandi-sand: #F7CB9A;           // 沙石琥珀
+$morandi-peach: #D88760;          // 桃色
+$morandi-teal: #BED7D1;           // 青绿
+$morandi-amber: #F2CD78;          // 琥珀
+$morandi-coral: #BC6446;          // 珊瑚
+
+// ============ 中性色 ============
+$morandi-light: #F9F6F2;          // 米白色
+$morandi-cream: #F4F0EC;          // 奶油色
+$morandi-gray: #A89890;           // 浅灰驼
+$morandi-dark: #2C2420;           // 深棕灰
+$morandi-border: #EDE8E2;         // 边框色
+
+// ============ 渐变背景 ============
+
+// 1. 珊瑚橙红渐变
+@mixin gradient-elegant-purple {
+  background: linear-gradient(135deg, #BC6446 0%, #A8533A 100%);
+}
+
+// 2. 温柔桃粉渐变
+@mixin gradient-soft-pink {
+  background: linear-gradient(135deg, #F3B7AD 0%, #D88760 100%);
+}
+
+// 3. 宁静青绿渐变
+@mixin gradient-calm-sage {
+  background: linear-gradient(135deg, #BED7D1 0%, #7AADA9 100%);
+}
+
+// 4. 温暖琥珀渐变
+@mixin gradient-warm-earth {
+  background: linear-gradient(135deg, #F2CD78 0%, #D9B05C 100%);
+}
+
+// 5. 梦幻日落渐变
+@mixin gradient-dreamy-lavender {
+  background: linear-gradient(135deg, #D88760 0%, #BC6446 100%);
+}
+
+// 6. 清新天空渐变
+@mixin gradient-fresh-sky {
+  background: linear-gradient(135deg, #93AEC1 0%, #7096B0 100%);
+}
+
+// 7. 柔和全局背景
+@mixin gradient-soft-background {
+  background: linear-gradient(180deg, #FDF0EB 0%, #F9F6F2 50%, #FDF0EB 100%);
+}
+
+// 8. 页面主背景（多层渐变）
+@mixin gradient-page-main {
+  background: linear-gradient(180deg, #FDF0EB 0%, #F9F6F2 100%);
+}
+
+// ============ 工具类 ============
+
+// 快速应用渐变背景的类名
+.bg-elegant-purple {
+  @include gradient-elegant-purple;
+}
+
+.bg-soft-pink {
+  @include gradient-soft-pink;
+}
+
+.bg-calm-sage {
+  @include gradient-calm-sage;
+}
+
+.bg-warm-earth {
+  @include gradient-warm-earth;
+}
+
+.bg-dreamy-lavender {
+  @include gradient-dreamy-lavender;
+}
+
+.bg-fresh-sky {
+  @include gradient-fresh-sky;
+}
+
+.bg-soft-background {
+  @include gradient-soft-background;
+}
+
+.bg-page-main {
+  @include gradient-page-main;
+}
+
+// ============ 日落风格页面容器 ============
+.morandi-page {
+  min-height: 100vh;
+  @include gradient-page-main;
+}
+
+// ============ 日落风格卡片 ============
+.morandi-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10rpx);
+  border-radius: 32rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(44, 36, 32, 0.06);
+  border: 1rpx solid rgba(237, 232, 226, 0.5);
+  transition: all 0.4s ease;
+
+  &:active {
+    transform: translateY(-4rpx);
+    box-shadow: 0 12rpx 40rpx rgba(44, 36, 32, 0.10);
+  }
+}
+
+// 紧凑型卡片
+.morandi-card-compact {
+  @extend .morandi-card;
+  padding: 24rpx;
+  border-radius: 24rpx;
+}
+
+// 大型卡片
+.morandi-card-large {
+  @extend .morandi-card;
+  padding: 48rpx;
+  border-radius: 40rpx;
+}
+
+// ============ 日落风格按钮 ============
+.morandi-btn {
+  padding: 24rpx 48rpx;
+  border-radius: 48rpx;
+  background: linear-gradient(135deg, #BC6446 0%, #A8533A 100%);
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 8rpx 20rpx rgba(188, 100, 70, 0.35);
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 12rpx rgba(188, 100, 70, 0.4);
+  }
+}
+
+.morandi-btn-secondary {
+  @extend .morandi-btn;
+  background: linear-gradient(135deg, #BED7D1 0%, #7AADA9 100%);
+  box-shadow: 0 8rpx 20rpx rgba(190, 215, 209, 0.35);
+}
+
+.morandi-btn-outline {
+  padding: 24rpx 48rpx;
+  border-radius: 48rpx;
+  background: transparent;
+  color: $morandi-primary;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: 2rpx solid $morandi-primary;
+  transition: all 0.3s ease;
+
+  &:active {
+    background: rgba(188, 100, 70, 0.1);
+  }
+}
+
+// ============ 日落风格标签/徽章 ============
+.morandi-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  background: rgba(188, 100, 70, 0.12);
+  color: $morandi-primary;
+  border: 1rpx solid rgba(188, 100, 70, 0.2);
+}
+
+.morandi-badge-pink {
+  @extend .morandi-badge;
+  background: rgba(243, 183, 173, 0.3);
+  color: #D88760;
+  border-color: rgba(216, 135, 96, 0.2);
+}
+
+.morandi-badge-sage {
+  @extend .morandi-badge;
+  background: rgba(190, 215, 209, 0.2);
+  color: $morandi-teal;
+  border-color: rgba(190, 215, 209, 0.3);
+}
+
+// ============ 日落风格分隔线 ============
+.morandi-divider {
+  height: 2rpx;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(237, 232, 226, 0.5) 50%,
+    transparent 100%
+  );
+  margin: 32rpx 0;
+}
+
+// ============ 日落风格空状态 ============
+.morandi-empty {
+  padding: 120rpx 60rpx;
+  text-align: center;
+
+  .empty-icon-wrapper {
+    width: 160rpx;
+    height: 160rpx;
+    margin: 0 auto 32rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #BED7D1 0%, #7AADA9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8rpx 24rpx rgba(190, 215, 209, 0.3);
+
+    .empty-icon-text {
+      font-size: 48rpx;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  .empty-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: $morandi-dark;
+    margin-bottom: 16rpx;
+  }
+
+  .empty-hint {
+    font-size: 26rpx;
+    color: $morandi-gray;
+    line-height: 1.6;
+  }
+}
+
+// ============ 日落风格进度条 ============
+.morandi-progress {
+  width: 100%;
+  height: 16rpx;
+  background: rgba(237, 232, 226, 0.5);
+  border-radius: 8rpx;
+  overflow: hidden;
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #D88760 0%, #BC6446 100%);
+    border-radius: 8rpx;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// ============ 日落风格图标容器 ============
+.morandi-icon-circle {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D88760 0%, #BC6446 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(188, 100, 70, 0.3);
+
+  .icon-text {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// 小号图标
+.morandi-icon-circle-sm {
+  @extend .morandi-icon-circle;
+  width: 56rpx;
+  height: 56rpx;
+
+  .icon-text {
+    font-size: 24rpx;
+  }
+}
+
+// 大号图标
+.morandi-icon-circle-lg {
+  @extend .morandi-icon-circle;
+  width: 120rpx;
+  height: 120rpx;
+
+  .icon-text {
+    font-size: 48rpx;
+  }
+}
+
+// ============ 日落风格时间线 ============
+.morandi-timeline-item {
+  display: flex;
+  margin-bottom: 48rpx;
+
+  .timeline-dot-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 24rpx;
+
+    .timeline-dot {
+      width: 64rpx;
+      height: 64rpx;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #BC6446 0%, #A8533A 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4rpx 16rpx rgba(188, 100, 70, 0.3);
+      z-index: 2;
+
+      .dot-text {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .timeline-line {
+      flex: 1;
+      width: 3rpx;
+      background: linear-gradient(180deg,
+        rgba(237, 232, 226, 0.5) 0%,
+        rgba(237, 232, 226, 0.2) 100%
+      );
+      margin-top: 8rpx;
+      min-height: 40rpx;
+    }
+  }
+
+  .timeline-content {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10rpx);
+    border-radius: 24rpx;
+    padding: 24rpx;
+    box-shadow: 0 4rpx 16rpx rgba(44, 36, 32, 0.06);
+    border: 1rpx solid rgba(237, 232, 226, 0.5);
+  }
+}
+
+// ============ 日落风格统计卡片 ============
+.morandi-stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10rpx);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(44, 36, 32, 0.06);
+  border: 1rpx solid rgba(237, 232, 226, 0.5);
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: translateY(-4rpx);
+    box-shadow: 0 8rpx 24rpx rgba(44, 36, 32, 0.10);
+  }
+
+  .stat-icon {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: $morandi-primary;
+    margin-bottom: 12rpx;
+  }
+
+  .stat-value {
+    font-size: 48rpx;
+    font-weight: 700;
+    color: $morandi-dark;
+    margin-bottom: 8rpx;
+  }
+
+  .stat-label {
+    font-size: 24rpx;
+    color: $morandi-gray;
+  }
+}
+
+// ============ 日落风格文字颜色 ============
+.text-morandi-primary {
+  color: $morandi-primary;
+}
+
+.text-morandi-secondary {
+  color: $morandi-secondary;
+}
+
+.text-morandi-dark {
+  color: $morandi-dark;
+}
+
+.text-morandi-light {
+  color: $morandi-gray;
+}
+
+// ============ 动画效果 ============
+@keyframes morandi-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.morandi-fade-in {
+  animation: morandi-fade-in 0.6s ease-out;
+}
+
+// 延迟动画（用于列表项）
+@for $i from 1 through 10 {
+  .morandi-fade-in-#{$i} {
+    animation: morandi-fade-in 0.6s ease-out #{$i * 0.1}s backwards;
+  }
+}

@@ -1,0 +1,13 @@
+@import '../../styles/variables.scss';
+
+.radar-chart-container {
+  position: static;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .radar-canvas {
+    display: block;
+  }
+}

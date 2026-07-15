@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Taro from '@tarojs/taro';
 import io, { Socket } from 'socket.io-client';
+import { tokenManager } from '../utils/token';
+import { config } from '../config';
 
 interface WebSocketHookOptions {
   autoConnect?: boolean;
@@ -40,13 +42,15 @@ export function useWebSocket(options: WebSocketHookOptions = {}) {
       return;
     }
 
-    const token = Taro.getStorageSync('accessToken');
+    // 使用tokenManager统一管理
+    const token = tokenManager.getAccessToken();
     if (!token) {
       console.warn('No access token found, cannot connect to WebSocket');
       return;
     }
 
-    const socket = io('http://localhost:3000', {
+    // 使用配置的API地址
+    const socket = io(config.apiBaseUrl, {
       path: '/socket.io',
       auth: {
         token

@@ -1,5 +1,5 @@
 /**
- * ✅ 安全Token管理工具
+ * ✓ 安全Token管理工具
  *
  * 集成后端安全措施：
  * - P0: JWT黑名单机制
@@ -10,7 +10,7 @@
 
 import Taro from '@tarojs/taro';
 
-// ✅ P0安全: Access Token存内存，页面刷新后消失
+// ✓ P0安全: Access Token存内存，页面刷新后消失
 let accessTokenInMemory: string | null = null;
 
 const STORAGE_KEYS = {
@@ -19,7 +19,7 @@ const STORAGE_KEYS = {
 };
 
 /**
- * ✅ P0安全: Token管理器
+ * ✓ P0安全: Token管理器
  */
 class TokenManager {
   /**
@@ -41,7 +41,7 @@ class TokenManager {
    */
   async setRefreshToken(token: string): Promise<void> {
     try {
-      // ✅ P0安全: 简单加密（实际可以用更复杂的加密算法）
+      // ✓ P0安全: 简单加密（实际可以用更复杂的加密算法）
       const encrypted = this.simpleEncrypt(token);
       await Taro.setStorage({
         key: STORAGE_KEYS.REFRESH_TOKEN,
@@ -68,7 +68,7 @@ class TokenManager {
   }
 
   /**
-   * ✅ P0安全: 保存Token对（登录成功后调用）
+   * ✓ P0安全: 保存Token对（登录成功后调用）
    */
   async saveTokens(accessToken: string, refreshToken: string): Promise<void> {
     this.setAccessToken(accessToken);
@@ -76,7 +76,7 @@ class TokenManager {
   }
 
   /**
-   * ✅ P0安全: 清除所有Token（退出登录）
+   * ✓ P0安全: 清除所有Token（退出登录）
    */
   async clearTokens(): Promise<void> {
     accessTokenInMemory = null;
@@ -125,23 +125,33 @@ class TokenManager {
    * 简单加密（实际应使用AES）
    */
   private simpleEncrypt(text: string): string {
-    // Base64编码
-    return Buffer.from(text).toString('base64');
+    // 使用btoa进行Base64编码（小程序兼容）
+    try {
+      return btoa(encodeURIComponent(text));
+    } catch (e) {
+      // 如果btoa不可用，使用简单的反转作为备用
+      return text.split('').reverse().join('');
+    }
   }
 
   /**
    * 简单解密
    */
   private simpleDecrypt(encrypted: string): string {
-    // Base64解码
-    return Buffer.from(encrypted, 'base64').toString();
+    // 使用atob进行Base64解码（小程序兼容）
+    try {
+      return decodeURIComponent(atob(encrypted));
+    } catch (e) {
+      // 如果atob不可用，使用简单的反转作为备用
+      return encrypted.split('').reverse().join('');
+    }
   }
 }
 
 export const tokenManager = new TokenManager();
 
 /**
- * ✅ P0安全: 手机号脱敏
+ * ✓ P0安全: 手机号脱敏
  */
 export function maskPhone(phone: string): string {
   if (!phone || phone.length !== 11) {
@@ -151,7 +161,7 @@ export function maskPhone(phone: string): string {
 }
 
 /**
- * ✅ P1安全: 检查登录锁定状态
+ * ✓ P1安全: 检查登录锁定状态
  */
 export function parseLoginLockError(errorMessage: string): {
   isLocked: boolean;

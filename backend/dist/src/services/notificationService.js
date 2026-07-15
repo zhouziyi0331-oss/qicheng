@@ -170,7 +170,7 @@ class NotificationService {
         const client = await db_1.pool.connect();
         try {
             const result = await client.query(`DELETE FROM notifications WHERE id = $1`, [notificationId]);
-            return result.rowCount > 0;
+            return (result.rowCount ?? 0) > 0;
         }
         finally {
             client.release();

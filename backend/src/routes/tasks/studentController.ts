@@ -6,6 +6,7 @@ import { AppError } from '../../middleware/errorHandler';
 import { config } from '../../../config';
 import logger from '../../utils/logger';
 import levelFilterService from '../../services/levelFilterService';
+import { TalentMatchingService } from '../../services/talentMatchingService';
 
 // ============================================================
 // GET /tasks/matched
@@ -86,26 +87,47 @@ export async function getRecommendedTasks(req: Request, res: Response, next: Nex
 
     const emotionState = emotion?.signal_type || 'calm';
 
-    // 调用 AI-02 匹配服务
+    // 使用新的天赋匹配服务（语义级精准匹配）
     let recommended;
     try {
-      const aiResponse = await axios.post(
-        `${config.ai.serviceUrl}/ai/match-task`,
-        {
-          student_id: userId,
-          student_level: student?.current_level || 0,
-          student_track: student?.track || 'content',
-          emotion_state: emotionState,
-          candidate_tasks: filteredResult.tasks,
-          max_results: config.platform.maxAssignees || 3,
-        },
-        { timeout: config.ai.timeout }
-      );
-      recommended = aiResponse.data.recommended_tasks;
-    } catch {
+      // 为每个候选任务计算匹配度
+      const matchPromises = filteredResult.tasks.map(async (task: any) => {
+        try {
+          const matches = await TalentMatchingService.matchStudentsForTask(task.id, 100);
+          const studentMatch = matches.find((m: any) => m.studentId === userId);
+
+          return {
+            ...task,
+            match_score: studentMatch?.overallScore || 0,
+            match_reason: studentMatch?.recommendation || '根据你的能力等级推荐',
+            talent_match_score: studentMatch?.talentMatchScore || 0,
+            opc_compatibility_score: studentMatch?.opcCompatibilityScore || 0,
+            growth_potential_score: studentMatch?.growthPotentialScore || 0,
+          };
+        } catch (error) {
+          // 如果匹配失败，返回基础分数
+          return {
+            ...task,
+            match_score: 50,
+            match_reason: '根据你的能力等级推荐'
+          };
+        }
+      });
+
+      const tasksWithScores = await Promise.all(matchPromises);
+
+      // 按匹配分数排序，取前3个
+      recommended = tasksWithScores
+        .sort((a, b) => (b.match_score || 0) - (a.match_score || 0))
+        .slice(0, config.platform.maxAssignees || 3);
+
+    } catch (error) {
+      logger.error('天赋匹配服务失败，使用降级方案:', error);
       // 降级: 取前3个
       recommended = filteredResult.tasks.slice(0, config.platform.maxAssignees || 3).map(t => ({
-        ...t, match_reason: '根据你的能力等级推荐'
+        ...t,
+        match_score: 50,
+        match_reason: '根据你的能力等级推荐'
       }));
     }
 

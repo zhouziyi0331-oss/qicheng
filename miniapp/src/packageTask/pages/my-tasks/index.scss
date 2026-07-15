@@ -1,0 +1,407 @@
+@import '../../../styles/variables.scss';
+
+.my-tasks-page {
+  @include page-container;
+  padding-bottom: 32rpx;
+}
+
+.page-header {
+  @include card-base;
+  padding: $spacing-xl $spacing-lg;
+  margin-bottom: $spacing-md;
+  animation: slideInDown 0.5s $ease-out;
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .page-title {
+    font-size: $font-size-h1;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+  }
+}
+
+.tabs {
+  display: flex;
+  @include card-base;
+  padding: 0 $spacing-lg;
+  margin-bottom: $spacing-md;
+
+  .tab-item {
+    flex: 1;
+    padding: $spacing-md 0;
+    text-align: center;
+    position: relative;
+    transition: all $transition-base $ease-out;
+    @include clickable;
+
+    .tab-text {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      transition: all $transition-base $ease-out;
+    }
+
+    &.active {
+      .tab-text {
+        color: $primary;
+        font-weight: $font-weight-semibold;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60rpx;
+        height: 6rpx;
+        background: $gradient-button-primary;
+        border-radius: $radius-xs;
+        animation: slideInUp 0.3s $ease-out;
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(6rpx);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+}
+
+.tasks-list {
+  height: calc(100vh - 300rpx);
+  padding: 0 32rpx;
+}
+
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.task-card {
+  @include card-base;
+  padding: $spacing-lg;
+  opacity: 0;
+  transform: translateY(20rpx);
+  animation: slideInUpCard 0.5s $ease-out forwards;
+  @include clickable;
+
+  @keyframes slideInUpCard {
+    from {
+      opacity: 0;
+      transform: translateY(20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24rpx;
+
+    .task-title {
+      flex: 1;
+      font-size: $font-size-h4;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      line-height: 1.4;
+      margin-right: $spacing-md;
+    }
+
+    .task-status {
+      padding: $spacing-xs $spacing-md;
+      border-radius: $radius-full;
+      font-size: $font-size-xs;
+      white-space: nowrap;
+      font-weight: $font-weight-medium;
+
+      &.status-working {
+        background: $gradient-card-green;
+        color: $primary;
+        border: 1rpx solid $primary;
+        animation: breathe 3s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      &.status-submitted {
+        background: $gradient-card-yellow;
+        color: #E6A23C;
+        border: 1rpx solid #E6A23C;
+      }
+
+      &.status-completed {
+        background: $gradient-card-blue;
+        color: #409EFF;
+        border: 1rpx solid #409EFF;
+      }
+
+      &.status-rejected {
+        background: rgba(255, 107, 107, 0.15);
+        color: #F56C6C;
+        border: 1rpx solid #F56C6C;
+        animation: shake 0.5s ease;
+      }
+
+      @keyframes shake {
+        0%, 100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-4rpx);
+        }
+        75% {
+          transform: translateX(4rpx);
+        }
+      }
+    }
+  }
+
+  .task-info {
+    display: flex;
+    gap: 48rpx;
+    margin-bottom: 24rpx;
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8rpx;
+
+      .info-label {
+        font-size: $font-size-xs;
+        color: $text-tertiary;
+      }
+
+      .info-value {
+        font-size: $font-size-sm;
+        color: $text-primary;
+
+        &.budget {
+          font-size: $font-size-h4;
+          font-weight: $font-weight-semibold;
+          color: $primary;
+          animation: pulse-number 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-number {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+
+  .task-progress {
+    margin-bottom: 24rpx;
+
+    .progress-bar {
+      height: 12rpx;
+      background: $bg-secondary;
+      border-radius: $radius-full;
+      overflow: hidden;
+      margin-bottom: $spacing-xs;
+
+      .progress-fill {
+        height: 100%;
+        background: $gradient-button-primary;
+        border-radius: $radius-full;
+        transition: width $transition-base $ease-out;
+      }
+    }
+
+    .progress-text {
+      font-size: $font-size-xs;
+      color: $text-tertiary;
+    }
+  }
+
+  .task-time {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16rpx;
+
+    .time-label {
+      font-size: 24rpx;
+      color: var(--text-tertiary);
+    }
+
+    .time-value {
+      font-size: 24rpx;
+      color: var(--text-secondary);
+    }
+  }
+
+  .rejection-info {
+    background: linear-gradient(135deg, rgba(245, 108, 108, 0.1) 0%, rgba(244, 182, 194, 0.1) 100%);
+    border-radius: $radius-md;
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1rpx solid #F56C6C;
+
+    .rejection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-xs;
+
+      .rejection-label {
+        font-size: $font-size-xs;
+        color: #F56C6C;
+        font-weight: $font-weight-semibold;
+      }
+
+      .rejection-time {
+        font-size: $font-size-xs;
+        color: $text-tertiary;
+      }
+    }
+
+    .rejection-reason {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      line-height: 1.6;
+      margin-bottom: $spacing-md;
+    }
+
+    .rejection-actions {
+      display: flex;
+      gap: $spacing-md;
+    }
+  }
+
+  .continue-btn {
+    width: 100%;
+    height: 88rpx;
+    background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
+    border-radius: var(--radius-round);
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: var(--shadow-soft);
+    transition: all var(--duration-fast) var(--ease-standard);
+    animation: heartbeat 2s ease-in-out infinite;
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      14%, 28% {
+        transform: scale(1.02);
+      }
+      21%, 35% {
+        transform: scale(1);
+      }
+    }
+
+    &:active {
+      transform: scale(0.95);
+      animation: none;
+    }
+  }
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx $spacing-lg;
+
+  .loading-text,
+  .empty-text {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-top: $spacing-md;
+  }
+
+  .empty-icon {
+    font-size: 120rpx;
+    opacity: 0.6;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-24rpx);
+    }
+  }
+
+  .go-tasks-btn {
+    margin-top: 48rpx;
+    width: 320rpx;
+    height: 88rpx;
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+    border-radius: var(--radius-round);
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: var(--shadow-soft);
+    transition: all var(--duration-fast) var(--ease-standard);
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.loading-state {
+  .loading-text {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
+
+// 资金查看按钮
+.payment-action {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.06);
+}

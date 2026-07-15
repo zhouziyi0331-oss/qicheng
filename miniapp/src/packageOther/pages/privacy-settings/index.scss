@@ -1,0 +1,222 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/morandi-colors.scss';
+
+.privacy-page {
+  min-height: 100vh;
+  @include gradient-page-main;
+  padding: 32rpx;
+
+  .privacy-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32rpx;
+  }
+
+  // 设置分组
+  .setting-group {
+    margin-bottom: 16rpx;
+
+    .group-label {
+      font-size: 22rpx;
+      font-weight: 700;
+      color: $text-3;
+      letter-spacing: 1.6rpx;
+      padding: 0 8rpx 16rpx;
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      &::before {
+        content: '';
+        width: 6rpx;
+        height: 24rpx;
+        background: var(--rust);
+        border-radius: 4rpx;
+        display: block;
+      }
+    }
+  }
+
+  // 设置卡片
+  .setting-card {
+    background: white;
+    border-radius: 32rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(44, 36, 32, 0.08);
+  }
+
+  // 雷达可见性部分
+  .radar-visibility-section {
+    padding: 28rpx 32rpx;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 24rpx;
+      margin-bottom: 24rpx;
+
+      .setting-icon {
+        width: 72rpx;
+        height: 72rpx;
+        border-radius: 20rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        .icon-text {
+          font-size: 36rpx;
+        }
+      }
+
+      .section-header-body {
+        flex: 1;
+
+        .section-title {
+          font-size: 28rpx;
+          font-weight: 600;
+          color: $text-1;
+          line-height: 1.3;
+          margin-bottom: 4rpx;
+        }
+
+        .section-desc {
+          font-size: 22rpx;
+          color: $text-3;
+          line-height: 1.4;
+        }
+      }
+    }
+
+    .visibility-options {
+      display: flex;
+      gap: 16rpx;
+
+      .vis-option {
+        display: flex;
+        align-items: center;
+        gap: 20rpx;
+        padding: 22rpx 28rpx;
+        border-radius: 24rpx;
+        border: 3rpx solid $border;
+        cursor: pointer;
+        transition: all 0.15s;
+        flex: 1;
+
+        &.selected {
+          border-color: var(--rust);
+          background: rgba(188, 100, 70, 0.05);
+        }
+
+        .vis-dot {
+          width: 32rpx;
+          height: 32rpx;
+          border-radius: 50%;
+          border: 4rpx solid $border;
+          flex-shrink: 0;
+          transition: all 0.15s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .vis-dot-inner {
+            width: 12rpx;
+            height: 12rpx;
+            border-radius: 50%;
+            background: white;
+            opacity: 0;
+            transition: opacity 0.15s;
+          }
+        }
+
+        &.selected .vis-dot {
+          border-color: var(--rust);
+          background: var(--rust);
+
+          .vis-dot-inner {
+            opacity: 1;
+          }
+        }
+
+        .vis-option-body {
+          flex: 1;
+
+          .vis-option-title {
+            font-size: 26rpx;
+            font-weight: 700;
+            color: $text-1;
+          }
+
+          .vis-option-desc {
+            font-size: 22rpx;
+            color: $text-3;
+            margin-top: 4rpx;
+          }
+        }
+      }
+    }
+  }
+
+  // 设置行
+  .setting-row {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    padding: 28rpx 32rpx;
+    position: relative;
+    transition: background 0.2s;
+
+    &:active {
+      background: rgba(188, 100, 70, 0.03);
+    }
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 104rpx;
+      right: 0;
+      height: 1rpx;
+      background: $border;
+    }
+
+    .setting-icon {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      .icon-text {
+        font-size: 36rpx;
+      }
+    }
+
+    .setting-body {
+      flex: 1;
+      min-width: 0;
+
+      .setting-title {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: $text-1;
+        line-height: 1.3;
+      }
+    }
+
+    .setting-right {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+      flex-shrink: 0;
+    }
+
+    .setting-arrow {
+      font-size: 32rpx;
+      color: $text-3;
+      flex-shrink: 0;
+    }
+  }
+}

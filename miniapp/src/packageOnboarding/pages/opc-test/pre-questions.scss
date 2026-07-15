@@ -1,0 +1,164 @@
+.opc-pre-questions-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F9FAFB 0%, #FFFFFF 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+
+.progress-bar {
+  width: 100%;
+  height: 8rpx;
+  background: #E5E7EB;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
+  transition: width 0.3s ease;
+}
+
+
+.content-container {
+  flex: 1;
+  padding: 80rpx 32rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.question-number {
+  margin-bottom: 24rpx;
+}
+
+.number-text {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #8B5CF6;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+}
+
+
+.question-title {
+  margin-bottom: 40rpx;
+}
+
+.title-text {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1F2937;
+  line-height: 1.4;
+}
+
+
+.answer-input {
+  width: 100%;
+  min-height: 300rpx;
+  padding: 32rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  border: 2rpx solid #E5E7EB;
+  font-size: 28rpx;
+  color: #1F2937;
+  line-height: 1.8;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #8B5CF6;
+    box-shadow: 0 0 0 4rpx rgba(139, 92, 246, 0.1);
+  }
+}
+
+
+.char-count {
+  margin-top: 16rpx;
+  text-align: right;
+}
+
+.count-text {
+  font-size: 24rpx;
+  color: #9CA3AF;
+}
+
+
+.hint-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-top: 32rpx;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 100%);
+  border-radius: 20rpx;
+  border: 2rpx solid #8B5CF6;
+}
+
+.hint-icon {
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.hint-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #6B21A8;
+  line-height: 1.6;
+}
+
+
+.button-group {
+  display: flex;
+  gap: 16rpx;
+  margin-top: auto;
+  padding-top: 40rpx;
+}
+
+.prev-button,
+.next-button {
+  height: 96rpx;
+  border-radius: 48rpx;
+  border: none;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &::after {
+    border: none;
+  }
+
+  .button-text {
+    font-size: 32rpx;
+    font-weight: 600;
+  }
+}
+
+.prev-button {
+  flex: 0 0 160rpx;
+  background: #F3F4F6;
+
+  .button-text {
+    color: #6B7280;
+  }
+}
+
+.next-button {
+  flex: 1;
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  box-shadow: 0 8rpx 24rpx rgba(139, 92, 246, 0.3);
+
+  &[disabled] {
+    background: #E5E7EB;
+    box-shadow: none;
+    opacity: 0.6;
+  }
+
+  .button-text {
+    color: #FFFFFF;
+  }
+}

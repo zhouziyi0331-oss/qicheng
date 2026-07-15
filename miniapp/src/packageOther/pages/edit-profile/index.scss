@@ -1,0 +1,245 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/morandi-colors.scss';
+
+.account-page {
+  min-height: 100vh;
+  @include gradient-page-main;
+  padding: 32rpx;
+
+  .account-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32rpx;
+  }
+
+  // 设置分组
+  .setting-group {
+    margin-bottom: 16rpx;
+
+    .group-label {
+      font-size: 22rpx;
+      font-weight: 700;
+      color: $text-3;
+      letter-spacing: 1.6rpx;
+      padding: 0 8rpx 16rpx;
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      &::before {
+        content: '';
+        width: 6rpx;
+        height: 24rpx;
+        background: var(--rust);
+        border-radius: 4rpx;
+        display: block;
+      }
+    }
+  }
+
+  // 设置卡片
+  .setting-card {
+    background: white;
+    border-radius: 32rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(44, 36, 32, 0.08);
+  }
+
+  // 设置行
+  .setting-row {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    padding: 28rpx 32rpx;
+    position: relative;
+    transition: background 0.2s;
+
+    &:active {
+      background: rgba(188, 100, 70, 0.03);
+    }
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 104rpx;
+      right: 0;
+      height: 1rpx;
+      background: $border;
+    }
+
+    .setting-icon {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      .icon-text {
+        font-size: 36rpx;
+      }
+    }
+
+    .setting-body {
+      flex: 1;
+      min-width: 0;
+
+      .setting-title {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: $text-1;
+        line-height: 1.3;
+        margin-bottom: 4rpx;
+      }
+
+      .setting-desc {
+        font-size: 22rpx;
+        color: $text-3;
+        line-height: 1.4;
+      }
+    }
+
+    .setting-right {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+      flex-shrink: 0;
+    }
+
+    .setting-arrow {
+      font-size: 32rpx;
+      color: $text-3;
+      flex-shrink: 0;
+    }
+
+    .setting-value {
+      font-size: 24rpx;
+      color: $text-3;
+      font-weight: 500;
+    }
+
+    .setting-badge {
+      padding: 4rpx 16rpx;
+      border-radius: 9999rpx;
+      font-size: 20rpx;
+      font-weight: 700;
+      flex-shrink: 0;
+
+      &.bound {
+        background: rgba(58, 138, 132, 0.1);
+        color: #3A8A84;
+      }
+
+      &.unbound {
+        background: rgba(168, 145, 122, 0.1);
+        color: $text-3;
+      }
+    }
+  }
+
+  // 头像预览
+  .avatar-preview-wrapper {
+    position: relative;
+    width: 80rpx;
+    height: 80rpx;
+
+    .avatar-preview {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 24rpx;
+      background: linear-gradient(135deg, var(--rust), var(--terra));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.avatar-placeholder {
+        .placeholder-icon {
+          font-size: 36rpx;
+        }
+      }
+    }
+
+    .camera-badge {
+      position: absolute;
+      bottom: -6rpx;
+      right: -6rpx;
+      width: 32rpx;
+      height: 32rpx;
+      border-radius: 50%;
+      background: var(--rust);
+      border: 4rpx solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .camera-icon {
+        font-size: 16rpx;
+      }
+    }
+  }
+
+  // 昵称行特殊样式
+  .nickname-row {
+    .nickname-display {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      .edit-btn {
+        width: 56rpx;
+        height: 56rpx;
+        border-radius: 16rpx;
+        background: rgba(58, 138, 132, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        .edit-icon {
+          font-size: 26rpx;
+        }
+      }
+    }
+
+    .nickname-edit {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      .nickname-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 28rpx;
+        font-weight: 600;
+        color: $text-1;
+        text-align: right;
+        min-width: 0;
+      }
+
+      .save-btn-small,
+      .cancel-btn-small {
+        padding: 10rpx 24rpx;
+        border-radius: 9999rpx;
+        font-size: 24rpx;
+        font-weight: 700;
+        white-space: nowrap;
+        border: none;
+        line-height: 1.2;
+      }
+
+      .save-btn-small {
+        background: var(--rust);
+        color: white;
+      }
+
+      .cancel-btn-small {
+        background: $surface2;
+        border: 2rpx solid $border;
+        color: $text-2;
+      }
+    }
+  }
+}

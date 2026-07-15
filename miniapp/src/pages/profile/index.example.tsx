@@ -1,5 +1,5 @@
 /**
- * ✅ 学生端个人中心示例
+ * ✓ 学生端个人中心示例
  *
  * 使用安全API层，展示：
  * - 手机号脱敏
@@ -31,7 +31,7 @@ export default function Profile() {
     }
   };
 
-  // ✅ P0安全: 退出登录（清除所有Token）
+  // ✓ P0安全: 退出登录（清除所有Token）
   const handleLogout = () => {
     Taro.showModal({
       title: '确认退出',
@@ -55,7 +55,7 @@ export default function Profile() {
     });
   };
 
-  // ✅ 退出所有设备
+  // ✓ 退出所有设备
   const handleLogoutAll = () => {
     Taro.showModal({
       title: '确认退出所有设备',
@@ -116,7 +116,7 @@ export default function Profile() {
         />
         <View className="user-info">
           <Text className="nickname">{userInfo.nickname || '未设置昵称'}</Text>
-          {/* ✅ 显示脱敏手机号 */}
+          {/* ✓ 显示脱敏手机号 */}
           <Text className="phone">{maskPhone(userInfo.phone)}</Text>
           <Text className="level">Lv.{userInfo.currentLevel || 1}</Text>
         </View>
@@ -149,15 +149,15 @@ export default function Profile() {
       {/* 菜单列表 */}
       <View className="menu-list">
         <View className="menu-item" onClick={() => Taro.navigateTo({ url: '/pages/profile/edit' })}>
-          <Text className="menu-label">✏️ 编辑资料</Text>
+          <Text className="menu-label">▪ 编辑资料</Text>
           <Text className="menu-arrow">›</Text>
         </View>
         <View className="menu-item" onClick={() => Taro.navigateTo({ url: '/pages/orders/list' })}>
-          <Text className="menu-label">📦 我的订单</Text>
+          <Text className="menu-label">● 我的订单</Text>
           <Text className="menu-arrow">›</Text>
         </View>
         <View className="menu-item" onClick={() => Taro.navigateTo({ url: '/pages/wallet/index' })}>
-          <Text className="menu-label">💰 我的钱包</Text>
+          <Text className="menu-label">● 我的钱包</Text>
           <Text className="menu-arrow">›</Text>
         </View>
         <View className="menu-item" onClick={() => Taro.navigateTo({ url: '/pages/settings/index' })}>
@@ -188,7 +188,7 @@ export default function Profile() {
 
       {/* 安全提示 */}
       <View className="security-tip">
-        <Text className="tip-icon">🔒</Text>
+        <Text className="tip-icon">锁</Text>
         <Text className="tip-text">
           您的登录已受保护，退出后Token立即失效
         </Text>

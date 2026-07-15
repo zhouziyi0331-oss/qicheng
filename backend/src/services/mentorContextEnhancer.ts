@@ -33,7 +33,9 @@ interface GrowthComparison {
 
 class MentorContextEnhancer {
   /**
-   * T-02: 获取真实的同类卡点案例
+   * T-02: 获取真实的同类卡点案例（增强版）
+   *
+   * 优先从案例库获取，如果案例库为空则回退到mentor_growth_observations
    *
    * @param studentId 当前学生ID
    * @param taskId 当前任务ID
@@ -54,7 +56,43 @@ class MentorContextEnhancer {
         return null;
       }
 
-      // 2. 查询同赛道的真实卡点案例
+      // 2. 优先从案例库查询（Phase 2.4新增）
+      const caseLibraryCases = await query<{
+        title: string;
+        situation: string;
+        solution: string;
+        time_to_resolve: number;
+        difficulty: number;
+      }>(
+        `SELECT title, situation, solution, time_to_resolve, difficulty
+         FROM case_library
+         WHERE case_type = 'stuck'
+           AND category = $1
+           AND solution IS NOT NULL
+         ORDER BY helpfulness DESC, RANDOM()
+         LIMIT 1`,
+        [taskInfo.track]
+      );
+
+      if (caseLibraryCases.length > 0) {
+        const caseData = caseLibraryCases[0];
+        logger.info('Found case from case library', {
+          track: taskInfo.track,
+          title: caseData.title
+        });
+
+        return {
+          observation_content: `${caseData.situation} 解决方式：${caseData.solution}`,
+          context: {
+            source: 'case_library',
+            title: caseData.title,
+            time_to_resolve: caseData.time_to_resolve,
+            difficulty: caseData.difficulty
+          }
+        };
+      }
+
+      // 3. 回退到原有的mentor_growth_observations查询
       const cases = await query<{
         observation_content: string;
         context: any;
@@ -81,7 +119,7 @@ class MentorContextEnhancer {
       }
 
       const realCase = cases[0];
-      logger.info('Found real stuck case', {
+      logger.info('Found real stuck case from observations', {
         track: taskInfo.track,
         hasContext: !!realCase.context
       });

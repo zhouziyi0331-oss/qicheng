@@ -100,12 +100,69 @@ import teamRoutesNew from './routes/teamRoutes';
 import communityRoutesNew from './routes/communityRoutes';
 import masterRoutes from './routes/masterRoutes';
 
+// 新增：前端融合相关路由
+import dashboardRoutes from './routes/dashboardRoutes';
+import coursesRoutes from './routes/coursesRoutes';
+import dailyTasksRoutes from './routes/dailyTasksRoutes';
+import sessionsRoutes from './routes/sessionsRoutes';
+import sectorHallRoutes from './routes/sectorHallRoutes';
+import recommendationsRoutes from './routes/recommendationsRoutes';
+import historyRoutes from './routes/historyRoutes';
+import abilityMapRoutes from './routes/abilityMapRoutes';
+import portfolioRoutes from './routes/portfolioRoutes';
+import projectCompleteRoutes from './routes/projectCompleteRoutes';
+import notificationSettingsRoutes from './routes/notificationSettingsRoutes';
+
+// 新增：天赋标签系统路由
+import talentRoutes from './routes/talent';
+
+// 新增：跳级系统路由
+import skipLevelRoutes from './routes/skipLevel';
+
+// 新增：任务定向邀约系统路由
+import invitationsRoutes from './routes/invitations';
+
+// Phase R1: Agent编排器系统路由
+import orchestratorRoutes from './routes/orchestrator';
+
+// Phase 1.4: 升级通关仪式路由
+import levelUpRoutes from './routes/levelUpRoutes';
+
+// Phase 2.1: OPC身份卡片路由
+import opcIdentityCardRoutes from './routes/opcIdentityCardRoutes';
+
+// Phase 2.2: 资产仪表盘路由
+import assetDashboardRoutes from './routes/assetDashboardRoutes';
+
+// Phase 2.3: 成长对比路由
+import growthComparisonRoutes from './routes/growthComparisonRoutes';
+
+// Phase 2.4: 案例库路由
+import caseLibraryRoutes from './routes/caseLibraryRoutes';
+
+// Phase 3.1: 引路人机制路由
+import mentorRelationshipRoutes from './routes/mentorRelationshipRoutes';
+
+// Phase 3.2: OPC故事墙路由
+import opcStoryRoutes from './routes/opcStoryRoutes';
+
+// Phase 3.3: 企业-学生端打通路由
+import companyStudentBridgeRoutes from './routes/companyStudentBridgeRoutes';
+
+// Phase 3.4: 需求自动拆解推送路由
+import demandDecompositionRoutes from './routes/demandDecompositionRoutes';
+
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
   require('./jobs/emotionSignalDetector');
   require('./jobs/firstTaskSettlement');
   require('./cron/mentorNudge').startMentorNudgeCron();
   require('./jobs/invitationCron');
+
+  // Phase R1: 初始化Agent编排器
+  const { initializeOrchestrator } = require('./orchestrator/orchestratorInit');
+  initializeOrchestrator();
+  logger.info('✅ Agent编排器已初始化');
 
   // 启动定时任务调度器（7天自动确认等）
   const { pool } = require('./utils/db');
@@ -125,6 +182,11 @@ if (process.env.NODE_ENV !== 'test') {
   const { startMatchingWorker } = require('./workers/matchingWorker');
   startMatchingWorker();
   logger.info('匹配Worker已启动');
+
+  // Phase R5.3: 启动报告生成Worker
+  const { startReportWorker } = require('./workers/reportWorker');
+  startReportWorker();
+  logger.info('✅ 报告生成Worker已启动');
 
   // 优雅关闭时停止定时任务
   process.on('SIGTERM', () => {
@@ -197,6 +259,10 @@ app.get('/health', (_req, res) => {
 // ============================================================
 // Routes
 // ============================================================
+
+// Phase R1: Agent编排器测试路由（需要在authIsolationRoutes之前注册，避免认证冲突）
+app.use('/api/v1/orchestrator', orchestratorRoutes);
+
 app.use('/api/v1/auth', authLimiter, authRoutes);
 app.use('/api/v1', authIsolationRoutes);
 app.use('/api/v1/user', userRoutes);
@@ -217,6 +283,7 @@ app.use('/api/mentor', enhancedMentorRoutes); // 增强版AI导师路由
 app.use('/api/admin', adminDashboardRoutes); // 管理后台API
 app.use('/api/v1/trust', trustRoutes);
 app.use('/api/v1/invitation', invitationRoutes);
+app.use('/api/v1/invitations', invitationsRoutes); // 任务定向邀约系统
 app.use('/api/v1/challenge', challengeRoutes);
 app.use('/api/v1/subcontract', subcontractRoutes);
 app.use('/api/v1/team', teamRoutes);
@@ -233,6 +300,7 @@ app.use('/api/v1/opc-v2', opcV2Routes); // OPC v2.0 AI画像分析系统（新�
 app.use('/api/v1/opc-personality', opcV2PersonalityRoutes); // OPC v2.0 人格测试与分析系统
 app.use('/api/v1/ai-mentor', aiMentorRoutesV2); // AI导师陪伴系统 v2.0
 app.use('/api/v1/asset', assetVisualizationRoutes); // 资产可视化系统
+app.use('/api/skip-level', skipLevelRoutes); // 跳级系统
 app.use('/api/v1/mentor-trigger', mentorAutoTriggerRoutes); // AI导师自动触发系统
 app.use('/api/v1', semanticMatchingRoutes); // 语义匹配引擎（任务推荐、学生匹配）
 app.use('/api/v1/stats', statsRoutes); // 统计API（真实数据，消除固定文案）
@@ -280,6 +348,49 @@ app.use('/api/v1/matching-enhancement', matchingEnhancementRoutes); // E-05a/b/c
 app.use('/api/v1/task-tracking', taskTrackingRoutes); // E-23-28: 进度、里程碑、通知、归档、预警、介入
 app.use('/api/v1/acceptance', acceptanceRoutes); // E-29-34: 清单、模板、评分、合作意愿、知识产权、退款
 app.use('/api/v1/cultivation', cultivationRoutes); // E-12: 定向培养计划
+
+// 新增：前端融合相关路由
+app.use('/api/v1', dashboardRoutes); // Dashboard数据
+app.use('/api/v1', coursesRoutes); // 课程和赛道
+app.use('/api/v1', dailyTasksRoutes); // 每日任务
+app.use('/api/v1', sessionsRoutes); // 学习会话
+app.use('/api/v1', sectorHallRoutes); // 板块大厅
+app.use('/api/v1', recommendationsRoutes); // 跨板块推荐
+app.use('/api/v1', historyRoutes); // 学习历史
+app.use('/api/v1', abilityMapRoutes); // 能力图谱
+app.use('/api/v1', portfolioRoutes); // 作品集
+app.use('/api/v1', projectCompleteRoutes); // 项目完成
+app.use('/api/v1', notificationSettingsRoutes); // 通知设置
+
+// 天赋标签系统（语义级精准匹配）
+app.use('/api/v1/talent', talentRoutes); // 天赋标签、能力积累、需求拆解系统
+
+// Phase 1.4: 升级通关仪式系统
+app.use('/api/v1/level-up', levelUpRoutes); // 升级通关仪式
+
+// Phase 2.1: OPC身份卡片系统
+app.use('/api/v1/opc', opcIdentityCardRoutes); // 可分享的OPC身份卡片
+
+// Phase 2.2: 资产仪表盘系统
+app.use('/api/v1/asset-dashboard', assetDashboardRoutes); // 能力估值与资产仪表盘
+
+// Phase 2.3: 成长对比系统
+app.use('/api/v1/growth-comparison', growthComparisonRoutes); // 入驻时vs当前的成长对比
+
+// Phase 2.4: 真实案例库系统
+app.use('/api/v1/case-library', caseLibraryRoutes); // 真实案例引用系统
+
+// Phase 3.1: 引路人机制系统
+app.use('/api/v1/mentor-relationship', mentorRelationshipRoutes); // 引路人匹配与关系管理
+
+// Phase 3.2: OPC故事墙系统
+app.use('/api/v1/opc-stories', opcStoryRoutes); // OPC故事分享与浏览
+
+// Phase 3.3: 企业-学生端打通系统
+app.use('/api/v1/company-student-bridge', companyStudentBridgeRoutes); // 成长通知与声誉标签
+
+// Phase 3.4: 需求自动拆解推送系统
+app.use('/api/v1/demand-decomposition', demandDecompositionRoutes); // 大需求拆解与智能推送
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
@@ -339,3 +450,4 @@ if (require.main === module) {
     });
   });
 }
+

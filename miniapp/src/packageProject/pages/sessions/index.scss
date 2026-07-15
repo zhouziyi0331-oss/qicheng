@@ -1,0 +1,195 @@
+
+
+@import '../../../styles/variables.scss';
+
+.sessions-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding-bottom: 240px;
+}
+
+.filter-bar {
+  display: flex;
+  background: white;
+  padding: 48px 64px;
+  gap: 32px;
+  border-bottom: 4px solid #e5e7eb;
+
+  .filter-item {
+    flex: 1;
+    padding: 32px;
+    text-align: center;
+    border-radius: 24px;
+    background: #f3f4f6;
+    color: $text-secondary;
+    font-size: 56px;
+    transition: all 0.3s;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, $primary 0%, $primary 100%);
+      color: white;
+      font-weight: 600;
+      box-shadow: $shadow-soft;
+    }
+  }
+}
+
+.sessions-list {
+  padding: 48px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.session-card {
+  background: white;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+
+  .session-main {
+    padding: 64px;
+    transition: all var(--duration-fast) var(--ease-standard);
+
+    &:active {
+      background: linear-gradient(135deg, rgba(255, 107, 157, 0.02) 0%, rgba(255, 230, 109, 0.02) 100%);
+    }
+
+    .session-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+
+      .session-title {
+        font-size: 64px;
+        font-weight: 600;
+        color: $text-primary;
+        flex: 1;
+      }
+
+      .session-badge {
+        padding: 16px 32px;
+        border-radius: 40px;
+        font-size: 48px;
+        font-weight: 500;
+
+        &.in-progress {
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+          color: #1e40af;
+        }
+
+        &.completed {
+          background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 230, 109, 0.1) 100%);
+          color: $primary;
+        }
+      }
+    }
+
+    .session-career {
+      display: block;
+      font-size: 56px;
+      color: $text-secondary;
+      margin-bottom: 48px;
+    }
+
+    .session-progress {
+      margin-bottom: 48px;
+
+      .progress-bar {
+        height: 16px;
+        background: #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 24px;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, $primary 0%, $primary 100%);
+          transition: width 0.3s ease;
+          border-radius: 8px;
+        }
+      }
+
+      .progress-text {
+        font-size: 48px;
+        color: $text-secondary;
+      }
+    }
+
+    .session-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .session-time {
+        font-size: 48px;
+        color: $text-secondary;
+        opacity: 0.7;
+      }
+
+      .session-iterations {
+        font-size: 48px;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .session-actions {
+    padding: 48px 64px;
+    border-top: 4px solid #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+
+    .action-btn {
+      padding: 32px 64px;
+      border-radius: 40px;
+      font-size: 56px;
+      border: none;
+      font-weight: 500;
+      transition: all var(--duration-fast) var(--ease-standard);
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &.delete {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+    }
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 240px 64px;
+
+  .empty-icon {
+    font-size: 240px;
+    margin-bottom: 64px;
+    opacity: 0.3;
+  }
+
+  .empty-text {
+    font-size: 56px;
+    color: $text-secondary;
+    opacity: 0.6;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 64px;
+  color: $primary;
+}

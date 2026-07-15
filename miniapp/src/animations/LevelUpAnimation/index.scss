@@ -1,6 +1,4 @@
-/**
- * 等级提升动画样式
- */
+
 
 .level-up-animation {
   position: fixed;
@@ -35,7 +33,7 @@
   padding: 0 32px;
 }
 
-/* ==================== 徽章动画 ==================== */
+
 
 .badge-container {
   position: relative;
@@ -64,7 +62,7 @@
   color: white;
 }
 
-/* 等级颜色 */
+
 .badge-level-1 {
   background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
 }
@@ -85,7 +83,7 @@
   background: linear-gradient(135deg, #1A1A1A 0%, #000000 100%);
 }
 
-/* 旧徽章缩小消失 */
+
 .badge-shrink {
   animation: badgeShrink 0.3s ease forwards;
 }
@@ -101,7 +99,7 @@
   }
 }
 
-/* 新徽章弹跳出现 */
+
 .badge-pop {
   animation: badgePop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
@@ -121,7 +119,7 @@
   }
 }
 
-/* ==================== 星光粒子 ==================== */
+
 
 .star-particles {
   position: absolute;
@@ -159,7 +157,7 @@
   }
 }
 
-/* ==================== 等级名称 ==================== */
+
 
 .level-name-container {
   text-align: center;
@@ -193,7 +191,7 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* ==================== 特性列表 ==================== */
+
 
 .features-container {
   width: 100%;
@@ -243,7 +241,7 @@
   flex: 1;
 }
 
-/* ==================== 导师留言 ==================== */
+
 
 .mentor-message {
   display: flex;
@@ -269,7 +267,7 @@
   line-height: 1.6;
 }
 
-/* ==================== 关闭按钮 ==================== */
+
 
 .close-button {
   padding: 14px 48px;
@@ -287,7 +285,7 @@
   }
 }
 
-/* ==================== 动画关键帧 ==================== */
+
 
 @keyframes fadeIn {
   from {

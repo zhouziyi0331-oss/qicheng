@@ -9,6 +9,7 @@ const autoConfirmationJob_1 = require("./autoConfirmationJob");
 const autoAcceptanceJob_1 = require("./autoAcceptanceJob");
 const taskExpirationJob_1 = require("./taskExpirationJob");
 const applicationTimeoutJob_1 = require("./applicationTimeoutJob");
+const reportGenerationJobs_1 = require("./reportGenerationJobs");
 const logger_1 = __importDefault(require("../utils/logger"));
 /**
  * 定时任务调度器
@@ -32,6 +33,10 @@ class CronScheduler {
         this.startTaskExpirationJob();
         // 启动申请超时取消任务
         this.startApplicationTimeoutJob();
+        // Phase R5.3: 启动每周报告生成任务
+        this.startWeeklyReportJob();
+        // Phase R5.3: 启动每月报告生成任务
+        this.startMonthlyReportJob();
         logger_1.default.info(`已启动${this.tasks.length}个定时任务`);
     }
     /**
@@ -131,6 +136,44 @@ class CronScheduler {
         logger_1.default.info('手动触发7天自动确认任务');
         const job = new autoConfirmationJob_1.AutoConfirmationJob(this.pool);
         await job.execute();
+    }
+    /**
+     * Phase R5.3: 启动每周报告生成任务
+     */
+    startWeeklyReportJob() {
+        const job = new reportGenerationJobs_1.WeeklyReportJob(this.pool);
+        const schedule = reportGenerationJobs_1.WeeklyReportJob.getCronSchedule();
+        const task = node_cron_1.default.schedule(schedule, async () => {
+            try {
+                await job.execute();
+            }
+            catch (error) {
+                logger_1.default.error('每周报告生成任务执行失败:', error);
+            }
+        }, {
+            timezone: 'Asia/Shanghai'
+        });
+        this.tasks.push(task);
+        logger_1.default.info(`已启动每周报告生成任务，调度时间: ${schedule}`);
+    }
+    /**
+     * Phase R5.3: 启动每月报告生成任务
+     */
+    startMonthlyReportJob() {
+        const job = new reportGenerationJobs_1.MonthlyReportJob(this.pool);
+        const schedule = reportGenerationJobs_1.MonthlyReportJob.getCronSchedule();
+        const task = node_cron_1.default.schedule(schedule, async () => {
+            try {
+                await job.execute();
+            }
+            catch (error) {
+                logger_1.default.error('每月报告生成任务执行失败:', error);
+            }
+        }, {
+            timezone: 'Asia/Shanghai'
+        });
+        this.tasks.push(task);
+        logger_1.default.info(`已启动每月报告生成任务，调度时间: ${schedule}`);
     }
 }
 exports.CronScheduler = CronScheduler;

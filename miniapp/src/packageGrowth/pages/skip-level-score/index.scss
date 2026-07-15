@@ -1,0 +1,289 @@
+// ============================================================
+// S5 – 评分结果页
+// 基于设计稿 Sunset Postcard 配色
+// ============================================================
+
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.skip-score-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+.score-hero {
+  background: linear-gradient(160deg, #EDD9C8 0%, #E8C9A8 40%, #F5EDE3 100%);
+  padding: 40rpx 32rpx 56rpx;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  .hero-glow-1 {
+    position: absolute;
+    top: -100rpx;
+    right: -100rpx;
+    width: 400rpx;
+    height: 400rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    bottom: -60rpx;
+    left: -60rpx;
+    width: 280rpx;
+    height: 280rpx;
+    background: radial-gradient(circle, rgba(190, 215, 209, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .score-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+    .score-ring {
+      width: 200rpx;
+      height: 200rpx;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $golden, $terra);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 12rpx rgba(242, 205, 120, 0.2),
+                  0 0 0 24rpx rgba(242, 205, 120, 0.1),
+                  0 24rpx 80rpx rgba(188, 100, 70, 0.3);
+      border: 6rpx solid rgba(255, 255, 255, 0.5);
+      margin-bottom: 24rpx;
+
+      .score-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .score-num {
+          font-size: 80rpx;
+          font-weight: 900;
+          color: white;
+          line-height: 1;
+        }
+
+        .score-unit {
+          font-size: 28rpx;
+          font-weight: 700;
+          color: rgba(255, 255, 255, 0.7);
+          margin-top: 4rpx;
+        }
+      }
+    }
+
+    .score-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8rpx;
+      padding: 8rpx 24rpx;
+      border-radius: 9999rpx;
+      font-size: 26rpx;
+      font-weight: 700;
+      margin-bottom: 16rpx;
+
+      &.pass {
+        background: rgba(94, 175, 122, 0.15);
+        color: #3A8A5A;
+
+        .status-icon {
+          font-size: 28rpx;
+        }
+      }
+
+      &.fail {
+        background: rgba(188, 100, 70, 0.12);
+        color: $rust;
+
+        .status-icon {
+          font-size: 28rpx;
+        }
+      }
+    }
+
+    .score-desc {
+      font-size: 26rpx;
+      color: $text-2;
+      text-align: center;
+      line-height: 1.6;
+      display: block;
+    }
+  }
+}
+
+.score-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.score-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.breakdown-card,
+.mentor-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+  border: 1rpx solid $border;
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 28rpx;
+
+    .header-icon {
+      font-size: 30rpx;
+    }
+
+    .header-title {
+      font-size: 28rpx;
+      font-weight: 800;
+      color: $text-1;
+    }
+  }
+}
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+
+  .breakdown-item {
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12rpx;
+
+      .item-name {
+        font-size: 26rpx;
+        font-weight: 600;
+        color: $text-2;
+      }
+
+      .item-score {
+        font-size: 26rpx;
+        font-weight: 800;
+        color: $rust;
+      }
+    }
+
+    .item-bar {
+      height: 12rpx;
+      background: $surface2;
+      border-radius: 9999rpx;
+      overflow: hidden;
+
+      .item-fill {
+        height: 100%;
+        border-radius: 9999rpx;
+        transition: width 0.5s;
+      }
+    }
+  }
+}
+
+.mentor-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+
+  .mentor-avatar {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $rust, $terra);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .avatar-text {
+      font-size: 28rpx;
+      font-weight: 800;
+      color: white;
+    }
+  }
+
+  .mentor-details {
+    flex: 1;
+
+    .mentor-name {
+      font-size: 26rpx;
+      font-weight: 700;
+      color: $text-1;
+      display: block;
+    }
+
+    .mentor-role {
+      font-size: 22rpx;
+      color: $text-3;
+      margin-top: 4rpx;
+      display: block;
+    }
+  }
+}
+
+.mentor-comment {
+  padding: 24rpx;
+  background: $surface2;
+  border-radius: 24rpx;
+  border-left: 6rpx solid $rust;
+
+  .comment-text {
+    font-size: 26rpx;
+    color: $text-2;
+    line-height: 1.7;
+    display: block;
+  }
+}
+
+.score-footer {
+  padding: 0 32rpx 32rpx;
+  flex-shrink: 0;
+
+  .btn-primary {
+    width: 100%;
+    padding: 28rpx;
+    border-radius: 9999rpx;
+    background: linear-gradient(135deg, $rust, $rust-dark);
+    box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.35);
+    text-align: center;
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 800;
+      color: white;
+    }
+  }
+}

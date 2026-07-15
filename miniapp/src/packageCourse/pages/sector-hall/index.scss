@@ -1,0 +1,300 @@
+@import '../../../styles/morandi-colors.scss';
+
+.sector-hall-page {
+  width: 100%;
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hall-hero {
+  background: linear-gradient(160deg, #2C2018, #4A3020, #6B4030);
+  padding: 32rpx 40rpx 56rpx;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100rpx;
+    right: -100rpx;
+    width: 400rpx;
+    height: 400rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, .18) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -60rpx;
+    left: -60rpx;
+    width: 280rpx;
+    height: 280rpx;
+    background: radial-gradient(circle, rgba(190, 215, 209, .12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 32rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.tb-back {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: white;
+  font-weight: 300;
+}
+
+.tb-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: white;
+}
+
+.tb-spacer {
+  width: 68rpx;
+}
+
+.hall-title {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 12rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.hall-sub {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, .55);
+  margin-bottom: 40rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.hall-stats {
+  display: flex;
+  gap: 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.hs-item {
+  text-align: center;
+}
+
+.hs-val {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: $golden;
+  display: block;
+}
+
+.hs-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, .45);
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* ============================================================
+   SCROLL AREA
+============================================================ */
+.scroll-area {
+  flex: 1;
+  background: $bg;
+}
+
+.hall-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+  padding-bottom: 60rpx;
+}
+
+/* ============================================================
+   SECTOR CARDS
+============================================================ */
+.sector-card {
+  border-radius: 48rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 40rpx rgba(44, 32, 24, .10);
+}
+
+.sector-card-header {
+  padding: 40rpx;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -60rpx;
+    right: -60rpx;
+    width: 240rpx;
+    height: 240rpx;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .08);
+  }
+}
+
+.sector-header-rust {
+  background: linear-gradient(135deg, #BC6446, #D88760);
+}
+
+.sector-header-mist {
+  background: linear-gradient(135deg, #9ABFB8, #BED7D1);
+}
+
+.sector-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.sector-name {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.sector-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, .7);
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.sector-tags {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+  margin-top: 16rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.sector-tag {
+  padding: 6rpx 20rpx;
+  border-radius: 9999rpx;
+  background: rgba(255, 255, 255, .15);
+}
+
+.tag-text {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, .8);
+}
+
+.sector-card-footer {
+  background: $surface;
+  padding: 24rpx 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.footer-left {
+  flex: 1;
+}
+
+.sector-meta {
+  font-size: 24rpx;
+  color: $text-3;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.selected-badge {
+  display: inline-flex;
+  padding: 8rpx 20rpx;
+  border-radius: 9999rpx;
+  background: rgba(188, 100, 70, .1);
+}
+
+.selected-text {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: $rust;
+}
+
+.sector-btn {
+  padding: 12rpx 32rpx;
+  border-radius: 9999rpx;
+  flex-shrink: 0;
+}
+
+.btn-rust {
+  background: linear-gradient(135deg, $rust, $rust-dark);
+}
+
+.btn-mist {
+  background: linear-gradient(135deg, #9ABFB8, $mist);
+}
+
+.btn-text {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: white;
+}
+
+.btn-mist .btn-text {
+  color: #2C5A56;
+}
+
+/* ============================================================
+   COMING SOON
+============================================================ */
+.coming-soon {
+  background: $surface2;
+  border-radius: 48rpx;
+  padding: 32rpx;
+  border: 2rpx dashed $border;
+}
+
+.cs-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: $text-2;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.cs-desc {
+  font-size: 24rpx;
+  color: $text-3;
+  display: block;
+}

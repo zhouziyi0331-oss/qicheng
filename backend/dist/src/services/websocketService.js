@@ -5,7 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const socket_io_1 = require("socket.io");
 const logger_1 = __importDefault(require("../utils/logger"));
-const verifyToken = (token) => { };
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const verifyToken = (token) => {
+    try {
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        return { userId: decoded.userId || decoded.id, role: decoded.role };
+    }
+    catch (error) {
+        return null;
+    }
+};
 class WebSocketService {
     constructor() {
         this.io = null;

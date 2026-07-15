@@ -5,6 +5,7 @@
  * 1. 获取安全承诺列表
  * 2. 获取合作进度
  * 3. 获取访问日志
+ * 4. 微信小程序内容安全检查（新增）
  */
 
 import { Router, Request, Response } from 'express';
@@ -14,6 +15,7 @@ import dataAccessLogService from '../services/dataAccessLogService';
 import collaborationProgressService from '../services/collaborationProgressService';
 import contactUnlockService from '../services/contactUnlockService';
 import { authenticate } from '../middleware/auth';
+import { imgSecCheck, msgSecCheck } from '../controllers/securityController';
 
 const router = Router();
 
@@ -467,5 +469,21 @@ router.get('/my-unlock-requests', authenticate, async (req: Request, res: Respon
     });
   }
 });
+
+// ============================================================
+// 微信小程序内容安全检查（新增）
+// ============================================================
+
+/**
+ * 图片内容安全检查
+ * POST /api/v1/security/imgSecCheck
+ */
+router.post('/imgSecCheck', authenticate, imgSecCheck);
+
+/**
+ * 文本内容安全检查
+ * POST /api/v1/security/msgSecCheck
+ */
+router.post('/msgSecCheck', authenticate, msgSecCheck);
 
 export default router;

@@ -1,65 +1,48 @@
-/**
- * 启程平台 - 果汁色主题系统
- * 设计理念：年轻、有力量、被看见
- * 从莫兰迪色升级为果汁色，饱和度提升30%
- */
-
-/* ==================== 果汁色调色板 ==================== */
-
 :root {
-  /* 主题背景色 - 果汁色 */
-  --strawberry-pink: #FFF0F3;        /* 草莓奶昔粉 */
-  --peach-yellow: #FFF6EB;           /* 蜜桃黄 */
-  --grape-green: #F0F7F2;            /* 青提绿 */
-  --cream-white: #FFFEF9;            /* 奶油白 */
+  --strawberry-pink: #FFF0F3;
+  --peach-yellow: #FFF6EB;
+  --grape-green: #F0F7F2;
+  --cream-white: #FFFEF9;
 
-  /* 主题强调色 - 果汁色 */
-  --grapefruit-orange: #FF6B6B;      /* 西柚橙 */
-  --blueberry-blue: #4ECDC4;         /* 蓝莓蓝 */
-  --mango-yellow: #FFE66D;           /* 芒果黄 */
-  --watermelon-red: #FF6B9D;         /* 西瓜红 */
-  --kiwi-green: #A8E6CF;             /* 猕猴桃绿 */
-  --grape-purple: #C5A3FF;           /* 葡萄紫 */
+  --grapefruit-orange: #FF6B6B;
+  --blueberry-blue: #4ECDC4;
+  --mango-yellow: #FFE66D;
+  --watermelon-red: #FF6B9D;
+  --kiwi-green: #A8E6CF;
+  --grape-purple: #C5A3FF;
 
-  /* 文字颜色 */
-  --text-primary: #2D1B0E;           /* 深可可色 */
-  --text-secondary: #8B7355;         /* 可可灰 */
-  --text-tertiary: #B8A393;          /* 浅可可 */
+  --text-primary: #2D1B0E;
+  --text-secondary: #8B7355;
+  --text-tertiary: #B8A393;
   --text-white: #FFFFFF;
 
-  /* 等级色系 */
-  --level-1-gray: #6B7280;           /* Lv.1 灰色盾牌 */
-  --level-2-purple: #7C3AED;         /* Lv.2 紫色盾牌 */
-  --level-3-orange: #D97706;         /* Lv.3 金色盾牌 */
-  --level-4-red: #DC2626;            /* Lv.4 红色盾牌 */
-  --level-5-black: #1A1A1A;          /* Lv.5 黑色盾牌 */
+  --level-1-gray: #6B7280;
+  --level-2-purple: #7C3AED;
+  --level-3-orange: #D97706;
+  --level-4-red: #DC2626;
+  --level-5-black: #1A1A1A;
 
-  /* 功能色 */
-  --success-green: #0D7A5F;          /* 成功/完成 */
-  --warning-orange: #F59E0B;         /* 警告 */
-  --error-red: #C0392B;              /* 错误/打回 */
-  --info-blue: #3B82F6;              /* 信息 */
+  --success-green: #0D7A5F;
+  --warning-orange: #F59E0B;
+  --error-red: #C0392B;
+  --info-blue: #3B82F6;
 
-  /* 动态主题色（根据用户人格标签切换） */
   --theme-primary: var(--grapefruit-orange);
   --theme-bg: var(--strawberry-pink);
   --theme-card: var(--cream-white);
   --theme-accent: var(--mango-yellow);
   --theme-secondary: var(--blueberry-blue);
 
-  /* 阴影系统 - 彩色柔和阴影 */
   --shadow-soft: 0 4px 20px rgba(255, 107, 107, 0.15);
   --shadow-card: 0 2px 12px rgba(45, 27, 14, 0.08);
   --shadow-hover: 0 8px 30px rgba(255, 107, 107, 0.25);
   --shadow-modal: 0 20px 50px rgba(45, 27, 14, 0.15);
 
-  /* 圆角规范 */
-  --radius-small: 8px;               /* 小元素 */
-  --radius-medium: 16px;             /* 卡片 */
-  --radius-large: 24px;              /* 大卡片 */
-  --radius-round: 9999px;            /* 胶囊按钮/头像 */
+  --radius-small: 8px;
+  --radius-medium: 16px;
+  --radius-large: 24px;
+  --radius-round: 9999px;
 
-  /* 间距规范 */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -67,14 +50,12 @@
   --spacing-xl: 32px;
   --spacing-2xl: 48px;
 
-  /* 动画时长 */
   --duration-instant: 0.1s;
   --duration-fast: 0.15s;
   --duration-normal: 0.3s;
   --duration-slow: 0.5s;
   --duration-slower: 0.8s;
 
-  /* 缓动函数 */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
   --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
@@ -82,18 +63,14 @@
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ==================== 人格标签主题切换 ==================== */
-
-/* 视觉叙事者 - 草莓粉系 */
 body[data-persona="visual-storyteller"],
 .theme-visual-storyteller {
-  --theme-primary: #FF6B9D;          /* 西瓜红 */
+  --theme-primary: #FF6B9D;
   --theme-bg: var(--strawberry-pink);
   --theme-accent: var(--watermelon-red);
   --theme-secondary: #FFB3D9;
 }
 
-/* 系统构建者 - 蓝莓蓝系 */
 body[data-persona="system-builder"],
 .theme-system-builder {
   --theme-primary: var(--blueberry-blue);
@@ -102,7 +79,6 @@ body[data-persona="system-builder"],
   --theme-secondary: #7FE5DC;
 }
 
-/* 创意执行者 - 西柚橙系 */
 body[data-persona="creative-executor"],
 .theme-creative-executor {
   --theme-primary: var(--grapefruit-orange);
@@ -111,7 +87,6 @@ body[data-persona="creative-executor"],
   --theme-secondary: #FFB8B8;
 }
 
-/* 数据翻译官 - 青提绿系 */
 body[data-persona="data-translator"],
 .theme-data-translator {
   --theme-primary: var(--kiwi-green);
@@ -120,7 +95,6 @@ body[data-persona="data-translator"],
   --theme-secondary: #C1F0DA;
 }
 
-/* 工具整合师 - 蜜桃黄系 */
 body[data-persona="tool-integrator"],
 .theme-tool-integrator {
   --theme-primary: #FFC857;
@@ -129,7 +103,6 @@ body[data-persona="tool-integrator"],
   --theme-secondary: #FFE5A0;
 }
 
-/* 对话设计师 - 芒果黄系 */
 body[data-persona="dialogue-designer"],
 .theme-dialogue-designer {
   --theme-primary: var(--mango-yellow);
@@ -138,8 +111,6 @@ body[data-persona="dialogue-designer"],
   --theme-secondary: #FFF1A8;
 }
 
-/* ==================== 全局基础样式改造 ==================== */
-
 page {
   background-color: var(--theme-bg);
   color: var(--text-primary);
@@ -147,7 +118,6 @@ page {
   transition: background-color 0.3s ease;
 }
 
-/* 卡片 - 升级为16px圆角 + 彩色阴影 */
 .card {
   background: var(--theme-card);
   border-radius: var(--radius-medium);
@@ -164,7 +134,6 @@ page {
   }
 }
 
-/* 按钮 - 升级为胶囊型 */
 .button {
   border-radius: var(--radius-round);
   padding: 12px 24px;
@@ -184,14 +153,12 @@ page {
     pointer-events: none;
   }
 
-  /* 次要按钮 */
   &.button-secondary {
     background: var(--theme-card);
     color: var(--theme-primary);
     box-shadow: 0 0 0 1px var(--theme-primary) inset;
   }
 
-  /* 文本按钮 */
   &.button-text {
     background: transparent;
     color: var(--theme-primary);
@@ -199,7 +166,6 @@ page {
   }
 }
 
-/* 输入框 */
 .input {
   border-radius: var(--radius-medium);
   padding: 12px 16px;
@@ -214,9 +180,6 @@ page {
   }
 }
 
-/* ==================== 动画类 ==================== */
-
-/* 淡入 */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -226,7 +189,7 @@ page {
   }
 }
 
-/* 从下滑入 */
+
 @keyframes slideInUp {
   from {
     transform: translateY(20px);
@@ -238,7 +201,7 @@ page {
   }
 }
 
-/* 从上滑入 */
+
 @keyframes slideInDown {
   from {
     transform: translateY(-20px);
@@ -250,7 +213,7 @@ page {
   }
 }
 
-/* 从左滑入 */
+
 @keyframes slideInLeft {
   from {
     transform: translateX(-20px);
@@ -262,7 +225,7 @@ page {
   }
 }
 
-/* 从右滑入 */
+
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
@@ -274,7 +237,7 @@ page {
   }
 }
 
-/* 弹性放大 */
+
 @keyframes scaleIn {
   from {
     transform: scale(0);
@@ -286,7 +249,7 @@ page {
   }
 }
 
-/* 心跳缩放 */
+
 @keyframes heartbeat {
   0%, 100% {
     transform: scale(1);
@@ -299,7 +262,7 @@ page {
   }
 }
 
-/* 呼吸光效 */
+
 @keyframes breathe {
   0%, 100% {
     opacity: 1;
@@ -309,7 +272,7 @@ page {
   }
 }
 
-/* 呼吸缩放（用于头像、图标等） */
+
 @keyframes breathe-scale {
   0%, 100% {
     transform: scale(1);
@@ -319,7 +282,7 @@ page {
   }
 }
 
-/* 浮动动画 */
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0);
@@ -329,7 +292,7 @@ page {
   }
 }
 
-/* 弹跳进入 */
+
 @keyframes bounce-in {
   0% {
     transform: scale(0.9);
@@ -342,7 +305,7 @@ page {
   }
 }
 
-/* 脉冲（透明度） */
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -352,7 +315,7 @@ page {
   }
 }
 
-/* 脉冲数字（缩放） */
+
 @keyframes pulse-number {
   0%, 100% {
     transform: scale(1);
@@ -362,7 +325,7 @@ page {
   }
 }
 
-/* 闪烁（星星等） */
+
 @keyframes twinkle {
   0%, 100% {
     opacity: 1;
@@ -374,7 +337,7 @@ page {
   }
 }
 
-/* Shimmer扫光 */
+
 @keyframes shimmer {
   0% {
     background-position: -1000px 0;
@@ -384,7 +347,7 @@ page {
   }
 }
 
-/* 打字光标闪烁 */
+
 @keyframes blink {
   0%, 100% {
     opacity: 1;
@@ -394,9 +357,9 @@ page {
   }
 }
 
-/* ==================== 工具类 ==================== */
 
-/* 动画工具类 */
+
+
 .fade-in {
   animation: fadeIn var(--duration-normal) var(--ease-standard);
 }
@@ -421,7 +384,7 @@ page {
   animation: breathe 2s ease-in-out infinite;
 }
 
-/* 微交互 */
+
 .tap-effect {
   transition: transform var(--duration-instant) var(--ease-standard);
 
@@ -438,7 +401,7 @@ page {
   }
 }
 
-/* 骨架屏 */
+
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -451,7 +414,7 @@ page {
   border-radius: var(--radius-small);
 }
 
-/* 文字渐变 */
+
 .gradient-text {
   background: linear-gradient(
     135deg,
@@ -461,21 +424,4 @@ page {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-/* ==================== 响应式 ==================== */
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* 深色模式支持（未来） */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* 暂不实现，保留接口 */
-  }
 }

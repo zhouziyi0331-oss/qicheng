@@ -1,0 +1,256 @@
+
+
+@import '../../../styles/variables.scss';
+
+.notification-center {
+  min-height: 100vh;
+  background: $bg-primary;
+}
+
+
+.header {
+  background: linear-gradient(135deg, $primary 0%, $primary 100%);
+  padding: 48px 32px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: $shadow-card;
+}
+
+.header-title {
+  font-size: 40px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.unread-badge {
+  background: var(--watermelon-red);
+  border-radius: $radius-md;
+  padding: 4px 12px;
+  min-width: 40px;
+  text-align: center;
+  box-shadow: $shadow-soft;
+  animation: pulse 2s ease-in-out infinite;
+
+}
+
+.badge-text {
+  font-size: 22px;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+
+.filter-tabs {
+  display: flex;
+  background: white;
+  padding: 16px 32px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: $shadow-card;
+}
+
+.tab {
+  flex: 1;
+  padding: 16px 24px;
+  border-radius: $radius-lg;
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--duration-normal) var(--ease-standard);
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.active {
+    background: linear-gradient(135deg, $primary 0%, $primary 100%);
+    box-shadow: $shadow-soft;
+    animation: bounce-in 0.3s var(--ease-elastic);
+
+    .tab-text {
+      color: #FFFFFF;
+    }
+  }
+
+}
+
+.tab-text {
+  font-size: 28px;
+  color: $text-secondary;
+  font-weight: 500;
+}
+
+.tab-badge {
+  background: var(--watermelon-red);
+  border-radius: $radius-sm;
+  padding: 2px 8px;
+  min-width: 32px;
+  text-align: center;
+  box-shadow: $shadow-soft;
+
+  .badge-text {
+    font-size: 20px;
+  }
+}
+
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  padding: 16px 32px;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.action-btn {
+  font-size: 24px;
+  color: $primary;
+  padding: 8px 16px;
+  transition: all var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    opacity: 0.7;
+  }
+
+  &.danger {
+    color: var(--grapefruit-orange);
+  }
+}
+
+
+.notification-list {
+  height: calc(100vh - 300px);
+  padding: 16px 0;
+}
+
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 32px;
+}
+
+.empty-icon {
+  font-size: 120px;
+  margin-bottom: 24px;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+
+}
+
+.empty-text {
+  font-size: 28px;
+  color: $text-tertiary;
+}
+
+
+.notification-item {
+  background: white;
+  margin: 0 16px 16px;
+  border-radius: $radius-lg;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  box-shadow: $shadow-card;
+  transition: all var(--duration-normal) var(--ease-standard);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.5s var(--ease-decelerate) forwards;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-hover);
+  }
+
+  &.unread {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(255, 240, 243, 0.5) 100%);
+    border-left: 4px solid $primary;
+  }
+
+  &.read {
+    opacity: 0.7;
+  }
+}
+
+.unread-dot {
+  position: absolute;
+  top: 24px;
+  left: 8px;
+  width: 12px;
+  height: 12px;
+  background: var(--watermelon-red);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+  animation: breathe 3s ease-in-out infinite;
+
+}
+
+.notification-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, $primary 0%, $primary 100%);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: $shadow-soft;
+  animation: float 3s ease-in-out infinite;
+}
+
+.icon-text {
+  font-size: 40px;
+}
+
+.notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notification-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.notification-message {
+  font-size: 26px;
+  color: $text-secondary;
+  line-height: 1.5;
+}
+
+.notification-time {
+  font-size: 22px;
+  color: $text-tertiary;
+  margin-top: 4px;
+}
+
+.notification-arrow {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.arrow-icon {
+  font-size: 48px;
+  color: $text-tertiary;
+  font-weight: 300;
+}

@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * GET /ability/radar/detailed — 详细版 (付费 ¥69)
  * GET /ability/timeline       — 成长时间线
  * GET /ability/emotion-state  — 获取情绪状态
+ * GET /ability/growth-comparison — 成长对比数据（入驻时 vs 当前）
+ * GET /ability/growth-dashboard — 成长仪表盘数据
  * POST /ability/update-after-task — 任务完成后更新能力
  */
 const express_1 = require("express");
@@ -50,6 +52,8 @@ router.get('/radar', controller.getRadar);
 router.get('/radar/detailed', controller.getDetailedRadar);
 router.get('/timeline', controller.getTimeline);
 router.get('/emotion-state', controller.getEmotionState);
+router.get('/growth-comparison', controller.getGrowthComparison);
+router.get('/growth-dashboard', controller.getGrowthDashboard);
 router.post('/update-after-task', controller.updateAfterTask);
 exports.default = router;
 //# sourceMappingURL=index.js.map

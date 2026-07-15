@@ -1,0 +1,164 @@
+.identity-card {
+  position: relative;
+  width: 670px;
+  margin: 30px auto;
+  padding: 40px 30px;
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  color: #FFFFFF;
+
+  // 卡片头部
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+
+    .level-badge {
+      padding: 8px 20px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+
+      .level-text {
+        font-size: 28px;
+        font-weight: 700;
+        color: #FFFFFF;
+      }
+    }
+
+    .personality-label {
+      font-size: 32px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // 身份宣言
+  .declaration-section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+
+    .declaration-text {
+      font-size: 32px;
+      line-height: 1.6;
+      font-weight: 500;
+      color: #FFFFFF;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // 三大优势
+  .strengths-section {
+    margin-bottom: 40px;
+
+    .section-title {
+      display: block;
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .strengths-list {
+      .strength-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .strength-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          margin-right: 16px;
+          flex-shrink: 0;
+        }
+
+        .strength-text {
+          font-size: 28px;
+          line-height: 1.5;
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+    }
+  }
+
+  // 成长数据
+  .stats-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    margin-bottom: 40px;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .stat-value {
+        font-size: 44px;
+        font-weight: 700;
+        color: #FFFFFF;
+        margin-bottom: 8px;
+      }
+
+      .stat-label {
+        font-size: 22px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .stat-divider {
+      width: 2px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  // 操作按钮
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    .action-btn {
+      flex: 1;
+      height: 88px;
+      line-height: 88px;
+      font-size: 28px;
+      font-weight: 600;
+      border-radius: 16px;
+      border: none;
+
+      &.save-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: #FFFFFF;
+        backdrop-filter: blur(10px);
+      }
+
+      &.share-btn {
+        background: #FFFFFF;
+        color: #6366F1;
+      }
+    }
+  }
+
+  // 装饰元素
+  .card-decoration {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    opacity: 0.15;
+  }
+}

@@ -1,6 +1,8 @@
 import { View, Text } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
+import { tokenManager } from '../../utils/token';
+import { getApiUrl } from '../../config';
 import './index.scss';
 
 interface CollaborationProgress {
@@ -42,10 +44,10 @@ export default function CollaborationProgressHint({
     try {
       const studentId = Taro.getStorageSync('userId');  // 学生端获取自己的ID
       const res = await Taro.request({
-        url: `http://localhost:3000/api/v1/security/collaboration-progress/${studentId}/${companyId}`,
+        url: getApiUrl(`/api/v1/security/collaboration-progress/${studentId}/${companyId}`),
         method: 'GET',
         header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          'Authorization': `Bearer ${tokenManager.getAccessToken()}`
         }
       });
 
@@ -96,9 +98,9 @@ export default function CollaborationProgressHint({
   }
 
   const getIcon = () => {
-    if (progress.canUnlockContact) return '🔓';
-    if (progress.completedCount === 1) return '⭐';
-    return '🔒';
+    if (progress.canUnlockContact) return '○';
+    if (progress.completedCount === 1) return '◇';
+    return '○';
   };
 
   return (

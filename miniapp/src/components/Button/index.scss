@@ -1,0 +1,88 @@
+@import '../../styles/variables.scss';
+
+.custom-button {
+  width: 100%;
+  border: none;
+  border-radius: $radius-sm;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast $ease-out;
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+
+  // Primary - 莫兰迪粉主按钮
+  &--primary {
+    height: $button-height-md;
+    background: $gradient-button-primary;
+    color: $text-white;
+    font-size: $font-size-h4;
+    box-shadow: $shadow-button;
+
+    &.button-hover {
+      opacity: 0.9;
+    }
+  }
+
+  // Secondary - 白底粉边框
+  &--secondary {
+    height: $button-height-md;
+    background: $bg-white;
+    color: $primary;
+    border: 2px solid $primary !important;
+    font-size: $font-size-h4;
+
+    &::after {
+      border: none;
+    }
+
+    &.button-hover {
+      background: rgba(244, 182, 194, 0.05);
+    }
+  }
+
+  // Text - 纯文字按钮
+  &--text {
+    height: auto;
+    background: transparent;
+    color: $text-secondary;
+    font-size: $font-size-base;
+    padding: $spacing-md;
+    box-shadow: none;
+
+    &.button-hover {
+      color: $primary;
+    }
+  }
+
+  // 尺寸变体
+  &--small {
+    height: $button-height-sm;
+    font-size: $font-size-base;
+    padding: 0 $spacing-lg;
+  }
+
+  &--medium {
+    height: $button-height-md;
+    font-size: $font-size-h4;
+  }
+
+  &--large {
+    height: $button-height-lg;
+    font-size: $font-size-h3;
+  }
+
+  // 禁用状态
+  &.button-disabled {
+    opacity: 0.4;
+
+    &:active {
+      transform: none;
+    }
+  }
+}

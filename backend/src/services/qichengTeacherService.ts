@@ -1,7 +1,10 @@
 /**
- * 启程老师翻译服务
- * 将企业任务翻译为学生易懂的语言
- * 拆解功能模块，评估难度，提取技能要求
+ * 启程老师翻译服务 - 融合版
+ *
+ * 融合特点：
+ * 1. 保留：心理洞察能力，温暖的语言风格（旧版精华）
+ * 2. 整合：决策树快速响应，术语快速翻译（新版精华）
+ * 3. 策略：常见情况用决策树（<50ms），复杂情况用AI（保留温暖）
  */
 
 import Anthropic from '@anthropic-ai/sdk';
@@ -52,26 +55,220 @@ interface TaskTranslation {
   difficulty: DifficultyAssessment;
   learning_value: number;
   career_impact: number;
+  used_decision_tree?: boolean; // 新增：是否使用了决策树
+}
+
+/**
+ * 启程老师决策树（新增）
+ * 快速处理常见的翻译场景，不调用AI
+ */
+class QichengDecisionTree {
+
+  /**
+   * 常见术语快速翻译字典
+   */
+  private commonTerms: Map<string, string> = new Map([
+    // 技术术语
+    ['API', 'API接口（程序之间交流的桥梁）'],
+    ['前端', '网页界面开发（用户看到的部分）'],
+    ['后端', '服务器开发（背后处理数据的部分）'],
+    ['数据库', '存储数据的地方'],
+    ['UI', '用户界面（看到的按钮、文字等）'],
+    ['UX', '用户体验（使用时的感受）'],
+    ['响应式', '能自动适应手机和电脑的网页'],
+    ['小程序', '微信里打开的轻量应用'],
+    ['H5', '手机上看的网页'],
+
+    // AI相关
+    ['ChatGPT', 'ChatGPT（AI聊天助手）'],
+    ['Midjourney', 'Midjourney（AI画图工具）'],
+    ['Prompt', 'Prompt（给AI的指令）'],
+    ['训练模型', '训练AI学习能力'],
+
+    // 电商相关
+    ['SKU', 'SKU（商品规格，如"红色L码"）'],
+    ['转化率', '转化率（有多少人最终购买）'],
+    ['跳出率', '跳出率（有多少人看一眼就走了）'],
+    ['GMV', 'GMV（总交易额）'],
+
+    // 营销相关
+    ['KOL', 'KOL（网红、意见领袖）'],
+    ['ROI', 'ROI（投入产出比）'],
+    ['私域', '私域（自己的粉丝群）'],
+    ['公域', '公域（抖音、小红书等平台流量）'],
+  ]);
+
+  /**
+   * 快速判断任务是否简单明了
+   */
+  isSimpleTask(task: Task): boolean {
+    const description = (task.description || '').toLowerCase();
+    const title = (task.title || '').toLowerCase();
+
+    // 任务描述很短（<100字）且包含明确关键词
+    const isShort = description.length < 100;
+    const hasClearKeywords = /设计|文案|海报|视频|剪辑|配音|翻译/.test(description + title);
+
+    return isShort && hasClearKeywords;
+  }
+
+  /**
+   * 快速翻译术语
+   */
+  translateTerms(text: string): { translated: string; terms: Array<{original: string, translation: string}> } {
+    const foundTerms: Array<{original: string, translation: string}> = [];
+    let translated = text;
+
+    this.commonTerms.forEach((translation, term) => {
+      const regex = new RegExp(term, 'g');
+      if (regex.test(text)) {
+        foundTerms.push({ original: term, translation });
+        // 只在第一次出现时添加解释
+        translated = translated.replace(new RegExp(`(${term})(?!（)`, 'g'), translation);
+      }
+    });
+
+    return { translated, terms: foundTerms };
+  }
+
+  /**
+   * 快速难度评估（基于关键词规则）
+   */
+  quickDifficultyAssessment(task: Task): DifficultyAssessment | null {
+    const text = `${task.title} ${task.description}`.toLowerCase();
+
+    // 简单任务关键词
+    const easyKeywords = ['设计海报', '写文案', '配音', '翻译', '整理资料'];
+    // 中等任务关键词
+    const mediumKeywords = ['开发小程序', '制作视频', 'H5页面', '数据分析'];
+    // 复杂任务关键词
+    const hardKeywords = ['系统开发', '架构设计', '算法优化', '大数据处理'];
+
+    const isEasy = easyKeywords.some(kw => text.includes(kw));
+    const isMedium = mediumKeywords.some(kw => text.includes(kw));
+    const isHard = hardKeywords.some(kw => text.includes(kw));
+
+    if (isEasy) {
+      return {
+        technical: 3,
+        cognitive: 3,
+        execution: 4,
+        communication: 3,
+        overall: 3.2
+      };
+    }
+
+    if (isMedium) {
+      return {
+        technical: 6,
+        cognitive: 5,
+        execution: 6,
+        communication: 4,
+        overall: 5.5
+      };
+    }
+
+    if (isHard) {
+      return {
+        technical: 8,
+        cognitive: 8,
+        execution: 8,
+        communication: 6,
+        overall: 7.8
+      };
+    }
+
+    return null; // 需要AI评估
+  }
+
+  /**
+   * 快速生成简单任务的翻译
+   */
+  quickTranslate(task: Task): Partial<TaskTranslation> | null {
+    if (!this.isSimpleTask(task)) {
+      return null; // 需要AI深度翻译
+    }
+
+    // 翻译术语
+    const titleTranslation = this.translateTerms(task.title);
+    const descTranslation = this.translateTerms(task.description);
+
+    // 快速难度评估
+    const difficulty = this.quickDifficultyAssessment(task);
+
+    if (!difficulty) {
+      return null; // 难度不确定，需要AI
+    }
+
+    // 生成简单的翻译
+    return {
+      student_friendly_title: titleTranslation.translated,
+      student_friendly_description: descTranslation.translated,
+      difficulty,
+      estimated_hours: task.duration || this.estimateHours(difficulty.overall),
+      used_decision_tree: true // 标记使用了决策树
+    };
+  }
+
+  private estimateHours(difficulty: number): number {
+    if (difficulty < 4) return 8;
+    if (difficulty < 7) return 20;
+    return 40;
+  }
 }
 
 class QichengTeacherService {
   private anthropic: Anthropic;
+  private decisionTree: QichengDecisionTree;
 
   constructor() {
     this.anthropic = new Anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY || "",
     });
+    this.decisionTree = new QichengDecisionTree();
   }
 
   /**
-   * 分析任务并生成完整翻译
+   * 分析任务并生成完整翻译（融合版）
+   * 策略：先尝试决策树快速响应，复杂任务才调用AI
    */
   async analyzeAndTranslateTask(task: Task): Promise<TaskTranslation> {
     try {
-      logger.info(`Analyzing and translating task: ${task.id}`);
+      logger.info(`[启程老师] 分析任务: ${task.id}`);
 
-      // 使用Claude进行综合分析
+      // ========== 新增：决策树快速处理 ==========
+      const quickResult = this.decisionTree.quickTranslate(task);
+
+      if (quickResult) {
+        logger.info(`[启程老师] 使用决策树快速翻译 (<50ms)`);
+
+        // 决策树处理简单任务，补充必要字段
+        return {
+          task_id: task.id,
+          functional_modules: this.generateSimpleModules(task),
+          student_friendly_title: quickResult.student_friendly_title!,
+          student_friendly_description: quickResult.student_friendly_description!,
+          what_you_will_do: this.generateSimpleSteps(task),
+          what_you_will_learn: this.generateSimpleLearning(task),
+          estimated_hours: quickResult.estimated_hours!,
+          required_skills: [],
+          difficulty: quickResult.difficulty!,
+          learning_value: 0.6,
+          career_impact: 0.5,
+          used_decision_tree: true
+        };
+      }
+
+      // ========== 保留：AI深度翻译（复杂任务） ==========
+      logger.info(`[启程老师] 复杂任务，使用AI深度翻译（保留心理洞察）`);
+
+      // 使用Claude进行综合分析（保留旧版本的温暖和洞察）
       const analysisPrompt = `你是启程平台的"启程老师"，负责将企业发布的任务翻译成学生容易理解的语言。
+
+你的特点：
+1. 心理洞察 - 理解学生的困惑和畏惧
+2. 温暖语言 - 用鼓励和理解的语气
+3. 具体指导 - 把复杂任务拆解成可执行的步骤
 
 企业任务信息：
 标题：${task.title}
@@ -154,18 +351,45 @@ class QichengTeacherService {
         },
         learning_value: analysis.growth?.learningValue || 0.5,
         career_impact: analysis.growth?.careerImpact || 0.5,
+        used_decision_tree: false // AI处理
       };
 
       return translation;
     } catch (error: unknown) {
-      logger.error('Error analyzing and translating task:', error);
+      logger.error('[启程老师] 翻译失败:', error);
       // 返回降级版本
       return this.createFallbackTranslation(task);
     }
   }
 
   /**
-   * 计算综合难度
+   * 新增：为简单任务生成模块
+   */
+  private generateSimpleModules(task: Task): FunctionalModule[] {
+    return [{
+      module: '主要任务',
+      description: task.description || task.title,
+      skills: [],
+      difficulty: 5
+    }];
+  }
+
+  /**
+   * 新增：为简单任务生成步骤
+   */
+  private generateSimpleSteps(task: Task): string {
+    return '1. 理解任务要求\n2. 准备必要工具\n3. 完成任务内容\n4. 检查和优化\n5. 提交作品';
+  }
+
+  /**
+   * 新增：为简单任务生成学习内容
+   */
+  private generateSimpleLearning(task: Task): string {
+    return '通过这个任务，你将积累实战经验，提升相关技能，并建立作品集。';
+  }
+
+  /**
+   * 计算综合难度（保留旧版）
    */
   private calculateOverallDifficulty(difficulty: any): number {
     if (!difficulty) return 5;
@@ -180,7 +404,7 @@ class QichengTeacherService {
   }
 
   /**
-   * 创建降级翻译（当AI失败时）
+   * 创建降级翻译（当AI失败时）（保留旧版）
    */
   private createFallbackTranslation(task: Task): TaskTranslation {
     return {
@@ -206,11 +430,14 @@ class QichengTeacherService {
       },
       learning_value: 0.5,
       career_impact: 0.5,
+      used_decision_tree: false
     };
   }
 
+  // ========== 以下保留旧版本的所有方法 ==========
+
   /**
-   * 拆解功能模块
+   * 拆解功能模块（保留旧版）
    */
   async breakdownFunctionalModules(taskDescription: string): Promise<FunctionalModule[]> {
     try {
@@ -251,41 +478,40 @@ class QichengTeacherService {
   }
 
   /**
-   * 生成学生友好描述
+   * 简化任务描述（保留旧版）
    */
-  async generateStudentFriendlyDescription(task: Task): Promise<string> {
+  async simplifyDescription(taskDescription: string): Promise<string> {
     try {
-      const prompt = `请用学生容易理解的语言重新描述这个任务，去掉专业术语：
+      const prompt = `请将以下任务描述改写为学生容易理解的语言：
 
-原始描述：${task.description}
+原描述：${taskDescription}
 
 要求：
-- 使用通俗易懂的语言
-- 避免技术黑话
-- 说明实际要做什么
-- 不超过200字`;
+1. 去掉专业术语或解释术语
+2. 用通俗易懂的语言
+3. 保持核心意思不变`;
 
       const response = await this.anthropic.messages.create({
         model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 512,
+        max_tokens: 1024,
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
       });
 
       const content = response.content[0];
-      if (content.type === 'text') {
-        return content.text.trim();
+      if (content.type !== 'text') {
+        return taskDescription;
       }
 
-      return task.description;
+      return content.text.trim();
     } catch (error: unknown) {
-      logger.error('Error generating student friendly description:', error);
-      return task.description;
+      logger.error('Error simplifying description:', error);
+      return taskDescription;
     }
   }
 
   /**
-   * 评估任务难度
+   * 评估任务难度（保留旧版）
    */
   async assessTaskDifficulty(task: Task): Promise<DifficultyAssessment> {
     try {
@@ -340,7 +566,7 @@ class QichengTeacherService {
   }
 
   /**
-   * 提取技能要求
+   * 提取技能要求（保留旧版）
    */
   async extractSkillRequirements(task: Task): Promise<SkillRequirement[]> {
     try {
@@ -382,7 +608,7 @@ class QichengTeacherService {
   }
 
   /**
-   * 保存翻译到数据库
+   * 保存翻译到数据库（保留旧版）
    */
   async saveTranslation(translation: TaskTranslation): Promise<void> {
     const client = await pool.connect();
@@ -431,9 +657,9 @@ class QichengTeacherService {
         ]
       );
 
-      logger.info(`Saved translation for task: ${translation.task_id}`);
+      logger.info(`[启程老师] 已保存翻译: ${translation.task_id} ${translation.used_decision_tree ? '(决策树)' : '(AI)'}`);
     } catch (error: unknown) {
-      logger.error('Error saving translation:', error);
+      logger.error('[启程老师] 保存翻译失败:', error);
       throw error;
     } finally {
       client.release();
@@ -441,7 +667,7 @@ class QichengTeacherService {
   }
 
   /**
-   * 获取任务翻译
+   * 获取任务翻译（保留旧版）
    */
   async getTranslation(taskId: string): Promise<TaskTranslation | null> {
     const client = await pool.connect();
@@ -482,7 +708,7 @@ class QichengTeacherService {
   }
 
   /**
-   * 为任务创建并保存翻译
+   * 为任务创建并保存翻译（保留旧版）
    */
   async translateTask(taskId: string): Promise<TaskTranslation> {
     const client = await pool.connect();
@@ -499,7 +725,7 @@ class QichengTeacherService {
 
       const task = taskResult.rows[0];
 
-      // 生成翻译
+      // 生成翻译（使用融合版的策略）
       const translation = await this.analyzeAndTranslateTask(task);
 
       // 保存到数据库

@@ -1,0 +1,137 @@
+@import '../../../styles/variables.scss';
+
+.pbl-create-project-page {
+  min-height: 100vh;
+  background: $bg-secondary;
+  padding: $spacing-lg;
+
+  .page-header {
+    text-align: center;
+    padding: $spacing-xl 0 $spacing-lg;
+
+    .page-title {
+      display: block;
+      font-size: $font-size-h1;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .page-subtitle {
+      font-size: $font-size-base;
+      color: $text-secondary;
+    }
+  }
+
+  .form-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-md;
+    }
+
+    .form-item {
+      margin-bottom: $spacing-lg;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .item-label {
+        display: block;
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+        margin-bottom: $spacing-sm;
+
+        .required {
+          color: $error;
+          margin-left: 4rpx;
+        }
+      }
+
+      .item-input,
+      .item-textarea {
+        width: 100%;
+        padding: $spacing-md;
+        background: $bg-secondary;
+        border-radius: $radius-md;
+        border: 2rpx solid rgba($text-tertiary, 0.2);
+        font-size: $font-size-base;
+        color: $text-primary;
+
+        &:focus {
+          border-color: $primary;
+        }
+      }
+
+      .item-textarea {
+        min-height: 200rpx;
+        line-height: 1.6;
+      }
+
+      .item-picker {
+        padding: $spacing-md;
+        background: $bg-secondary;
+        border-radius: $radius-md;
+        border: 2rpx solid rgba($text-tertiary, 0.2);
+
+        .picker-text {
+          font-size: $font-size-base;
+          color: $text-primary;
+
+          &.placeholder {
+            color: $text-tertiary;
+          }
+        }
+      }
+
+      .item-hint {
+        display: block;
+        font-size: $font-size-sm;
+        color: $text-tertiary;
+        margin-top: $spacing-xs;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  .submit-section {
+    padding: $spacing-xl 0;
+
+    .submit-button {
+      width: 100%;
+      padding: $spacing-lg;
+      background: linear-gradient(135deg, $primary-blue 0%, $primary 100%);
+      border-radius: $radius-lg;
+      text-align: center;
+      @include clickable;
+
+      &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .button-text {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: white;
+      }
+    }
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-xxl;
+    font-size: $font-size-base;
+    color: $text-tertiary;
+  }
+}

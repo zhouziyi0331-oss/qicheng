@@ -1,6 +1,4 @@
-/**
- * AI分析等待页样式
- */
+
 
 .ai-waiting-screen {
   position: fixed;
@@ -34,7 +32,7 @@
   padding: 0 32px;
 }
 
-/* ==================== 几何体动画 ==================== */
+
 
 .geometry-container {
   margin-bottom: 48px;
@@ -87,7 +85,7 @@
   }
 }
 
-/* ==================== 标题 ==================== */
+
 
 .waiting-title {
   font-size: 24px;
@@ -98,7 +96,7 @@
   animation: fadeIn 0.5s ease;
 }
 
-/* ==================== 呼吸点 ==================== */
+
 
 .breathing-dots {
   display: flex;
@@ -137,7 +135,7 @@
   }
 }
 
-/* ==================== 副标题轮播 ==================== */
+
 
 .subtitle-container {
   position: relative;
@@ -161,7 +159,7 @@
   }
 }
 
-/* ==================== 进度条 ==================== */
+
 
 .progress-container {
   width: 100%;
@@ -195,7 +193,7 @@
   text-align: center;
 }
 
-/* ==================== 提示文字 ==================== */
+
 
 .hint-text {
   font-size: 12px;
@@ -204,7 +202,7 @@
   animation: fadeIn 0.5s ease 1s backwards;
 }
 
-/* ==================== 动画关键帧 ==================== */
+
 
 @keyframes fadeIn {
   from {

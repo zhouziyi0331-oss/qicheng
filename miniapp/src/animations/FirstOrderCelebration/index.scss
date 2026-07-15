@@ -1,6 +1,4 @@
-/**
- * 首单完成庆祝动画样式
- */
+
 
 .first-order-celebration {
   position: fixed;
@@ -35,7 +33,7 @@
   justify-content: center;
 }
 
-/* ==================== 信封动画 ==================== */
+
 
 .envelope-container {
   animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -83,7 +81,7 @@
   }
 }
 
-/* ==================== 撒花特效 ==================== */
+
 
 .confetti-container {
   position: absolute;
@@ -130,7 +128,7 @@
   }
 }
 
-/* ==================== 金额显示 ==================== */
+
 
 .amount-container {
   animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -159,7 +157,7 @@
   animation: fadeIn 0.3s ease 0.2s backwards;
 }
 
-/* ==================== 按钮 ==================== */
+
 
 .button-container {
   margin-top: 40px;
@@ -181,7 +179,7 @@
   }
 }
 
-/* ==================== 动画关键帧 ==================== */
+
 
 @keyframes fadeIn {
   from {

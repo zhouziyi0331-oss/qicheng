@@ -46,6 +46,7 @@ interface OPCAnalysisResult {
   personalityTags: PersonalityTag[]
   selfPerception: SelfPerception
   trackRecommendation: TrackRecommendation
+  identityStatement?: string
 }
 
 class OPCv2AnalysisService {
@@ -458,7 +459,8 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
           match_score: row.track_match_score,
           reason: row.track_reason,
           firstTaskSuggestion: row.first_task_suggestion
-        }
+        },
+        identityStatement: row.identity_statement || row.declaration
       }
     } finally {
       client.release()
@@ -506,7 +508,8 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
           match_score: row.track_match_score,
           reason: row.track_reason,
           firstTaskSuggestion: row.first_task_suggestion
-        }
+        },
+        identityStatement: row.identity_statement || row.declaration
       }
     } finally {
       client.release()

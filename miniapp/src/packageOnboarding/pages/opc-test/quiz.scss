@@ -1,0 +1,254 @@
+@import '../../../styles/morandi-colors.scss';
+
+.opc-quiz-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部导航 */
+.quiz-header {
+  background: linear-gradient(160deg, #3D1F10 0%, #6B3520 100%);
+  padding: 0 40rpx 36rpx;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -60rpx;
+    right: -60rpx;
+    width: 240rpx;
+    height: 240rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.topbar {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8rpx);
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: white;
+  font-weight: 300;
+}
+
+.topbar-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: white;
+}
+
+.quiz-counter {
+  font-size: 26rpx;
+  color: #F2CD78;
+  font-weight: 700;
+}
+
+/* 总进度条 */
+.progress-bar {
+  height: 8rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F2CD78, #D88760);
+  border-radius: 9999rpx;
+  transition: width 0.3s ease;
+}
+
+/* 6维度进度小条 */
+.dim-bars {
+  display: flex;
+  gap: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.dim-bar {
+  flex: 1;
+  height: 6rpx;
+  border-radius: 9999rpx;
+  transition: background 0.3s ease;
+}
+
+/* 维度标签 */
+.dim-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 9999rpx;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dim-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #F2CD78;
+  flex-shrink: 0;
+}
+
+.dim-text {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+/* 滚动区域 */
+.quiz-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.quiz-content {
+  padding: 40rpx 32rpx;
+}
+
+/* 问题文本 */
+.question-text {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: $text-1;
+  line-height: 1.55;
+  margin-bottom: 48rpx;
+  display: block;
+}
+
+/* 选项列表 */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+  border-radius: 40rpx;
+  background: white;
+  border: 3rpx solid #EDE5DC;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.selected {
+    background: rgba(188, 100, 70, 0.06);
+    border-color: #BC6446;
+
+    .option-label {
+      background: #BC6446;
+      color: white;
+    }
+  }
+}
+
+.option-label {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #F5F0EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #6B5540;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.option-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: $text-1;
+  line-height: 1.5;
+}
+
+/* 底部按钮 */
+.quiz-footer {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 40rpx 32rpx;
+  background: $surface;
+  border-top: 1rpx solid $border;
+  flex-shrink: 0;
+}
+
+.prev-button {
+  flex: 1;
+  padding: 26rpx;
+  border-radius: 9999rpx;
+  background: #F5F0EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .button-text {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #6B5540;
+  }
+}
+
+.next-button {
+  flex: 2;
+  padding: 26rpx;
+  border-radius: 9999rpx;
+  background: linear-gradient(135deg, #BC6446, #A0503A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8rpx 28rpx rgba(188, 100, 70, 0.35);
+  transition: all 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .button-text {
+    font-size: 28rpx;
+    font-weight: 700;
+    color: white;
+  }
+}

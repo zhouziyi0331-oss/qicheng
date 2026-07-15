@@ -1,0 +1,395 @@
+// ============================================================
+// S7 – 跳级失败页
+// 基于设计稿 Sunset Postcard 配色
+// ============================================================
+
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.skip-fail-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+.fail-hero {
+  background: linear-gradient(160deg, #EDD9C8 0%, #E8C9A8 40%, #F5EDE3 100%);
+  padding: 40rpx 32rpx 56rpx;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  .hero-glow-1 {
+    position: absolute;
+    top: -80rpx;
+    right: -80rpx;
+    width: 320rpx;
+    height: 320rpx;
+    background: radial-gradient(circle, rgba(188, 100, 70, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    bottom: -40rpx;
+    left: -40rpx;
+    width: 200rpx;
+    height: 200rpx;
+    background: radial-gradient(circle, rgba(191, 158, 113, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .fail-icon-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28rpx;
+    position: relative;
+    z-index: 1;
+
+    .fail-icon {
+      width: 160rpx;
+      height: 160rpx;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #E8C9A8, #D4A882);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8rpx 40rpx rgba(188, 100, 70, 0.2);
+      border: 6rpx solid rgba(255, 255, 255, 0.6);
+
+      .icon-text {
+        font-size: 72rpx;
+      }
+    }
+  }
+
+  .fail-title {
+    font-size: 44rpx;
+    font-weight: 900;
+    color: $text-1;
+    text-align: center;
+    margin-bottom: 12rpx;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .fail-subtitle {
+    font-size: 26rpx;
+    color: $text-2;
+    text-align: center;
+    line-height: 1.6;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.fail-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.fail-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.score-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+  border: 1rpx solid $border;
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 28rpx;
+
+    .score-wrap {
+      width: 144rpx;
+      height: 144rpx;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $surface2, $border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 4rpx solid $border;
+      flex-shrink: 0;
+
+      .score-num {
+        font-size: 48rpx;
+        font-weight: 900;
+        color: $rust;
+        line-height: 1;
+      }
+
+      .score-unit {
+        font-size: 22rpx;
+        color: $text-3;
+        margin-top: 4rpx;
+      }
+    }
+
+    .score-info {
+      flex: 1;
+
+      .info-title {
+        font-size: 28rpx;
+        font-weight: 800;
+        color: $text-1;
+        margin-bottom: 8rpx;
+        display: block;
+      }
+
+      .info-desc {
+        font-size: 24rpx;
+        color: $text-2;
+        line-height: 1.5;
+        display: block;
+      }
+
+      .gap-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6rpx;
+        padding: 6rpx 16rpx;
+        border-radius: 9999rpx;
+        background: rgba(188, 100, 70, 0.1);
+        margin-top: 12rpx;
+
+        .gap-icon {
+          font-size: 20rpx;
+          color: $rust;
+        }
+
+        .gap-text {
+          font-size: 22rpx;
+          font-weight: 700;
+          color: $rust;
+        }
+      }
+    }
+  }
+}
+
+.breakdown-card,
+.penalty-card,
+.encourage-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+  border: 1rpx solid $border;
+
+  .card-header {
+    margin-bottom: 28rpx;
+
+    .header-title {
+      font-size: 28rpx;
+      font-weight: 800;
+      color: $text-1;
+    }
+
+    .header-icon {
+      font-size: 28rpx;
+      margin-right: 12rpx;
+    }
+  }
+}
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+
+  .breakdown-item {
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12rpx;
+
+      .item-name {
+        font-size: 26rpx;
+        color: $text-2;
+      }
+
+      .item-score {
+        font-size: 26rpx;
+        font-weight: 800;
+        color: $rust;
+      }
+    }
+
+    .item-bar {
+      height: 12rpx;
+      background: $surface2;
+      border-radius: 9999rpx;
+      overflow: hidden;
+
+      .item-fill {
+        height: 100%;
+        border-radius: 9999rpx;
+        transition: width 0.5s;
+      }
+    }
+  }
+}
+
+.penalty-card {
+  background: rgba(188, 100, 70, 0.06);
+  border-color: rgba(188, 100, 70, 0.15);
+
+  .penalty-header {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 24rpx;
+
+    .header-icon {
+      font-size: 28rpx;
+    }
+
+    .header-title {
+      font-size: 28rpx;
+      font-weight: 800;
+      color: $rust;
+    }
+  }
+
+  .penalty-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
+
+    .penalty-step {
+      display: flex;
+      gap: 20rpx;
+      align-items: flex-start;
+      padding: 20rpx 24rpx;
+      border-radius: 24rpx;
+      background: rgba(255, 255, 255, 0.6);
+      border: 2rpx solid rgba(188, 100, 70, 0.1);
+
+      .step-num {
+        width: 44rpx;
+        height: 44rpx;
+        border-radius: 50%;
+        background: $rust;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2rpx;
+
+        .num-text {
+          font-size: 22rpx;
+          font-weight: 800;
+          color: white;
+        }
+      }
+
+      .step-content {
+        flex: 1;
+
+        .step-text {
+          font-size: 26rpx;
+          color: $text-2;
+          line-height: 1.5;
+
+          .step-highlight {
+            color: $text-1;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}
+
+.encourage-card {
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 20rpx;
+
+    .header-icon {
+      font-size: 28rpx;
+    }
+
+    .header-title {
+      font-size: 28rpx;
+      font-weight: 800;
+      color: $text-1;
+    }
+  }
+
+  .encourage-text {
+    font-size: 26rpx;
+    color: $text-2;
+    line-height: 1.7;
+    display: block;
+
+    .text-highlight {
+      color: $rust;
+      font-weight: 700;
+    }
+  }
+}
+
+.fail-footer {
+  padding: 0 32rpx 32rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+
+  .btn-primary {
+    width: 100%;
+    padding: 28rpx;
+    border-radius: 9999rpx;
+    background: linear-gradient(135deg, $rust, $rust-dark);
+    box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.35);
+    text-align: center;
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 800;
+      color: white;
+    }
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 28rpx;
+    border-radius: 9999rpx;
+    background: $surface;
+    border: 3rpx solid rgba(188, 100, 70, 0.3);
+    text-align: center;
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 700;
+      color: $rust;
+    }
+  }
+}

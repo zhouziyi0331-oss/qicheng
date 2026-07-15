@@ -1,0 +1,496 @@
+@import '../../../styles/morandi-colors.scss';
+
+.level-detail-page {
+  width: 100%;
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status Bar */
+.status-bar {
+  height: 88rpx;
+  flex-shrink: 0;
+  background: $bg;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 40rpx 20rpx;
+  background: $bg;
+}
+
+.tb-back {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: $surface2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: $text-2;
+  font-weight: 300;
+}
+
+.tb-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: $text-1;
+}
+
+.tb-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.icon-btn {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-text {
+  font-size: 32rpx;
+  color: $text-2;
+}
+
+/* Hero */
+.lv-detail-hero {
+  background: linear-gradient(160deg, #EDD9C8, #E8C9A8, #F5EDE3);
+  padding: 32rpx 40rpx 48rpx;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80rpx;
+    right: -80rpx;
+    width: 320rpx;
+    height: 320rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, .4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.lv-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  margin-bottom: 28rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.lv-hero-badge {
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $rust, $rust-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 40rpx rgba(188, 100, 70, .35);
+  border: 6rpx solid rgba(255, 255, 255, .6);
+  flex-shrink: 0;
+}
+
+.lv-hero-badge-num {
+  font-size: 56rpx;
+  font-weight: 900;
+  color: white;
+}
+
+.lv-hero-info {
+  flex: 1;
+}
+
+.lv-hero-level {
+  font-size: 26rpx;
+  color: $rust;
+  font-weight: 700;
+}
+
+.lv-hero-name {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: $text-1;
+  margin-top: 4rpx;
+}
+
+.lv-hero-sub {
+  font-size: 24rpx;
+  color: $text-2;
+  margin-top: 6rpx;
+}
+
+.lv-hero-desc {
+  font-size: 26rpx;
+  color: $text-2;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* Body */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.lv-detail-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+  padding-bottom: 60rpx;
+}
+
+/* Card */
+.card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, .06);
+  border: 1rpx solid $border;
+}
+
+.sec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.sec-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: $text-1;
+}
+
+/* Ability Tags */
+.ability-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.ability-tag {
+  padding: 12rpx 28rpx;
+  border-radius: 9999rpx;
+  background: rgba(188, 100, 70, .08);
+  border: 2rpx solid rgba(188, 100, 70, .2);
+}
+
+.tag-text {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: $rust;
+}
+
+.ability-tag.mist-tag {
+  background: rgba(190, 215, 209, .15);
+  border-color: rgba(190, 215, 209, .4);
+}
+
+.ability-tag.mist-tag .tag-text {
+  color: #4A8A84;
+}
+
+.ability-tag.golden-tag {
+  background: rgba(242, 205, 120, .15);
+  border-color: rgba(242, 205, 120, .4);
+}
+
+.ability-tag.golden-tag .tag-text {
+  color: #8A6A20;
+}
+
+/* Progress */
+.progress-percent {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: $rust;
+}
+
+.prog-bar-wrapper {
+  margin-bottom: 16rpx;
+}
+
+.prog-bar {
+  height: 12rpx;
+  background: $surface2;
+  border-radius: 9999rpx;
+  overflow: hidden;
+}
+
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, $terra, $rust);
+  border-radius: 9999rpx;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: $text-3;
+}
+
+/* Task List */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 28rpx;
+  border-radius: 24rpx;
+  background: $surface2;
+  border: 2rpx solid $border;
+}
+
+.task-item.done-task {
+  background: rgba(190, 215, 209, .1);
+  border-color: rgba(190, 215, 209, .4);
+}
+
+.task-item.active-task {
+  background: rgba(188, 100, 70, .05);
+  border-color: rgba(188, 100, 70, .25);
+}
+
+.task-num {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.num-text {
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.task-num.done-num {
+  background: linear-gradient(135deg, $mist, $mist-dark);
+}
+
+.task-num.done-num .num-text {
+  color: white;
+}
+
+.task-num.active-num {
+  background: linear-gradient(135deg, $rust, $rust-dark);
+}
+
+.task-num.active-num .num-text {
+  color: white;
+}
+
+.task-num.pending-num {
+  background: $border;
+}
+
+.task-num.pending-num .num-text {
+  color: $text-3;
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 6rpx;
+}
+
+.task-desc {
+  font-size: 24rpx;
+  color: $text-3;
+  line-height: 1.5;
+}
+
+.task-reward {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: $rust;
+  margin-top: 12rpx;
+}
+
+.task-reward.pending-reward {
+  color: $text-3;
+}
+
+/* Reward Grid */
+.reward-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.reward-item {
+  background: $surface2;
+  border-radius: 24rpx;
+  padding: 28rpx 20rpx;
+  text-align: center;
+}
+
+.reward-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.reward-val {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: $rust;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.reward-label {
+  font-size: 22rpx;
+  color: $text-3;
+  display: block;
+}
+
+/* Mentor Advice */
+.card.mentor-advice {
+  background: linear-gradient(135deg, rgba(190, 215, 209, .12), rgba(190, 215, 209, .06));
+  border-color: rgba(190, 215, 209, .4);
+}
+
+.mentor-text {
+  font-size: 26rpx;
+  color: $text-2;
+  line-height: 1.7;
+}
+
+.highlight {
+  color: $rust;
+  font-weight: 700;
+}
+
+/* Bottom Button */
+.bottom-btn-wrapper {
+  padding: 0 0 16rpx;
+}
+
+.btn-primary {
+  padding: 28rpx 48rpx;
+  border-radius: 9999rpx;
+  background: linear-gradient(135deg, $rust, $rust-dark);
+  box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, .35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-text {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: white;
+}
+
+/* ============================================================
+   DEV TRACK STYLES (工具开发赛道 - Teal/Mist Blue)
+============================================================ */
+
+// Dev track hero
+.level-detail-page.dev-track {
+  background: #F4F8F7;
+}
+
+.lv-detail-hero.dev-hero {
+  background: linear-gradient(160deg, #D4EAE8, #C0DDD9, #EBF5F4);
+
+  &::before {
+    background: radial-gradient(circle, rgba(58, 138, 132, .25) 0%, transparent 70%);
+  }
+}
+
+.lv-hero-badge.dev-badge {
+  background: linear-gradient(135deg, $teal, $teal-dark);
+  box-shadow: 0 12rpx 40rpx rgba(58, 138, 132, .35);
+}
+
+.lv-hero-level.dev-level {
+  color: $teal;
+}
+
+// Dev track ability tags
+.ability-tag.blue-tag {
+  background: rgba(91, 143, 171, .1);
+  border-color: rgba(91, 143, 171, .3);
+}
+
+.ability-tag.blue-tag .tag-text {
+  color: $blue;
+}
+
+// Dev track progress
+.progress-percent.dev-progress {
+  color: $teal;
+}
+
+.prog-fill.dev-prog-fill {
+  background: linear-gradient(90deg, $teal-light, $teal);
+}
+
+// Dev track task list
+.task-item.dev-active-task {
+  background: rgba(58, 138, 132, .05);
+  border-color: rgba(58, 138, 132, .25);
+}
+
+.task-num.dev-active-num {
+  background: linear-gradient(135deg, $teal, $teal-dark);
+}
+
+.task-num.dev-done-num {
+  background: linear-gradient(135deg, $blue-light, $blue);
+}
+
+.task-reward.dev-reward {
+  color: $teal;
+}
+
+// Dev track rewards
+.reward-val.dev-reward-val {
+  color: $teal;
+}
+
+// Dev track mentor advice
+.card.mentor-advice.dev-mentor {
+  background: linear-gradient(135deg, rgba(58, 138, 132, .08), rgba(58, 138, 132, .04));
+  border-color: rgba(58, 138, 132, .3);
+}
+
+// Dev track button
+.btn-primary.dev-btn {
+  background: linear-gradient(135deg, $teal, $teal-dark);
+  box-shadow: 0 8rpx 32rpx rgba(58, 138, 132, .35);
+}

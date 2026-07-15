@@ -33,6 +33,8 @@ const config = {
       chain.optimization.runtimeChunk({
         name: 'runtime'
       })
+      // 禁用所有压缩以修复微信小程序WXSS解析错误
+      chain.optimization.minimize(false)
     },
     postcss: {
       pxtransform: {

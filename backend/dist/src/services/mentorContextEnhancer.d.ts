@@ -26,7 +26,9 @@ interface GrowthComparison {
 }
 declare class MentorContextEnhancer {
     /**
-     * T-02: 获取真实的同类卡点案例
+     * T-02: 获取真实的同类卡点案例（增强版）
+     *
+     * 优先从案例库获取，如果案例库为空则回退到mentor_growth_observations
      *
      * @param studentId 当前学生ID
      * @param taskId 当前任务ID

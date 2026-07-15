@@ -1,7 +1,16 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { Server as HTTPServer } from 'http';
 import logger from '../utils/logger';
-const verifyToken = (token: string) => { /* stub */ };
+import jwt from 'jsonwebtoken';
+
+const verifyToken = (token: string): { userId: string; role: string } | null => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any;
+    return { userId: decoded.userId || decoded.id, role: decoded.role };
+  } catch (error) {
+    return null;
+  }
+};
 
 /**
  * WebSocket服务

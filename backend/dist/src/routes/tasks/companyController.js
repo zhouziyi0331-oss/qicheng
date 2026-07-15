@@ -45,6 +45,8 @@ const errorHandler_1 = require("../../middleware/errorHandler");
 const logger_1 = __importDefault(require("../../utils/logger"));
 const sixDimUpdater_1 = require("../../utils/sixDimUpdater");
 const smartReview_1 = require("../../utils/smartReview");
+const capabilityExtractionService_1 = require("../../services/capabilityExtractionService");
+const talentTagInferenceService_1 = require("../../services/talentTagInferenceService");
 // POST /company — 企业发布任务
 async function createTask(req, res, next) {
     try {
@@ -246,6 +248,38 @@ async function approveTask(req, res, next) {
         }
         catch (error) {
             logger_1.default.error('Failed to update student capability after task completion:', error);
+        }
+        // 【新增】任务完成后自动提取能力标签（工具/案例/领域）
+        try {
+            const taskInfo = await (0, db_1.queryOne)('SELECT id, title, description, requirements FROM tasks WHERE id = $1', [taskId]);
+            if (taskInfo) {
+                // 调用能力提取服务
+                await capabilityExtractionService_1.CapabilityExtractionService.extractFromTaskCompletion(submission.student_id, taskId, {
+                    taskId: taskInfo.id,
+                    title: taskInfo.title,
+                    description: taskInfo.description,
+                    requirements: taskInfo.requirements
+                }, {
+                    deliverableType: 'submission',
+                    deliverableContent: submission.submission_note || '',
+                    quality: finalScore
+                });
+                logger_1.default.info(`Extracted capabilities for student ${submission.student_id}`);
+                // 同时从任务表现推断天赋标签
+                // TODO: 从实际数据计算这些指标
+                await talentTagInferenceService_1.TalentTagInferenceService.inferFromTaskPerformance(submission.student_id, taskId, {
+                    enterprise_rating: finalScore,
+                    enterprise_feedback: finalFeedback,
+                    revision_count: 0, // TODO: 从submission历史计算
+                    delivery_status: 'on_time', // TODO: 从时间计算
+                    delivery_completeness: finalScore >= 90 ? 'complete' : 'partial'
+                });
+                logger_1.default.info(`Inferred talents from task performance for student ${submission.student_id}`);
+            }
+        }
+        catch (error) {
+            logger_1.default.error('Failed to extract capabilities or infer talents:', error);
+            // 不影响主流程
         }
         // 首单: 触发24h结算通知
         if (submission.is_first_task) {

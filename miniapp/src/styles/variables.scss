@@ -1,0 +1,304 @@
+/**
+ * 启程 OPC - 设计系统变量
+ * 基于莫兰迪色系，适配青少年审美
+ */
+
+// ========================================
+// 色彩系统
+// ========================================
+
+// 背景渐变基础色
+$bg-pink-light: #F5E6E8;
+$bg-green-light: #E8F3E8;
+$bg-blue-light: #E6F1F5;
+$bg-yellow-light: #FFF8E1;
+
+// 主要功能色
+$primary: #F4B6C2;              // 主要按钮、强调（莫兰迪粉）
+$primary-pink: #F4B6C2;
+$primary-purple: #C5A3D9;
+$primary-green: #B8D4B8;
+$primary-yellow: #F5D291;
+$primary-blue: #A3C7D9;
+
+// 状态色（降低饱和度的莫兰迪版本）
+$success: #B8D4B8;              // 成功 - 淡绿
+$warning: #F5D291;              // 警告 - 淡黄
+$error: #E6A5A5;                // 错误 - 淡红
+$info: #A3C7D9;                 // 信息 - 淡蓝
+
+// 文字色
+$text-primary: #4A4A4A;         // 主要文字 - 深灰
+$text-secondary: #8C8C8C;       // 次要文字 - 中灰
+$text-tertiary: #C0C0C0;        // 辅助文字 - 浅灰
+$text-light: #999999;           // 浅灰（兼容旧版）
+$text-white: #FFFFFF;           // 白色文字
+
+// 背景色
+$bg-page: #F5E6E8;              // 页面背景（粉色基调）
+$bg-primary: #F5E6E8;           // 主背景（兼容旧版）
+$bg-secondary: #F8F8F8;         // 次要背景
+$bg-card: #FFFFFF;              // 卡片背景
+$bg-white: #FFFFFF;             // 白色背景（兼容旧版）
+$bg-mask: rgba(0, 0, 0, 0.5);  // 遮罩层
+
+// 边框色
+$border-light: #F0F0F0;
+$border-base: #E0E0E0;
+$border-color: #E0E0E0;         // 兼容旧版
+$border-dark: #D0D0D0;
+
+// 阴影色
+$shadow-soft: 0 4px 20px rgba(244, 182, 194, 0.15);
+$shadow-card: 0 4px 16px rgba(244, 182, 194, 0.1);
+$shadow-button: 0 4px 12px rgba(244, 182, 194, 0.3);
+$shadow-float: 0 8px 24px rgba(244, 182, 194, 0.15);
+$shadow: 0 2px 8px rgba(0, 0, 0, 0.1);      // 兼容旧版
+$shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.1);   // 兼容旧版
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15); // 兼容旧版
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);  // 兼容旧版
+
+// 兼容旧版
+$card-bg: #FFFFFF;
+$card-white: #FFFFFF;
+
+// ========================================
+// 渐变方案
+// ========================================
+
+// 页面背景渐变（多色柔和过渡）
+$gradient-page: linear-gradient(
+  135deg,
+  #F5E6E8 0%,
+  #EDE9E8 25%,
+  #E9EEF3 50%,
+  #F2EDE6 75%,
+  #F5E6E8 100%
+);
+
+// 卡片渐变
+$gradient-card-pink: linear-gradient(135deg, #FFF5F7 0%, #FFE8ED 100%);
+$gradient-card-green: linear-gradient(135deg, #F5FFF5 0%, #E8F5E8 100%);
+$gradient-card-blue: linear-gradient(135deg, #F5F9FF 0%, #E8F1FF 100%);
+$gradient-card-yellow: linear-gradient(135deg, #FFFBF0 0%, #FFF5E1 100%);
+$gradient-card-purple: linear-gradient(135deg, #F9F5FF 0%, #F0E8FF 100%);
+
+// 按钮渐变
+$gradient-button-primary: linear-gradient(135deg, #F4B6C2 0%, #EFA3B3 100%);
+$gradient-primary: $gradient-button-primary; // 兼容旧版
+
+// ========================================
+// 字体系统
+// ========================================
+
+$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+
+// 字号
+$font-size-h1: 48px;            // 页面主标题
+$font-size-h2: 40px;            // 区块标题
+$font-size-h3: 36px;            // 卡片标题
+$font-size-h4: 32px;            // 小标题
+
+$font-size-lg: 30px;            // 大号正文
+$font-size-base: 28px;          // 标准正文
+$font-size-sm: 26px;            // 小号正文
+$font-size-xs: 24px;            // 辅助信息
+
+$font-size-number-xl: 96px;     // 超大数字
+$font-size-number-lg: 64px;     // 大数字
+$font-size-number-md: 48px;     // 中等数字
+
+// 字重
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// 行高
+$line-height-tight: 1.2;
+$line-height-base: 1.6;
+$line-height-loose: 2;
+
+// ========================================
+// 间距系统
+// ========================================
+
+$spacing-unit: 8px;
+
+$spacing-xxs: 8px;              // 0.5单位
+$spacing-xs: 16px;              // 1单位
+$spacing-sm: 24px;              // 1.5单位
+$spacing-md: 32px;              // 2单位
+$spacing-lg: 40px;              // 2.5单位
+$spacing-xl: 48px;              // 3单位
+$spacing-xxl: 64px;             // 4单位
+$spacing-xxxl: 80px;            // 5单位
+
+$spacing-page: 32px;            // 页面边距（兼容旧版）
+
+// ========================================
+// 圆角系统
+// ========================================
+
+$radius-xs: 8px;                // 小元素（标签、徽章）
+$radius-sm: 12px;               // 按钮
+$radius-md: 16px;               // 卡片
+$radius-lg: 24px;               // 大卡片、模态框
+$radius-xl: 32px;               // 特殊容器
+$radius-2xl: 32px;              // 兼容旧版
+$radius-full: 50%;              // 圆形
+
+// ========================================
+// 尺寸系统
+// ========================================
+
+// 图标尺寸
+$icon-size-xs: 48px;
+$icon-size-sm: 64px;
+$icon-size-md: 80px;
+$icon-size-lg: 120px;
+$icon-size-xl: 160px;
+
+// 按钮高度
+$button-height-sm: 64px;
+$button-height-md: 88px;
+$button-height-lg: 100px;
+
+// 导航栏高度
+$tabbar-height: 120px;
+
+// ========================================
+// 动画系统
+// ========================================
+
+// 过渡时长
+$transition-fast: 0.15s;
+$transition-base: 0.3s;
+$transition-slow: 0.5s;
+
+// 缓动函数
+$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-out: cubic-bezier(0, 0, 0.2, 1);
+$ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+// ========================================
+// Z-index层级
+// ========================================
+
+$z-index-base: 1;
+$z-index-dropdown: 100;
+$z-index-sticky: 200;
+$z-index-fixed: 300;
+$z-index-modal-backdrop: 400;
+$z-index-modal: 500;
+$z-index-popover: 600;
+$z-index-toast: 700;
+
+// ========================================
+// 断点系统（响应式）
+// ========================================
+
+$breakpoint-xs: 320px;
+$breakpoint-sm: 375px;
+$breakpoint-md: 414px;
+$breakpoint-lg: 768px;
+
+// ========================================
+// 混合宏（Mixins）
+// ========================================
+
+// 文字溢出省略
+@mixin text-ellipsis($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// 清除浮动
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// 居中对齐
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 绝对居中
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 渐变背景（淡粉色圆形图标容器）
+@mixin icon-container($size: $icon-size-md) {
+  width: $size;
+  height: $size;
+  background: $gradient-card-pink;
+  border-radius: $radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// 卡片样式
+@mixin card-base {
+  background: $bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+}
+
+// 点击反馈
+@mixin clickable {
+  transition: all $transition-fast $ease-out;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+}
+
+// 页面容器
+@mixin page-container {
+  min-height: 100vh;
+  background: $gradient-page;
+  padding: $spacing-lg;
+  padding-bottom: calc(#{$tabbar-height} + #{$spacing-lg});
+}
+
+// 安全区域适配（iPhone X+）
+@mixin safe-area-inset-bottom($extra: 0px) {
+  padding-bottom: calc(#{$extra} + constant(safe-area-inset-bottom));
+  padding-bottom: calc(#{$extra} + env(safe-area-inset-bottom));
+}
+
+// ========================================
+// 兼容旧版 Accent Colors
+// ========================================
+
+$accent-pink: $primary-pink;
+$accent-blue: $primary-blue;
+$accent-green: $primary-green;
+$accent-yellow: $primary-yellow;
+$accent-purple: $primary-purple;
+$accent-orange: #F5B58A;        // 莫兰迪橙
+$accent-red: $error;

@@ -1,66 +1,166 @@
 export default defineAppConfig({
+  lazyCodeLoading: 'requiredComponents',
   pages: [
-    'pages/auth/login/index',      // ✅ 登录页面（首页）
-    'pages/index/index',           // 首页
-    'pages/role-select/index',     // 角色选择
-    'pages/opc-test/index',        // OPC测评
-    'pages/opc-test/result',       // OPC测评结果
-    'pages/track-selection/index', // 赛道选择
-    'pages/login/index',           // 登录
-    'pages/register/index',        // 注册
-    'pages/bind-phone/index',      // 绑定手机号
-    'pages/onboarding/index',      // 引导页
-    'pages/tasks/index',           // 任务大厅
-    'pages/tasks/detail',          // 任务详情
-    'pages/tasks/working',         // 任务执行
-    'pages/tasks/submit',          // 任务提交
-    'pages/tasks/recommended',     // 推荐任务（AI智能匹配）
-    'pages/invitations/index',     // 任务邀请
-    'pages/my-tasks/index',        // 我的任务
-    'pages/mentor/index',          // AI导师（启程小猫）
-    'pages/mentor-chat/index',     // AI导师聊天
-    'pages/deep-patterns/index',   // 深度模式识别
-    'pages/belief-shifts/index',   // 信念转变追踪
-    'pages/growth-challenges/index', // 成长挑战
-    'pages/growth-dashboard/index', // 成长仪表盘
-    'pages/mentor-reports/index',  // 导师报告
-    'pages/growth-timeline/index', // 成长时间线
-    'pages/my-growth/index',       // 我的成长
-    'pages/toolbox/index',         // 工具箱
-    'pages/mentor-care/index',     // 导师关心
-    'pages/ability/index',         // 六维能力图
-    'pages/timeline/index',        // 成长时间线
-    'pages/story/index',           // 故事墙
-    'pages/story/post',            // 发布故事
-    'pages/reports/index',         // OPC报告
-    'pages/reports/detail',        // 报告详情
-    'pages/profile/index',         // 个人中心
-    'pages/wallet/index',          // 钱包
-    'pages/wallet/withdraw/index', // 提现
-    'pages/task-communication/index', // 任务沟通
-    'pages/challenge/index',       // 跳级挑战
-    'pages/graduation/index',      // 毕业系统
-    'pages/agreement/index',       // 用户协议
-    'pages/data-authorization/index', // 数据授权设置
-    'pages/chat-list/index',       // 聊天列表
-    'pages/chat-detail/index',     // 聊天详情
-    'pages/pending-ratings/index', // 待评价任务
-    'pages/rate-task/index',       // 评价任务
-    'pages/life-question/index',   // 生命问题记录器
-    'pages/flow-moments/index',    // 穿越感时刻记录
-    'pages/partnerships/index',    // 合伙人关系
-    'pages/exploration-reflection/index', // 探索反思
-    'pages/exploration-patterns/index',   // 探索模式库
-    'pages/opc-incubation/index',  // OPC孵化计划
-    'pages/alliances/index',       // 团队协作
-    'pages/notifications/index',   // 通知中心
-    'pages/my-ratings/index',      // 我的评价
-    'pages/my-wallet/index',       // 我的钱包（托管提现）
-    'pages/create-rating/index',   // 创建评价
-    'pages/level-rewards/index',   // 等级奖励
-    'pages/community/index',       // 社区首页
-    'pages/community/detail',      // 帖子详情
-    'pages/community/create',      // 发帖页面
+    'pages/index/index',
+    'pages/tasks/index',
+    'pages/mentor/index',
+    'pages/story/index',
+    'pages/profile/index',
+    'pages/cat-secret/index',
+    'pages/cat-quotes/index',
+    'pages/cat-achievements/index',
+    'pages/company-add-tag/index',
+    'pages/story-detail/index',
+    'pages/mentor-apply/index',
+  ],
+  subPackages: [
+    {
+      root: 'packageAuth',
+      pages: [
+        'pages/auth/login/index',
+        'pages/login/index',
+        'pages/register/index',
+        'pages/bind-phone/index',
+      ]
+    },
+    {
+      root: 'packageOnboarding',
+      pages: [
+        'pages/onboarding/index',
+        'pages/role-select/index',
+        'pages/opc-test/index',
+        'pages/opc-test/pre-questions',
+        'pages/opc-test/choice-questions',
+        'pages/opc-test/result',
+        'pages/opc-test/quiz',
+        'pages/opc-test/open-question1',
+        'pages/opc-test/open-question2',
+        'pages/self-exploration/index',
+        'pages/identity-intro/index',
+        'pages/my-radar/index',
+        'pages/growth-dashboard/index',
+        'pages/deep-mode/index',
+      ]
+    },
+    {
+      root: 'packageMisc',
+      pages: [
+        'pages/payment-status/index',
+        'pages/alliances/index',
+        'pages/opc-incubation/index',
+        'pages/graduation/index',
+      ]
+    },
+    {
+      root: 'packagePBL',
+      pages: [
+        'pages/pbl-create-project/index',
+        'pages/pbl-project-detail/index',
+        'pages/pbl-project-showcase/index',
+      ]
+    },
+    {
+      root: 'packageTask',
+      pages: [
+        'pages/tasks/detail',
+        'pages/tasks/working',
+        'pages/tasks/submit',
+        'pages/tasks/recommended',
+        'pages/tasks/accept',
+        'pages/tasks/plan',
+        'pages/tasks/progress',
+        'pages/tasks/messages',
+        'pages/tasks/completed',
+        'pages/my-tasks/index',
+        'pages/pending-ratings/index',
+        'pages/rate-task/index',
+        'pages/daily-tasks/index',
+      ]
+    },
+    {
+      root: 'packageMentor',
+      pages: [
+        'pages/mentor-system/my-mentees',
+        'pages/mentor-reports/index',
+        'pages/mentor-reports/detail',
+        'pages/mentor-care/index',
+        'pages/chat-list/index',
+        'pages/chat-detail/index',
+      ]
+    },
+    {
+      root: 'packageGrowth',
+      pages: [
+        'pages/ability/index',
+        'pages/ability-map/index',
+        'pages/challenge/index',
+        'pages/growth-challenges/index',
+        'pages/growth-comparison/index',
+        'pages/journey/index',
+        'pages/skip-level-intro/index',
+        'pages/skip-level-apply/index',
+        'pages/skip-level-task/index',
+        'pages/skip-level-progress/index',
+        'pages/skip-level-score/index',
+        'pages/skip-level-success/index',
+        'pages/skip-level-fail/index',
+        'pages/skip-level-improve/index',
+      ]
+    },
+    {
+      root: 'packageCommunity',
+      pages: [
+        'pages/thinking-points/index',
+      ]
+    },
+    {
+      root: 'packageOther',
+      pages: [
+        'pages/wallet/index',
+        'pages/wallet/withdraw-history/index',
+        'pages/my-wallet/index',
+        'pages/reports/index',
+        'pages/reports/detail',
+        'pages/settings/index',
+        'pages/notification-center/index',
+        'pages/notification-settings/index',
+        'pages/edit-profile/index',
+        'pages/privacy-settings/index',
+        'pages/about/index',
+      ]
+    },
+    {
+      root: 'packageProject',
+      pages: [
+        'pages/teams/index',
+        'pages/my-projects/index',
+        'pages/portfolio/index',
+        'pages/sessions/index',
+      ]
+    },
+    {
+      root: 'packageCourse',
+      pages: [
+        'pages/sector-hall/index',
+        'pages/track-content-path/index',
+        'pages/track-dev-path/index',
+      ]
+    },
+    {
+      root: 'packageAdvanced',
+      pages: [
+        'pages/level-up/skip-test',
+        'pages/level-up/test-questions',
+        'pages/level-up/test-result',
+        'pages/level-growth/index',
+        'pages/capability-verify/index',
+        'pages/project-complete/index',
+        'pages/recommended-tasks/index',
+        'pages/team/create/index',
+        'pages/level-detail/index',
+        'pages/level-up-ceremony/index',
+      ]
+    }
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -70,7 +170,7 @@ export default defineAppConfig({
     backgroundColor: '#F5E6F0'
   },
   tabBar: {
-    custom: true,  // 启用自定义 TabBar
+    custom: true,  // 启用自定义 TabBar（中间显示导师小猫）
     color: '#8E8E93',
     selectedColor: '#1A1A1A',
     backgroundColor: '#F5F5F7',
@@ -85,8 +185,8 @@ export default defineAppConfig({
         text: '任务'
       },
       {
-        pagePath: 'pages/community/index',
-        text: '社区'
+        pagePath: 'pages/mentor/index',
+        text: '导师'
       },
       {
         pagePath: 'pages/story/index',

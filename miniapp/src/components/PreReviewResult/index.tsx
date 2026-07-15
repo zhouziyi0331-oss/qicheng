@@ -37,13 +37,13 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
   const getRecommendation = (): { icon: string; text: string; color: string } => {
     if (result.shouldSubmit) {
       return {
-        icon: '✅',
+        icon: '✓',
         text: 'AI建议：可以提交',
         color: '#52c41a'
       };
     } else {
       return {
-        icon: '⚠️',
+        icon: '▲',
         text: 'AI建议：建议修改后再提交',
         color: '#faad14'
       };
@@ -56,7 +56,7 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
     <View className="pre-review-result">
       {/* 头部 */}
       <View className="result-header">
-        <Text className="header-title">🤖 AI预审结果</Text>
+        <Text className="header-title">○ AI预审结果</Text>
         <Text className="header-subtitle">帮你提前发现问题，提高通过率</Text>
       </View>
 
@@ -97,7 +97,7 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
       {/* 总体反馈 */}
       {result.overallFeedback && (
         <View className="feedback-section">
-          <Text className="section-title">💬 总体反馈</Text>
+          <Text className="section-title">● 总体反馈</Text>
           <Text className="feedback-text">{result.overallFeedback}</Text>
         </View>
       )}
@@ -105,7 +105,7 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
       {/* 关键问题 */}
       {result.criticalIssues && result.criticalIssues.length > 0 && (
         <View className="issues-section critical">
-          <Text className="section-title">🚨 关键问题（必须修改）</Text>
+          <Text className="section-title">▲ 关键问题（必须修改）</Text>
           <View className="issues-list">
             {result.criticalIssues.map((issue, index) => (
               <View key={index} className="issue-item critical">
@@ -120,7 +120,7 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
       {/* 警告 */}
       {result.warnings && result.warnings.length > 0 && (
         <View className="issues-section warning">
-          <Text className="section-title">⚠️ 建议改进</Text>
+          <Text className="section-title">▲ 建议改进</Text>
           <View className="issues-list">
             {result.warnings.map((warning, index) => (
               <View key={index} className="issue-item warning">
@@ -135,7 +135,7 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
       {/* 亮点 */}
       {result.highlights && result.highlights.length > 0 && (
         <View className="issues-section highlight">
-          <Text className="section-title">✨ 做得好的地方</Text>
+          <Text className="section-title">◇ 做得好的地方</Text>
           <View className="issues-list">
             {result.highlights.map((highlight, index) => (
               <View key={index} className="issue-item highlight">
@@ -165,7 +165,7 @@ export default function PreReviewResult({ result, onConfirmSubmit, onRevise }: P
       {/* 提示 */}
       <View className="bottom-tip">
         <Text className="tip-text">
-          💡 AI预审仅供参考，最终审核由企业决定
+          ◇ AI预审仅供参考，最终审核由企业决定
         </Text>
       </View>
     </View>

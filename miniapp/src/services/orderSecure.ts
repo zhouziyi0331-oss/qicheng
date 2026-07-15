@@ -1,5 +1,5 @@
 /**
- * ✅ 订单服务 - 集成横向越权保护
+ * ✓ 订单服务 - 集成横向越权保护
  *
  * 后端已实现Service层权限校验，前端调用即可
  */
@@ -17,7 +17,7 @@ export interface Order {
   student?: {
     id: string;
     nickname: string;
-    phone: string; // ✅ 后端会自动脱敏
+    phone: string; // ✓ 后端会自动脱敏
   };
   client?: {
     id: string;
@@ -27,7 +27,7 @@ export interface Order {
 
 class OrderService {
   /**
-   * ✅ P0安全: 获取订单详情
+   * ✓ P0安全: 获取订单详情
    * 后端会自动校验权限，学生只能查看自己的订单
    */
   async getOrderById(orderId: string): Promise<Order> {
@@ -35,7 +35,7 @@ class OrderService {
   }
 
   /**
-   * ✅ P0安全: 获取我的订单列表
+   * ✓ P0安全: 获取我的订单列表
    * 后端会自动过滤只返回当前用户的订单
    */
   async getMyOrders(params?: {

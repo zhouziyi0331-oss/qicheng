@@ -1,6 +1,8 @@
 import { Component } from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
+import { tokenManager } from '../utils/token'
+import { getApiUrl } from '../config'
 import catLogo from '../assets/images/cat-logo.png'
 import './index.scss'
 
@@ -20,21 +22,15 @@ export default class CustomTabBar extends Component {
         iconType: 'tasks'
       },
       {
-        // 中央启程小猫按钮
+        // 中央启程小猫按钮（放大显示）
         pagePath: '/pages/mentor/index',
-        text: '启程小猫',
+        text: '导师',
         iconType: 'mentor',
         isCenter: true
       },
       {
-        pagePath: '/pages/community/index',
-        text: '社区',
-        iconType: 'community',
-        requiredLevel: 4
-      },
-      {
         pagePath: '/pages/story/index',
-        text: '故事墙',
+        text: '故事',
         iconType: 'story'
       },
       {
@@ -51,11 +47,12 @@ export default class CustomTabBar extends Component {
 
   loadUserLevel = async () => {
     try {
-      const token = Taro.getStorageSync('token')
+      // 使用tokenManager统一管理
+      const token = tokenManager.getAccessToken()
       if (!token) return
 
       const res = await Taro.request({
-        url: '/api/v1/user/profile',
+        url: getApiUrl('/api/v1/user/profile'),
         method: 'GET',
         header: { 'Authorization': `Bearer ${token}` }
       })
@@ -86,9 +83,9 @@ export default class CustomTabBar extends Component {
     }
 
     if (isCenter) {
-      // 中央按钮：跳转到AI导师页面（使用navigateTo而不是switchTab）
-      console.log('跳转到AI导师页面:', url)
-      Taro.navigateTo({
+      // 中央按钮：使用switchTab切换到导师页面
+      this.setSelected(index)
+      Taro.switchTab({
         url: url,
         fail: (err) => {
           console.error('跳转失败:', err)
@@ -110,11 +107,11 @@ export default class CustomTabBar extends Component {
   }
 
   renderIcon(iconType: string, isActive: boolean) {
-    // 使用简洁的线条风格Unicode字符图标
+    // 使用极简符号图标，不使用emoji
     const iconMap = {
       home: <Text className="tab-icon-text">⌂</Text>,
-      tasks: <Text className="tab-icon-text">☐</Text>,
-      community: <Text className="tab-icon-text">💬</Text>,
+      tasks: <Text className="tab-icon-text">▢</Text>,
+      community: <Text className="tab-icon-text">◉</Text>,
       story: <Text className="tab-icon-text">◐</Text>,
       profile: <Text className="tab-icon-text">◯</Text>
     }
@@ -155,7 +152,7 @@ export default class CustomTabBar extends Component {
               onClick={() => this.switchTab(index, item.pagePath)}
             >
               <View className="tab-icon-wrapper">
-                {isLocked ? <Text className="tab-icon-text">🔒</Text> : this.renderIcon(item.iconType, isActive)}
+                {isLocked ? <Text className="tab-icon-text">⊗</Text> : this.renderIcon(item.iconType, isActive)}
               </View>
               <Text className="tab-text">
                 {item.text}

@@ -1,0 +1,456 @@
+// 通用视觉增强样式
+// 用于所有页面的美化效果
+
+// ============ 圆角卡片 ============
+.card {
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
+  }
+}
+
+.card-rounded {
+  border-radius: 32rpx;
+}
+
+.card-large {
+  border-radius: 40rpx;
+}
+
+// ============ 渐变背景 ============
+.gradient-primary {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+}
+
+.gradient-subtle {
+  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+}
+
+.gradient-purple {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+}
+
+// ============ 空状态设计 ============
+.empty-state {
+  padding: 120rpx 60rpx;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .empty-icon-wrapper {
+    width: 160rpx;
+    height: 160rpx;
+    margin: 0 auto 32rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+
+    .empty-icon-text {
+      font-size: 48rpx;
+      font-weight: 600;
+      color: #9CA3AF;
+    }
+  }
+
+  .empty-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 16rpx;
+  }
+
+  .empty-text {
+    font-size: 28rpx;
+    color: #6B7280;
+    margin-bottom: 16rpx;
+  }
+
+  .empty-hint {
+    font-size: 24rpx;
+    color: #9CA3AF;
+    line-height: 1.6;
+    margin-bottom: 48rpx;
+  }
+
+  .empty-action-btn {
+    padding: 24rpx 48rpx;
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+    color: #FFFFFF;
+    border-radius: 48rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    border: none;
+    box-shadow: 0 8rpx 16rpx rgba(99, 102, 241, 0.3);
+  }
+}
+
+// ============ 统计卡片 ============
+.stat-card {
+  padding: 32rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: translateY(-4rpx);
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+  }
+
+  .stat-icon {
+    font-size: 40rpx;
+    font-weight: 600;
+    color: #6366F1;
+    margin-bottom: 16rpx;
+  }
+
+  .stat-value {
+    font-size: 48rpx;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8rpx;
+  }
+
+  .stat-label {
+    font-size: 24rpx;
+    color: #6B7280;
+  }
+}
+
+// ============ 等级徽章 ============
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 32rpx;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  border-radius: 48rpx;
+  box-shadow: 0 4rpx 12rpx rgba(245, 158, 11, 0.3);
+
+  .level-badge-text {
+    font-size: 28rpx;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+}
+
+// ============ 进度条 ============
+.progress-bar {
+  width: 100%;
+  height: 16rpx;
+  background: #F3F4F6;
+  border-radius: 8rpx;
+  overflow: hidden;
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366F1 0%, #8B5CF6 100%);
+    border-radius: 8rpx;
+    transition: width 0.5s ease;
+  }
+}
+
+.progress-bar-large {
+  height: 24rpx;
+  border-radius: 12rpx;
+
+  .progress-fill {
+    border-radius: 12rpx;
+  }
+}
+
+// ============ 时间线 ============
+.timeline-item {
+  display: flex;
+  position: relative;
+  padding-bottom: 48rpx;
+
+  .timeline-dot-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 24rpx;
+
+    .timeline-dot {
+      width: 64rpx;
+      height: 64rpx;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4rpx 12rpx rgba(99, 102, 241, 0.3);
+      z-index: 2;
+
+      .event-icon {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: #FFFFFF;
+      }
+    }
+
+    .timeline-line {
+      flex: 1;
+      width: 4rpx;
+      background: linear-gradient(180deg, #E5E7EB 0%, #F3F4F6 100%);
+      margin-top: 8rpx;
+      min-height: 40rpx;
+    }
+  }
+
+  .timeline-content {
+    flex: 1;
+    padding: 24rpx;
+    background: #FFFFFF;
+    border-radius: 20rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+
+    .event-date {
+      font-size: 24rpx;
+      color: #9CA3AF;
+      margin-bottom: 8rpx;
+    }
+
+    .event-title {
+      font-size: 30rpx;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 8rpx;
+    }
+
+    .event-description {
+      font-size: 26rpx;
+      color: #6B7280;
+      line-height: 1.6;
+    }
+  }
+}
+
+// ============ 徽章/标签 ============
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 20rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+
+  &.badge-primary {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366F1;
+  }
+
+  &.badge-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+  }
+
+  &.badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+  }
+
+  &.badge-purple {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8B5CF6;
+  }
+}
+
+// ============ 能力条 ============
+.ability-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+
+  .ability-name {
+    width: 120rpx;
+    font-size: 26rpx;
+    color: #374151;
+    font-weight: 500;
+  }
+
+  .ability-bar {
+    flex: 1;
+    height: 16rpx;
+    background: #F3F4F6;
+    border-radius: 8rpx;
+    overflow: hidden;
+    margin: 0 16rpx;
+
+    .ability-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366F1 0%, #8B5CF6 100%);
+      border-radius: 8rpx;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  .ability-score {
+    width: 60rpx;
+    text-align: right;
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #6366F1;
+  }
+}
+
+// ============ 按钮样式 ============
+.btn-primary {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 24rpx;
+  padding: 24rpx 48rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 8rpx 16rpx rgba(99, 102, 241, 0.3);
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 8rpx rgba(99, 102, 241, 0.4);
+  }
+}
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: #6366F1;
+  border: 2rpx solid #6366F1;
+  border-radius: 24rpx;
+  padding: 24rpx 48rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  transition: all 0.3s ease;
+
+  &:active {
+    background: rgba(99, 102, 241, 0.05);
+  }
+}
+
+// ============ 页面容器 ============
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F9FAFB 0%, #FFFFFF 100%);
+}
+
+.page-header {
+  padding: 48rpx 32rpx 32rpx;
+
+  .page-title {
+    font-size: 48rpx;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8rpx;
+  }
+
+  .page-subtitle {
+    font-size: 28rpx;
+    color: #6B7280;
+  }
+}
+
+// ============ 分隔线 ============
+.divider {
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent 0%, #E5E7EB 50%, transparent 100%);
+  margin: 32rpx 0;
+}
+
+// ============ 浮动效果 ============
+.float-shadow {
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+}
+
+.hover-lift {
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: translateY(-4rpx);
+  }
+}
+
+// ============ 加载骨架屏 ============
+.skeleton {
+  background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 8rpx;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ============ 脉动动画 ============
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// ============ 淡入动画 ============
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============ 滑入动画 ============
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

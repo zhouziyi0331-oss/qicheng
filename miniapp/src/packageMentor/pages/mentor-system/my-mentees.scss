@@ -1,0 +1,202 @@
+@import '../../../styles/variables.scss';
+
+.my-mentees-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding: 40px 32px;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  display: block;
+  font-size: 44px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 28px;
+  color: $text-secondary;
+}
+
+.rewards-card {
+  background: linear-gradient(135deg, $primary 0%, $primary 100%);
+  padding: 32px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: 32px;
+  animation: scaleIn 0.5s var(--ease-decelerate);
+}
+
+.rewards-row {
+  display: flex;
+  gap: 40px;
+}
+
+.rewards-item {
+  flex: 1;
+  text-align: center;
+}
+
+.rewards-label {
+  display: block;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 12px;
+}
+
+.rewards-value {
+  display: block;
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+}
+
+.mentees-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mentee-card {
+  background: white;
+  padding: 24px 32px;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+  animation: slideInUp 0.5s var(--ease-decelerate);
+}
+
+.mentee-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mentee-name {
+  font-size: 32px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.mentee-level {
+  font-size: 24px;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, $primary 0%, $primary 100%);
+  color: white;
+  border-radius: $radius-sm;
+  font-weight: 600;
+}
+
+.mentee-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stat-text {
+  font-size: 24px;
+  color: $text-secondary;
+}
+
+.mentee-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--theme-border);
+}
+
+.joined-text {
+  font-size: 22px;
+  color: $text-tertiary;
+}
+
+.reward-badge {
+  padding: 6px 16px;
+  border-radius: $radius-sm;
+
+  &.received {
+    background: rgba(72, 187, 120, 0.1);
+  }
+
+  &.pending {
+    background: rgba(237, 137, 54, 0.1);
+  }
+
+  &.waiting {
+    background: rgba(160, 174, 192, 0.1);
+  }
+}
+
+.reward-text {
+  font-size: 22px;
+  font-weight: 600;
+
+  .received & {
+    color: var(--avocado-green);
+  }
+
+  .pending & {
+    color: var(--mango-yellow);
+  }
+
+  .waiting & {
+    color: $text-tertiary;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 32px;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.empty-text {
+  display: block;
+  font-size: 32px;
+  font-weight: 600;
+  color: $text-secondary;
+  margin-bottom: 12px;
+}
+
+.empty-hint {
+  display: block;
+  font-size: 26px;
+  color: $text-tertiary;
+  text-align: center;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

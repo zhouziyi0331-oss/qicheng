@@ -1,0 +1,335 @@
+@import '../../../styles/morandi-colors.scss';
+
+.task-messages-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部导航 */
+.messages-header {
+  background: $surface;
+  border-bottom: 1rpx solid $border;
+  height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40rpx;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, 0.06);
+}
+
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: $surface2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: $text-2;
+  font-weight: 300;
+}
+
+.header-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: $text-1;
+}
+
+.unread-badge {
+  padding: 8rpx 20rpx;
+  border-radius: 9999rpx;
+  background: rgba(188, 100, 70, 0.1);
+}
+
+.unread-text {
+  font-size: 22rpx;
+  color: $rust;
+  font-weight: 700;
+}
+
+/* 任务选择器 */
+.task-selector {
+  background: $surface2;
+  padding: 20rpx 32rpx;
+  flex-shrink: 0;
+  border-bottom: 1rpx solid $border;
+}
+
+.selector-scroll {
+  display: flex;
+  gap: 12rpx;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.selector-tab {
+  flex-shrink: 0;
+  padding: 12rpx 24rpx;
+  border-radius: 9999rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  background: $surface;
+  color: $text-2;
+  border: 3rpx solid $border;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.selector-tab.active {
+  background: rgba(188, 100, 70, 0.1);
+  color: $rust;
+  border-color: rgba(188, 100, 70, 0.3);
+  font-weight: 700;
+}
+
+/* 滚动区域 */
+.messages-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.messages-content {
+  padding: 28rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 时间分组 */
+.time-group {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: $text-3;
+  letter-spacing: 2rpx;
+  text-align: center;
+  padding: 8rpx 0;
+  text-transform: uppercase;
+}
+
+/* 消息项 */
+.message-item {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 28rpx 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, 0.06);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-item.unread {
+  background: rgba(188, 100, 70, 0.03);
+}
+
+.message-item.unread::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rpx;
+  background: $rust;
+  border-radius: 0 4rpx 4rpx 0;
+}
+
+.unread-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rpx;
+  background: $rust;
+  border-radius: 0 4rpx 4rpx 0;
+}
+
+/* 消息头像 */
+.message-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #1A2A3A, #2A4A6A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 消息主体 */
+.message-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 10rpx;
+}
+
+.message-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 9999rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.message-type.type-enterprise {
+  background: rgba(147, 174, 193, 0.15);
+  color: #5B8FAB;
+}
+
+.message-type.type-review-pass {
+  background: rgba(190, 215, 209, 0.2);
+  color: #3A8A84;
+}
+
+.message-type.type-review-fail {
+  background: rgba(248, 113, 113, 0.1);
+  color: #DC4444;
+}
+
+.message-type.type-platform {
+  background: rgba(242, 205, 120, 0.15);
+  color: #8A6A20;
+}
+
+.unread-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: $rust;
+  flex-shrink: 0;
+}
+
+.message-time {
+  font-size: 20rpx;
+  color: $text-3;
+  margin-left: auto;
+}
+
+.message-company {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: $text-2;
+  margin-bottom: 6rpx;
+  display: block;
+}
+
+.message-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+/* 消息内容框 */
+.message-content-box {
+  background: $surface2;
+  border-radius: 24rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.message-content {
+  font-size: 26rpx;
+  color: $text-2;
+  line-height: 1.7;
+  display: block;
+  white-space: pre-wrap;
+}
+
+/* 评分信息 */
+.rating-info {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.rating-star {
+  font-size: 24rpx;
+  color: #F2CD78;
+}
+
+.rating-text {
+  font-size: 22rpx;
+  color: #3A8A84;
+  font-weight: 600;
+}
+
+/* 操作按钮 */
+.message-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 16rpx 0;
+  border-radius: 9999rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+  border: none;
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, $rust, #A0503A);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(188, 100, 70, 0.4);
+}
+
+.action-btn.primary.full {
+  flex: 2;
+}
+
+.action-btn.secondary {
+  background: $surface2;
+  border: 3rpx solid $border;
+  color: $text-2;
+}

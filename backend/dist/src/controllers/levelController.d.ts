@@ -13,7 +13,7 @@ export declare const checkUpgradeConditions: (req: Request, res: Response) => Pr
  * 执行升级
  * POST /api/level/upgrade
  */
-export declare const upgradeLevel: (req: Request, res: Response) => Promise<void>;
+export declare const upgradeLevel: (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
 /**
  * 申请跳级挑战
  * POST /api/level/challenge

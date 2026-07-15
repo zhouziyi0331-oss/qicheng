@@ -35,5 +35,13 @@ export declare class CronScheduler {
      * 手动触发7天自动确认任务（用于测试）
      */
     triggerAutoConfirmation(): Promise<void>;
+    /**
+     * Phase R5.3: 启动每周报告生成任务
+     */
+    private startWeeklyReportJob;
+    /**
+     * Phase R5.3: 启动每月报告生成任务
+     */
+    private startMonthlyReportJob;
 }
 //# sourceMappingURL=scheduler.d.ts.map

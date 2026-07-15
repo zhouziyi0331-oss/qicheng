@@ -96,12 +96,54 @@ const threeStrikeRoutes_1 = __importDefault(require("./routes/tasks/threeStrikeR
 const teamRoutes_1 = __importDefault(require("./routes/teamRoutes"));
 const communityRoutes_1 = __importDefault(require("./routes/communityRoutes"));
 const masterRoutes_1 = __importDefault(require("./routes/masterRoutes"));
+// 新增：前端融合相关路由
+const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
+const coursesRoutes_1 = __importDefault(require("./routes/coursesRoutes"));
+const dailyTasksRoutes_1 = __importDefault(require("./routes/dailyTasksRoutes"));
+const sessionsRoutes_1 = __importDefault(require("./routes/sessionsRoutes"));
+const sectorHallRoutes_1 = __importDefault(require("./routes/sectorHallRoutes"));
+const recommendationsRoutes_1 = __importDefault(require("./routes/recommendationsRoutes"));
+const historyRoutes_1 = __importDefault(require("./routes/historyRoutes"));
+const abilityMapRoutes_1 = __importDefault(require("./routes/abilityMapRoutes"));
+const portfolioRoutes_1 = __importDefault(require("./routes/portfolioRoutes"));
+const projectCompleteRoutes_1 = __importDefault(require("./routes/projectCompleteRoutes"));
+const notificationSettingsRoutes_1 = __importDefault(require("./routes/notificationSettingsRoutes"));
+// 新增：天赋标签系统路由
+const talent_1 = __importDefault(require("./routes/talent"));
+// 新增：跳级系统路由
+const skipLevel_1 = __importDefault(require("./routes/skipLevel"));
+// 新增：任务定向邀约系统路由
+const invitations_1 = __importDefault(require("./routes/invitations"));
+// Phase R1: Agent编排器系统路由
+const orchestrator_1 = __importDefault(require("./routes/orchestrator"));
+// Phase 1.4: 升级通关仪式路由
+const levelUpRoutes_1 = __importDefault(require("./routes/levelUpRoutes"));
+// Phase 2.1: OPC身份卡片路由
+const opcIdentityCardRoutes_1 = __importDefault(require("./routes/opcIdentityCardRoutes"));
+// Phase 2.2: 资产仪表盘路由
+const assetDashboardRoutes_1 = __importDefault(require("./routes/assetDashboardRoutes"));
+// Phase 2.3: 成长对比路由
+const growthComparisonRoutes_1 = __importDefault(require("./routes/growthComparisonRoutes"));
+// Phase 2.4: 案例库路由
+const caseLibraryRoutes_1 = __importDefault(require("./routes/caseLibraryRoutes"));
+// Phase 3.1: 引路人机制路由
+const mentorRelationshipRoutes_1 = __importDefault(require("./routes/mentorRelationshipRoutes"));
+// Phase 3.2: OPC故事墙路由
+const opcStoryRoutes_1 = __importDefault(require("./routes/opcStoryRoutes"));
+// Phase 3.3: 企业-学生端打通路由
+const companyStudentBridgeRoutes_1 = __importDefault(require("./routes/companyStudentBridgeRoutes"));
+// Phase 3.4: 需求自动拆解推送路由
+const demandDecompositionRoutes_1 = __importDefault(require("./routes/demandDecompositionRoutes"));
 // Cron jobs — only load when not running tests
 if (process.env.NODE_ENV !== 'test') {
     require('./jobs/emotionSignalDetector');
     require('./jobs/firstTaskSettlement');
     require('./cron/mentorNudge').startMentorNudgeCron();
     require('./jobs/invitationCron');
+    // Phase R1: 初始化Agent编排器
+    const { initializeOrchestrator } = require('./orchestrator/orchestratorInit');
+    initializeOrchestrator();
+    logger_1.default.info('✅ Agent编排器已初始化');
     // 启动定时任务调度器（7天自动确认等）
     const { pool } = require('./utils/db');
     const { CronScheduler } = require('./cron/scheduler');
@@ -117,6 +159,10 @@ if (process.env.NODE_ENV !== 'test') {
     const { startMatchingWorker } = require('./workers/matchingWorker');
     startMatchingWorker();
     logger_1.default.info('匹配Worker已启动');
+    // Phase R5.3: 启动报告生成Worker
+    const { startReportWorker } = require('./workers/reportWorker');
+    startReportWorker();
+    logger_1.default.info('✅ 报告生成Worker已启动');
     // 优雅关闭时停止定时任务
     process.on('SIGTERM', () => {
         cronScheduler.stop();
@@ -178,6 +224,8 @@ app.get('/health', (_req, res) => {
 // ============================================================
 // Routes
 // ============================================================
+// Phase R1: Agent编排器测试路由（需要在authIsolationRoutes之前注册，避免认证冲突）
+app.use('/api/v1/orchestrator', orchestrator_1.default);
 app.use('/api/v1/auth', authLimiter, auth_1.default);
 app.use('/api/v1', authIsolationRoutes_1.default);
 app.use('/api/v1/user', user_1.default);
@@ -198,6 +246,7 @@ app.use('/api/mentor', enhanced_routes_1.default); // 增强版AI导师路由
 app.use('/api/admin', dashboard_1.default); // 管理后台API
 app.use('/api/v1/trust', trust_1.default);
 app.use('/api/v1/invitation', invitation_1.default);
+app.use('/api/v1/invitations', invitations_1.default); // 任务定向邀约系统
 app.use('/api/v1/challenge', challenge_1.default);
 app.use('/api/v1/subcontract', subcontract_1.default);
 app.use('/api/v1/team', team_1.default);
@@ -214,6 +263,7 @@ app.use('/api/v1/opc-v2', opcV2Routes_1.default); // OPC v2.0 AI画像分析系�
 app.use('/api/v1/opc-personality', opcV2PersonalityRoutes_1.default); // OPC v2.0 人格测试与分析系统
 app.use('/api/v1/ai-mentor', aiMentorRoutesV2_1.default); // AI导师陪伴系统 v2.0
 app.use('/api/v1/asset', assetVisualizationRoutes_1.default); // 资产可视化系统
+app.use('/api/skip-level', skipLevel_1.default); // 跳级系统
 app.use('/api/v1/mentor-trigger', mentorAutoTriggerRoutes_1.default); // AI导师自动触发系统
 app.use('/api/v1', semanticMatching_1.default); // 语义匹配引擎（任务推荐、学生匹配）
 app.use('/api/v1/stats', stats_1.default); // 统计API（真实数据，消除固定文案）
@@ -258,6 +308,38 @@ app.use('/api/v1/matching-enhancement', matchingEnhancement_1.default); // E-05a
 app.use('/api/v1/task-tracking', taskTracking_1.default); // E-23-28: 进度、里程碑、通知、归档、预警、介入
 app.use('/api/v1/acceptance', acceptance_1.default); // E-29-34: 清单、模板、评分、合作意愿、知识产权、退款
 app.use('/api/v1/cultivation', cultivation_1.default); // E-12: 定向培养计划
+// 新增：前端融合相关路由
+app.use('/api/v1', dashboardRoutes_1.default); // Dashboard数据
+app.use('/api/v1', coursesRoutes_1.default); // 课程和赛道
+app.use('/api/v1', dailyTasksRoutes_1.default); // 每日任务
+app.use('/api/v1', sessionsRoutes_1.default); // 学习会话
+app.use('/api/v1', sectorHallRoutes_1.default); // 板块大厅
+app.use('/api/v1', recommendationsRoutes_1.default); // 跨板块推荐
+app.use('/api/v1', historyRoutes_1.default); // 学习历史
+app.use('/api/v1', abilityMapRoutes_1.default); // 能力图谱
+app.use('/api/v1', portfolioRoutes_1.default); // 作品集
+app.use('/api/v1', projectCompleteRoutes_1.default); // 项目完成
+app.use('/api/v1', notificationSettingsRoutes_1.default); // 通知设置
+// 天赋标签系统（语义级精准匹配）
+app.use('/api/v1/talent', talent_1.default); // 天赋标签、能力积累、需求拆解系统
+// Phase 1.4: 升级通关仪式系统
+app.use('/api/v1/level-up', levelUpRoutes_1.default); // 升级通关仪式
+// Phase 2.1: OPC身份卡片系统
+app.use('/api/v1/opc', opcIdentityCardRoutes_1.default); // 可分享的OPC身份卡片
+// Phase 2.2: 资产仪表盘系统
+app.use('/api/v1/asset-dashboard', assetDashboardRoutes_1.default); // 能力估值与资产仪表盘
+// Phase 2.3: 成长对比系统
+app.use('/api/v1/growth-comparison', growthComparisonRoutes_1.default); // 入驻时vs当前的成长对比
+// Phase 2.4: 真实案例库系统
+app.use('/api/v1/case-library', caseLibraryRoutes_1.default); // 真实案例引用系统
+// Phase 3.1: 引路人机制系统
+app.use('/api/v1/mentor-relationship', mentorRelationshipRoutes_1.default); // 引路人匹配与关系管理
+// Phase 3.2: OPC故事墙系统
+app.use('/api/v1/opc-stories', opcStoryRoutes_1.default); // OPC故事分享与浏览
+// Phase 3.3: 企业-学生端打通系统
+app.use('/api/v1/company-student-bridge', companyStudentBridgeRoutes_1.default); // 成长通知与声誉标签
+// Phase 3.4: 需求自动拆解推送系统
+app.use('/api/v1/demand-decomposition', demandDecompositionRoutes_1.default); // 大需求拆解与智能推送
 // Static file serving for uploads
 app.use('/uploads', express_1.default.static('uploads'));
 // ============================================================

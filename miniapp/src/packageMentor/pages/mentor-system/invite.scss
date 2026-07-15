@@ -1,0 +1,324 @@
+@import '../../../styles/variables.scss';
+
+.mentor-invite-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba($primary-pink, 0.1) 0%, $bg-secondary 30%);
+  padding: $spacing-lg;
+
+  // 顶部标题
+  .header-section {
+    text-align: center;
+    padding: $spacing-xl 0 $spacing-lg;
+
+    .page-title {
+      display: block;
+      font-size: $font-size-h1;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .page-subtitle {
+      font-size: $font-size-base;
+      color: $text-secondary;
+    }
+  }
+
+  // 邀请统计
+  .stats-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+
+    .stat-card {
+      @include card-base;
+      padding: $spacing-lg;
+      text-align: center;
+
+      .stat-icon {
+        display: block;
+        font-size: 64rpx;
+        margin-bottom: $spacing-sm;
+      }
+
+      .stat-value {
+        display: block;
+        font-size: $font-size-h2;
+        font-weight: $font-weight-bold;
+        color: $primary;
+        margin-bottom: $spacing-xs;
+      }
+
+      .stat-label {
+        font-size: $font-size-sm;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  // 邀请码卡片
+  .invite-code-section {
+    margin-bottom: $spacing-lg;
+
+    .code-card {
+      @include card-base;
+      padding: $spacing-xl;
+      background: linear-gradient(135deg, rgba($primary-yellow, 0.15) 0%, rgba($primary-pink, 0.15) 100%);
+      text-align: center;
+
+      .code-label {
+        display: block;
+        font-size: $font-size-base;
+        color: $text-secondary;
+        margin-bottom: $spacing-md;
+      }
+
+      .code-display {
+        padding: $spacing-lg;
+        background: white;
+        border-radius: $radius-md;
+        margin-bottom: $spacing-lg;
+        border: 3rpx dashed $primary;
+
+        .code-text {
+          font-size: $font-size-h1;
+          font-weight: $font-weight-bold;
+          color: $primary;
+          font-family: monospace;
+          letter-spacing: 4rpx;
+        }
+      }
+
+      .code-actions {
+        display: flex;
+        gap: $spacing-md;
+
+        .action-btn {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: $spacing-xs;
+          padding: $spacing-md;
+          background: white;
+          border-radius: $radius-md;
+          border: 2rpx solid rgba($primary, 0.3);
+          @include clickable;
+
+          &.primary {
+            background: linear-gradient(135deg, $primary 0%, $primary-pink 100%);
+            border: none;
+
+            .btn-icon,
+            .btn-text {
+              color: white;
+            }
+          }
+
+          .btn-icon {
+            font-size: 40rpx;
+          }
+
+          .btn-text {
+            font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  // 二维码
+  .qrcode-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+    text-align: center;
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+    }
+
+    .qrcode-card {
+      display: flex;
+      justify-content: center;
+      margin-bottom: $spacing-lg;
+
+      .qrcode-placeholder {
+        width: 400rpx;
+        height: 400rpx;
+        background: $bg-secondary;
+        border-radius: $radius-lg;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2rpx dashed rgba($text-tertiary, 0.3);
+
+        .placeholder-text {
+          font-size: $font-size-h2;
+          color: $text-tertiary;
+          margin-bottom: $spacing-sm;
+        }
+
+        .placeholder-hint {
+          font-size: $font-size-xs;
+          color: $text-tertiary;
+        }
+      }
+
+      .qrcode-image {
+        width: 400rpx;
+        height: 400rpx;
+      }
+    }
+
+    .qrcode-btn {
+      padding: $spacing-md;
+      background: linear-gradient(135deg, $primary-blue 0%, $primary 100%);
+      border-radius: $radius-md;
+      @include clickable;
+
+      .btn-text {
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+        color: white;
+      }
+    }
+  }
+
+  // 邀请奖励说明
+  .rewards-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+    }
+
+    .reward-list {
+      .reward-item {
+        display: flex;
+        gap: $spacing-md;
+        margin-bottom: $spacing-lg;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .reward-icon {
+          flex-shrink: 0;
+          width: 80rpx;
+          height: 80rpx;
+          border-radius: $radius-full;
+          background: linear-gradient(135deg, rgba($primary-yellow, 0.2) 0%, rgba($primary-pink, 0.2) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .icon-text {
+            font-size: 48rpx;
+          }
+        }
+
+        .reward-content {
+          flex: 1;
+
+          .reward-title {
+            display: block;
+            font-size: $font-size-base;
+            font-weight: $font-weight-medium;
+            color: $text-primary;
+            margin-bottom: $spacing-xs;
+          }
+
+          .reward-desc {
+            display: block;
+            font-size: $font-size-sm;
+            color: $text-secondary;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+
+  // 邀请规则
+  .rules-section {
+    @include card-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+    background: rgba($primary-blue, 0.05);
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+    }
+
+    .rule-list {
+      .rule-item {
+        display: flex;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-md;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .rule-bullet {
+          color: $primary;
+          font-size: $font-size-base;
+          line-height: 1.6;
+        }
+
+        .rule-text {
+          flex: 1;
+          font-size: $font-size-sm;
+          color: $text-secondary;
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+
+  // 查看邀请记录按钮
+  .history-btn {
+    padding: $spacing-md;
+    background: white;
+    border: 2rpx solid rgba($primary, 0.3);
+    border-radius: $radius-md;
+    text-align: center;
+    @include clickable;
+    margin-bottom: $spacing-lg;
+
+    .btn-text {
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      color: $primary;
+    }
+  }
+
+  // 加载状态
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-xxl;
+    font-size: $font-size-base;
+    color: $text-tertiary;
+  }
+}

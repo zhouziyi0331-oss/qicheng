@@ -342,7 +342,8 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
                     match_score: row.track_match_score,
                     reason: row.track_reason,
                     firstTaskSuggestion: row.first_task_suggestion
-                }
+                },
+                identityStatement: row.identity_statement || row.declaration
             };
         }
         finally {
@@ -384,7 +385,8 @@ ${choiceAnswers.map(a => `${a.questionId}: ${a.selectedOption}`).join('\n')}
                     match_score: row.track_match_score,
                     reason: row.track_reason,
                     firstTaskSuggestion: row.first_task_suggestion
-                }
+                },
+                identityStatement: row.identity_statement || row.declaration
             };
         }
         finally {

@@ -1,0 +1,374 @@
+@import '../../../styles/variables.scss';
+
+.mentor-report-detail-page {
+  min-height: 100vh;
+  background: $bg-secondary;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  // 顶部头部
+  .detail-header {
+    background: white;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    .header-main {
+      display: flex;
+      gap: $spacing-md;
+      margin-bottom: $spacing-lg;
+
+      .report-icon {
+        flex-shrink: 0;
+        width: 120rpx;
+        height: 120rpx;
+        border-radius: $radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon-text {
+          font-size: 64rpx;
+        }
+      }
+
+      .header-info {
+        flex: 1;
+
+        .report-title {
+          display: block;
+          font-size: $font-size-h2;
+          font-weight: $font-weight-bold;
+          color: $text-primary;
+          margin-bottom: $spacing-xs;
+        }
+
+        .report-type {
+          display: inline-block;
+          font-size: $font-size-xs;
+          color: $primary;
+          background: rgba($primary, 0.1);
+          padding: 4rpx 12rpx;
+          border-radius: $radius-sm;
+          margin-bottom: $spacing-xs;
+        }
+
+        .report-period {
+          display: block;
+          font-size: $font-size-sm;
+          color: $text-tertiary;
+          margin-top: $spacing-xs;
+        }
+      }
+    }
+
+    .export-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-xs;
+      padding: $spacing-md $spacing-lg;
+      background: linear-gradient(135deg, $primary-blue 0%, $primary 100%);
+      border-radius: $radius-md;
+      @include clickable;
+
+      .export-icon {
+        font-size: 32rpx;
+      }
+
+      .export-text {
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+        color: white;
+      }
+    }
+  }
+
+  // 核心指标
+  .metrics-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-sm;
+    padding: 0 $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    .metric-card {
+      background: white;
+      border-radius: $radius-md;
+      padding: $spacing-md;
+      text-align: center;
+
+      &.highlight {
+        background: linear-gradient(135deg, rgba($primary-yellow, 0.15) 0%, rgba($primary-pink, 0.15) 100%);
+      }
+
+      .metric-icon {
+        display: block;
+        font-size: 40rpx;
+        margin-bottom: $spacing-xs;
+      }
+
+      .metric-value {
+        display: block;
+        font-size: $font-size-h3;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+        margin-bottom: $spacing-xs;
+
+        &.growth {
+          color: $success;
+        }
+      }
+
+      .metric-label {
+        font-size: $font-size-xs;
+        color: $text-tertiary;
+      }
+    }
+  }
+
+  // 内容滚动区域
+  .content-scroll {
+    height: calc(100vh - 300rpx);
+    padding: 0 $spacing-lg;
+  }
+
+  // 内容区块
+  .content-section {
+    margin-bottom: $spacing-lg;
+
+    .section-title {
+      display: block;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-md;
+    }
+
+    .section-card {
+      background: white;
+      border-radius: $radius-lg;
+      padding: $spacing-lg;
+
+      .section-text {
+        font-size: $font-size-base;
+        color: $text-secondary;
+        line-height: 1.7;
+      }
+
+      .list-item {
+        display: flex;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-md;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .list-bullet {
+          flex-shrink: 0;
+          width: 24rpx;
+          padding-top: 4rpx;
+
+          .bullet-text {
+            font-size: $font-size-base;
+            color: $primary;
+          }
+        }
+
+        .list-text {
+          flex: 1;
+          font-size: $font-size-base;
+          color: $text-secondary;
+          line-height: 1.6;
+        }
+      }
+
+      .insight-group {
+        margin-bottom: $spacing-lg;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .insight-subtitle {
+          display: block;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          color: $text-primary;
+          margin-bottom: $spacing-sm;
+        }
+      }
+
+      .recommendation-group {
+        margin-bottom: $spacing-lg;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .recommendation-subtitle {
+          display: block;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          color: $text-primary;
+          margin-bottom: $spacing-sm;
+        }
+
+        .step-item {
+          display: flex;
+          gap: $spacing-sm;
+          margin-bottom: $spacing-md;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .step-number {
+            flex-shrink: 0;
+            width: 48rpx;
+            height: 48rpx;
+            border-radius: $radius-full;
+            background: linear-gradient(135deg, $primary-blue 0%, $primary 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .number-text {
+              font-size: $font-size-sm;
+              font-weight: $font-weight-bold;
+              color: white;
+            }
+          }
+
+          .step-text {
+            flex: 1;
+            font-size: $font-size-base;
+            color: $text-secondary;
+            line-height: 1.6;
+            padding-top: 8rpx;
+          }
+        }
+      }
+    }
+  }
+
+  // 精彩瞬间
+  .highlights-container {
+    .highlight-card {
+      background: white;
+      border-radius: $radius-lg;
+      padding: $spacing-lg;
+      margin-bottom: $spacing-md;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .highlight-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-sm;
+
+        .highlight-type {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          color: $primary;
+        }
+
+        .highlight-date {
+          font-size: $font-size-xs;
+          color: $text-tertiary;
+        }
+      }
+
+      .highlight-title {
+        display: block;
+        font-size: $font-size-base;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        margin-bottom: $spacing-xs;
+      }
+
+      .highlight-desc {
+        font-size: $font-size-sm;
+        color: $text-secondary;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  // 导师寄语
+  .mentor-message {
+    .message-card {
+      background: linear-gradient(135deg, rgba($primary-yellow, 0.1) 0%, rgba($primary-pink, 0.1) 100%);
+      border-radius: $radius-lg;
+      padding: $spacing-lg;
+      border: 2rpx solid rgba($primary, 0.2);
+
+      .message-text {
+        display: block;
+        font-size: $font-size-base;
+        color: $text-secondary;
+        line-height: 1.8;
+        margin-bottom: $spacing-lg;
+        font-style: italic;
+      }
+
+      .message-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: $spacing-md;
+        border-top: 1rpx solid rgba($text-tertiary, 0.2);
+
+        .message-signature {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          color: $primary;
+        }
+
+        .message-date {
+          font-size: $font-size-xs;
+          color: $text-tertiary;
+        }
+      }
+    }
+  }
+
+  // 底部空白
+  .bottom-padding {
+    height: 40rpx;
+  }
+
+  // 加载状态
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-xxl;
+    font-size: $font-size-base;
+    color: $text-tertiary;
+  }
+
+  // 空状态
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xxl;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 120rpx;
+      margin-bottom: $spacing-lg;
+    }
+
+    .empty-text {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      color: $text-secondary;
+    }
+  }
+}

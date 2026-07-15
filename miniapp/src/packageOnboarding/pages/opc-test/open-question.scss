@@ -1,0 +1,256 @@
+@import '../../../styles/morandi-colors.scss';
+
+.open-question-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部导航 */
+.open-header {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.header-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #2A1A0A 0%, #5A3018 100%);
+  z-index: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -60rpx;
+    right: -60rpx;
+    width: 240rpx;
+    height: 240rpx;
+    background: radial-gradient(circle, rgba(242, 205, 120, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 40rpx 44rpx;
+}
+
+.topbar {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8rpx);
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: white;
+  font-weight: 300;
+}
+
+.topbar-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: white;
+}
+
+.question-counter {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 进度点 */
+.progress-dots {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.dot {
+  flex: 1;
+  height: 8rpx;
+  border-radius: 9999rpx;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.3s ease;
+
+  &.active {
+    background: #F2CD78;
+  }
+}
+
+/* 问题标题 */
+.question-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: white;
+  line-height: 1.5;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.question-subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  display: block;
+}
+
+/* 滚动区域 */
+.open-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.open-content {
+  padding: 40rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+/* 输入框容器 */
+.textarea-wrapper {
+  background: white;
+  border-radius: 40rpx;
+  border: 3rpx solid #EDE5DC;
+  overflow: hidden;
+}
+
+.answer-textarea {
+  padding: 32rpx;
+  font-size: 30rpx;
+  color: $text-1;
+  line-height: 1.7;
+  min-height: 320rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.textarea-placeholder {
+  color: $text-3;
+}
+
+.char-count {
+  padding: 20rpx 32rpx;
+  border-top: 1rpx solid #EDE5DC;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.count-text {
+  font-size: 24rpx;
+  color: $text-3;
+}
+
+/* 提示卡片 */
+.hint-card {
+  background: linear-gradient(135deg, rgba(242, 205, 120, 0.12), rgba(191, 158, 113, 0.1));
+  border-radius: 40rpx;
+  padding: 28rpx;
+  border: 2rpx solid rgba(242, 205, 120, 0.2);
+}
+
+.hint-title {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #BF9E71;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.hint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.hint-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+}
+
+.hint-dot {
+  font-size: 24rpx;
+  color: #BF9E71;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+.hint-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #6B5540;
+  line-height: 1.5;
+}
+
+/* 底部按钮 */
+.open-footer {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 40rpx 32rpx;
+  background: $surface;
+  border-top: 1rpx solid $border;
+  flex-shrink: 0;
+}
+
+.prev-button {
+  flex: 1;
+  padding: 26rpx;
+  border-radius: 9999rpx;
+  background: #F5F0EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .button-text {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #6B5540;
+  }
+}
+
+.next-button {
+  flex: 2;
+  padding: 26rpx;
+  border-radius: 9999rpx;
+  background: linear-gradient(135deg, #BC6446, #A0503A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8rpx 28rpx rgba(188, 100, 70, 0.35);
+  transition: all 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .button-text {
+    font-size: 28rpx;
+    font-weight: 700;
+    color: white;
+  }
+}

@@ -1,0 +1,138 @@
+@import '../../styles/variables.scss';
+
+.role-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.role-modal-container {
+  width: 85%;
+  max-width: 500px;
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.role-modal-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .modal-title {
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    color: #4A4A4A;
+    margin-bottom: 8px;
+  }
+
+  .modal-subtitle {
+    display: block;
+    font-size: 14px;
+    color: #8C8C8C;
+  }
+}
+
+.role-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.role-option {
+  position: relative;
+  padding: 24px;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+
+  .role-icon {
+    display: block;
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .role-name {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
+    color: #4A4A4A;
+    margin-bottom: 8px;
+  }
+
+  .role-desc {
+    display: block;
+    font-size: 14px;
+    color: #8C8C8C;
+    line-height: 1.5;
+  }
+
+  .selected-check {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #C5A3D9 0%, #F4B6C2 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  &.selected {
+    border-color: #9370DB;
+    background: linear-gradient(135deg, rgba(147, 112, 219, 0.1), rgba(138, 43, 226, 0.05));
+    box-shadow: 0 2px 12px rgba(147, 112, 219, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.warning-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  margin-bottom: 24px;
+
+  .warning-icon {
+    font-size: 18px;
+    color: #ff9800;
+  }
+
+  .warning-text {
+    font-size: 14px;
+    color: #8C8C8C;
+    font-weight: 500;
+  }
+}
+
+.confirm-button {
+  width: 100%;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

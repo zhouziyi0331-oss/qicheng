@@ -4,7 +4,7 @@
 export const config = {
   // API基础URL
   apiBaseUrl: process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
+    ? 'http://localhost:3517'
     : 'https://api.qicheng.com',
 
   // 超时时间

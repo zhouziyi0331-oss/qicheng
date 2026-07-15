@@ -17,21 +17,21 @@ export default function GuideDialog({ visible, type, onClose, data }: GuideDialo
         return {
           title: '开启你的OPC之旅',
           message: '这是你的第一个任务！完成它，你将获得经验值和能力标签，开始你的成长之旅。',
-          icon: '🎯',
+          icon: '◆',
           btnText: '开始任务'
         }
       case 'first-complete':
         return {
           title: '恭喜完成首个任务！',
           message: '你已经迈出了第一步！继续完成更多任务，解锁更多能力标签，提升你的OPC等级。',
-          icon: '🎉',
+          icon: '◇',
           btnText: '继续探索'
         }
       case 'level-up':
         return {
           title: `恭喜升级到 Lv.${data?.level || 2}`,
           message: '你的努力得到了回报！等级提升意味着你可以接取更高难度、更高收益的任务。',
-          icon: '⭐',
+          icon: '◇',
           btnText: '太棒了'
         }
       default:

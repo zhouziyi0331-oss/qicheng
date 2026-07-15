@@ -4,6 +4,7 @@ import { AutoConfirmationJob } from './autoConfirmationJob';
 import { AutoAcceptanceJob } from './autoAcceptanceJob';
 import { TaskExpirationJob } from './taskExpirationJob';
 import { ApplicationTimeoutJob } from './applicationTimeoutJob';
+import { WeeklyReportJob, MonthlyReportJob } from './reportGenerationJobs';
 import logger from '../utils/logger';
 
 /**
@@ -35,6 +36,12 @@ export class CronScheduler {
 
     // 启动申请超时取消任务
     this.startApplicationTimeoutJob();
+
+    // Phase R5.3: 启动每周报告生成任务
+    this.startWeeklyReportJob();
+
+    // Phase R5.3: 启动每月报告生成任务
+    this.startMonthlyReportJob();
 
     logger.info(`已启动${this.tasks.length}个定时任务`);
   }
@@ -149,5 +156,47 @@ export class CronScheduler {
     logger.info('手动触发7天自动确认任务');
     const job = new AutoConfirmationJob(this.pool);
     await job.execute();
+  }
+
+  /**
+   * Phase R5.3: 启动每周报告生成任务
+   */
+  private startWeeklyReportJob(): void {
+    const job = new WeeklyReportJob(this.pool);
+    const schedule = WeeklyReportJob.getCronSchedule();
+
+    const task = cron.schedule(schedule, async () => {
+      try {
+        await job.execute();
+      } catch (error: any) {
+        logger.error('每周报告生成任务执行失败:', error);
+      }
+    }, {
+      timezone: 'Asia/Shanghai'
+    });
+
+    this.tasks.push(task);
+    logger.info(`已启动每周报告生成任务，调度时间: ${schedule}`);
+  }
+
+  /**
+   * Phase R5.3: 启动每月报告生成任务
+   */
+  private startMonthlyReportJob(): void {
+    const job = new MonthlyReportJob(this.pool);
+    const schedule = MonthlyReportJob.getCronSchedule();
+
+    const task = cron.schedule(schedule, async () => {
+      try {
+        await job.execute();
+      } catch (error: any) {
+        logger.error('每月报告生成任务执行失败:', error);
+      }
+    }, {
+      timezone: 'Asia/Shanghai'
+    });
+
+    this.tasks.push(task);
+    logger.info(`已启动每月报告生成任务，调度时间: ${schedule}`);
   }
 }

@@ -281,7 +281,7 @@ class NotificationService {
         [notificationId]
       );
 
-      return result.rowCount > 0;
+      return (result.rowCount ?? 0) > 0;
     } finally {
       client.release();
     }

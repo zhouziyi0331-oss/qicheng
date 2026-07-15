@@ -149,7 +149,7 @@ const LevelUpAnimation: React.FC<LevelUpAnimationProps> = ({
         {/* 导师留言 */}
         {currentStep >= 6 && mentorMessage && (
           <View className="mentor-message">
-            <View className="mentor-avatar">🐱</View>
+            <View className="mentor-avatar">○</View>
             <View className="mentor-text">{mentorMessage}</View>
           </View>
         )}
@@ -171,7 +171,7 @@ const FeatureItem: React.FC<{ feature: string; delay: number }> = ({ feature, de
 
   return (
     <View className={`feature-item ${show ? 'feature-item-show' : ''}`}>
-      <View className="feature-icon">✨</View>
+      <View className="feature-icon">◇</View>
       <View className="feature-text">{feature}</View>
     </View>
   );

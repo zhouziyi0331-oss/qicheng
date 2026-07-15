@@ -1,540 +1,399 @@
-/**
- * 首页 - 果汁色改造版
- * 从Morandi色升级为果汁色主题
- */
-
-@import '../../styles/theme.scss';
+@import '../../styles/variables.scss';
+@import '../../styles/morandi-colors.scss';
 
 .index-page {
   min-height: 100vh;
-  background: var(--theme-bg);
-  padding: 0 0 240px 0;
+  background: #F9F6F2;
+  padding-bottom: 120rpx;
 }
 
-// 顶部用户栏
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 64px 80px 32px;
-
-  .user-info-bar {
-    display: flex;
-    align-items: center;
-    gap: 48px;
-  }
-
-  .user-avatar-small {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-soft);
-    overflow: hidden;
-    animation: breathe 3s ease-in-out infinite;
-
-
-    .avatar-img {
-      width: 100%;
-      height: 100%;
-    }
-
-    .avatar-letter {
-      font-size: 72px;
-      font-weight: 700;
-      color: #FFFFFF;
-    }
-  }
-
-  .user-level-badge {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .level-text {
-      font-size: 64px;
-      font-weight: 700;
-      color: var(--theme-primary);
-    }
-
-    .level-name {
-      font-size: 48px;
-      color: var(--text-secondary);
-    }
-  }
-
-  .notification-icon {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: var(--theme-card);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-card);
-    transition: all var(--duration-fast) var(--ease-standard);
-
-    &:active {
-      transform: scale(0.9);
-    }
-
-    .icon-bell {
-      font-size: 72px;
-    }
-  }
-}
-
-// Hero插画区域
-.hero-illustration {
-  padding: 80px 80px 120px;
+// ============================================================
+// Hero 区域
+// ============================================================
+.hero-section {
+  background: linear-gradient(180deg, #FDF0EB 0%, #F9F6F2 100%);
+  padding: 64rpx 0rpx 64rpx;
   text-align: center;
   position: relative;
+  overflow: hidden;
+  width: 100%;
 
-  .illustration-container {
-    width: 1120px;
-    height: 1120px;
-    margin: 0 auto 96px;
-    position: relative;
-    background: linear-gradient(135deg, rgba(255, 230, 109, 0.15) 0%, rgba(255, 107, 157, 0.15) 50%, rgba(78, 205, 196, 0.15) 100%);
-    border-radius: 560px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-
-    // 装饰圆圈
-    .deco-circle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.6;
-    }
-
-    .deco-1 {
-      width: 180px;
-      height: 180px;
-      background: var(--mango-yellow);
-      top: 120px;
-      left: 80px;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .deco-2 {
-      width: 120px;
-      height: 120px;
-      background: var(--strawberry-pink);
-      top: 200px;
-      right: 120px;
-      animation: float 4s ease-in-out infinite 0.5s;
-    }
-
-    .deco-3 {
-      width: 150px;
-      height: 150px;
-      background: var(--blueberry-blue);
-      bottom: 160px;
-      left: 160px;
-      animation: float 3.5s ease-in-out infinite 1s;
-    }
-
-    // 中心Logo
-    .character {
-      width: 720px;
-      height: 720px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-      animation: breathe 4s ease-in-out infinite;
-
-      .center-logo {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-
-  .hero-title {
-    font-size: 96px;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.4;
-  }
-}
-
-
-
-// 登录区域
-.login-section {
-  padding: 0 80px;
-
-  .primary-btn {
-    width: 100%;
-    height: 192px;
-    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
-    color: #FFFFFF;
-    font-size: 64px;
-    font-weight: 600;
-    border-radius: 96px;
-    border: none;
-    box-shadow: var(--shadow-soft);
-    transition: all var(--duration-fast) var(--ease-standard);
-
-    &:active {
-      transform: scale(0.95);
-    }
-  }
-}
-
-// 内容区域
-.content-section {
-  padding: 0 80px;
-}
-
-// 等级进度卡片
-.level-progress-card {
-  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
-  border-radius: var(--radius-large);
-  padding: 64px;
-  margin-bottom: 64px;
-  box-shadow: var(--shadow-soft);
-
-  .level-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 48px;
-
-    .level-info {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-
-      .current-level {
-        font-size: 64px;
-        font-weight: 700;
-        color: #FFFFFF;
-      }
-
-      .next-level {
-        font-size: 56px;
-        color: rgba(255, 255, 255, 0.8);
-      }
-    }
-
-    .view-rewards {
-      font-size: 56px;
-      color: #FFFFFF;
-      opacity: 0.9;
-    }
-  }
-
-  .progress-bar {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 16px;
-    overflow: hidden;
-    margin-bottom: 32px;
-
-    .progress-fill {
-      height: 100%;
-      background: #FFFFFF;
-      border-radius: 16px;
-      animation: fillBar 1s var(--ease-decelerate);
-    }
-
-    @keyframes fillBar {
-      from {
-        width: 0;
-      }
-    }
-  }
-
-  .progress-text {
-    font-size: 48px;
-    color: rgba(255, 255, 255, 0.9);
-  }
-}
-
-// OPC测评卡片
-.opc-test-card {
-  background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, var(--theme-card) 100%);
-  border: 6px solid var(--strawberry-pink);
-  border-radius: var(--radius-large);
-  padding: 64px;
-  margin-bottom: 96px;
-  box-shadow: var(--shadow-card);
-  animation: pulse-border 2s ease-in-out infinite;
-
-  @keyframes pulse-border {
-    0%, 100% {
-      border-color: var(--strawberry-pink);
-    }
-    50% {
-      border-color: var(--theme-primary);
-    }
-  }
-
-  .test-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-
-    .test-card-title {
-      font-size: 72px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .test-card-badge {
-      background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
-      color: #FFFFFF;
-      font-size: 48px;
-      font-weight: 600;
-      padding: 16px 40px;
-      border-radius: 40px;
-      animation: heartbeat 2s ease-in-out infinite;
-    }
-
-  }
-
-  .test-card-desc {
-    font-size: 56px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 48px;
-  }
-
-  .test-card-features {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    margin-bottom: 48px;
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-
-      .feature-icon {
-        font-size: 48px;
-        color: var(--strawberry-pink);
-      }
-
-      .feature-text {
-        font-size: 52px;
-        color: var(--text-primary);
-      }
-    }
-  }
-
-  .test-card-btn {
-    background: linear-gradient(135deg, var(--strawberry-pink) 0%, var(--watermelon-red) 100%);
-    border-radius: 96px;
-    padding: 48px;
-    text-align: center;
-    box-shadow: var(--shadow-soft);
-    transition: all var(--duration-fast) var(--ease-standard);
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    .btn-text {
-      font-size: 64px;
-      font-weight: 600;
-      color: #FFFFFF;
-    }
-  }
-}
-
-// 区块标题
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 64px;
-
-  .section-title {
-    font-size: 72px;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-
-  .section-link {
-    font-size: 56px;
-    color: var(--theme-primary);
-  }
-}
-
-// 功能网格
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 48px;
-  margin-bottom: 96px;
-}
-
-// 功能卡片
-.feature-card {
-  position: relative;
-  border-radius: var(--radius-large);
-  padding: 64px 48px;
-  min-height: 480px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-card);
-  transition: all var(--duration-normal) var(--ease-standard);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.5s var(--ease-decelerate) forwards;
-
-  @for $i from 1 through 4 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{$i * 0.1}s;
-    }
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &.locked {
-    opacity: 0.6;
-    filter: grayscale(0.5);
-  }
-
-  .lock-overlay {
+  &::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: var(--radius-large);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    z-index: 2;
-
-    .lock-icon {
-      font-size: 96px;
-    }
-
-    .lock-text {
-      font-size: 48px;
-      font-weight: 600;
-      color: #FFFFFF;
-    }
+    background:
+      radial-gradient(circle at 20% 30%, rgba(242, 205, 120, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(190, 215, 209, 0.15) 0%, transparent 50%);
+    z-index: 0;
   }
 
-  .card-icon-small {
-    width: 144px;
-    height: 144px;
+  .surprise-dot {
+    position: absolute;
+    top: 180rpx;
+    left: 40rpx;
+    width: 68rpx;
+    height: 68rpx;
+    background: linear-gradient(135deg, $morandi-accent 0%, #E8B84D 100%);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 32px;
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 8rpx 24rpx rgba(242, 205, 120, 0.45);
+    z-index: 10;
+    transition: all 0.3s ease;
 
-    .icon-symbol {
-      font-size: 72px;
+    &:active {
+      transform: scale(0.95);
+      box-shadow: 0 4rpx 16rpx rgba(242, 205, 120, 0.5);
+    }
+
+    .dot-icon {
+      font-size: 36rpx;
+      font-weight: 400;
+      color: $morandi-dark;
+      line-height: 1;
     }
   }
 
-  .card-title-small {
-    font-size: 64px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 16px;
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 8rpx 24rpx rgba(242, 205, 120, 0.5);
+    }
+    50% {
+      transform: scale(1.08);
+      box-shadow: 0 12rpx 32rpx rgba(242, 205, 120, 0.7);
+    }
   }
 
-  .card-desc-small {
-    font-size: 48px;
-    color: var(--text-secondary);
-    line-height: 1.4;
+  .hero-page-title {
+    font-size: 34rpx;
+    font-weight: 600;
+    color: $morandi-dark;
+    margin-bottom: 48rpx;
+    position: relative;
+    z-index: 1;
+    display: block;
   }
 
-  &.card-green {
-    background: linear-gradient(135deg, rgba(255, 230, 109, 0.3) 0%, rgba(212, 242, 145, 0.3) 100%);
+  .mentor-cat {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 40rpx;
+    z-index: 1;
+
+    .cat-circle {
+      width: 200rpx;
+      height: 200rpx;
+      background: linear-gradient(135deg, #FDE8E4, #F9D0C8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16rpx 64rpx rgba(188, 100, 70, 0.2);
+      position: relative;
+
+      .cat-image {
+        width: 120rpx;
+        height: 120rpx;
+      }
+    }
+
+    .cat-badge {
+      position: absolute;
+      top: -8rpx;
+      right: -8rpx;
+      width: 56rpx;
+      height: 56rpx;
+      background: $morandi-accent;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28rpx;
+      box-shadow: 0 4rpx 16rpx rgba(242, 205, 120, 0.4);
+      z-index: 2;
+    }
   }
 
-  &.card-purple {
-    background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(255, 230, 109, 0.2) 100%);
+  .hero-title {
+    font-size: 44rpx;
+    font-weight: 800;
+    color: $morandi-dark;
+    margin-bottom: 16rpx;
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
+    display: block;
   }
 
-  &.card-yellow {
-    background: linear-gradient(135deg, rgba(255, 230, 109, 0.4) 0%, rgba(255, 200, 87, 0.4) 100%);
-  }
-
-  &.card-pink {
-    background: linear-gradient(135deg, rgba(255, 107, 157, 0.25) 0%, rgba(255, 182, 193, 0.25) 100%);
+  .hero-subtitle {
+    font-size: 24rpx;
+    color: #6B5E57;
+    line-height: 1.6;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: block;
+    padding: 0 40rpx;
+    white-space: nowrap;
   }
 }
 
-// 热门卡片
-.popular-card {
-  border-radius: var(--radius-large);
-  padding: 80px 64px;
-  box-shadow: var(--shadow-card);
-  margin-bottom: 64px;
+// ============================================================
+// OPC 测评卡片
+// ============================================================
+.opc-card {
+  margin: 40rpx 40rpx 0;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 40rpx rgba(44, 36, 32, 0.1);
+  position: relative;
+  overflow: hidden;
 
-  .popular-title {
-    font-size: 80px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 32px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40rpx;
+    right: -40rpx;
+    width: 200rpx;
+    height: 200rpx;
+    background: radial-gradient(circle, rgba(188, 100, 70, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
   }
 
-  .popular-desc {
-    font-size: 56px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 48px;
-  }
-
-  .popular-tags {
+  .opc-header {
     display: flex;
-    gap: 32px;
+    align-items: center;
+    gap: 24rpx;
+    margin-bottom: 28rpx;
+    position: relative;
+    z-index: 1;
+
+    .opc-icon {
+      width: 88rpx;
+      height: 88rpx;
+      background: linear-gradient(135deg, $morandi-coral 0%, #A8533A 100%);
+      border-radius: 16rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .opc-title-wrapper {
+      flex: 1;
+
+      .opc-title {
+        font-size: 34rpx;
+        font-weight: 700;
+        color: $morandi-dark;
+        margin-bottom: 6rpx;
+      }
+
+      .opc-duration {
+        font-size: 24rpx;
+        color: #A89890;
+      }
+    }
+  }
+
+  .opc-desc {
+    font-size: 26rpx;
+    color: #6B5E57;
+    line-height: 1.6;
+    margin-bottom: 32rpx;
+    position: relative;
+    z-index: 1;
+  }
+
+  .opc-tags {
+    display: flex;
+    gap: 16rpx;
     flex-wrap: wrap;
+    margin-bottom: 32rpx;
+    position: relative;
+    z-index: 1;
 
-    .tag {
-      padding: 24px 48px;
-      border-radius: 40px;
-      font-size: 48px;
-      font-weight: 500;
-      transition: all var(--duration-fast) var(--ease-standard);
+    .opc-tag {
+      font-size: 22rpx;
+      font-weight: 600;
+      padding: 8rpx 20rpx;
+      border-radius: 999rpx;
+      background: #F4F0EC;
+      color: #6B5E57;
+    }
+  }
 
-      &:active {
-        transform: scale(0.95);
+  .opc-btn {
+    width: 100%;
+    height: 96rpx;
+    background: linear-gradient(135deg, $morandi-coral 0%, #A8533A 100%);
+    border-radius: 999rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16rpx;
+    box-shadow: 0 8rpx 32rpx rgba(188, 100, 70, 0.35);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+
+    &:active {
+      transform: scale(0.98);
+      box-shadow: 0 4rpx 24rpx rgba(188, 100, 70, 0.4);
+    }
+
+    .btn-icon {
+      font-size: 36rpx;
+      color: #FFFFFF;
+    }
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.6rpx;
+    }
+  }
+}
+
+// ============================================================
+// 探索更多区域
+// ============================================================
+.explore-section {
+  padding: 40rpx 40rpx 0;
+
+  .explore-title {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: $morandi-dark;
+    margin-bottom: 28rpx;
+  }
+}
+
+// ============================================================
+// 阶段卡片
+// ============================================================
+.phase-item {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 36rpx;
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44, 36, 32, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .phase-number {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    background: #F4F0EC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32rpx;
+    font-weight: 800;
+    color: #6B5E57;
+    flex-shrink: 0;
+  }
+
+  .phase-content {
+    flex: 1;
+
+    .phase-name {
+      font-size: 30rpx;
+      font-weight: 700;
+      color: $morandi-dark;
+      margin-bottom: 6rpx;
+      display: block;
+    }
+
+    .phase-desc {
+      font-size: 24rpx;
+      color: #A89890;
+      line-height: 1.4;
+      display: block;
+    }
+  }
+
+  .phase-status {
+    width: 56rpx;
+    height: 56rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .status-icon {
+      font-size: 28rpx;
+    }
+  }
+
+  // 已完成状态
+  &.completed {
+    .phase-status {
+      background: rgba(190, 215, 209, 0.2);
+
+      .status-icon {
+        color: #9DBDBA;
+      }
+    }
+  }
+
+  // 当前激活状态
+  &.active {
+    background: linear-gradient(135deg, $morandi-coral 0%, #A8533A 100%);
+    box-shadow: 0 12rpx 48rpx rgba(188, 100, 70, 0.3);
+
+    .phase-number {
+      background: rgba(255, 255, 255, 0.25);
+      color: #FFFFFF;
+    }
+
+    .phase-content {
+      .phase-name {
+        color: #FFFFFF;
       }
 
-      &.tag-pink {
-        background: rgba(255, 107, 157, 0.2);
-        color: var(--strawberry-pink);
+      .phase-desc {
+        color: rgba(255, 255, 255, 0.75);
       }
+    }
 
-      &.tag-dark {
-        background: rgba(0, 0, 0, 0.05);
-        color: var(--text-primary);
+    .phase-status {
+      background: rgba(255, 255, 255, 0.25);
+
+      .status-icon {
+        color: #FFFFFF;
+      }
+    }
+  }
+
+  // 锁定状态
+  &.locked {
+    opacity: 0.6;
+
+    .phase-status {
+      background: #F4F0EC;
+
+      .status-icon {
+        color: #A89890;
       }
     }
   }

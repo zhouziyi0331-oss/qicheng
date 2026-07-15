@@ -4,7 +4,7 @@
   min-height: 100vh;
 }
 
-/* 头部 */
+
 .result-header {
   text-align: center;
   margin-bottom: 32rpx;
@@ -24,7 +24,7 @@
   color: #636e72;
 }
 
-/* 通过概率卡片 */
+
 .pass-likelihood-card {
   background: white;
   border-radius: 24rpx;
@@ -65,7 +65,7 @@
   color: #636e72;
 }
 
-/* AI建议卡片 */
+
 .recommendation-card {
   background: white;
   border-radius: 16rpx;
@@ -87,7 +87,7 @@
   font-weight: 600;
 }
 
-/* 反馈区域 */
+
 .feedback-section {
   background: white;
   border-radius: 16rpx;
@@ -111,7 +111,7 @@
   color: #636e72;
 }
 
-/* 问题区域 */
+
 .issues-section {
   background: white;
   border-radius: 16rpx;
@@ -185,7 +185,7 @@
   line-height: 1.6;
 }
 
-/* 操作按钮 */
+
 .action-buttons {
   display: flex;
   gap: 16rpx;
@@ -222,7 +222,7 @@
   }
 }
 
-/* 底部提示 */
+
 .bottom-tip {
   text-align: center;
   padding: 24rpx;

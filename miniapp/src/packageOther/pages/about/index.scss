@@ -1,0 +1,198 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/morandi-colors.scss';
+
+.about-page {
+  min-height: 100vh;
+  @include gradient-page-main;
+  padding: 32rpx;
+
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32rpx;
+  }
+
+  // Logo 区域
+  .logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64rpx 0 48rpx;
+    gap: 28rpx;
+
+    .logo-icon {
+      width: 144rpx;
+      height: 144rpx;
+      border-radius: 44rpx;
+      background: linear-gradient(135deg, #3D1F10, #9B5030);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16rpx 48rpx rgba(188, 100, 70, 0.3);
+
+      .logo-emoji {
+        font-size: 72rpx;
+      }
+    }
+
+    .app-info {
+      text-align: center;
+
+      .app-name {
+        font-size: 40rpx;
+        font-weight: 900;
+        color: $text-1;
+        letter-spacing: 1rpx;
+      }
+
+      .app-tagline {
+        font-size: 24rpx;
+        color: $text-3;
+        margin-top: 8rpx;
+      }
+    }
+
+    .version-badge {
+      display: flex;
+      align-items: center;
+      gap: 16rpx;
+      padding: 12rpx 32rpx;
+      border-radius: 9999rpx;
+      background: rgba(58, 138, 132, 0.08);
+      border: 2rpx solid rgba(58, 138, 132, 0.15);
+
+      .badge-icon {
+        font-size: 24rpx;
+        color: #3A8A84;
+      }
+
+      .badge-text {
+        font-size: 24rpx;
+        font-weight: 700;
+        color: #3A8A84;
+      }
+    }
+  }
+
+  // 设置分组
+  .setting-group {
+    margin-bottom: 16rpx;
+
+    .group-label {
+      font-size: 22rpx;
+      font-weight: 700;
+      color: $text-3;
+      letter-spacing: 1.6rpx;
+      padding: 0 8rpx 16rpx;
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      &::before {
+        content: '';
+        width: 6rpx;
+        height: 24rpx;
+        background: var(--rust);
+        border-radius: 4rpx;
+        display: block;
+      }
+    }
+  }
+
+  // 设置卡片
+  .setting-card {
+    background: white;
+    border-radius: 32rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(44, 36, 32, 0.08);
+  }
+
+  // 设置行
+  .setting-row {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    padding: 28rpx 32rpx;
+    position: relative;
+    transition: background 0.2s;
+
+    &:active {
+      background: rgba(188, 100, 70, 0.03);
+    }
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 104rpx;
+      right: 0;
+      height: 1rpx;
+      background: $border;
+    }
+
+    .setting-icon {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      .icon-text {
+        font-size: 36rpx;
+      }
+    }
+
+    .setting-body {
+      flex: 1;
+      min-width: 0;
+
+      .setting-title {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: $text-1;
+        line-height: 1.3;
+        margin-bottom: 4rpx;
+      }
+
+      .setting-desc {
+        font-size: 22rpx;
+        color: $text-3;
+        line-height: 1.4;
+      }
+    }
+
+    .setting-right {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+      flex-shrink: 0;
+    }
+
+    .setting-arrow {
+      font-size: 32rpx;
+      color: $text-3;
+      flex-shrink: 0;
+    }
+
+    .setting-value {
+      font-size: 24rpx;
+      color: $text-3;
+      font-weight: 500;
+    }
+  }
+
+  // 版权信息
+  .copyright {
+    text-align: center;
+    padding: 16rpx 0 8rpx;
+
+    .copyright-text {
+      display: block;
+      font-size: 22rpx;
+      color: $text-3;
+      line-height: 1.8;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+// 全局Mixins
+@import './variables.scss';
+
+@mixin card-super-rounded {
+  border-radius: 24px;
+  box-shadow: $shadow;
+  background: $card-bg;
+}
+
+@mixin card-rounded {
+  border-radius: 16px;
+  box-shadow: $shadow;
+  background: $card-bg;
+}
+
+@mixin card {
+  border-radius: 12px;
+  box-shadow: $shadow;
+  background: $card-bg;
+}
+
+@mixin icon-circle($size, $bg-color) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  background: $bg-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin btn-gradient {
+  background: $gradient-primary;
+  border: none;
+  color: white;
+  font-weight: 600;
+}
+
+@mixin btn-primary {
+  background: $primary;
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: $radius-md;
+  padding: 12px 24px;
+}

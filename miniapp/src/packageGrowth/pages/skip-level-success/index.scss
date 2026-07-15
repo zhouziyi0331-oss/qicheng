@@ -1,0 +1,214 @@
+// ============================================================
+// S6 – 跳级成功页
+// 基于设计稿 Sunset Postcard 配色
+// ============================================================
+
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.skip-success-page {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.success-bg {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1A0C06 0%, #2C1810 40%, #4A2818 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64rpx 56rpx;
+
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    .particle {
+      position: absolute;
+      width: 16rpx;
+      height: 16rpx;
+      border-radius: 50%;
+      background: $golden;
+      animation: float-up 3s ease-in-out infinite;
+
+      &:nth-child(1) { background: $golden; width: 16rpx; height: 16rpx; }
+      &:nth-child(2) { background: $terra; width: 10rpx; height: 10rpx; }
+      &:nth-child(3) { background: $mist; width: 12rpx; height: 12rpx; }
+      &:nth-child(4) { background: $sand; width: 8rpx; height: 8rpx; }
+      &:nth-child(5) { background: $golden; width: 14rpx; height: 14rpx; }
+      &:nth-child(6) { background: $rust; width: 10rpx; height: 10rpx; }
+    }
+  }
+
+  @keyframes float-up {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-40rpx) scale(1.2);
+      opacity: 1;
+    }
+  }
+
+  .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 560rpx;
+    height: 560rpx;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(242, 205, 120, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge-wrap {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 48rpx;
+    animation: badge-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes badge-pop {
+    from {
+      transform: scale(0) rotate(-20deg);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
+  }
+
+  .badge {
+    width: 240rpx;
+    height: 240rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $golden, $terra);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 16rpx rgba(242, 205, 120, 0.15),
+                0 0 0 32rpx rgba(242, 205, 120, 0.08),
+                0 40rpx 120rpx rgba(188, 100, 70, 0.4);
+    border: 6rpx solid rgba(255, 255, 255, 0.3);
+
+    .badge-num {
+      font-size: 96rpx;
+      font-weight: 900;
+      color: white;
+    }
+  }
+
+  .label {
+    font-size: 24rpx;
+    color: $golden;
+    font-weight: 700;
+    letter-spacing: 4rpx;
+    text-transform: uppercase;
+    margin-bottom: 16rpx;
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+
+  .title {
+    font-size: 56rpx;
+    font-weight: 900;
+    color: white;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 12rpx;
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+
+  .subtitle {
+    font-size: 28rpx;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 48rpx;
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+
+  .rewards {
+    display: flex;
+    gap: 20rpx;
+    margin-bottom: 48rpx;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+
+    .reward-item {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 24rpx;
+      padding: 28rpx 16rpx;
+      text-align: center;
+      border: 2rpx solid rgba(255, 255, 255, 0.12);
+
+      .reward-icon {
+        margin-bottom: 12rpx;
+        display: flex;
+        justify-content: center;
+
+        .icon-text {
+          font-size: 48rpx;
+        }
+      }
+
+      .reward-value {
+        font-size: 28rpx;
+        font-weight: 800;
+        color: $golden;
+        display: block;
+      }
+
+      .reward-label {
+        font-size: 22rpx;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 4rpx;
+        display: block;
+      }
+    }
+  }
+
+  .btn-back {
+    width: 100%;
+    padding: 32rpx;
+    border-radius: 9999rpx;
+    background: linear-gradient(135deg, $rust, $rust-dark);
+    box-shadow: 0 12rpx 48rpx rgba(188, 100, 70, 0.5);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+
+    .btn-text {
+      font-size: 32rpx;
+      font-weight: 800;
+      color: white;
+    }
+  }
+}

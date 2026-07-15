@@ -1,6 +1,8 @@
 import { View, Text, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
+import { tokenManager } from '../../utils/token';
+import { getApiUrl } from '../../config';
 import './index.scss';
 
 interface UnlockContactModalProps {
@@ -42,10 +44,10 @@ export default function UnlockContactModal({
       Taro.showLoading({ title: '发送申请中...' });
 
       const res = await Taro.request({
-        url: 'http://localhost:3000/api/v1/security/unlock-contact/request',
+        url: getApiUrl('/api/v1/security/unlock-contact/request'),
         method: 'POST',
         header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          'Authorization': `Bearer ${tokenManager.getAccessToken()}`
         },
         data: {
           studentId,
@@ -81,10 +83,10 @@ export default function UnlockContactModal({
       Taro.showLoading({ title: '处理中...' });
 
       const res = await Taro.request({
-        url: 'http://localhost:3000/api/v1/security/unlock-contact/approve',
+        url: getApiUrl('/api/v1/security/unlock-contact/approve'),
         method: 'POST',
         header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          'Authorization': `Bearer ${tokenManager.getAccessToken()}`
         },
         data: {
           studentId,
@@ -134,10 +136,10 @@ export default function UnlockContactModal({
             Taro.showLoading({ title: '处理中...' });
 
             const res = await Taro.request({
-              url: 'http://localhost:3000/api/v1/security/unlock-contact/reject',
+              url: getApiUrl('/api/v1/security/unlock-contact/reject'),
               method: 'POST',
               header: {
-                'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+                'Authorization': `Bearer ${tokenManager.getAccessToken()}`
               },
               data: {
                 studentId,
@@ -172,10 +174,10 @@ export default function UnlockContactModal({
       Taro.showLoading({ title: '加载中...' });
 
       const res = await Taro.request({
-        url: `http://localhost:3000/api/v1/security/unlock-contact/${studentId}/${companyId}`,
+        url: getApiUrl(`/api/v1/security/unlock-contact/${studentId}/${companyId}`),
         method: 'GET',
         header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+          'Authorization': `Bearer ${tokenManager.getAccessToken()}`
         }
       });
 
@@ -249,7 +251,7 @@ export default function UnlockContactModal({
     // 我已同意，等待对方
     if (myAgreed && !otherAgreed) {
       return {
-        icon: '⏰',
+        icon: '●',
         title: '等待对方确认',
         desc: `您已同意解锁，等待${targetName}确认`,
         actions: (
@@ -263,7 +265,7 @@ export default function UnlockContactModal({
     // 对方已同意，等待我确认
     if (!myAgreed && otherAgreed) {
       return {
-        icon: '🔔',
+        icon: '●',
         title: '对方已同意解锁',
         desc: `${targetName}已同意解锁联系方式，是否同意？`,
         actions: (
@@ -282,7 +284,7 @@ export default function UnlockContactModal({
     // 都未同意，可以发起申请
     if (status.canUnlock) {
       return {
-        icon: '🔓',
+        icon: '○',
         title: '申请解锁联系方式',
         desc: `您与${targetName}已完成${status.collaborationCount}单合作，可以申请解锁联系方式`,
         tips: [
@@ -305,7 +307,7 @@ export default function UnlockContactModal({
 
     // 还未达到解锁条件
     return {
-      icon: '🔒',
+      icon: '○',
       title: '暂不可解锁',
       desc: `再完成 ${2 - status.collaborationCount} 单可解锁联系方式`,
       actions: (
@@ -323,16 +325,16 @@ export default function UnlockContactModal({
     return (
       <View className="unlock-modal-mask celebration">
         <View className="celebration-content">
-          <View className="celebration-icon">🎉</View>
+          <View className="celebration-icon">◇</View>
           <Text className="celebration-title">恭喜！联系方式已解锁</Text>
           <Text className="celebration-subtitle">你们已建立直接联系</Text>
           <View className="fireworks">
-            <View className="firework firework-1">✨</View>
-            <View className="firework firework-2">✨</View>
-            <View className="firework firework-3">✨</View>
-            <View className="firework firework-4">✨</View>
-            <View className="firework firework-5">✨</View>
-            <View className="firework firework-6">✨</View>
+            <View className="firework firework-1">◇</View>
+            <View className="firework firework-2">◇</View>
+            <View className="firework firework-3">◇</View>
+            <View className="firework firework-4">◇</View>
+            <View className="firework firework-5">◇</View>
+            <View className="firework firework-6">◇</View>
           </View>
         </View>
       </View>
@@ -344,7 +346,7 @@ export default function UnlockContactModal({
     return (
       <View className="unlock-modal-mask" onClick={(e) => e.stopPropagation()}>
         <View className="unlock-modal disclaimer-modal">
-          <View className="modal-icon">⚠️</View>
+          <View className="modal-icon">▲</View>
           <Text className="modal-title">重要提示</Text>
           <View className="disclaimer-content">
             <Text className="disclaimer-text">
@@ -352,7 +354,7 @@ export default function UnlockContactModal({
             </Text>
             <View className="disclaimer-box">
               <Text className="disclaimer-highlight">
-                ⚠️ 平台免责声明
+                ▲ 平台免责声明
               </Text>
               <Text className="disclaimer-detail">
                 解锁联系方式后，双方可以脱离平台直接对接。

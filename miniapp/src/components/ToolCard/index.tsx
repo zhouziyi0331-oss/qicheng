@@ -75,7 +75,7 @@ export default function ToolCard({ tool, onSelect }: ToolCardProps) {
       {tool.url && (
         <View className="tool-action">
           <Text className="action-text">点击复制链接</Text>
-          <Text className="action-icon">📋</Text>
+          <Text className="action-icon">▪</Text>
         </View>
       )}
     </View>

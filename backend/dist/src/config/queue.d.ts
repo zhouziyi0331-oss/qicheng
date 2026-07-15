@@ -19,11 +19,16 @@ export declare const aiQueue: Bull.Queue<any>;
  * 数据同步队列 - 处理缓存失效、数据聚合等
  */
 export declare const syncQueue: Bull.Queue<any>;
+/**
+ * Phase R5.3: 报告生成队列 - 自动触发报告生成
+ */
+export declare const reportQueue: Bull.Queue<any>;
 export declare function getQueuesHealth(): Promise<{
     matching: Bull.JobCounts;
     notification: Bull.JobCounts;
     ai: Bull.JobCounts;
     sync: Bull.JobCounts;
+    report: Bull.JobCounts;
     timestamp: string;
 }>;
 export declare function closeQueues(): Promise<void>;
@@ -32,6 +37,7 @@ declare const _default: {
     notificationQueue: Bull.Queue<any>;
     aiQueue: Bull.Queue<any>;
     syncQueue: Bull.Queue<any>;
+    reportQueue: Bull.Queue<any>;
     getQueuesHealth: typeof getQueuesHealth;
     closeQueues: typeof closeQueues;
 };

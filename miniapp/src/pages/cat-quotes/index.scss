@@ -1,0 +1,192 @@
+@import '../../styles/variables.scss';
+@import '../../styles/morandi-colors.scss';
+
+.cat-quotes-page {
+  min-height: 100vh;
+  background: $bg;
+
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28rpx 32rpx 20rpx;
+    background: transparent;
+
+    .back-btn {
+      width: 68rpx;
+      height: 68rpx;
+      border-radius: 50%;
+      background: $surface2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .back-icon {
+        font-size: 48rpx;
+        color: $text-2;
+        font-weight: 600;
+      }
+    }
+
+    .top-title {
+      font-size: 34rpx;
+      font-weight: 700;
+      color: $text-1;
+    }
+
+    .top-actions {
+      width: 68rpx;
+      display: flex;
+      justify-content: flex-end;
+
+      .icon-btn {
+        width: 68rpx;
+        height: 68rpx;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon {
+          font-size: 32rpx;
+        }
+      }
+    }
+  }
+
+  // Hero
+  .qc-hero {
+    background: linear-gradient(160deg, #EDD9C8, #E8C9A8, #F5EDE3);
+    padding: 32rpx 40rpx 40rpx;
+    margin: 0 40rpx 32rpx;
+    border-radius: 32rpx;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -60rpx;
+      right: -60rpx;
+      width: 240rpx;
+      height: 240rpx;
+      background: radial-gradient(circle, rgba(242, 205, 120, 0.35) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .qc-count {
+      font-size: 72rpx;
+      font-weight: 900;
+      color: $rust;
+      letter-spacing: -4rpx;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+      display: block;
+    }
+
+    .qc-count-label {
+      font-size: 26rpx;
+      color: $text-2;
+      margin-top: 8rpx;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 10rpx;
+
+      .sparkle {
+        font-size: 26rpx;
+      }
+    }
+  }
+
+  .scroll-area {
+    height: calc(100vh - 320rpx);
+  }
+
+  .qc-body {
+    padding: 0 32rpx 32rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+  }
+
+  .quote-saved-card {
+    background: $surface;
+    border-radius: 32rpx;
+    padding: 36rpx;
+    box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, 0.06);
+    border: 1rpx solid $border;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '"';
+      position: absolute;
+      top: -16rpx;
+      left: 24rpx;
+      font-size: 120rpx;
+      color: rgba(188, 100, 70, 0.06);
+      font-family: Georgia, serif;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .qs-text {
+      font-size: 34rpx;
+      font-weight: 800;
+      color: $text-1;
+      line-height: 1.5;
+      margin-bottom: 12rpx;
+      display: block;
+    }
+
+    .qs-sub {
+      font-size: 24rpx;
+      color: $text-3;
+      margin-bottom: 24rpx;
+      display: block;
+    }
+
+    .qs-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .qs-date {
+      font-size: 22rpx;
+      color: $text-3;
+      display: block;
+    }
+
+    .qs-actions {
+      display: flex;
+      gap: 16rpx;
+    }
+
+    .qs-btn {
+      padding: 10rpx 24rpx;
+      border-radius: 999rpx;
+      font-size: 22rpx;
+      font-weight: 600;
+      border: none;
+
+      &::after {
+        border: none;
+      }
+
+      &.share {
+        background: rgba(188, 100, 70, 0.1);
+        color: $rust;
+      }
+
+      &.del {
+        background: $surface2;
+        color: $text-3;
+      }
+    }
+  }
+}

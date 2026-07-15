@@ -1,0 +1,668 @@
+@import '../../../styles/morandi-colors.scss';
+
+.ability-map-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+// ========== 顶部Tab ==========
+.main-tabs {
+  display: flex;
+  background: $surface;
+  border-bottom: 1rpx solid $border;
+  flex-shrink: 0;
+
+  .main-tab {
+    flex: 1;
+    padding: 28rpx 0;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+
+    .tab-name {
+      font-size: 30rpx;
+      font-weight: 600;
+      color: $text-3;
+      transition: color 0.3s;
+    }
+
+    &.active {
+      .tab-name {
+        color: $rust;
+        font-weight: 700;
+      }
+
+      .tab-indicator {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60rpx;
+        height: 6rpx;
+        background: linear-gradient(90deg, $rust, $terra);
+        border-radius: 3rpx 3rpx 0 0;
+      }
+    }
+  }
+}
+
+.content-scroll {
+  flex: 1;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+  padding: 32rpx;
+}
+
+// ========== 六维雷达Tab ==========
+.radar-tab {
+  padding: 0 !important;
+  gap: 0 !important;
+
+  .radar-header {
+    background: linear-gradient(160deg, #3D1F10 0%, #6B3520 40%, #9B5030 100%);
+    padding: 28rpx 32rpx 36rpx;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28rpx;
+
+    .header-glow {
+      position: absolute;
+      top: -80rpx;
+      right: -80rpx;
+      width: 320rpx;
+      height: 320rpx;
+      background: radial-gradient(circle, rgba(242, 205, 120, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+
+      .header-title {
+        font-size: 34rpx;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 12rpx;
+        display: block;
+      }
+
+      .header-subtitle {
+        font-size: 24rpx;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.5;
+        display: block;
+      }
+    }
+  }
+
+  .radar-card,
+  .dimensions-card,
+  .insight-card {
+    margin: 0 32rpx 28rpx;
+  }
+}
+
+.radar-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 40rpx 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+
+  .radar-canvas {
+    width: 480rpx;
+    height: 480rpx;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+.dimensions-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 28rpx;
+
+    &::before {
+      content: '';
+      width: 8rpx;
+      height: 32rpx;
+      background: $rust;
+      border-radius: 4rpx;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 32rpx;
+      font-weight: 700;
+      color: $text-1;
+    }
+  }
+
+  .dimension-row {
+    margin-bottom: 28rpx;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .dim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12rpx;
+
+      .dim-info {
+        display: flex;
+        align-items: center;
+        gap: 16rpx;
+
+        .dim-dot {
+          width: 16rpx;
+          height: 16rpx;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        .dim-name {
+          font-size: 28rpx;
+          font-weight: 700;
+          color: $text-1;
+        }
+      }
+
+      .dim-score {
+        font-size: 32rpx;
+        font-weight: 800;
+      }
+    }
+
+    .dim-bar {
+      height: 12rpx;
+      background: $surface2;
+      border-radius: 9999rpx;
+      overflow: hidden;
+
+      .dim-fill {
+        height: 100%;
+        border-radius: 9999rpx;
+        transition: width 0.5s ease;
+      }
+    }
+  }
+}
+
+.insight-card {
+  background: linear-gradient(135deg, rgba(188, 100, 70, 0.08), rgba(216, 135, 96, 0.05));
+  border-radius: 32rpx;
+  padding: 32rpx;
+  border: 2rpx solid rgba(188, 100, 70, 0.15);
+
+  .insight-header {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 16rpx;
+
+    .insight-icon {
+      font-size: 28rpx;
+    }
+
+    .insight-title {
+      font-size: 28rpx;
+      font-weight: 700;
+      color: $rust;
+    }
+  }
+
+  .insight-text {
+    font-size: 26rpx;
+    color: $text-2;
+    line-height: 1.7;
+  }
+
+  &.deep {
+    background: linear-gradient(135deg, rgba(91, 143, 171, 0.08), rgba(147, 174, 193, 0.05));
+    border-color: rgba(91, 143, 171, 0.15);
+
+    .insight-title {
+      color: $blue-dark;
+    }
+
+    .highlight {
+      color: $blue-dark;
+      font-weight: 700;
+    }
+  }
+}
+
+// ========== 深度模式Tab ==========
+.deep-tab {
+  padding: 0 !important;
+  gap: 0 !important;
+
+  .deep-header-section {
+    background: linear-gradient(180deg, #0E1A24 0%, #1A2A38 100%);
+    padding: 32rpx;
+    margin-bottom: 28rpx;
+
+    .deep-header {
+      text-align: center;
+      margin-bottom: 32rpx;
+
+      .deep-title {
+        font-size: 40rpx;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8rpx;
+        display: block;
+      }
+
+      .deep-subtitle {
+        font-size: 24rpx;
+        color: rgba(255, 255, 255, 0.5);
+        display: block;
+      }
+    }
+
+    .comparison-radars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24rpx;
+
+      .radar-compare-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 24rpx;
+        padding: 24rpx;
+        text-align: center;
+        border: 1rpx solid rgba(255, 255, 255, 0.08);
+
+        &.current {
+          border-color: rgba(188, 100, 70, 0.2);
+        }
+
+        .radar-label {
+          font-size: 22rpx;
+          color: rgba(255, 255, 255, 0.4);
+          font-weight: 600;
+          margin-bottom: 16rpx;
+          display: block;
+
+          &.current {
+            color: #F2CD78;
+          }
+        }
+
+        .radar-canvas-small {
+          width: 320rpx;
+          height: 320rpx;
+          margin: 0 auto 16rpx;
+          display: block;
+        }
+
+        .radar-avg {
+          font-size: 20rpx;
+          color: rgba(255, 255, 255, 0.3);
+          font-weight: 600;
+
+          &.current {
+            color: #F2CD78;
+            font-weight: 800;
+            font-size: 22rpx;
+          }
+        }
+      }
+    }
+  }
+
+  .change-card,
+  .insight-card {
+    margin: 0 32rpx 28rpx;
+  }
+}
+
+.change-card {
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(44, 32, 24, 0.06);
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 28rpx;
+
+    &::before {
+      content: '';
+      width: 8rpx;
+      height: 32rpx;
+      background: $blue-dark;
+      border-radius: 4rpx;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 32rpx;
+      font-weight: 700;
+      color: $text-1;
+    }
+  }
+
+  .change-row {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    margin-bottom: 24rpx;
+
+    .change-label {
+      font-size: 24rpx;
+      color: $text-2;
+      width: 100rpx;
+      flex-shrink: 0;
+    }
+
+    .change-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6rpx;
+
+      .change-bar-past,
+      .change-bar-current {
+        height: 8rpx;
+        background: $surface2;
+        border-radius: 9999rpx;
+        overflow: hidden;
+
+        .change-bar-fill {
+          height: 100%;
+          border-radius: 9999rpx;
+          transition: width 0.5s ease;
+
+          &.past {
+            background: rgba(147, 174, 193, 0.4);
+          }
+        }
+      }
+    }
+
+    .change-value {
+      font-size: 24rpx;
+      font-weight: 700;
+      width: 50rpx;
+      text-align: right;
+      flex-shrink: 0;
+    }
+  }
+
+  .legend-row {
+    display: flex;
+    gap: 32rpx;
+    margin-top: 24rpx;
+    padding-top: 24rpx;
+    border-top: 1rpx solid $border;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8rpx;
+
+      .legend-bar {
+        width: 32rpx;
+        height: 6rpx;
+        border-radius: 9999rpx;
+
+        &.past {
+          background: rgba(147, 174, 193, 0.4);
+        }
+
+        &.current {
+          background: $rust;
+        }
+      }
+
+      .legend-text {
+        font-size: 22rpx;
+        color: $text-3;
+      }
+    }
+  }
+}
+
+// ========== 标签地图Tab ==========
+.map-tab {
+  .map-overview-card {
+    background: linear-gradient(160deg, #1A2A28 0%, #2A4A44 40%, #3A6A60 100%);
+    border-radius: 32rpx;
+    padding: 36rpx;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28rpx;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -80rpx;
+      right: -80rpx;
+      width: 320rpx;
+      height: 320rpx;
+      background: radial-gradient(circle, rgba(190, 215, 209, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .overview-content {
+      position: relative;
+      z-index: 1;
+
+      .overview-title {
+        font-size: 40rpx;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8rpx;
+        display: block;
+      }
+
+      .overview-subtitle {
+        font-size: 24rpx;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 28rpx;
+        display: block;
+      }
+
+      .overview-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12rpx;
+
+        .stats-label {
+          font-size: 24rpx;
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        .stats-value {
+          font-size: 28rpx;
+          font-weight: 700;
+          color: #F2CD78;
+        }
+      }
+
+      .progress-bar {
+        height: 12rpx;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 9999rpx;
+        overflow: hidden;
+        margin-bottom: 28rpx;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #BED7D1, #5ABFB8);
+          border-radius: 9999rpx;
+          transition: width 0.5s ease;
+        }
+      }
+
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12rpx;
+
+        .category-stat {
+          text-align: center;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 20rpx;
+          padding: 16rpx 8rpx;
+          border: 1rpx solid rgba(255, 255, 255, 0.1);
+
+          .stat-num {
+            font-size: 32rpx;
+            font-weight: 800;
+            color: #BED7D1;
+            line-height: 1;
+            display: block;
+            margin-bottom: 6rpx;
+          }
+
+          .stat-label {
+            font-size: 18rpx;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.3;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  // 竖向类别列表
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+    margin-bottom: 28rpx;
+  }
+
+  .category-section {
+    background: $surface;
+    border-radius: 24rpx;
+    padding: 28rpx;
+    box-shadow: 0 4rpx 16rpx rgba(44, 32, 24, 0.04);
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20rpx;
+      padding-bottom: 16rpx;
+      border-bottom: 2rpx solid $border;
+
+      .category-title {
+        font-size: 30rpx;
+        font-weight: 700;
+        color: $text-1;
+      }
+
+      .category-count {
+        font-size: 24rpx;
+        color: $rust;
+        font-weight: 600;
+        padding: 4rpx 16rpx;
+        border-radius: 9999rpx;
+        background: rgba(188, 100, 70, 0.1);
+      }
+    }
+
+    .tags-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16rpx;
+    }
+
+    .tag-item {
+      padding: 14rpx 24rpx;
+      border-radius: 32rpx;
+      transition: transform 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8rpx;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &.unlocked {
+        background: linear-gradient(135deg, rgba(188, 100, 70, 0.12), rgba(216, 135, 96, 0.08));
+        border: 2rpx solid rgba(188, 100, 70, 0.2);
+
+        .tag-name {
+          color: $rust;
+          font-weight: 700;
+          font-size: 26rpx;
+          white-space: nowrap;
+        }
+      }
+
+      &.locked {
+        background: $surface2;
+        border: 2rpx dashed $border;
+        opacity: 0.5;
+
+        .tag-name {
+          color: $text-3;
+          font-weight: 600;
+          font-size: 26rpx;
+          white-space: nowrap;
+        }
+
+        .lock-icon {
+          font-size: 20rpx;
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+
+  .info-card {
+    background: linear-gradient(135deg, rgba(190, 215, 209, 0.12), rgba(58, 138, 132, 0.08));
+    padding: 32rpx;
+    border-radius: 24rpx;
+    border: 2rpx solid rgba(58, 138, 132, 0.2);
+
+    .info-title {
+      font-size: 28rpx;
+      font-weight: 700;
+      color: $text-1;
+      margin-bottom: 16rpx;
+      display: block;
+    }
+
+    .info-text {
+      font-size: 24rpx;
+      color: $text-2;
+      line-height: 1.8;
+      display: block;
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 32rpx;
+  color: $text-2;
+}

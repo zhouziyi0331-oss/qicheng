@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>赛道总览 · 开发赛道</title>
+    <style>
+        :root {
+            --rust: #BC6446;
+            --rust-dark: #A0503A;
+            --terra: #D88760;
+            --sand: #BF9E71;
+            --golden: #F2CD78;
+            --mist: #BED7D1;
+            --mist-dark: #9ABFB8;
+            --bg: #FAF7F4;
+            --surface: #FFFFFF;
+            --surface2: #F5F0EB;
+            --border: #EDE5DC;
+            --text-1: #2C2018;
+            --text-2: #6B5540;
+            --text-3: #A8917A;
+            --r-sm: 8px;
+            --r-md: 16px;
+            --r-lg: 24px;
+            --r-xl: 32px;
+            --r-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(44, 32, 24, .06);
+            --shadow-md: 0 4px 20px rgba(44, 32, 24, .10);
+            --font: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; }
+        body {
+            font-family: var(--font);
+            background: #C8BDB4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .phone {
+            width: 375px;
+            height: 812px;
+            background: var(--bg);
+            border-radius: 44px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 0 10px #1A1008, 0 0 0 12px #2C2018, 0 30px 80px rgba(0, 0, 0, .4);
+            display: flex;
+            flex-direction: column;
+        }
+        .status-bar {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            flex-shrink: 0;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+        .status-bar .time { font-size: 15px; font-weight: 600; color: var(--text-1); }
+        .status-bar .icons { display: flex; gap: 5px; align-items: center; }
+        .status-bar .icons svg { width: 16px; height: 16px; fill: var(--text-1); }
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 20px 10px;
+            flex-shrink: 0;
+        }
+        .tb-title { font-size: 17px; font-weight: 700; color: var(--text-1); }
+        .tb-back {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .tb-back svg { width: 18px; height: 18px; color: var(--text-2); }
+        .tb-actions { display: flex; gap: 8px; }
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .icon-btn svg { width: 18px; height: 18px; color: var(--text-2); }
+        .scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+        .scroll-area::-webkit-scrollbar { display: none; }
+        .bottom-nav {
+            height: 80px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 8px 16px;
+            flex-shrink: 0;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1; }
+        .nav-item svg { width: 22px; height: 22px; }
+        .nav-item span { font-size: 10px; color: var(--text-3); font-weight: 500; }
+        .nav-item.active span { color: var(--rust); }
+        .nav-fab {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--rust), var(--rust-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -28px;
+            box-shadow: 0 4px 16px rgba(188, 100, 70, .4);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .nav-fab svg { width: 28px; height: 28px; fill: white; }
+        .btn-primary {
+            padding: 14px 24px;
+            border-radius: var(--r-full);
+            background: linear-gradient(135deg, #9ABFB8, #BED7D1);
+            color: #2C5A56;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font);
+            box-shadow: 0 4px 16px rgba(154,191,184, .35);
+            width: 100%;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: var(--r-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 0.5px solid var(--border);
+        }
+        .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .sec-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
+        .sec-more { font-size: 12px; color: #4A8A84; font-weight: 600; cursor: pointer; }
+        .tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--r-full); font-size: 11px; font-weight: 600; }
+        .tag-mist { background: rgba(190, 215, 209, .2); color: #4A8A84; }
+        .prog-bar { height: 6px; background: var(--surface2); border-radius: var(--r-full); overflow: hidden; }
+        .prog-fill { height: 100%; background: linear-gradient(90deg, #9ABFB8, #BED7D1); border-radius: var(--r-full); }
+        .track-hero {
+            background: linear-gradient(160deg, #1A3530 0%, #2C5550 40%, #4A7A75 100%);
+            padding: 20px 20px 28px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .track-hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(190, 215, 209, .25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .track-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(154, 191, 184, .2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .track-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: var(--r-full);
+            background: rgba(190, 215, 209, .2);
+            color: #BED7D1;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .track-icon-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; position: relative; z-index: 1; }
+        .track-icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 2px solid rgba(255, 255, 255, .2);
+            flex-shrink: 0;
+        }
+        .track-title { font-size: 24px; font-weight: 800; color: white; line-height: 1.2; }
+        .track-sub { font-size: 13px; color: rgba(255, 255, 255, .6); margin-top: 4px; }
+        .track-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .7);
+            line-height: 1.7;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        .track-stats { display: flex; gap: 20px; position: relative; z-index: 1; }
+        .ts-item { text-align: center; }
+        .ts-val { font-size: 20px; font-weight: 800; color: #BED7D1; }
+        .ts-label { font-size: 11px; color: rgba(255, 255, 255, .45); margin-top: 2px; }
+        .track-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+        .my-level-card {
+            background: linear-gradient(135deg, rgba(154, 191, 184, .1), rgba(190, 215, 209, .08));
+            border-radius: var(--r-lg);
+            padding: 16px;
+            border: 1.5px solid rgba(154, 191, 184, .25);
+        }
+        .mlc-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .mlc-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9ABFB8, #BED7D1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 4px 12px rgba(154, 191, 184, .3);
+            border: 2.5px solid rgba(255, 255, 255, .5);
+            flex-shrink: 0;
+        }
+        .mlc-info .mlc-name { font-size: 16px; font-weight: 800; color: var(--text-1); }
+        .mlc-info .mlc-title { font-size: 12px; color: #4A8A84; font-weight: 600; margin-top: 2px; }
+        .mlc-info .mlc-xp { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+        .mlc-progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-3); margin-bottom: 5px; }
+        .level-list { display: flex; flex-direction: column; gap: 10px; }
+        .level-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: var(--r-md);
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform .15s;
+        }
+        .level-item:active { transform: scale(.98); }
+        .level-item.current { border-color: #9ABFB8; background: rgba(154, 191, 184, .06); }
+        .level-item.done { border-color: var(--mist-dark); background: rgba(190, 215, 209, .06); }
+        .level-item.locked { opacity: .5; }
+        .li-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        .li-badge.done-badge { background: linear-gradient(135deg, var(--mist), var(--mist-dark)); color: white; }
+        .li-badge.current-badge { background: linear-gradient(135deg, #9ABFB8, #BED7D1); color: white; }
+        .li-badge.locked-badge { background: var(--surface2); color: var(--text-3); }
+        .li-info { flex: 1; }
+        .li-name { font-size: 14px; font-weight: 700; color: var(--text-1); }
+        .li-desc { font-size: 12px; color: var(--text-3); margin-top: 3px; line-height: 1.4; }
+        .li-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .li-status { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: var(--r-full); }
+        .li-status.done-s { background: rgba(190, 215, 209, .2); color: #4A8A84; }
+        .li-status.current-s { background: rgba(154, 191, 184, .15); color: #4A8A84; }
+        .li-status.locked-s { background: var(--surface2); color: var(--text-3); }
+        .current-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 3px 10px;
+            background: #9ABFB8;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 0 var(--r-md) 0 var(--r-md);
+        }
+        @media (max-width: 480px) { .phone { width: 340px; height: 736px; } }
+    </style>
+</head>
+<body>
+    <div class="phone">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+        </div>
+        <div class="top-bar">
+            <div class="tb-back" onclick="window.history.back()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            </div>
+            <div class="tb-title">开发赛道</div>
+            <div class="tb-actions">
+                <div class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="track-hero">
+            <div class="track-badge">💻 赛道B</div>
+            <div class="track-icon-wrap">
+                <div class="track-icon-circle">💻</div>
+                <div>
+                    <div class="track-title">开发赛道</div>
+                    <div class="track-sub">Development Track</div>
+                </div>
+            </div>
+            <div class="track-desc">从 AI 辅助编码到独立交付完整应用，系统化掌握前端开发、小程序开发全链路能力，最终成为可承接商业定制项目的独立开发者。</div>
+            <div class="track-stats">
+                <div class="ts-item"><div class="ts-val">6</div><div class="ts-label">成长等级</div></div>
+                <div class="ts-item"><div class="ts-val">856</div><div class="ts-label">在读人数</div></div>
+                <div class="ts-item"><div class="ts-val">¥4.5k</div><div class="ts-label">平均月收入</div></div>
+                <div class="ts-item"><div class="ts-val">95%</div><div class="ts-label">好评率</div></div>
+            </div>
+        </div>
+        <div class="scroll-area">
+            <div class="track-body">
+                <div class="my-level-card">
+                    <div class="mlc-top">
+                        <div class="mlc-badge">1</div>
+                        <div class="mlc-info">
+                            <div class="mlc-name">当前：Lv.1 入门者</div>
+                            <div class="mlc-title">开发赛道</div>
+                            <div class="mlc-xp">经验值 420 / 800 XP</div>
+                        </div>
+                        <div style="margin-left:auto"><span class="tag tag-mist">进行中</span></div>
+                    </div>
+                    <div class="mlc-progress-label"><span>升级进度</span><span style="color:#4A8A84;font-weight:700">52%</span></div>
+                    <div class="prog-bar"><div class="prog-fill" style="width:52%"></div></div>
+                </div>
+                <div class="card">
+                    <div class="sec-header"><div class="sec-title">🏆 成长路径</div><div class="sec-more">全部 →</div></div>
+                    <div class="level-list">
+                        <div class="level-item done">
+                            <div class="li-badge done-badge">0</div>
+                            <div class="li-info">
+                                <div class="li-name">Lv.0 · 探索者</div>
+                                <div class="li-desc">AI 辅助生成简单组件、基础页面布局、静态网页开发</div>
+                            </div>
+                            <div class="li-right"><div class="li-status done-s">✓ 已完成</div></div>
+                        </div>
+                        <div class="level-item current">
+                            <div class="current-tag">当前</div>
+                            <div class="li-badge current-badge">1</div>
+                            <div class="li-info">
+                                <div class="li-name">Lv.1 · 入门者</div>
+                                <div class="li-desc">AI 辅助交互功能、表单开发、基础数据对接</div>
+                            </div>
+                            <div class="li-right"><div class="li-status current-s">进行中</div></div>
+                        </div>
+                        <div class="level-item locked">
+                            <div class="li-badge locked-badge">2</div>
+                            <div class="li-info">
+                                <div class="li-name">Lv.2 · 实践者</div>
+                                <div class="li-desc">AI 辅助开发完整小程序、H5应用、API集成与状态管理</div>
+                            </div>
+                            <div class="li-right"><div class="li-status locked-s">🔒 未解锁</div></div>
+                        </div>
+                        <div class="level-item locked">
+                            <div class="li-badge locked-badge">3</div>
+                            <div class="li-info">
+                                <div class="li-name">Lv.3 · 熟练者</div>
+                                <div class="li-desc">独立开发复杂应用、性能优化、用户体验设计</div>
+                            </div>
+                            <div class="li-right"><div class="li-status locked-s">🔒 未解锁</div></div>
+                        </div>
+                        <div class="level-item locked">
+                            <div class="li-badge locked-badge">4</div>
+                            <div class="li-info">
+                                <div class="li-name">Lv.4 · 专业者</div>
+                                <div class="li-desc">架构设计、技术选型、团队协作、项目交付管理</div>
+                            </div>
+                            <div class="li-right"><div class="li-status locked-s">🔒 未解锁</div></div>
+                        </div>
+                        <div class="level-item locked">
+                            <div class="li-badge locked-badge" style="background:linear-gradient(135deg,#9ABFB8,#BED7D1);color:white;font-size:18px">🎓</div>
+                            <div class="li-info">
+                                <div class="li-name">Lv.5 · 独立开发者（毕业）</div>
+                                <div class="li-desc">独立承接商业项目、技术顾问、入驻平台开发者体系承接高端订单</div>
+                            </div>
+                            <div class="li-right"><div class="li-status locked-s">🔒 未解锁</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="sec-header"><div class="sec-title">🌟 赛道特色</div></div>
+                    <div style="display:flex;flex-direction:column;gap:10px">
+                        <div style="display:flex;gap:10px;align-items:flex-start">
+                            <div style="width:36px;height:36px;border-radius:var(--r-sm);background:rgba(154,191,184,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">⚡</div>
+                            <div>
+                                <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px">AI 编程辅助</div>
+                                <div style="font-size:12px;color:var(--text-3);line-height:1.5">GitHub Copilot、Cursor、V0 等 AI 辅助编程工具深度训练</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:flex-start">
+                            <div style="width:36px;height:36px;border-radius:var(--r-sm);background:rgba(190,215,209,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🚀</div>
+                            <div>
+                                <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px">项目驱动学习</div>
+                                <div style="font-size:12px;color:var(--text-3);line-height:1.5">每个等级对应真实商业项目，从小程序到完整应用开发</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:flex-start">
+                            <div style="width:36px;height:36px;border-radius:var(--r-sm);background:rgba(154,191,184,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">💼</div>
+                            <div>
+                                <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px">技术栈全覆盖</div>
+                                <div style="font-size:12px;color:var(--text-3);line-height:1.5">React、Vue、小程序、Node.js 主流技术栈完整学习路径</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:0 0 8px"><button class="btn-primary">🚀 继续我的成长之旅</button></div>
+            </div>
+        </div>
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="window.location.href='hall-enhanced.html'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#A8917A" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>首页</span>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#A8917A" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>任务</span>
+            </div>
+            <div class="nav-fab">
+                <svg viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#BC6446" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span>赛道</span>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#A8917A" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

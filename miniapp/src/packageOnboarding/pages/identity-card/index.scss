@@ -1,0 +1,58 @@
+.identity-card-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F8F9FF 0%, #FFFFFF 100%);
+  padding-bottom: 200px;
+
+  .loading-container,
+  .error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 32px;
+    color: #666666;
+  }
+
+  .view-count-tip {
+    text-align: center;
+    margin-top: 30px;
+    padding: 0 30px;
+
+    .tip-text {
+      font-size: 26px;
+      color: #999999;
+    }
+  }
+
+  .bottom-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 20px;
+    padding: 30px;
+    background: #FFFFFF;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+
+    .action-btn {
+      flex: 1;
+      height: 88px;
+      line-height: 88px;
+      font-size: 28px;
+      font-weight: 600;
+      border-radius: 16px;
+      border: none;
+
+      &.primary {
+        background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        color: #FFFFFF;
+      }
+
+      &.secondary {
+        background: #F3F4F6;
+        color: #6366F1;
+      }
+    }
+  }
+}
