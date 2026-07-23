@@ -65,34 +65,100 @@ export default function Mentor() {
     setMessages(prev => [...prev, userMessage])
     const messageToSend = inputText
     setInputText('')
-    setLoading(true)
 
-    // 模拟AI回复（带里程碑卡片示例）
-    setTimeout(() => {
-      const aiMessage: Message = {
-        id: Date.now().toString() + '_ai',
-        role: 'assistant',
-        content: '选题是小红书运营的核心。我帮你梳理一个思路框架：\n\n1. 找痛点 — 目标用户最常搜什么、最困惑什么\n2. 蹭热点 — 结合当下趋势做差异化内容\n3. 测数据 — 发 3-5 篇测试，看哪类互动率高',
-        timestamp: new Date().toISOString(),
-        milestone: {
-          title: '小红书账号冷启动',
-          description: '完成选题策划 → 发布 3 篇测试内容',
-          progress: 60,
-          deadline: '剩余 5 天'
-        },
-        suggestions: ['继续分析', '给我案例', '制定计划', '我明白了']
-      }
-      setMessages(prev => [...prev, aiMessage])
-      setLoading(false)
-    }, 1500)
+    // 调用AI接口
+    sendToAI(messageToSend)
   }
 
   const handleQuickReply = (text: string) => {
-    setInputText(text)
+    // 快速回复：直接发送，不只是设置输入框
+    if (loading) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: text,
+      timestamp: new Date().toISOString()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInputText('')
+
+    // 调用AI接口
+    sendToAI(text)
   }
 
   const handleSuggestionClick = (suggestion: string) => {
-    setInputText(suggestion)
+    // 建议点击：直接发送
+    if (loading) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: suggestion,
+      timestamp: new Date().toISOString()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInputText('')
+
+    // 调用AI接口
+    sendToAI(suggestion)
+  }
+
+  const sendToAI = async (userInput: string) => {
+    setLoading(true)
+
+    try {
+      const token = Taro.getStorageSync('token')
+      if (!token) {
+        throw new Error('请先登录')
+      }
+
+      // 调用真实的AI导师接口
+      const res = await Taro.request({
+        url: 'http://localhost:3000/api/mentor/chat',
+        method: 'POST',
+        header: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          message: userInput,
+          conversationHistory: messages.map(m => ({
+            role: m.role,
+            content: m.content
+          }))
+        }
+      })
+
+      if (res.statusCode === 200 && res.data.success) {
+        const aiMessage: Message = {
+          id: Date.now().toString() + '_ai',
+          role: 'assistant',
+          content: res.data.data.response,
+          timestamp: new Date().toISOString(),
+          suggestions: res.data.data.suggestions || []
+        }
+        setMessages(prev => [...prev, aiMessage])
+      } else {
+        throw new Error(res.data.message || '请求失败')
+      }
+    } catch (error: any) {
+      console.error('AI回复失败:', error)
+
+      // 降级：使用本地模拟回复
+      const aiMessage: Message = {
+        id: Date.now().toString() + '_ai',
+        role: 'assistant',
+        content: `我理解你的问题："${userInput}"。让我帮你分析一下：\n\n1. 首先，我们需要明确目标和当前状况的差距\n2. 然后，制定可执行的行动计划\n3. 最后，在实践中不断调整优化\n\n你可以先告诉我更多细节，这样我能给出更具体的建议。`,
+        timestamp: new Date().toISOString(),
+        suggestions: ['告诉你更多', '具体怎么做', '我需要帮助']
+      }
+      setMessages(prev => [...prev, aiMessage])
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handlePBLClick = () => {

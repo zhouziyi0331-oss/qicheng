@@ -1,0 +1,608 @@
+// Morandi 色系变量
+$rust: #BC6446;
+$rust-dark: #A0503A;
+$terra: #D88760;
+$sand: #BF9E71;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$mist-dark: #9ABFB8;
+$teal: #3A8A84;
+$teal-dark: #2A6E68;
+$blue: #5B8FAB;
+
+$bg-rust: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+$bg-teal: #F4F8F7;
+$surface2-teal: #EBF3F2;
+$border-teal: #D8ECEB;
+$text-1-teal: #182820;
+$text-2-teal: #3D5E58;
+$text-3-teal: #7AA09A;
+
+.master-orders-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &.theme-rust {
+    background: $bg-rust;
+  }
+
+  &.theme-teal {
+    background: $bg-teal;
+  }
+}
+
+// Hero 区域
+.track-hero-rust {
+  background: linear-gradient(160deg, #3D1F10 0%, #6B3520 40%, #9B5030 100%);
+  padding: 16px 20px 24px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(242,205,120,.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(216,135,96,.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.track-hero-teal {
+  background: linear-gradient(160deg, #0D2820 0%, #1A4A40 40%, #2A6E60 100%);
+  padding: 16px 20px 24px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(190,215,209,.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(58,138,132,.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-back {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .back-icon {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+  }
+}
+
+.hero-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+}
+
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  background: rgba(242,205,120,.15);
+
+  .badge-icon {
+    font-size: 12px;
+  }
+
+  .badge-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: #F2CD78;
+  }
+}
+
+.hero-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-avatar-rust {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D88760, #BC6446);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(188,100,70,.35);
+  border: 2.5px solid rgba(255,255,255,.3);
+
+  .avatar-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+  }
+}
+
+.hero-avatar-teal {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3A8A84, #2A6E68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(58,138,132,.35);
+  border: 2.5px solid rgba(255,255,255,.3);
+
+  .avatar-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+  }
+}
+
+.hero-info {
+  flex: 1;
+}
+
+.hero-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+}
+
+.hero-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,.6);
+  margin-top: 3px;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-item {
+  background: rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: #F2CD78;
+  display: block;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: rgba(255,255,255,.45);
+  margin-top: 2px;
+  display: block;
+}
+
+// 筛选栏
+.filter-chips {
+  padding: 14px 16px 8px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filter-chip {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: $surface2;
+  color: $text-2;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+  transition: all .15s;
+
+  &.active {
+    background: rgba(188,100,70,.1);
+    color: $rust;
+    border-color: rgba(188,100,70,.3);
+  }
+
+  .theme-teal & {
+    background: $surface2-teal;
+    color: $text-2-teal;
+
+    &.active {
+      background: rgba(58,138,132,.1);
+      color: $teal;
+      border-color: rgba(58,138,132,.3);
+    }
+  }
+}
+
+// 订单列表
+.orders-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.orders-list {
+  padding: 0 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  background: $surface;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(44,32,24,.06);
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  &.card-rust::before {
+    background: $rust;
+  }
+
+  &.card-teal::before {
+    background: $teal;
+  }
+}
+
+.order-banner {
+  padding: 8px 16px 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(242,205,120,.1);
+  border-bottom: 1px solid rgba(242,205,120,.2);
+
+  .theme-teal & {
+    background: rgba(190,215,209,.1);
+    border-color: rgba(190,215,209,.2);
+  }
+}
+
+.banner-icon {
+  font-size: 14px;
+}
+
+.banner-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8A6A20;
+
+  .theme-teal & {
+    color: $teal;
+  }
+}
+
+.order-inner {
+  padding: 14px 16px 12px 20px;
+}
+
+.order-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.order-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  flex: 1;
+  color: $text-1;
+
+  .theme-teal & {
+    color: $text-1-teal;
+  }
+}
+
+.order-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  margin-top: 2px;
+
+  &.status-hot {
+    background: rgba(188,100,70,.12);
+    color: $rust;
+
+    .theme-teal & {
+      background: rgba(58,138,132,.12);
+      color: $teal;
+    }
+  }
+
+  &.status-normal {
+    background: $surface2;
+    color: $text-3;
+  }
+
+  &.status-vip {
+    background: rgba(242,205,120,.18);
+    color: #8A6A20;
+
+    .theme-teal & {
+      background: rgba(190,215,209,.2);
+      color: $teal;
+    }
+  }
+}
+
+.order-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  color: $text-2;
+
+  .theme-teal & {
+    color: $text-2-teal;
+  }
+}
+
+.order-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.order-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(188,100,70,.1);
+  color: $rust;
+
+  .theme-teal & {
+    background: rgba(58,138,132,.12);
+    color: $teal;
+  }
+}
+
+.order-meta {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: $text-3;
+
+  .theme-teal & {
+    color: $text-3-teal;
+  }
+}
+
+.meta-icon {
+  font-size: 13px;
+}
+
+.meta-text {
+  font-size: 12px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star-on {
+  font-size: 12px;
+  color: $golden;
+}
+
+.star-off {
+  font-size: 12px;
+  color: $border;
+}
+
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 14px 20px;
+  border-top: 1px solid $border;
+
+  .theme-teal & {
+    border-color: $border-teal;
+  }
+}
+
+.requester {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.req-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: $surface2;
+
+  .theme-teal & {
+    background: $surface2-teal;
+  }
+}
+
+.req-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.req-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-2;
+
+  .theme-teal & {
+    color: $text-2-teal;
+  }
+}
+
+.req-level {
+  font-size: 10px;
+  margin-top: 1px;
+  color: $text-3;
+
+  .theme-teal & {
+    color: $text-3-teal;
+  }
+}
+
+.order-price-area {
+  text-align: right;
+}
+
+.order-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: $rust;
+  letter-spacing: -0.5px;
+  display: block;
+
+  .theme-teal & {
+    color: $teal;
+  }
+}
+
+.price-label {
+  font-size: 11px;
+  margin-top: 1px;
+  color: $text-3;
+  display: block;
+
+  .theme-teal & {
+    color: $text-3-teal;
+  }
+}
+
+.order-actions {
+  padding: 0 16px 14px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.accept-btn {
+  padding: 9px 20px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #D88760, #BC6446);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(188,100,70,.3);
+
+  .theme-teal & {
+    background: linear-gradient(135deg, #3A8A84, #2A6E68);
+    box-shadow: 0 3px 10px rgba(58,138,132,.3);
+  }
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: $text-3;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: $text-3;
+}

@@ -243,6 +243,22 @@ export default function Index() {
     } else if (phase === 2) {
       // 项目匹配 - 当前进行中
       Taro.switchTab({ url: '/pages/tasks/index' })
+    } else if (phase === 3) {
+      // 真实实践 - 查看已完成的项目汇总
+      Taro.navigateTo({ url: '/packagePractice/pages/practice-list/index' })
+    } else if (phase === 4) {
+      // OPC 孵化 - 需要满级才能解锁
+      const userLevel = user?.level || 1
+      if (userLevel >= 10) {
+        // 满级，跳转到大师接单页面
+        Taro.navigateTo({ url: '/packageIncubation/pages/master-orders/index' })
+      } else {
+        Taro.showToast({
+          title: '需要达到满级（Lv.10）才能解锁',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     } else {
       // 后续阶段锁定
       Taro.showToast({

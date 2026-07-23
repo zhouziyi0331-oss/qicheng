@@ -1,0 +1,410 @@
+// Morandi 色系变量
+$rust: #BC6446;
+$terra: #D88760;
+$golden: #F2CD78;
+$teal: #3A8A84;
+$mist: #9ABFB8;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.practice-list-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0; // 移除底部padding，全屏显示
+}
+
+// Hero 区域 - 再次增大尺寸
+.practice-hero {
+  background: linear-gradient(160deg, #EDD9C8, #E8C9A8, #F5EDE3);
+  padding: 48rpx 48rpx 64rpx; // 再次增大padding
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(242,205,120,.4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx; // 增大间距
+  position: relative;
+  z-index: 1;
+}
+
+.hero-back {
+  width: 80rpx; // 再次增大按钮
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .back-icon {
+    color: $text-1;
+    font-size: 44rpx; // 再次增大图标
+    font-weight: 700;
+  }
+}
+
+.hero-title {
+  font-size: 40rpx; // 再次增大字体
+  font-weight: 700;
+  color: $text-1;
+}
+
+.hero-more {
+  width: 80rpx; // 再次增大按钮
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx; // 再次增大图标
+  color: $text-1;
+}
+
+.hero-main-title {
+  font-size: 56rpx; // 再次增大标题
+  font-weight: 800;
+  color: $text-1;
+  margin-bottom: 12rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.hero-subtitle {
+  font-size: 32rpx; // 再次增大副标题
+  color: $text-2;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 40rpx; // 增大间距
+  display: block;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx; // 增大间距
+  position: relative;
+  z-index: 1;
+}
+
+.hero-stat {
+  background: rgba(255,255,255,.7);
+  border-radius: 28rpx; // 增大圆角
+  padding: 28rpx 20rpx; // 增大padding
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.stat-num {
+  font-size: 44rpx; // 再次增大数字
+  font-weight: 800;
+  color: $text-1;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  margin-bottom: 8rpx;
+  display: block;
+
+  &.rust {
+    color: $rust;
+  }
+
+  &.teal {
+    color: $teal;
+  }
+
+  &.amber {
+    color: #8A6A20;
+  }
+}
+
+.stat-label {
+  font-size: 24rpx; // 再次增大标签
+  color: $text-3;
+  font-weight: 500;
+  display: block;
+}
+
+// 筛选栏 - 再次增大尺寸
+.filter-chips {
+  padding: 36rpx 48rpx 24rpx; // 再次增大padding
+  display: flex;
+  gap: 20rpx; // 增大间距
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filter-chip {
+  flex-shrink: 0;
+  padding: 18rpx 40rpx; // 再次增大padding
+  border-radius: 9999px;
+  font-size: 32rpx; // 再次增大字体
+  font-weight: 600;
+  background: $surface2;
+  color: $text-2;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+  transition: all .15s;
+
+  &.active {
+    background: rgba(188,100,70,.1);
+    color: $rust;
+    border-color: rgba(188,100,70,.3);
+  }
+}
+
+// 实践列表 - 再次增大尺寸
+.practices-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.practices-list {
+  padding: 0 48rpx 64rpx; // 再次增大padding
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx; // 增大间距
+}
+
+.practice-card {
+  background: $surface;
+  border-radius: 40rpx; // 增大圆角
+  box-shadow: 0 6rpx 20rpx rgba(44,32,24,.08); // 增强阴影
+  overflow: hidden;
+  position: relative;
+  transition: transform .15s;
+
+  &:active {
+    transform: scale(.985);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 10rpx; // 增大色条宽度
+    border-radius: 4px 0 0 4px;
+  }
+
+  &.card-rust::before {
+    background: $rust;
+  }
+
+  &.card-teal::before {
+    background: $teal;
+  }
+}
+
+.practice-inner {
+  padding: 36rpx 40rpx 32rpx 50rpx; // 再次增大padding
+}
+
+.practice-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 32rpx; // 增大间距
+  margin-bottom: 28rpx;
+}
+
+.practice-icon {
+  width: 112rpx; // 再次增大图标
+  height: 112rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52rpx; // 再次增大图标字体
+  flex-shrink: 0;
+
+  &.icon-rust {
+    background: linear-gradient(135deg, #FDE8E4, #F5D0C8);
+  }
+
+  &.icon-teal {
+    background: linear-gradient(135deg, #D4EAE8, #C0DDD9);
+  }
+}
+
+.practice-content {
+  flex: 1;
+}
+
+.practice-title {
+  font-size: 34rpx; // 再次增大标题
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 14rpx;
+  line-height: 1.4;
+  display: block;
+}
+
+.practice-tags {
+  display: flex;
+  gap: 16rpx; // 增大间距
+  flex-wrap: wrap;
+}
+
+.practice-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 24rpx; // 再次增大padding
+  border-radius: 9999px;
+  font-size: 26rpx; // 再次增大字体
+  font-weight: 600;
+
+  &.tag-rust {
+    background: rgba(188,100,70,.1);
+    color: $rust;
+  }
+
+  &.tag-teal {
+    background: rgba(58,138,132,.12);
+    color: $teal;
+  }
+}
+
+// 洞察框 - 再次增大尺寸
+.insight-box {
+  border-radius: 0 20rpx 20rpx 0;
+  padding: 28rpx 32rpx; // 再次增大padding
+  margin-bottom: 28rpx;
+
+  &.insight-rust {
+    border-left: 8rpx solid $golden; // 增大边框
+    background: linear-gradient(135deg, rgba(242,205,120,.1), rgba(188,100,70,.06));
+  }
+
+  &.insight-teal {
+    border-left: 8rpx solid $mist;
+    background: rgba(190,215,209,.12);
+  }
+}
+
+.insight-label {
+  font-size: 24rpx; // 再次增大字体
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 8rpx;
+  display: block;
+  color: #8A6A20;
+
+  .insight-teal & {
+    color: $teal;
+  }
+}
+
+.insight-text {
+  font-size: 30rpx; // 再次增大字体
+  color: $text-2;
+  line-height: 1.6;
+  display: block;
+}
+
+// 进度条 - 再次增大尺寸
+.practice-progress {
+  margin-bottom: 28rpx;
+}
+
+.progress-bar {
+  height: 16rpx; // 再次增大进度条高度
+  background: $surface2;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+
+  &.fill-rust {
+    background: linear-gradient(90deg, #D88760, #BC6446);
+  }
+
+  &.fill-teal {
+    background: linear-gradient(90deg, #9ABFB8, #3A8A84);
+  }
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx; // 再次增大字体
+  color: $text-3;
+}
+
+.progress-label,
+.progress-date {
+  font-size: 26rpx;
+}
+
+// 底部 - 再次增大尺寸
+.practice-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 40rpx 36rpx 50rpx; // 再次增大padding
+  border-top: 1px solid $border;
+}
+
+.practice-date {
+  font-size: 26rpx; // 再次增大字体
+  color: $text-3;
+}
+
+.detail-btn {
+  padding: 18rpx 40rpx; // 再次增大按钮
+  border-radius: 9999px;
+  background: $surface2;
+  color: $text-2;
+  font-size: 28rpx; // 再次增大字体
+  font-weight: 600;
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 48rpx; // 再次增大padding
+  color: $text-3;
+}
+
+.empty-icon {
+  font-size: 120rpx; // 再次增大图标
+  margin-bottom: 40rpx;
+}
+
+.empty-text {
+  font-size: 32rpx; // 再次增大字体
+  color: $text-3;
+}

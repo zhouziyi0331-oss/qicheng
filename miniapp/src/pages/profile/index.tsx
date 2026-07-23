@@ -330,6 +330,70 @@ export default function Profile() {
           </View>
         </View>
 
+        {/* OPC孵化 - 大师接单（满级解锁） */}
+        {radarData?.level >= 10 && (
+          <View className="master-orders-banner" onClick={() => handleNavigate('/packageIncubation/pages/master-orders/index')}>
+            <View className="master-badge">
+              <Text className="badge-icon">◈</Text>
+              <Text className="badge-text">满级解锁</Text>
+            </View>
+            <Text className="master-title">OPC 孵化 · 大师接单</Text>
+            <Text className="master-subtitle">别人做不了的，我来接</Text>
+            <View className="master-stats">
+              <View className="master-stat">
+                <Text className="stat-num">23</Text>
+                <Text className="stat-label">已接单</Text>
+              </View>
+              <View className="master-stat">
+                <Text className="stat-num">¥18,400</Text>
+                <Text className="stat-label">累计收入</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {/* 联系方式交换提示（有合作伙伴时显示） */}
+        <View className="contact-exchange-banner" onClick={() => handleNavigate('/packageOther/pages/contact-exchange/index')}>
+          <View className="banner-left">
+            <View className="banner-badge">
+              <Text className="badge-icon">⇄</Text>
+              <Text className="badge-text">合作伙伴</Text>
+            </View>
+            <Text className="banner-title">联系方式交换</Text>
+            <Text className="banner-subtitle">与张小美完成2单合作，可申请交换</Text>
+          </View>
+          <View className="banner-right">
+            <View className="banner-notification">
+              <Text>1</Text>
+            </View>
+            <Text className="banner-arrow">›</Text>
+          </View>
+        </View>
+
+        {/* 真实实践汇总 */}
+        <View className="practice-banner" onClick={() => handleNavigate('/packagePractice/pages/practice-list/index')}>
+          <View className="banner-badge">
+            <Text className="badge-icon">◆</Text>
+            <Text className="badge-text">实践汇总</Text>
+          </View>
+          <Text className="banner-title">真实实践 · 项目拆解</Text>
+          <Text className="banner-subtitle">查看你的实践项目和深度拆解报告</Text>
+          <View className="banner-stats">
+            <View className="banner-stat">
+              <Text className="stat-num">12</Text>
+              <Text className="stat-label">已完成</Text>
+            </View>
+            <View className="banner-stat">
+              <Text className="stat-num">3</Text>
+              <Text className="stat-label">进行中</Text>
+            </View>
+            <View className="banner-stat">
+              <Text className="stat-num">4.8</Text>
+              <Text className="stat-label">平均评分</Text>
+            </View>
+          </View>
+        </View>
+
         {/* 快捷入口 */}
         <View className="quick-access-section">
           <Text className="section-title">快捷入口</Text>

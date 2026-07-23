@@ -1,0 +1,503 @@
+import { openai, AI_CONFIG } from '../config/openai'
+import { MentorConversation } from '../models/MentorConversation'
+import { PassionSpark } from '../models/PassionSpark'
+import { FlowMoment } from '../models/FlowMoment'
+import { User } from '../models/User'
+import { RealProject } from '../models/RealProject'
+import { log } from '../utils/logger'
+import mongoose from 'mongoose'
+
+/**
+ * AI导师服务
+ * 实现心理引导、PBL教育、探索式引导
+ */
+export class MentorService {
+
+  // 热情火花关键词
+  private readonly PASSION_KEYWORDS = [
+    '很酷', '有意思', '我发现', '太棒了', '惊喜', '兴奋',
+    '喜欢', '好玩', '想试试', '感兴趣', '迫不及待'
+  ]
+
+  // 穿越感关键词
+  private readonly FLOW_KEYWORDS = [
+    '时间过得很快', '忘记时间', '沉浸', '专注', '停不下来',
+    '不知不觉', '投入', '完全进入状态', '心流'
+  ]
+
+  /**
+   * 生成AI导师Prompt
+   * 核心：不是老师，是"先走过这条河的人"
+   */
+  private generateMentorPrompt(
+    userData: any,
+    taskData: any,
+    context: string
+  ): string {
+    return `你是一个先走过这条河的人，回头给线索的角色。
+
+## 你的身份定位
+- 不是老师，不是教练，不是评委
+- 是一个先走过这条河的人，知道哪里有暗流，哪里有惊喜
+- 你的任务不是教技能，是帮学生看见自己
+
+## 学生信息
+- 姓名：${userData.nickname}
+- OPC人格标签：${userData.personalityTag || '未测评'}
+- 生命问题：${userData.lifeQuestion || '未设置'}
+- 当前项目：${taskData?.title || '无'}
+- 当前等级：Lv.${userData.level || 0}
+
+## 核心任务
+1. 捕捉热情火花 ✨ - 学生说"很酷"、"有意思"时
+2. 连接生命问题 🎯 - 引导学生思考项目与生命问题的关系
+3. 捕捉穿越感时刻 🌊 - 学生说"时间过得很快"时
+4. 自我对比式反馈 📊 - 不和别人比，和自己的过去比
+
+## 语气规范
+
+❌ 禁止说：
+- "你做错了"
+- "这样不对"
+- "你应该..."
+- "正确的做法是..."
+
+✅ 改为说：
+- "你注意到这里可以不一样吗？"
+- "试试换个角度？"
+- "你觉得现在的处理方式够好吗？"
+- "我之前也在这里卡过，后来发现..."
+
+## 提问方式
+
+❌ 不问：
+- "你学会了什么技能？"
+- "你掌握了XX工具吗？"
+- "你的完成度是多少？"
+
+✅ 改为问：
+- "你发现了什么关于自己的事？"
+- "做这个的时候，有没有感觉时间过得特别快？"（捕捉穿越感）
+- "你刚才说XX的时候，听起来很有热情，这是你真正感兴趣的吗？"（捕捉热情火花）
+- "这个和你的生命问题有关系吗？"（连接生命问题）
+
+## 反馈方式
+
+❌ 不用对比式夸奖：
+- "你比上次进步了"
+- "你做得比别人好"
+
+✅ 改为自我对比：
+- "上次你在XX这里卡了很久，这次你直接就处理好了——你自己有感觉到吗？"
+- "你注意到自己在XX方面的变化了吗？"
+
+## 当前对话场景：${context}
+
+请用300字以上深度引导学生，帮助他们看见自己。保持温暖、支持的语气。`
+  }
+
+  /**
+   * AI对话核心方法
+   */
+  async chat(
+    userId: string,
+    message: string,
+    context: string = 'general',
+    taskId?: string,
+    conversationHistory?: Array<{ role: string; content: string }>
+  ) {
+    try {
+      log.info('AI导师对话开始', { userId, context, taskId })
+
+      // 1. 获取用户和任务信息
+      const user = await User.findById(userId)
+      if (!user) {
+        throw new Error('用户不存在')
+      }
+
+      const task = taskId ? await RealProject.findById(taskId) : null
+
+      // 2. 生成系统Prompt
+      const systemPrompt = this.generateMentorPrompt(user, task, context)
+
+      // 3. 构建对话历史
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...(conversationHistory || []),
+        { role: 'user', content: message }
+      ]
+
+      // 4. 调用OpenAI GPT-4
+      const completion = await openai.chat.completions.create({
+        model: AI_CONFIG.model,
+        messages: messages as any,
+        temperature: 0.8,
+        max_tokens: 600,  // 限制在600 token，约300-500字
+        presence_penalty: 0.6,  // 鼓励多样性
+        frequency_penalty: 0.3   // 减少重复
+      })
+
+      let response = completion.choices[0].message.content || '抱歉，我暂时无法回应。'
+
+      // 确保回复至少有200字
+      if (response.length < 200) {
+        response += '\n\n你可以告诉我更多细节，这样我能给你更具体的建议。'
+      }
+
+      // 5. 生成建议选项（基于上下文）
+      const suggestions = this.generateSuggestions(message, context)
+
+      const hasPassionSpark = this.detectPassionSpark(message)
+
+      // 6. 检测穿越感时刻
+      const hasFlowMoment = this.detectFlowMoment(message)
+
+      // 7. 保存对话记录
+      await MentorConversation.create({
+        userId: new mongoose.Types.ObjectId(userId),
+        taskId: taskId ? new mongoose.Types.ObjectId(taskId) : undefined,
+        studentMessage: message,
+        mentorResponse: response,
+        context,
+        detectedPassionSpark: hasPassionSpark,
+        detectedFlowMoment: hasFlowMoment,
+        createdAt: new Date()
+      })
+
+      // 8. 如果检测到热情火花，保存到专门表
+      if (hasPassionSpark) {
+        await PassionSpark.create({
+          userId: new mongoose.Types.ObjectId(userId),
+          taskId: taskId ? new mongoose.Types.ObjectId(taskId) : undefined,
+          sparkText: message,
+          context: context,
+          capturedAt: new Date()
+        })
+        log.info('✨ 捕捉到热情火花', { userId, taskId })
+      }
+
+      // 9. 如果检测到穿越感时刻，保存到专门表
+      if (hasFlowMoment) {
+        await FlowMoment.create({
+          userId: new mongoose.Types.ObjectId(userId),
+          taskId: taskId ? new mongoose.Types.ObjectId(taskId) : undefined,
+          momentText: message,
+          context: context,
+          capturedAt: new Date()
+        })
+        log.info('🌊 捕捉到穿越感时刻', { userId, taskId })
+      }
+
+      log.info('AI导师对话完成', { userId, hasPassionSpark, hasFlowMoment })
+
+      return {
+        response,
+        suggestions,
+        detectedPassionSpark: hasPassionSpark,
+        detectedFlowMoment: hasFlowMoment
+      }
+    } catch (error: any) {
+      log.error('AI导师对话失败', { userId, error: error.message })
+
+      // 降级：返回智能默认回复
+      return {
+        response: this.getDefaultResponse(message),
+        suggestions: this.generateSuggestions(message, context),
+        detectedPassionSpark: false,
+        detectedFlowMoment: false
+      }
+    }
+  }
+
+  /**
+   * 生成建议选项
+   */
+  private generateSuggestions(message: string, context: string): string[] {
+    const lowerMessage = message.toLowerCase()
+
+    if (lowerMessage.includes('困难') || lowerMessage.includes('问题')) {
+      return ['告诉你具体情况', '需要学习资源', '想要解决方案', '换个话题']
+    }
+
+    if (lowerMessage.includes('项目') || lowerMessage.includes('任务')) {
+      return ['继续分析', '给我建议', '制定计划', '我明白了']
+    }
+
+    if (lowerMessage.includes('学习') || lowerMessage.includes('技能')) {
+      return ['推荐学习路径', '找学习资源', '制定学习计划', '评估我的水平']
+    }
+
+    if (lowerMessage.includes('opc') || lowerMessage.includes('测评')) {
+      return ['去完成测评', '了解测评维度', '查看测评结果', '基于测评建议']
+    }
+
+    // 默认建议
+    return ['继续聊聊', '换个话题', '给我建议', '我明白了']
+  }
+
+  /**
+   * 默认回复（降级方案）
+   */
+  private getDefaultResponse(message: string): string {
+    const lowerMessage = message.toLowerCase()
+
+    if (lowerMessage.includes('困难') || lowerMessage.includes('问题')) {
+      return `我理解你遇到了困难。让我们一起来分析一下：
+
+首先，把问题具体化是解决它的第一步。你能告诉我更多细节吗？比如：
+- 困难具体表现在哪里？
+- 你已经尝试过什么方法？
+- 你希望达到什么样的结果？
+
+有了这些信息，我就能给你更有针对性的建议。记住，每个困难都是成长的机会，我们一起来突破它！`
+    }
+
+    if (lowerMessage.includes('项目')) {
+      return `很好，让我们来分析你的项目。
+
+一个成功的项目需要三个要素：
+1. 明确的目标 - 你想达成什么？
+2. 合理的计划 - 分几步走？每步做什么？
+3. 持续的执行 - 如何保持动力？
+
+你的项目目前处在哪个阶段？是刚开始构思，还是已经在执行中了？告诉我更多，我会给你具体的指导。`
+    }
+
+    return `我在这里陪伴你成长。你可以：
+
+📊 和我聊聊你的项目，我帮你分析规划
+💡 向我提出你的困惑，我给你解决思路
+🎯 告诉我你的目标，我帮你制定计划
+🚀 分享你的进展，我陪你持续前进
+
+从哪里开始都可以，我会认真倾听并提供帮助 😊`
+    }
+  }
+
+  /**
+   * 检测热情火花
+   */
+  private detectPassionSpark(message: string): boolean {
+    return this.PASSION_KEYWORDS.some(keyword => message.includes(keyword))
+  }
+
+  /**
+   * 检测穿越感时刻
+   */
+  private detectFlowMoment(message: string): boolean {
+    return this.FLOW_KEYWORDS.some(keyword => message.includes(keyword))
+  }
+
+  /**
+   * 获取对话历史
+   */
+  async getHistory(userId: string, taskId?: string) {
+    const query: any = {
+      userId: new mongoose.Types.ObjectId(userId)
+    }
+
+    if (taskId) {
+      query.taskId = new mongoose.Types.ObjectId(taskId)
+    }
+
+    const conversations = await MentorConversation.find(query)
+      .sort({ createdAt: 1 })
+      .limit(50)
+
+    return conversations
+  }
+
+  /**
+   * 生成接单欢迎消息
+   * 连接学生的OPC人格和生命问题
+   */
+  async getFirstStep(userId: string, taskId: string) {
+    try {
+      const user = await User.findById(userId)
+      const task = await RealProject.findById(taskId)
+
+      if (!user || !task) {
+        throw new Error('用户或任务不存在')
+      }
+
+      const prompt = `学生刚接了项目：${task.title}
+
+学生的OPC人格标签是：${user.personalityTag || '未测评'}
+学生的生命问题是：${user.lifeQuestion || '未设置'}
+
+请生成一个欢迎引导，要求：
+1. 连接项目和学生的人格特点
+2. 提示这个项目可能帮助他们探索生命问题
+3. 语气温暖、支持，不要说教
+4. 200字左右`
+
+      const completion = await openai.chat.completions.create({
+        model: AI_CONFIG.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.8,
+        max_tokens: 300
+      })
+
+      const guidance = completion.choices[0].message.content || '欢迎开始你的探索之旅！'
+
+      // 保存为对话记录
+      await MentorConversation.create({
+        userId: new mongoose.Types.ObjectId(userId),
+        taskId: new mongoose.Types.ObjectId(taskId),
+        studentMessage: '[系统] 接单',
+        mentorResponse: guidance,
+        context: 'task',
+        detectedPassionSpark: false,
+        detectedFlowMoment: false,
+        createdAt: new Date()
+      })
+
+      return guidance
+    } catch (error: any) {
+      log.error('生成接单欢迎消息失败', { userId, taskId, error: error.message })
+      throw error
+    }
+  }
+
+  /**
+   * 学生说"我卡住了"
+   */
+  async reportStuck(userId: string, taskId: string, stuckPoint: string) {
+    try {
+      const prompt = `学生在项目中卡住了。
+
+卡点是：${stuckPoint}
+
+请给予引导式支持，要求：
+1. 不直接给答案
+2. 帮助学生换个角度思考
+3. 给线索不给解决方案
+4. 语气：我之前也在这里卡过，后来发现...
+5. 200字左右`
+
+      const completion = await openai.chat.completions.create({
+        model: AI_CONFIG.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.8,
+        max_tokens: 300
+      })
+
+      const guidance = completion.choices[0].message.content || '试试换个角度看看？'
+
+      // 保存对话记录
+      await MentorConversation.create({
+        userId: new mongoose.Types.ObjectId(userId),
+        taskId: new mongoose.Types.ObjectId(taskId),
+        studentMessage: `我卡住了：${stuckPoint}`,
+        mentorResponse: guidance,
+        context: 'stuck',
+        detectedPassionSpark: false,
+        detectedFlowMoment: false,
+        createdAt: new Date()
+      })
+
+      return guidance
+    } catch (error: any) {
+      log.error('处理卡点失败', { userId, taskId, error: error.message })
+      throw error
+    }
+  }
+
+  /**
+   * 完成里程碑时的见证
+   * 使用自我对比式反馈
+   */
+  async celebrateMilestone(userId: string, taskId: string, milestone: string) {
+    try {
+      const user = await User.findById(userId)
+
+      // 查找历史卡点记录
+      const pastStucks = await MentorConversation.find({
+        userId: new mongoose.Types.ObjectId(userId),
+        context: 'stuck'
+      }).sort({ createdAt: -1 }).limit(5)
+
+      const stuckHistory = pastStucks.length > 0
+        ? `历史卡点：${pastStucks.map(s => s.studentMessage).join('; ')}`
+        : '这是第一次完成里程碑'
+
+      const prompt = `学生完成了里程碑：${milestone}
+
+${stuckHistory}
+
+请给予自我对比式反馈，要求：
+1. 不和别人比，和学生自己的过去比
+2. 帮助学生看见自己的成长
+3. 提问：你自己有感觉到吗？
+4. 语气温暖、真诚
+5. 200字左右`
+
+      const completion = await openai.chat.completions.create({
+        model: AI_CONFIG.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.8,
+        max_tokens: 300
+      })
+
+      const feedback = completion.choices[0].message.content || '你做到了！'
+
+      // 保存对话记录
+      await MentorConversation.create({
+        userId: new mongoose.Types.ObjectId(userId),
+        taskId: new mongoose.Types.ObjectId(taskId),
+        studentMessage: `[完成里程碑] ${milestone}`,
+        mentorResponse: feedback,
+        context: 'milestone',
+        detectedPassionSpark: false,
+        detectedFlowMoment: false,
+        createdAt: new Date()
+      })
+
+      return feedback
+    } catch (error: any) {
+      log.error('生成里程碑反馈失败', { userId, taskId, error: error.message })
+      throw error
+    }
+  }
+
+  /**
+   * 获取用户的热情火花列表
+   */
+  async getPassionSparks(userId: string, limit: number = 10) {
+    const sparks = await PassionSpark.find({
+      userId: new mongoose.Types.ObjectId(userId)
+    }).sort({ capturedAt: -1 }).limit(limit)
+
+    return sparks
+  }
+
+  /**
+   * 获取用户的穿越感时刻列表
+   */
+  async getFlowMoments(userId: string, limit: number = 10) {
+    const moments = await FlowMoment.find({
+      userId: new mongoose.Types.ObjectId(userId)
+    }).sort({ capturedAt: -1 }).limit(limit)
+
+    return moments
+  }
+
+  /**
+   * 获取用户的成长统计
+   */
+  async getGrowthStats(userId: string) {
+    const [totalConversations, totalPassionSparks, totalFlowMoments] = await Promise.all([
+      MentorConversation.countDocuments({ userId: new mongoose.Types.ObjectId(userId) }),
+      PassionSpark.countDocuments({ userId: new mongoose.Types.ObjectId(userId) }),
+      FlowMoment.countDocuments({ userId: new mongoose.Types.ObjectId(userId) })
+    ])
+
+    return {
+      totalConversations,
+      totalPassionSparks,
+      totalFlowMoments
+    }
+  }
+}
+
+export const mentorService = new MentorService()

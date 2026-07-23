@@ -12,6 +12,9 @@ export default defineAppConfig({
     'pages/company-add-tag/index',
     'pages/story-detail/index',
     'pages/mentor-apply/index',
+    'pages/level-up-validation/index',
+    'pages/level-up-done/index',
+    'pages/level-up-test/index',
   ],
   subPackages: [
     {
@@ -127,6 +130,20 @@ export default defineAppConfig({
         'pages/edit-profile/index',
         'pages/privacy-settings/index',
         'pages/about/index',
+        'pages/contact-exchange/index',
+      ]
+    },
+    {
+      root: 'packageIncubation',
+      pages: [
+        'pages/master-orders/index',
+      ]
+    },
+    {
+      root: 'packagePractice',
+      pages: [
+        'pages/practice-list/index',
+        'pages/practice-report/index',
       ]
     },
     {

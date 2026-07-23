@@ -1,0 +1,516 @@
+// Morandi 色系变量
+$rust: #BC6446;
+$terra: #D88760;
+$golden: #F2CD78;
+$mist: #BED7D1;
+$teal: #3A8A84;
+
+$bg: #FAF7F4;
+$surface: #FFFFFF;
+$surface2: #F5F0EB;
+$border: #EDE5DC;
+$text-1: #2C2018;
+$text-2: #6B5540;
+$text-3: #A8917A;
+
+.contact-exchange-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0; // 全屏显示
+}
+
+// Hero 区域 - 增大尺寸
+.exchange-hero {
+  background: linear-gradient(160deg, #EDD9C8, #E8C9A8, #F5EDE3);
+  padding: 32rpx 40rpx 48rpx; // 增大padding
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80rpx;
+    right: -80rpx;
+    width: 320rpx;
+    height: 320rpx;
+    background: radial-gradient(circle, rgba(242,205,120,.4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx; // 增大间距
+  position: relative;
+  z-index: 1;
+}
+
+.hero-back {
+  width: 68rpx; // 增大按钮
+  height: 68rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .back-icon {
+    color: $text-1;
+    font-size: 40rpx; // 增大图标
+    font-weight: 700;
+  }
+}
+
+.hero-title {
+  font-size: 34rpx; // 增大字体
+  font-weight: 700;
+  color: $text-1;
+}
+
+.hero-main-title {
+  font-size: 44rpx; // 增大标题
+  font-weight: 800;
+  color: $text-1;
+  margin-bottom: 8rpx;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.hero-subtitle {
+  font-size: 26rpx; // 增大字体
+  color: $text-2;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 32rpx; // 增大间距
+  display: block;
+}
+
+.hero-condition {
+  background: rgba(255,255,255,.7);
+  border-radius: 32rpx; // 增大圆角
+  padding: 24rpx 32rpx; // 增大padding
+  display: flex;
+  align-items: center;
+  gap: 24rpx; // 增大间距
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(8px);
+}
+
+.cond-icon {
+  font-size: 40rpx; // 增大图标
+  flex-shrink: 0;
+}
+
+.cond-content {
+  flex: 1;
+}
+
+.cond-title {
+  font-size: 28rpx; // 增大字体
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 4rpx;
+  display: block;
+}
+
+.cond-subtitle {
+  font-size: 24rpx; // 增大字体
+  color: $text-3;
+  display: block;
+}
+
+// 滚动区域
+.partners-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+// 区块标题
+.section-block {
+  padding: 32rpx 32rpx 0;
+}
+
+.section-block-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: $text-3;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+// 合作伙伴卡片 - 简化版
+.partner-card {
+  margin-bottom: 24rpx;
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44,32,24,.06);
+}
+
+.pc-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.pc-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D88760, #BC6446);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(188,100,70,.2);
+  flex-shrink: 0;
+}
+
+.pc-info {
+  flex: 1;
+}
+
+.pc-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 6rpx;
+  display: block;
+}
+
+.pc-company {
+  font-size: 24rpx;
+  color: $text-3;
+  display: block;
+}
+
+.pc-status-badge {
+  padding: 8rpx 20rpx;
+  border-radius: 9999px;
+  font-size: 22rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+
+  &.confirmed {
+    background: rgba(58,138,132,.1);
+    color: $teal;
+  }
+
+  &.pending {
+    background: rgba(242,205,120,.15);
+    color: #B07820;
+  }
+}
+
+.pc-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.pc-stat {
+  background: $surface2;
+  border-radius: 20rpx;
+  padding: 20rpx 16rpx;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: $text-1;
+  letter-spacing: -0.5px;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: $text-3;
+  display: block;
+}
+
+// 项目预览
+.projects-preview {
+  background: $surface2;
+  border-radius: 20rpx;
+  padding: 20rpx;
+}
+
+.preview-title {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: $text-3;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.project-item-mini {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 8rpx 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(168,145,122,.15);
+  }
+}
+
+.project-icon-mini {
+  font-size: 20rpx;
+  color: $teal;
+  flex-shrink: 0;
+}
+
+.project-title-mini {
+  font-size: 24rpx;
+  color: $text-2;
+  flex: 1;
+}
+
+// 警告卡片 - 增大尺寸
+.warning-card {
+  margin: 32rpx 32rpx 48rpx;
+  background: rgba(188,100,70,.06);
+  border: 2rpx solid rgba(188,100,70,.18);
+  border-radius: 32rpx; // 增大圆角
+  padding: 28rpx 32rpx; // 增大padding
+  display: flex;
+  gap: 20rpx; // 增大间距
+  align-items: flex-start;
+}
+
+.warning-icon {
+  font-size: 32rpx; // 增大图标
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.warning-content {
+  flex: 1;
+}
+
+.warning-text {
+  font-size: 24rpx; // 增大字体
+  color: $text-2;
+  line-height: 1.7;
+}
+
+.warning-highlight {
+  color: $rust;
+  font-weight: 600;
+}
+
+// 待满足条件的合作伙伴 - 增大尺寸
+.section-header {
+  padding: 24rpx 32rpx 8rpx;
+}
+
+.section-header-title {
+  font-size: 24rpx; // 增大字体
+  font-weight: 700;
+  color: $text-3;
+}
+
+.pending-partner-card {
+  margin-bottom: 24rpx;
+  background: $surface;
+  border-radius: 32rpx;
+  padding: 28rpx 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(44,32,24,.06);
+  opacity: .7;
+}
+
+.pp-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.pp-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #BED7D1, #9ABFB8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.pp-info {
+  flex: 1;
+}
+
+.pp-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 4rpx;
+  display: block;
+}
+
+.pp-company {
+  font-size: 24rpx;
+  color: $text-3;
+  display: block;
+}
+
+.pp-badge {
+  padding: 6rpx 16rpx;
+  border-radius: 9999px;
+  background: $surface2;
+  color: $text-3;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.pp-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 22rpx;
+  color: $text-3;
+  margin-bottom: 10rpx;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: $surface2;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D88760, #BC6446);
+  border-radius: 9999px;
+}
+
+// 确认弹窗
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 32rpx;
+}
+
+.confirm-modal {
+  background: $surface;
+  border-radius: 48rpx;
+  padding: 48rpx 40rpx;
+  width: 100%;
+  max-width: 600rpx;
+  box-shadow: 0 24rpx 80rpx rgba(0,0,0,.3);
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: $text-1;
+  text-align: center;
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+.modal-partner-info {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx;
+  background: $surface2;
+  border-radius: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.modal-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D88760, #BC6446);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  flex-shrink: 0;
+}
+
+.modal-info {
+  flex: 1;
+}
+
+.modal-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: $text-1;
+  margin-bottom: 6rpx;
+  display: block;
+}
+
+.modal-company {
+  font-size: 26rpx;
+  color: $text-3;
+  display: block;
+}
+
+.modal-desc {
+  font-size: 26rpx;
+  color: $text-2;
+  line-height: 1.8;
+  margin-bottom: 40rpx;
+  display: block;
+  text-align: center;
+}
+
+.modal-highlight {
+  color: $rust;
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 700;
+  transition: all 0.2s;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.modal-btn-cancel {
+  background: $surface2;
+  color: $text-2;
+}
+
+.modal-btn-confirm {
+  background: linear-gradient(135deg, #F2CD78, #D88760);
+  color: $text-1;
+  box-shadow: 0 8rpx 24rpx rgba(242,205,120,.3);
+}

@@ -2,17 +2,18 @@ import Taro from '@tarojs/taro'
 import { getApiUrl } from '../config'
 import { tokenManager } from '../utils/token'
 
-const BASE_URL = getApiUrl('/api/v1')
+const BASE_URL = getApiUrl('/api')
 
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   data?: any
   needAuth?: boolean
+  timeout?: number // 添加自定义超时选项
 }
 
-// 通用请求方法
-async function request(url: string, options: RequestOptions = {}) {
-  const { method = 'GET', data, needAuth = true } = options
+// 通用请求方法（带重试机制）
+async function request(url: string, options: RequestOptions = {}, retryCount = 0): Promise<any> {
+  const { method = 'GET', data, needAuth = true, timeout = 120000 } = options
 
   const header: any = {
     'Content-Type': 'application/json'
@@ -32,7 +33,7 @@ async function request(url: string, options: RequestOptions = {}) {
       method,
       data,
       header,
-      timeout: 60000 // 设置60秒超时，AI回复需要较长时间
+      timeout // 默认120秒超时，可自定义
     })
 
     if (response.statusCode === 200) {
@@ -40,16 +41,31 @@ async function request(url: string, options: RequestOptions = {}) {
     } else if (response.statusCode === 401) {
       // Token过期，使用tokenManager清除
       await tokenManager.clearTokens()
-      Taro.redirectTo({ url: '/pages/login/index' })
+      // 不要立即跳转，避免影响当前页面
+      console.warn('Token已过期，需要重新登录')
       throw new Error('请先登录')
     } else {
       throw new Error(response.data?.message || '请求失败')
     }
   } catch (error: any) {
-    Taro.showToast({
-      title: error.message || '网络错误',
-      icon: 'none'
-    })
+    // 超时错误且未达到最大重试次数
+    if ((error.errMsg?.includes('timeout') || error.errMsg?.includes('超时')) && retryCount < 2) {
+      console.log(`API请求超时，正在重试 (${retryCount + 1}/2): ${url}`)
+      await new Promise(resolve => setTimeout(resolve, 1000)) // 等待1秒后重试
+      return request(url, options, retryCount + 1)
+    }
+
+    // 只在非超时错误时显示Toast，避免干扰用户
+    if (!error.errMsg?.includes('timeout')) {
+      Taro.showToast({
+        title: error.message || '网络错误',
+        icon: 'none',
+        duration: 2000
+      })
+    } else {
+      console.error('API请求超时:', url, error)
+    }
+
     throw error
   }
 }
@@ -1486,7 +1502,62 @@ export default {
   taskTranslation: taskTranslationAPI,
   studentRecommendation: studentRecommendationAPI,
   taskFlow: taskFlowAPI,
-  submission: submissionAPI
+  submission: submissionAPI,
+  practice: practiceAPI,
+  contactExchange: contactExchangeAPI
+}
+
+// 真实实践项目API
+export const practiceAPI = {
+  // 获取实践项目列表
+  getList: (params?: {
+    status?: 'ongoing' | 'completed'
+    track?: 'content' | 'dev'
+    page?: number
+    limit?: number
+  }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.status) queryParams.append('status', params.status)
+    if (params?.track) queryParams.append('track', params.track)
+    if (params?.page) queryParams.append('page', params.page.toString())
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+    return request(`/practice/projects${queryParams.toString() ? '?' + queryParams.toString() : ''}`)
+  },
+
+  // 获取实践项目详情报告
+  getReport: (projectId: string) =>
+    request(`/practice/projects/${projectId}/report`),
+
+  // 获取实践统计数据
+  getStats: () =>
+    request('/practice/stats'),
+
+  // 更新实践项目进度
+  updateProgress: (projectId: string, progress: number) =>
+    request(`/practice/projects/${projectId}/progress`, { method: 'PUT', data: { progress } })
+}
+
+// 联系方式交换API
+export const contactExchangeAPI = {
+  // 获取可交换联系方式的合作伙伴列表
+  getPartners: () =>
+    request('/contact-exchange/partners'),
+
+  // 发起联系方式交换请求
+  requestExchange: (partnerId: string) =>
+    request('/contact-exchange/request', { method: 'POST', data: { partnerId } }),
+
+  // 确认联系方式交换
+  confirmExchange: (partnerId: string) =>
+    request('/contact-exchange/confirm', { method: 'POST', data: { partnerId } }),
+
+  // 获取交换状态
+  getExchangeStatus: (partnerId: string) =>
+    request(`/contact-exchange/status/${partnerId}`),
+
+  // 获取已交换的联系方式
+  getExchangedContact: (partnerId: string) =>
+    request(`/contact-exchange/contact/${partnerId}`)
 }
 
 // 安全相关API
@@ -1663,4 +1734,23 @@ export const submissionAPI = {
   // AI预审核
   preCheck: (data: { taskId: string; submissionContent: string }) =>
     request('/submissions/pre-check', { method: 'POST', data })
+}
+
+// 升级验证API
+export const levelUpValidationAPI = {
+  // 生成升级验证内容
+  generate: (targetLevel: number) =>
+    request('/level-up-validation/generate', { method: 'POST', data: { targetLevel } }),
+
+  // 提交升级验证答案
+  submit: (data: { fromLevel: number; toLevel: number; selectedOption: string }) =>
+    request('/level-up-validation/submit', { method: 'POST', data }),
+
+  // 获取升级历史
+  getHistory: () =>
+    request('/level-up-validation/history'),
+
+  // 确认升级
+  confirm: (toLevel: number) =>
+    request('/level/confirm', { method: 'POST', data: { toLevel } })
 }

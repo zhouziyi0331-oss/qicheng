@@ -1,0 +1,223 @@
+/**
+ * 标签种子数据
+ * 包含几千个标签用于向量匹配
+ */
+
+export const tagSeeds = {
+  // ========== 技能标签 (skill) ==========
+  skills: [
+    // 设计类
+    { name: 'Figma设计', category: 'skill', description: '使用Figma进行界面设计、原型制作', weight: 1.2 },
+    { name: 'Photoshop', category: 'skill', description: '使用PS进行图像处理、修图、平面设计', weight: 1.2 },
+    { name: 'Illustrator', category: 'skill', description: '使用AI进行矢量图设计、插画创作', weight: 1.1 },
+    { name: 'Sketch设计', category: 'skill', description: '使用Sketch进行UI/UX设计', weight: 1.1 },
+    { name: 'Adobe XD', category: 'skill', description: '使用XD进行交互设计和原型制作', weight: 1.0 },
+    { name: '视觉设计', category: 'skill', description: '色彩搭配、排版布局、视觉层级设计', weight: 1.3 },
+    { name: 'UI设计', category: 'skill', description: '用户界面设计、图标设计、界面规范', weight: 1.3 },
+    { name: 'UX设计', category: 'skill', description: '用户体验设计、交互流程、可用性测试', weight: 1.2 },
+    { name: '品牌设计', category: 'skill', description: 'Logo设计、VI系统、品牌视觉', weight: 1.2 },
+    { name: '平面设计', category: 'skill', description: '海报、宣传册、名片等平面物料设计', weight: 1.1 },
+    { name: '插画设计', category: 'skill', description: '手绘插画、数字插画、IP形象设计', weight: 1.1 },
+    { name: '动效设计', category: 'skill', description: '界面动效、Lottie动画、交互动画', weight: 1.0 },
+    { name: '3D建模', category: 'skill', description: 'C4D、Blender等3D软件建模', weight: 1.0 },
+    { name: '视频剪辑', category: 'skill', description: 'Premiere、Final Cut Pro视频剪辑', weight: 1.1 },
+    { name: 'After Effects', category: 'skill', description: '使用AE进行特效制作、动画合成', weight: 1.0 },
+
+    // 前端开发
+    { name: 'HTML/CSS', category: 'skill', description: 'HTML5语义化标签、CSS3布局和动画', weight: 1.2 },
+    { name: 'JavaScript', category: 'skill', description: 'ES6+语法、DOM操作、异步编程', weight: 1.3 },
+    { name: 'TypeScript', category: 'skill', description: 'TS类型系统、接口定义、泛型', weight: 1.2 },
+    { name: 'React开发', category: 'skill', description: 'React组件、Hooks、状态管理', weight: 1.4 },
+    { name: 'Vue开发', category: 'skill', description: 'Vue3组合式API、响应式原理', weight: 1.3 },
+    { name: '小程序开发', category: 'skill', description: '微信小程序、uni-app、Taro框架', weight: 1.3 },
+    { name: 'CSS框架', category: 'skill', description: 'Tailwind、Bootstrap、Ant Design', weight: 1.1 },
+    { name: '响应式布局', category: 'skill', description: '媒体查询、Flexbox、Grid布局', weight: 1.1 },
+    { name: '前端性能优化', category: 'skill', description: '加载优化、渲染优化、打包优化', weight: 1.2 },
+    { name: 'Webpack配置', category: 'skill', description: 'Webpack打包配置、插件开发', weight: 1.0 },
+    { name: 'Git版本控制', category: 'skill', description: 'Git工作流、分支管理、代码协作', weight: 1.1 },
+
+    // 后端开发
+    { name: 'Node.js开发', category: 'skill', description: 'Node.js后端、Express、Koa框架', weight: 1.3 },
+    { name: 'Python开发', category: 'skill', description: 'Python基础、Django、Flask框架', weight: 1.3 },
+    { name: 'Java开发', category: 'skill', description: 'Java基础、Spring Boot、微服务', weight: 1.3 },
+    { name: '数据库设计', category: 'skill', description: 'MySQL、MongoDB、Redis数据库', weight: 1.2 },
+    { name: 'API设计', category: 'skill', description: 'RESTful API、GraphQL接口设计', weight: 1.2 },
+    { name: '服务器运维', category: 'skill', description: 'Linux命令、Nginx配置、Docker部署', weight: 1.1 },
+
+    // 内容创作
+    { name: '文案撰写', category: 'skill', description: '营销文案、产品文案、品牌故事', weight: 1.2 },
+    { name: '短视频制作', category: 'skill', description: '短视频脚本、拍摄、剪辑、运营', weight: 1.3 },
+    { name: '直播运营', category: 'skill', description: '直播策划、主播培训、互动运营', weight: 1.2 },
+    { name: '内容策划', category: 'skill', description: '选题策划、内容日历、专题策划', weight: 1.2 },
+    { name: 'SEO优化', category: 'skill', description: '搜索引擎优化、关键词分析', weight: 1.1 },
+    { name: '社群运营', category: 'skill', description: '社群搭建、活动策划、用户运营', weight: 1.1 },
+    { name: '公众号运营', category: 'skill', description: '微信公众号内容、排版、推广', weight: 1.1 },
+    { name: '小红书运营', category: 'skill', description: '小红书内容创作、笔记优化', weight: 1.1 },
+    { name: '抖音运营', category: 'skill', description: '抖音短视频创作、账号运营', weight: 1.2 },
+    { name: 'B站运营', category: 'skill', description: 'B站视频创作、UP主运营', weight: 1.1 },
+
+    // 营销推广
+    { name: '数据分析', category: 'skill', description: 'Excel、数据可视化、用户行为分析', weight: 1.2 },
+    { name: '用户增长', category: 'skill', description: '增长黑客、裂变活动、转化优化', weight: 1.2 },
+    { name: '广告投放', category: 'skill', description: '信息流广告、搜索广告、投放优化', weight: 1.1 },
+    { name: '活动策划', category: 'skill', description: '线上活动、促销活动、创意策划', weight: 1.1 },
+    { name: '用户调研', category: 'skill', description: '问卷设计、访谈、需求洞察', weight: 1.1 },
+
+    // 产品设计
+    { name: '产品设计', category: 'skill', description: '需求分析、功能设计、原型设计', weight: 1.3 },
+    { name: '交互设计', category: 'skill', description: '交互流程、信息架构、可用性', weight: 1.2 },
+    { name: '原型制作', category: 'skill', description: 'Axure、Figma原型工具', weight: 1.1 },
+    { name: '需求分析', category: 'skill', description: '用户需求、业务需求、需求文档', weight: 1.2 },
+    { name: 'PRD撰写', category: 'skill', description: '产品需求文档撰写', weight: 1.1 },
+
+    // 项目管理
+    { name: '项目管理', category: 'skill', description: '敏捷开发、进度管理、风险控制', weight: 1.2 },
+    { name: '团队协作', category: 'skill', description: '跨部门协作、沟通协调', weight: 1.1 },
+    { name: '时间管理', category: 'skill', description: '任务优先级、时间规划', weight: 1.0 },
+  ],
+
+  // ========== 行业标签 (industry) ==========
+  industries: [
+    { name: '电商', category: 'industry', description: '电子商务、在线购物、新零售', weight: 1.2 },
+    { name: '教育', category: 'industry', description: '在线教育、K12、职业培训', weight: 1.2 },
+    { name: '金融', category: 'industry', description: '互联网金融、支付、理财', weight: 1.1 },
+    { name: '医疗健康', category: 'industry', description: '互联网医疗、健康管理', weight: 1.1 },
+    { name: '文娱', category: 'industry', description: '短视频、直播、游戏、音乐', weight: 1.2 },
+    { name: '社交', category: 'industry', description: '社交网络、即时通讯、社区', weight: 1.1 },
+    { name: '本地生活', category: 'industry', description: '外卖、到店、团购', weight: 1.1 },
+    { name: '旅游', category: 'industry', description: '在线旅游、酒店预订', weight: 1.0 },
+    { name: '汽车', category: 'industry', description: '新能源汽车、汽车服务', weight: 1.0 },
+    { name: '房产', category: 'industry', description: '房地产、租房、家装', weight: 1.0 },
+    { name: '企业服务', category: 'industry', description: 'SaaS、企业软件、协同办公', weight: 1.1 },
+    { name: '物流', category: 'industry', description: '快递物流、供应链', weight: 1.0 },
+    { name: '农业', category: 'industry', description: '智慧农业、农产品电商', weight: 0.9 },
+    { name: '制造业', category: 'industry', description: '智能制造、工业互联网', weight: 1.0 },
+    { name: '餐饮', category: 'industry', description: '餐饮连锁、外卖配送', weight: 1.1 },
+    { name: '时尚', category: 'industry', description: '服装、美妆、潮流品牌', weight: 1.1 },
+    { name: '母婴', category: 'industry', description: '母婴用品、育儿服务', weight: 1.0 },
+    { name: '宠物', category: 'industry', description: '宠物用品、宠物服务', weight: 1.0 },
+    { name: '运动健身', category: 'industry', description: '健身器材、运动APP', weight: 1.0 },
+    { name: '家居', category: 'industry', description: '家居用品、智能家居', weight: 1.0 },
+  ],
+
+  // ========== 人格特质标签 (personality) ==========
+  personalities: [
+    { name: '视觉叙事者', category: 'personality', description: '用图像讲故事，视觉表达力强', weight: 1.3 },
+    { name: '系统构建者', category: 'personality', description: '先搭框架再填细节，系统化思维', weight: 1.3 },
+    { name: '创意执行者', category: 'personality', description: '创意+落地能力，快速实现', weight: 1.3 },
+    { name: '逻辑拆解者', category: 'personality', description: '把复杂问题拆解成步骤', weight: 1.3 },
+    { name: '稳健交付者', category: 'personality', description: '按时交付，质量稳定', weight: 1.2 },
+    { name: '探索整合者', category: 'personality', description: '探索新领域，整合资源', weight: 1.2 },
+    { name: '混合型', category: 'personality', description: '多方面能力，灵活切换', weight: 1.1 },
+    { name: '细心', category: 'personality', description: '注重细节，追求完美', weight: 1.1 },
+    { name: '创新', category: 'personality', description: '创新思维，勇于尝试', weight: 1.2 },
+    { name: '执行力强', category: 'personality', description: '高效执行，结果导向', weight: 1.2 },
+    { name: '学习能力强', category: 'personality', description: '快速学习，适应力强', weight: 1.2 },
+    { name: '沟通能力强', category: 'personality', description: '善于表达，理解需求', weight: 1.1 },
+    { name: '责任心强', category: 'personality', description: '负责任，可信赖', weight: 1.1 },
+    { name: '抗压能力强', category: 'personality', description: '抗压，情绪稳定', weight: 1.1 },
+  ],
+
+  // ========== 兴趣标签 (interest) ==========
+  interests: [
+    { name: '游戏', category: 'interest', description: '电子游戏、手游、主机游戏', weight: 1.0 },
+    { name: '动漫', category: 'interest', description: '动画、漫画、二次元文化', weight: 1.0 },
+    { name: '音乐', category: 'interest', description: '音乐欣赏、乐器演奏', weight: 1.0 },
+    { name: '电影', category: 'interest', description: '电影观赏、影评', weight: 1.0 },
+    { name: '阅读', category: 'interest', description: '小说、非虚构、知识学习', weight: 1.0 },
+    { name: '运动', category: 'interest', description: '健身、跑步、球类运动', weight: 1.0 },
+    { name: '旅行', category: 'interest', description: '旅游、探索、摄影', weight: 1.0 },
+    { name: '美食', category: 'interest', description: '烹饪、美食探店', weight: 1.0 },
+    { name: '摄影', category: 'interest', description: '摄影创作、后期处理', weight: 1.0 },
+    { name: '科技', category: 'interest', description: '数码产品、前沿技术', weight: 1.1 },
+    { name: '时尚', category: 'interest', description: '服装搭配、美妆护肤', weight: 1.0 },
+    { name: '宠物', category: 'interest', description: '养宠物、宠物护理', weight: 1.0 },
+    { name: '手工', category: 'interest', description: '手工制作、DIY', weight: 1.0 },
+    { name: '汽车', category: 'interest', description: '汽车文化、改装', weight: 0.9 },
+    { name: '军事', category: 'interest', description: '军事知识、武器装备', weight: 0.9 },
+    { name: '历史', category: 'interest', description: '历史知识、文物古迹', weight: 0.9 },
+    { name: '心理学', category: 'interest', description: '心理学知识、自我成长', weight: 1.0 },
+    { name: '投资理财', category: 'interest', description: '理财知识、投资分析', weight: 1.0 },
+  ],
+
+  // ========== 工具标签 (tool) ==========
+  tools: [
+    { name: 'Figma', category: 'tool', description: '协作设计工具', weight: 1.2 },
+    { name: 'Photoshop', category: 'tool', description: '图像处理软件', weight: 1.2 },
+    { name: 'Illustrator', category: 'tool', description: '矢量图设计软件', weight: 1.1 },
+    { name: 'Sketch', category: 'tool', description: 'UI设计工具', weight: 1.1 },
+    { name: 'Adobe XD', category: 'tool', description: '原型设计工具', weight: 1.0 },
+    { name: 'Axure', category: 'tool', description: '原型制作工具', weight: 1.0 },
+    { name: 'Premiere Pro', category: 'tool', description: '视频剪辑软件', weight: 1.1 },
+    { name: 'After Effects', category: 'tool', description: '特效合成软件', weight: 1.0 },
+    { name: 'Final Cut Pro', category: 'tool', description: '视频剪辑软件', weight: 1.0 },
+    { name: 'C4D', category: 'tool', description: '3D设计软件', weight: 1.0 },
+    { name: 'Blender', category: 'tool', description: '3D建模软件', weight: 0.9 },
+    { name: 'VSCode', category: 'tool', description: '代码编辑器', weight: 1.1 },
+    { name: 'WebStorm', category: 'tool', description: '前端IDE', weight: 1.0 },
+    { name: 'Postman', category: 'tool', description: 'API测试工具', weight: 1.0 },
+    { name: 'Git', category: 'tool', description: '版本控制工具', weight: 1.1 },
+    { name: 'Docker', category: 'tool', description: '容器化工具', weight: 1.0 },
+    { name: 'Notion', category: 'tool', description: '协作文档工具', weight: 1.0 },
+    { name: 'Trello', category: 'tool', description: '项目管理工具', weight: 0.9 },
+    { name: 'Jira', category: 'tool', description: '敏捷开发工具', weight: 0.9 },
+    { name: 'Excel', category: 'tool', description: '数据分析工具', weight: 1.1 },
+  ],
+
+  // ========== 领域标签 (domain) ==========
+  domains: [
+    { name: '短视频', category: 'domain', description: '短视频内容创作和运营', weight: 1.3 },
+    { name: '品牌设计', category: 'domain', description: '品牌视觉体系设计', weight: 1.2 },
+    { name: '电商运营', category: 'domain', description: '电商平台运营推广', weight: 1.2 },
+    { name: '小程序', category: 'domain', description: '微信小程序开发', weight: 1.2 },
+    { name: '移动应用', category: 'domain', description: 'App开发设计', weight: 1.2 },
+    { name: '网站开发', category: 'domain', description: '官网、商城网站开发', weight: 1.1 },
+    { name: '内容营销', category: 'domain', description: '内容策划和营销推广', weight: 1.2 },
+    { name: '社交媒体', category: 'domain', description: '社交平台运营', weight: 1.1 },
+    { name: '直播带货', category: 'domain', description: '直播电商运营', weight: 1.2 },
+    { name: '数据分析', category: 'domain', description: '数据分析和可视化', weight: 1.1 },
+    { name: '用户增长', category: 'domain', description: '增长黑客、裂变', weight: 1.2 },
+    { name: 'UI/UX', category: 'domain', description: '界面和体验设计', weight: 1.2 },
+    { name: '插画', category: 'domain', description: '插画创作', weight: 1.1 },
+    { name: '摄影', category: 'domain', description: '摄影创作', weight: 1.0 },
+    { name: '视频制作', category: 'domain', description: '视频拍摄和后期', weight: 1.1 },
+    { name: '文案', category: 'domain', description: '文案创作', weight: 1.1 },
+    { name: 'SEO', category: 'domain', description: '搜索引擎优化', weight: 1.0 },
+    { name: '广告投放', category: 'domain', description: '线上广告投放', weight: 1.1 },
+  ],
+
+  // ========== 软技能标签 (soft_skill) ==========
+  softSkills: [
+    { name: '沟通协调', category: 'soft_skill', description: '有效沟通、协调资源', weight: 1.1 },
+    { name: '问题解决', category: 'soft_skill', description: '分析问题、找到解决方案', weight: 1.2 },
+    { name: '时间管理', category: 'soft_skill', description: '合理规划、高效执行', weight: 1.1 },
+    { name: '团队合作', category: 'soft_skill', description: '团队协作、配合默契', weight: 1.1 },
+    { name: '批判性思维', category: 'soft_skill', description: '独立思考、理性分析', weight: 1.1 },
+    { name: '创造力', category: 'soft_skill', description: '创新思维、发散思考', weight: 1.2 },
+    { name: '适应能力', category: 'soft_skill', description: '快速适应、灵活应变', weight: 1.1 },
+    { name: '学习能力', category: 'soft_skill', description: '快速学习、持续成长', weight: 1.2 },
+    { name: '抗压能力', category: 'soft_skill', description: '承受压力、保持稳定', weight: 1.1 },
+    { name: '自我管理', category: 'soft_skill', description: '自律、目标导向', weight: 1.1 },
+    { name: '情绪管理', category: 'soft_skill', description: '情绪稳定、积极心态', weight: 1.0 },
+    { name: '领导力', category: 'soft_skill', description: '带领团队、激励他人', weight: 1.1 },
+  ],
+
+  // ========== 项目类型标签 (project_type) ==========
+  projectTypes: [
+    { name: '落地页设计', category: 'project_type', description: '营销落地页、活动页面设计', weight: 1.1 },
+    { name: '小程序开发', category: 'project_type', description: '微信小程序完整开发', weight: 1.2 },
+    { name: 'Logo设计', category: 'project_type', description: '品牌Logo标志设计', weight: 1.1 },
+    { name: 'VI设计', category: 'project_type', description: '品牌视觉识别系统', weight: 1.1 },
+    { name: '海报设计', category: 'project_type', description: '宣传海报、活动海报', weight: 1.0 },
+    { name: '短视频制作', category: 'project_type', description: '短视频脚本、拍摄、剪辑', weight: 1.2 },
+    { name: '公众号运营', category: 'project_type', description: '公众号内容创作和运营', weight: 1.1 },
+    { name: '电商店铺设计', category: 'project_type', description: '淘宝、京东店铺装修', weight: 1.1 },
+    { name: '产品摄影', category: 'project_type', description: '商品拍摄、修图', weight: 1.0 },
+    { name: '活动策划', category: 'project_type', description: '线上活动策划执行', weight: 1.1 },
+    { name: '文案撰写', category: 'project_type', description: '营销文案、品牌文案', weight: 1.0 },
+    { name: '数据分析报告', category: 'project_type', description: '数据分析和报告撰写', weight: 1.0 },
+    { name: '官网开发', category: 'project_type', description: '企业官网设计开发', weight: 1.1 },
+    { name: 'App界面设计', category: 'project_type', description: '移动应用UI设计', weight: 1.2 },
+    { name: '插画创作', category: 'project_type', description: '商业插画、IP形象', weight: 1.1 },
+  ],
+}

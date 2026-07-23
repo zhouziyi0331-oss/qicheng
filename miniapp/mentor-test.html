@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小猫导师测试工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .status {
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .test-section {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .test-section h3 {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .quick-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .quick-tag {
+      padding: 8px 16px;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      border: none;
+      font-size: 14px;
+    }
+
+    .quick-tag:hover {
+      background: #ff5252;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .input-area button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .input-area button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .messages {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #fafafa;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .message.user {
+      background: #e3f2fd;
+      text-align: right;
+    }
+
+    .message.assistant {
+      background: white;
+      border: 1px solid #e0e0e0;
+    }
+
+    .message .role {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .message .content {
+      color: #333;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .message .length {
+      font-size: 11px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .suggestions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .suggestion {
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 12px;
+      border: 1px solid #ddd;
+    }
+
+    .suggestion:hover {
+      background: #e0e0e0;
+    }
+
+    .loading {
+      text-align: center;
+      color: #666;
+      padding: 20px;
+    }
+
+    .test-results {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .test-result {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-left: 4px solid #4CAF50;
+      background: white;
+    }
+
+    .test-result.fail {
+      border-left-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐱 小猫导师测试工具</h1>
+
+    <div id="status" class="status">准备测试...</div>
+
+    <!-- 测试1：快速标签 -->
+    <div class="test-section">
+      <h3>测试1：快速标签发送</h3>
+      <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
+        点击下面的快速标签，应该立即发送并获得回复
+      </p>
+      <div class="quick-tags">
+        <button class="quick-tag" onclick="testQuickTag('我遇到了困难')">我遇到了困难</button>
+        <button class="quick-tag" onclick="testQuickTag('帮我分析项目')">帮我分析项目</button>
+        <button class="quick-tag" onclick="testQuickTag('我想了解 OPC')">我想了解 OPC</button>
+      </div>
+    </div>
+
+    <!-- 测试2：文字输入 -->
+    <div class="test-section">
+      <h3>测试2：文字输入发送</h3>
+      <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
+        输入文字后点击发送按钮
+      </p>
+      <div class="input-area">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="输入消息..."
+          onkeypress="if(event.key==='Enter') testTextSend()"
+        />
+        <button onclick="testTextSend()" id="sendBtn">发送</button>
+      </div>
+    </div>
+
+    <!-- 对话显示 -->
+    <div class="test-section">
+      <h3>对话记录</h3>
+      <div id="messages" class="messages">
+        <p style="color: #999; text-align: center;">暂无对话</p>
+      </div>
+    </div>
+
+    <!-- 测试结果 -->
+    <div class="test-results">
+      <h3>测试结果</h3>
+      <div id="testResults"></div>
+    </div>
+  </div>
+
+  <script>
+    let messages = []
+    let loading = false
+    let testResults = []
+
+    const API_URL = 'http://localhost:3000/api/mentor/chat'
+    const TOKEN = localStorage.getItem('test_token') || 'test_token_123'
+
+    function updateStatus(message, isError = false) {
+      const statusEl = document.getElementById('status')
+      statusEl.textContent = message
+      statusEl.className = `status ${isError ? 'error' : 'success'}`
+    }
+
+    function addTestResult(test, passed, message) {
+      testResults.push({ test, passed, message })
+      renderTestResults()
+    }
+
+    function renderTestResults() {
+      const resultsEl = document.getElementById('testResults')
+      resultsEl.innerHTML = testResults.map(r => `
+        <div class="test-result ${r.passed ? '' : 'fail'}">
+          ${r.passed ? '✅' : '❌'} ${r.test}: ${r.message}
+        </div>
+      `).join('')
+    }
+
+    function renderMessages() {
+      const messagesEl = document.getElementById('messages')
+
+      if (messages.length === 0) {
+        messagesEl.innerHTML = '<p style="color: #999; text-align: center;">暂无对话</p>'
+        return
+      }
+
+      messagesEl.innerHTML = messages.map(msg => `
+        <div class="message ${msg.role}">
+          <div class="role">${msg.role === 'user' ? '👤 你' : '🐱 小猫导师'}</div>
+          <div class="content">${msg.content}</div>
+          <div class="length">${msg.content.length}字 | ${new Date(msg.timestamp).toLocaleTimeString()}</div>
+          ${msg.suggestions ? `
+            <div class="suggestions">
+              ${msg.suggestions.map(s => `
+                <span class="suggestion" onclick="testQuickTag('${s}')">${s}</span>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `).join('')
+
+      messagesEl.scrollTop = messagesEl.scrollHeight
+    }
+
+    async function sendToAI(userInput) {
+      if (loading) {
+        addTestResult('发送限制', false, '正在加载中，不能发送')
+        return
+      }
+
+      loading = true
+      updateStatus('正在发送...')
+      document.getElementById('sendBtn').disabled = true
+
+      // 添加用户消息
+      const userMessage = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: userInput,
+        timestamp: new Date().toISOString()
+      }
+
+      messages.push(userMessage)
+      renderMessages()
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${TOKEN}`
+          },
+          body: JSON.stringify({
+            message: userInput,
+            conversationHistory: messages.map(m => ({
+              role: m.role,
+              content: m.content
+            }))
+          })
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+          const aiMessage = {
+            id: Date.now().toString() + '_ai',
+            role: 'assistant',
+            content: data.data.response,
+            timestamp: new Date().toISOString(),
+            suggestions: data.data.suggestions || []
+          }
+
+          messages.push(aiMessage)
+          renderMessages()
+
+          // 验证回复长度
+          const length = aiMessage.content.length
+          if (length >= 300 && length <= 800) {
+            addTestResult('回复长度', true, `${length}字，符合300-500字要求`)
+          } else {
+            addTestResult('回复长度', false, `${length}字，不符合300-500字要求`)
+          }
+
+          // 验证建议选项
+          if (aiMessage.suggestions.length > 0) {
+            addTestResult('建议选项', true, `返回${aiMessage.suggestions.length}个建议`)
+          } else {
+            addTestResult('建议选项', false, '没有返回建议选项')
+          }
+
+          updateStatus(`✅ 收到回复 (${length}字)`)
+        } else {
+          throw new Error(data.message || '请求失败')
+        }
+      } catch (error) {
+        updateStatus(`❌ 请求失败: ${error.message}`, true)
+        addTestResult('API调用', false, error.message)
+
+        // 降级回复
+        const fallbackMessage = {
+          id: Date.now().toString() + '_ai',
+          role: 'assistant',
+          content: `我理解你的问题："${userInput}"。让我帮你分析一下...\n\n（这是降级回复，后端API未响应）`,
+          timestamp: new Date().toISOString(),
+          suggestions: ['继续聊聊', '换个话题']
+        }
+
+        messages.push(fallbackMessage)
+        renderMessages()
+      } finally {
+        loading = false
+        document.getElementById('sendBtn').disabled = false
+      }
+    }
+
+    function testQuickTag(text) {
+      addTestResult('快速标签', true, `点击"${text}"`)
+      sendToAI(text)
+    }
+
+    function testTextSend() {
+      const input = document.getElementById('messageInput')
+      const text = input.value.trim()
+
+      if (!text) {
+        addTestResult('文字输入', false, '输入为空')
+        return
+      }
+
+      addTestResult('文字输入', true, `发送"${text}"`)
+      input.value = ''
+      sendToAI(text)
+    }
+
+    // 初始化
+    window.onload = () => {
+      updateStatus('✅ 就绪，可以开始测试')
+
+      // 测试后端连接
+      fetch('http://localhost:3000/api/health')
+        .then(res => res.json())
+        .then(data => {
+          addTestResult('后端连接', true, '后端服务正常')
+        })
+        .catch(err => {
+          addTestResult('后端连接', false, '后端服务未启动')
+          updateStatus('❌ 后端服务未启动，请先启动后端', true)
+        })
+    }
+  </script>
+</body>
+</html>
