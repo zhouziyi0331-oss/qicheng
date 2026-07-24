@@ -1,0 +1,94 @@
+@import '../../styles/morandi-colors.scss';
+
+.level-up-notification-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(242, 205, 120, 0.1), rgba(188, 100, 70, 0.07));
+  border: 3rpx solid rgba(242, 205, 120, 0.38);
+  border-radius: 32rpx;
+  padding: 28rpx 32rpx;
+  margin: 28rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.notification-glow {
+  position: absolute;
+  top: -40rpx;
+  right: -40rpx;
+  width: 160rpx;
+  height: 160rpx;
+  background: radial-gradient(circle, rgba(242, 205, 120, 0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.notification-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F2CD78, #D88760);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6rpx 20rpx rgba(242, 205, 120, 0.28);
+  position: relative;
+  z-index: 1;
+}
+
+.icon-emoji {
+  font-size: 40rpx;
+}
+
+.notification-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.notification-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #2C2018;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.notification-subtitle {
+  font-size: 24rpx;
+  color: #6B5540;
+  line-height: 1.5;
+  display: block;
+}
+
+.notification-arrow {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.arrow-icon {
+  font-size: 36rpx;
+  color: #BC6446;
+  font-weight: 700;
+}
