@@ -20,6 +20,7 @@ import mentorRoutes from './routes/mentor.routes'
 import mentorEnhancedRoutes from './routes/mentorEnhanced.routes'
 import levelRoutes from './routes/level.routes'
 import levelUpValidationRoutes from './routes/levelUpValidation.routes'
+import levelUpRoutes from './routes/levelUp.routes'
 import storyWallRoutes from './routes/storyWall.routes'
 import vectorMatchRoutes from './routes/vectorMatch.routes'
 import projectSummaryRoutes from './routes/projectSummary.routes'
@@ -86,6 +87,7 @@ app.use('/api/mentor', mentorRoutes)
 app.use('/api/mentor-enhanced', mentorEnhancedRoutes)
 app.use('/api/level', levelRoutes)
 app.use('/api/level-up-validation', levelUpValidationRoutes)
+app.use('/api/level-up', levelUpRoutes)
 app.use('/api/story-wall', storyWallRoutes)
 app.use('/api/vector-match', vectorMatchRoutes)
 app.use('/api/project-summary', projectSummaryRoutes)
