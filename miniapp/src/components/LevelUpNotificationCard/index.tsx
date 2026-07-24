@@ -10,8 +10,6 @@ interface LevelUpNotificationProps {
 }
 
 export default function LevelUpNotificationCard({
-  fromLevel,
-  toLevel,
   completedCount,
   onClick
 }: LevelUpNotificationProps) {

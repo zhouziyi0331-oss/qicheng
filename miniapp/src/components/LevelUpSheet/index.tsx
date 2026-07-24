@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, Button } from '@tarojs/components'
+import Taro from '@tarojs/taro'
 import { useState, useEffect } from 'react'
 import './index.scss'
 
@@ -40,7 +41,6 @@ interface LevelUpSheetProps {
 
 export default function LevelUpSheet({
   visible,
-  fromLevel,
   toLevel,
   mentorText,
   question,
